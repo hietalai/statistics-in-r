@@ -194,7 +194,8 @@ window.Quarto = {
     <h2 id="toc-title">På denna sida</h2>
    
   <ul>
-  <li><a href="#olika-typer-av-studier" id="toc-olika-typer-av-studier" class="nav-link active" data-scroll-target="#olika-typer-av-studier">Olika typer av studier</a></li>
+  <li><a href="#studier-och-andra-variabler" id="toc-studier-och-andra-variabler" class="nav-link active" data-scroll-target="#studier-och-andra-variabler">Studier och andra variabler</a></li>
+  <li><a href="#modellens-antaganden" id="toc-modellens-antaganden" class="nav-link" data-scroll-target="#modellens-antaganden">Modellens antaganden</a></li>
   </ul>
 </nav>
     </div>
@@ -221,9 +222,10 @@ window.Quarto = {
 
 
 <p>Att undersöka samband mellan variabler är ett vanligt steg i att förstå relationer eller fenomen. Till exempel hur åldern på ett träd påverkar dess volym, hur olika doser av en medicin påverkar en individs blodtryck, eller hur en persons ålder och utbildningsnivå påverkar dens ingångslön.</p>
-<p>Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. I det allra enklaste fallet anpassas en linjär modell där variablernas samband antas enkelriktat och konstant. <span class="math display">\[\begin{align*}
+<p>Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. I det allra enklaste fallet anpassas en linjär modell där variablernas samband antas enkelriktat och konstant. <span id="eq-lin-reg"><span class="math display">\[
 Y = \beta_0 + \beta_1 \cdot X + E
-\end{align*}\]</span> där:</p>
+\tag{1}\]</span></span></p>
+<p>där:</p>
 <ul>
 <li><span class="math inline">\(Y\)</span> är den <em>beroende/respons- variabeln</em> som antas påverkas av <span class="math inline">\(X\)</span>.</li>
 <li><span class="math inline">\(X\)</span> är den <em>oberoende/förklarande variabeln</em> som antas påverka av <span class="math inline">\(Y\)</span>.</li>
@@ -232,8 +234,8 @@ Y = \beta_0 + \beta_1 \cdot X + E
 <li><span class="math inline">\(E\)</span> är modellens <em>felterm</em>, avståndet mellan det observerade värdet på <span class="math inline">\(Y\)</span> och modellens skattade värde <span class="math inline">\(\hat{Y}\)</span>.</li>
 </ul>
 <p>Om flera förklarande variabler antas påverka responsvariabeln utökas den linjära modellen med flera <span class="math inline">\(\beta_j\)</span>, en för varje förklarande variabel <span class="math inline">\(X_j\)</span>.</p>
-<section id="olika-typer-av-studier" class="level1">
-<h1>Olika typer av studier</h1>
+<section id="studier-och-andra-variabler" class="level2">
+<h2 class="anchored" data-anchor-id="studier-och-andra-variabler">Studier och andra variabler</h2>
 <p>En matematisk modell behöver nödvändigtvis inte beskriva ett “orsak-och-verkan” samband, eller som vi brukar benämna det, ett <em>kausalt</em> samband. Samband kan ibland uppstå utav ren slump där det inte finns någon logisk koppling mellan olika variabler. Denna typ av samband benämns som <em>korrelation</em>ssamband.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -249,7 +251,179 @@ Figur&nbsp;1: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och 
 </div>
 </div>
 </div>
-<p><a href="#fig-correlation" class="quarto-xref">Figur&nbsp;1</a> uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. Modellen som anpassas för att beskriva sambandet kan inte urskilja mellan dessa två typer av samband vilket innebär att vi som analytiker behöver ha i åtanke</p>
+<p><a href="#fig-correlation" class="quarto-xref">Figur&nbsp;1</a> uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation.</p>
+<p>En regressionsmodell som beskriver sambandet kan inte urskilja mellan de två typer av samband vilket innebär att vi som analytiker måste ta hänsyn till vilken sorts och hur data har samlats in.</p>
+<p>Exemplet i figuren är insamlad som en <em>observationsstudie</em> där mätvärden (antal dödsfall och filmer) på enheterna (år) har observerats från olika registerdata. Vi har inte kunnat styra vilken relation dessa variabler har till varandra och studien i sig har inte tagit hänsyn till någon specifik orsak och verkan mellan de två. Vi kan därför endast dra slutsatser om korrelationssamband från en observationsstudie, vi kan säga att desto fler filmer Nicolas Cage medverkar i medför ett större antal dödsfall, men vi kan inte säga något om den kausala effekten.</p>
+<p>För att kunna dra slutsatser om kausala samband behöver vi genomföra en <em>experimentell studie</em> där vi styr vilka mätvärden som enheter får eller har och responsvariablen antas vara en direkt verkan av de förklarande variablerna. Medicinska studier, till exempel studier om Covid-vaccinets effektivitet på att motverka en infektion, är typiska exempel på experimentella studier där en förklarande variabel (dos) ges till vissa grupper av enheter där andra påverkande effekter kontrolleras för att justera den förklarande variabelns verkliga påverkan.</p>
+<p>I en observationsstudie kan vi ibland observera <em>kontrollvariabler</em> som kan justera den förklarande variabelns faktiska påverkan men det är främst i experimentella studier som dessa typer av variabler kan användas. Okända variabler kallas för <em>confounding</em>-effekter och antas påverka både den förklarande och responsvariabeln.</p>
+<p>I följande två figurer visas den förklarande och responsvariabeln med ovaler. De kända (heldragen) och okända (streckade) kontrollvariablerna visas som rektanglar.</p>
+<div id="fig-obs-relation" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell" data-fig-height="2" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<svg width="672" height="192" viewbox="0.00 0.00 188.08 116.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+<title>G</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-112 184.08,-112 184.08,4 -4,4"></polygon>
+<!-- Okänd -->
+<g id="node1" class="node">
+<title>Okänd</title>
+<polygon fill="none" stroke="black" stroke-dasharray="5,2" points="112.9,-108 58.68,-108 58.68,-72 112.9,-72 112.9,-108"></polygon>
+<text text-anchor="middle" x="85.79" y="-85.8" font-family="Times,serif" font-size="14.00">Okänd</text>
+</g>
+<!-- Filmer -->
+<g id="node2" class="node">
+<title>Filmer</title>
+<ellipse fill="none" stroke="black" cx="36.79" cy="-18" rx="36.57" ry="18"></ellipse>
+<text text-anchor="middle" x="36.79" y="-13.8" font-family="Times,serif" font-size="14.00">Filmer</text>
+</g>
+<!-- Okänd&#45;&gt;Filmer -->
+<g id="edge2" class="edge">
+<title>Okänd-&gt;Filmer</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M73.67,-71.7C67.75,-63.23 60.51,-52.89 54.01,-43.61"></path>
+<polygon fill="black" stroke="black" points="56.69,-41.33 48.09,-35.14 50.96,-45.34 56.69,-41.33"></polygon>
+</g>
+<!-- Dödsfall -->
+<g id="node3" class="node">
+<title>Dödsfall</title>
+<ellipse fill="none" stroke="black" cx="135.79" cy="-18" rx="44.09" ry="18"></ellipse>
+<text text-anchor="middle" x="135.79" y="-13.8" font-family="Times,serif" font-size="14.00">Dödsfall</text>
+</g>
+<!-- Okänd&#45;&gt;Dödsfall -->
+<g id="edge3" class="edge">
+<title>Okänd-&gt;Dödsfall</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M98.15,-71.7C104.11,-63.35 111.37,-53.18 117.92,-44.02"></path>
+<polygon fill="black" stroke="black" points="120.95,-45.79 123.91,-35.62 115.25,-41.73 120.95,-45.79"></polygon>
+</g>
+<!-- Filmer&#45;&gt;Dödsfall -->
+<g id="edge1" class="edge">
+<title>Filmer-&gt;Dödsfall</title>
+<path fill="none" stroke="black" d="M73.91,-18C76.36,-18 78.81,-18 81.25,-18"></path>
+<polygon fill="black" stroke="black" points="81.31,-21.5 91.31,-18 81.31,-14.5 81.31,-21.5"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;2: Exempel på relationen mellan variabler i en observationsstudie.
+</figcaption>
+</figure>
+</div>
+<p>Eftersom sambandet mellan filmer och dödsfall förmodligen endast uppkommit av slumpen kan det finnas andra okända variabler som påverkar de båda.</p>
+<div id="fig-obs-relation" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell" data-fig-height="2" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<svg width="672" height="192" viewbox="0.00 0.00 225.22 116.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+<title>G</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-112 221.22,-112 221.22,4 -4,4"></polygon>
+<!-- Ålder -->
+<g id="node1" class="node">
+<title>Ålder</title>
+<polygon fill="none" stroke="black" points="145.22,-108 91.22,-108 91.22,-72 145.22,-72 145.22,-108"></polygon>
+<text text-anchor="middle" x="118.22" y="-85.8" font-family="Times,serif" font-size="14.00">Ålder</text>
+</g>
+<!-- Blodtryck -->
+<g id="node4" class="node">
+<title>Blodtryck</title>
+<ellipse fill="none" stroke="black" cx="154.22" cy="-18" rx="49.82" ry="18"></ellipse>
+<text text-anchor="middle" x="154.22" y="-13.8" font-family="Times,serif" font-size="14.00">Blodtryck</text>
+</g>
+<!-- Ålder&#45;&gt;Blodtryck -->
+<g id="edge2" class="edge">
+<title>Ålder-&gt;Blodtryck</title>
+<path fill="none" stroke="black" d="M127.12,-71.7C131.22,-63.73 136.17,-54.1 140.71,-45.26"></path>
+<polygon fill="black" stroke="black" points="143.96,-46.6 145.42,-36.1 137.74,-43.4 143.96,-46.6"></polygon>
+</g>
+<!-- Kön -->
+<g id="node2" class="node">
+<title>Kön</title>
+<polygon fill="none" stroke="black" points="217.22,-108 163.22,-108 163.22,-72 217.22,-72 217.22,-108"></polygon>
+<text text-anchor="middle" x="190.22" y="-85.8" font-family="Times,serif" font-size="14.00">Kön</text>
+</g>
+<!-- Kön&#45;&gt;Blodtryck -->
+<g id="edge3" class="edge">
+<title>Kön-&gt;Blodtryck</title>
+<path fill="none" stroke="black" d="M181.32,-71.7C177.22,-63.73 172.27,-54.1 167.73,-45.26"></path>
+<polygon fill="black" stroke="black" points="170.7,-43.4 163.01,-36.1 164.48,-46.6 170.7,-43.4"></polygon>
+</g>
+<!-- Medicin -->
+<g id="node3" class="node">
+<title>Medicin</title>
+<ellipse fill="none" stroke="black" cx="43.22" cy="-18" rx="43.44" ry="18"></ellipse>
+<text text-anchor="middle" x="43.22" y="-13.8" font-family="Times,serif" font-size="14.00">Medicin</text>
+</g>
+<!-- Medicin&#45;&gt;Blodtryck -->
+<g id="edge1" class="edge">
+<title>Medicin-&gt;Blodtryck</title>
+<path fill="none" stroke="black" d="M86.58,-18C89.2,-18 91.82,-18 94.44,-18"></path>
+<polygon fill="black" stroke="black" points="94.54,-21.5 104.54,-18 94.54,-14.5 94.54,-21.5"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;3: Exempel på relationen mellan variabler i en experimentell studie.
+</figcaption>
+</figure>
+</div>
+<p>Effekten av en medicin på blodtryck kan också påverkas av personens ålder och kön <span class="citation" data-cites="gu2008">(<a href="#ref-gu2008" role="doc-biblioref">Gu et al. 2008</a>)</span> vilka inkluderas i modellen för att isolera den förklarande variabelns effekt.</p>
+</section>
+<section id="modellens-antaganden" class="level2">
+<h2 class="anchored" data-anchor-id="modellens-antaganden">Modellens antaganden</h2>
+<p>Syftet med en modell är att ge en lämplig förenkling av verkligheten. En linjär regressionsmodell kan vara en lämplig förenkling av ett samband om följande antaganden uppfylls:</p>
+<ol type="1">
+<li>att det för varje <span class="math inline">\(X\)</span> finns en slumpvariabel <span class="math inline">\(Y\)</span> med ett ändligt medelvärde och varians,</li>
+<li>observationerna är oberoende av varandra,</li>
+<li>medelvärdet, <span class="math inline">\(\mu_{Y|X}\)</span>, kan modelleras linjärt,</li>
+<li>variansen för <span class="math inline">\(Y\)</span> är lika för alla värden av <span class="math inline">\(X\)</span>, <span class="math inline">\(\sigma^2_{Y|X} \equiv \sigma^2\)</span>,</li>
+<li>slumpvariabeln <span class="math inline">\(Y\)</span> är normalfördelad för alla värden av <span class="math inline">\(X\)</span>.</li>
+</ol>
+<p>Vi kan sammanfatta majoriteten av dessa antaganden med: <span class="math display">\[
+   Y|X \overset{\mathrm{iid}}{\sim} N(\mu_{Y|X}, \sigma^2_{Y|X})
+\]</span> där <span class="math inline">\(\mathrm{iid}\)</span> betyder “independent and identically distributed” motsvarande antagande 2.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det finns inget antagande om att <span class="math inline">\(Y \sim N(\mu_Y, \sigma^2_Y)\)</span>! Alla dessa antaganden fokuserar på att vi med hjälp av <span class="math inline">\(X\)</span> har en normalfördelad slumpvariabel <span class="math inline">\(Y\)</span>.</p>
+</div>
+</div>
+<p>Om det tredje antagandet uppfylls kan vi modellera väntevärdet av <span class="math inline">\(Y|X\)</span> med den linjära modellen: <span id="eq-lin-reg-exp"><span class="math display">\[
+  E[Y|X] = \beta_0 + \beta_1 \cdot X
+\tag{2}\]</span></span> så att: <span class="math display">\[
+Y|X \overset{\mathrm{iid}}{\sim} N(\beta_0 + \beta_1 \cdot X, \sigma^2_{Y|X})
+\]</span></p>
+<p>Till skillnad från <a href="#eq-lin-reg" class="quarto-xref">Formel&nbsp;1</a> saknar <a href="#eq-lin-reg-exp" class="quarto-xref">Formel&nbsp;2</a> modellens felterm på grund av att vi nu modellerar endast medelvärdet av slumpvariabelns fördelning, <span class="math inline">\(\mu_{Y|X}\)</span>. Osäkerheten runtomkring medelvärdet är variansen av fördelningen.</p>
+<p>När vi modellerar varje enskilda observation inkluderas <span class="math inline">\(E\)</span> vilket innebär att vi kan flytta modellens antaganden från <span class="math inline">\(Y|X\)</span> till <span class="math inline">\(E\)</span>. <span id="eq-lin-reg-assumptions"><span class="math display">\[
+  E \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)
+\tag{3}\]</span></span></p>
+<p>Denna omskrivning ger oss en bra utgångspunkt att utvärdera lämpligheten av en anpassad modell.</p>
 
 
 
@@ -258,6 +432,9 @@ Figur&nbsp;1: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referenser</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-cdcNCHSNational" class="csl-entry" role="listitem">
 <span>“<span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — Cdc.gov.”</span> <a href="https://www.cdc.gov/nchs/" class="uri">https://www.cdc.gov/nchs/</a>.
+</div>
+<div id="ref-gu2008" class="csl-entry" role="listitem">
+Gu, Qiuping, Vicki L. Burt, Ryne Paulose-Ram, and Charles F. Dillon. 2008. <span>“<span class="nocase">Gender Differences in Hypertension Treatment, Drug Utilization Patterns, and Blood Pressure Control Among US Adults With Hypertension: Data From the National Health and Nutrition Examination Survey 1999–2004</span>.”</span> <em>American Journal of Hypertension</em> 21 (7): 789–98. <a href="https://doi.org/10.1038/ajh.2008.185">https://doi.org/10.1038/ajh.2008.185</a>.
 </div>
 <div id="ref-imdbNicolasCage" class="csl-entry" role="listitem">
 <span>“<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — Imdb.com.”</span> <a href="https://www.imdb.com/name/nm0000115/" class="uri">https://www.imdb.com/name/nm0000115/</a>.
