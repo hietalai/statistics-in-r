@@ -1,10 +1,14 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "stats-in-r",
+    "objectID": "regression.html",
+    "href": "regression.html",
+    "title": "Introduktion till regression",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+    "text": "Att undersöka samband mellan variabler är ett vanligt steg i att förstå relationer eller fenomen. Till exempel hur åldern på ett träd påverkar dess volym, hur olika doser av en medicin påverkar en individs blodtryck, eller hur en persons ålder och utbildningsnivå påverkar dens ingångslön.\nRegressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. I det allra enklaste fallet anpassas en linjär modell där variablernas samband antas enkelriktat och konstant. \\[\\begin{align*}\nY = \\beta_0 + \\beta_1 \\cdot X + E\n\\end{align*}\\] där:\n\n\\(Y\\) är den beroende/respons- variabeln som antas påverkas av \\(X\\).\n\\(X\\) är den oberoende/förklarande variabeln som antas påverka av \\(Y\\).\n\\(\\beta_0\\) är modellens intercept där linjen skär y-axeln när \\(X = 0\\).\n\\(\\beta_1\\) är lutningen som beskriver det enkelriktade samband mellan \\(X\\) och \\(Y\\). Mer specifikt beskriver parametern förändringen i \\(Y\\) när \\(X\\) ökar med en enhet.\n\\(E\\) är modellens felterm, avståndet mellan det observerade värdet på \\(Y\\) och modellens skattade värde \\(\\hat{Y}\\).\n\nOm flera förklarande variabler antas påverka responsvariabeln utökas den linjära modellen med flera \\(\\beta_j\\), en för varje förklarande variabel \\(X_j\\).\n\nOlika typer av studier\nEn matematisk modell behöver nödvändigtvis inte beskriva ett “orsak-och-verkan” samband, eller som vi brukar benämna det, ett kausalt samband. Samband kan ibland uppstå utav ren slump där det inte finns någon logisk koppling mellan olika variabler. Denna typ av samband benämns som korrelationssamband.\n\n\n\n\n\n\n\n\nFigur 1: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och antalet dödsfall av drunkning mellan 1999 och 2009 i USA (“CDC - NCHS - National Center for Health Statistics — Cdc.gov”; “Nicolas Cage | Actor, Producer, Director — Imdb.com”)\n\n\n\n\n\nFigur 1 uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. Modellen som anpassas för att beskriva sambandet kan inte urskilja mellan dessa två typer av samband vilket innebär att vi som analytiker behöver ha i åtanke\n\n\n\n\n\nReferenser\n\n“CDC - NCHS - National Center for Health Statistics — Cdc.gov.” https://www.cdc.gov/nchs/.\n\n\n“Nicolas Cage | Actor, Producer, Director — Imdb.com.” https://www.imdb.com/name/nm0000115/.",
+    "crumbs": [
+      "Regression",
+      "Introduktion till regression"
+    ]
   },
   {
     "objectID": "about.html",
@@ -12,5 +16,23 @@
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "01-regression/01-intro-to-regression.html",
+    "href": "01-regression/01-intro-to-regression.html",
+    "title": "intro-to-regression",
+    "section": "",
+    "text": "TESTing",
+    "crumbs": [
+      "Regression",
+      "intro-to-regression"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Statistical Applications in R",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
   }
 ]

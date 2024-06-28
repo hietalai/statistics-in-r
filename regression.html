@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk tillämpning i R - Statistical Applications in R</title>
+<title>Statistisk tillämpning i R - Introduktion till regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,41 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
 }
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
 }
-</style>
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -101,11 +87,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -123,7 +138,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./regression.html"> 
+    <a class="nav-link active" href="./regression.html" aria-current="page"> 
 <span class="menu-text">Regression</span></a>
   </li>  
 </ul>
@@ -132,21 +147,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./regression.html">Introduktion till regression</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regression.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Introduktion till regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-regression/01-intro-to-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">intro-to-regression</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">På denna sida</h2>
    
   <ul>
-  <li><a href="#testing" id="toc-testing" class="nav-link active" data-scroll-target="#testing">Testing</a>
-  <ul class="collapse">
-  <li><a href="#trial" id="toc-trial" class="nav-link" data-scroll-target="#trial">trial</a></li>
-  </ul></li>
-  <li><a href="#hesjf" id="toc-hesjf" class="nav-link" data-scroll-target="#hesjf">Hesjf</a></li>
+  <li><a href="#olika-typer-av-studier" id="toc-olika-typer-av-studier" class="nav-link active" data-scroll-target="#olika-typer-av-studier">Olika typer av studier</a></li>
   </ul>
 </nav>
     </div>
@@ -155,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Statistical Applications in R</h1>
+<h1 class="title">Introduktion till regression</h1>
 </div>
 
 
@@ -172,27 +220,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="testing" class="level1">
-<h1>Testing</h1>
-<p>This is a Quarto website.</p>
-<p>To learn more about Quarto websites visit <a href="https://quarto.org/docs/websites" class="uri">https://quarto.org/docs/websites</a>.</p>
+<p>Att undersöka samband mellan variabler är ett vanligt steg i att förstå relationer eller fenomen. Till exempel hur åldern på ett träd påverkar dess volym, hur olika doser av en medicin påverkar en individs blodtryck, eller hur en persons ålder och utbildningsnivå påverkar dens ingångslön.</p>
+<p>Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. I det allra enklaste fallet anpassas en linjär modell där variablernas samband antas enkelriktat och konstant. <span class="math display">\[\begin{align*}
+Y = \beta_0 + \beta_1 \cdot X + E
+\end{align*}\]</span> där:</p>
+<ul>
+<li><span class="math inline">\(Y\)</span> är den <em>beroende/respons- variabeln</em> som antas påverkas av <span class="math inline">\(X\)</span>.</li>
+<li><span class="math inline">\(X\)</span> är den <em>oberoende/förklarande variabeln</em> som antas påverka av <span class="math inline">\(Y\)</span>.</li>
+<li><span class="math inline">\(\beta_0\)</span> är modellens <em>intercept</em> där linjen skär y-axeln när <span class="math inline">\(X = 0\)</span>.</li>
+<li><span class="math inline">\(\beta_1\)</span> är <em>lutningen</em> som beskriver det enkelriktade samband mellan <span class="math inline">\(X\)</span> och <span class="math inline">\(Y\)</span>. Mer specifikt beskriver parametern förändringen i <span class="math inline">\(Y\)</span> när <span class="math inline">\(X\)</span> ökar med en enhet.</li>
+<li><span class="math inline">\(E\)</span> är modellens <em>felterm</em>, avståndet mellan det observerade värdet på <span class="math inline">\(Y\)</span> och modellens skattade värde <span class="math inline">\(\hat{Y}\)</span>.</li>
+</ul>
+<p>Om flera förklarande variabler antas påverka responsvariabeln utökas den linjära modellen med flera <span class="math inline">\(\beta_j\)</span>, en för varje förklarande variabel <span class="math inline">\(X_j\)</span>.</p>
+<section id="olika-typer-av-studier" class="level1">
+<h1>Olika typer av studier</h1>
+<p>En matematisk modell behöver nödvändigtvis inte beskriva ett “orsak-och-verkan” samband, eller som vi brukar benämna det, ett <em>kausalt</em> samband. Samband kan ibland uppstå utav ren slump där det inte finns någon logisk koppling mellan olika variabler. Denna typ av samband benämns som <em>korrelation</em>ssamband.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<div class="cell-output-display">
+<div id="fig-correlation" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-correlation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="regression_files/figure-html/fig-correlation-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-correlation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och antalet dödsfall av drunkning mellan 1999 och 2009 i USA <span class="citation" data-cites="cdcNCHSNational imdbNicolasCage">(<a href="#ref-cdcNCHSNational" role="doc-biblioref"><span>“<span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — Cdc.gov”</span></a>; <a href="#ref-imdbNicolasCage" role="doc-biblioref"><span>“<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — Imdb.com”</span></a>)</span>
+</figcaption>
+</figure>
 </div>
 </div>
-<section id="trial" class="level2">
-<h2 class="anchored" data-anchor-id="trial">trial</h2>
-</section>
-</section>
-<section id="hesjf" class="level1">
-<h1>Hesjf</h1>
+</div>
+<p><a href="#fig-correlation" class="quarto-xref">Figur&nbsp;1</a> uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. Modellen som anpassas för att beskriva sambandet kan inte urskilja mellan dessa två typer av samband vilket innebär att vi som analytiker behöver ha i åtanke</p>
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referenser</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-cdcNCHSNational" class="csl-entry" role="listitem">
+<span>“<span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — Cdc.gov.”</span> <a href="https://www.cdc.gov/nchs/" class="uri">https://www.cdc.gov/nchs/</a>.
+</div>
+<div id="ref-imdbNicolasCage" class="csl-entry" role="listitem">
+<span>“<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — Imdb.com.”</span> <a href="https://www.imdb.com/name/nm0000115/" class="uri">https://www.imdb.com/name/nm0000115/</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
