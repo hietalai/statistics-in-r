@@ -1,0 +1,29 @@
+project:
+  type: website
+  
+website:
+  title: "Statistisk tillämpning i R"
+  navbar:
+    left:
+      # - href: index.qmd
+      #   text: Home
+      # - about.qmd
+      - href: regression.qmd
+        text: "Regression"
+  sidebar: 
+    - title: "Regression"
+      style: "docked"
+      search: true
+      contents: 
+        - regression.qmd
+        - 01-regression/01-intro-to-regression.qmd
+bibliography: bibliography.bib
+
+format:
+  html:
+    theme: sandstone #lux superhero united sandstone
+    css: styles.css
+    toc: true
+
+
+

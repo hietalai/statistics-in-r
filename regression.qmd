@@ -1,0 +1,157 @@
+---
+title: "Introduktion till regression"
+editor_options: 
+  chunk_output_type: console
+language: custom.yml
+---
+
+```{r setup}
+#| include: false
+
+require(tidyverse)
+require(palmerpenguins)
+
+penguins <- filter(penguins, !is.na(sex))
+
+```
+
+Att undersöka samband mellan variabler är ett vanligt steg i att förstå relationer eller fenomen. Till exempel hur åldern på ett träd påverkar dess volym, hur olika doser av en medicin påverkar en individs blodtryck, eller hur en persons ålder och utbildningsnivå påverkar dens ingångslön.
+
+Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. I det allra enklaste fallet anpassas en linjär modell där variablernas samband antas enkelriktat och konstant.
+$$
+Y = \beta_0 + \beta_1 \cdot X + E
+$$ {#eq-lin-reg}
+
+där:
+
+- $Y$ är den *beroende/respons- variabeln* som antas påverkas av $X$.
+- $X$ är den *oberoende/förklarande variabeln* som antas påverka av $Y$.
+- $\beta_0$ är modellens *intercept* där linjen skär y-axeln när $X = 0$.
+- $\beta_1$ är *lutningen* som beskriver det enkelriktade samband mellan $X$ och $Y$. Mer specifikt beskriver parametern förändringen i $Y$ när $X$ ökar med en enhet.
+- $E$ är modellens *felterm*, avståndet mellan det observerade värdet på $Y$ och modellens skattade värde $\hat{Y}$.
+
+Om flera förklarande variabler antas påverka responsvariabeln utökas den linjära modellen med flera $\beta_j$, en för varje förklarande variabel $X_j$.
+
+## Studier och andra variabler
+En matematisk modell behöver nödvändigtvis inte beskriva ett "orsak-och-verkan" samband, eller som vi brukar benämna det, ett *kausalt* samband. Samband kan ibland uppstå utav ren slump där det inte finns någon logisk koppling mellan olika variabler. Denna typ av samband benämns som *korrelation*ssamband.
+
+```{r}
+#| echo: false
+#| fig-cap: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och antalet dödsfall av drunkning mellan 1999 och 2009 i USA [@cdcNCHSNational;@imdbNicolasCage]
+#| fig-width: 5
+#| fig-height: 3
+#| label: fig-correlation
+
+data <- 
+  tibble(
+    cage = c(2,2,2,3,1,1,2,3,4,1,4),
+    drowning = c(107,103,103,97,86,93,94,95,119,93,104)
+  )
+
+ggplot(data) + aes(x = cage, y = drowning) + geom_point() + 
+  theme_bw() + labs(x = "Filmer", y = "Dödsfall") + 
+  theme(
+    text = element_text(size = 14)
+  )
+
+```
+
+@fig-correlation uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. 
+
+En regressionsmodell som beskriver sambandet kan inte urskilja mellan de två typer av samband vilket innebär att vi som analytiker måste ta hänsyn till vilken sorts och hur data har samlats in. 
+
+Exemplet i figuren är insamlad som en *observationsstudie* där mätvärden (antal dödsfall och filmer) på enheterna (år) har observerats från olika registerdata. Vi har inte kunnat styra vilken relation dessa variabler har till varandra och studien i sig har inte tagit hänsyn till någon specifik orsak och verkan mellan de två. Vi kan därför endast dra slutsatser om korrelationssamband från en observationsstudie, vi kan säga att desto fler filmer Nicolas Cage medverkar i medför ett större antal dödsfall, men vi kan inte säga något om den kausala effekten.
+
+För att kunna dra slutsatser om kausala samband behöver vi genomföra en *experimentell studie* där vi styr vilka mätvärden som enheter får eller har och responsvariablen antas vara en direkt verkan av de förklarande variablerna. Medicinska studier, till exempel studier om Covid-vaccinets effektivitet på att motverka en infektion, är typiska exempel på experimentella studier där en förklarande variabel (dos) ges till vissa grupper av enheter där andra påverkande effekter kontrolleras för att justera den förklarande variabelns verkliga påverkan. 
+
+I en observationsstudie kan vi ibland observera *kontrollvariabler* som kan justera den förklarande variabelns faktiska påverkan men det är främst i experimentella studier som dessa typer av variabler kan användas. Okända variabler kallas för *confounding*-effekter och antas påverka både den förklarande och responsvariabeln.
+
+I följande två figurer visas den förklarande och responsvariabeln med ovaler. De kända (heldragen) och okända (streckade) kontrollvariablerna visas som rektanglar.
+
+::: {#fig-obs-relation}
+```{dot}
+//| fig-height: 2
+
+digraph G {
+  layout=dot
+  overlap=false
+  
+  Okänd [shape=rectangle, style=dashed]
+  
+  Filmer -> Dödsfall
+  
+  Okänd -> Filmer [style=dashed]
+  Okänd -> Dödsfall [style=dashed]
+  
+  {rank=same; Filmer; Dödsfall;}
+}
+
+```
+
+Exempel på relationen mellan variabler i en observationsstudie.
+:::
+
+Eftersom sambandet mellan filmer och dödsfall förmodligen endast uppkommit av slumpen kan det finnas andra okända variabler som påverkar de båda.
+
+::: {#fig-obs-relation}
+```{dot}
+//| fig-height: 2
+
+digraph G {
+  layout=dot
+  overlap=false
+  
+  Ålder [shape=rectangle]
+  Kön [shape=rectangle]
+  
+  Medicin -> Blodtryck
+  
+  {Ålder, Kön} -> Blodtryck
+  
+  {rank=same; Medicin; Blodtryck;}
+}
+
+```
+
+Exempel på relationen mellan variabler i en experimentell studie.
+:::
+
+Effekten av en medicin på blodtryck kan också påverkas av personens ålder och kön [@gu2008] vilka inkluderas i modellen för att isolera den förklarande variabelns effekt.
+
+## Modellens antaganden
+Syftet med en modell är att ge en lämplig förenkling av verkligheten. En linjär regressionsmodell kan vara en lämplig förenkling av ett samband om följande antaganden uppfylls:
+
+1. att det för varje $X$ finns en slumpvariabel $Y$ med ett ändligt medelvärde och varians,
+2. observationerna är oberoende av varandra,
+3. medelvärdet, $\mu_{Y|X}$, kan modelleras linjärt,
+4. variansen för $Y$ är lika för alla värden av $X$, $\sigma^2_{Y|X} \equiv \sigma^2$,
+5. slumpvariabeln $Y$ är normalfördelad för alla värden av $X$.
+
+Vi kan sammanfatta majoriteten av dessa antaganden med:
+$$
+   Y|X \overset{\mathrm{iid}}{\sim} N(\mu_{Y|X}, \sigma^2_{Y|X})
+$$
+där $\mathrm{iid}$ betyder "independent and identically distributed" motsvarande antagande 2.
+
+::: {.callout-important}
+Det finns inget antagande om att $Y \sim N(\mu_Y, \sigma^2_Y)$! Alla dessa antaganden fokuserar på att vi med hjälp av $X$ har en normalfördelad slumpvariabel $Y$.
+::: 
+
+Om det tredje antagandet uppfylls kan vi modellera väntevärdet av $Y|X$ med den linjära modellen:
+$$
+  E[Y|X] = \beta_0 + \beta_1 \cdot X 
+$$ {#eq-lin-reg-exp}
+så att:
+$$
+Y|X \overset{\mathrm{iid}}{\sim} N(\beta_0 + \beta_1 \cdot X, \sigma^2_{Y|X})
+$$
+
+Till skillnad från @eq-lin-reg saknar @eq-lin-reg-exp modellens felterm på grund av att vi nu modellerar endast medelvärdet av slumpvariabelns fördelning, $\mu_{Y|X}$. Osäkerheten runtomkring medelvärdet är variansen av fördelningen. 
+
+När vi modellerar varje enskilda observation inkluderas $E$ vilket innebär att vi kan flytta modellens antaganden från $Y|X$ till $E$. 
+$$
+  E \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)
+$$ {#eq-lin-reg-assumptions}
+
+Denna omskrivning ger oss en bra utgångspunkt att utvärdera lämpligheten av en anpassad modell.
+
