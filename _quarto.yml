@@ -3,11 +3,9 @@ project:
   
 website:
   title: "Statistisk tillämpning i R"
+  page-navigation: true
   navbar:
     left:
-      # - href: index.qmd
-      #   text: Home
-      # - about.qmd
       - href: regression.qmd
         text: "Regression"
   sidebar: 
@@ -16,14 +14,20 @@ website:
       search: true
       contents: 
         - regression.qmd
-        - 01-regression/01-intro-to-regression.qmd
+        - 01-regression/01-explorative-analysis.qmd
+        - 01-regression/02-model-structure.qmd
+        - 01-regression/03-model-assessment.qmd
 bibliography: bibliography.bib
 
 format:
   html:
-    theme: sandstone #lux superhero united sandstone
+    theme: simplex #lux united pulse simplex
     css: styles.css
     toc: true
+    tbl-cap-location: top
+    language: custom.yml
+    code-fold: true
+    code-summary: "Visa kod"
 
 
-
+# quarto publish gh-pages

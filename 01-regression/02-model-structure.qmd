@@ -1,0 +1,335 @@
+---
+title: "Regressionsmodellen"
+editor_options: 
+  chunk_output_type: console
+
+---
+<!-- Setup -->
+
+```{r setup}
+#| include: false
+
+# Laddar paketet med datamaterialet
+require(palmerpenguins)
+require(tidyverse)
+require(plotly)
+require(kableExtra)
+require(ggforce)
+
+# Filtrerar bort observationer med saknade värden
+penguins <- 
+  penguins %>% 
+  filter(!is.na(sex))
+
+```
+
+<!-- New commands for matrices in regression -->
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
+}
+
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
+
+ <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
+
+<!-- CONTENT -->
+
+Efter att ha sammanställt iaktaggelser från visualiseringar och beskrivande statistik, är nästa steg i processen att bygga modellen. Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i @sec-modellantaganden. Det enklaste är att börja med de kvantitativa variablerna som (vanligtvis) endast kräver en term vardera i modellen.
+
+$$
+\text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \cdots + E
+$$ {#eq-penguin-quant}
+
+## Indikatorvariabler
+En regressionsmodell kan inte hantera kvalitativa variabler direkt, exempelvis $\beta_4 \cdot \text{art}$, då variabelns värden beskriver kategorier inte värden från en numerisk skala. Detta gäller även om den kvalitativa variabeln är kodad numerisk. En lutningsparameter beskriver den konstanta förändring i responsvariabeln när den tillhörande förklarande variabeln ökar med en enhet, men en kvalitativ variabel har oftast ingen enhet och inte heller konstanta förändringar mellan intilliggande värden. Istället måste vi transformera den kvalitativa variabeln numerisk genom *indikatorvariabler* (även kallad dummyvariabler). 
+
+Som namnet antyder används indikatorvariabler för att indikera vilken kategori en observation har uppmätt på den kvalitativa variabeln. Vi behöver då skapa en begränsad mängd indikatorvariabler som på ett tydligt sätt visar exakt en kategori per observation. 
+
+Anta att en kvalitativ variabel har 3 kategorier:
+$$
+\begin{bmatrix}A\\B\\C\end{bmatrix}
+$$
+Vi kan börja med att skapa en indikatorvariabel för kategori A som antar värdet 1 om observationen har uppmätt kategorin, 0 annars:
+
+$$
+\begin{bmatrix}A\\B\\C\end{bmatrix} = \begin{bmatrix}1\\0\\0\end{bmatrix}
+$$
+Med endast en indikatorvariabel kan vi inte tydligt identifiera om en observation har uppmätt kategori B eller C då de båda har värdet 0, så vi lägger till ytterligare en indikator som antar värdet 1 om observationen uppmätt kategori B, 0 annars:
+
+$$
+\begin{bmatrix}A\\B\\C\end{bmatrix} = \begin{bmatrix}1 & 0\\0 & 1\\0 & 0\end{bmatrix}
+$$
+Nu skulle det vara lätt att fortsätta, att skapa en indikatorvariabel även för den sista kategorin, men det behövs inte. Om båda indikatorvariablerna är 0 har vi lyckats identifiera att observationen uppmätt kategori C och ytterligare en variabel är bara onödig information. 
+
+Den sista kategorin blir också vår *referenskategori*, den kategori som de andra indikatorvariablernas effekter tolkas gentemot. När vi tolkar lutningsparametrar för indikatorvariabler, till exempel indikatorvariabeln för A, mäts förändringen i $Y$ när $X = A$ jämfört med när $X = C$.
+
+::: {.callout-important}
+Rent matematiskt kommer tre indikatorvariabler modellera ett perfekt samband och skapa problem med singularitet i beräkningarna.
+:::
+
+Generellt skapas $\text{antal kategorier} - 1$ indikatorvariabler för varje kvalitativa variabel som ska inkluderas i en regressionsmodell. Valet av referenskategori för respektive är godtyckligt, men vanligtvis används den första eller sista kategorin för detta ändamål.
+
+För att slutföra modelleringen av @eq-penguin-quant ska vi inkludera Art och Kön i modellen. Då behöver vi skapa två respektive en indikatorvariabel enligt:
+
+\begin{align*}
+  Gentoo &= \begin{cases}
+            1 \qquad \text{om art Gentoo}\\
+            0 \qquad \text{annars}
+        \end{cases}\\
+  Chinstrap &= \begin{cases}
+      1 \qquad \text{om art Chinstrap}\\
+      0 \qquad \text{annars}
+  \end{cases}
+\end{align*}
+
+och 
+
+\begin{align*}
+  hane &= \begin{cases}
+            1 \qquad \text{om hane}\\
+            0 \qquad \text{annars}
+        \end{cases}
+\end{align*}
+
+för att till slut skapa följande modell:
+
+$$
+\text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \beta_4 \cdot \text{Gentoo} + \beta_5 \cdot \text{Chinstrap} + \beta_6 \cdot \text{hane} + E
+$$ {#eq-penguin-full-simple}
+
+där Adelie och honor agerar referenskategori för respektive kvalitativ variabel. 
+
+## Modellanpassning
+@eq-penguin-full-simple visar den sanna modell som utgår ifrån populationens alla observerade värden, men nästintill alla undersökningar utgår från någon form av urval. Även en totalundersökning under en viss period kan anses vara ett urval i tiden om modellen avses att användas efter undersökningsperioden är slutförd.
+
+Vi kan beteckna den anpassade modellen med dess skattade parametrar enligt:
+
+$$
+\hat{y}_i = b_0 + b_1 \cdot x_{1i} + b_2 \cdot x_{2i} + b_3 \cdot x_{3i} + b_4 \cdot x_{4i} + b_5 \cdot x_{5i} + b_6 \cdot x_{6i}
+$$ {#eq-penguin-est-simple}
+där
+\begin{align*}
+  \hat{y}_i &= \text{responsvariabelns skattade värde för observation i}\\
+  b_0 &= \text{skattning av interceptet}\\
+  b_1 - b_6 &= \text{skattning av lutningsparametrar}
+\end{align*}
+
+::: {.callout-note}
+Viss litteratur använder $\hat{\beta}$ som beteckning för skattade parametrar.
+:::
+
+Modellen anpassas med hjälp av *minsta kvadratskattningen* (eng. **O**rdinary **L**east **S**quares, OLS), där syftet är att minimera modellens totala fel. Vi kan notera att @eq-penguin-est-simple saknar feltermen $E$ som inkluderas tidigare, vilket kommer från att den anpassade modellen endast består av regressionslinjen. Kom ihåg att en regressionsmodell ämnar att ge en förenkling av verkligheten. Men $E$ beskrev ju felet i modellen och om vi ska minimera det totala felet behöver vi på något sätt ta hänsyn till denna term i modellanpassningen.
+
+Anta att vi anpassar en modell enbart på kroppsvikt och näbblängd. Om vi skulle projicera den anpassade enkla linjära modellen i ett spridningsdiagram över de två variablerna (@fig-reg-errors) skulle linjen inte lyckas träffa alla punkter exakt, varje enskilda observation kommer ligga ett visst avstånd från regressionslinjen. Detta avstånd är observationens *residual* som betecknas med $e_i$.
+
+```{r}
+#| fig-cap: Visualisering av regressionsmodellens residualer
+#| fig-height: 3
+#| fig-width: 5 
+#| label: fig-reg-errors
+#| echo: FALSE
+
+ggplot(penguins) + aes(x = body_mass_g, y = bill_length_mm) + 
+  geom_point(color = "steelblue") +
+  geom_smooth(
+    method = "lm", 
+    formula = y  ~ x, 
+    se = FALSE, 
+    color = "steelblue", 
+    linewidth = 1.5
+  ) +
+  theme_bw() +
+  labs(y = "Näbblängd (mm)", x = "Kroppsvikt (g)") + 
+  annotate(
+    geom = "segment", 
+    x = penguins$body_mass_g[penguins$body_mass_g == min(penguins$body_mass_g)],
+    xend = penguins$body_mass_g[penguins$body_mass_g == min(penguins$body_mass_g)],
+    y = penguins$bill_length_mm[penguins$body_mass_g == min(penguins$body_mass_g)],
+    yend = lm(bill_length_mm ~ body_mass_g, data = penguins)$fit[penguins$body_mass_g == min(penguins$body_mass_g)],
+    color = "#d9230f",
+    linewidth = 1,
+    linetype = 2
+  ) + 
+  annotate(
+    "text", 
+    x = penguins$body_mass_g[penguins$body_mass_g == min(penguins$body_mass_g)]+150, 
+    y = 45, 
+    parse = TRUE, 
+    label = "e[i]", 
+    color = "#d9230f"
+  )
+
+
+```
+
+Matematiskt beräknar vi $e_i = Y_i - \hat{Y}_i$, där $Y_i$ är det observerade värdet (punkten) och $\hat{Y}_i$ är modellens anpassade värde (linjen). Minsta kvadratskattningen beräknar modellens alla parametrar så att det totala felet (**S**um of **S**quares of **E**rror, SSE) för alla residualer blir så litet som möjligt. 
+
+$$
+SSE = \sum_{i = 1}^n e_i^2 = \sum_{i = 1}^n (Y_i - \hat{Y}_i)^2
+$$ {#eq-sse}
+
+I en enkel linjär regression går det att härleda fram analytiska lösningar för de två parameterskattningarna, $b_0$ och $b_1$, som minimerar SSE men så fort vi inkluderar flera variabler blir detta betydligt svårare. Istället förlitar vi (och R) oss på matrisberäkningar som presenteras mer i @sec-matrices.
+
+::: {.callout-important}
+Formler för parameterskattningarna i en enkel linjär regression är:
+\begin{align*}
+  b_1 &= \frac{\Sum{n}(X_i - \bar{X})(Y_i - \bar{Y})}{\Sum{n}(X_i - \bar{X})^2} \\
+  b_0 &= \bar{Y} - b_1 \cdot \bar{X}
+\end{align*}
+:::
+
+### Modellanpassning i R
+För att anpassa en linjär regressionsmodell i R används funktionen `lm()` med följande argument: 
+
+- `formula`: modellens struktur som ett formelobjekt
+- `data`: datamaterialet som variablerna hittas
+
+Ett formelobjekt är ett speciellt format som R använder för att beskriva relationen mellan variabler. Generellt anges formatet som `y ~ x` där `x` består utav de olika förklarande variablerna, till exempel `bill_length_mm ~ body_mass_g + bill_depth_mm`. Det finns ett kortkommando (`~ .`) som används i exemplet nedan, där alla övriga variabler inkluderas i högerledet , men det kräver att vi först har ett datamaterial enbart bestående av de förklarande variablerna från @eq-penguin-full-simple. 
+
+Vi måste också se till att alla variabler i datamaterialet har rätt variabeltyp som vi förväntar oss. Vi identifierade i @sec-example-data att vi hade tre kvantitativa variabler och två kvalitativa variabler som i R motsvarar typerna `numeric` och `Factor`. Att använda sig av `Factor` underlättar transformationen till indikatorvariabler eftersom R vet att den måste göra så för att modellen ska fungera. Om de kvalitativa variablerna var av typen `character` eller kodad `numeric` är det inte säkert att R skapar indikatorvariabler. Vi kan undersöka variabeltyperna för `penguins` med hjälp av `str()`.
+
+
+
+```{r}
+#| code-fold: false
+
+# Tar endast med de variabler som vi ansåg ha ett samband med responsvariabeln
+modelData <- 
+  penguins %>% 
+  select(
+    bill_length_mm,
+    body_mass_g,
+    flipper_length_mm,
+    bill_depth_mm,
+    species,
+    sex
+  )
+
+# Anpassar angiven modell
+model <- lm(formula = bill_length_mm ~ ., data = modelData)
+
+```
+
+Med `summary()` får vi en detaljerad utskrift för modellen som inkluderar de anpassade *regressionskoefficienterna*. Vid presentation av en sådan utskrift kan vi använda `kable()` eller `xtable()` för att få en snyggare utskrift.
+
+::: {#fig-reg-summary-bad}
+```{r}
+
+summary(model)
+
+```
+Inte särskilt snygg utskrift
+:::
+
+
+```{r}
+#| tbl-cap: En snygg utskrift av modellens anpassade parametrar
+#| tbl-cap-location: top
+#| label: tbl-reg-summary-good
+
+summary(model) %>% 
+  coef() %>% 
+  as_tibble(rownames = NA) %>% 
+  rownames_to_column() %>% 
+  rename(
+    ` ` = rowname,
+    Skattning = Estimate,
+    Medelfel = `Std. Error`,
+    `t-värde` = `t value`,
+    `p-värde` = `Pr(>|t|)`
+  ) %>% 
+  kable(
+    digits = 4
+  ) %>% 
+  kable_styling("striped")
+
+```
+
+::: {.callout-tip}
+För att skapa denna snygga utskrift av koefficienterna behöver vi plocka ut en enskild del av `summary()` med hjälp av `coef()`. I dokumentationen för `lm()` finns mer information om vad som kan hämtas från det resulterande regressionsobjektet. 
+
+R är ett objektorienterat programmeringsspråk, och funktionen lm() returnerar ett objekt av klassen ”lm”, vilket är en lista. Det är enkelt att plocka önskade delar från den listan vid behov. Det finns en mängd funktioner kopplade till objekt av klassen ”lm”: 
+
+- `coef()`: Ger regressionskoefficienter
+- `residuals()`: Ger residualerna
+- `fitted()`: Ger de anpassade värdena ($\hat{Y}$)
+- `summary()`: Ger en sammanfattande analys av regressionsmodellen. Funktionen returnerar ett objekt
+av klassen ”summary.lm”. Se `?summary.lm` i dokumentationen. coef() funkar även på dessa objekt som vi såg ovan.
+- `anova()`: Ger ANOVA-tabellen för modellen
+- `predict()`: gör prediktioner för (nya) x-värden, alltså beräknar $\hat{Y}$ för givna x-värden. Kan även
+beräkna konfidensintervall och prediktionsintervall för $\hat{Y}$. Se `?predict.lm()` för detaljer.
+- `plot()`: Ger olika diagnostiska plottar, se `?plot.lm` för detaljer.
+- `confint()`: Beräknar konfidensintervall för regressionskoefficienterna
+- `model.matrix()`: skapar olika typer av designmatriser som kan användas i `lm()`, se @sec-matrices.
+
+Det är också användbart att använda `str()` på lm-objekt. Kolla i `?lm()` under Value rubriken för att se vilka olika delar som finns i objektet.
+:::
+
+@tbl-reg-summary-good visar de skattade lutningsparametrarna (koefficienterna). Exempelvis kan vi se att för varje gram mer en pingvin väger ökar näbbens längd med ca 0.0011 mm i genomsnitt **givet att alla andra variabler hålls konstanta**. Den sista delen av denna tolkning är viktig att inkludera då en förändring av flera variabler skulle medföra en annan förändring av responsvariabeln i relation till respektive koefficient. 
+
+Indikatorvariablerna tolkas inom sin grupp jämfört med referenskategorin, till exempel har Gentoo-pingviner i genomsnitt en 6.4 mm större näbblängd än referenskategorin Adelie-pingviner givet att alla andra variabler hålls konstanta.
+
+Interceptet är endast relevant att tolka om *värdemängden* är alla 0, det vill säga att data täcker det område där alla förklarande variabler antar värdet 0. I just detta exempel finns det inte data över dessa områden vilket medför att värdet på interceptet inte har någon rimlig tolkning. 
+
+::: {.callout-important}
+Även om tolkningen av interceptet inte blir rimlig **måste** interceptet inkluderas i modellanpassningen för att minsta kvadratskattningen ska minimera SSE. Om interceptet hade plockats bort motsvarar det en linje som tvingas att korsa y-axeln vid $y = 0$ vilket resulterar i att modellen inte beskriver de fenomen som vi vill att den ska beskriva.
+:::
+
+Det är inte bara koefficienttabellen som är relevant att titta på i en modellanpassning och vi kommer tillbaka till de andra objekten som finns inuti `lm` senare.
+
+## Matrisberäkningar {#sec-matrices}
+Matriser underlättar de tunga beräkningar som krävs för att anpassa en regressionsmodell med flera förklarande variabler. Vi kan formulera en regressionsmodell i matrisform enligt:
+$$
+\mathbf{Y} = \mathbf{X} \boldsymbol{\beta} + \mathbf{E}
+$$ {#eq-reg-matrix}
+där, 
+$$
+    \mathbf{Y} = \underset{n \times 1}{\Ymatrix} \quad \mathbf{X} = \underset{n \times p}{\Xmatrix} \quad \boldsymbol{\beta} = \underset{p \times 1}{\betamatrix} \quad \mathbf{E} = \underset{n \times 1} {\Ematrix}
+$$
+$\mathbf{X}$ kallas för *designmatrisen* och innehåller alla $k$ förklarande variabler, en kolumn för varje, samt en första kolumn med 1:or som motsvarar interceptet. Indikatorvariabler adderar till antalet förklarande variabler trots att de utgår ifrån samma kvalitativa variabel, se @eq-penguin-full-simple där vi totalt har 6 förklarande variabler. $p$ beskriver antalet parametrar, motsvarande $k + 1$ antalet lutningsparametrar + interceptet, och $n$ är antalet observationer.
+
+Skattningen av $\hat{\boldsymbol{\beta}}$ minimerar fortfarande SSE där:
+$$
+SSE = (\mathbf{Y} - \mathbf{X}\boldsymbol{\hat{\beta}})'(\mathbf{Y}-\mathbf{X}\boldsymbol{\hat{\beta}})
+$$ {#eq-sse-matrix}
+
+och 
+$$
+\boldsymbol{\hat{\beta}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y}
+$$ {#eq-bhat-matrix}
+
+### Matriser i R
+R använder sig av matriser i bakgrunden när vi använder `lm()` men vi kan också skapa våra egna utifrån datamaterialet och genomföra matrisberäkningen för $\boldsymbol{\hat{\beta}}$ eller SSE. 
+
+Designmatrisen är den mest komplexa att skapa, speciellt om vi har kvalitativa variabler med i data, men som tur är kan vi använda samma formelobjekt i funktionen `model.matrix()`.
+
+```{r}
+#| code-fold: false
+
+X <- 
+  model.matrix(
+    bill_length_mm ~ ., 
+    data = modelData
+  )
+
+Y <- 
+  modelData$bill_length_mm %>% 
+  as.matrix()
+
+dim(X)
+dim(Y)
+
+```
+
+
+
+
+

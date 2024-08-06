@@ -17,7 +17,19 @@ penguins <- filter(penguins, !is.na(sex))
 
 Att undersöka samband mellan variabler är ett vanligt steg i att förstå relationer eller fenomen. Till exempel hur åldern på ett träd påverkar dess volym, hur olika doser av en medicin påverkar en individs blodtryck, eller hur en persons ålder och utbildningsnivå påverkar dens ingångslön.
 
-Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. I det allra enklaste fallet anpassas en linjär modell där variablernas samband antas enkelriktat och konstant.
+Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. Generellt är modeller någon form av konstruktion som skapas för att öka förståelsen av någonting verkligt. Till exempel är en flygplansmodell inte ett riktigt flygplan men kan användas för att förstå hur ett flygplan är uppbyggd och hur den kan hantera luftströmmar och andra fenomen. Ett klassiskt exempel är tavlan "Ceci n'est pas une pipe" av René Magritte (@fig-pipe) som visar en representation (en modell) av en pipa, inte en fungerande pipa. 
+
+::: {#fig-pipe}
+```{r}
+#| echo: false
+#| out-width: 400px
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/a/a7/Ceci_n%27est_pas_une_pipe_graffiti_in_Bucharest.jpg")
+```
+[bixentro](https://commons.wikimedia.org/wiki/File:Ceci_n%27est_pas_une_pipe_graffiti_in_Bucharest.jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0), via Wikimedia Commons
+:::
+
+## Den linjära regressionsmodellen
+Det finns många olika sorters modeller inom regressionsanalys, men i det allra enklaste fallet anpassas en linjär modell där variablernas samband antas enkelriktat och konstant.
 $$
 Y = \beta_0 + \beta_1 \cdot X + E
 $$ {#eq-lin-reg}
@@ -25,15 +37,15 @@ $$ {#eq-lin-reg}
 där:
 
 - $Y$ är den *beroende/respons- variabeln* som antas påverkas av $X$.
-- $X$ är den *oberoende/förklarande variabeln* som antas påverka av $Y$.
+- $X$ är den *oberoende/förklarande variabeln* som antas påverka $Y$.
 - $\beta_0$ är modellens *intercept* där linjen skär y-axeln när $X = 0$.
 - $\beta_1$ är *lutningen* som beskriver det enkelriktade samband mellan $X$ och $Y$. Mer specifikt beskriver parametern förändringen i $Y$ när $X$ ökar med en enhet.
 - $E$ är modellens *felterm*, avståndet mellan det observerade värdet på $Y$ och modellens skattade värde $\hat{Y}$.
 
-Om flera förklarande variabler antas påverka responsvariabeln utökas den linjära modellen med flera $\beta_j$, en för varje förklarande variabel $X_j$.
+Om flera förklarande variabler antas påverka responsvariabeln utökas den linjära modellen med flera $\beta_j$, en för varje förklarande variabel $X_j$. Senare kapitel kommer titta närmare på utökningar av denna linjära modell.
 
 ## Studier och andra variabler
-En matematisk modell behöver nödvändigtvis inte beskriva ett "orsak-och-verkan" samband, eller som vi brukar benämna det, ett *kausalt* samband. Samband kan ibland uppstå utav ren slump där det inte finns någon logisk koppling mellan olika variabler. Denna typ av samband benämns som *korrelation*ssamband.
+En matematisk modell behöver nödvändigtvis inte beskriva ett "orsak-och-verkan" samband, eller som vi brukar benämna det, ett *kausalt* samband. Samband kan ibland uppstå utav ren slump där det inte finns någon logisk koppling mellan olika variabler. Denna typ av samband benämns som *korrelation*ssamband. Trots att korrelationssamband rent matematiskt beskriver en påverkan från den ena variabeln till den andra, är det i vissa fall inte lämpligt eller relevant att använda eller tolka modellen i verkligheten.
 
 ```{r}
 #| echo: false
@@ -56,14 +68,13 @@ ggplot(data) + aes(x = cage, y = drowning) + geom_point() +
 
 ```
 
-@fig-correlation uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. 
+@fig-correlation uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. Att beskriva detta samband skulle inte ge någon information om verkligheten så en viktig del av regressionsanalys är att bedöma lämpligheten och relevansen av utvalda variabler. En regressionsmodell kan inte heller urskilja mellan kausala eller korrelationssamband vilket innebär att vi som analytiker måste ta hänsyn till vilken sorts data och hur data har samlats in för att använda och tolka modeller på rätt sätt.
 
-En regressionsmodell som beskriver sambandet kan inte urskilja mellan de två typer av samband vilket innebär att vi som analytiker måste ta hänsyn till vilken sorts och hur data har samlats in. 
-
-Exemplet i figuren är insamlad som en *observationsstudie* där mätvärden (antal dödsfall och filmer) på enheterna (år) har observerats från olika registerdata. Vi har inte kunnat styra vilken relation dessa variabler har till varandra och studien i sig har inte tagit hänsyn till någon specifik orsak och verkan mellan de två. Vi kan därför endast dra slutsatser om korrelationssamband från en observationsstudie, vi kan säga att desto fler filmer Nicolas Cage medverkar i medför ett större antal dödsfall, men vi kan inte säga något om den kausala effekten.
+Exemplet i figuren är insamlad som en *observationsstudie* där mätvärden (antal dödsfall och filmer) på enheterna (år) har observerats från olika registerdata. Vi har inte kunnat styra vilken relation dessa variabler har till varandra och studien i sig har inte tagit hänsyn till någon specifik orsak och verkan mellan de två. Vi kan därför endast dra slutsatser om korrelationssamband från en observationsstudie, vi kan säga att desto fler filmer Nicolas Cage medverkar i medför ett större antal dödsfall (vilket egentligen inte är relevant), men vi kan inte säga något om den kausala effekten.
 
 För att kunna dra slutsatser om kausala samband behöver vi genomföra en *experimentell studie* där vi styr vilka mätvärden som enheter får eller har och responsvariablen antas vara en direkt verkan av de förklarande variablerna. Medicinska studier, till exempel studier om Covid-vaccinets effektivitet på att motverka en infektion, är typiska exempel på experimentella studier där en förklarande variabel (dos) ges till vissa grupper av enheter där andra påverkande effekter kontrolleras för att justera den förklarande variabelns verkliga påverkan. 
 
+### Kontrollvariabler
 I en observationsstudie kan vi ibland observera *kontrollvariabler* som kan justera den förklarande variabelns faktiska påverkan men det är främst i experimentella studier som dessa typer av variabler kan användas. Okända variabler kallas för *confounding*-effekter och antas påverka både den förklarande och responsvariabeln.
 
 I följande två figurer visas den förklarande och responsvariabeln med ovaler. De kända (heldragen) och okända (streckade) kontrollvariablerna visas som rektanglar.
@@ -118,7 +129,7 @@ Exempel på relationen mellan variabler i en experimentell studie.
 
 Effekten av en medicin på blodtryck kan också påverkas av personens ålder och kön [@gu2008] vilka inkluderas i modellen för att isolera den förklarande variabelns effekt.
 
-## Modellens antaganden
+## Modellens antaganden {#sec-modellantaganden}
 Syftet med en modell är att ge en lämplig förenkling av verkligheten. En linjär regressionsmodell kan vara en lämplig förenkling av ett samband om följande antaganden uppfylls:
 
 1. att det för varje $X$ finns en slumpvariabel $Y$ med ett ändligt medelvärde och varians,
@@ -134,7 +145,7 @@ $$
 där $\mathrm{iid}$ betyder "independent and identically distributed" motsvarande antagande 2.
 
 ::: {.callout-important}
-Det finns inget antagande om att $Y \sim N(\mu_Y, \sigma^2_Y)$! Alla dessa antaganden fokuserar på att vi med hjälp av $X$ har en normalfördelad slumpvariabel $Y$.
+Det finns inget antagande om att $Y \sim N(\mu_Y, \sigma^2_Y)$! Alla antaganden för en linjär regressionsmodell fokuserar på att vi **med hjälp av $X$** har en normalfördelad slumpvariabel $Y$.
 ::: 
 
 Om det tredje antagandet uppfylls kan vi modellera väntevärdet av $Y|X$ med den linjära modellen:
@@ -153,5 +164,20 @@ $$
   E \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)
 $$ {#eq-lin-reg-assumptions}
 
-Denna omskrivning ger oss en bra utgångspunkt att utvärdera lämpligheten av en anpassad modell.
+Denna omskrivning ger oss en bra utgångspunkt att utvärdera lämpligheten av en anpassad modell. 
+
+::: {#fig-airplane-ai}
+```{r}
+#| echo: false
+#| out-width: 400px
+
+knitr::include_graphics("images/model_airplane_chatgpt.webp")
+```
+
+Ej lämplig flygplansmodell, [@chatgpt2024]
+:::
+Om en flygplansmodell ser endast till viss del ut som ett flygplan kommer modellen inte vara lämplig att använda för att förstå eller förenkla verkligheten. Detsamma gäller för regressionsmodeller; om modellen inte uppfyller dess antaganden riskerar slutsatser som dras inte stämma överens med verkligheten.
+
+
+
 

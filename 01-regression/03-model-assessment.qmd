@@ -1,0 +1,215 @@
+---
+title: "Modellutvärdering"
+editor_options: 
+  chunk_output_type: console
+
+---
+<!-- Setup -->
+
+```{r setup}
+#| include: false
+
+# Laddar paketet med datamaterialet
+require(palmerpenguins)
+require(tidyverse)
+require(plotly)
+require(kableExtra)
+require(ggforce)
+
+# Filtrerar bort observationer med saknade värden
+penguins <- 
+  penguins %>% 
+  filter(!is.na(sex))
+
+```
+
+<!-- New commands for matrices in regression -->
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
+}
+
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
+
+ <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
+
+<!-- CONTENT -->
+
+
+## Residualanalys
+För att kontrollera antaganden som råder för en enkel linjär regressionsmodell kan visualiseringar av residualerna hjälpa till. I modellen som anpassas antas att $E\overset{iid}{\sim}N(0, \sigma^2)$, det vill säga att residualerna är oberoende, normalfördelade med väntevärde 0 och lika varians.
+
+```{r}
+# Skapa ett datamaterial för visualiseringar
+
+dataResid <- 
+  data.frame(
+    resids = resids,
+    y = trees$Volume,
+    yHat = yHat
+  )
+```
+
+Vi har redan skapat nya objekt från den skattade regressionsmodellen men för att använda ggplot behöver dessa anges i en `data.frame`.
+
+#### Normalfördelning
+
+Vi undersöker antagandet om normalfördelning genom ett histogram och ett qq-diagram.
+
+```{r fig.cap="Residualernas fördelning."}
+
+ggplot(dataResid) + 
+  aes(x = resids, y = after_stat(density)) +
+  geom_histogram(binwidth = 1) + 
+  theme_bw()
+
+```
+```{r fig.cap="Residualernas faktiska kvantiler jämfört med teoretiska normalfördelade kvantiler."}
+
+ggplot(dataResid) + 
+  # Använder standardiserade residualer
+  aes(sample = scale(resids)) + 
+  geom_qq() +
+  geom_qq_line() + 
+  theme_bw()
+
+```
+
+Med ett så pass litet datamaterial är det svårt att utläsa något från dessa diagram, men QQ-diagrammet visar att punkterna till stor del följer den teoretiska linjen med några avvikelser. 
+
+#### Lika varians
+```{r fig.cap = "Residualernas spridning mot anpassade värden."}
+
+ggplot(dataResid) + 
+  aes(x = yHat, y = resids) + 
+  geom_point() + 
+  theme_bw() +
+  labs(x = "Anpassade värden", y = "Residualer") + 
+  geom_hline(
+    aes(yintercept = 0),
+    color = "blue"
+  )
+
+```
+
+För att uppfylla antagandet om lika varians, ska punkterna ligga lika utspridda om y = 0 över hela diagrammet. I detta fall ser det ut som att spridningen av punkterna ökar i mitten istället för att vara konstant vilket tyder på att modellen inte har residualer med lika varians.
+
+#### Oberoende
+```{r fig.cap = "Residualer i observationsordning."}
+
+ggplot(dataResid) + 
+  aes(x = 1:nrow(dataResid), y = resids) + 
+  geom_line() + 
+  theme_bw() +
+  labs(x = "Obs. index", y = "Residualer") + 
+  geom_hline(
+    aes(yintercept = 0),
+    color = "blue"
+  )
+
+```
+
+Detta diagram hjälper oss att undersöka om det finns något beroende mellan residualerna med avseende på just observationsordning, alltså i den ordning som observationerna finns i vårt dataset. I just detta fall finner vi inga tydliga mönster, vilket är bra.
+
+Ofta är det svårt eller omöjligt att undersöka om det är oberoende observationer i ett dataset med avseeende på alla ordningar som data kan komma i. Undantaget är du vi vet hur datainsamlingen har gått till och vet om det finns någon tydlig tidsaspekt där, eller något annat likande som gör att vi tror att observationerna är beroende. Andra exempel kan vara: 
+
+- Vi samlar in data från personer, men vissa personer kommer ifrån samma famlij, detta kan göra att det finns ett beroende mellan dessa personer.
+- i samlar in spatiala (rumsliga) data. Då är det vanligt att det finns en positiv korrelation mellan närliggande observationer.
+
+#### Funktion med alla diagram
+
+Dessa diagram kommer vara återkommande i regressionsmodellering så vi kan skapa en funktion för att automatiskt generera alla fyra diagram samtidigt.
+
+```{r fig.cap="Fyra residualdiagram i ett."}
+
+residualPlots <- function(model, binwidth = 1) {
+  
+  dataResid <- 
+    data.frame(
+      resids = resid(model),
+      y = model$model[,1],
+      yHat = fitted(model)
+    )
+  
+  
+  p1 <- ggplot(dataResid) + 
+    aes(x = resids, y = after_stat(density)) +
+    geom_histogram(binwidth = binwidth) + 
+    theme_bw() + 
+    labs(x = "Residualer", y = "Densitet")
+  
+  p2 <- ggplot(dataResid) + 
+  aes(x = yHat, y = resids) + 
+  geom_point() + 
+  theme_bw() +
+  labs(x = "Anpassade värden", y = "Residualer") + 
+  geom_hline(
+    aes(yintercept = 0),
+    color = "blue"
+  )
+  
+  p3 <- ggplot(dataResid) + 
+  # Använder standardiserade residualer
+  aes(sample = scale(resids)) + 
+  geom_qq() +
+  geom_qq_line() + 
+  theme_bw()
+  
+  p4 <- ggplot(dataResid) + 
+  aes(x = 1:nrow(dataResid), y = resids) + 
+  geom_line() + 
+  theme_bw() +
+  labs(x = "Obs. index", y = "Residualer") + 
+  geom_hline(
+    aes(yintercept = 0),
+    color = "blue"
+  )
+  
+  cowplot::plot_grid(p1, p2, p3, p4, nrow = 2)
+  
+}
+
+residualPlots(model, 2)
+
+```
+
+Vi får genom paketet `cowplot` tillgång till en funktion (`plot_grid`) som kan kombinera flera diagram till ett och samma. 
+
+## Statistisk inferens
+I den detaljerade utskriften från modellen fås enskilda t-test för respektive parameter i koefficienttabellen samt modellens F-test visas i sista raden. I en multipel linjär regression är F-testet bra att börja med för att se ifall minst en parameter är signifikant. Vi undersöker mer formellt hypoteserna:
+
+\begin{align*}
+H_0&: \beta_1 = \beta_2 = \beta_3 = 0\\
+H_a&: \text{Minst en av } \beta_j \text{ är skild från } 0
+\end{align*}
+
+Eftersom p-värdet är mindre än 5 procent, kan $H_0$ förkastas och minst en av variablerna har ett samband med responsvariabeln.\footnote{Om vi hade tagit ett annat beslut (att inte förkasta nollhypotesen) hade det inte varit relevant att fortsätta med analysen, eller åtminstone att fokusera resterande analys på att undersöka varför en multipel linjär regressionsmodell som vi förväntar har ett samband utifrån parvisa spridningsdiagram inte visar på det tillsammans.}
+
+I vår utskrift ser vi att p-värdet för t-testen är alla väldigt låga (nära 0) förutom för `newspaper`. Detta innebär att $H_0$ förkastas för $\beta_1$ och $\beta_2$ men $H_0$ kan inte förkastas för $\beta_3$, vardera med fem procents signifikans. När en parameter inte anses signifikant är det en motivering till att variabeln kan plockas bort, modellen anpassas om och en ny analys påbörjas.
+
+```{r}
+
+model <- lm(formula = sales ~ youtube + facebook, data = marketing)
+
+summary(model)
+
+```
+
+Eftersom en variabel har plockats bort kommer de övriga parameterskattningarna förändras och tolkningar samt inferens behöver uppdateras. I vårt fall har modellen inte förändrats avsevärt.
+
+## Utvärderingsmått
+Förklaringsgraden ($R^2$) beskriver hur stor andel av den variation i responsvariabeln som förklaras av modellens förklarande variabler. I de två modellerna som anpassats ser vi att förklaringsgraden faktiskt är densamma, ca. 89.7%, vilket tyder på två saker. Dels förklarar modellen väldigt mycket av responsvariabelns variation vilket är bra och modellen har inte blivit sämre när `newspaper` togs bort. 
+
+Däremot ger inte detta mått en rättvis bild av modelljämförelsen eftersom de innehåller olika antal variabler. Istället bör vi titta på den justerade förklaringsgraden ($R^2_{a}$) för att se vilken modell som är bäst. Modellen innehållande `newspaper` har en justerad förklaringsgrad på ca 89.56% och modellen utan är ca 89.62%, en ytterst liten förbättring. En förbättrad $R^2_{a}$ betyder att modellen har tagit bort onödig komplexitet.
+
+## ANOVA-tabell och kvadratsummor
+
+
+

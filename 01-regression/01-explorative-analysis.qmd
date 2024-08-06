@@ -1,0 +1,278 @@
+---
+title: "Utforska samband"
+editor_options: 
+  chunk_output_type: console
+---
+
+Det första steget i en regressionsanalys är att utforska datamaterialet. Oavsett om vi genomfört en observations- eller experimentell studie har vi säkerligen valt ut en responsvariabel som vi vill beskriva dess påverkan av andra variabler. 
+
+Aspekter som är viktiga att identifiera är:
+
+- Vilken typ och skala har variablerna?
+- Kring vilka värden förhåller sig variablerna? Minsta och största värde? Läges- och spridningsmått?
+- Hur fördelar sig variablerna? Vilken typ av fördelning verkar beskriva variabeln? Normal, likformig, skev?
+- Finns det några extremvärden?
+
+Om vi har koll på alla dessa punkter är det mycket lättare att anpassa en korrekt modellstruktur och även att utvärdera anpassade modeller. Vi kan undersöka dessa punkter genom enklare funktioner (ex. `mean()`, `min()`, `summary(variabel)`) men vi kan också få relevant information genom enskilda och parvisa visualiseringar av variablerna. 
+
+## Pingviner vid Antarktis {#sec-example-data}
+
+```{r setup}
+#| include: false
+
+# Laddar paketet med datamaterialet
+require(palmerpenguins)
+require(tidyverse)
+require(plotly)
+require(kableExtra)
+require(ggforce)
+
+# Filtrerar bort observationer med saknade värden
+penguins <- 
+  penguins %>% 
+  filter(!is.na(sex))
+
+```
+
+Återkommande i underlaget kommer ett insamlat datamaterial från ett forskarteam vid Antarktis användas. Teamet har mellan 2007 och 2009 samlat in information om `r nrow(penguins)` pingviner vid tre öar runtomkring [Palmer Research Station](https://pal.lternet.edu/). Datamaterialet kan hämtas via paketet `palmerpenguins`.[@penguins2020]
+
+```{r}
+#| eval: false
+
+# Laddar paketet med datamaterialet
+require(palmerpenguins)
+
+# Filtrerar bort observationer med saknade värden
+penguins <- 
+  penguins %>% 
+  filter(!is.na(sex))
+
+```
+
+Vi kan titta närmare på ett urval av datamaterialet i @tbl-penguins-sample.
+```{r}
+#| cap-location: top
+#| tbl-cap: Urval av observationer från datamaterialet.
+#| label: tbl-penguins-sample
+
+# Generera en formaterad tabell med hjälp av kable()
+penguins %>% 
+  sample_n(size = 5) %>% 
+  kable() %>% 
+  kable_styling("striped")
+
+```
+
+Från tabellen kan vi utläsa följande variabler: 
+
+- `species`: Pingvinens art mäts som en kvalitativ variabel och vi kan inte säga att en art är "bättre" eller "större" än någon annan. Vi kan alltså inte rangordna kategorierna och denna variabel följer då en nominalskala.
+- `island`: Vilken ö pingvinen har befunnit sig på vid mättidpunkten är också en kvalitativ variabel som inte går att rangordna. Därav följer även denna variabel en nominalskala.
+- `bill_length_mm`: En kvantitativ variabel som mäter längden på näbben i millimeter (mm). Längd är en typisk variabel som följer en kvotskala eftersom det finns en tydlig nollpunkt.
+- `bill_depth_mm`: Mäter näbbens djup i millimeter och följer samma resonemang som näbblängden.
+- `flipper_length_mm`: Ytterligare en variabel som mäter en längd, nu längden av pingvinens fena. Samma resonemang som näbbens olika längder kan föras.
+- `body_mass_g`: Vikt av pingvinen mätt i gram. Även vikt har en tydlig nollpunkt och variabeln anses vara kvantitativ och följa en kvotskala.
+- `sex`: Pingvinens biologiska kön vilket är en kvalitativ variabel som inte går att rangordna, nominalskala.
+- `year`: Denna variabel är lite svårare att bedöma då den mäter året då pingvinen är mätt som en numerisk variabel (heltal så R har sparat det som en `int`), men variabeln i sig behöver inte bedömas vara kvantitativ i denna kontext. Vi går inte in vidare på detta utan för enkelhetens skull kan vi säga att eftersom det går att beräkna differenser mellan åren, (det är 1 år mellan 2007 och 2008) men ingen tydlig nollpunkt finns på skalan, så kan vi anse denna variabel vara en kvantitativ variabel som följer en intervallskala.
+
+I följande exempel kommer vi anta att näbblängden är av intresse att förklara av de andra variablerna. I och med att datamaterialet är en observationsstudie kommer vi inte kunna dra slutsatser om kausala samband, utan kan endast undersöka korrelationssamband.
+
+## Visualisera responsvariabeln
+Som ett första steg i den explorativa analysen kan vi visualisera fördelningen av responsvariabeln med ett histogram.
+
+```{r}
+#| fig-cap: Histogram över näbblängdens fördelning
+#| fig-height: 3
+#| fig-width: 5
+#| label: fig-hist-y
+
+ggplot(penguins) + aes(x = bill_length_mm) + 
+  geom_histogram(bins = 30, fill = "steelblue", color = "black") +
+  theme_bw() +
+  labs(x = "Näbblängd (mm)", y = "Antal")
+
+```
+
+@fig-hist-y ger oss en bild av variabelns egenskaperoch ifall materialet innehåller några extremvärden som kan vara svåra att plocka upp med en modell. Näbblängden verkar ha en bimodal struktur med två masscentrum vid 38-40 och 50 mm. Vi ser att majoriteten av observationerna ligger mellan ca 35-52 mm men det finns också enstaka observationer omkring 58-60 mm som verkar vara något avvikande stora näbbar.
+
+Att fördelningen inte ser normalfördelad ut spelar ingen roll då vi måste titta på fördelningen av responsvariabeln med avseende på de förklarande variablerna för att kontrollera en regressionsmodells antaganden.
+
+## Parvisa samband
+Datamaterialet innehåller ett flertal potentiella förklarande variabler som skulle kunna inkluderas i en modell. Beroende på hur en undersökning gått till kan variabler väljas bort om de inte anses ha ett logiskt samband med responsvariabeln, t.ex. id-variabler är inte relevanta att undersöka. I vårt exempel finns en variabel som beskriver årtal vilket vi i ett första skede kan anta inte har något logiskt samband med näbblängden. Då återstår sex andra variabler som skulle kunna inkluderas i modellanpassningen.
+
+### Kvantitativa förklarande variabler
+För kvantitativa förklarande variabler kan vi skapa ett spridningsdiagram där varje observation representeras med en punkt. Den förklarande variabeln placeras på x-axeln och responsvariabeln placeras på y-axeln.
+
+```{r}
+#| fig-cap: Spridningsdiagram som visar sambandet mellan kroppsvikt och näbblängd
+#| fig-height: 3
+#| fig-width: 5
+#| label: fig-weight-length
+
+
+ggplot(penguins) + aes(x = body_mass_g, y = bill_length_mm) +
+  geom_point(color = "steelblue") + 
+  theme_bw() + 
+  labs(x = "Kroppsvikt (g)", y = "Näbblängd (mm)")
+
+```
+
+Med hjälp av punktsvärmen i spridningsdiagrammet kan vi få information om sambandet mellan de två variablerna. Det är fyra huvudsakliga punkter som vi fokuserar på:
+
+1. Är sambandet linjärt?
+2. Är sambandet positivt eller negativt?
+3. Är sambandet starkt eller svagt?
+4. Förekommer det några extremvärden?
+
+@fig-weight-length visar att sambandet ser till största del linjärt ut då det är en konstant förändring (ökning) av kroppsvikt leder till en konstant förändring (ökning) av näbblängden. Majoriteten av punkterna verkar följa detta positiva samband, vilket tyder på ett relativt starkt samband, dock finns det ett flertal observationer (markerade i @fig-w-l-ex) som avviker från detta. Dessa observationer har en lägre kroppsvikt men samma näbblängd som pingviner med en större kroppsvikt och påverkar styrkan av sambandet. 
+
+```{r}
+#| fig-cap: Spridningsdiagram med markerat område i cirkeln
+#| fig-height: 3
+#| fig-width: 5
+#| echo: false 
+#| label: fig-w-l-ex
+
+
+ggplot(penguins) + aes(x = body_mass_g, y = bill_length_mm) +
+  geom_point(color = "steelblue") + 
+  theme_bw() + 
+  labs(x = "Kroppsvikt (g)", y = "Näbblängd (mm)") +
+  annotate("point", x = 3650, y = 49, size = 50, shape = 21, color = "#d9230f", fill = "transparent", stroke = 2)
+
+```
+
+Vi kan beräkna *Pearson's korrelationskoefficient* ($r$) för att inte behöva förlita oss på den subjektiva tolkningen av styrkan.^[Andra mått, t.ex. Kendall [@kendall1955rank] eller Spearman [@spearman1904].] Denna koefficient mäter styrkan på det **linjära sambandet** mellan två kvantitativa variabler och är ett lämpligt mått i just detta fall. Ett värde nära 0 tyder på inget eller ett svagt samband medan värden nära -1 eller +1 tyder på ett starkt negativt respektive positivt samband.
+
+$$
+r = `r cor(penguins$bill_length_mm, penguins$body_mass_g) %>% round(3)`
+$$
+
+Då korrelationskoefficienten är nära `r cor(penguins$bill_length_mm, penguins$body_mass_g) %>% round(1)` tyder det på att sambandet är måttligt starkt.
+
+::: {.callout-important}
+Om spridningsdiagrammet uppvisar ett icke-linjärt och icke-monotont (konstant) samband kommer koefficienten inte beskriva sambandets styrka på rätt sätt. Det är lätt hänt att korrelationskoefficienten används som den enda utforskande metoden då den är enkel att beräkna för flera olika par av variabler, men den kan ofta missa relevant information.
+:::
+
+@fig-weight-length visar också vissa observationer som skulle kunna anses vara extremvärden. Till exempel skulle $\{x = ~2700, y = ~47\}$ och $\{x = ~3700, y = ~58\}$ vara observationer som avviker extremt från det tilltänkta sambandet och andra observationer. Detaljerad analys av extremvärden lämnar vi till senare kapitel, men i ett utforskande syfte noterar vi att vi kan ha observationer som kommer påverka modellanpassningen.
+
+Sammanfattningsvis kan vi säga att sambandet mellan kroppsvikt och näbblängd är:
+
+1. linjärt,
+2. positivt, 
+3. måttligt starkt, 
+4. med ev. några extremvärden.
+
+När vi ska skapa vår första modell kommer det nog räcka med att inkludera en enkel $\beta_1 \cdot \text{kroppsvikt}$ term i modelleringen.
+
+#### Övriga kvantitativa variabler
+Samma utforskning bör genomföras för alla par av variabler, i detta fall också näbbredd och fenlängd:
+```{r}
+#| fig-cap: Spridningsdiagram som visar sambandet mellan näbbredd och näbblängd
+#| fig-height: 3
+#| fig-width: 5
+#| label: fig-width-length
+#| echo: false
+
+
+ggplot(penguins) + 
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point(color = "steelblue") + 
+  theme_bw() + 
+  labs(x = "Näbbredd (mm)", y = "Näbblängd (mm)")
+```
+
+```{r}
+#| fig-cap: Spridningsdiagram som visar sambandet mellan fenlängd och näbblängd
+#| fig-height: 3
+#| fig-width: 5
+#| label: fig-flipper-length 
+#| echo: false
+
+ggplot(penguins) + 
+  aes(x = flipper_length_mm, y = bill_length_mm) +
+  geom_point(color = "steelblue") + 
+  theme_bw() + 
+  labs(x = "Fenlängd (mm)", y = "Näbblängd (mm)")
+```
+
+Båda variablerna ser ut att ha linjärt samband med responsvariabeln. @fig-width-length tyder på att sambandet mellan näbbredd och näbblängd är svagt negativt ($r = `r cor(penguins[,"bill_length_mm"], penguins[,"bill_depth_mm"]) %>% round(3)`$) då punkterna är mycket utspridda medan @fig-flipper-length tyder på ett lite starkare positivt samband ($r = `r cor(penguins[,"bill_length_mm"], penguins[,"flipper_length_mm"]) %>% round(3)`$) i linje med @fig-weight-length.
+
+Ett nytt fenomen som vi kan se i @fig-width-length är att vi verkar ha flera punktsvärmar som var och en har ett positivt samband trots att vi tolkade det övergripande sambandet som svagt negativt. Om vi endast hade beräknat korrelationskoefficienten hade detta fenomen undgått vår analys. @fig-width-length-annot är ett exempel på *Simpson's Paradox* som vi kommer undersöka närmare senare i detta underlag.
+
+```{r}
+#| fig-cap: Grupperingar av observationer
+#| fig-height: 3
+#| fig-width: 5
+#| label: fig-width-length-annot
+#| echo: false
+
+
+ggplot(penguins) + 
+  aes(x = bill_depth_mm, y = bill_length_mm) +
+  geom_point(color = "steelblue") + 
+  theme_bw() + 
+  labs(x = "Näbbredd (mm)", y = "Näbblängd (mm)") + 
+  geom_mark_ellipse(aes(filter = species == "Adelie"), color = "#d9230f", linewidth = 1, expand = unit(2, "mm"))+
+  geom_mark_ellipse(aes(filter = species == "Gentoo"), color = "#d9230f", linewidth = 1,expand = unit(2, "mm"))
+ 
+```
+
+### Kvalitativa förklarande variabler
+Vi kan inte använda spridningsdiagram för att visualisera sambandet mellan kvalitativa förklarande variabler och en kontinuerlig responsvariabel. Vi behöver istället använda visualiseringar som tar hänsyn till den kvalitativa skalan, vanligtvis ordinal eller nominalskala. Det finns flera olika sätt att visualisera fördelningen av responsvariabeln för de olika nivåerna av den förklarande, till exempel grupperade histogram eller lådagram, men en typ av visualisering som visar detaljerna i fördelningen är ett *fioldiagram*.
+
+Via `ggplot2` kan vi skapa ett sådant diagram genom `geom_violin()`:
+
+```{r}
+#| fig-cap: Fördelningen av näbblängd uppdelat på art
+#| fig-height: 3
+#| fig-width: 5
+#| label: fig-species-length
+#| echo: true
+
+
+ggplot(penguins) + 
+  aes(x = species, y = bill_length_mm) +
+  geom_violin(fill = "steelblue") + 
+  theme_bw() + 
+  labs(x = "Art", y = "Näbblängd (mm)")
+ 
+```
+
+```{r}
+#| fig-cap: Fördelningen av näbblängd uppdelat på kön
+#| fig-height: 3
+#| fig-width: 5
+#| label: fig-sex-length
+#| echo: false
+
+
+ggplot(penguins) + 
+  aes(x = sex, y = bill_length_mm) +
+  geom_violin(fill = "steelblue") + 
+  theme_bw() + 
+  labs(x = "Art", y = "Näbblängd (mm)")
+ 
+```
+
+
+```{r}
+#| fig-cap: Fördelningen av näbblängd uppdelat på ö
+#| fig-height: 3
+#| fig-width: 5
+#| label: fig-island-length
+#| echo: false
+
+
+ggplot(penguins) + 
+  aes(x = island, y = bill_length_mm) +
+  geom_violin(fill = "steelblue") + 
+  theme_bw() + 
+  labs(x = "Art", y = "Näbblängd (mm)")
+ 
+```
+Ett fioldiagram består utav en spegling av ett densitetsdiagram, där områden med många observationer har en större yta under kurvan.
+
+@fig-species-length visar att Adelie-pingviner överlag har en kortare näbblängd jämfört med Chinstrap och Gentoo då fördelningens mittpunkt förhåller sig kring 38-40 mm. Chinstrap-pingviner har en något större andel pingviner med en längd större än 50 mm medan Gentoo har en större andel med en längd mindre än 50 mm. @fig-sex-length har en liten annorlunda form, med två stora massor för respektive kategori. Här har vi förmodligen en indikation på att kön inom de olika arterna har en påverkan och att hanar generellt har en större näbblängd än motsvarande honor av samma art. @fig-island-length antyder att pingviner på ön Torgersen har en mindre näbblängd än vid övriga öar, men här behöver vi resonera huruvida denna variabel faktiskt beskriver sambandet eller om det finns något annat fenomen som kan förklara samma sak, till exempel om en ö endast har pingviner av en viss art. Mer om dessa sorters samband kommer senare i underlaget.
+
+Slutsatsen från detta är att det verkar finnas ett samband mellan art och kön med näbblängd och variablerna bör inkluderas i modellen. Vi behöver nu fundera på hur vi på ett lämpligt sätt kan inkludera en kvalitativ variabel innehållande text i en matematisk modell som kräver siffror.
+
