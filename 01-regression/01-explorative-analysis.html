@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk tillämpning i R - 2&nbsp; Utforska samband</title>
+<title>Statistisk teori och tillämpningar i R - 3&nbsp; Utforska samband</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -168,7 +168,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Statistisk tillämpning i R</span>
+    <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Sök"></div>
@@ -192,7 +192,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/01-explorative-analysis.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/01-explorative-analysis.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Utforska samband</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -215,25 +215,25 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
   </div>
 </li>
     </ul>
@@ -246,12 +246,12 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#sec-example-data" id="toc-sec-example-data" class="nav-link active" data-scroll-target="#sec-example-data"><span class="header-section-number">2.1</span> Pingviner vid Antarktis</a></li>
-  <li><a href="#visualisera-responsvariabeln" id="toc-visualisera-responsvariabeln" class="nav-link" data-scroll-target="#visualisera-responsvariabeln"><span class="header-section-number">2.2</span> Visualisera responsvariabeln</a></li>
-  <li><a href="#parvisa-samband" id="toc-parvisa-samband" class="nav-link" data-scroll-target="#parvisa-samband"><span class="header-section-number">2.3</span> Parvisa samband</a>
+  <li><a href="#sec-example-data" id="toc-sec-example-data" class="nav-link active" data-scroll-target="#sec-example-data"><span class="header-section-number">3.1</span> Pingviner vid Antarktis</a></li>
+  <li><a href="#visualisera-responsvariabeln" id="toc-visualisera-responsvariabeln" class="nav-link" data-scroll-target="#visualisera-responsvariabeln"><span class="header-section-number">3.2</span> Visualisera responsvariabeln</a></li>
+  <li><a href="#parvisa-samband" id="toc-parvisa-samband" class="nav-link" data-scroll-target="#parvisa-samband"><span class="header-section-number">3.3</span> Parvisa samband</a>
   <ul class="collapse">
-  <li><a href="#kvantitativa-förklarande-variabler" id="toc-kvantitativa-förklarande-variabler" class="nav-link" data-scroll-target="#kvantitativa-förklarande-variabler"><span class="header-section-number">2.3.1</span> Kvantitativa förklarande variabler</a></li>
-  <li><a href="#kvalitativa-förklarande-variabler" id="toc-kvalitativa-förklarande-variabler" class="nav-link" data-scroll-target="#kvalitativa-förklarande-variabler"><span class="header-section-number">2.3.2</span> Kvalitativa förklarande variabler</a></li>
+  <li><a href="#kvantitativa-förklarande-variabler" id="toc-kvantitativa-förklarande-variabler" class="nav-link" data-scroll-target="#kvantitativa-förklarande-variabler"><span class="header-section-number">3.3.1</span> Kvantitativa förklarande variabler</a></li>
+  <li><a href="#kvalitativa-förklarande-variabler" id="toc-kvalitativa-förklarande-variabler" class="nav-link" data-scroll-target="#kvalitativa-förklarande-variabler"><span class="header-section-number">3.3.2</span> Kvalitativa förklarande variabler</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -261,7 +261,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Utforska samband</span></h1>
 </div>
 
 
@@ -287,8 +287,8 @@ window.Quarto = {
 <li>Finns det några extremvärden?</li>
 </ul>
 <p>Om vi har koll på alla dessa punkter är det mycket lättare att anpassa en korrekt modellstruktur och även att utvärdera anpassade modeller. Vi kan undersöka dessa punkter genom enklare funktioner (ex. <code>mean()</code>, <code>min()</code>, <code>summary(variabel)</code>) men vi kan också få relevant information genom enskilda och parvisa visualiseringar av variablerna.</p>
-<section id="sec-example-data" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="sec-example-data"><span class="header-section-number">2.1</span> Pingviner vid Antarktis</h2>
+<section id="sec-example-data" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-example-data"><span class="header-section-number">3.1</span> Pingviner vid Antarktis</h2>
 <p>Återkommande i underlaget kommer ett insamlat datamaterial från ett forskarteam vid Antarktis användas. Teamet har mellan 2007 och 2009 samlat in information om 333 pingviner vid tre öar runtomkring <a href="https://pal.lternet.edu/">Palmer Research Station</a>. Datamaterialet kan hämtas via paketet <code>palmerpenguins</code>.<span class="citation" data-cites="penguins2020">(<a href="#ref-penguins2020" role="doc-biblioref">Horst, Hill, och Gorman 2020</a>)</span></p>
 <div class="cell">
 <details class="code-fold">
@@ -302,7 +302,7 @@ window.Quarto = {
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Vi kan titta närmare på ett urval av datamaterialet i <a href="#tbl-penguins-sample" class="quarto-xref">Tabell&nbsp;<span>2.1</span></a>.</p>
+<p>Vi kan titta närmare på ett urval av datamaterialet i <a href="#tbl-penguins-sample" class="quarto-xref">Tabell&nbsp;<span>3.1</span></a>.</p>
 <div class="cell" data-cap-location="top">
 <details class="code-fold">
 <summary>Visa kod</summary>
@@ -315,7 +315,7 @@ window.Quarto = {
 <div id="tbl-penguins-sample" class="cell quarto-float anchored" data-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-penguins-sample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;2.1: Urval av observationer från datamaterialet.
+Tabell&nbsp;3.1: Urval av observationer från datamaterialet.
 </figcaption>
 <div aria-describedby="tbl-penguins-sample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -407,8 +407,8 @@ Tabell&nbsp;2.1: Urval av observationer från datamaterialet.
 </ul>
 <p>I följande exempel kommer vi anta att näbblängden är av intresse att förklara av de andra variablerna. I och med att datamaterialet är en observationsstudie kommer vi inte kunna dra slutsatser om kausala samband, utan kan endast undersöka korrelationssamband.</p>
 </section>
-<section id="visualisera-responsvariabeln" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="visualisera-responsvariabeln"><span class="header-section-number">2.2</span> Visualisera responsvariabeln</h2>
+<section id="visualisera-responsvariabeln" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="visualisera-responsvariabeln"><span class="header-section-number">3.2</span> Visualisera responsvariabeln</h2>
 <p>Som ett första steg i den explorativa analysen kan vi visualisera fördelningen av responsvariabeln med ett histogram.</p>
 <div class="cell">
 <details class="code-fold">
@@ -425,20 +425,20 @@ Tabell&nbsp;2.1: Urval av observationer från datamaterialet.
 <img src="01-explorative-analysis_files/figure-html/fig-hist-y-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hist-y-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.1: Histogram över näbblängdens fördelning
+Figur&nbsp;3.1: Histogram över näbblängdens fördelning
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-hist-y" class="quarto-xref">Figur&nbsp;<span>2.1</span></a> ger oss en bild av variabelns egenskaperoch ifall materialet innehåller några extremvärden som kan vara svåra att plocka upp med en modell. Näbblängden verkar ha en bimodal struktur med två masscentrum vid 38-40 och 50 mm. Vi ser att majoriteten av observationerna ligger mellan ca 35-52 mm men det finns också enstaka observationer omkring 58-60 mm som verkar vara något avvikande stora näbbar.</p>
+<p><a href="#fig-hist-y" class="quarto-xref">Figur&nbsp;<span>3.1</span></a> ger oss en bild av variabelns egenskaperoch ifall materialet innehåller några extremvärden som kan vara svåra att plocka upp med en modell. Näbblängden verkar ha en bimodal struktur med två masscentrum vid 38-40 och 50 mm. Vi ser att majoriteten av observationerna ligger mellan ca 35-52 mm men det finns också enstaka observationer omkring 58-60 mm som verkar vara något avvikande stora näbbar.</p>
 <p>Att fördelningen inte ser normalfördelad ut spelar ingen roll då vi måste titta på fördelningen av responsvariabeln med avseende på de förklarande variablerna för att kontrollera en regressionsmodells antaganden.</p>
 </section>
-<section id="parvisa-samband" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="parvisa-samband"><span class="header-section-number">2.3</span> Parvisa samband</h2>
+<section id="parvisa-samband" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="parvisa-samband"><span class="header-section-number">3.3</span> Parvisa samband</h2>
 <p>Datamaterialet innehåller ett flertal potentiella förklarande variabler som skulle kunna inkluderas i en modell. Beroende på hur en undersökning gått till kan variabler väljas bort om de inte anses ha ett logiskt samband med responsvariabeln, t.ex. id-variabler är inte relevanta att undersöka. I vårt exempel finns en variabel som beskriver årtal vilket vi i ett första skede kan anta inte har något logiskt samband med näbblängden. Då återstår sex andra variabler som skulle kunna inkluderas i modellanpassningen.</p>
-<section id="kvantitativa-förklarande-variabler" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="kvantitativa-förklarande-variabler"><span class="header-section-number">2.3.1</span> Kvantitativa förklarande variabler</h3>
+<section id="kvantitativa-förklarande-variabler" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="kvantitativa-förklarande-variabler"><span class="header-section-number">3.3.1</span> Kvantitativa förklarande variabler</h3>
 <p>För kvantitativa förklarande variabler kan vi skapa ett spridningsdiagram där varje observation representeras med en punkt. Den förklarande variabeln placeras på x-axeln och responsvariabeln placeras på y-axeln.</p>
 <div class="cell">
 <details class="code-fold">
@@ -455,7 +455,7 @@ Figur&nbsp;2.1: Histogram över näbblängdens fördelning
 <img src="01-explorative-analysis_files/figure-html/fig-weight-length-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-weight-length-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.2: Spridningsdiagram som visar sambandet mellan kroppsvikt och näbblängd
+Figur&nbsp;3.2: Spridningsdiagram som visar sambandet mellan kroppsvikt och näbblängd
 </figcaption>
 </figure>
 </div>
@@ -468,7 +468,7 @@ Figur&nbsp;2.2: Spridningsdiagram som visar sambandet mellan kroppsvikt och näb
 <li>Är sambandet starkt eller svagt?</li>
 <li>Förekommer det några extremvärden?</li>
 </ol>
-<p><a href="#fig-weight-length" class="quarto-xref">Figur&nbsp;<span>2.2</span></a> visar att sambandet ser till största del linjärt ut då det är en konstant förändring (ökning) av kroppsvikt leder till en konstant förändring (ökning) av näbblängden. Majoriteten av punkterna verkar följa detta positiva samband, vilket tyder på ett relativt starkt samband, dock finns det ett flertal observationer (markerade i <a href="#fig-w-l-ex" class="quarto-xref">Figur&nbsp;<span>2.3</span></a>) som avviker från detta. Dessa observationer har en lägre kroppsvikt men samma näbblängd som pingviner med en större kroppsvikt och påverkar styrkan av sambandet.</p>
+<p><a href="#fig-weight-length" class="quarto-xref">Figur&nbsp;<span>3.2</span></a> visar att sambandet ser till största del linjärt ut då det är en konstant förändring (ökning) av kroppsvikt leder till en konstant förändring (ökning) av näbblängden. Majoriteten av punkterna verkar följa detta positiva samband, vilket tyder på ett relativt starkt samband, dock finns det ett flertal observationer (markerade i <a href="#fig-w-l-ex" class="quarto-xref">Figur&nbsp;<span>3.3</span></a>) som avviker från detta. Dessa observationer har en lägre kroppsvikt men samma näbblängd som pingviner med en större kroppsvikt och påverkar styrkan av sambandet.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-w-l-ex" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -477,7 +477,7 @@ Figur&nbsp;2.2: Spridningsdiagram som visar sambandet mellan kroppsvikt och näb
 <img src="01-explorative-analysis_files/figure-html/fig-w-l-ex-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-w-l-ex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.3: Spridningsdiagram med markerat område i cirkeln
+Figur&nbsp;3.3: Spridningsdiagram med markerat område i cirkeln
 </figcaption>
 </figure>
 </div>
@@ -501,7 +501,7 @@ Viktigt
 <p>Om spridningsdiagrammet uppvisar ett icke-linjärt och icke-monotont (konstant) samband kommer koefficienten inte beskriva sambandets styrka på rätt sätt. Det är lätt hänt att korrelationskoefficienten används som den enda utforskande metoden då den är enkel att beräkna för flera olika par av variabler, men den kan ofta missa relevant information.</p>
 </div>
 </div>
-<p><a href="#fig-weight-length" class="quarto-xref">Figur&nbsp;<span>2.2</span></a> visar också vissa observationer som skulle kunna anses vara extremvärden. Till exempel skulle <span class="math inline">\(\{x = ~2700, y = ~47\}\)</span> och <span class="math inline">\(\{x = ~3700, y = ~58\}\)</span> vara observationer som avviker extremt från det tilltänkta sambandet och andra observationer. Detaljerad analys av extremvärden lämnar vi till senare kapitel, men i ett utforskande syfte noterar vi att vi kan ha observationer som kommer påverka modellanpassningen.</p>
+<p><a href="#fig-weight-length" class="quarto-xref">Figur&nbsp;<span>3.2</span></a> visar också vissa observationer som skulle kunna anses vara extremvärden. Till exempel skulle <span class="math inline">\(\{x = ~2700, y = ~47\}\)</span> och <span class="math inline">\(\{x = ~3700, y = ~58\}\)</span> vara observationer som avviker extremt från det tilltänkta sambandet och andra observationer. Detaljerad analys av extremvärden lämnar vi till senare kapitel, men i ett utforskande syfte noterar vi att vi kan ha observationer som kommer påverka modellanpassningen.</p>
 <p>Sammanfattningsvis kan vi säga att sambandet mellan kroppsvikt och näbblängd är:</p>
 <ol type="1">
 <li>linjärt,</li>
@@ -510,8 +510,8 @@ Viktigt
 <li>med ev. några extremvärden.</li>
 </ol>
 <p>När vi ska skapa vår första modell kommer det nog räcka med att inkludera en enkel <span class="math inline">\(\beta_1 \cdot \text{kroppsvikt}\)</span> term i modelleringen.</p>
-<section id="övriga-kvantitativa-variabler" class="level4" data-number="2.3.1.1">
-<h4 data-number="2.3.1.1" class="anchored" data-anchor-id="övriga-kvantitativa-variabler"><span class="header-section-number">2.3.1.1</span> Övriga kvantitativa variabler</h4>
+<section id="övriga-kvantitativa-variabler" class="level4" data-number="3.3.1.1">
+<h4 data-number="3.3.1.1" class="anchored" data-anchor-id="övriga-kvantitativa-variabler"><span class="header-section-number">3.3.1.1</span> Övriga kvantitativa variabler</h4>
 <p>Samma utforskning bör genomföras för alla par av variabler, i detta fall också näbbredd och fenlängd:</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -521,7 +521,7 @@ Viktigt
 <img src="01-explorative-analysis_files/figure-html/fig-width-length-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-width-length-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.4: Spridningsdiagram som visar sambandet mellan näbbredd och näbblängd
+Figur&nbsp;3.4: Spridningsdiagram som visar sambandet mellan näbbredd och näbblängd
 </figcaption>
 </figure>
 </div>
@@ -535,14 +535,14 @@ Figur&nbsp;2.4: Spridningsdiagram som visar sambandet mellan näbbredd och näbb
 <img src="01-explorative-analysis_files/figure-html/fig-flipper-length-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-flipper-length-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.5: Spridningsdiagram som visar sambandet mellan fenlängd och näbblängd
+Figur&nbsp;3.5: Spridningsdiagram som visar sambandet mellan fenlängd och näbblängd
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Båda variablerna ser ut att ha linjärt samband med responsvariabeln. <a href="#fig-width-length" class="quarto-xref">Figur&nbsp;<span>2.4</span></a> tyder på att sambandet mellan näbbredd och näbblängd är svagt negativt (<span class="math inline">\(r = -0.229\)</span>) då punkterna är mycket utspridda medan <a href="#fig-flipper-length" class="quarto-xref">Figur&nbsp;<span>2.5</span></a> tyder på ett lite starkare positivt samband (<span class="math inline">\(r = 0.653\)</span>) i linje med <a href="#fig-weight-length" class="quarto-xref">Figur&nbsp;<span>2.2</span></a>.</p>
-<p>Ett nytt fenomen som vi kan se i <a href="#fig-width-length" class="quarto-xref">Figur&nbsp;<span>2.4</span></a> är att vi verkar ha flera punktsvärmar som var och en har ett positivt samband trots att vi tolkade det övergripande sambandet som svagt negativt. Om vi endast hade beräknat korrelationskoefficienten hade detta fenomen undgått vår analys. <a href="#fig-width-length-annot" class="quarto-xref">Figur&nbsp;<span>2.6</span></a> är ett exempel på <em>Simpson’s Paradox</em> som vi kommer undersöka närmare senare i detta underlag.</p>
+<p>Båda variablerna ser ut att ha linjärt samband med responsvariabeln. <a href="#fig-width-length" class="quarto-xref">Figur&nbsp;<span>3.4</span></a> tyder på att sambandet mellan näbbredd och näbblängd är svagt negativt (<span class="math inline">\(r = -0.229\)</span>) då punkterna är mycket utspridda medan <a href="#fig-flipper-length" class="quarto-xref">Figur&nbsp;<span>3.5</span></a> tyder på ett lite starkare positivt samband (<span class="math inline">\(r = 0.653\)</span>) i linje med <a href="#fig-weight-length" class="quarto-xref">Figur&nbsp;<span>3.2</span></a>.</p>
+<p>Ett nytt fenomen som vi kan se i <a href="#fig-width-length" class="quarto-xref">Figur&nbsp;<span>3.4</span></a> är att vi verkar ha flera punktsvärmar som var och en har ett positivt samband trots att vi tolkade det övergripande sambandet som svagt negativt. Om vi endast hade beräknat korrelationskoefficienten hade detta fenomen undgått vår analys. <a href="#fig-width-length-annot" class="quarto-xref">Figur&nbsp;<span>3.6</span></a> är ett exempel på <em>Simpson’s Paradox</em> som vi kommer undersöka närmare senare i detta underlag.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-width-length-annot" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -551,7 +551,7 @@ Figur&nbsp;2.5: Spridningsdiagram som visar sambandet mellan fenlängd och näbb
 <img src="01-explorative-analysis_files/figure-html/fig-width-length-annot-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-width-length-annot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.6: Grupperingar av observationer
+Figur&nbsp;3.6: Grupperingar av observationer
 </figcaption>
 </figure>
 </div>
@@ -559,8 +559,8 @@ Figur&nbsp;2.6: Grupperingar av observationer
 </div>
 </section>
 </section>
-<section id="kvalitativa-förklarande-variabler" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="kvalitativa-förklarande-variabler"><span class="header-section-number">2.3.2</span> Kvalitativa förklarande variabler</h3>
+<section id="kvalitativa-förklarande-variabler" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="kvalitativa-förklarande-variabler"><span class="header-section-number">3.3.2</span> Kvalitativa förklarande variabler</h3>
 <p>Vi kan inte använda spridningsdiagram för att visualisera sambandet mellan kvalitativa förklarande variabler och en kontinuerlig responsvariabel. Vi behöver istället använda visualiseringar som tar hänsyn till den kvalitativa skalan, vanligtvis ordinal eller nominalskala. Det finns flera olika sätt att visualisera fördelningen av responsvariabeln för de olika nivåerna av den förklarande, till exempel grupperade histogram eller lådagram, men en typ av visualisering som visar detaljerna i fördelningen är ett <em>fioldiagram</em>.</p>
 <p>Via <code>ggplot2</code> kan vi skapa ett sådant diagram genom <code>geom_violin()</code>:</p>
 <div class="cell">
@@ -579,7 +579,7 @@ Figur&nbsp;2.6: Grupperingar av observationer
 <img src="01-explorative-analysis_files/figure-html/fig-species-length-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-species-length-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.7: Fördelningen av näbblängd uppdelat på art
+Figur&nbsp;3.7: Fördelningen av näbblängd uppdelat på art
 </figcaption>
 </figure>
 </div>
@@ -593,7 +593,7 @@ Figur&nbsp;2.7: Fördelningen av näbblängd uppdelat på art
 <img src="01-explorative-analysis_files/figure-html/fig-sex-length-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sex-length-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.8: Fördelningen av näbblängd uppdelat på kön
+Figur&nbsp;3.8: Fördelningen av näbblängd uppdelat på kön
 </figcaption>
 </figure>
 </div>
@@ -607,14 +607,14 @@ Figur&nbsp;2.8: Fördelningen av näbblängd uppdelat på kön
 <img src="01-explorative-analysis_files/figure-html/fig-island-length-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-island-length-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.9: Fördelningen av näbblängd uppdelat på ö
+Figur&nbsp;3.9: Fördelningen av näbblängd uppdelat på ö
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>Ett fioldiagram består utav en spegling av ett densitetsdiagram, där områden med många observationer har en större yta under kurvan.</p>
-<p><a href="#fig-species-length" class="quarto-xref">Figur&nbsp;<span>2.7</span></a> visar att Adelie-pingviner överlag har en kortare näbblängd jämfört med Chinstrap och Gentoo då fördelningens mittpunkt förhåller sig kring 38-40 mm. Chinstrap-pingviner har en något större andel pingviner med en längd större än 50 mm medan Gentoo har en större andel med en längd mindre än 50 mm. <a href="#fig-sex-length" class="quarto-xref">Figur&nbsp;<span>2.8</span></a> har en liten annorlunda form, med två stora massor för respektive kategori. Här har vi förmodligen en indikation på att kön inom de olika arterna har en påverkan och att hanar generellt har en större näbblängd än motsvarande honor av samma art. <a href="#fig-island-length" class="quarto-xref">Figur&nbsp;<span>2.9</span></a> antyder att pingviner på ön Torgersen har en mindre näbblängd än vid övriga öar, men här behöver vi resonera huruvida denna variabel faktiskt beskriver sambandet eller om det finns något annat fenomen som kan förklara samma sak, till exempel om en ö endast har pingviner av en viss art. Mer om dessa sorters samband kommer senare i underlaget.</p>
+<p><a href="#fig-species-length" class="quarto-xref">Figur&nbsp;<span>3.7</span></a> visar att Adelie-pingviner överlag har en kortare näbblängd jämfört med Chinstrap och Gentoo då fördelningens mittpunkt förhåller sig kring 38-40 mm. Chinstrap-pingviner har en något större andel pingviner med en längd större än 50 mm medan Gentoo har en större andel med en längd mindre än 50 mm. <a href="#fig-sex-length" class="quarto-xref">Figur&nbsp;<span>3.8</span></a> har en liten annorlunda form, med två stora massor för respektive kategori. Här har vi förmodligen en indikation på att kön inom de olika arterna har en påverkan och att hanar generellt har en större näbblängd än motsvarande honor av samma art. <a href="#fig-island-length" class="quarto-xref">Figur&nbsp;<span>3.9</span></a> antyder att pingviner på ön Torgersen har en mindre näbblängd än vid övriga öar, men här behöver vi resonera huruvida denna variabel faktiskt beskriver sambandet eller om det finns något annat fenomen som kan förklara samma sak, till exempel om en ö endast har pingviner av en viss art. Mer om dessa sorters samband kommer senare i underlaget.</p>
 <p>Slutsatsen från detta är att det verkar finnas ett samband mellan art och kön med näbblängd och variablerna bör inkluderas i modellen. Vi behöver nu fundera på hur vi på ett lämpligt sätt kan inkludera en kvalitativ variabel innehållande text i en matematisk modell som kräver siffror.</p>
 
 
@@ -1051,12 +1051,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../01-regression/00-intro-regression.html" class="pagination-link" aria-label="Introduktion till regression">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../01-regression/02-model-structure.html" class="pagination-link" aria-label="Modellanpassning">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk tillämpning i R - 3&nbsp; Modellanpassning</title>
+<title>Statistisk teori och tillämpningar i R - 4&nbsp; Modellanpassning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Statistisk tillämpning i R</span>
+    <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Sök"></div>
@@ -172,7 +172,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/02-model-structure.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/02-model-structure.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellanpassning</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -195,25 +195,25 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
   </div>
 </li>
     </ul>
@@ -226,14 +226,14 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#indikatorvariabler" id="toc-indikatorvariabler" class="nav-link active" data-scroll-target="#indikatorvariabler"><span class="header-section-number">3.1</span> Indikatorvariabler</a></li>
-  <li><a href="#modellanpassning" id="toc-modellanpassning" class="nav-link" data-scroll-target="#modellanpassning"><span class="header-section-number">3.2</span> Modellanpassning</a>
+  <li><a href="#indikatorvariabler" id="toc-indikatorvariabler" class="nav-link active" data-scroll-target="#indikatorvariabler"><span class="header-section-number">4.1</span> Indikatorvariabler</a></li>
+  <li><a href="#modellanpassning" id="toc-modellanpassning" class="nav-link" data-scroll-target="#modellanpassning"><span class="header-section-number">4.2</span> Modellanpassning</a>
   <ul class="collapse">
-  <li><a href="#sec-model-fit-example" id="toc-sec-model-fit-example" class="nav-link" data-scroll-target="#sec-model-fit-example"><span class="header-section-number">3.2.1</span> Modellanpassning i R</a></li>
+  <li><a href="#sec-model-fit-example" id="toc-sec-model-fit-example" class="nav-link" data-scroll-target="#sec-model-fit-example"><span class="header-section-number">4.2.1</span> Modellanpassning i R</a></li>
   </ul></li>
-  <li><a href="#sec-matrices" id="toc-sec-matrices" class="nav-link" data-scroll-target="#sec-matrices"><span class="header-section-number">3.3</span> Matrisberäkningar</a>
+  <li><a href="#sec-matrices" id="toc-sec-matrices" class="nav-link" data-scroll-target="#sec-matrices"><span class="header-section-number">4.3</span> Matrisberäkningar</a>
   <ul class="collapse">
-  <li><a href="#matriser-i-r" id="toc-matriser-i-r" class="nav-link" data-scroll-target="#matriser-i-r"><span class="header-section-number">3.3.1</span> Matriser i R</a></li>
+  <li><a href="#matriser-i-r" id="toc-matriser-i-r" class="nav-link" data-scroll-target="#matriser-i-r"><span class="header-section-number">4.3.1</span> Matriser i R</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -243,7 +243,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellanpassning</span></h1>
 </div>
 
 
@@ -263,12 +263,12 @@ window.Quarto = {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
-<p>Efter att ha sammanställt iaktaggelser från visualiseringar och beskrivande statistik, är nästa steg i processen att bygga modellen. Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 1.3</span></a>. Det enklaste är att börja med de kvantitativa variablerna som (vanligtvis) endast kräver en term vardera i modellen.</p>
+<p>Efter att ha sammanställt iaktaggelser från visualiseringar och beskrivande statistik, är nästa steg i processen att bygga modellen. Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 2.3</span></a>. Det enklaste är att börja med de kvantitativa variablerna som (vanligtvis) endast kräver en term vardera i modellen.</p>
 <p><span id="eq-penguin-quant"><span class="math display">\[
 \text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \cdots + E
-\tag{3.1}\]</span></span></p>
-<section id="indikatorvariabler" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="indikatorvariabler"><span class="header-section-number">3.1</span> Indikatorvariabler</h2>
+\tag{4.1}\]</span></span></p>
+<section id="indikatorvariabler" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="indikatorvariabler"><span class="header-section-number">4.1</span> Indikatorvariabler</h2>
 <p>En regressionsmodell kan inte hantera kvalitativa variabler direkt, exempelvis <span class="math inline">\(\beta_4 \cdot \text{art}\)</span>, då variabelns värden beskriver kategorier inte värden från en numerisk skala. Detta gäller även om den kvalitativa variabeln är kodad numerisk. En lutningsparameter beskriver den konstanta förändring i responsvariabeln när den tillhörande förklarande variabeln ökar med en enhet, men en kvalitativ variabel har oftast ingen enhet och inte heller konstanta förändringar mellan intilliggande värden. Istället måste vi transformera den kvalitativa variabeln numerisk genom <em>indikatorvariabler</em> (även kallad dummyvariabler).</p>
 <p>Som namnet antyder används indikatorvariabler för att indikera vilken kategori en observation har uppmätt på den kvalitativa variabeln. Vi behöver då skapa en begränsad mängd indikatorvariabler som på ett tydligt sätt visar exakt en kategori per observation.</p>
 <p>Anta att en kvalitativ variabel har 3 kategorier: <span class="math display">\[
@@ -295,7 +295,7 @@ Viktigt
 </div>
 </div>
 <p>Generellt skapas <span class="math inline">\(\text{antal kategorier} - 1\)</span> indikatorvariabler för varje kvalitativa variabel som ska inkluderas i en regressionsmodell. Valet av referenskategori för respektive är godtyckligt, men vanligtvis används den första eller sista kategorin för detta ändamål.</p>
-<p>För att slutföra modelleringen av <a href="#eq-penguin-quant" class="quarto-xref">Ekvation&nbsp;<span>3.1</span></a> ska vi inkludera Art och Kön i modellen. Då behöver vi skapa två respektive en indikatorvariabel enligt:</p>
+<p>För att slutföra modelleringen av <a href="#eq-penguin-quant" class="quarto-xref">Ekvation&nbsp;<span>4.1</span></a> ska vi inkludera Art och Kön i modellen. Då behöver vi skapa två respektive en indikatorvariabel enligt:</p>
 <p><span class="math display">\[\begin{align*}
   Gentoo &amp;= \begin{cases}
             1 \qquad \text{om art Gentoo}\\
@@ -316,16 +316,16 @@ Viktigt
 <p>för att till slut skapa följande modell:</p>
 <p><span id="eq-penguin-full-simple"><span class="math display">\[
 \text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \beta_4 \cdot \text{Gentoo} + \beta_5 \cdot \text{Chinstrap} + \beta_6 \cdot \text{hane} + E
-\tag{3.2}\]</span></span></p>
+\tag{4.2}\]</span></span></p>
 <p>där Adelie och honor agerar referenskategori för respektive kvalitativ variabel.</p>
 </section>
-<section id="modellanpassning" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="modellanpassning"><span class="header-section-number">3.2</span> Modellanpassning</h2>
-<p><a href="#eq-penguin-full-simple" class="quarto-xref">Ekvation&nbsp;<span>3.2</span></a> visar den sanna modell som utgår ifrån populationens alla observerade värden, men nästintill alla undersökningar utgår från någon form av urval. Även en totalundersökning under en viss period kan anses vara ett urval i tiden om modellen avses att användas efter undersökningsperioden är slutförd.</p>
+<section id="modellanpassning" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="modellanpassning"><span class="header-section-number">4.2</span> Modellanpassning</h2>
+<p><a href="#eq-penguin-full-simple" class="quarto-xref">Ekvation&nbsp;<span>4.2</span></a> visar den sanna modell som utgår ifrån populationens alla observerade värden, men nästintill alla undersökningar utgår från någon form av urval. Även en totalundersökning under en viss period kan anses vara ett urval i tiden om modellen avses att användas efter undersökningsperioden är slutförd.</p>
 <p>Vi kan beteckna den anpassade modellen med dess skattade parametrar enligt:</p>
 <p><span id="eq-penguin-est-simple"><span class="math display">\[
 \hat{y}_i = b_0 + b_1 \cdot x_{1i} + b_2 \cdot x_{2i} + b_3 \cdot x_{3i} + b_4 \cdot x_{4i} + b_5 \cdot x_{5i} + b_6 \cdot x_{6i}
-\tag{3.3}\]</span></span> där <span class="math display">\[\begin{align*}
+\tag{4.3}\]</span></span> där <span class="math display">\[\begin{align*}
   \hat{y}_i &amp;= \text{responsvariabelns skattade värde för observation i}\\
   b_0 &amp;= \text{skattning av interceptet}\\
   b_1 - b_6 &amp;= \text{skattning av lutningsparametrar}
@@ -343,8 +343,8 @@ Notera
 <p>Viss litteratur använder <span class="math inline">\(\hat{\beta}\)</span> som beteckning för skattade parametrar.</p>
 </div>
 </div>
-<p>Modellen anpassas med hjälp av <em>minsta kvadratskattningen</em> (eng. <strong>O</strong>rdinary <strong>L</strong>east <strong>S</strong>quares, OLS), där syftet är att minimera modellens totala fel. Vi kan notera att <a href="#eq-penguin-est-simple" class="quarto-xref">Ekvation&nbsp;<span>3.3</span></a> saknar feltermen <span class="math inline">\(E\)</span> som inkluderas tidigare, vilket kommer från att den anpassade modellen endast består av regressionslinjen. Kom ihåg att en regressionsmodell ämnar att ge en förenkling av verkligheten. Men <span class="math inline">\(E\)</span> beskrev ju felet i modellen och om vi ska minimera det totala felet behöver vi på något sätt ta hänsyn till denna term i modellanpassningen.</p>
-<p>Anta att vi anpassar en modell enbart på kroppsvikt och näbblängd. Om vi skulle projicera den anpassade enkla linjära modellen i ett spridningsdiagram över de två variablerna (<a href="#fig-reg-errors" class="quarto-xref">Figur&nbsp;<span>3.1</span></a>) skulle linjen inte lyckas träffa alla punkter exakt, varje enskilda observation kommer ligga ett visst avstånd från regressionslinjen. Detta avstånd är observationens <em>residual</em> som betecknas med <span class="math inline">\(e_i\)</span>.</p>
+<p>Modellen anpassas med hjälp av <em>minsta kvadratskattningen</em> (eng. <strong>O</strong>rdinary <strong>L</strong>east <strong>S</strong>quares, OLS), där syftet är att minimera modellens totala fel. Vi kan notera att <a href="#eq-penguin-est-simple" class="quarto-xref">Ekvation&nbsp;<span>4.3</span></a> saknar feltermen <span class="math inline">\(E\)</span> som inkluderas tidigare, vilket kommer från att den anpassade modellen endast består av regressionslinjen. Kom ihåg att en regressionsmodell ämnar att ge en förenkling av verkligheten. Men <span class="math inline">\(E\)</span> beskrev ju felet i modellen och om vi ska minimera det totala felet behöver vi på något sätt ta hänsyn till denna term i modellanpassningen.</p>
+<p>Anta att vi anpassar en modell enbart på kroppsvikt och näbblängd. Om vi skulle projicera den anpassade enkla linjära modellen i ett spridningsdiagram över de två variablerna (<a href="#fig-reg-errors" class="quarto-xref">Figur&nbsp;<span>4.1</span></a>) skulle linjen inte lyckas träffa alla punkter exakt, varje enskilda observation kommer ligga ett visst avstånd från regressionslinjen. Detta avstånd är observationens <em>residual</em> som betecknas med <span class="math inline">\(e_i\)</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-reg-errors" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -353,7 +353,7 @@ Notera
 <img src="02-model-structure_files/figure-html/fig-reg-errors-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reg-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;3.1: Visualisering av regressionsmodellens residualer
+Figur&nbsp;4.1: Visualisering av regressionsmodellens residualer
 </figcaption>
 </figure>
 </div>
@@ -362,8 +362,8 @@ Figur&nbsp;3.1: Visualisering av regressionsmodellens residualer
 <p>Matematiskt beräknar vi <span class="math inline">\(e_i = Y_i - \hat{Y}_i\)</span>, där <span class="math inline">\(Y_i\)</span> är det observerade värdet (punkten) och <span class="math inline">\(\hat{Y}_i\)</span> är modellens anpassade värde (linjen). Minsta kvadratskattningen beräknar modellens alla parametrar så att det totala felet (<strong>S</strong>um of <strong>S</strong>quares of <strong>E</strong>rror, SSE) för alla residualer blir så litet som möjligt.</p>
 <p><span id="eq-sse"><span class="math display">\[
 SSE = \sum_{i = 1}^n e_i^2 = \sum_{i = 1}^n (Y_i - \hat{Y}_i)^2
-\tag{3.4}\]</span></span></p>
-<p>I en enkel linjär regression går det att härleda fram analytiska lösningar för de två parameterskattningarna, <span class="math inline">\(b_0\)</span> och <span class="math inline">\(b_1\)</span>, som minimerar SSE men så fort vi inkluderar flera variabler blir detta betydligt svårare. Istället förlitar vi (och R) oss på matrisberäkningar som presenteras mer i <a href="#sec-matrices" class="quarto-xref"><span>Avsnitt 3.3</span></a>.</p>
+\tag{4.4}\]</span></span></p>
+<p>I en enkel linjär regression går det att härleda fram analytiska lösningar för de två parameterskattningarna, <span class="math inline">\(b_0\)</span> och <span class="math inline">\(b_1\)</span>, som minimerar SSE men så fort vi inkluderar flera variabler blir detta betydligt svårare. Istället förlitar vi (och R) oss på matrisberäkningar som presenteras mer i <a href="#sec-matrices" class="quarto-xref"><span>Avsnitt 4.3</span></a>.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -380,15 +380,15 @@ Viktigt
 \end{align*}\]</span></p>
 </div>
 </div>
-<section id="sec-model-fit-example" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="sec-model-fit-example"><span class="header-section-number">3.2.1</span> Modellanpassning i R</h3>
+<section id="sec-model-fit-example" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="sec-model-fit-example"><span class="header-section-number">4.2.1</span> Modellanpassning i R</h3>
 <p>För att anpassa en linjär regressionsmodell i R används funktionen <code>lm()</code> med följande argument:</p>
 <ul>
 <li><code>formula</code>: modellens struktur som ett formelobjekt</li>
 <li><code>data</code>: datamaterialet som variablerna hittas</li>
 </ul>
-<p>Ett formelobjekt är ett speciellt format som R använder för att beskriva relationen mellan variabler. Generellt anges formatet som <code>y ~ x</code> där <code>x</code> består utav de olika förklarande variablerna, till exempel <code>bill_length_mm ~ body_mass_g + bill_depth_mm</code>. Det finns ett kortkommando (<code>~ .</code>) som används i exemplet nedan, där alla övriga variabler inkluderas i högerledet , men det kräver att vi först har ett datamaterial enbart bestående av de förklarande variablerna från <a href="#eq-penguin-full-simple" class="quarto-xref">Ekvation&nbsp;<span>3.2</span></a>.</p>
-<p>Vi måste också se till att alla variabler i datamaterialet har rätt variabeltyp som vi förväntar oss. Vi identifierade i <a href="01-explorative-analysis.html#sec-example-data" class="quarto-xref"><span>Avsnitt 2.1</span></a> att vi hade tre kvantitativa variabler och två kvalitativa variabler som i R motsvarar typerna <code>numeric</code> och <code>Factor</code>. Att använda sig av <code>Factor</code> underlättar transformationen till indikatorvariabler eftersom R vet att den måste göra så för att modellen ska fungera. Om de kvalitativa variablerna var av typen <code>character</code> eller kodad <code>numeric</code> är det inte säkert att R skapar indikatorvariabler. Vi kan undersöka variabeltyperna för <code>penguins</code> med hjälp av <code>str()</code>.</p>
+<p>Ett formelobjekt är ett speciellt format som R använder för att beskriva relationen mellan variabler. Generellt anges formatet som <code>y ~ x</code> där <code>x</code> består utav de olika förklarande variablerna, till exempel <code>bill_length_mm ~ body_mass_g + bill_depth_mm</code>. Det finns ett kortkommando (<code>~ .</code>) som används i exemplet nedan, där alla övriga variabler inkluderas i högerledet , men det kräver att vi först har ett datamaterial enbart bestående av de förklarande variablerna från <a href="#eq-penguin-full-simple" class="quarto-xref">Ekvation&nbsp;<span>4.2</span></a>.</p>
+<p>Vi måste också se till att alla variabler i datamaterialet har rätt variabeltyp som vi förväntar oss. Vi identifierade i <a href="01-explorative-analysis.html#sec-example-data" class="quarto-xref"><span>Avsnitt 3.1</span></a> att vi hade tre kvantitativa variabler och två kvalitativa variabler som i R motsvarar typerna <code>numeric</code> och <code>Factor</code>. Att använda sig av <code>Factor</code> underlättar transformationen till indikatorvariabler eftersom R vet att den måste göra så för att modellen ska fungera. Om de kvalitativa variablerna var av typen <code>character</code> eller kodad <code>numeric</code> är det inte säkert att R skapar indikatorvariabler. Vi kan undersöka variabeltyperna för <code>penguins</code> med hjälp av <code>str()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar endast med de variabler som vi ansåg ha ett samband med responsvariabeln</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>modelData <span class="ot">&lt;-</span> </span>
@@ -442,7 +442,7 @@ F-statistic: 282.3 on 6 and 326 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reg-summary-bad-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;3.2: Inte särskilt snygg utskrift
+Figur&nbsp;4.2: Inte särskilt snygg utskrift
 </figcaption>
 </figure>
 </div>
@@ -468,7 +468,7 @@ Figur&nbsp;3.2: Inte särskilt snygg utskrift
 <div id="tbl-reg-summary-good" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-reg-summary-good-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;3.1: En snygg utskrift av modellens anpassade parametrar
+Tabell&nbsp;4.1: En snygg utskrift av modellens anpassade parametrar
 </figcaption>
 <div aria-describedby="tbl-reg-summary-good-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -549,7 +549,7 @@ Tabell&nbsp;3.1: En snygg utskrift av modellens anpassade parametrar
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip&nbsp;3.1
+Tip&nbsp;4.1
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -564,12 +564,12 @@ Tip&nbsp;3.1
 <li><code>predict()</code>: gör prediktioner för (nya) x-värden, alltså beräknar <span class="math inline">\(\hat{Y}\)</span> för givna x-värden. Kan även beräkna konfidensintervall och prediktionsintervall för <span class="math inline">\(\hat{Y}\)</span>. Se <code>?predict.lm()</code> för detaljer.</li>
 <li><code>plot()</code>: Ger olika diagnostiska plottar, se <code>?plot.lm</code> för detaljer.</li>
 <li><code>confint()</code>: Beräknar konfidensintervall för regressionskoefficienterna</li>
-<li><code>model.matrix()</code>: skapar olika typer av designmatriser som kan användas i <code>lm()</code>, se <a href="#sec-matrices" class="quarto-xref"><span>Avsnitt 3.3</span></a>.</li>
+<li><code>model.matrix()</code>: skapar olika typer av designmatriser som kan användas i <code>lm()</code>, se <a href="#sec-matrices" class="quarto-xref"><span>Avsnitt 4.3</span></a>.</li>
 </ul>
 <p>Det är också användbart att använda <code>str()</code> på lm-objekt. Kolla i <code>?lm()</code> under Value rubriken för att se vilka olika delar som finns i objektet.</p>
 </div>
 </div>
-<p><a href="#tbl-reg-summary-good" class="quarto-xref">Tabell&nbsp;<span>3.1</span></a> visar de skattade lutningsparametrarna (koefficienterna). Exempelvis kan vi se att för varje gram mer en pingvin väger ökar näbbens längd med ca 0.0011 mm i genomsnitt <strong>givet att alla andra variabler hålls konstanta</strong>. Den sista delen av denna tolkning är viktig att inkludera då en förändring av flera variabler skulle medföra en annan förändring av responsvariabeln i relation till respektive koefficient.</p>
+<p><a href="#tbl-reg-summary-good" class="quarto-xref">Tabell&nbsp;<span>4.1</span></a> visar de skattade lutningsparametrarna (koefficienterna). Exempelvis kan vi se att för varje gram mer en pingvin väger ökar näbbens längd med ca 0.0011 mm i genomsnitt <strong>givet att alla andra variabler hålls konstanta</strong>. Den sista delen av denna tolkning är viktig att inkludera då en förändring av flera variabler skulle medföra en annan förändring av responsvariabeln i relation till respektive koefficient.</p>
 <p>Indikatorvariablerna tolkas inom sin grupp jämfört med referenskategorin, till exempel har Gentoo-pingviner i genomsnitt en 6.4 mm större näbblängd än referenskategorin Adelie-pingviner givet att alla andra variabler hålls konstanta.</p>
 <p>Interceptet är endast relevant att tolka om <em>värdemängden</em> är alla 0, det vill säga att data täcker det område där alla förklarande variabler antar värdet 0. I just detta exempel finns det inte data över dessa områden vilket medför att värdet på interceptet inte har någon rimlig tolkning.</p>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -588,22 +588,22 @@ Viktigt
 <p>Det är inte bara koefficienttabellen som är relevant att titta på i en modellanpassning och vi kommer tillbaka till de andra objekten som finns inuti <code>lm</code> senare.</p>
 </section>
 </section>
-<section id="sec-matrices" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="sec-matrices"><span class="header-section-number">3.3</span> Matrisberäkningar</h2>
+<section id="sec-matrices" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="sec-matrices"><span class="header-section-number">4.3</span> Matrisberäkningar</h2>
 <p>Matriser underlättar de tunga beräkningar som krävs för att anpassa en regressionsmodell med flera förklarande variabler. Vi kan formulera en regressionsmodell i matrisform enligt: <span id="eq-reg-matrix"><span class="math display">\[
 \mathbf{Y} = \mathbf{X} \boldsymbol{\beta} + \mathbf{E}
-\tag{3.5}\]</span></span> där, <span class="math display">\[
+\tag{4.5}\]</span></span> där, <span class="math display">\[
     \mathbf{Y} = \underset{n \times 1}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}} \quad \mathbf{X} = \underset{n \times p}{\begin{bmatrix}1 &amp; X_{11} &amp; X_{12} &amp; \cdots &amp; X_{1k}\\1 &amp; X_{21} &amp; X_{22} &amp; \cdots &amp; X_{2k}\\\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\1 &amp; X_{n1} &amp; X_{n2} &amp; \cdots &amp; X_{nk}\end{bmatrix}
 } \quad \boldsymbol{\beta} = \underset{p \times 1}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}} \quad \mathbf{E} = \underset{n \times 1} {\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
-\]</span> <span class="math inline">\(\mathbf{X}\)</span> kallas för <em>designmatrisen</em> och innehåller alla <span class="math inline">\(k\)</span> förklarande variabler, en kolumn för varje, samt en första kolumn med 1:or som motsvarar interceptet. Indikatorvariabler adderar till antalet förklarande variabler trots att de utgår ifrån samma kvalitativa variabel, se <a href="#eq-penguin-full-simple" class="quarto-xref">Ekvation&nbsp;<span>3.2</span></a> där vi totalt har 6 förklarande variabler. <span class="math inline">\(p\)</span> beskriver antalet parametrar, motsvarande <span class="math inline">\(k + 1\)</span> antalet lutningsparametrar + interceptet, och <span class="math inline">\(n\)</span> är antalet observationer.</p>
+\]</span> <span class="math inline">\(\mathbf{X}\)</span> kallas för <em>designmatrisen</em> och innehåller alla <span class="math inline">\(k\)</span> förklarande variabler, en kolumn för varje, samt en första kolumn med 1:or som motsvarar interceptet. Indikatorvariabler adderar till antalet förklarande variabler trots att de utgår ifrån samma kvalitativa variabel, se <a href="#eq-penguin-full-simple" class="quarto-xref">Ekvation&nbsp;<span>4.2</span></a> där vi totalt har 6 förklarande variabler. <span class="math inline">\(p\)</span> beskriver antalet parametrar, motsvarande <span class="math inline">\(k + 1\)</span> antalet lutningsparametrar + interceptet, och <span class="math inline">\(n\)</span> är antalet observationer.</p>
 <p>Skattningen av <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> minimerar fortfarande SSE där: <span id="eq-sse-matrix"><span class="math display">\[
 SSE = (\mathbf{Y} - \mathbf{X}\boldsymbol{\hat{\beta}})'(\mathbf{Y}-\mathbf{X}\boldsymbol{\hat{\beta}})
-\tag{3.6}\]</span></span></p>
+\tag{4.6}\]</span></span></p>
 <p>och <span id="eq-bhat-matrix"><span class="math display">\[
 \boldsymbol{\hat{\beta}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y}
-\tag{3.7}\]</span></span></p>
-<section id="matriser-i-r" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="matriser-i-r"><span class="header-section-number">3.3.1</span> Matriser i R</h3>
+\tag{4.7}\]</span></span></p>
+<section id="matriser-i-r" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="matriser-i-r"><span class="header-section-number">4.3.1</span> Matriser i R</h3>
 <p>R använder sig av matriser i bakgrunden när vi använder <code>lm()</code> men vi kan också skapa våra egna utifrån datamaterialet och genomföra matrisberäkningen för <span class="math inline">\(\boldsymbol{\hat{\beta}}\)</span> eller SSE.</p>
 <p>Designmatrisen är den mest komplexa att skapa, speciellt om vi har kvalitativa variabler med i data, men som tur är kan vi använda samma formelobjekt i funktionen <code>model.matrix()</code>.</p>
 <div class="cell">
@@ -639,9 +639,9 @@ SSE = (\mathbf{Y} - \mathbf{X}\boldsymbol{\hat{\beta}})'(\mathbf{Y}-\mathbf{X}\b
 <pre><code>[1] 39.1 39.5 40.3 36.7 39.3</code></pre>
 </div>
 </div>
-<p>De fem första raderna i respektive matris är transformerade värden från <a href="01-explorative-analysis.html#tbl-penguins-sample" class="quarto-xref">Tabell&nbsp;<span>2.1</span></a> och designmatrisen innehåller indikatorvariabler enligt <a href="#eq-penguin-full-simple" class="quarto-xref">Ekvation&nbsp;<span>3.2</span></a>.</p>
-<section id="skattning-av-boldsymbolhatbeta" class="level4" data-number="3.3.1.1">
-<h4 data-number="3.3.1.1" class="anchored" data-anchor-id="skattning-av-boldsymbolhatbeta"><span class="header-section-number">3.3.1.1</span> Skattning av <span class="math inline">\(\boldsymbol{\hat{\beta}}\)</span></h4>
+<p>De fem första raderna i respektive matris är transformerade värden från <a href="01-explorative-analysis.html#tbl-penguins-sample" class="quarto-xref">Tabell&nbsp;<span>3.1</span></a> och designmatrisen innehåller indikatorvariabler enligt <a href="#eq-penguin-full-simple" class="quarto-xref">Ekvation&nbsp;<span>4.2</span></a>.</p>
+<section id="skattning-av-boldsymbolhatbeta" class="level4" data-number="4.3.1.1">
+<h4 data-number="4.3.1.1" class="anchored" data-anchor-id="skattning-av-boldsymbolhatbeta"><span class="header-section-number">4.3.1.1</span> Skattning av <span class="math inline">\(\boldsymbol{\hat{\beta}}\)</span></h4>
 <p>Nu kan vi med hjälp av matrisberäkningsformler i R beräkna koefficienterna:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>betaHat <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X) <span class="sc">%*%</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> Y</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -650,7 +650,7 @@ SSE = (\mathbf{Y} - \mathbf{X}\boldsymbol{\hat{\beta}})'(\mathbf{Y}-\mathbf{X}\b
 <div id="tbl-coef-matrix" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coef-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;3.2: Skattade koefficienter från matrisberäkning avrundat till fyra decimaler
+Tabell&nbsp;4.2: Skattade koefficienter från matrisberäkning avrundat till fyra decimaler
 </figcaption>
 <div aria-describedby="tbl-coef-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -701,7 +701,7 @@ Tabell&nbsp;3.2: Skattade koefficienter från matrisberäkning avrundat till fyr
 </figure>
 </div>
 </div>
-<p><a href="#tbl-coef-matrix" class="quarto-xref">Tabell&nbsp;<span>3.2</span></a> visar samma parameterskattningar som <a href="#tbl-reg-summary-good" class="quarto-xref">Tabell&nbsp;<span>3.1</span></a>, eftersom det är samma beräkningar som genomförts. Vi ser dock fler värden i den tidigare tabellen vilket uppkommer från att <code>lm()</code> omfattar fler beräkningar som sedan sammanställs i ett och samma objekt.</p>
+<p><a href="#tbl-coef-matrix" class="quarto-xref">Tabell&nbsp;<span>4.2</span></a> visar samma parameterskattningar som <a href="#tbl-reg-summary-good" class="quarto-xref">Tabell&nbsp;<span>4.1</span></a>, eftersom det är samma beräkningar som genomförts. Vi ser dock fler värden i den tidigare tabellen vilket uppkommer från att <code>lm()</code> omfattar fler beräkningar som sedan sammanställs i ett och samma objekt.</p>
 <p>Till exempel beräknas även prediktioner och residualer, vilket vi också kan göra med matrisberäkningar enligt:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Yhat <span class="ot">&lt;-</span> X <span class="sc">%*%</span> betaHat</span>
@@ -709,8 +709,8 @@ Tabell&nbsp;3.2: Skattade koefficienter från matrisberäkning avrundat till fyr
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> Y <span class="sc">-</span> Yhat</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="kovariansmatris-för-boldsymbolhatbeta" class="level4" data-number="3.3.1.2">
-<h4 data-number="3.3.1.2" class="anchored" data-anchor-id="kovariansmatris-för-boldsymbolhatbeta"><span class="header-section-number">3.3.1.2</span> Kovariansmatris för <span class="math inline">\(\boldsymbol{\hat{\beta}}\)</span></h4>
+<section id="kovariansmatris-för-boldsymbolhatbeta" class="level4" data-number="4.3.1.2">
+<h4 data-number="4.3.1.2" class="anchored" data-anchor-id="kovariansmatris-för-boldsymbolhatbeta"><span class="header-section-number">4.3.1.2</span> Kovariansmatris för <span class="math inline">\(\boldsymbol{\hat{\beta}}\)</span></h4>
 <p>Variansen för respektive parameter kan också beräknas med matriser, där medelfelet är roten ur diagonalelementen från kovariansmatrisen. <span class="math display">\[
 s^2_{\boldsymbol{\hat{\beta}}} = (\mathbf{X}'\mathbf{X})^{-1}MSE
 \]</span> där MSE är <span class="math inline">\(\frac{SSE}{n - (k + 1)}\)</span>.</p>
@@ -729,7 +729,7 @@ s^2_{\boldsymbol{\hat{\beta}}} = (\mathbf{X}'\mathbf{X})^{-1}MSE
 <div id="tbl-se-matrix" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-se-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;3.3: Skattade medelfel från matrisberäkning avrundat till fyra decimaler
+Tabell&nbsp;4.3: Skattade medelfel från matrisberäkning avrundat till fyra decimaler
 </figcaption>
 <div aria-describedby="tbl-se-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -780,7 +780,7 @@ Tabell&nbsp;3.3: Skattade medelfel från matrisberäkning avrundat till fyra dec
 </figure>
 </div>
 </div>
-<p>Vi ser även i <a href="#tbl-se-matrix" class="quarto-xref">Tabell&nbsp;<span>3.3</span></a> samma värden som <a href="#tbl-reg-summary-good" class="quarto-xref">Tabell&nbsp;<span>3.1</span></a>.</p>
+<p>Vi ser även i <a href="#tbl-se-matrix" class="quarto-xref">Tabell&nbsp;<span>4.3</span></a> samma värden som <a href="#tbl-reg-summary-good" class="quarto-xref">Tabell&nbsp;<span>4.1</span></a>.</p>
 
 
 </section>
@@ -1200,12 +1200,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../01-regression/01-explorative-analysis.html" class="pagination-link" aria-label="Utforska samband">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Utforska samband</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../01-regression/03-model-assessment.html" class="pagination-link" aria-label="Modellutvärdering">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
