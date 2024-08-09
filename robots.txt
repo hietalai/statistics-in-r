@@ -1,1 +1,0 @@
-Sitemap: git@liu.github.com:hietalai/statistics-in-r.git/sitemap.xml
