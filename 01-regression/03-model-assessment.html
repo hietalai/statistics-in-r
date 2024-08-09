@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk teori och tillämpningar i R - 5&nbsp; Modellutvärdering</title>
+<title>Statistisk teori och tillämpningar i R - 4&nbsp; Modellutvärdering</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -171,7 +171,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/03-model-assessment.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/03-model-assessment.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -194,25 +194,25 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
   </div>
 </li>
     </ul>
@@ -225,22 +225,22 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#residualanalys" id="toc-residualanalys" class="nav-link active" data-scroll-target="#residualanalys"><span class="header-section-number">5.1</span> Residualanalys</a>
+  <li><a href="#residualanalys" id="toc-residualanalys" class="nav-link active" data-scroll-target="#residualanalys"><span class="header-section-number">4.1</span> Residualanalys</a>
   <ul class="collapse">
-  <li><a href="#normalfördelning" id="toc-normalfördelning" class="nav-link" data-scroll-target="#normalfördelning"><span class="header-section-number">5.1.1</span> Normalfördelning</a></li>
-  <li><a href="#lika-varians" id="toc-lika-varians" class="nav-link" data-scroll-target="#lika-varians"><span class="header-section-number">5.1.2</span> Lika varians</a></li>
-  <li><a href="#oberoende" id="toc-oberoende" class="nav-link" data-scroll-target="#oberoende"><span class="header-section-number">5.1.3</span> Oberoende</a></li>
-  <li><a href="#funktion-med-alla-diagram" id="toc-funktion-med-alla-diagram" class="nav-link" data-scroll-target="#funktion-med-alla-diagram"><span class="header-section-number">5.1.4</span> Funktion med alla diagram</a></li>
+  <li><a href="#normalfördelning" id="toc-normalfördelning" class="nav-link" data-scroll-target="#normalfördelning"><span class="header-section-number">4.1.1</span> Normalfördelning</a></li>
+  <li><a href="#lika-varians" id="toc-lika-varians" class="nav-link" data-scroll-target="#lika-varians"><span class="header-section-number">4.1.2</span> Lika varians</a></li>
+  <li><a href="#oberoende" id="toc-oberoende" class="nav-link" data-scroll-target="#oberoende"><span class="header-section-number">4.1.3</span> Oberoende</a></li>
+  <li><a href="#funktion-med-alla-diagram" id="toc-funktion-med-alla-diagram" class="nav-link" data-scroll-target="#funktion-med-alla-diagram"><span class="header-section-number">4.1.4</span> Funktion med alla diagram</a></li>
   </ul></li>
-  <li><a href="#statistisk-inferens" id="toc-statistisk-inferens" class="nav-link" data-scroll-target="#statistisk-inferens"><span class="header-section-number">5.2</span> Statistisk inferens</a>
+  <li><a href="#statistisk-inferens" id="toc-statistisk-inferens" class="nav-link" data-scroll-target="#statistisk-inferens"><span class="header-section-number">4.2</span> Statistisk inferens</a>
   <ul class="collapse">
-  <li><a href="#anova" id="toc-anova" class="nav-link" data-scroll-target="#anova"><span class="header-section-number">5.2.1</span> ANOVA</a></li>
-  <li><a href="#f-test-för-modellen" id="toc-f-test-för-modellen" class="nav-link" data-scroll-target="#f-test-för-modellen"><span class="header-section-number">5.2.2</span> F-test för modellen</a></li>
-  <li><a href="#partiella-f-test-för-grupper-av-parametrar" id="toc-partiella-f-test-för-grupper-av-parametrar" class="nav-link" data-scroll-target="#partiella-f-test-för-grupper-av-parametrar"><span class="header-section-number">5.2.3</span> Partiella F-test för grupper av parametrar</a></li>
-  <li><a href="#t-test-för-enskilda-parametrar" id="toc-t-test-för-enskilda-parametrar" class="nav-link" data-scroll-target="#t-test-för-enskilda-parametrar"><span class="header-section-number">5.2.4</span> t-test för enskilda parametrar</a></li>
-  <li><a href="#konfidensintervall-för-beta" id="toc-konfidensintervall-för-beta" class="nav-link" data-scroll-target="#konfidensintervall-för-beta"><span class="header-section-number">5.2.5</span> Konfidensintervall för <span class="math inline">\(\beta\)</span></a></li>
+  <li><a href="#anova" id="toc-anova" class="nav-link" data-scroll-target="#anova"><span class="header-section-number">4.2.1</span> ANOVA</a></li>
+  <li><a href="#f-test-för-modellen" id="toc-f-test-för-modellen" class="nav-link" data-scroll-target="#f-test-för-modellen"><span class="header-section-number">4.2.2</span> F-test för modellen</a></li>
+  <li><a href="#partiella-f-test-för-grupper-av-parametrar" id="toc-partiella-f-test-för-grupper-av-parametrar" class="nav-link" data-scroll-target="#partiella-f-test-för-grupper-av-parametrar"><span class="header-section-number">4.2.3</span> Partiella F-test för grupper av parametrar</a></li>
+  <li><a href="#t-test-för-enskilda-parametrar" id="toc-t-test-för-enskilda-parametrar" class="nav-link" data-scroll-target="#t-test-för-enskilda-parametrar"><span class="header-section-number">4.2.4</span> t-test för enskilda parametrar</a></li>
+  <li><a href="#konfidensintervall-för-beta" id="toc-konfidensintervall-för-beta" class="nav-link" data-scroll-target="#konfidensintervall-för-beta"><span class="header-section-number">4.2.5</span> Konfidensintervall för <span class="math inline">\(\beta\)</span></a></li>
   </ul></li>
-  <li><a href="#utvärderingsmått" id="toc-utvärderingsmått" class="nav-link" data-scroll-target="#utvärderingsmått"><span class="header-section-number">5.3</span> Utvärderingsmått</a></li>
+  <li><a href="#utvärderingsmått" id="toc-utvärderingsmått" class="nav-link" data-scroll-target="#utvärderingsmått"><span class="header-section-number">4.3</span> Utvärderingsmått</a></li>
   </ul>
 </nav>
     </div>
@@ -249,7 +249,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></h1>
 </div>
 
 
@@ -269,16 +269,16 @@ window.Quarto = {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
-<p>Efter att vi har anpassat en modell baserat på iakttagelser från visualiseringar och beskrivande statistik har vi möjlighet att tolka det skattade sambandet mellan de förklarande variablerna och responsvariabeln, vilket vi också gjorde i <a href="02-model-structure.html#sec-model-fit-example" class="quarto-xref"><span>Avsnitt 4.2.1</span></a>. Det finns dock två aspekter som vi ännu inte funderat på;</p>
+<p>Efter att vi har anpassat en modell baserat på iakttagelser från visualiseringar och beskrivande statistik har vi möjlighet att tolka det skattade sambandet mellan de förklarande variablerna och responsvariabeln, vilket vi också gjorde i <a href="02-model-structure.html#sec-model-fit-example" class="quarto-xref"><span>Avsnitt 3.2.1</span></a>. Det finns dock två aspekter som vi ännu inte funderat på;</p>
 <ul>
 <li>vi kan inte anse att dessa tolkningar beskriver det sanna sambandet då vi ännu inte vet om modellen är lämplig,</li>
 <li>dessa tolkningar beskriver endast urvalet som samlats in, inte den population som vi vill dra slutsatser om.</li>
 </ul>
-<p>För att kunna bedöma lämpligheten av modellen måste vi undersöka huruvida modellen uppfyller de antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 2.3</span></a> genom <em>residualanalys</em> och slutsatser om populationen kan göras med hjälp av statistisk inferens.</p>
-<section id="residualanalys" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="residualanalys"><span class="header-section-number">5.1</span> Residualanalys</h2>
+<p>För att kunna bedöma lämpligheten av modellen måste vi undersöka huruvida modellen uppfyller de antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 1.3</span></a> genom <em>residualanalys</em> och slutsatser om populationen kan göras med hjälp av statistisk inferens.</p>
+<section id="residualanalys" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="residualanalys"><span class="header-section-number">4.1</span> Residualanalys</h2>
 <p>Residualanalys innebär att beräkna och visuellt utforska residualerna från en modell gentemot modellantaganden <span class="math inline">\(E\overset{iid}{\sim}N(0, \sigma^2)\)</span>, det vill säga att residualerna är oberoende, normalfördelade med väntevärde 0 och lika varians. Residualerna kan också användas för att undersöka ifall den linjära modell som anpassats är lämplig. Vi kommer titta närmare på mer detaljerad residualanalys i ett senare kapitel.</p>
-<p>För enkelhetens skull kan vi plocka ut residualerna samt de observerade och skattade värdena på responsvariabeln från den skattade modellen (se <a href="02-model-structure.html#tip-lm-objects" class="quarto-xref">Tip&nbsp;<span>4.1</span></a>).</p>
+<p>För enkelhetens skull kan vi plocka ut residualerna samt de observerade och skattade värdena på responsvariabeln från den skattade modellen (se <a href="02-model-structure.html#tip-lm-objects" class="quarto-xref">Tip&nbsp;<span>3.1</span></a>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapa ett datamaterial för visualiseringar</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -290,8 +290,8 @@ window.Quarto = {
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Vi kommer visualisera dessa variabler i olika former med hjälp av <code>ggplot2</code> vilket kräver att vi har en <code>data.frame</code> eller <code>tibble</code> med data.</p>
-<section id="normalfördelning" class="level3" data-number="5.1.1">
-<h3 data-number="5.1.1" class="anchored" data-anchor-id="normalfördelning"><span class="header-section-number">5.1.1</span> Normalfördelning</h3>
+<section id="normalfördelning" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="normalfördelning"><span class="header-section-number">4.1.1</span> Normalfördelning</h3>
 <p>Vi kan undersöka antagandet om normalfördelade residualer genom ett histogram och ett QQ-diagram (<strong>q</strong>uantile-<strong>q</strong>uantile diagram).</p>
 <div class="cell">
 <details class="code-fold">
@@ -356,8 +356,8 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="lika-varians" class="level3" data-number="5.1.2">
-<h3 data-number="5.1.2" class="anchored" data-anchor-id="lika-varians"><span class="header-section-number">5.1.2</span> Lika varians</h3>
+<section id="lika-varians" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="lika-varians"><span class="header-section-number">4.1.2</span> Lika varians</h3>
 <p>Vi kan kontrollera antagandet om residualernas lika varians genom ett spridningsdiagram med residualerna på y-axeln och någon av anpassade värden eller observerade värden på förklarande eller responsvariabeln. Vanligtvis används de anpassade värdena för att x-axeln ska beskriva hela modellen, men andra variabler kan vara användbara att visualisera för att identifiera potentiella orsaker till ett brustet antagande.</p>
 <div class="cell">
 <details class="code-fold">
@@ -389,13 +389,13 @@ Viktigt
 <img src="03-model-assessment_files/figure-html/fig-ex-eq-var-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ex-eq-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;5.1: Residualernas spridning mot anpassade värden.
+Figur&nbsp;4.1: Residualernas spridning mot anpassade värden.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>För att uppfylla antagandet om lika varians, ska punkterna i varje tvärsnitt av värden på x-axeln vara jämnt utspridda. Tänk som att vi vill placera två stycken parallella linjer längs med maximum och minimum-värden för residualerna (de två rödstreckade linjerna i <a href="#fig-ex-eq-var" class="quarto-xref">Figur&nbsp;<span>5.1</span></a>) och en stor majoritet av punkterna bör ligga utspridda emellan dessa. Vi ser i <a href="#fig-ex-eq-var" class="quarto-xref">Figur&nbsp;<span>5.1</span></a> att några enstaka observationer faktiskt hamnar utanför och ökar variationen i vissa tvärsnitt, men då det inte är tydliga avvikelser kan vi anse att residualerna har uppfyllt antagandet om lika varians.</p>
+<p>För att uppfylla antagandet om lika varians, ska punkterna i varje tvärsnitt av värden på x-axeln vara jämnt utspridda. Tänk som att vi vill placera två stycken parallella linjer längs med maximum och minimum-värden för residualerna (de två rödstreckade linjerna i <a href="#fig-ex-eq-var" class="quarto-xref">Figur&nbsp;<span>4.1</span></a>) och en stor majoritet av punkterna bör ligga utspridda emellan dessa. Vi ser i <a href="#fig-ex-eq-var" class="quarto-xref">Figur&nbsp;<span>4.1</span></a> att några enstaka observationer faktiskt hamnar utanför och ökar variationen i vissa tvärsnitt, men då det inte är tydliga avvikelser kan vi anse att residualerna har uppfyllt antagandet om lika varians.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -439,8 +439,8 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="oberoende" class="level3" data-number="5.1.3">
-<h3 data-number="5.1.3" class="anchored" data-anchor-id="oberoende"><span class="header-section-number">5.1.3</span> Oberoende</h3>
+<section id="oberoende" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="oberoende"><span class="header-section-number">4.1.3</span> Oberoende</h3>
 <p>Ofta är det svårt eller omöjligt att undersöka om det är oberoende observationer i ett datamaterial med avseeende på alla ordningar som data kan samlas in på. Undantaget är ifall vi vet hur datainsamlingen har gått till och om det finns någon tydlig tidsaspekt (till exempel i tidsseriedata) eller att samma enhet har uppmätts flera gånger som gör att vi att observationerna blir beroende. Vi vill att den modell som anpassas tar bort det beroende som finns i data så att de efterföljande residualerna endast uppvisar oberoende.</p>
 <p>Ett linjediagram över residualerna i observationsordning kan användas för att undersöka oberoende, men det är som sagt endast i specialfall som denna visualisering används. Linjediagrammet ska uppvisa “slump”, det vill säga inga tydliga mönster i residualerna.</p>
 <div class="cell">
@@ -471,8 +471,8 @@ Viktigt
 <li>Vi samlar in spatiala (rumsliga) data, till exempel temperatur eller regnmängd på olika platser i Östergötland. Då är det vanligt att det finns en positiv korrelation mellan geografiskt närliggande observationer.</li>
 </ul>
 </section>
-<section id="funktion-med-alla-diagram" class="level3" data-number="5.1.4">
-<h3 data-number="5.1.4" class="anchored" data-anchor-id="funktion-med-alla-diagram"><span class="header-section-number">5.1.4</span> Funktion med alla diagram</h3>
+<section id="funktion-med-alla-diagram" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="funktion-med-alla-diagram"><span class="header-section-number">4.1.4</span> Funktion med alla diagram</h3>
 <p>Dessa diagram kommer vara återkommande i regressionsmodellering så vi kan skapa en funktion för att automatiskt generera alla fyra diagram samtidigt. Vi får genom paketet <code>cowplot</code> tillgång till en funktion (<code>plot_grid</code>) som kan kombinera flera diagram till en och samma.</p>
 <div class="cell">
 <details class="code-fold">
@@ -524,34 +524,34 @@ Viktigt
 <img src="03-model-assessment_files/figure-html/fig-penguin-resid-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-penguin-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;5.2: Residualdiagrammen i en och samma bild
+Figur&nbsp;4.2: Residualdiagrammen i en och samma bild
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Sammanfattningsvis visar <a href="#fig-penguin-resid" class="quarto-xref">Figur&nbsp;<span>5.2</span></a> att residualerna uppfyller antagandet om normalfördelning med väntevärde 0 och lika varians. Det finns inga tydliga mönster i något diagram som indikerar på motsatsen eller att modellen missar att plocka upp något av sambandet. Några enstaka extremvärden har identifierats, specifikt två stycken stora positiva residualer som kommer undersökas mer i senare kapitel. Slutsatsen är att modellen är en lämplig förenkling av verkligheten.</p>
+<p>Sammanfattningsvis visar <a href="#fig-penguin-resid" class="quarto-xref">Figur&nbsp;<span>4.2</span></a> att residualerna uppfyller antagandet om normalfördelning med väntevärde 0 och lika varians. Det finns inga tydliga mönster i något diagram som indikerar på motsatsen eller att modellen missar att plocka upp något av sambandet. Några enstaka extremvärden har identifierats, specifikt två stycken stora positiva residualer som kommer undersökas mer i senare kapitel. Slutsatsen är att modellen är en lämplig förenkling av verkligheten.</p>
 </section>
 </section>
-<section id="statistisk-inferens" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="statistisk-inferens"><span class="header-section-number">5.2</span> Statistisk inferens</h2>
+<section id="statistisk-inferens" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="statistisk-inferens"><span class="header-section-number">4.2</span> Statistisk inferens</h2>
 <p>När vi anser oss ha hittat en lämplig modell kan vi fokusera på att tolka modellens resultat avseende populationen. Inom regressionsmodellering kan vi genomföra flera olika typer av statistisk inferens; på hela modellen, på grupper av parametrar, eller på enskilda parametrar.</p>
 <p>Vi kan börja med ett <em>F-test</em> för hela modellen för att se ifall minst en parameter är signifikant, att modellen är värd att undersöka vidare, för att sedan genomföra enskilda <em>t-test</em> för respektive parameter och bedöma vilka förklarande variabler har en signifikant påverkan på responsvariabeln. Då kvalitativa variabler ofta består utav flera parametrar behöver dessa slås samman för att undersöka variabelns samband vilket vi kan göra med ett <em>partiellt F-test</em>.</p>
 <p>Innan vi går in på de olika testerna behöver vi presentera <em>ANOVA</em>-tabellen som används för att dela upp responsvariabelns variation i modellens olika komponenter; modellens förklarande variabler och feltermen.</p>
-<section id="anova" class="level3" data-number="5.2.1">
-<h3 data-number="5.2.1" class="anchored" data-anchor-id="anova"><span class="header-section-number">5.2.1</span> ANOVA</h3>
+<section id="anova" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="anova"><span class="header-section-number">4.2.1</span> ANOVA</h3>
 <p><strong>An</strong>alysis <strong>o</strong>f <strong>Va</strong>riance är en samling metoder som beräknar variationen av olika modellkomponenter. Målet med en modell är att förklara den <em>totala variationen</em> i responsvariabeln på bästa sätt. Allting som de förklarande variablerna hjälper till att beskriva kallas för den <em>förklarade variationen</em> och det som modellen inte lyckas förklara (felet) är den <em>oförklarade variationen</em>.</p>
 <p><span id="eq-variation-components"><span class="math display">\[
 \underbrace{\mathbf{Y}}_\text{total variation} = \underbrace{\mathbf{X} \boldsymbol{\beta}}_\text{förklarad variation} + \underbrace{\mathbf{E}}_\text{oförklarad variation}
-\tag{5.1}\]</span></span></p>
-<p><a href="#eq-variation-components" class="quarto-xref">Ekvation&nbsp;<span>5.1</span></a> visar att den totala variationen är en summa av den förklarade och oförklarade variationen vilket också ses i formlerna för dessa. Respektive komponent beräknas enligt:</p>
+\tag{4.1}\]</span></span></p>
+<p><a href="#eq-variation-components" class="quarto-xref">Ekvation&nbsp;<span>4.1</span></a> visar att den totala variationen är en summa av den förklarade och oförklarade variationen vilket också ses i formlerna för dessa. Respektive komponent beräknas enligt:</p>
 <p><span class="math display">\[
   \text{total variation} = SST = \mathbf{Y}'\mathbf{Y} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}
 \]</span> där <span class="math inline">\(\mathbf{J}\)</span> är enhetsmatrisen, en <span class="math inline">\(n \times n\)</span> matris endast innehållande 1:or.</p>
 <p>Det kanske inte är så lätt att se vad dessa matrisberäkningar faktiskt beskriver men beräkningen motsvarar <span class="math inline">\(\sum_{i=1}^n(Y_i - \bar{Y})^2\)</span>, alltså täljaren i en variansberäkning för <span class="math inline">\(Y\)</span>. Den vänstra termen (<span class="math inline">\(\mathbf{Y}'\mathbf{Y}\)</span>) motsvarar <span class="math inline">\(Y_i\)</span> och den högra termen (<span class="math inline">\(\left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}\)</span>) motsvarar <span class="math inline">\(\bar{Y}\)</span>, responsvariabelns medelvärde. Den totala variationen beskriver hur mycket variation som uppkommer ifall vi skulle använda medelvärdet av <span class="math inline">\(Y\)</span> som modell.</p>
 <p><span class="math display">\[
   \text{oförklarad variation} = SSE = \mathbf{Y}'\mathbf{Y} - \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y}
-\]</span> SSE har vi tidigare använt som ett mått på felet i modellen, se <a href="02-model-structure.html#eq-sse" class="quarto-xref">Ekvation&nbsp;<span>4.4</span></a>, vilket betyder att <span class="math inline">\(\boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y}\)</span> motsvarar <span class="math inline">\(\hat{Y}_i\)</span>.</p>
+\]</span> SSE har vi tidigare använt som ett mått på felet i modellen, se <a href="02-model-structure.html#eq-sse" class="quarto-xref">Ekvation&nbsp;<span>3.4</span></a>, vilket betyder att <span class="math inline">\(\boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y}\)</span> motsvarar <span class="math inline">\(\hat{Y}_i\)</span>.</p>
 <p><span class="math display">\[
   \text{förklarad variation} = SSR = \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}
 \]</span></p>
@@ -569,15 +569,15 @@ Figur&nbsp;5.2: Residualdiagrammen i en och samma bild
 </div>
 </div>
 </div>
-<section id="anova-tabellen" class="level4" data-number="5.2.1.1">
-<h4 data-number="5.2.1.1" class="anchored" data-anchor-id="anova-tabellen"><span class="header-section-number">5.2.1.1</span> ANOVA-tabellen</h4>
+<section id="anova-tabellen" class="level4" data-number="4.2.1.1">
+<h4 data-number="4.2.1.1" class="anchored" data-anchor-id="anova-tabellen"><span class="header-section-number">4.2.1.1</span> ANOVA-tabellen</h4>
 <p>En ANOVA-tabell är ett sätt att effektivt få en översikt av dessa olika komponenter samt visa ytterligare information, såsom <em>frihetsgraderna</em> (<span class="math inline">\(df\)</span>) för respektive komponent och <em>medelkvadratsummor</em>.</p>
 <p>Frihetsgrader beskriver hur många lutningsparametrar som skattas för respektive del<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> och medelkvadratsummor visar den genomsnittliga variationen per frihetsgrad, <span class="math inline">\(\frac{SS}{df}\)</span>.</p>
 <div class="cell" data-tbl-cap-location="top">
 <div id="tbl-anova-example" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;5.1: Enkel ANOVA-tabell
+Tabell&nbsp;4.1: Enkel ANOVA-tabell
 </figcaption>
 <div aria-describedby="tbl-anova-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -622,11 +622,11 @@ Tabell&nbsp;5.1: Enkel ANOVA-tabell
 </figure>
 </div>
 </div>
-<p>En enkel ANOVA-tabell som <a href="#tbl-anova-example" class="quarto-xref">Tabell&nbsp;<span>5.1</span></a> visar endast de tre huvudsakliga komponenterna, men olika programvaror kan ibland visa andra uppdelningar som standard. I en multipel linjär regressionsmodell är det vanligt att dela upp den förklarade variationen ytterligare, exempelvis i <em>sekventiella kvadratsummor</em>.</p>
+<p>En enkel ANOVA-tabell som <a href="#tbl-anova-example" class="quarto-xref">Tabell&nbsp;<span>4.1</span></a> visar endast de tre huvudsakliga komponenterna, men olika programvaror kan ibland visa andra uppdelningar som standard. I en multipel linjär regressionsmodell är det vanligt att dela upp den förklarade variationen ytterligare, exempelvis i <em>sekventiella kvadratsummor</em>.</p>
 </section>
-<section id="sekventiella-kvadratsummor" class="level4" data-number="5.2.1.2">
-<h4 data-number="5.2.1.2" class="anchored" data-anchor-id="sekventiella-kvadratsummor"><span class="header-section-number">5.2.1.2</span> Sekventiella kvadratsummor</h4>
-<p>Beräkningarna för en ANOVA-tabell sker automatiskt i R när vi använder <code>lm()</code> och vi kan plocka ut tabellen från modellobjektet med hjälp av <code>anova()</code>, (se <a href="02-model-structure.html#tip-lm-objects" class="quarto-xref">Tip&nbsp;<span>4.1</span></a>).</p>
+<section id="sekventiella-kvadratsummor" class="level4" data-number="4.2.1.2">
+<h4 data-number="4.2.1.2" class="anchored" data-anchor-id="sekventiella-kvadratsummor"><span class="header-section-number">4.2.1.2</span> Sekventiella kvadratsummor</h4>
+<p>Beräkningarna för en ANOVA-tabell sker automatiskt i R när vi använder <code>lm()</code> och vi kan plocka ut tabellen från modellobjektet med hjälp av <code>anova()</code>, (se <a href="02-model-structure.html#tip-lm-objects" class="quarto-xref">Tip&nbsp;<span>3.1</span></a>).</p>
 <div class="cell" data-tbl-cap-location="top">
 <details class="code-fold">
 <summary>Visa kod</summary>
@@ -638,7 +638,7 @@ Tabell&nbsp;5.1: Enkel ANOVA-tabell
 <div id="tbl-anova-example-R" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-R-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;5.2: ANOVA-tabell från R
+Tabell&nbsp;4.2: ANOVA-tabell från R
 </figcaption>
 <div aria-describedby="tbl-anova-example-R-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -714,14 +714,14 @@ Tabell&nbsp;5.2: ANOVA-tabell från R
 </div>
 </div>
 <p>Som standard, delar R upp modellens kvadratsumma (SSR) i de enskilda förklarande variablerna med hjälp av sekventiella (även kallad betingade) kvadratsummor. En sekventiell kvadratsumma beskriver hur mycket variation en förklarande variabel bidrar med givet att modellen redan innehåller andra förklarande variabler.</p>
-<p>Ordningen som presenteras i <a href="#tbl-anova-example-R" class="quarto-xref">Tabell&nbsp;<span>5.2</span></a> är ordningen som variablerna läggs till i modellen, till exempel visar andra raden <span class="math inline">\(SS(\text{bill\_depth\_mm} | \text{species})\)</span>, att näbbredden bidrar med 818.505 ytterligare unik förklarad variation av responsvariabeln som art inte redan har förklarat. Den tredje raden visar <span class="math inline">\(SS(\text{flipper\_length\_mm} | \text{species}, \text{bill\_depth\_mm})\)</span>, det vill säga hur mycket ytterligare unik variation som fenlängden förklarar i en modell som inkluderar näbbredd och art.</p>
+<p>Ordningen som presenteras i <a href="#tbl-anova-example-R" class="quarto-xref">Tabell&nbsp;<span>4.2</span></a> är ordningen som variablerna läggs till i modellen, till exempel visar andra raden <span class="math inline">\(SS(\text{bill\_depth\_mm} | \text{species})\)</span>, att näbbredden bidrar med 818.505 ytterligare unik förklarad variation av responsvariabeln som art inte redan har förklarat. Den tredje raden visar <span class="math inline">\(SS(\text{flipper\_length\_mm} | \text{species}, \text{bill\_depth\_mm})\)</span>, det vill säga hur mycket ytterligare unik variation som fenlängden förklarar i en modell som inkluderar näbbredd och art.</p>
 <p>Rent matematiskt beräknas den sekventiella kvadratsumman som en summa av antingen SSE eller SSR mellan två olika modeller, en utan den tillagda variabeln och en med variabeln inkluderad. Anta att vi vill lägga till variabel <span class="math inline">\(X^*\)</span> till en modell som har <span class="math inline">\(k\)</span> andra variabler, då ser beräkningen ut som följer:</p>
 <p><span id="eq-seq-ss"><span class="math display">\[
 \begin{aligned}
 SS(X^*|X_1, \ldots, X_k) &amp;= SSE_{X_1, \ldots, X_k} - SSE_{X_1, \ldots, X_k, X^*} = \\
 &amp;= SSR_{X_1, \ldots, X_k, X^*} - SSR_{X_1, \ldots, X_k}
 \end{aligned}
-\tag{5.2}\]</span></span></p>
+\tag{4.2}\]</span></span></p>
 <p>Notera att SSR ökar för varje ytterligare variabel som läggs till i modellen, medan SSE alltid minskar. En variation måste alltid vara positiv, därav beräknas <span class="math inline">\(SSE_{reducerad} - SSE_{komplett}\)</span> eller <span class="math inline">\(SSR_{komplett} - SSR_{reducerad}\)</span>.</p>
 <p>Sekventiella kvadratsummor påverkas av ordningen variablerna läggs till i modellen. Låt oss byta ordning på de förklarande variablerna när vi anpassar modellen:</p>
 <div class="cell" data-tbl-cap-location="top">
@@ -737,7 +737,7 @@ SS(X^*|X_1, \ldots, X_k) &amp;= SSE_{X_1, \ldots, X_k} - SSE_{X_1, \ldots, X_k, 
 <div id="tbl-anova-example-sex" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-sex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;5.3: Annan ordning på modellernas variabler
+Tabell&nbsp;4.3: Annan ordning på modellernas variabler
 </figcaption>
 <div aria-describedby="tbl-anova-example-sex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -812,12 +812,12 @@ Tabell&nbsp;5.3: Annan ordning på modellernas variabler
 </figure>
 </div>
 </div>
-<p>I <a href="#tbl-anova-example-sex" class="quarto-xref">Tabell&nbsp;<span>5.3</span></a> ser vi att <span class="math inline">\(SS(\text{sex}) = 1175.478\)</span> vilket är betydligt högre än <span class="math inline">\(SS(\text{sex}|\text{species}, \text{bill\_depth\_mm}, \text{flipper\_length\_mm}, \text{body\_mass\_g}) = 133.7191\)</span> från <a href="#tbl-anova-example-R" class="quarto-xref">Tabell&nbsp;<span>5.2</span></a>. Variabeln kön bidrar med mycket variation när den är ensam i en modell, men när den läggs till i en modell som redan har andra variabler bidrar den inte med lika mycket unik information. Detta betyder att den förklarade variationen som variabeln bidrar med verkar finnas i övriga variabler också. Denna iakttagelse kommer vi komma tillbaka till i ett senare kapitel.</p>
+<p>I <a href="#tbl-anova-example-sex" class="quarto-xref">Tabell&nbsp;<span>4.3</span></a> ser vi att <span class="math inline">\(SS(\text{sex}) = 1175.478\)</span> vilket är betydligt högre än <span class="math inline">\(SS(\text{sex}|\text{species}, \text{bill\_depth\_mm}, \text{flipper\_length\_mm}, \text{body\_mass\_g}) = 133.7191\)</span> från <a href="#tbl-anova-example-R" class="quarto-xref">Tabell&nbsp;<span>4.2</span></a>. Variabeln kön bidrar med mycket variation när den är ensam i en modell, men när den läggs till i en modell som redan har andra variabler bidrar den inte med lika mycket unik information. Detta betyder att den förklarade variationen som variabeln bidrar med verkar finnas i övriga variabler också. Denna iakttagelse kommer vi komma tillbaka till i ett senare kapitel.</p>
 <p>Någonting som är lika i de två tabellerna är SSE. Vi har i båda modellerna inkluderad samma variabler vilket innebör att SST, SSR, och SSE överlag är densamma. Summan av alla sekventiella kvadratsummor ska fortfarande bli SSR oavsett ordningen på variablerna och på grund av den additiva egenskapen hos variationen har SST och SSE inte heller förändrats.</p>
 </section>
 </section>
-<section id="f-test-för-modellen" class="level3" data-number="5.2.2">
-<h3 data-number="5.2.2" class="anchored" data-anchor-id="f-test-för-modellen"><span class="header-section-number">5.2.2</span> F-test för modellen</h3>
+<section id="f-test-för-modellen" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="f-test-för-modellen"><span class="header-section-number">4.2.2</span> F-test för modellen</h3>
 <p>I en multipel linjär regression är ett F-test för hela modellen bra att börja med för att se ifall minst en lutningsparameter är signifikant. Vi undersöker hypoteserna:</p>
 <p><span class="math display">\[\begin{align*}
 H_0&amp;: \beta_1 = \beta_2 = \beta_3 = \cdots = \beta_k = 0\\
@@ -907,7 +907,7 @@ F_{test} = \frac{SSR / k}{SSE / (n - (k+1))} = \frac{MSR}{MSE}
 <div id="tbl-anova-example-simple" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-simple-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;5.4: Bearbetad och förenklad ANOVA tabell
+Tabell&nbsp;4.4: Bearbetad och förenklad ANOVA tabell
 </figcaption>
 <div aria-describedby="tbl-anova-example-simple-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -952,21 +952,21 @@ Tabell&nbsp;5.4: Bearbetad och förenklad ANOVA tabell
 </div>
 <p>Eftersom p-värdet är mindre än 5 procent, kan <span class="math inline">\(H_0\)</span> förkastas och minst en av variablerna har ett samband med responsvariabeln.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 </section>
-<section id="partiella-f-test-för-grupper-av-parametrar" class="level3" data-number="5.2.3">
-<h3 data-number="5.2.3" class="anchored" data-anchor-id="partiella-f-test-för-grupper-av-parametrar"><span class="header-section-number">5.2.3</span> Partiella F-test för grupper av parametrar</h3>
+<section id="partiella-f-test-för-grupper-av-parametrar" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="partiella-f-test-för-grupper-av-parametrar"><span class="header-section-number">4.2.3</span> Partiella F-test för grupper av parametrar</h3>
 <p>Ibland är vi intresserade att undersöka delar av modellen, en grupp med lutningsparametrar. Ett sådant fall är om vi vill undersöka en kvalitativ variabels påverkan eftersom den kan ha transformerats till flera indikatorvariabler alla med en tillhörande lutningsparameter. Ett annat tillfälle är om vi vill undersöka om flera variabler tillsammans bidrar med förklarad variation till modellen.</p>
 <p>Istället för att undersöka alla lutningsparametrar undersöks nu ett urval: <span class="math display">\[\begin{align*}
 H_0&amp;: \beta_1 = \beta_2 = \beta_3 = \cdots = \beta_s = 0\\
 H_a&amp;: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
 \end{align*}\]</span> där <span class="math inline">\(s\)</span> är antalet parametrar som undersöks.</p>
-<p>Testvariabeln för ett partiellt F-test kräver en komplett (betecknad <span class="math inline">\(_F\)</span>) och en reducerad modell (betecknad <span class="math inline">\(_R\)</span>). Den kompletta modellen består av alla variabler medan den reducerade modellen utgår från att <span class="math inline">\(H_0\)</span> är sann och variablerna som undersöks har plockats bort från anpassningen. Vi kan välja att antingen använda SSR eller SSE för att beräkna hur mycket förklarad variation som försvinner mellan de två modellerna enligt samma princip som <a href="#eq-seq-ss" class="quarto-xref">Ekvation&nbsp;<span>5.2</span></a>.</p>
+<p>Testvariabeln för ett partiellt F-test kräver en komplett (betecknad <span class="math inline">\(_F\)</span>) och en reducerad modell (betecknad <span class="math inline">\(_R\)</span>). Den kompletta modellen består av alla variabler medan den reducerade modellen utgår från att <span class="math inline">\(H_0\)</span> är sann och variablerna som undersöks har plockats bort från anpassningen. Vi kan välja att antingen använda SSR eller SSE för att beräkna hur mycket förklarad variation som försvinner mellan de två modellerna enligt samma princip som <a href="#eq-seq-ss" class="quarto-xref">Ekvation&nbsp;<span>4.2</span></a>.</p>
 <p><span id="eq-partial-f"><span class="math display">\[
 F_{test} = \frac{(SSR_F - SSR_R) / s}{SSE_F / (n - (k+1))} = \frac{(SSE_R - SSE_F) / s}{SSE_F / (n - (k+1))}
-\tag{5.3}\]</span></span></p>
+\tag{4.3}\]</span></span></p>
 <p>Testvariabeln är fortfarande F-fördelat med <span class="math inline">\(s\)</span> respektive <span class="math inline">\(n - (k+1)\)</span> frihetsgrader.</p>
-<section id="räkneknep-för-partiella-f-test" class="level4" data-number="5.2.3.1">
-<h4 data-number="5.2.3.1" class="anchored" data-anchor-id="räkneknep-för-partiella-f-test"><span class="header-section-number">5.2.3.1</span> Räkneknep för partiella F-test</h4>
-<p>Med hjälp av <a href="#eq-seq-ss" class="quarto-xref">Ekvation&nbsp;<span>5.2</span></a> kan <a href="#eq-partial-f" class="quarto-xref">Ekvation&nbsp;<span>5.3</span></a> formuleras på ett tredje sätt som underlättar vår analysprocess. Vi kan skriva om skillnaden i förklarad variation mellan den kompletta och reducerade modellen som en sekventiell kvadratsumma. Exempelvis kan vi vilja undersöka om variabeln art har ett samband med responsvariabeln. Eftersom den variabeln transformeras till två indikatorvariabler omfattar hypoteserna två lutningsparametrar.</p>
+<section id="räkneknep-för-partiella-f-test" class="level4" data-number="4.2.3.1">
+<h4 data-number="4.2.3.1" class="anchored" data-anchor-id="räkneknep-för-partiella-f-test"><span class="header-section-number">4.2.3.1</span> Räkneknep för partiella F-test</h4>
+<p>Med hjälp av <a href="#eq-seq-ss" class="quarto-xref">Ekvation&nbsp;<span>4.2</span></a> kan <a href="#eq-partial-f" class="quarto-xref">Ekvation&nbsp;<span>4.3</span></a> formuleras på ett tredje sätt som underlättar vår analysprocess. Vi kan skriva om skillnaden i förklarad variation mellan den kompletta och reducerade modellen som en sekventiell kvadratsumma. Exempelvis kan vi vilja undersöka om variabeln art har ett samband med responsvariabeln. Eftersom den variabeln transformeras till två indikatorvariabler omfattar hypoteserna två lutningsparametrar.</p>
 <p><span class="math display">\[\begin{align*}
 H_0&amp;: \beta_{Chinstrap} = \beta_{Gentoo} = 0\\
 H_a&amp;: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
@@ -977,7 +977,7 @@ H_a&amp;: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
   SSR_{F} &amp;= SSR_{bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex, species}
 \end{aligned}
 \]</span></p>
-<p>Vi kan omformulera täljaren i <a href="#eq-partial-f" class="quarto-xref">Ekvation&nbsp;<span>5.3</span></a> till: <span class="math display">\[
+<p>Vi kan omformulera täljaren i <a href="#eq-partial-f" class="quarto-xref">Ekvation&nbsp;<span>4.3</span></a> till: <span class="math display">\[
 SS(species|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex)
 \]</span> I de ANOVA-tabeller som presenterats tidigare kan vi få fram denna kvadratsumma direkt om art läggs till som den sista variabeln i modellen.</p>
 <div class="cell" data-tbl-cap-location="top">
@@ -993,7 +993,7 @@ SS(species|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex)
 <div id="tbl-anova-example-species" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;5.5: ANOVA-tabell från en modell där art läggs till sist
+Tabell&nbsp;4.5: ANOVA-tabell från en modell där art läggs till sist
 </figcaption>
 <div aria-describedby="tbl-anova-example-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1068,7 +1068,7 @@ Tabell&nbsp;5.5: ANOVA-tabell från en modell där art läggs till sist
 </figure>
 </div>
 </div>
-<p>En ANOVA-tabell med sekventiella kvadratsummor beräknar ett partiellt F-test för respektive variabel (och dess parameter/parametrar) som undersöker huruvida variabeln bidrar med en signifikant ökning av den förklarade variationen till en modell som redan inkluderar variablerna ovanför. <a href="#tbl-anova-example-species" class="quarto-xref">Tabell&nbsp;<span>5.5</span></a> beräknar nu det partiella F-test för art (<span class="math inline">\(F_{test} = 374.9776\)</span>) som vi var intresserade av och vi kan direkt tolka p-värdet för testet (<span class="math inline">\(p-värde &lt; 0.001\)</span>) som att minst en av lutningsparametrarna är signifikant skild från 0.</p>
+<p>En ANOVA-tabell med sekventiella kvadratsummor beräknar ett partiellt F-test för respektive variabel (och dess parameter/parametrar) som undersöker huruvida variabeln bidrar med en signifikant ökning av den förklarade variationen till en modell som redan inkluderar variablerna ovanför. <a href="#tbl-anova-example-species" class="quarto-xref">Tabell&nbsp;<span>4.5</span></a> beräknar nu det partiella F-test för art (<span class="math inline">\(F_{test} = 374.9776\)</span>) som vi var intresserade av och vi kan direkt tolka p-värdet för testet (<span class="math inline">\(p-värde &lt; 0.001\)</span>) som att minst en av lutningsparametrarna är signifikant skild från 0.</p>
 <p>Om vi genomför ett partiellt F-test för <strong>flera variabler</strong> kan vi inte använda p-värden som anges i tabellen då hypoteserna omfattar fler lutningsparametrar/variabler än vad de sekventiella kvadratsummorna visar. Anta att vi vill undersöka om art och kön tillsammans bidrar något till modellen. Hypotesprövningen skulle då omfatta:</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -1076,7 +1076,7 @@ H_0&amp;: \beta_{sexMale} = \beta_{Chinstrap} = \beta_{Gentoo} = 0\\
 H_a&amp;: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
 \end{aligned}
 \]</span></p>
-<p>Den sekventiella kvadratsumman som vi vill använda anges som <span class="math inline">\(SS(species, sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g)\)</span> och vi kan beräkna fram detta värde genom att summera de två variablernas SS från <a href="#tbl-anova-example-species" class="quarto-xref">Tabell&nbsp;<span>5.5</span></a>.</p>
+<p>Den sekventiella kvadratsumman som vi vill använda anges som <span class="math inline">\(SS(species, sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g)\)</span> och vi kan beräkna fram detta värde genom att summera de två variablernas SS från <a href="#tbl-anova-example-species" class="quarto-xref">Tabell&nbsp;<span>4.5</span></a>.</p>
 <p><span class="math display">\[
 \begin{aligned}
 SS(species, sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g) = \\
@@ -1086,8 +1086,8 @@ SS(sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g)
 \]</span> Alternativet är att anpassa två modeller i R, den kompletta och reducerade och läsa av SSE eller summera SSR från respektive ANOVA-tabell.</p>
 </section>
 </section>
-<section id="t-test-för-enskilda-parametrar" class="level3" data-number="5.2.4">
-<h3 data-number="5.2.4" class="anchored" data-anchor-id="t-test-för-enskilda-parametrar"><span class="header-section-number">5.2.4</span> t-test för enskilda parametrar</h3>
+<section id="t-test-för-enskilda-parametrar" class="level3" data-number="4.2.4">
+<h3 data-number="4.2.4" class="anchored" data-anchor-id="t-test-för-enskilda-parametrar"><span class="header-section-number">4.2.4</span> t-test för enskilda parametrar</h3>
 <p>Att använda ANOVA-tabellen för att undersöka enskilda parametrar är inte lämpligt då det kräver att variabeln anges sist i modelleringen för att det partiella F-testet undersöker just den enskilda variabeln i relation till övriga modellen. Istället bör vi använda t-test för respektive parameter.</p>
 <p>Formellt undersöks hypoteserna: <span class="math display">\[
 \begin{aligned}
@@ -1116,7 +1116,7 @@ t_{test} = \frac{b_j - 0}{s_{b_j}}
 <div id="tbl-coef-example" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coef-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;5.6: Koefficienttabell för en modell med tillhörande t-test för enskilda parametrar
+Tabell&nbsp;4.6: Koefficienttabell för en modell med tillhörande t-test för enskilda parametrar
 </figcaption>
 <div aria-describedby="tbl-coef-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1191,7 +1191,7 @@ Tabell&nbsp;5.6: Koefficienttabell för en modell med tillhörande t-test för e
 </figure>
 </div>
 </div>
-<p>I <a href="#tbl-coef-example" class="quarto-xref">Tabell&nbsp;<span>5.6</span></a> ser vi att p-värdet för alla t-testen är väldigt låga (nära 0). För varje enskilda hypotesprövning kan vi på fem procents signifikans förkasta <span class="math inline">\(H_0\)</span> vilket betyder att variabeln har en signifikant påverkan på responsvariabeln.</p>
+<p>I <a href="#tbl-coef-example" class="quarto-xref">Tabell&nbsp;<span>4.6</span></a> ser vi att p-värdet för alla t-testen är väldigt låga (nära 0). För varje enskilda hypotesprövning kan vi på fem procents signifikans förkasta <span class="math inline">\(H_0\)</span> vilket betyder att variabeln har en signifikant påverkan på responsvariabeln.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1206,8 +1206,8 @@ Tips
 </div>
 </div>
 </section>
-<section id="konfidensintervall-för-beta" class="level3" data-number="5.2.5">
-<h3 data-number="5.2.5" class="anchored" data-anchor-id="konfidensintervall-för-beta"><span class="header-section-number">5.2.5</span> Konfidensintervall för <span class="math inline">\(\beta\)</span></h3>
+<section id="konfidensintervall-för-beta" class="level3" data-number="4.2.5">
+<h3 data-number="4.2.5" class="anchored" data-anchor-id="konfidensintervall-för-beta"><span class="header-section-number">4.2.5</span> Konfidensintervall för <span class="math inline">\(\beta\)</span></h3>
 <p>Slutsatsen vi kan dra från dessa hypotesprövningar är att modellen innehåller variabler som alla har ett signifikant samband med responsvariabeln. Om vi vill tolka magnituden av effekten gentemot populationen, inte bara om sambandet är signifikant, behöver vi beräkna intervallskattningar.</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -1216,8 +1216,8 @@ b_j \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_j}
 \]</span></p>
 </section>
 </section>
-<section id="utvärderingsmått" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="utvärderingsmått"><span class="header-section-number">5.3</span> Utvärderingsmått</h2>
+<section id="utvärderingsmått" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="utvärderingsmått"><span class="header-section-number">4.3</span> Utvärderingsmått</h2>
 <p>Bara för att en modell är lämplig, uppfyller modellantaganden och innehåller signifikanta parametrar, betyder det inte att modellen är den bästa som kan skapas eller överhuvudtaget bra. Med hjälp av olika utvärderingsmått kan vi få en överblick på hur bra modellen är.</p>
 <p><em>Förklaringsgraden</em> (<span class="math inline">\(R^2\)</span>) beskriver hur stor andel av den totala variationen som förklaras av modellens förklarande variabler. Med denna beskrivning kan vi beräkna <span class="math inline">\(R^2\)</span> som: <span class="math display">\[
 \begin{aligned}
@@ -1653,7 +1653,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../01-regression/02-model-structure.html" class="pagination-link" aria-label="Modellanpassning">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
