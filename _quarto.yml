@@ -1,22 +1,30 @@
 project:
-  type: website
+  type: book
+  output-dir: _site
   
-website:
+book:
   title: "Statistisk tillämpning i R"
   page-navigation: true
   navbar:
     left:
-      - href: regression.qmd
-        text: "Regression"
+      - href: 01-regression/00-intro-regression.qmd
+        text: "Regressionsanalys"
   sidebar: 
     - title: "Regression"
       style: "docked"
       search: true
       contents: 
-        - regression.qmd
+        - 01-regression/00-intro-regression.qmd
         - 01-regression/01-explorative-analysis.qmd
         - 01-regression/02-model-structure.qmd
         - 01-regression/03-model-assessment.qmd
+  chapters: 
+    - index.qmd
+    - 01-regression/00-intro-regression.qmd
+    - 01-regression/01-explorative-analysis.qmd
+    - 01-regression/02-model-structure.qmd
+    - 01-regression/03-model-assessment.qmd
+        
 bibliography: bibliography.bib
 
 format:
@@ -24,8 +32,9 @@ format:
     theme: simplex #lux united pulse simplex
     css: styles.css
     toc: true
-    tbl-cap-location: top
+    lang: sv-SE
     language: custom.yml
+    tbl-cap-location: top
     code-fold: true
     code-summary: "Visa kod"
 

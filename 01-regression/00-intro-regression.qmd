@@ -2,19 +2,7 @@
 title: "Introduktion till regression"
 editor_options: 
   chunk_output_type: console
-language: custom.yml
 ---
-
-```{r setup}
-#| include: false
-
-require(tidyverse)
-require(palmerpenguins)
-
-penguins <- filter(penguins, !is.na(sex))
-
-```
-
 Att undersöka samband mellan variabler är ett vanligt steg i att förstå relationer eller fenomen. Till exempel hur åldern på ett träd påverkar dess volym, hur olika doser av en medicin påverkar en individs blodtryck, eller hur en persons ålder och utbildningsnivå påverkar dens ingångslön.
 
 Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. Generellt är modeller någon form av konstruktion som skapas för att öka förståelsen av någonting verkligt. Till exempel är en flygplansmodell inte ett riktigt flygplan men kan användas för att förstå hur ett flygplan är uppbyggd och hur den kan hantera luftströmmar och andra fenomen. Ett klassiskt exempel är tavlan "Ceci n'est pas une pipe" av René Magritte (@fig-pipe) som visar en representation (en modell) av en pipa, inte en fungerande pipa. 
@@ -129,7 +117,7 @@ Exempel på relationen mellan variabler i en experimentell studie.
 
 Effekten av en medicin på blodtryck kan också påverkas av personens ålder och kön [@gu2008] vilka inkluderas i modellen för att isolera den förklarande variabelns effekt.
 
-## Modellens antaganden {#sec-modellantaganden}
+## Modellens antaganden {#sec-model-assumptions}
 Syftet med en modell är att ge en lämplig förenkling av verkligheten. En linjär regressionsmodell kan vara en lämplig förenkling av ett samband om följande antaganden uppfylls:
 
 1. att det för varje $X$ finns en slumpvariabel $Y$ med ett ändligt medelvärde och varians,
@@ -171,7 +159,7 @@ Denna omskrivning ger oss en bra utgångspunkt att utvärdera lämpligheten av e
 #| echo: false
 #| out-width: 400px
 
-knitr::include_graphics("images/model_airplane_chatgpt.webp")
+knitr::include_graphics("../images/model_airplane_chatgpt.webp")
 ```
 
 Ej lämplig flygplansmodell, [@chatgpt2024]

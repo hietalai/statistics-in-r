@@ -1,28 +1,9 @@
 ---
-title: "Regressionsmodellen"
+title: "Modellanpassning"
 editor_options: 
   chunk_output_type: console
 
 ---
-<!-- Setup -->
-
-```{r setup}
-#| include: false
-
-# Laddar paketet med datamaterialet
-require(palmerpenguins)
-require(tidyverse)
-require(plotly)
-require(kableExtra)
-require(ggforce)
-
-# Filtrerar bort observationer med saknade värden
-penguins <- 
-  penguins %>% 
-  filter(!is.na(sex))
-
-```
-
 <!-- New commands for matrices in regression -->
 \newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
 }
@@ -42,7 +23,7 @@ penguins <-
 
 <!-- CONTENT -->
 
-Efter att ha sammanställt iaktaggelser från visualiseringar och beskrivande statistik, är nästa steg i processen att bygga modellen. Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i @sec-modellantaganden. Det enklaste är att börja med de kvantitativa variablerna som (vanligtvis) endast kräver en term vardera i modellen.
+Efter att ha sammanställt iaktaggelser från visualiseringar och beskrivande statistik, är nästa steg i processen att bygga modellen. Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i @sec-model-assumptions. Det enklaste är att börja med de kvantitativa variablerna som (vanligtvis) endast kräver en term vardera i modellen.
 
 $$
 \text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \cdots + E
@@ -89,6 +70,7 @@ För att slutföra modelleringen av @eq-penguin-quant ska vi inkludera Art och K
       0 \qquad \text{annars}
   \end{cases}
 \end{align*}
+
 
 och 
 
@@ -186,7 +168,7 @@ Formler för parameterskattningarna i en enkel linjär regression är:
 \end{align*}
 :::
 
-### Modellanpassning i R
+### Modellanpassning i R {#sec-model-fit-example}
 För att anpassa en linjär regressionsmodell i R används funktionen `lm()` med följande argument: 
 
 - `formula`: modellens struktur som ett formelobjekt
@@ -195,8 +177,6 @@ För att anpassa en linjär regressionsmodell i R används funktionen `lm()` med
 Ett formelobjekt är ett speciellt format som R använder för att beskriva relationen mellan variabler. Generellt anges formatet som `y ~ x` där `x` består utav de olika förklarande variablerna, till exempel `bill_length_mm ~ body_mass_g + bill_depth_mm`. Det finns ett kortkommando (`~ .`) som används i exemplet nedan, där alla övriga variabler inkluderas i högerledet , men det kräver att vi först har ett datamaterial enbart bestående av de förklarande variablerna från @eq-penguin-full-simple. 
 
 Vi måste också se till att alla variabler i datamaterialet har rätt variabeltyp som vi förväntar oss. Vi identifierade i @sec-example-data att vi hade tre kvantitativa variabler och två kvalitativa variabler som i R motsvarar typerna `numeric` och `Factor`. Att använda sig av `Factor` underlättar transformationen till indikatorvariabler eftersom R vet att den måste göra så för att modellen ska fungera. Om de kvalitativa variablerna var av typen `character` eller kodad `numeric` är det inte säkert att R skapar indikatorvariabler. Vi kan undersöka variabeltyperna för `penguins` med hjälp av `str()`.
-
-
 
 ```{r}
 #| code-fold: false
@@ -214,7 +194,7 @@ modelData <-
   )
 
 # Anpassar angiven modell
-model <- lm(formula = bill_length_mm ~ ., data = modelData)
+simpleModel <- lm(formula = bill_length_mm ~ ., data = modelData)
 
 ```
 
@@ -223,7 +203,7 @@ Med `summary()` får vi en detaljerad utskrift för modellen som inkluderar de a
 ::: {#fig-reg-summary-bad}
 ```{r}
 
-summary(model)
+summary(simpleModel)
 
 ```
 Inte särskilt snygg utskrift
@@ -235,7 +215,7 @@ Inte särskilt snygg utskrift
 #| tbl-cap-location: top
 #| label: tbl-reg-summary-good
 
-summary(model) %>% 
+summary(simpleModel) %>% 
   coef() %>% 
   as_tibble(rownames = NA) %>% 
   rownames_to_column() %>% 
@@ -253,7 +233,7 @@ summary(model) %>%
 
 ```
 
-::: {.callout-tip}
+::: {#tip-lm-objects .callout-tip}
 För att skapa denna snygga utskrift av koefficienterna behöver vi plocka ut en enskild del av `summary()` med hjälp av `coef()`. I dokumentationen för `lm()` finns mer information om vad som kan hämtas från det resulterande regressionsobjektet. 
 
 R är ett objektorienterat programmeringsspråk, och funktionen lm() returnerar ett objekt av klassen ”lm”, vilket är en lista. Det är enkelt att plocka önskade delar från den listan vid behov. Det finns en mängd funktioner kopplade till objekt av klassen ”lm”: 
@@ -320,15 +300,97 @@ X <-
     data = modelData
   )
 
+# Visar de första fem raderna i matrisen
+X[1:5,]
+
 Y <- 
   modelData$bill_length_mm %>% 
   as.matrix()
 
-dim(X)
-dim(Y)
+# Visar de första fem raderna i vektorn
+Y[1:5,]
 
 ```
 
+De fem första raderna i respektive matris är transformerade värden från @tbl-penguins-sample och designmatrisen innehåller indikatorvariabler enligt @eq-penguin-full-simple.
+
+#### Skattning av $\boldsymbol{\hat{\beta}}$
+Nu kan vi med hjälp av matrisberäkningsformler i R beräkna koefficienterna:
+```{r}
+#| code-fold: false
+
+betaHat <- solve(t(X) %*% X) %*% t(X) %*% Y
+
+```
+
+```{r}
+#| echo: false
+#| tbl-cap: Skattade koefficienter från matrisberäkning avrundat till fyra decimaler
+#| tbl-cap-location: top
+#| label: tbl-coef-matrix
+
+betaHat %>% 
+  round(4) %>% 
+  kable(col.names = c("", "Koefficient")) %>% 
+  kable_styling("striped", full_width = FALSE)
+
+```
+
+@tbl-coef-matrix visar samma parameterskattningar som @tbl-reg-summary-good, eftersom det är samma beräkningar som genomförts. Vi ser dock fler värden i den tidigare tabellen vilket uppkommer från att `lm()` omfattar fler beräkningar som sedan sammanställs i ett och samma objekt. 
+
+Till exempel beräknas även prediktioner och residualer, vilket vi också kan göra med matrisberäkningar enligt:
+
+```{r}
+#| code-fold: false
+
+Yhat <- X %*% betaHat
+
+e <- Y - Yhat
+
+```
+
+
+#### Kovariansmatris för $\boldsymbol{\hat{\beta}}$
+Variansen för respektive parameter kan också beräknas med matriser, där medelfelet är roten ur diagonalelementen från kovariansmatrisen.
+$$
+s^2_{\boldsymbol{\hat{\beta}}} = (\mathbf{X}'\mathbf{X})^{-1}MSE
+$$
+där MSE är $\frac{SSE}{n - (k + 1)}$.
+
+Då beräkningen av SSE och MSE utgår från matriser kommer även deras objekt vara en $1 \times 1$ matris, men i beräkningen av kovariansmatrisen är MSE endast en skalär. Vi behöver därför explicit ange att MSE inte längre är en matris för att undvika problem med matrisdimensioner. 
+
+```{r}
+#| code-fold: false
+
+
+# Beräknar SSE
+SSE <- t(Y - Yhat) %*% (Y - Yhat)
+
+# Beräknas MSE
+MSE <- SSE / (nrow(X) - ncol(X))
+
+# Beräknar kovariansmatrisen för Beta
+s2Beta <- solve(t(X) %*% X) * as.numeric(MSE)
+
+```
+
+
+```{r}
+#| echo: false
+#| tbl-cap: Skattade medelfel från matrisberäkning avrundat till fyra decimaler
+#| tbl-cap-location: top
+#| label: tbl-se-matrix
+
+s2Beta %>% 
+  diag() %>% 
+  sqrt() %>% 
+  round(4) %>% 
+  kable(col.names = c("", "Medelfel")) %>% 
+  kable_styling("striped", full_width = FALSE)
+
+```
+
+Vi ser även i @tbl-se-matrix samma värden som @tbl-reg-summary-good.
 
 
 

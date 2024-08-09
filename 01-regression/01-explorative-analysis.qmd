@@ -16,24 +16,6 @@ Aspekter som är viktiga att identifiera är:
 Om vi har koll på alla dessa punkter är det mycket lättare att anpassa en korrekt modellstruktur och även att utvärdera anpassade modeller. Vi kan undersöka dessa punkter genom enklare funktioner (ex. `mean()`, `min()`, `summary(variabel)`) men vi kan också få relevant information genom enskilda och parvisa visualiseringar av variablerna. 
 
 ## Pingviner vid Antarktis {#sec-example-data}
-
-```{r setup}
-#| include: false
-
-# Laddar paketet med datamaterialet
-require(palmerpenguins)
-require(tidyverse)
-require(plotly)
-require(kableExtra)
-require(ggforce)
-
-# Filtrerar bort observationer med saknade värden
-penguins <- 
-  penguins %>% 
-  filter(!is.na(sex))
-
-```
-
 Återkommande i underlaget kommer ett insamlat datamaterial från ett forskarteam vid Antarktis användas. Teamet har mellan 2007 och 2009 samlat in information om `r nrow(penguins)` pingviner vid tre öar runtomkring [Palmer Research Station](https://pal.lternet.edu/). Datamaterialet kan hämtas via paketet `palmerpenguins`.[@penguins2020]
 
 ```{r}
@@ -57,7 +39,7 @@ Vi kan titta närmare på ett urval av datamaterialet i @tbl-penguins-sample.
 
 # Generera en formaterad tabell med hjälp av kable()
 penguins %>% 
-  sample_n(size = 5) %>% 
+  slice_head(n = 5) %>% 
   kable() %>% 
   kable_styling("striped")
 
