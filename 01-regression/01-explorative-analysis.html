@@ -248,11 +248,12 @@ window.Quarto = {
   <ul>
   <li><a href="#sec-example-data" id="toc-sec-example-data" class="nav-link active" data-scroll-target="#sec-example-data"><span class="header-section-number">2.1</span> Pingviner vid Antarktis</a></li>
   <li><a href="#visualisera-responsvariabeln" id="toc-visualisera-responsvariabeln" class="nav-link" data-scroll-target="#visualisera-responsvariabeln"><span class="header-section-number">2.2</span> Visualisera responsvariabeln</a></li>
-  <li><a href="#parvisa-samband" id="toc-parvisa-samband" class="nav-link" data-scroll-target="#parvisa-samband"><span class="header-section-number">2.3</span> Parvisa samband</a>
+  <li><a href="#sec-pairwise-visualization" id="toc-sec-pairwise-visualization" class="nav-link" data-scroll-target="#sec-pairwise-visualization"><span class="header-section-number">2.3</span> Parvisa samband</a>
   <ul class="collapse">
   <li><a href="#kvantitativa-förklarande-variabler" id="toc-kvantitativa-förklarande-variabler" class="nav-link" data-scroll-target="#kvantitativa-förklarande-variabler"><span class="header-section-number">2.3.1</span> Kvantitativa förklarande variabler</a></li>
   <li><a href="#kvalitativa-förklarande-variabler" id="toc-kvalitativa-förklarande-variabler" class="nav-link" data-scroll-target="#kvalitativa-förklarande-variabler"><span class="header-section-number">2.3.2</span> Kvalitativa förklarande variabler</a></li>
   </ul></li>
+  <li><a href="#sec-exercise-explore" id="toc-sec-exercise-explore" class="nav-link" data-scroll-target="#sec-exercise-explore"><span class="header-section-number">2.4</span> Övningsuppgifter</a></li>
   </ul>
 </nav>
     </div>
@@ -278,21 +279,19 @@ window.Quarto = {
 </header>
 
 
-<p>Det första steget i en regressionsanalys är att utforska datamaterialet. Oavsett om vi genomfört en observations- eller experimentell studie har vi säkerligen valt ut en responsvariabel som vi vill beskriva dess påverkan av andra variabler.</p>
-<p>Aspekter som är viktiga att identifiera är:</p>
+<p>Det första steget i en regressionsanalys är att utforska datamaterialet. Oavsett om vi genomfört en observations- eller experimentell studie har vi förmodligen innan insamlingen valt ut en responsvariabel som vi vill beskriva eller prediktera med hjälp av andra variabler. Målet med att utforska data är att få insikter som kan hjälpa oss på traven i senare steg, till exempel vilka variabler som är relevanta att inkludera i en modell, hur sambanden verkar se ut, finns det några problem med det insamlade data som behöver korrigeras.</p>
+<p>Några punkter som vi behöver få svar på är:</p>
 <ul>
 <li>Vilken typ och skala har variablerna?</li>
 <li>Kring vilka värden förhåller sig variablerna? Minsta och största värde? Läges- och spridningsmått?</li>
 <li>Hur fördelar sig variablerna? Vilken typ av fördelning verkar beskriva variabeln? Normal, likformig, skev?</li>
 <li>Finns det några extremvärden?</li>
 </ul>
-<p>Om vi har koll på alla dessa punkter är det mycket lättare att anpassa en korrekt modellstruktur och även att utvärdera anpassade modeller. Vi kan undersöka dessa punkter genom enklare funktioner (ex. <code>mean()</code>, <code>min()</code>, <code>summary(variabel)</code>) men vi kan också få relevant information genom enskilda och parvisa visualiseringar av variablerna.</p>
+<p>När vi fått svar på alla dessa punkter är det mycket lättare att skapa en korrekt modellstruktur och även att utvärdera anpassade modeller. Vi kan undersöka dessa punkter genom enklare funktioner (ex. <code>mean()</code>, <code>min()</code>, <code>summary(variabel)</code>) men vi kan också få relevant information genom enskilda och parvisa visualiseringar av variablerna.</p>
 <section id="sec-example-data" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="sec-example-data"><span class="header-section-number">2.1</span> Pingviner vid Antarktis</h2>
-<p>Återkommande i underlaget kommer ett insamlat datamaterial från ett forskarteam vid Antarktis användas. Teamet har mellan 2007 och 2009 samlat in information om 333 pingviner vid tre öar runtomkring <a href="https://pal.lternet.edu/">Palmer Research Station</a>. Datamaterialet kan hämtas via paketet <code>palmerpenguins</code>.<span class="citation" data-cites="penguins2020">(<a href="#ref-penguins2020" role="doc-biblioref">Horst, Hill, och Gorman 2020</a>)</span></p>
+<p>Återkommande i underlaget kommer ett insamlat datamaterial från ett forskarteam vid Antarktis användas. Teamet har mellan 2007 och 2009 samlat in information om 333 pingviner vid tre öar runtomkring <a href="https://pal.lternet.edu/">Palmer Research Station</a>. Datamaterialet kan hämtas via paketet <code>palmerpenguins</code> <span class="citation" data-cites="penguins2020">(<a href="#ref-penguins2020" role="doc-biblioref">Horst, Hill, och Gorman 2020</a>)</span> och laddas in i R via följande kod:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laddar paketet med datamaterialet</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(palmerpenguins)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -300,7 +299,20 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>penguins <span class="ot">&lt;-</span> </span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  penguins <span class="sc">%&gt;%</span> </span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Som en del av utforskningen kan vi identifiera saknade värden på vissa variabler och väljer att filtrera bort dessa variabler i just detta exempel. Hantering av saknade värden är ett stort fält inom statistiken och det finns flertalet metoder som kan <em>imputera</em> (skatta det saknade värdet) värden så att vi inte behöver ta bort hela observationer från undersökningen.</p>
+<p>En enkel imputeringsmetod är medelvärdesimputering där vi byter ut det saknade värdet med medelvärdet av de övriga mätvärdena eller typvärdet ifall en kvalitativ variabel ska imputeras. I praktiken används mer avancerade metoder som kan tillämpas i många olika fall där vi också tar hänsyn till annan information om observationerna.</p>
+</div>
 </div>
 <p>Vi kan titta närmare på ett urval av datamaterialet i <a href="#tbl-penguins-sample" class="quarto-xref">Tabell&nbsp;<span>2.1</span></a>.</p>
 <div class="cell" data-cap-location="top">
@@ -319,76 +331,73 @@ Tabell&nbsp;2.1: Urval av observationer från datamaterialet.
 </figcaption>
 <div aria-describedby="tbl-penguins-sample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div>
-<table class="table table-striped do-not-create-environment cell table-sm small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">species</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">island</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">bill_length_mm</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">bill_depth_mm</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">flipper_length_mm</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">body_mass_g</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">sex</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">year</th>
-</tr>
-</thead>
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> species </th>
+   <th style="text-align:left;"> island </th>
+   <th style="text-align:right;"> bill_length_mm </th>
+   <th style="text-align:right;"> bill_depth_mm </th>
+   <th style="text-align:right;"> flipper_length_mm </th>
+   <th style="text-align:right;"> body_mass_g </th>
+   <th style="text-align:left;"> sex </th>
+   <th style="text-align:right;"> year </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">Adelie</td>
-<td style="text-align: left;">Torgersen</td>
-<td style="text-align: right;">39.1</td>
-<td style="text-align: right;">18.7</td>
-<td style="text-align: right;">181</td>
-<td style="text-align: right;">3750</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: right;">2007</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Adelie</td>
-<td style="text-align: left;">Torgersen</td>
-<td style="text-align: right;">39.5</td>
-<td style="text-align: right;">17.4</td>
-<td style="text-align: right;">186</td>
-<td style="text-align: right;">3800</td>
-<td style="text-align: left;">female</td>
-<td style="text-align: right;">2007</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Adelie</td>
-<td style="text-align: left;">Torgersen</td>
-<td style="text-align: right;">40.3</td>
-<td style="text-align: right;">18.0</td>
-<td style="text-align: right;">195</td>
-<td style="text-align: right;">3250</td>
-<td style="text-align: left;">female</td>
-<td style="text-align: right;">2007</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Adelie</td>
-<td style="text-align: left;">Torgersen</td>
-<td style="text-align: right;">36.7</td>
-<td style="text-align: right;">19.3</td>
-<td style="text-align: right;">193</td>
-<td style="text-align: right;">3450</td>
-<td style="text-align: left;">female</td>
-<td style="text-align: right;">2007</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Adelie</td>
-<td style="text-align: left;">Torgersen</td>
-<td style="text-align: right;">39.3</td>
-<td style="text-align: right;">20.6</td>
-<td style="text-align: right;">190</td>
-<td style="text-align: right;">3650</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: right;">2007</td>
-</tr>
+  <tr>
+   <td style="text-align:left;"> Adelie </td>
+   <td style="text-align:left;"> Torgersen </td>
+   <td style="text-align:right;"> 39.1 </td>
+   <td style="text-align:right;"> 18.7 </td>
+   <td style="text-align:right;"> 181 </td>
+   <td style="text-align:right;"> 3750 </td>
+   <td style="text-align:left;"> male </td>
+   <td style="text-align:right;"> 2007 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Adelie </td>
+   <td style="text-align:left;"> Torgersen </td>
+   <td style="text-align:right;"> 39.5 </td>
+   <td style="text-align:right;"> 17.4 </td>
+   <td style="text-align:right;"> 186 </td>
+   <td style="text-align:right;"> 3800 </td>
+   <td style="text-align:left;"> female </td>
+   <td style="text-align:right;"> 2007 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Adelie </td>
+   <td style="text-align:left;"> Torgersen </td>
+   <td style="text-align:right;"> 40.3 </td>
+   <td style="text-align:right;"> 18.0 </td>
+   <td style="text-align:right;"> 195 </td>
+   <td style="text-align:right;"> 3250 </td>
+   <td style="text-align:left;"> female </td>
+   <td style="text-align:right;"> 2007 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Adelie </td>
+   <td style="text-align:left;"> Torgersen </td>
+   <td style="text-align:right;"> 36.7 </td>
+   <td style="text-align:right;"> 19.3 </td>
+   <td style="text-align:right;"> 193 </td>
+   <td style="text-align:right;"> 3450 </td>
+   <td style="text-align:left;"> female </td>
+   <td style="text-align:right;"> 2007 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Adelie </td>
+   <td style="text-align:left;"> Torgersen </td>
+   <td style="text-align:right;"> 39.3 </td>
+   <td style="text-align:right;"> 20.6 </td>
+   <td style="text-align:right;"> 190 </td>
+   <td style="text-align:right;"> 3650 </td>
+   <td style="text-align:left;"> male </td>
+   <td style="text-align:right;"> 2007 </td>
+  </tr>
 </tbody>
 </table>
 
-
-</div>
 </div>
 </div>
 </figure>
@@ -405,7 +414,7 @@ Tabell&nbsp;2.1: Urval av observationer från datamaterialet.
 <li><code>sex</code>: Pingvinens biologiska kön vilket är en kvalitativ variabel som inte går att rangordna, nominalskala.</li>
 <li><code>year</code>: Denna variabel är lite svårare att bedöma då den mäter året då pingvinen är mätt som en numerisk variabel (heltal så R har sparat det som en <code>int</code>), men variabeln i sig behöver inte bedömas vara kvantitativ i denna kontext. Vi går inte in vidare på detta utan för enkelhetens skull kan vi säga att eftersom det går att beräkna differenser mellan åren, (det är 1 år mellan 2007 och 2008) men ingen tydlig nollpunkt finns på skalan, så kan vi anse denna variabel vara en kvantitativ variabel som följer en intervallskala.</li>
 </ul>
-<p>I följande exempel kommer vi anta att näbblängden är av intresse att förklara av de andra variablerna. I och med att datamaterialet är en observationsstudie kommer vi inte kunna dra slutsatser om kausala samband, utan kan endast undersöka korrelationssamband.</p>
+<p>Vi kommer fokusera på näbblängden som vår responsvariabel i efterföljande exempel. I och med att datamaterialet är en observationsstudie kommer vi inte kunna dra slutsatser om kausala samband, utan kan endast undersöka korrelationssamband mellan pingvinernas olika egenskaper.</p>
 </section>
 <section id="visualisera-responsvariabeln" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="visualisera-responsvariabeln"><span class="header-section-number">2.2</span> Visualisera responsvariabeln</h2>
@@ -431,15 +440,21 @@ Figur&nbsp;2.1: Histogram över näbblängdens fördelning
 </div>
 </div>
 </div>
-<p><a href="#fig-hist-y" class="quarto-xref">Figur&nbsp;<span>2.1</span></a> ger oss en bild av variabelns egenskaperoch ifall materialet innehåller några extremvärden som kan vara svåra att plocka upp med en modell. Näbblängden verkar ha en bimodal struktur med två masscentrum vid 38-40 och 50 mm. Vi ser att majoriteten av observationerna ligger mellan ca 35-52 mm men det finns också enstaka observationer omkring 58-60 mm som verkar vara något avvikande stora näbbar.</p>
+<p><a href="#fig-hist-y" class="quarto-xref">Figur&nbsp;<span>2.1</span></a> ger oss en bild av variabelns egenskaper och ifall materialet innehåller några extremvärden som kan vara svåra att plocka upp med en modell. Näbblängden verkar ha en bimodal struktur med två masscentrum vid 38-40 och 50 mm. Vi ser att majoriteten av observationerna ligger mellan ca 35-52 mm men det finns också enstaka observationer omkring 58-60 mm som verkar vara något avvikande stora näbbar.</p>
 <p>Att fördelningen inte ser normalfördelad ut spelar ingen roll då vi måste titta på fördelningen av responsvariabeln med avseende på de förklarande variablerna för att kontrollera en regressionsmodells antaganden.</p>
 </section>
-<section id="parvisa-samband" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="parvisa-samband"><span class="header-section-number">2.3</span> Parvisa samband</h2>
+<section id="sec-pairwise-visualization" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-pairwise-visualization"><span class="header-section-number">2.3</span> Parvisa samband</h2>
 <p>Datamaterialet innehåller ett flertal potentiella förklarande variabler som skulle kunna inkluderas i en modell. Beroende på hur en undersökning gått till kan variabler väljas bort om de inte anses ha ett logiskt samband med responsvariabeln, t.ex. id-variabler är inte relevanta att undersöka. I vårt exempel finns en variabel som beskriver årtal vilket vi i ett första skede kan anta inte har något logiskt samband med näbblängden. Då återstår sex andra variabler som skulle kunna inkluderas i modellanpassningen.</p>
 <section id="kvantitativa-förklarande-variabler" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="kvantitativa-förklarande-variabler"><span class="header-section-number">2.3.1</span> Kvantitativa förklarande variabler</h3>
-<p>För kvantitativa förklarande variabler kan vi skapa ett spridningsdiagram där varje observation representeras med en punkt. Den förklarande variabeln placeras på x-axeln och responsvariabeln placeras på y-axeln.</p>
+<p>För kvantitativa förklarande variabler kan vi skapa ett spridningsdiagram där varje observation representeras med en punkt. Den förklarande variabeln placeras på x-axeln och responsvariabeln placeras på y-axeln. Med hjälp av punktsvärmen i spridningsdiagrammet kan vi få information om sambandet mellan de två variablerna. Det är fyra huvudsakliga punkter som vi fokuserar på:</p>
+<ol type="1">
+<li>Är sambandet linjärt?</li>
+<li>Är sambandet positivt eller negativt?</li>
+<li>Är sambandet starkt eller svagt?</li>
+<li>Förekommer det några extremvärden?</li>
+</ol>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
@@ -461,14 +476,7 @@ Figur&nbsp;2.2: Spridningsdiagram som visar sambandet mellan kroppsvikt och näb
 </div>
 </div>
 </div>
-<p>Med hjälp av punktsvärmen i spridningsdiagrammet kan vi få information om sambandet mellan de två variablerna. Det är fyra huvudsakliga punkter som vi fokuserar på:</p>
-<ol type="1">
-<li>Är sambandet linjärt?</li>
-<li>Är sambandet positivt eller negativt?</li>
-<li>Är sambandet starkt eller svagt?</li>
-<li>Förekommer det några extremvärden?</li>
-</ol>
-<p><a href="#fig-weight-length" class="quarto-xref">Figur&nbsp;<span>2.2</span></a> visar att sambandet ser till största del linjärt ut då det är en konstant förändring (ökning) av kroppsvikt leder till en konstant förändring (ökning) av näbblängden. Majoriteten av punkterna verkar följa detta positiva samband, vilket tyder på ett relativt starkt samband, dock finns det ett flertal observationer (markerade i <a href="#fig-w-l-ex" class="quarto-xref">Figur&nbsp;<span>2.3</span></a>) som avviker från detta. Dessa observationer har en lägre kroppsvikt men samma näbblängd som pingviner med en större kroppsvikt och påverkar styrkan av sambandet.</p>
+<p><a href="#fig-weight-length" class="quarto-xref">Figur&nbsp;<span>2.2</span></a> visar att sambandet ser till största del linjärt ut då en konstant förändring (ökning) av kroppsvikt leder till en konstant förändring (ökning) av näbblängden. Majoriteten av punkterna verkar följa denna trend, vilket tyder på ett relativt starkt samband, dock finns det ett flertal observationer (markerade i <a href="#fig-w-l-ex" class="quarto-xref">Figur&nbsp;<span>2.3</span></a>) som avviker från detta. Dessa observationer har en lägre kroppsvikt men samma näbblängd som pingviner med en större kroppsvikt och påverkar styrkan av sambandet.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-w-l-ex" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -498,7 +506,7 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Om spridningsdiagrammet uppvisar ett icke-linjärt och icke-monotont (konstant) samband kommer koefficienten inte beskriva sambandets styrka på rätt sätt. Det är lätt hänt att korrelationskoefficienten används som den enda utforskande metoden då den är enkel att beräkna för flera olika par av variabler, men den kan ofta missa relevant information.</p>
+<p>Om spridningsdiagrammet uppvisar ett icke-linjärt och icke-monotont (konstant) samband kommer koefficienten inte beskriva sambandets styrka på rätt sätt. Det är lätt hänt att korrelationskoefficienten används som den enda utforskande metoden då den är enkel att beräkna för flera olika par av variabler, men den kan ofta missa relevant information. Visualisering möjliggör identifieringen av komplexa samband som ofta medför att vi behöver hantera modellen på olika sätt.</p>
 </div>
 </div>
 <p><a href="#fig-weight-length" class="quarto-xref">Figur&nbsp;<span>2.2</span></a> visar också vissa observationer som skulle kunna anses vara extremvärden. Till exempel skulle <span class="math inline">\(\{x = ~2700, y = ~47\}\)</span> och <span class="math inline">\(\{x = ~3700, y = ~58\}\)</span> vara observationer som avviker extremt från det tilltänkta sambandet och andra observationer. Detaljerad analys av extremvärden lämnar vi till senare kapitel, men i ett utforskande syfte noterar vi att vi kan ha observationer som kommer påverka modellanpassningen.</p>
@@ -561,7 +569,7 @@ Figur&nbsp;2.6: Grupperingar av observationer
 </section>
 <section id="kvalitativa-förklarande-variabler" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="kvalitativa-förklarande-variabler"><span class="header-section-number">2.3.2</span> Kvalitativa förklarande variabler</h3>
-<p>Vi kan inte använda spridningsdiagram för att visualisera sambandet mellan kvalitativa förklarande variabler och en kontinuerlig responsvariabel. Vi behöver istället använda visualiseringar som tar hänsyn till den kvalitativa skalan, vanligtvis ordinal eller nominalskala. Det finns flera olika sätt att visualisera fördelningen av responsvariabeln för de olika nivåerna av den förklarande, till exempel grupperade histogram eller lådagram, men en typ av visualisering som visar detaljerna i fördelningen är ett <em>fioldiagram</em>.</p>
+<p>Vi kan inte använda spridningsdiagram för att visualisera sambandet mellan kvalitativa förklarande variabler och en kontinuerlig responsvariabel. Vi behöver istället använda visualiseringar som tar hänsyn till den kvalitativa skalan, vanligtvis ordinal eller nominalskala. Det finns flera olika sätt att visualisera fördelningen av responsvariabeln för de olika nivåerna av den förklarande, till exempel grupperade histogram eller lådagram, men en typ av visualisering som visar detaljerna i fördelningen är ett <em>fioldiagram</em>. Ett fioldiagram består utav en spegling av ett densitetsdiagram, där områden med många observationer har en större yta under kurvan.</p>
 <p>Via <code>ggplot2</code> kan vi skapa ett sådant diagram genom <code>geom_violin()</code>:</p>
 <div class="cell">
 <details class="code-fold">
@@ -585,6 +593,7 @@ Figur&nbsp;2.7: Fördelningen av näbblängd uppdelat på art
 </div>
 </div>
 </div>
+<p><a href="#fig-species-length" class="quarto-xref">Figur&nbsp;<span>2.7</span></a> visar att Adelie-pingviner överlag har en kortare näbblängd jämfört med Chinstrap och Gentoo då fördelningens mittpunkt förhåller sig kring 38-40 mm. Chinstrap-pingviner har en något större andel pingviner med en längd större än 50 mm medan Gentoo har en större andel med en längd mindre än 50 mm.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-sex-length" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -599,6 +608,7 @@ Figur&nbsp;2.8: Fördelningen av näbblängd uppdelat på kön
 </div>
 </div>
 </div>
+<p><a href="#fig-sex-length" class="quarto-xref">Figur&nbsp;<span>2.8</span></a> har en liten annorlunda form, med två stora massor för respektive kategori. Här har vi förmodligen en indikation på att kön inom de olika arterna har en påverkan och att hanar generellt har en större näbblängd än motsvarande honor av samma art.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-island-length" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -613,9 +623,26 @@ Figur&nbsp;2.9: Fördelningen av näbblängd uppdelat på ö
 </div>
 </div>
 </div>
-<p>Ett fioldiagram består utav en spegling av ett densitetsdiagram, där områden med många observationer har en större yta under kurvan.</p>
-<p><a href="#fig-species-length" class="quarto-xref">Figur&nbsp;<span>2.7</span></a> visar att Adelie-pingviner överlag har en kortare näbblängd jämfört med Chinstrap och Gentoo då fördelningens mittpunkt förhåller sig kring 38-40 mm. Chinstrap-pingviner har en något större andel pingviner med en längd större än 50 mm medan Gentoo har en större andel med en längd mindre än 50 mm. <a href="#fig-sex-length" class="quarto-xref">Figur&nbsp;<span>2.8</span></a> har en liten annorlunda form, med två stora massor för respektive kategori. Här har vi förmodligen en indikation på att kön inom de olika arterna har en påverkan och att hanar generellt har en större näbblängd än motsvarande honor av samma art. <a href="#fig-island-length" class="quarto-xref">Figur&nbsp;<span>2.9</span></a> antyder att pingviner på ön Torgersen har en mindre näbblängd än vid övriga öar, men här behöver vi resonera huruvida denna variabel faktiskt beskriver sambandet eller om det finns något annat fenomen som kan förklara samma sak, till exempel om en ö endast har pingviner av en viss art. Mer om dessa sorters samband kommer senare i underlaget.</p>
-<p>Slutsatsen från detta är att det verkar finnas ett samband mellan art och kön med näbblängd och variablerna bör inkluderas i modellen. Vi behöver nu fundera på hur vi på ett lämpligt sätt kan inkludera en kvalitativ variabel innehållande text i en matematisk modell som kräver siffror.</p>
+<p><a href="#fig-island-length" class="quarto-xref">Figur&nbsp;<span>2.9</span></a> antyder att pingviner på ön Torgersen har en mindre näbblängd än vid övriga öar, men här behöver vi resonera huruvida denna variabel faktiskt beskriver sambandet eller om det finns något annat fenomen som kan förklara samma sak, till exempel om en ö endast har pingviner av en viss art. Mer om dessa sorters samband kommer senare i underlaget.</p>
+<p>Slutsatsen från dessa visualiseringar är att det verkar finnas ett samband mellan art och kön med näbblängd och de två variablerna bör inkluderas i modellen. Vi behöver nu fundera på hur vi på ett lämpligt sätt kan inkludera en kvalitativ variabel innehållande text i en matematisk modell som kräver siffror.</p>
+</section>
+</section>
+<section id="sec-exercise-explore" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-exercise-explore"><span class="header-section-number">2.4</span> Övningsuppgifter</h2>
+<p>Använd datamaterialet <code>marketing</code> som går att hämta via:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"kassambara/datarium"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"marketing"</span>, <span class="at">package =</span> <span class="st">"datarium"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Datamaterialet innehåller tre variabler som beskriver reklambudget för YouTube, Facebook och nyhetstidningar (tusentals dollar) samt försäljningen (tusentals enheter). Vi vill modellera sambandet mellan försäljningen och de tre reklamkällorna.</p>
+<ol type="1">
+<li>Undersöka variablernas typ och skala.</li>
+<li>Sammanställ beskrivande statistik för respektive variabel.</li>
+<li>Visualisera fördelningen av respektive variabel.</li>
+<li>Skapa ett spridningsdiagram för varje förklarande variabel med responsvariabeln och tolka de utefter de fyra bitar information som ett spridningsdiagram visar.</li>
+<li>Sammanfatta dina iakttagelser och motivera vilka förklarande variabler som bör inkluderas i en modell och hur de bör struktureras.</li>
+</ol>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
@@ -630,11 +657,10 @@ Spearman, C. 1904. <span>”The Proof and Measurement of Association between Two
 </div>
 </div>
 </section>
-</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Andra mått, t.ex. Kendall <span class="citation" data-cites="kendall1955rank">(<a href="#ref-kendall1955rank" role="doc-biblioref">Kendall 1955</a>)</span> eller Spearman <span class="citation" data-cites="spearman1904">(<a href="#ref-spearman1904" role="doc-biblioref">Spearman 1904</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Eller andra mått för att beräkna styrkan på samband, t.ex. Kendall <span class="citation" data-cites="kendall1955rank">(<a href="#ref-kendall1955rank" role="doc-biblioref">Kendall 1955</a>)</span> eller Spearman <span class="citation" data-cites="spearman1904">(<a href="#ref-spearman1904" role="doc-biblioref">Spearman 1904</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

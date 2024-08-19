@@ -232,7 +232,7 @@ window.Quarto = {
   <li><a href="#oberoende" id="toc-oberoende" class="nav-link" data-scroll-target="#oberoende"><span class="header-section-number">4.1.3</span> Oberoende</a></li>
   <li><a href="#funktion-med-alla-diagram" id="toc-funktion-med-alla-diagram" class="nav-link" data-scroll-target="#funktion-med-alla-diagram"><span class="header-section-number">4.1.4</span> Funktion med alla diagram</a></li>
   </ul></li>
-  <li><a href="#statistisk-inferens" id="toc-statistisk-inferens" class="nav-link" data-scroll-target="#statistisk-inferens"><span class="header-section-number">4.2</span> Statistisk inferens</a>
+  <li><a href="#sec-stat-inference" id="toc-sec-stat-inference" class="nav-link" data-scroll-target="#sec-stat-inference"><span class="header-section-number">4.2</span> Statistisk inferens</a>
   <ul class="collapse">
   <li><a href="#anova" id="toc-anova" class="nav-link" data-scroll-target="#anova"><span class="header-section-number">4.2.1</span> ANOVA</a></li>
   <li><a href="#f-test-för-modellen" id="toc-f-test-för-modellen" class="nav-link" data-scroll-target="#f-test-för-modellen"><span class="header-section-number">4.2.2</span> F-test för modellen</a></li>
@@ -240,7 +240,8 @@ window.Quarto = {
   <li><a href="#t-test-för-enskilda-parametrar" id="toc-t-test-för-enskilda-parametrar" class="nav-link" data-scroll-target="#t-test-för-enskilda-parametrar"><span class="header-section-number">4.2.4</span> t-test för enskilda parametrar</a></li>
   <li><a href="#konfidensintervall-för-beta" id="toc-konfidensintervall-för-beta" class="nav-link" data-scroll-target="#konfidensintervall-för-beta"><span class="header-section-number">4.2.5</span> Konfidensintervall för <span class="math inline">\(\beta\)</span></a></li>
   </ul></li>
-  <li><a href="#utvärderingsmått" id="toc-utvärderingsmått" class="nav-link" data-scroll-target="#utvärderingsmått"><span class="header-section-number">4.3</span> Utvärderingsmått</a></li>
+  <li><a href="#enkla-utvärderingsmått" id="toc-enkla-utvärderingsmått" class="nav-link" data-scroll-target="#enkla-utvärderingsmått"><span class="header-section-number">4.3</span> Enkla utvärderingsmått</a></li>
+  <li><a href="#sec-exercise-evaluate" id="toc-sec-exercise-evaluate" class="nav-link" data-scroll-target="#sec-exercise-evaluate"><span class="header-section-number">4.4</span> Övningsuppgifter</a></li>
   </ul>
 </nav>
     </div>
@@ -274,7 +275,7 @@ window.Quarto = {
 <li>vi kan inte anse att dessa tolkningar beskriver det sanna sambandet då vi ännu inte vet om modellen är lämplig,</li>
 <li>dessa tolkningar beskriver endast urvalet som samlats in, inte den population som vi vill dra slutsatser om.</li>
 </ul>
-<p>För att kunna bedöma lämpligheten av modellen måste vi undersöka huruvida modellen uppfyller de antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 1.3</span></a> genom <em>residualanalys</em> och slutsatser om populationen kan göras med hjälp av statistisk inferens.</p>
+<p>För att kunna bedöma lämpligheten av modellen måste vi undersöka huruvida modellen uppfyller de antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 1.2</span></a> genom <em>residualanalys</em> och slutsatser om populationen kan göras med hjälp av statistisk inferens. Vi börjar alltid med att undersöka modellens lämplighet eftersom inferensmetodernas beräkningar också förutsätter att dessa antaganden är uppfyllda.</p>
 <section id="residualanalys" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="residualanalys"><span class="header-section-number">4.1</span> Residualanalys</h2>
 <p>Residualanalys innebär att beräkna och visuellt utforska residualerna från en modell gentemot modellantaganden <span class="math inline">\(E\overset{iid}{\sim}N(0, \sigma^2)\)</span>, det vill säga att residualerna är oberoende, normalfördelade med väntevärde 0 och lika varians. Residualerna kan också användas för att undersöka ifall den linjära modell som anpassats är lämplig. Vi kommer titta närmare på mer detaljerad residualanalys i ett senare kapitel.</p>
@@ -331,7 +332,8 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>I histogrammet vill vi se normalfördelningens symmetriska och klockliknande form centrerad kring 0 vilket ibland kan vara svårt att utläsa speciellt om datamaterialet är litet. QQ-diagrammet visar de observerade och de teoretiska kvantilerna där vi vill att punkterna ska följa den inritade linjen för en “perfekt” normalfördelning. För denna modell ser vi inga tydliga avvikelser från det mönster vi vill se, men vi kan utläsa ett fåtal avvikande observationer som skulle kunna betraktas som extremvärden. Två stora positiva residualer kan identifieras i diagrammet men det finns även enstaka negativa som ligger långt från linjen.</p>
+<p>I histogrammet vill vi se normalfördelningens symmetriska och klockliknande form centrerad kring 0 vilket ibland kan vara svårt att utläsa speciellt om datamaterialet är litet. QQ-diagrammet visar de observerade och de teoretiska kvantilerna där vi vill att punkterna ska följa den inritade linjen för en “perfekt” normalfördelning.</p>
+<p>För denna modell ser vi inga tydliga avvikelser från det mönster vi vill se, men vi kan utläsa ett fåtal avvikande observationer som skulle kunna betraktas som extremvärden. Två stora positiva residualer kan identifieras i diagrammen men det finns även enstaka negativa som ligger långt från de övriga.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -342,12 +344,85 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
+<p>Vi kan betrakta antagandet om normalfördelning som inte uppfyllt om dessa diagram visar på starka avvikelser från det vi vill se. Även när vi vet att ett urval är draget från en normalfördelning är det inte alltid som histogrammet visar den form som vi söker.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">30</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> <span class="fu">after_stat</span>(density)) <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"x"</span>, <span class="at">y =</span> <span class="st">"Densitet"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Fördelning av ett urval från den faktiska normalfördelningen</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Starka avvikelser från normalfördelningen innebär exempelvis att vi ser flera områden med hög densitet:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">30</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> <span class="fu">after_stat</span>(density)) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"x"</span>, <span class="at">y =</span> <span class="st">"Densitet"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Fördelning av ett urval från andra fördelningar</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>eller en väldigt skev fördelning:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">rchisq</span>(<span class="dv">30</span>, <span class="at">df =</span> <span class="dv">2</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> <span class="fu">after_stat</span>(density)) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"x"</span>, <span class="at">y =</span> <span class="st">"Densitet"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Fördelning av ett urval från andra fördelningar</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Dessa diagram indikerar att modellen saknar en förklarande variabel eller måste transformeras på något sätt för att uppfylla antagandet.</p>
 <p>Om QQ-diagrammet uppvisar tydliga mönster, till exempel om punkterna är krökta runt linjen, betyder det att modellen inte uppfyller antagandet om linjärt samband.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="480"></p>
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="480"></p>
 <figcaption>Exempel på mönster i QQ-diagram</figcaption>
 </figure>
 </div>
@@ -362,25 +437,25 @@ Viktigt
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> yHat, <span class="at">y =</span> residuals) <span class="sc">+</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Anpassade värden"</span>, <span class="at">y =</span> <span class="st">"Residualer"</span>) <span class="sc">+</span> </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">0</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Imaginära gränser</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="sc">-</span><span class="dv">5</span>),</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#d9230f"</span>,</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="dv">2</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">5</span>),</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#d9230f"</span>,</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="dv">2</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> yHat, <span class="at">y =</span> residuals) <span class="sc">+</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Anpassade värden"</span>, <span class="at">y =</span> <span class="st">"Residualer"</span>) <span class="sc">+</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">0</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Imaginära gränser</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="sc">-</span><span class="dv">5</span>),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#d9230f"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="dv">2</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">5</span>),</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#d9230f"</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="dv">2</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-ex-eq-var" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -411,7 +486,7 @@ Viktigt
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="480"></p>
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="480"></p>
 <figcaption>Exempel på icke-konstant varians i residualerna</figcaption>
 </figure>
 </div>
@@ -419,18 +494,19 @@ Viktigt
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="480"></p>
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid figure-img" width="480"></p>
 <figcaption>Exempel på icke-konstant varians i residualerna</figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>Dessa fenomen betyder oftast att hela eller delar av modellen behöver transformeras för att uppfylla antagandet om lika varians.</p>
 <p>Vi kan också identifiera problem med linjäritet i detta spridningsdiagram. Figuren nedan uppvisar någorlunda konstant varians i avseende på variationen i varje tvärsnitt av x-axeln, men det finns ett tydligt mönster i residualerna. Detta betyder att modellen inte lyckats modellera sambandet på rätt sätt. I detta läge vore det lämpligt att visualisera residualerna mot respektive förklarande variabel för att identifiera vilken/vilka utav de som verkar bidra med det icke-linjära sambandet.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="480"></p>
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="480"></p>
 <figcaption>Mönster i residualerna som tyder på ett icke-linjärt samband</figcaption>
 </figure>
 </div>
@@ -441,25 +517,25 @@ Viktigt
 </section>
 <section id="oberoende" class="level3" data-number="4.1.3">
 <h3 data-number="4.1.3" class="anchored" data-anchor-id="oberoende"><span class="header-section-number">4.1.3</span> Oberoende</h3>
-<p>Ofta är det svårt eller omöjligt att undersöka om det är oberoende observationer i ett datamaterial med avseeende på alla ordningar som data kan samlas in på. Undantaget är ifall vi vet hur datainsamlingen har gått till och om det finns någon tydlig tidsaspekt (till exempel i tidsseriedata) eller att samma enhet har uppmätts flera gånger som gör att vi att observationerna blir beroende. Vi vill att den modell som anpassas tar bort det beroende som finns i data så att de efterföljande residualerna endast uppvisar oberoende.</p>
+<p>Ofta är det svårt eller omöjligt att undersöka om observationerna är oberoende med avseeende på alla ordningar som data kan samlas in på. Undantaget är ifall vi vet hur datainsamlingen har gått till och om det finns någon tydlig tidsaspekt, till exempel i tidsseriedata, eller att samma enhet har uppmätts flera gånger som gör att vi vet att observationerna blir beroende. Vi vill att den modell som anpassas tar hänsyn till det beroende som finns i data så att de efterföljande residualerna endast uppvisar oberoende.</p>
 <p>Ett linjediagram över residualerna i observationsordning kan användas för att undersöka oberoende, men det är som sagt endast i specialfall som denna visualisering används. Linjediagrammet ska uppvisa “slump”, det vill säga inga tydliga mönster i residualerna.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(residualData), <span class="at">y =</span> residuals) <span class="sc">+</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Obs. index"</span>, <span class="at">y =</span> <span class="st">"Residualer"</span>) <span class="sc">+</span> </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">0</span>),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(residualData), <span class="at">y =</span> residuals) <span class="sc">+</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Obs. index"</span>, <span class="at">y =</span> <span class="st">"Residualer"</span>) <span class="sc">+</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">0</span>),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="480"></p>
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="480"></p>
 <figcaption>Residualer i observationsordning.</figcaption>
 </figure>
 </div>
@@ -477,45 +553,45 @@ Viktigt
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Funktionen kräver två argument, modellen som anpassats och bredden på staplarna i histogrammet.</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>residualPlots <span class="ot">&lt;-</span> <span class="cf">function</span>(model, <span class="at">binwidth =</span> <span class="dv">1</span>) {</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  residualData <span class="ot">&lt;-</span> </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">residuals =</span> <span class="fu">residuals</span>(model),</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Responsvariabeln finns som första kolumn i modellens model-objekt</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> model<span class="sc">$</span>model[,<span class="dv">1</span>],</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">yHat =</span> <span class="fu">fitted</span>(model)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> residuals, <span class="at">y =</span> <span class="fu">after_stat</span>(density)) <span class="sc">+</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> binwidth, <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Residualer"</span>, <span class="at">y =</span> <span class="st">"Densitet"</span>)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> yHat, <span class="at">y =</span> residuals) <span class="sc">+</span> </span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">0</span>)) <span class="sc">+</span> </span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Anpassade värden"</span>, <span class="at">y =</span> <span class="st">"Residualer"</span>)</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Använder standardiserade residualer</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">scale</span>(residuals)) <span class="sc">+</span> </span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_qq_line</span>() <span class="sc">+</span> </span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_qq</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x=</span> <span class="st">"Teoretiska kvantiler"</span>, <span class="at">y =</span> <span class="st">"Observerade kvantiler"</span>)</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  cowplot<span class="sc">::</span><span class="fu">plot_grid</span>(p1, p2, p3, <span class="at">nrow =</span> <span class="dv">2</span>)</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(simpleModel, <span class="dv">1</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Funktionen kräver två argument, modellen som anpassats och bredden på staplarna i histogrammet.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>residualPlots <span class="ot">&lt;-</span> <span class="cf">function</span>(model) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  residualData <span class="ot">&lt;-</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">residuals =</span> <span class="fu">residuals</span>(model),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Responsvariabeln finns som första kolumn i modellens model-objekt</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> model<span class="sc">$</span>model[,<span class="dv">1</span>],</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">yHat =</span> <span class="fu">fitted</span>(model)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> residuals, <span class="at">y =</span> <span class="fu">after_stat</span>(density)) <span class="sc">+</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">20</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Residualer"</span>, <span class="at">y =</span> <span class="st">"Densitet"</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> yHat, <span class="at">y =</span> residuals) <span class="sc">+</span> </span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Anpassade värden"</span>, <span class="at">y =</span> <span class="st">"Residualer"</span>)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(residualData) <span class="sc">+</span> </span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Använder standardiserade residualer</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">scale</span>(residuals)) <span class="sc">+</span> </span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_qq_line</span>() <span class="sc">+</span> </span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_qq</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x=</span> <span class="st">"Teoretiska kvantiler"</span>, <span class="at">y =</span> <span class="st">"Observerade kvantiler"</span>)</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  cowplot<span class="sc">::</span><span class="fu">plot_grid</span>(p1, p2, p3, <span class="at">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(simpleModel)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-penguin-resid" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -533,8 +609,8 @@ Figur&nbsp;4.2: Residualdiagrammen i en och samma bild
 <p>Sammanfattningsvis visar <a href="#fig-penguin-resid" class="quarto-xref">Figur&nbsp;<span>4.2</span></a> att residualerna uppfyller antagandet om normalfördelning med väntevärde 0 och lika varians. Det finns inga tydliga mönster i något diagram som indikerar på motsatsen eller att modellen missar att plocka upp något av sambandet. Några enstaka extremvärden har identifierats, specifikt två stycken stora positiva residualer som kommer undersökas mer i senare kapitel. Slutsatsen är att modellen är en lämplig förenkling av verkligheten.</p>
 </section>
 </section>
-<section id="statistisk-inferens" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="statistisk-inferens"><span class="header-section-number">4.2</span> Statistisk inferens</h2>
+<section id="sec-stat-inference" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="sec-stat-inference"><span class="header-section-number">4.2</span> Statistisk inferens</h2>
 <p>När vi anser oss ha hittat en lämplig modell kan vi fokusera på att tolka modellens resultat avseende populationen. Inom regressionsmodellering kan vi genomföra flera olika typer av statistisk inferens; på hela modellen, på grupper av parametrar, eller på enskilda parametrar.</p>
 <p>Vi kan börja med ett <em>F-test</em> för hela modellen för att se ifall minst en parameter är signifikant, att modellen är värd att undersöka vidare, för att sedan genomföra enskilda <em>t-test</em> för respektive parameter och bedöma vilka förklarande variabler har en signifikant påverkan på responsvariabeln. Då kvalitativa variabler ofta består utav flera parametrar behöver dessa slås samman för att undersöka variabelns samband vilket vi kan göra med ett <em>partiellt F-test</em>.</p>
 <p>Innan vi går in på de olika testerna behöver vi presentera <em>ANOVA</em>-tabellen som används för att dela upp responsvariabelns variation i modellens olika komponenter; modellens förklarande variabler och feltermen.</p>
@@ -563,7 +639,7 @@ Figur&nbsp;4.2: Residualdiagrammen i en och samma bild
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="480"></p>
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="480"></p>
 <figcaption>Visualisering av de olika källor av variation</figcaption>
 </figure>
 </div>
@@ -630,10 +706,10 @@ Tabell&nbsp;4.1: Enkel ANOVA-tabell
 <div class="cell" data-tbl-cap-location="top">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(simpleModel) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(simpleModel) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="tbl-anova-example-R" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -642,72 +718,69 @@ Tabell&nbsp;4.2: ANOVA-tabell från R
 </figcaption>
 <div aria-describedby="tbl-anova-example-R-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div>
-<table class="table table-striped do-not-create-environment cell table-sm small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Df</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Sum Sq</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Mean Sq</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">F value</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Pr(&gt;F)</th>
-</tr>
-</thead>
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Df </th>
+   <th style="text-align:right;"> Sum Sq </th>
+   <th style="text-align:right;"> Mean Sq </th>
+   <th style="text-align:right;"> F value </th>
+   <th style="text-align:right;"> Pr(&gt;F) </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">species</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">7015.3857</td>
-<td style="text-align: right;">3507.6929</td>
-<td style="text-align: right;">713.4929</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">bill_depth_mm</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">818.5050</td>
-<td style="text-align: right;">818.5050</td>
-<td style="text-align: right;">166.4905</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">flipper_length_mm</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">198.2269</td>
-<td style="text-align: right;">198.2269</td>
-<td style="text-align: right;">40.3210</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">body_mass_g</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">160.3760</td>
-<td style="text-align: right;">160.3760</td>
-<td style="text-align: right;">32.6218</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">sex</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">133.7191</td>
-<td style="text-align: right;">133.7191</td>
-<td style="text-align: right;">27.1995</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">326</td>
-<td style="text-align: right;">1602.6899</td>
-<td style="text-align: right;">4.9162</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
+  <tr>
+   <td style="text-align:left;"> species </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 7015.3857 </td>
+   <td style="text-align:right;"> 3507.6929 </td>
+   <td style="text-align:right;"> 713.4929 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> bill_depth_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 818.5050 </td>
+   <td style="text-align:right;"> 818.5050 </td>
+   <td style="text-align:right;"> 166.4905 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> flipper_length_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 198.2269 </td>
+   <td style="text-align:right;"> 198.2269 </td>
+   <td style="text-align:right;"> 40.3210 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> body_mass_g </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 160.3760 </td>
+   <td style="text-align:right;"> 160.3760 </td>
+   <td style="text-align:right;"> 32.6218 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> sex </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 133.7191 </td>
+   <td style="text-align:right;"> 133.7191 </td>
+   <td style="text-align:right;"> 27.1995 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Residuals </td>
+   <td style="text-align:right;"> 326 </td>
+   <td style="text-align:right;"> 1602.6899 </td>
+   <td style="text-align:right;"> 4.9162 </td>
+   <td style="text-align:right;">  </td>
+   <td style="text-align:right;">  </td>
+  </tr>
 </tbody>
 </table>
 
-
-</div>
 </div>
 </div>
 </figure>
@@ -727,12 +800,12 @@ SS(X^*|X_1, \ldots, X_k) &amp;= SSE_{X_1, \ldots, X_k} - SSE_{X_1, \ldots, X_k, 
 <div class="cell" data-tbl-cap-location="top">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> bill_length_mm <span class="sc">~</span> sex <span class="sc">+</span> ., <span class="at">data =</span> modelData)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> bill_length_mm <span class="sc">~</span> sex <span class="sc">+</span> ., <span class="at">data =</span> modelData)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="tbl-anova-example-sex" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -741,72 +814,69 @@ Tabell&nbsp;4.3: Annan ordning på modellernas variabler
 </figcaption>
 <div aria-describedby="tbl-anova-example-sex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div>
-<table class="table table-striped do-not-create-environment cell table-sm small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Df</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Sum Sq</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Mean Sq</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">F value</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Pr(&gt;F)</th>
-</tr>
-</thead>
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Df </th>
+   <th style="text-align:right;"> Sum Sq </th>
+   <th style="text-align:right;"> Mean Sq </th>
+   <th style="text-align:right;"> F value </th>
+   <th style="text-align:right;"> Pr(&gt;F) </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">sex</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1175.4780</td>
-<td style="text-align: right;">1175.4780</td>
-<td style="text-align: right;">239.1017</td>
-<td style="text-align: right;">0.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">species</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">6975.5916</td>
-<td style="text-align: right;">3487.7958</td>
-<td style="text-align: right;">709.4457</td>
-<td style="text-align: right;">0.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bill_depth_mm</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">64.4987</td>
-<td style="text-align: right;">64.4987</td>
-<td style="text-align: right;">13.1196</td>
-<td style="text-align: right;">0.0003</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">flipper_length_mm</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">78.3815</td>
-<td style="text-align: right;">78.3815</td>
-<td style="text-align: right;">15.9434</td>
-<td style="text-align: right;">0.0001</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">body_mass_g</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">32.2629</td>
-<td style="text-align: right;">32.2629</td>
-<td style="text-align: right;">6.5625</td>
-<td style="text-align: right;">0.0109</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">326</td>
-<td style="text-align: right;">1602.6899</td>
-<td style="text-align: right;">4.9162</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
+  <tr>
+   <td style="text-align:left;"> sex </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 1175.4780 </td>
+   <td style="text-align:right;"> 1175.4780 </td>
+   <td style="text-align:right;"> 239.1017 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> species </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 6975.5916 </td>
+   <td style="text-align:right;"> 3487.7958 </td>
+   <td style="text-align:right;"> 709.4457 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> bill_depth_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 64.4987 </td>
+   <td style="text-align:right;"> 64.4987 </td>
+   <td style="text-align:right;"> 13.1196 </td>
+   <td style="text-align:right;"> 0.0003 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> flipper_length_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 78.3815 </td>
+   <td style="text-align:right;"> 78.3815 </td>
+   <td style="text-align:right;"> 15.9434 </td>
+   <td style="text-align:right;"> 0.0001 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> body_mass_g </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 32.2629 </td>
+   <td style="text-align:right;"> 32.2629 </td>
+   <td style="text-align:right;"> 6.5625 </td>
+   <td style="text-align:right;"> 0.0109 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Residuals </td>
+   <td style="text-align:right;"> 326 </td>
+   <td style="text-align:right;"> 1602.6899 </td>
+   <td style="text-align:right;"> 4.9162 </td>
+   <td style="text-align:right;">  </td>
+   <td style="text-align:right;">  </td>
+  </tr>
 </tbody>
 </table>
 
-
-</div>
 </div>
 </div>
 </figure>
@@ -831,42 +901,42 @@ F_{test} = \frac{SSR / k}{SSE / (n - (k+1))} = \frac{MSR}{MSE}
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en funktion för att generera olika F-fördelningar</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>generateFdistribution <span class="ot">&lt;-</span> <span class="cf">function</span>(df1, df2, <span class="at">n =</span> <span class="dv">1000</span>) {</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="at">length.out =</span> n)  </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">df</span>(x, df1, df2)  </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">df1 =</span> df1, <span class="at">df2 =</span> df2)  </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en lista med olika frihetsgrader</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>dfs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">30</span>), <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">100</span>), <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">50</span>), <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">300</span>))</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Genererar data</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>Fdistributions <span class="ot">&lt;-</span> dfs <span class="sc">%&gt;%</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map_df</span>(<span class="sc">~</span><span class="fu">generateFdistribution</span>(.x[<span class="dv">1</span>], .x[<span class="dv">2</span>]), <span class="at">.id =</span> <span class="st">"Distribution"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Distribution =</span> <span class="fu">paste0</span>(<span class="st">"df1 = "</span>, df1, <span class="st">", df2 = "</span>, df2))</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the F-distributions using ggplot2</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Fdistributions) <span class="sc">+</span> </span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> Distribution) <span class="sc">+</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"F-värde"</span>,</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Densitet"</span>,</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Frihetsgrader"</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span>,</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>)</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"#d9230f"</span>, <span class="st">"black"</span>, <span class="st">"grey50"</span>))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en funktion för att generera olika F-fördelningar</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>generateFdistribution <span class="ot">&lt;-</span> <span class="cf">function</span>(df1, df2, <span class="at">n =</span> <span class="dv">1000</span>) {</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="at">length.out =</span> n)  </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">df</span>(x, df1, df2)  </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">df1 =</span> df1, <span class="at">df2 =</span> df2)  </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en lista med olika frihetsgrader</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>dfs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">30</span>), <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">100</span>), <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">50</span>), <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">300</span>))</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Genererar data</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>Fdistributions <span class="ot">&lt;-</span> dfs <span class="sc">%&gt;%</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map_df</span>(<span class="sc">~</span><span class="fu">generateFdistribution</span>(.x[<span class="dv">1</span>], .x[<span class="dv">2</span>]), <span class="at">.id =</span> <span class="st">"Distribution"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Distribution =</span> <span class="fu">paste0</span>(<span class="st">"df1 = "</span>, df1, <span class="st">", df2 = "</span>, df2))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the F-distributions using ggplot2</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Fdistributions) <span class="sc">+</span> </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> Distribution) <span class="sc">+</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"F-värde"</span>,</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Densitet"</span>,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Frihetsgrader"</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>)</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"#d9230f"</span>, <span class="st">"black"</span>, <span class="st">"grey50"</span>))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="03-model-assessment_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption>Olika F-fördelningar och deras frihetsgrader</figcaption>
 </figure>
 </div>
@@ -876,33 +946,33 @@ F_{test} = \frac{SSR / k}{SSE / (n - (k+1))} = \frac{MSR}{MSE}
 <div class="cell" data-tbl-cap-location="top">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>anovaTable <span class="ot">&lt;-</span> <span class="fu">anova</span>(simpleModel)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar raden för SSR utifrån alla rader förutom SSE</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>SSR <span class="ot">&lt;-</span> anovaTable[<span class="sc">-</span><span class="fu">nrow</span>(anovaTable),] <span class="sc">%&gt;%</span> </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(Df<span class="sc">:</span><span class="st">`</span><span class="at">Sum Sq</span><span class="st">`</span>, <span class="sc">~</span><span class="fu">sum</span>(.x))) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Sum Sq</span><span class="st">`</span> <span class="sc">/</span> Df,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">F value</span><span class="st">`</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> <span class="cn">NA</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Kombinerar SSR med SSE från ursprungliga tabellen</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>simpleAnova <span class="ot">&lt;-</span> SSR <span class="sc">%&gt;%</span> </span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(anovaTable[<span class="fu">nrow</span>(anovaTable),]) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">F value</span><span class="st">`</span> <span class="ot">=</span> </span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">1</span>] <span class="sc">/</span> <span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">2</span>], </span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>            <span class="cn">NA</span>),</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> </span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">==</span> <span class="dv">1</span>, </span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pf</span>(<span class="at">q =</span> <span class="st">`</span><span class="at">F value</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">df1 =</span> Df[<span class="dv">1</span>], <span class="at">df2 =</span> Df[<span class="dv">2</span>], <span class="at">lower.tail =</span> <span class="cn">FALSE</span>), </span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>              <span class="cn">NA</span>)</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(simpleAnova) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Model"</span>, <span class="st">"Residuals"</span>)</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(simpleAnova, <span class="at">digits =</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>anovaTable <span class="ot">&lt;-</span> <span class="fu">anova</span>(simpleModel)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar raden för SSR utifrån alla rader förutom SSE</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>SSR <span class="ot">&lt;-</span> anovaTable[<span class="sc">-</span><span class="fu">nrow</span>(anovaTable),] <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(Df<span class="sc">:</span><span class="st">`</span><span class="at">Sum Sq</span><span class="st">`</span>, <span class="sc">~</span><span class="fu">sum</span>(.x))) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Sum Sq</span><span class="st">`</span> <span class="sc">/</span> Df,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">F value</span><span class="st">`</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> <span class="cn">NA</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Kombinerar SSR med SSE från ursprungliga tabellen</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>simpleAnova <span class="ot">&lt;-</span> SSR <span class="sc">%&gt;%</span> </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(anovaTable[<span class="fu">nrow</span>(anovaTable),]) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">F value</span><span class="st">`</span> <span class="ot">=</span> </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">1</span>] <span class="sc">/</span> <span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">2</span>], </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>            <span class="cn">NA</span>),</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">==</span> <span class="dv">1</span>, </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pf</span>(<span class="at">q =</span> <span class="st">`</span><span class="at">F value</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">df1 =</span> Df[<span class="dv">1</span>], <span class="at">df2 =</span> Df[<span class="dv">2</span>], <span class="at">lower.tail =</span> <span class="cn">FALSE</span>), </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>              <span class="cn">NA</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(simpleAnova) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Model"</span>, <span class="st">"Residuals"</span>)</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(simpleAnova, <span class="at">digits =</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="tbl-anova-example-simple" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -911,40 +981,37 @@ Tabell&nbsp;4.4: Bearbetad och förenklad ANOVA tabell
 </figcaption>
 <div aria-describedby="tbl-anova-example-simple-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div>
-<table class="table table-striped do-not-create-environment cell table-sm small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Df</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Sum Sq</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Mean Sq</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">F value</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Pr(&gt;F)</th>
-</tr>
-</thead>
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Df </th>
+   <th style="text-align:right;"> Sum Sq </th>
+   <th style="text-align:right;"> Mean Sq </th>
+   <th style="text-align:right;"> F value </th>
+   <th style="text-align:right;"> Pr(&gt;F) </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">Model</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">8326.213</td>
-<td style="text-align: right;">1387.7021</td>
-<td style="text-align: right;">282.2698</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">326</td>
-<td style="text-align: right;">1602.690</td>
-<td style="text-align: right;">4.9162</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
+  <tr>
+   <td style="text-align:left;"> Model </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 8326.213 </td>
+   <td style="text-align:right;"> 1387.7021 </td>
+   <td style="text-align:right;"> 282.2698 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Residuals </td>
+   <td style="text-align:right;"> 326 </td>
+   <td style="text-align:right;"> 1602.690 </td>
+   <td style="text-align:right;"> 4.9162 </td>
+   <td style="text-align:right;">  </td>
+   <td style="text-align:right;">  </td>
+  </tr>
 </tbody>
 </table>
 
-
-</div>
 </div>
 </div>
 </figure>
@@ -983,12 +1050,12 @@ SS(species|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex)
 <div class="cell" data-tbl-cap-location="top">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> body_mass_g <span class="sc">+</span> sex <span class="sc">+</span> species, <span class="at">data =</span> modelData)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> body_mass_g <span class="sc">+</span> sex <span class="sc">+</span> species, <span class="at">data =</span> modelData)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="tbl-anova-example-species" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -997,72 +1064,69 @@ Tabell&nbsp;4.5: ANOVA-tabell från en modell där art läggs till sist
 </figcaption>
 <div aria-describedby="tbl-anova-example-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div>
-<table class="table table-striped do-not-create-environment cell table-sm small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Df</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Sum Sq</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Mean Sq</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">F value</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Pr(&gt;F)</th>
-</tr>
-</thead>
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Df </th>
+   <th style="text-align:right;"> Sum Sq </th>
+   <th style="text-align:right;"> Mean Sq </th>
+   <th style="text-align:right;"> F value </th>
+   <th style="text-align:right;"> Pr(&gt;F) </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">bill_depth_mm</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">518.9806</td>
-<td style="text-align: right;">518.9806</td>
-<td style="text-align: right;">105.5648</td>
-<td style="text-align: right;">0.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">flipper_length_mm</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">4045.7248</td>
-<td style="text-align: right;">4045.7248</td>
-<td style="text-align: right;">822.9329</td>
-<td style="text-align: right;">0.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">body_mass_g</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">6.1329</td>
-<td style="text-align: right;">6.1329</td>
-<td style="text-align: right;">1.2475</td>
-<td style="text-align: right;">0.2649</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sex</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">68.4245</td>
-<td style="text-align: right;">68.4245</td>
-<td style="text-align: right;">13.9181</td>
-<td style="text-align: right;">0.0002</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">species</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">3686.9500</td>
-<td style="text-align: right;">1843.4750</td>
-<td style="text-align: right;">374.9776</td>
-<td style="text-align: right;">0.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Residuals</td>
-<td style="text-align: right;">326</td>
-<td style="text-align: right;">1602.6899</td>
-<td style="text-align: right;">4.9162</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
+  <tr>
+   <td style="text-align:left;"> bill_depth_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 518.9806 </td>
+   <td style="text-align:right;"> 518.9806 </td>
+   <td style="text-align:right;"> 105.5648 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> flipper_length_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 4045.7248 </td>
+   <td style="text-align:right;"> 4045.7248 </td>
+   <td style="text-align:right;"> 822.9329 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> body_mass_g </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 6.1329 </td>
+   <td style="text-align:right;"> 6.1329 </td>
+   <td style="text-align:right;"> 1.2475 </td>
+   <td style="text-align:right;"> 0.2649 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> sex </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 68.4245 </td>
+   <td style="text-align:right;"> 68.4245 </td>
+   <td style="text-align:right;"> 13.9181 </td>
+   <td style="text-align:right;"> 0.0002 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> species </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 3686.9500 </td>
+   <td style="text-align:right;"> 1843.4750 </td>
+   <td style="text-align:right;"> 374.9776 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Residuals </td>
+   <td style="text-align:right;"> 326 </td>
+   <td style="text-align:right;"> 1602.6899 </td>
+   <td style="text-align:right;"> 4.9162 </td>
+   <td style="text-align:right;">  </td>
+   <td style="text-align:right;">  </td>
+  </tr>
 </tbody>
 </table>
 
-
-</div>
 </div>
 </div>
 </figure>
@@ -1085,6 +1149,19 @@ SS(sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g)
 \end{aligned}
 \]</span> Alternativet är att anpassa två modeller i R, den kompletta och reducerade och läsa av SSE eller summera SSR från respektive ANOVA-tabell.</p>
 </section>
+<section id="partiellt-f-test-för-specifika-värden" class="level4" data-number="4.2.3.2">
+<h4 data-number="4.2.3.2" class="anchored" data-anchor-id="partiellt-f-test-för-specifika-värden"><span class="header-section-number">4.2.3.2</span> Partiellt F-test för specifika värden</h4>
+<p>Vi kan ställa upp en generell modell som: <span class="math display">\[\begin{align*}
+  Y = \beta_0 + \beta_1 \cdot X_1 + \beta_2 \cdot X_2 + \beta_3 \cdot X_3 +\beta_4 \cdot X_4 +\beta_5 \cdot X_5+ E
+\end{align*}\]</span></p>
+<p>Om vi ska undersöka specifika parametrars värden (som inte är 0) kan vi genomföra följande härledning. Anta <span class="math inline">\(H_0:\)</span> <span class="math inline">\(\beta_2=4\)</span> och <span class="math inline">\(\beta_5 = -2\)</span> som ska undersökas med ett test.</p>
+<p><span class="math display">\[\begin{align*}
+Y &amp;= \beta_0 + \beta_1 \cdot X_1 + 4 \cdot X_2 + \beta_3 \cdot X_3 +\beta_4 \cdot X_4 - 2 \cdot X_5+ E\\
+Y - 4 \cdot X_2 + 2 \cdot X_5 &amp;= \beta_0 + \beta_1 \cdot X_1  + \beta_3 \cdot X_3 +\beta_4 \cdot X_4 + E \\
+Y^* &amp;= \beta_0 + \beta_1 \cdot X_1  + \beta_3 \cdot X_3 +\beta_4 \cdot X_4 + E
+\end{align*}\]</span></p>
+<p><span class="math inline">\(Y^*\)</span> kan anses vara en reducerad modell för ett F-test. I R kan detta inte lösas genom <code>anova()</code> utan måste beräknas ‘’för hand’’ genom att anpassa två modeller, den kompletta och den reducerade.</p>
+</section>
 </section>
 <section id="t-test-för-enskilda-parametrar" class="level3" data-number="4.2.4">
 <h3 data-number="4.2.4" class="anchored" data-anchor-id="t-test-för-enskilda-parametrar"><span class="header-section-number">4.2.4</span> t-test för enskilda parametrar</h3>
@@ -1105,13 +1182,13 @@ t_{test} = \frac{b_j - 0}{s_{b_j}}
 <div class="cell" data-tbl-cap-location="top">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(simpleModel) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">format =</span> <span class="st">"markdown"</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Parameter"</span>, <span class="st">"Estimate"</span>, <span class="st">"Std. Error"</span>, <span class="st">"t value"</span>, <span class="st">"Pr(&gt;t)"</span>), </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">parse =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(simpleModel) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">format =</span> <span class="st">"markdown"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Parameter"</span>, <span class="st">"Estimate"</span>, <span class="st">"Std. Error"</span>, <span class="st">"t value"</span>, <span class="st">"Pr(&gt;t)"</span>), </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">parse =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="tbl-coef-example" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1120,85 +1197,82 @@ Tabell&nbsp;4.6: Koefficienttabell för en modell med tillhörande t-test för e
 </figcaption>
 <div aria-describedby="tbl-coef-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div>
-<table class="table table-striped do-not-create-environment cell table-sm small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">Parameter</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Estimate</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Std. Error</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">t value</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Pr(&gt;t)</th>
-</tr>
-</thead>
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Parameter </th>
+   <th style="text-align:right;"> Estimate </th>
+   <th style="text-align:right;"> Std. Error </th>
+   <th style="text-align:right;"> t value </th>
+   <th style="text-align:right;"> Pr(&gt;t) </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">15.0166</td>
-<td style="text-align: right;">4.3742</td>
-<td style="text-align: right;">3.4330</td>
-<td style="text-align: right;">0.0007</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">speciesChinstrap</td>
-<td style="text-align: right;">9.5655</td>
-<td style="text-align: right;">0.3497</td>
-<td style="text-align: right;">27.3508</td>
-<td style="text-align: right;">0.0000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">speciesGentoo</td>
-<td style="text-align: right;">6.4044</td>
-<td style="text-align: right;">1.0304</td>
-<td style="text-align: right;">6.2154</td>
-<td style="text-align: right;">0.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">bill_depth_mm</td>
-<td style="text-align: right;">0.3130</td>
-<td style="text-align: right;">0.1541</td>
-<td style="text-align: right;">2.0316</td>
-<td style="text-align: right;">0.0430</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">flipper_length_mm</td>
-<td style="text-align: right;">0.0686</td>
-<td style="text-align: right;">0.0232</td>
-<td style="text-align: right;">2.9608</td>
-<td style="text-align: right;">0.0033</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">body_mass_g</td>
-<td style="text-align: right;">0.0011</td>
-<td style="text-align: right;">0.0004</td>
-<td style="text-align: right;">2.5617</td>
-<td style="text-align: right;">0.0109</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">sexmale</td>
-<td style="text-align: right;">2.0297</td>
-<td style="text-align: right;">0.3892</td>
-<td style="text-align: right;">5.2153</td>
-<td style="text-align: right;">0.0000</td>
-</tr>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 15.0166 </td>
+   <td style="text-align:right;"> 4.3742 </td>
+   <td style="text-align:right;"> 3.4330 </td>
+   <td style="text-align:right;"> 0.0007 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> speciesChinstrap </td>
+   <td style="text-align:right;"> 9.5655 </td>
+   <td style="text-align:right;"> 0.3497 </td>
+   <td style="text-align:right;"> 27.3508 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> speciesGentoo </td>
+   <td style="text-align:right;"> 6.4044 </td>
+   <td style="text-align:right;"> 1.0304 </td>
+   <td style="text-align:right;"> 6.2154 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> bill_depth_mm </td>
+   <td style="text-align:right;"> 0.3130 </td>
+   <td style="text-align:right;"> 0.1541 </td>
+   <td style="text-align:right;"> 2.0316 </td>
+   <td style="text-align:right;"> 0.0430 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> flipper_length_mm </td>
+   <td style="text-align:right;"> 0.0686 </td>
+   <td style="text-align:right;"> 0.0232 </td>
+   <td style="text-align:right;"> 2.9608 </td>
+   <td style="text-align:right;"> 0.0033 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> body_mass_g </td>
+   <td style="text-align:right;"> 0.0011 </td>
+   <td style="text-align:right;"> 0.0004 </td>
+   <td style="text-align:right;"> 2.5617 </td>
+   <td style="text-align:right;"> 0.0109 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> sexmale </td>
+   <td style="text-align:right;"> 2.0297 </td>
+   <td style="text-align:right;"> 0.3892 </td>
+   <td style="text-align:right;"> 5.2153 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
 </tbody>
 </table>
 
-
-</div>
 </div>
 </div>
 </figure>
 </div>
 </div>
 <p>I <a href="#tbl-coef-example" class="quarto-xref">Tabell&nbsp;<span>4.6</span></a> ser vi att p-värdet för alla t-testen är väldigt låga (nära 0). För varje enskilda hypotesprövning kan vi på fem procents signifikans förkasta <span class="math inline">\(H_0\)</span> vilket betyder att variabeln har en signifikant påverkan på responsvariabeln.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tips
+Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1216,8 +1290,8 @@ b_j \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_j}
 \]</span></p>
 </section>
 </section>
-<section id="utvärderingsmått" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="utvärderingsmått"><span class="header-section-number">4.3</span> Utvärderingsmått</h2>
+<section id="enkla-utvärderingsmått" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="enkla-utvärderingsmått"><span class="header-section-number">4.3</span> Enkla utvärderingsmått</h2>
 <p>Bara för att en modell är lämplig, uppfyller modellantaganden och innehåller signifikanta parametrar, betyder det inte att modellen är den bästa som kan skapas eller överhuvudtaget bra. Med hjälp av olika utvärderingsmått kan vi få en överblick på hur bra modellen är.</p>
 <p><em>Förklaringsgraden</em> (<span class="math inline">\(R^2\)</span>) beskriver hur stor andel av den totala variationen som förklaras av modellens förklarande variabler. Med denna beskrivning kan vi beräkna <span class="math inline">\(R^2\)</span> som: <span class="math display">\[
 \begin{aligned}
@@ -1229,6 +1303,15 @@ b_j \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_j}
   R^2_a = 1 - \frac{SSE / (n - (k+1))}{SST / (n - 1)}
 \end{aligned}
 \]</span></p>
+</section>
+<section id="sec-exercise-evaluate" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="sec-exercise-evaluate"><span class="header-section-number">4.4</span> Övningsuppgifter</h2>
+<p>Använd återigen <code>marketing</code> från <a href="01-explorative-analysis.html#sec-exercise-explore" class="quarto-xref"><span>Avsnitt 2.4</span></a>.</p>
+<ol type="1">
+<li><p>Genomför en enkel residualanalys med hjälp av de residualdiagrammen. Kontrollera respektive antagande och bedöm ifall modellen uppfyller modellantaganden.</p></li>
+<li><p>Genomför enskilda t-test för respektive variabel för att bedöma om var och en har en signifikant samband med responsvariabeln.</p></li>
+<li></li>
+</ol>
 
 
 </section>

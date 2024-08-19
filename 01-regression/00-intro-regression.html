@@ -208,11 +208,11 @@ window.Quarto = {
    
   <ul>
   <li><a href="#den-linjära-regressionsmodellen" id="toc-den-linjära-regressionsmodellen" class="nav-link active" data-scroll-target="#den-linjära-regressionsmodellen"><span class="header-section-number">1.1</span> Den linjära regressionsmodellen</a></li>
-  <li><a href="#studier-och-andra-variabler" id="toc-studier-och-andra-variabler" class="nav-link" data-scroll-target="#studier-och-andra-variabler"><span class="header-section-number">1.2</span> Studier och andra variabler</a>
+  <li><a href="#sec-model-assumptions" id="toc-sec-model-assumptions" class="nav-link" data-scroll-target="#sec-model-assumptions"><span class="header-section-number">1.2</span> Modellens antaganden</a></li>
+  <li><a href="#studier-och-andra-variabler" id="toc-studier-och-andra-variabler" class="nav-link" data-scroll-target="#studier-och-andra-variabler"><span class="header-section-number">1.3</span> Studier och andra variabler</a>
   <ul class="collapse">
-  <li><a href="#kontrollvariabler" id="toc-kontrollvariabler" class="nav-link" data-scroll-target="#kontrollvariabler"><span class="header-section-number">1.2.1</span> Kontrollvariabler</a></li>
+  <li><a href="#kontrollvariabler" id="toc-kontrollvariabler" class="nav-link" data-scroll-target="#kontrollvariabler"><span class="header-section-number">1.3.1</span> Kontrollvariabler</a></li>
   </ul></li>
-  <li><a href="#sec-model-assumptions" id="toc-sec-model-assumptions" class="nav-link" data-scroll-target="#sec-model-assumptions"><span class="header-section-number">1.3</span> Modellens antaganden</a></li>
   </ul>
 </nav>
     </div>
@@ -238,6 +238,9 @@ window.Quarto = {
 </header>
 
 
+<div class="video-container">
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/bcnEg8pE2IA" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</div>
 <p>Att undersöka samband mellan variabler är ett vanligt steg i att förstå relationer eller fenomen. Till exempel hur åldern på ett träd påverkar dess volym, hur olika doser av en medicin påverkar en individs blodtryck, eller hur en persons ålder och utbildningsnivå påverkar dens ingångslön.</p>
 <p>Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. Generellt är modeller någon form av konstruktion som skapas för att öka förståelsen av någonting verkligt. Till exempel är en flygplansmodell inte ett riktigt flygplan men kan användas för att förstå hur ett flygplan är uppbyggd och hur den kan hantera luftströmmar och andra fenomen. Ett klassiskt exempel är tavlan “Ceci n’est pas une pipe” av René Magritte (<a href="#fig-pipe" class="quarto-xref">Figur&nbsp;<span>1.1</span></a>) som visar en representation (en modell) av en pipa, inte en fungerande pipa.</p>
 <div id="fig-pipe" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -273,9 +276,65 @@ Y = \beta_0 + \beta_1 \cdot X + E
 </ul>
 <p>Om flera förklarande variabler antas påverka responsvariabeln utökas den linjära modellen med flera <span class="math inline">\(\beta_j\)</span>, en för varje förklarande variabel <span class="math inline">\(X_j\)</span>. Senare kapitel kommer titta närmare på utökningar av denna linjära modell.</p>
 </section>
-<section id="studier-och-andra-variabler" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="studier-och-andra-variabler"><span class="header-section-number">1.2</span> Studier och andra variabler</h2>
-<p>En matematisk modell behöver nödvändigtvis inte beskriva ett “orsak-och-verkan” samband, eller som vi brukar benämna det, ett <em>kausalt</em> samband. Samband kan ibland uppstå utav ren slump där det inte finns någon logisk koppling mellan olika variabler. Denna typ av samband benämns som <em>korrelation</em>ssamband. Trots att korrelationssamband rent matematiskt beskriver en påverkan från den ena variabeln till den andra, är det i vissa fall inte lämpligt eller relevant att använda eller tolka modellen i verkligheten.</p>
+<section id="sec-model-assumptions" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-model-assumptions"><span class="header-section-number">1.2</span> Modellens antaganden</h2>
+<p>Syftet med en modell är att ge en lämplig förenkling av verkligheten. En linjär regressionsmodell kan vara en lämplig förenkling av ett samband om följande antaganden uppfylls:</p>
+<ol type="1">
+<li>att det för varje <span class="math inline">\(X\)</span> finns en slumpvariabel <span class="math inline">\(Y\)</span> med ett ändligt medelvärde och varians,</li>
+<li>observationerna är oberoende av varandra,</li>
+<li>medelvärdet, <span class="math inline">\(\mu_{Y|X}\)</span>, kan modelleras linjärt,</li>
+<li>variansen för <span class="math inline">\(Y\)</span> är lika för alla värden av <span class="math inline">\(X\)</span>, <span class="math inline">\(\sigma^2_{Y|X} \equiv \sigma^2\)</span>,</li>
+<li>slumpvariabeln <span class="math inline">\(Y\)</span> är normalfördelad för alla värden av <span class="math inline">\(X\)</span>.</li>
+</ol>
+<p>Vi kan sammanfatta majoriteten av dessa antaganden med: <span class="math display">\[
+   Y|X \overset{\mathrm{iid}}{\sim} N(\mu_{Y|X}, \sigma^2_{Y|X})
+\]</span> där <span class="math inline">\(\mathrm{iid}\)</span> betyder “independent and identically distributed” motsvarande antagande 2.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det finns inget antagande om att <span class="math inline">\(Y \sim N(\mu_Y, \sigma^2_Y)\)</span>! Alla antaganden för en linjär regressionsmodell fokuserar på att vi <strong>med hjälp av <span class="math inline">\(X\)</span></strong> har en normalfördelad slumpvariabel <span class="math inline">\(Y\)</span>.</p>
+</div>
+</div>
+<p>Om det tredje antagandet uppfylls kan vi modellera väntevärdet av <span class="math inline">\(Y|X\)</span> med den linjära modellen: <span id="eq-lin-reg-exp"><span class="math display">\[
+  E[Y|X] = \beta_0 + \beta_1 \cdot X
+\tag{1.2}\]</span></span> så att: <span class="math display">\[
+Y|X \overset{\mathrm{iid}}{\sim} N(\beta_0 + \beta_1 \cdot X, \sigma^2_{Y|X})
+\]</span></p>
+<p>Till skillnad från <a href="#eq-lin-reg" class="quarto-xref">Ekvation&nbsp;<span>1.1</span></a> saknar <a href="#eq-lin-reg-exp" class="quarto-xref">Ekvation&nbsp;<span>1.2</span></a> modellens felterm på grund av att vi nu modellerar endast medelvärdet av slumpvariabelns fördelning, <span class="math inline">\(\mu_{Y|X}\)</span>. Osäkerheten runtomkring medelvärdet är variansen av fördelningen.</p>
+<p>När vi modellerar varje enskilda observation inkluderas <span class="math inline">\(E\)</span> vilket innebär att vi kan flytta modellens antaganden från <span class="math inline">\(Y|X\)</span> till <span class="math inline">\(E\)</span>. <span id="eq-lin-reg-assumptions"><span class="math display">\[
+  E \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)
+\tag{1.3}\]</span></span></p>
+<p>Denna omskrivning ger oss en bra utgångspunkt att utvärdera lämpligheten av en anpassad modell.</p>
+<div id="fig-airplane-ai" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-airplane-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../images/model_airplane_chatgpt.webp" class="img-fluid figure-img" width="400"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airplane-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1.2: Ej lämplig flygplansmodell, <span class="citation" data-cites="chatgpt2024">(<a href="#ref-chatgpt2024" role="doc-biblioref"><span>”Create a model of a commercial airplane where some parts are taken from a car or a boat”</span> 2024</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>Om en flygplansmodell ser endast till viss del ut som ett flygplan kommer modellen inte vara lämplig att använda för att förstå eller förenkla verkligheten. Detsamma gäller för regressionsmodeller; om modellen inte uppfyller dess antaganden riskerar slutsatser som dras inte stämma överens med verkligheten.</p>
+</section>
+<section id="studier-och-andra-variabler" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="studier-och-andra-variabler"><span class="header-section-number">1.3</span> Studier och andra variabler</h2>
+<p>En regressionsmodell behöver nödvändigtvis inte beskriva ett “orsak-och-verkan” samband, eller som vi brukar benämna det, ett <em>kausalt</em> samband. Samband kan ibland uppstå utav ren slump där det inte finns någon logisk koppling mellan variablerna. Denna typ av samband benämns som <em>korrelation</em>ssamband. Trots att korrelationssamband rent matematiskt beskriver en relation mellan den ena variabeln och den andra, är det i vissa fall inte lämpligt eller relevant att använda eller tolka modellen i verkligheten.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-correlation" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -284,19 +343,19 @@ Y = \beta_0 + \beta_1 \cdot X + E
 <img src="00-intro-regression_files/figure-html/fig-correlation-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-correlation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1.2: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och antalet dödsfall av drunkning mellan 1999 och 2009 i USA <span class="citation" data-cites="cdcNCHSNational imdbNicolasCage">(<a href="#ref-cdcNCHSNational" role="doc-biblioref"><span>”<span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — cdc.gov”</span></a>; <a href="#ref-imdbNicolasCage" role="doc-biblioref"><span>”<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — imdb.com”</span></a>)</span>
+Figur&nbsp;1.3: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och antalet dödsfall av drunkning mellan 1999 och 2009 i USA <span class="citation" data-cites="cdcNCHSNational imdbNicolasCage">(<a href="#ref-cdcNCHSNational" role="doc-biblioref"><span>”<span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — cdc.gov”</span></a>; <a href="#ref-imdbNicolasCage" role="doc-biblioref"><span>”<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — imdb.com”</span></a>)</span>
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-correlation" class="quarto-xref">Figur&nbsp;<span>1.2</span></a> uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. Att beskriva detta samband skulle inte ge någon information om verkligheten så en viktig del av regressionsanalys är att bedöma lämpligheten och relevansen av utvalda variabler. En regressionsmodell kan inte heller urskilja mellan kausala eller korrelationssamband vilket innebär att vi som analytiker måste ta hänsyn till vilken sorts data och hur data har samlats in för att använda och tolka modeller på rätt sätt.</p>
-<p>Exemplet i figuren är insamlad som en <em>observationsstudie</em> där mätvärden (antal dödsfall och filmer) på enheterna (år) har observerats från olika registerdata. Vi har inte kunnat styra vilken relation dessa variabler har till varandra och studien i sig har inte tagit hänsyn till någon specifik orsak och verkan mellan de två. Vi kan därför endast dra slutsatser om korrelationssamband från en observationsstudie, vi kan säga att desto fler filmer Nicolas Cage medverkar i medför ett större antal dödsfall (vilket egentligen inte är relevant), men vi kan inte säga något om den kausala effekten.</p>
-<p>För att kunna dra slutsatser om kausala samband behöver vi genomföra en <em>experimentell studie</em> där vi styr vilka mätvärden som enheter får eller har och responsvariablen antas vara en direkt verkan av de förklarande variablerna. Medicinska studier, till exempel studier om Covid-vaccinets effektivitet på att motverka en infektion, är typiska exempel på experimentella studier där en förklarande variabel (dos) ges till vissa grupper av enheter där andra påverkande effekter kontrolleras för att justera den förklarande variabelns verkliga påverkan.</p>
-<section id="kontrollvariabler" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="kontrollvariabler"><span class="header-section-number">1.2.1</span> Kontrollvariabler</h3>
+<p><a href="#fig-correlation" class="quarto-xref">Figur&nbsp;<span>1.3</span></a> uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. Att beskriva detta samband skulle inte ge någon information om verkligheten så en viktig del av regressionsanalys är att bedöma lämpligheten och relevansen av utvalda variabler. Rent matematiskt kan inte heller en regressionsmodell urskilja mellan kausala eller korrelationssamband vilket innebär att vi som analytiker måste ta hänsyn till vilken sorts data och hur data har samlats in för att använda och tolka modellerna på rätt sätt.</p>
+<p>Exemplet i figuren är insamlad som en <em>observationsstudie</em> där mätvärden (antal dödsfall och filmer) på enheterna (år) har observerats från olika registerdata. Vi har inte kunnat styra vilken relation dessa variabler har till varandra och studien i sig har inte tagit hänsyn till någon specifik orsak och verkan mellan de två. Vi kan därför endast dra slutsatser om korrelationssamband från en observationsstudie, vi kan säga att desto fler filmer Nicolas Cage medverkar i medför ett större antal dödsfall, vilket egentligen inte är relevant, men vi kan inte säga något om den kausala effekten.</p>
+<p>För att kunna dra slutsatser om kausala samband behöver vi genomföra en <em>experimentell studie</em> där vi styr vilka mätvärden som enheter får eller har och responsvariablen antas vara en direkt effekt från de förklarande variablerna. Medicinska studier, till exempel studier om Covid-vaccinets effektivitet på att motverka en infektion, är typiska exempel på experimentella studier där en förklarande variabel (dos) ges till vissa grupper av enheter där andra påverkande effekter kontrolleras för att justera den förklarande variabelns verkliga påverkan.</p>
+<section id="kontrollvariabler" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="kontrollvariabler"><span class="header-section-number">1.3.1</span> Kontrollvariabler</h3>
 <p>I en observationsstudie kan vi ibland observera <em>kontrollvariabler</em> som kan justera den förklarande variabelns faktiska påverkan men det är främst i experimentella studier som dessa typer av variabler kan användas. Okända variabler kallas för <em>confounding</em>-effekter och antas påverka både den förklarande och responsvariabeln.</p>
-<p>I följande två figurer visas den förklarande och responsvariabeln med ovaler. De kända (heldragen) och okända (streckade) kontrollvariablerna visas som rektanglar.</p>
+<p>I följande två figurer visas den huvudsakliga förklarande variabeln och den valda responsvariabeln med ovaler. De kända (heldragen) och okända (streckade) kontrollvariablerna visas som rektanglar.</p>
 <div id="fig-obs-relation" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -354,7 +413,7 @@ Figur&nbsp;1.2: Sambandet mellan antalet filmer som Nicolas Cage medverkade i oc
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1.3: Exempel på relationen mellan variabler i en observationsstudie.
+Figur&nbsp;1.4: Exempel på relationen mellan variabler i en observationsstudie.
 </figcaption>
 </figure>
 </div>
@@ -422,68 +481,11 @@ Figur&nbsp;1.3: Exempel på relationen mellan variabler i en observationsstudie.
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1.4: Exempel på relationen mellan variabler i en experimentell studie.
+Figur&nbsp;1.5: Exempel på relationen mellan variabler i en experimentell studie.
 </figcaption>
 </figure>
 </div>
-<p>Effekten av en medicin på blodtryck kan också påverkas av personens ålder och kön <span class="citation" data-cites="gu2008">(<a href="#ref-gu2008" role="doc-biblioref">Gu m.fl. 2008</a>)</span> vilka inkluderas i modellen för att isolera den förklarande variabelns effekt.</p>
-</section>
-</section>
-<section id="sec-model-assumptions" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="sec-model-assumptions"><span class="header-section-number">1.3</span> Modellens antaganden</h2>
-<p>Syftet med en modell är att ge en lämplig förenkling av verkligheten. En linjär regressionsmodell kan vara en lämplig förenkling av ett samband om följande antaganden uppfylls:</p>
-<ol type="1">
-<li>att det för varje <span class="math inline">\(X\)</span> finns en slumpvariabel <span class="math inline">\(Y\)</span> med ett ändligt medelvärde och varians,</li>
-<li>observationerna är oberoende av varandra,</li>
-<li>medelvärdet, <span class="math inline">\(\mu_{Y|X}\)</span>, kan modelleras linjärt,</li>
-<li>variansen för <span class="math inline">\(Y\)</span> är lika för alla värden av <span class="math inline">\(X\)</span>, <span class="math inline">\(\sigma^2_{Y|X} \equiv \sigma^2\)</span>,</li>
-<li>slumpvariabeln <span class="math inline">\(Y\)</span> är normalfördelad för alla värden av <span class="math inline">\(X\)</span>.</li>
-</ol>
-<p>Vi kan sammanfatta majoriteten av dessa antaganden med: <span class="math display">\[
-   Y|X \overset{\mathrm{iid}}{\sim} N(\mu_{Y|X}, \sigma^2_{Y|X})
-\]</span> där <span class="math inline">\(\mathrm{iid}\)</span> betyder “independent and identically distributed” motsvarande antagande 2.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Viktigt
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Det finns inget antagande om att <span class="math inline">\(Y \sim N(\mu_Y, \sigma^2_Y)\)</span>! Alla antaganden för en linjär regressionsmodell fokuserar på att vi <strong>med hjälp av <span class="math inline">\(X\)</span></strong> har en normalfördelad slumpvariabel <span class="math inline">\(Y\)</span>.</p>
-</div>
-</div>
-<p>Om det tredje antagandet uppfylls kan vi modellera väntevärdet av <span class="math inline">\(Y|X\)</span> med den linjära modellen: <span id="eq-lin-reg-exp"><span class="math display">\[
-  E[Y|X] = \beta_0 + \beta_1 \cdot X
-\tag{1.2}\]</span></span> så att: <span class="math display">\[
-Y|X \overset{\mathrm{iid}}{\sim} N(\beta_0 + \beta_1 \cdot X, \sigma^2_{Y|X})
-\]</span></p>
-<p>Till skillnad från <a href="#eq-lin-reg" class="quarto-xref">Ekvation&nbsp;<span>1.1</span></a> saknar <a href="#eq-lin-reg-exp" class="quarto-xref">Ekvation&nbsp;<span>1.2</span></a> modellens felterm på grund av att vi nu modellerar endast medelvärdet av slumpvariabelns fördelning, <span class="math inline">\(\mu_{Y|X}\)</span>. Osäkerheten runtomkring medelvärdet är variansen av fördelningen.</p>
-<p>När vi modellerar varje enskilda observation inkluderas <span class="math inline">\(E\)</span> vilket innebär att vi kan flytta modellens antaganden från <span class="math inline">\(Y|X\)</span> till <span class="math inline">\(E\)</span>. <span id="eq-lin-reg-assumptions"><span class="math display">\[
-  E \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)
-\tag{1.3}\]</span></span></p>
-<p>Denna omskrivning ger oss en bra utgångspunkt att utvärdera lämpligheten av en anpassad modell.</p>
-<div id="fig-airplane-ai" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-airplane-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="../images/model_airplane_chatgpt.webp" class="img-fluid figure-img" width="400"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airplane-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1.5: Ej lämplig flygplansmodell, <span class="citation" data-cites="chatgpt2024">(<a href="#ref-chatgpt2024" role="doc-biblioref"><span>”Create a model of a commercial airplane where some parts are taken from a car or a boat”</span> 2024</a>)</span>
-</figcaption>
-</figure>
-</div>
-<p>Om en flygplansmodell ser endast till viss del ut som ett flygplan kommer modellen inte vara lämplig att använda för att förstå eller förenkla verkligheten. Detsamma gäller för regressionsmodeller; om modellen inte uppfyller dess antaganden riskerar slutsatser som dras inte stämma överens med verkligheten.</p>
+<p>Effekten av en medicin på blodtryck kan också påverkas av personens ålder och kön <span class="citation" data-cites="gu2008">(<a href="#ref-gu2008" role="doc-biblioref">Gu m.fl. 2008</a>)</span> vilka inkluderas i modellen för att isolera den förklarande variabelns effekt. I alla dessa exempel är det endast en effekt som är av intresse att undersöka, trots att modellen innehåller flera variabler och tillhörande lutningsparametrar.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
@@ -500,6 +502,7 @@ Gu, Qiuping, Vicki L. Burt, Ryne Paulose-Ram, och Charles F. Dillon. 2008. <span
 <span>”<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — imdb.com”</span>. <a href="https://www.imdb.com/name/nm0000115/" class="uri">https://www.imdb.com/name/nm0000115/</a>.
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->

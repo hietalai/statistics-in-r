@@ -6,3 +6,22 @@
 .math.display .MathJax  {
   font-size: 100% !important;
 }
+
+.video-container {
+  position: fixed; /* Fixed position relative to the viewport */
+  bottom: 0; /* Align to the bottom */
+  left: 0; /* Align to the left */
+  margin: 10px; /* Add margin for spacing */
+  z-index: 1000; /* Ensure it's above other content */
+  overflow: auto; /* Add scrollbars if needed */
+  min-width: 260px; /* Minimum width */
+  min-height: 150px; /* Minimum height */
+}
+
+.quarto-video {
+  background-color: white; /* Background color to ensure it's visible */
+  padding: 10px; /* Add padding for aesthetics */
+  border: 1px solid #ccc; /* Optional border for visual separation */
+  border-radius: 5px; /* Optional border radius for rounded corners */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Optional shadow for better visibility */
+}
