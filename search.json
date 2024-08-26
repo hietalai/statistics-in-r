@@ -236,5 +236,82 @@
       "Regressionsanalys",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modellutvärdering</span>"
     ]
+  },
+  {
+    "objectID": "01-regression/04-using-the-model.html",
+    "href": "01-regression/04-using-the-model.html",
+    "title": "5  Använda modellen",
+    "section": "",
+    "text": "5.1 Simultan inferens\nNär en modell innehåller flera förklarande variabler, alla med minst en tillhörande lutningsparameter, kommer vi genomföra flera inferensberäkningar om vi vill dra slutsatser om flera parametrar eller intervallskatta prediktioner för flera nya observationer. Varje hypotesprövning eller intervallskattning som beräknas utgår från att vi alltid har en risk att fatta fel beslut, vilket innebär att denna risk inflateras ju fler parametrar eller värden som undersöks med enskilda beräkningar. Typ I felet (signifikansnivån) beskriver risken att förkasta en sann \\(H_0\\).\nDen satiriska vetenskapliga serietecknaren xkcd har publicerat en serie som berör signifikansen av hypotesprövningar.\nEn grupp forskare, som hellre vill spela Minecraft, har fått i uppdrag att undersöka effekten av Jelly Beans på förekomsten av acne. Forskarna undersöker 20 olika färger av Jelly Beans med en signifikansnivå på fem procent. En utav färgerna visade sig ha en signifikant påverkan på förekomsten av acne och som vi ser i nyhetsartikeln allra sist i serien blir denna upptäckt innehållet på första sidan.\nVad är det som faktiskt har hänt här och är det korrekt att annonsera ut detta för världen? Vi kan skapa ett liknande simulerat exempel genom att genomföra 20 stycken urval från en population där vi vet det sanna medelvärdet.",
+    "crumbs": [
+      "Regressionsanalys",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Använda modellen</span>"
+    ]
+  },
+  {
+    "objectID": "01-regression/04-using-the-model.html#simultan-inferens",
+    "href": "01-regression/04-using-the-model.html#simultan-inferens",
+    "title": "5  Använda modellen",
+    "section": "",
+    "text": "Figur 5.1: xkcd, CC BY-NC 2.5\n\n\n\n\n\n\n5.1.1 Simulering\n\n\nVisa kod\n## Anger ett seed\nset.seed(12345)\n\n## Simulerar ett datamaterial från en given population med sanna värden\ndata &lt;- \n  replicate(\n    n = 20,\n    expr = rnorm(n = 30, mean = 0, sd = 1)\n  )\n\n\nObjektet data innehåller nu 20 stycken kolumner med 30 observationer i varje och varje kolumn är ett nytt urval (motsvarande en undersökning av en färg Jelly Bean). Alla dessa urval kommer från en population där \\(\\mu = 0\\) och det skulle vi kunna undersöka genom ett enkelt t-test för ett medelvärde. Formellt undersöks hypoteserna:\n\\[\n\\begin{aligned}\n  H_0 &: \\mu = 0\\\\\n  H_A &: \\mu \\ne 0\n\\end{aligned}\n\\]\ndär testvariabeln är \\[\nt_{test} = \\frac{\\bar{x} - 0}{ \\frac{s}{\\sqrt{n}}}\n\\]\n\n\nVisa kod\n## Testvariabeln för första urvalet\ntTest &lt;- (mean(data[,1]) - 0) / (sd(data[,1]) / sqrt(nrow(data))) \n\n\np-värdet för testet kan beräknas utifrån t-fördelningen med \\(n - 1\\) frihetsgrader. Vi måste dock ta hänsyn till att vi undersöker en dubbelsidig mothypotes vilket innebär att p-värdet är både större än den positiva testvariabeln och mindre än den negativa testvariabeln. Med hjälp av symmetrin i t-fördelningen kan vi räkna ut detta genom att beräkna absolutbeloppet av testvariabeln och multiplicera ytan större än detta värde med \\(2\\).\n\n\nVisa kod\n## Beräkning av p-värdet\npValue &lt;- 2 * pt(q = abs(tTest), df = nrow(data) - 1, lower.tail = FALSE) \n\n\nVi kan också använda inbyggda funktionen t.test() för att få fram samma resultat, där standardargumentet är att vi undersöker om populationsmedelvärdet är skilt från 0.\n\n\nVisa kod\nt.test(data[,1])\n\n\n\n    One Sample t-test\n\ndata:  data[, 1]\nt = 0.46006, df = 29, p-value = 0.6489\nalternative hypothesis: true mean is not equal to 0\n95 percent confidence interval:\n -0.2715323  0.4291463\nsample estimates:\n mean of x \n0.07880701 \n\n\nVi kan replikera detta test och spara p-värdet för alla 20 olika utval med hjälp av apply(). Funktionen genomför en angiven funktion för varje element i ett objekt, i detta fall anger vi att den ska genomföra beräkningen för varje kolumn (MARGIN = 2) i objektet data.\n\n\nVisa kod\n## Kör samma funktion (t.test) för varje kolumn (MARGIN = 2) av datamaterialet\npValues &lt;- \n  apply(\n    X = data,\n    MARGIN = 2,\n    FUN = function(x){\n      t.test(x)$p.value\n    }\n  )\n\n\n\n\n\n\nTabell 5.1: p-värden för t-testet i respektive urval\n\n\n\n\n \n  \n    p-värde \n  \n \n\n  \n    0.649 \n  \n  \n    0.195 \n  \n  \n    0.036 \n  \n  \n    0.895 \n  \n  \n    0.806 \n  \n  \n    0.978 \n  \n  \n    0.341 \n  \n  \n    0.765 \n  \n  \n    0.981 \n  \n  \n    0.269 \n  \n  \n    0.092 \n  \n  \n    0.497 \n  \n  \n    0.228 \n  \n  \n    0.467 \n  \n  \n    0.114 \n  \n  \n    0.333 \n  \n  \n    0.268 \n  \n  \n    0.790 \n  \n  \n    0.290 \n  \n  \n    0.896 \n  \n\n\n\n\n\n\n\n\nI Tabell 5.1 är det endast ett test vars tillhörande p-värde är mindre än \\(\\alpha = 0.05\\) (urval 3), motsvarande den gröna Jelly Bean. Eftersom vi skapat dessa urval från en sann fördelning, vet vi att populationen har medelvärde 0 vilket innebär att vi gör ett fel av typ I, förkastar en sann \\(H_0\\). Med en signifikansnivå på 5 procent räknar vi att i 1 av 20 fall (5%) så fattar vi fel beslut utav ren slump. Desto fler tester som genomförs desto större risk att minst en av dessa tester kommer generera ett typ I-fel och att tolka ett enskilt test med 5 procents signifikans är missvisande.\nUnder antagandet att de olika urvalen är oberoende av varandra kan vi räkna ut den slutgiltiga risken för typ-I fel i minst en av testerna med hjälp av multiplikationssatsen för oberoende händelser:\n\\[\n\\begin{aligned}\n1 - (0.95 \\cdot 0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 &\\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95 \\cdot  0.95)\\\\\n&1 - (0.95^{20})\\\\\n&0.6415141\n\\end{aligned}\n\\] Risken att minst en utav 20 tester har förkastat en sann \\(H_0\\) är istället ca 64% istället för 5%.\n\n\n5.1.2 Familjekonfidens\nNär vi genomför flera tester kan vi istället justera konfidensgraden för varje individuella test så att vi får en sammanfattande konfidensnivå som vi också använder i tolkningen. Den enklaste varianten är att beräkna Bonferronis familjekonfidens där konfidensgraden beräknas enligt: \\[\n\\begin{aligned}\n  1 - \\alpha/2 \\Rightarrow 1 - \\alpha/(2 \\cdot g)\n\\end{aligned}\n\\] där \\(g\\) är antalet tester som genomförs.\n\n\nVisa kod\n# Plockar ur testvariabeln\nstatistic &lt;- \n  apply(\n    X = data,\n    MARGIN = 2,\n    FUN = function(x){\n      t.test(x)$statistic\n    }\n  )\n\ntibble(`Testvariabel` = statistic) %&gt;% \n  kable(digits = 3, caption.placement = \"top\") %&gt;% \n  kable_styling(\"striped\", full_width = FALSE) \n\n\n\n\nTabell 5.2: Beräknad testvariabel för respektive urval\n\n\n\n\n \n  \n    Testvariabel \n  \n \n\n  \n    0.460 \n  \n  \n    1.328 \n  \n  \n    2.196 \n  \n  \n    0.134 \n  \n  \n    -0.248 \n  \n  \n    0.028 \n  \n  \n    0.969 \n  \n  \n    0.302 \n  \n  \n    0.024 \n  \n  \n    -1.127 \n  \n  \n    1.744 \n  \n  \n    0.689 \n  \n  \n    1.231 \n  \n  \n    -0.737 \n  \n  \n    1.629 \n  \n  \n    -0.984 \n  \n  \n    -1.129 \n  \n  \n    0.268 \n  \n  \n    1.077 \n  \n  \n    0.132 \n  \n\n\n\n\n\n\n\n\nDet justerade kritiska tabellvärdet är \\(\\pm t_{30 - 1, 1 - 0.05 / (2 \\cdot 20)} = \\pm\\) 3.31 istället för \\(\\pm t_{30 - 1, 1 - 0.05 / (2)} = \\pm\\) 2.045 vilket innebär att ingen testvariabel i Tabell 5.2 ligger extremare än det justerade. Med en simultan signifikansnivå på fem procent förkastas ingen av testernas nollhypoteser.\n\n\n5.1.3 Familjekonfidens för lutningsparametrar\nMed hjälp av Bonferroni:s familjekonfidens kan vi justera formlerna för intervallskattning av lutningsparametrarna. En generell formel för en intervallskattning kan skrivas såsom: \\[\n\\text{punktskattning} \\pm \\text{tabellvärde} \\cdot \\text{medelfel}\n\\tag{5.1}\\]\nI fallet för \\(\\beta_1\\) blir formeln: \\[\n    b_1 \\pm t_{n - (k+1); 1- \\alpha/2} \\cdot s_{b_1}\n\\] Bonferroni:s familjekonfidens leder till att formeln justeras enligt: \\[\n    b_1 \\pm t_{n - (k+1); 1- \\alpha/(2\\cdot g)} \\cdot s_{b_1}\n\\] , där \\(g\\) är antalet lutningsparametrar som ska undersökas samtidigt.\n\\(t_{n-(k+1); 1 - \\alpha/(2\\cdot g)}\\) brukar också anges som \\(B\\). När \\(g\\) är stort, kommer värden från \\(t\\)-fördelningen också vara stora vilket i slutändan kan leda till intervall som inte ger någon vettig information. Därför följer att Bonferronis metod är lämpligast att användas när antalet intervall eller tester är få.",
+    "crumbs": [
+      "Regressionsanalys",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Använda modellen</span>"
+    ]
+  },
+  {
+    "objectID": "01-regression/04-using-the-model.html#prediktioner",
+    "href": "01-regression/04-using-the-model.html#prediktioner",
+    "title": "5  Använda modellen",
+    "section": "5.2 Prediktioner",
+    "text": "5.2 Prediktioner\nPrediktioner innebär att vi skattar värdet på Y givet observerade värden på X med hjälp av den anpassade regressionslinjen. Dessa prediktioner kommer falla längsmed linjen vilket ytterligare motiverar att modellen behöver vara lämplig och bra. Vi vill inte att en prediktion i ett område är mer träffsäker än en prediktion i en annan eller att regressionslinjen generellt är en dålig representation av responsvariabeln.\nModellen utgår från en specifik definitionsmängd, de observerade värdena på \\(\\mathbf{X}\\), och det är även inom denna mängd som prediktioner bör göras. Det finns vissa tillfällen, till exempel inom tidsserieanalys, där prediktioner görs utanför definitionsmängden men där finns ett beroende i tiden som möjliggör dessa extrapoleringar. Inom “vanlig” regression bör vi undvika att extrapolera regressionslinjen utanför definitionsmängden.\n\n5.2.1 Medelvärdet av Y för givna \\(\\mathbf{X}\\)\nOm vi är intresserad av det genomsnittliga värdet på responsvariabeln för alla nya observationer med givna värden på \\(\\mathbf{X}\\) kan vi skatta \\(\\mu_{Y|{\\mathbf{X}_0}}\\) där \\(\\mathbf{X}_0\\) innehåller värden för den nya observationen.\n\\[\n\\mathbf{X}_0 = \\begin{bmatrix}\n    1 \\\\\n    X_{1,0}\\\\\n    \\vdots\\\\\n    X_{k,0}\n    \\end{bmatrix}\n\\] Vi utgår från den anpassade regressionsmodellen och beräknar en punktprediktion av responsvariabeln enligt: \\[\n\\hat{Y}_{\\mathbf{X}_0} = \\mathbf{X}_0'\\boldsymbol{\\hat{\\beta}}\n\\]\nMedelfelet för skattningen tar hänsyn till:\n\\[\ns^2_{\\hat{Y}_{\\mathbf{X}_0}} = \\mathbf{X}_0'\\mathbf{s}^2_{\\boldsymbol{\\hat{\\beta}}}\\mathbf{X}_0\n\\]\nIntervallskattningen för ett genomsnitt blir ett konfidensintervall.\n\n\n5.2.2 Enskild prediktion av Y för givna \\(\\mathbf{X}\\)\nOm vi istället är intresserad av ett enskilt värde på Y med givna värden på \\(\\mathbf{X}\\), kan vi skatta \\(Y_{\\mathbf{X}_0}\\).\n\\[\ns^2_{pred} = MSE + s^2_{\\hat{Y}_{\\mathbf{X}_0}}\n\\] Intervallskattningen för ett värde av Y blir ett prediktionsintervall.\n\n\n5.2.3 Skattning av flera konfidensintervall\nOm vi vill beräkna konfidensband för hela regressionslinjen, i.e. \\(\\mu_Y\\) för alla punkter av \\(\\mathbf{X}\\), kan Working-Hotelling:s metod skapa denna region. Strukturen från formel Ekvation 5.1 ger då följande formel:\n\\[\n\\begin{aligned}\n  \\hat{Y}_{\\mathbf{X}_0} \\pm W \\cdot s_{\\hat{Y}_{\\mathbf{X}_0}}\n\\end{aligned}\n\\tag{5.2}\\]\ndär \\(W^2 = 2\\cdot F_{k+1; n-(k+1); 1-\\alpha}\\).\nDenna beräkning tar redan hänsyn till alla möjliga punkter av \\(\\mathbf{X}\\) som regressionslinjen täcker, vilket innebär att samma formler kan användas för enstaka nya observationer, \\(\\mathbf{X}_{\\mathbf{X}_0}\\).\nÄven för prediktioner av responsvariabeln kan Bonferroni användas enligt: \\[\n  \\hat{Y}_{\\mathbf{X}_0} \\pm B \\cdot s_{\\hat{Y}_{\\mathbf{X}_0}}\n\\tag{5.3}\\] där \\(B = t_{n-(k+1); 1 - \\alpha/(2\\cdot g)}\\)\nEkvation 5.2 ger generellt smalare intervall än Ekvation 5.3 då \\(W\\) är samma värde oavsett hur många intervall som skattas medan \\(B\\) ökar med antalet \\(g\\).\n\n\n5.2.4 Skattning av flera prediktionsintervall\nFör enstaka nya observationer beräknas istället prediktionsintervall vilket innebär att skattningens medelfel förändras. Metoder för att beräkna \\(g\\) prediktionsintervall är Scheffé och Bonferronis metoder.\nScheffés metod: \\[\\begin{align}\n   \\hat{Y}_{\\mathbf{X}_0} \\pm S \\cdot s_{pred}\n\\end{align}\\] där \\[\\begin{align*}\n    S &= g \\cdot F_{g; n-k+1; 1 - \\alpha}\\\\\n    s_{pred} &= \\sqrt{MSE + s^2_{\\hat{Y}_{\\mathbf{X}_0}}}\n\\end{align*}\\]\nBonferronis metod: \\[\\begin{align}\n    \\hat{Y}_{\\mathbf{X}_0} \\pm B \\cdot s_{pred}\n\\end{align}\\] där \\[\\begin{align*}\n    B = t_{n-k+1; 1 - \\alpha/(2\\cdot g)}\n\\end{align*}\\]\nBåda dessa metoder kommer skapa bredare intervall i relation till antalet intervall som skattas eftersom \\(g\\) inkluderas i båda beräkningarna. Detta skiljer sig från Ekvation 5.2 där \\(W\\) inte blir större desto fler intervall.",
+    "crumbs": [
+      "Regressionsanalys",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Använda modellen</span>"
+    ]
+  },
+  {
+    "objectID": "01-regression/05-complex-predictors.html",
+    "href": "01-regression/05-complex-predictors.html",
+    "title": "6  Komplexa samband",
+    "section": "",
+    "text": "6.1 Interaktioner",
+    "crumbs": [
+      "Regressionsanalys",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Komplexa samband</span>"
+    ]
+  },
+  {
+    "objectID": "01-regression/05-complex-predictors.html#sec-komplex-modell",
+    "href": "01-regression/05-complex-predictors.html#sec-komplex-modell",
+    "title": "6  Komplexa samband",
+    "section": "",
+    "text": "6.1.1 Simpson’s paradox",
+    "crumbs": [
+      "Regressionsanalys",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Komplexa samband</span>"
+    ]
+  },
+  {
+    "objectID": "01-regression/05-complex-predictors.html#polynom",
+    "href": "01-regression/05-complex-predictors.html#polynom",
+    "title": "6  Komplexa samband",
+    "section": "6.2 Polynom",
+    "text": "6.2 Polynom",
+    "crumbs": [
+      "Regressionsanalys",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Komplexa samband</span>"
+    ]
+  },
+  {
+    "objectID": "01-regression/05-complex-predictors.html#multikollinearitet",
+    "href": "01-regression/05-complex-predictors.html#multikollinearitet",
+    "title": "6  Komplexa samband",
+    "section": "6.3 Multikollinearitet",
+    "text": "6.3 Multikollinearitet\nBla",
+    "crumbs": [
+      "Regressionsanalys",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Komplexa samband</span>"
+    ]
   }
 ]

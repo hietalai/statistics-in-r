@@ -216,6 +216,18 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/04-using-the-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Använda modellen</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/05-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -268,7 +280,7 @@ window.Quarto = {
 <p><span id="eq-penguin-quant"><span class="math display">\[
 \text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \cdots + E
 \tag{3.1}\]</span></span></p>
-<p>Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 1.2</span></a> framförallt antagandet om linjäritet. Har vi upptäckt icke-linjära samband i de parvisa visualiseringarna räcker det oftast inte med att inkludera en term i modellen. Detta kommer vi återkomma till i <span class="quarto-unresolved-ref">?sec-komplex-modell</span>.</p>
+<p>Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 1.2</span></a> framförallt antagandet om linjäritet. Har vi upptäckt icke-linjära samband i de parvisa visualiseringarna räcker det oftast inte med att inkludera en term i modellen. Detta kommer vi återkomma till i <a href="05-complex-predictors.html#sec-komplex-modell" class="quarto-xref"><span>Avsnitt 6.1</span></a>.</p>
 <section id="indikatorvariabler" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="indikatorvariabler"><span class="header-section-number">3.1</span> Indikatorvariabler</h2>
 <p>En regressionsmodell kan inte hantera kvalitativa variabler direkt, exempelvis <span class="math inline">\(\beta_4 \cdot \text{art}\)</span>, då variabelns värden beskriver kategorier inte värden från en numerisk skala. Detta gäller även om den kvalitativa variabeln är kodad numerisk. En lutningsparameter beskriver den konstanta förändring i responsvariabeln när den tillhörande förklarande variabeln ökar med en enhet, men en kvalitativ variabel har oftast ingen enhet och inte heller konstanta förändringar mellan intilliggande värden. Istället måste vi transformera den kvalitativa variabeln numerisk genom <em>indikatorvariabler</em> (även kallad dummyvariabler).</p>
