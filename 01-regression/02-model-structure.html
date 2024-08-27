@@ -276,6 +276,9 @@ window.Quarto = {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
+<div class="video-container">
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/Io1KMfzhQYc" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</div>
 <p>Efter att ha sammanställt iaktaggelser från visualiseringar och beskrivande statistik, är nästa steg i processen att bygga modellens struktur. Det enklaste är att börja med de kvantitativa variablerna som (vanligtvis) endast kräver en term vardera i modellen.</p>
 <p><span id="eq-penguin-quant"><span class="math display">\[
 \text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \cdots + E
@@ -389,9 +392,14 @@ Viktigt
 </div>
 <div class="callout-body-container callout-body">
 <p>Formler för parameterskattningarna i en enkel linjär regression är: <span class="math display">\[\begin{align*}
-  b_1 &amp;= \frac{\sum_{i=1}^n(X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n(X_i - \bar{X})^2} \\
+  b_1 &amp;= \frac{\sum_{i=1}^n(X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n(X_i - \bar{X})^2}\\
   b_0 &amp;= \bar{Y} - b_1 \cdot \bar{X}
 \end{align*}\]</span></p>
+<p><span class="math inline">\(b_1\)</span> kan också omformuleras till beräkningsformeln: <span class="math display">\[
+\begin{aligned}
+\frac{\sum_{i=1}^n(X_i \cdot Y_i) - \frac{\sum_{i=1}^nX_i \cdot \sum_{i=1}^nY_i}{n}}{\sum_{i=1}^nX_i^2 - \frac{(\sum_{i=1}^nX_i)^2}{n}}
+\end{aligned}
+\]</span></p>
 </div>
 </div>
 <section id="sec-model-fit-example" class="level3" data-number="3.2.1">
