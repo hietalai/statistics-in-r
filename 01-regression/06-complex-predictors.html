@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk teori och tillämpningar i R - 6&nbsp; Komplexa samband</title>
+<title>Statistisk teori och tillämpningar i R - 7&nbsp; Komplexa samband</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../01-regression/04-using-the-model.html" rel="prev">
+<link href="../01-regression/05-using-the-model.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -104,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/05-complex-predictors.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Komplexa samband</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/06-complex-predictors.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -150,14 +150,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../01-regression/04-using-the-model.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Använda modellen</span></span></a>
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../01-regression/05-complex-predictors.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  <a href="../01-regression/05-using-the-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Använda modellen</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
     </ul>
@@ -170,12 +176,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#sec-komplex-modell" id="toc-sec-komplex-modell" class="nav-link active" data-scroll-target="#sec-komplex-modell"><span class="header-section-number">6.1</span> Interaktioner</a>
+  <li><a href="#sec-komplex-modell" id="toc-sec-komplex-modell" class="nav-link active" data-scroll-target="#sec-komplex-modell"><span class="header-section-number">7.1</span> Interaktioner</a>
   <ul class="collapse">
-  <li><a href="#simpsons-paradox" id="toc-simpsons-paradox" class="nav-link" data-scroll-target="#simpsons-paradox"><span class="header-section-number">6.1.1</span> Simpson’s paradox</a></li>
+  <li><a href="#simpsons-paradox" id="toc-simpsons-paradox" class="nav-link" data-scroll-target="#simpsons-paradox"><span class="header-section-number">7.1.1</span> Simpson’s paradox</a></li>
   </ul></li>
-  <li><a href="#polynom" id="toc-polynom" class="nav-link" data-scroll-target="#polynom"><span class="header-section-number">6.2</span> Polynom</a></li>
-  <li><a href="#multikollinearitet" id="toc-multikollinearitet" class="nav-link" data-scroll-target="#multikollinearitet"><span class="header-section-number">6.3</span> Multikollinearitet</a></li>
+  <li><a href="#polynom" id="toc-polynom" class="nav-link" data-scroll-target="#polynom"><span class="header-section-number">7.2</span> Polynom</a></li>
+  <li><a href="#multikollinearitet" id="toc-multikollinearitet" class="nav-link" data-scroll-target="#multikollinearitet"><span class="header-section-number">7.3</span> Multikollinearitet</a></li>
   </ul>
 </nav>
     </div>
@@ -184,7 +190,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Komplexa samband</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></h1>
 </div>
 
 
@@ -205,17 +211,17 @@ ul.task-list li input[type="checkbox"] {
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
 <p>När vi i <a href="01-explorative-analysis.html#sec-pairwise-visualization" class="quarto-xref"><span>Avsnitt 2.3</span></a> visualiserade de parvisa sambanden mellan</p>
-<section id="sec-komplex-modell" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="sec-komplex-modell"><span class="header-section-number">6.1</span> Interaktioner</h2>
-<section id="simpsons-paradox" class="level3" data-number="6.1.1">
-<h3 data-number="6.1.1" class="anchored" data-anchor-id="simpsons-paradox"><span class="header-section-number">6.1.1</span> Simpson’s paradox</h3>
+<section id="sec-komplex-modell" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="sec-komplex-modell"><span class="header-section-number">7.1</span> Interaktioner</h2>
+<section id="simpsons-paradox" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="simpsons-paradox"><span class="header-section-number">7.1.1</span> Simpson’s paradox</h3>
 </section>
 </section>
-<section id="polynom" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="polynom"><span class="header-section-number">6.2</span> Polynom</h2>
+<section id="polynom" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="polynom"><span class="header-section-number">7.2</span> Polynom</h2>
 </section>
-<section id="multikollinearitet" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="multikollinearitet"><span class="header-section-number">6.3</span> Multikollinearitet</h2>
+<section id="multikollinearitet" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="multikollinearitet"><span class="header-section-number">7.3</span> Multikollinearitet</h2>
 <p>Bla</p>
 
 
@@ -633,8 +639,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../01-regression/04-using-the-model.html" class="pagination-link" aria-label="Använda modellen">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Använda modellen</span></span>
+      <a href="../01-regression/05-using-the-model.html" class="pagination-link" aria-label="Använda modellen">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Använda modellen</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

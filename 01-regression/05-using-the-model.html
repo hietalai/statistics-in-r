@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk teori och tillämpningar i R - 5&nbsp; Använda modellen</title>
+<title>Statistisk teori och tillämpningar i R - 6&nbsp; Använda modellen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,8 +64,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../01-regression/05-complex-predictors.html" rel="next">
-<link href="../01-regression/03-model-assessment.html" rel="prev">
+<link href="../01-regression/06-complex-predictors.html" rel="next">
+<link href="../01-regression/04-statistical-inference.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -172,7 +172,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/04-using-the-model.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Använda modellen</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/05-using-the-model.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Använda modellen</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -218,14 +218,20 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../01-regression/04-using-the-model.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Använda modellen</span></span></a>
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../01-regression/05-complex-predictors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  <a href="../01-regression/05-using-the-model.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Använda modellen</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
     </ul>
@@ -238,18 +244,18 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#simultan-inferens" id="toc-simultan-inferens" class="nav-link active" data-scroll-target="#simultan-inferens"><span class="header-section-number">5.1</span> Simultan inferens</a>
+  <li><a href="#simultan-inferens" id="toc-simultan-inferens" class="nav-link active" data-scroll-target="#simultan-inferens"><span class="header-section-number">6.1</span> Simultan inferens</a>
   <ul class="collapse">
-  <li><a href="#simulering" id="toc-simulering" class="nav-link" data-scroll-target="#simulering"><span class="header-section-number">5.1.1</span> Simulering</a></li>
-  <li><a href="#familjekonfidens" id="toc-familjekonfidens" class="nav-link" data-scroll-target="#familjekonfidens"><span class="header-section-number">5.1.2</span> Familjekonfidens</a></li>
-  <li><a href="#familjekonfidens-för-lutningsparametrar" id="toc-familjekonfidens-för-lutningsparametrar" class="nav-link" data-scroll-target="#familjekonfidens-för-lutningsparametrar"><span class="header-section-number">5.1.3</span> Familjekonfidens för lutningsparametrar</a></li>
+  <li><a href="#simulering" id="toc-simulering" class="nav-link" data-scroll-target="#simulering"><span class="header-section-number">6.1.1</span> Simulering</a></li>
+  <li><a href="#familjekonfidens" id="toc-familjekonfidens" class="nav-link" data-scroll-target="#familjekonfidens"><span class="header-section-number">6.1.2</span> Familjekonfidens</a></li>
+  <li><a href="#familjekonfidens-för-lutningsparametrar" id="toc-familjekonfidens-för-lutningsparametrar" class="nav-link" data-scroll-target="#familjekonfidens-för-lutningsparametrar"><span class="header-section-number">6.1.3</span> Familjekonfidens för lutningsparametrar</a></li>
   </ul></li>
-  <li><a href="#prediktioner" id="toc-prediktioner" class="nav-link" data-scroll-target="#prediktioner"><span class="header-section-number">5.2</span> Prediktioner</a>
+  <li><a href="#prediktioner" id="toc-prediktioner" class="nav-link" data-scroll-target="#prediktioner"><span class="header-section-number">6.2</span> Prediktioner</a>
   <ul class="collapse">
-  <li><a href="#medelvärdet-av-y-för-givna-mathbfx" id="toc-medelvärdet-av-y-för-givna-mathbfx" class="nav-link" data-scroll-target="#medelvärdet-av-y-för-givna-mathbfx"><span class="header-section-number">5.2.1</span> Medelvärdet av Y för givna <span class="math inline">\(\mathbf{X}\)</span></a></li>
-  <li><a href="#enskild-prediktion-av-y-för-givna-mathbfx" id="toc-enskild-prediktion-av-y-för-givna-mathbfx" class="nav-link" data-scroll-target="#enskild-prediktion-av-y-för-givna-mathbfx"><span class="header-section-number">5.2.2</span> Enskild prediktion av Y för givna <span class="math inline">\(\mathbf{X}\)</span></a></li>
-  <li><a href="#skattning-av-flera-konfidensintervall" id="toc-skattning-av-flera-konfidensintervall" class="nav-link" data-scroll-target="#skattning-av-flera-konfidensintervall"><span class="header-section-number">5.2.3</span> Skattning av flera konfidensintervall</a></li>
-  <li><a href="#skattning-av-flera-prediktionsintervall" id="toc-skattning-av-flera-prediktionsintervall" class="nav-link" data-scroll-target="#skattning-av-flera-prediktionsintervall"><span class="header-section-number">5.2.4</span> Skattning av flera prediktionsintervall</a></li>
+  <li><a href="#medelvärdet-av-y-för-givna-mathbfx" id="toc-medelvärdet-av-y-för-givna-mathbfx" class="nav-link" data-scroll-target="#medelvärdet-av-y-för-givna-mathbfx"><span class="header-section-number">6.2.1</span> Medelvärdet av Y för givna <span class="math inline">\(\mathbf{X}\)</span></a></li>
+  <li><a href="#enskild-prediktion-av-y-för-givna-mathbfx" id="toc-enskild-prediktion-av-y-för-givna-mathbfx" class="nav-link" data-scroll-target="#enskild-prediktion-av-y-för-givna-mathbfx"><span class="header-section-number">6.2.2</span> Enskild prediktion av Y för givna <span class="math inline">\(\mathbf{X}\)</span></a></li>
+  <li><a href="#skattning-av-flera-konfidensintervall" id="toc-skattning-av-flera-konfidensintervall" class="nav-link" data-scroll-target="#skattning-av-flera-konfidensintervall"><span class="header-section-number">6.2.3</span> Skattning av flera konfidensintervall</a></li>
+  <li><a href="#skattning-av-flera-prediktionsintervall" id="toc-skattning-av-flera-prediktionsintervall" class="nav-link" data-scroll-target="#skattning-av-flera-prediktionsintervall"><span class="header-section-number">6.2.4</span> Skattning av flera prediktionsintervall</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -259,7 +265,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Använda modellen</span></h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Använda modellen</span></h1>
 </div>
 
 
@@ -279,9 +285,9 @@ window.Quarto = {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
-<p>När en modell har undersökts med hjälp av residualanalys och statistisk inferens och vi kommit fram till att den är en lämplig och bra förenkling av verkligheten, kan vi börja använda den för att dra lärdomar om sambandet och prediktera nya observationer. Vi har i <a href="03-model-assessment.html#sec-stat-inference" class="quarto-xref"><span>Avsnitt 4.2</span></a> redan fått några lärdomar om hur sambandet mellan vissa variabler ser ut men om vi vill tolka flera parametrar från modellen samtidigt bör vi tillämpa någon form av <em>simultan inferens</em>. En utav regressionsmodellers huvudsakliga användningsområden är att <em>prediktera</em> nya observationer. Till exempel kan responsvariabeln vara väldigt kostsam att mäta jämfört med de förklarande variablerna. Då kan en lämplig och bra regressionsmodellen minska kostnaderna genom att intervallskatta värdet på responsvariabeln utifrån givna värden på de förklarande variablerna. Prediktioner kan också användas för beslutsunderlag, till exempel kan en regressionsmodell ge information om förväntade inkomster givet en viss reklambudget.</p>
-<section id="simultan-inferens" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="simultan-inferens"><span class="header-section-number">5.1</span> Simultan inferens</h2>
+<p>När en modell har undersökts med hjälp av residualanalys och statistisk inferens och vi kommit fram till att den är en lämplig och bra förenkling av verkligheten, kan vi börja använda den för att dra lärdomar om sambandet och prediktera nya observationer. Vi har i <a href="04-statistical-inference.html#sec-stat-inference" class="quarto-xref"><span>Avsnitt 5.2</span></a> redan fått några lärdomar om hur sambandet mellan vissa variabler ser ut men om vi vill tolka flera parametrar från modellen samtidigt bör vi tillämpa någon form av <em>simultan inferens</em>. En utav regressionsmodellers huvudsakliga användningsområden är att <em>prediktera</em> nya observationer. Till exempel kan responsvariabeln vara väldigt kostsam att mäta jämfört med de förklarande variablerna. Då kan en lämplig och bra regressionsmodellen minska kostnaderna genom att intervallskatta värdet på responsvariabeln utifrån givna värden på de förklarande variablerna. Prediktioner kan också användas för beslutsunderlag, till exempel kan en regressionsmodell ge information om förväntade inkomster givet en viss reklambudget.</p>
+<section id="simultan-inferens" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="simultan-inferens"><span class="header-section-number">6.1</span> Simultan inferens</h2>
 <p>När en modell innehåller flera förklarande variabler, alla med minst en tillhörande lutningsparameter, kommer vi genomföra flera inferensberäkningar om vi vill dra slutsatser om flera parametrar eller intervallskatta prediktioner för flera nya observationer. Varje hypotesprövning eller intervallskattning som beräknas utgår från att vi alltid har en risk att fatta fel beslut, vilket innebär att denna risk inflateras ju fler parametrar eller värden som undersöks med enskilda beräkningar. Typ I felet (signifikansnivån) beskriver risken att förkasta en sann <span class="math inline">\(H_0\)</span>.</p>
 <p>Den satiriska vetenskapliga serietecknaren <a href="https://xkcd.com">xkcd</a> har publicerat en serie som berör signifikansen av hypotesprövningar.</p>
 <div id="fig-jelly-bean" class="quarto-figure quarto-figure-center quarto-float anchored">
@@ -298,14 +304,14 @@ window.Quarto = {
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-jelly-bean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;5.1: <a href="https://xkcd.com/882">xkcd</a>, <a href="https://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC 2.5</a>
+Figur&nbsp;6.1: <a href="https://xkcd.com/882">xkcd</a>, <a href="https://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC 2.5</a>
 </figcaption>
 </figure>
 </div>
 <p>En grupp forskare, som hellre vill spela Minecraft, har fått i uppdrag att undersöka effekten av Jelly Beans på förekomsten av acne. Forskarna undersöker 20 olika färger av Jelly Beans med en signifikansnivå på fem procent. En utav färgerna visade sig ha en signifikant påverkan på förekomsten av acne och som vi ser i nyhetsartikeln allra sist i serien blir denna upptäckt innehållet på första sidan.</p>
 <p>Vad är det som faktiskt har hänt här och är det korrekt att annonsera ut detta för världen? Vi kan skapa ett liknande simulerat exempel genom att genomföra 20 stycken urval från en population där vi vet det sanna medelvärdet.</p>
-<section id="simulering" class="level3" data-number="5.1.1">
-<h3 data-number="5.1.1" class="anchored" data-anchor-id="simulering"><span class="header-section-number">5.1.1</span> Simulering</h3>
+<section id="simulering" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="simulering"><span class="header-section-number">6.1.1</span> Simulering</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
@@ -384,7 +390,7 @@ sample estimates:
 <div id="tbl-family-confidence" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-family-confidence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;5.1: p-värden för t-testet i respektive urval
+Tabell&nbsp;6.1: p-värden för t-testet i respektive urval
 </figcaption>
 <div aria-describedby="tbl-family-confidence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -463,7 +469,7 @@ Tabell&nbsp;5.1: p-värden för t-testet i respektive urval
 </figure>
 </div>
 </div>
-<p>I <a href="#tbl-family-confidence" class="quarto-xref">Tabell&nbsp;<span>5.1</span></a> är det endast ett test vars tillhörande p-värde är mindre än <span class="math inline">\(\alpha = 0.05\)</span> (urval 3), motsvarande den gröna Jelly Bean. Eftersom vi skapat dessa urval från en sann fördelning, vet vi att populationen har medelvärde 0 vilket innebär att vi gör ett fel av typ I, förkastar en sann <span class="math inline">\(H_0\)</span>. Med en signifikansnivå på 5 procent räknar vi att i 1 av 20 fall (5%) så fattar vi fel beslut utav ren slump. Desto fler tester som genomförs desto större risk att minst en av dessa tester kommer generera ett typ I-fel och att tolka ett enskilt test med 5 procents signifikans är missvisande.</p>
+<p>I <a href="#tbl-family-confidence" class="quarto-xref">Tabell&nbsp;<span>6.1</span></a> är det endast ett test vars tillhörande p-värde är mindre än <span class="math inline">\(\alpha = 0.05\)</span> (urval 3), motsvarande den gröna Jelly Bean. Eftersom vi skapat dessa urval från en sann fördelning, vet vi att populationen har medelvärde 0 vilket innebär att vi gör ett fel av typ I, förkastar en sann <span class="math inline">\(H_0\)</span>. Med en signifikansnivå på 5 procent räknar vi att i 1 av 20 fall (5%) så fattar vi fel beslut utav ren slump. Desto fler tester som genomförs desto större risk att minst en av dessa tester kommer generera ett typ I-fel och att tolka ett enskilt test med 5 procents signifikans är missvisande.</p>
 <p>Under antagandet att de olika urvalen är oberoende av varandra kan vi räkna ut den slutgiltiga risken för typ-I fel i minst en av testerna med hjälp av multiplikationssatsen för oberoende händelser:</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -473,8 +479,8 @@ Tabell&nbsp;5.1: p-värden för t-testet i respektive urval
 \end{aligned}
 \]</span> Risken att minst en utav 20 tester har förkastat en sann <span class="math inline">\(H_0\)</span> är istället ca 64% istället för 5%.</p>
 </section>
-<section id="familjekonfidens" class="level3" data-number="5.1.2">
-<h3 data-number="5.1.2" class="anchored" data-anchor-id="familjekonfidens"><span class="header-section-number">5.1.2</span> Familjekonfidens</h3>
+<section id="familjekonfidens" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="familjekonfidens"><span class="header-section-number">6.1.2</span> Familjekonfidens</h3>
 <p>När vi genomför flera tester kan vi istället justera konfidensgraden för varje individuella test så att vi får en sammanfattande konfidensnivå som vi också använder i tolkningen. Den enklaste varianten är att beräkna Bonferronis familjekonfidens där konfidensgraden beräknas enligt: <span class="math display">\[
 \begin{aligned}
   1 - \alpha/2 \Rightarrow 1 - \alpha/(2 \cdot g)
@@ -500,7 +506,7 @@ Tabell&nbsp;5.1: p-värden för t-testet i respektive urval
 <div id="tbl-family-statistic" class="cell quarto-float anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-family-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;5.2: Beräknad testvariabel för respektive urval
+Tabell&nbsp;6.2: Beräknad testvariabel för respektive urval
 </figcaption>
 <div aria-describedby="tbl-family-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -579,13 +585,13 @@ Tabell&nbsp;5.2: Beräknad testvariabel för respektive urval
 </figure>
 </div>
 </div>
-<p>Det justerade kritiska tabellvärdet är <span class="math inline">\(\pm t_{30 - 1, 1 - 0.05 / (2 \cdot 20)} = \pm\)</span> 3.31 istället för <span class="math inline">\(\pm t_{30 - 1, 1 - 0.05 / (2)} = \pm\)</span> 2.045 vilket innebär att ingen testvariabel i <a href="#tbl-family-statistic" class="quarto-xref">Tabell&nbsp;<span>5.2</span></a> ligger extremare än det justerade. Med en simultan signifikansnivå på fem procent förkastas ingen av testernas nollhypoteser.</p>
+<p>Det justerade kritiska tabellvärdet är <span class="math inline">\(\pm t_{30 - 1, 1 - 0.05 / (2 \cdot 20)} = \pm\)</span> 3.31 istället för <span class="math inline">\(\pm t_{30 - 1, 1 - 0.05 / (2)} = \pm\)</span> 2.045 vilket innebär att ingen testvariabel i <a href="#tbl-family-statistic" class="quarto-xref">Tabell&nbsp;<span>6.2</span></a> ligger extremare än det justerade. Med en simultan signifikansnivå på fem procent förkastas ingen av testernas nollhypoteser.</p>
 </section>
-<section id="familjekonfidens-för-lutningsparametrar" class="level3" data-number="5.1.3">
-<h3 data-number="5.1.3" class="anchored" data-anchor-id="familjekonfidens-för-lutningsparametrar"><span class="header-section-number">5.1.3</span> Familjekonfidens för lutningsparametrar</h3>
+<section id="familjekonfidens-för-lutningsparametrar" class="level3" data-number="6.1.3">
+<h3 data-number="6.1.3" class="anchored" data-anchor-id="familjekonfidens-för-lutningsparametrar"><span class="header-section-number">6.1.3</span> Familjekonfidens för lutningsparametrar</h3>
 <p>Med hjälp av Bonferroni:s familjekonfidens kan vi justera formlerna för intervallskattning av lutningsparametrarna. En generell formel för en intervallskattning kan skrivas såsom: <span id="eq-interval-base"><span class="math display">\[
 \text{punktskattning} \pm \text{tabellvärde} \cdot \text{medelfel}
-\tag{5.1}\]</span></span></p>
+\tag{6.1}\]</span></span></p>
 <p>I fallet för <span class="math inline">\(\beta_1\)</span> blir formeln: <span class="math display">\[
     b_1 \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_1}
 \]</span> Bonferroni:s familjekonfidens leder till att formeln justeras enligt: <span class="math display">\[
@@ -594,12 +600,12 @@ Tabell&nbsp;5.2: Beräknad testvariabel för respektive urval
 <p><span class="math inline">\(t_{n-(k+1); 1 - \alpha/(2\cdot g)}\)</span> brukar också anges som <span class="math inline">\(B\)</span>. När <span class="math inline">\(g\)</span> är stort, kommer värden från <span class="math inline">\(t\)</span>-fördelningen också vara stora vilket i slutändan kan leda till intervall som inte ger någon vettig information. Därför följer att Bonferronis metod är lämpligast att användas när antalet intervall eller tester är få.</p>
 </section>
 </section>
-<section id="prediktioner" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="prediktioner"><span class="header-section-number">5.2</span> Prediktioner</h2>
+<section id="prediktioner" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="prediktioner"><span class="header-section-number">6.2</span> Prediktioner</h2>
 <p>Prediktioner innebär att vi skattar värdet på Y givet observerade värden på X med hjälp av den anpassade regressionslinjen. Dessa prediktioner kommer falla längsmed linjen vilket ytterligare motiverar att modellen behöver vara lämplig och bra. Vi vill inte att en prediktion i ett område är mer träffsäker än en prediktion i en annan eller att regressionslinjen generellt är en dålig representation av responsvariabeln.</p>
 <p>Modellen utgår från en specifik <em>definitionsmängd</em>, de observerade värdena på <span class="math inline">\(\mathbf{X}\)</span>, och det är även inom denna mängd som prediktioner bör göras. Det finns vissa tillfällen, till exempel inom tidsserieanalys, där prediktioner görs utanför definitionsmängden men där finns ett beroende i tiden som möjliggör dessa <em>extrapoleringar</em>. Inom “vanlig” regression bör vi undvika att extrapolera regressionslinjen utanför definitionsmängden.</p>
-<section id="medelvärdet-av-y-för-givna-mathbfx" class="level3" data-number="5.2.1">
-<h3 data-number="5.2.1" class="anchored" data-anchor-id="medelvärdet-av-y-för-givna-mathbfx"><span class="header-section-number">5.2.1</span> Medelvärdet av Y för givna <span class="math inline">\(\mathbf{X}\)</span></h3>
+<section id="medelvärdet-av-y-för-givna-mathbfx" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="medelvärdet-av-y-för-givna-mathbfx"><span class="header-section-number">6.2.1</span> Medelvärdet av Y för givna <span class="math inline">\(\mathbf{X}\)</span></h3>
 <p>Om vi är intresserad av det genomsnittliga värdet på responsvariabeln för alla nya observationer med givna värden på <span class="math inline">\(\mathbf{X}\)</span> kan vi skatta <span class="math inline">\(\mu_{Y|{\mathbf{X}_0}}\)</span> där <span class="math inline">\(\mathbf{X}_0\)</span> innehåller värden för den nya observationen.</p>
 <p><span class="math display">\[
 \mathbf{X}_0 = \begin{bmatrix}
@@ -617,30 +623,30 @@ s^2_{\hat{Y}_{\mathbf{X}_0}} = \mathbf{X}_0'\mathbf{s}^2_{\boldsymbol{\hat{\beta
 \]</span></p>
 <p>Intervallskattningen för ett genomsnitt blir ett konfidensintervall.</p>
 </section>
-<section id="enskild-prediktion-av-y-för-givna-mathbfx" class="level3" data-number="5.2.2">
-<h3 data-number="5.2.2" class="anchored" data-anchor-id="enskild-prediktion-av-y-för-givna-mathbfx"><span class="header-section-number">5.2.2</span> Enskild prediktion av Y för givna <span class="math inline">\(\mathbf{X}\)</span></h3>
+<section id="enskild-prediktion-av-y-för-givna-mathbfx" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="enskild-prediktion-av-y-för-givna-mathbfx"><span class="header-section-number">6.2.2</span> Enskild prediktion av Y för givna <span class="math inline">\(\mathbf{X}\)</span></h3>
 <p>Om vi istället är intresserad av ett enskilt värde på Y med givna värden på <span class="math inline">\(\mathbf{X}\)</span>, kan vi skatta <span class="math inline">\(Y_{\mathbf{X}_0}\)</span>.</p>
 <p><span class="math display">\[
 s^2_{pred} = MSE + s^2_{\hat{Y}_{\mathbf{X}_0}}
 \]</span> Intervallskattningen för ett värde av Y blir ett prediktionsintervall.</p>
 </section>
-<section id="skattning-av-flera-konfidensintervall" class="level3" data-number="5.2.3">
-<h3 data-number="5.2.3" class="anchored" data-anchor-id="skattning-av-flera-konfidensintervall"><span class="header-section-number">5.2.3</span> Skattning av flera konfidensintervall</h3>
-<p>Om vi vill beräkna konfidensband för hela regressionslinjen, i.e.&nbsp;<span class="math inline">\(\mu_Y\)</span> för alla punkter av <span class="math inline">\(\mathbf{X}\)</span>, kan <em>Working-Hotelling</em>:s metod skapa denna region. Strukturen från formel <a href="#eq-interval-base" class="quarto-xref">Ekvation&nbsp;<span>5.1</span></a> ger då följande formel:</p>
+<section id="skattning-av-flera-konfidensintervall" class="level3" data-number="6.2.3">
+<h3 data-number="6.2.3" class="anchored" data-anchor-id="skattning-av-flera-konfidensintervall"><span class="header-section-number">6.2.3</span> Skattning av flera konfidensintervall</h3>
+<p>Om vi vill beräkna konfidensband för hela regressionslinjen, i.e.&nbsp;<span class="math inline">\(\mu_Y\)</span> för alla punkter av <span class="math inline">\(\mathbf{X}\)</span>, kan <em>Working-Hotelling</em>:s metod skapa denna region. Strukturen från formel <a href="#eq-interval-base" class="quarto-xref">Ekvation&nbsp;<span>6.1</span></a> ger då följande formel:</p>
 <p><span id="eq-interval-working-hotelling"><span class="math display">\[
 \begin{aligned}
   \hat{Y}_{\mathbf{X}_0} \pm W \cdot s_{\hat{Y}_{\mathbf{X}_0}}
 \end{aligned}
-\tag{5.2}\]</span></span></p>
+\tag{6.2}\]</span></span></p>
 <p>där <span class="math inline">\(W^2 = 2\cdot F_{k+1; n-(k+1); 1-\alpha}\)</span>.</p>
 <p>Denna beräkning tar redan hänsyn till alla möjliga punkter av <span class="math inline">\(\mathbf{X}\)</span> som regressionslinjen täcker, vilket innebär att samma formler kan användas för enstaka nya observationer, <span class="math inline">\(\mathbf{X}_{\mathbf{X}_0}\)</span>.</p>
 <p>Även för prediktioner av responsvariabeln kan Bonferroni användas enligt: <span id="eq-interval-bonf-y"><span class="math display">\[
   \hat{Y}_{\mathbf{X}_0} \pm B \cdot s_{\hat{Y}_{\mathbf{X}_0}}
-\tag{5.3}\]</span></span> där <span class="math inline">\(B = t_{n-(k+1); 1 - \alpha/(2\cdot g)}\)</span></p>
-<p><a href="#eq-interval-working-hotelling" class="quarto-xref">Ekvation&nbsp;<span>5.2</span></a> ger generellt smalare intervall än <a href="#eq-interval-bonf-y" class="quarto-xref">Ekvation&nbsp;<span>5.3</span></a> då <span class="math inline">\(W\)</span> är samma värde oavsett hur många intervall som skattas medan <span class="math inline">\(B\)</span> ökar med antalet <span class="math inline">\(g\)</span>.</p>
+\tag{6.3}\]</span></span> där <span class="math inline">\(B = t_{n-(k+1); 1 - \alpha/(2\cdot g)}\)</span></p>
+<p><a href="#eq-interval-working-hotelling" class="quarto-xref">Ekvation&nbsp;<span>6.2</span></a> ger generellt smalare intervall än <a href="#eq-interval-bonf-y" class="quarto-xref">Ekvation&nbsp;<span>6.3</span></a> då <span class="math inline">\(W\)</span> är samma värde oavsett hur många intervall som skattas medan <span class="math inline">\(B\)</span> ökar med antalet <span class="math inline">\(g\)</span>.</p>
 </section>
-<section id="skattning-av-flera-prediktionsintervall" class="level3" data-number="5.2.4">
-<h3 data-number="5.2.4" class="anchored" data-anchor-id="skattning-av-flera-prediktionsintervall"><span class="header-section-number">5.2.4</span> Skattning av flera prediktionsintervall</h3>
+<section id="skattning-av-flera-prediktionsintervall" class="level3" data-number="6.2.4">
+<h3 data-number="6.2.4" class="anchored" data-anchor-id="skattning-av-flera-prediktionsintervall"><span class="header-section-number">6.2.4</span> Skattning av flera prediktionsintervall</h3>
 <p>För enstaka nya observationer beräknas istället prediktionsintervall vilket innebär att skattningens medelfel förändras. Metoder för att beräkna <span class="math inline">\(g\)</span> prediktionsintervall är <em>Scheffé</em> och <em>Bonferronis</em> metoder.</p>
 <p>Scheffés metod: <span class="math display">\[\begin{align}
    \hat{Y}_{\mathbf{X}_0} \pm S \cdot s_{pred}
@@ -653,7 +659,7 @@ s^2_{pred} = MSE + s^2_{\hat{Y}_{\mathbf{X}_0}}
 \end{align}\]</span> där <span class="math display">\[\begin{align*}
     B = t_{n-k+1; 1 - \alpha/(2\cdot g)}
 \end{align*}\]</span></p>
-<p>Båda dessa metoder kommer skapa bredare intervall i relation till antalet intervall som skattas eftersom <span class="math inline">\(g\)</span> inkluderas i båda beräkningarna. Detta skiljer sig från <a href="#eq-interval-working-hotelling" class="quarto-xref">Ekvation&nbsp;<span>5.2</span></a> där <span class="math inline">\(W\)</span> inte blir större desto fler intervall.</p>
+<p>Båda dessa metoder kommer skapa bredare intervall i relation till antalet intervall som skattas eftersom <span class="math inline">\(g\)</span> inkluderas i båda beräkningarna. Detta skiljer sig från <a href="#eq-interval-working-hotelling" class="quarto-xref">Ekvation&nbsp;<span>6.2</span></a> där <span class="math inline">\(W\)</span> inte blir större desto fler intervall.</p>
 
 
 </section>
@@ -1071,13 +1077,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../01-regression/03-model-assessment.html" class="pagination-link" aria-label="Modellutvärdering">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span>
+      <a href="../01-regression/04-statistical-inference.html" class="pagination-link" aria-label="Statistisk inferens">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../01-regression/05-complex-predictors.html" class="pagination-link" aria-label="Komplexa samband">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../01-regression/06-complex-predictors.html" class="pagination-link" aria-label="Komplexa samband">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

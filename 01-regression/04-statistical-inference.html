@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.553">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Statistisk teori och tillämpningar i R - 5&nbsp; Statistisk inferens</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../01-regression/05-using-the-model.html" rel="next">
+<link href="../01-regression/03-model-assessment.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Inget resultat",
+    "search-matching-documents-text": "matchande dokument",
+    "search-copy-link-title": "Kopiera länk för att söka",
+    "search-hide-matches-text": "Göm ytterligare resultat",
+    "search-more-match-text": "annat resultat i detta dokument",
+    "search-more-matches-text": "fler resultat i detta dokument",
+    "search-clear-button-title": "Rensa",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Verkställ",
+    "search-label": "Sök"
+  }
+}</script>
+<script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Sök"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Skifta navigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../01-regression/00-intro-regression.html" aria-current="page"> 
+<span class="menu-text">Regressionsanalys</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/04-statistical-inference.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Sök"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/05-using-the-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Använda modellen</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innehållsförteckning</h2>
+   
+  <ul>
+  <li><a href="#anova" id="toc-anova" class="nav-link active" data-scroll-target="#anova"><span class="header-section-number">5.1</span> ANOVA</a>
+  <ul class="collapse">
+  <li><a href="#anova-tabellen" id="toc-anova-tabellen" class="nav-link" data-scroll-target="#anova-tabellen"><span class="header-section-number">5.1.1</span> ANOVA-tabellen</a></li>
+  <li><a href="#sekventiella-kvadratsummor" id="toc-sekventiella-kvadratsummor" class="nav-link" data-scroll-target="#sekventiella-kvadratsummor"><span class="header-section-number">5.1.2</span> Sekventiella kvadratsummor</a></li>
+  </ul></li>
+  <li><a href="#sec-stat-inference" id="toc-sec-stat-inference" class="nav-link" data-scroll-target="#sec-stat-inference"><span class="header-section-number">5.2</span> Statistisk inferens</a>
+  <ul class="collapse">
+  <li><a href="#f-test-för-modellen" id="toc-f-test-för-modellen" class="nav-link" data-scroll-target="#f-test-för-modellen"><span class="header-section-number">5.2.1</span> F-test för modellen</a></li>
+  <li><a href="#partiella-f-test-för-grupper-av-parametrar" id="toc-partiella-f-test-för-grupper-av-parametrar" class="nav-link" data-scroll-target="#partiella-f-test-för-grupper-av-parametrar"><span class="header-section-number">5.2.2</span> Partiella F-test för grupper av parametrar</a></li>
+  <li><a href="#t-test-för-enskilda-parametrar" id="toc-t-test-för-enskilda-parametrar" class="nav-link" data-scroll-target="#t-test-för-enskilda-parametrar"><span class="header-section-number">5.2.3</span> t-test för enskilda parametrar</a></li>
+  <li><a href="#konfidensintervall-för-beta" id="toc-konfidensintervall-för-beta" class="nav-link" data-scroll-target="#konfidensintervall-för-beta"><span class="header-section-number">5.2.4</span> Konfidensintervall för <span class="math inline">\(\beta\)</span></a></li>
+  </ul></li>
+  <li><a href="#enkla-utvärderingsmått" id="toc-enkla-utvärderingsmått" class="nav-link" data-scroll-target="#enkla-utvärderingsmått"><span class="header-section-number">5.3</span> Enkla utvärderingsmått</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- New commands for matrices in regression -->
+<!-- Creates a shortcommand for sums -->
+<!-- CONTENT -->
+<p>När vi anser oss ha hittat en lämplig modell kan vi fokusera på att tolka modellens resultat avseende populationen. Inom regressionsmodellering kan vi genomföra flera olika typer av statistisk inferens; på hela modellen, på grupper av parametrar, eller på enskilda parametrar.</p>
+<p>Vi kan börja med ett <em>F-test</em> för hela modellen för att se ifall minst en parameter är signifikant, att modellen är värd att undersöka vidare, för att sedan genomföra enskilda <em>t-test</em> för respektive parameter och bedöma vilka förklarande variabler har en signifikant påverkan på responsvariabeln. Då kvalitativa variabler ofta består utav flera parametrar behöver dessa slås samman för att undersöka variabelns samband vilket vi kan göra med ett <em>partiellt F-test</em>.</p>
+<p>Innan vi går in på de olika testerna behöver vi presentera <em>ANOVA</em>-tabellen som används för att dela upp responsvariabelns variation i modellens olika komponenter; modellens förklarande variabler och feltermen.</p>
+<section id="anova" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="anova"><span class="header-section-number">5.1</span> ANOVA</h2>
+<p><strong>An</strong>alysis <strong>o</strong>f <strong>Va</strong>riance är en samling metoder som beräknar variationen av olika modellkomponenter. Målet med en modell är att förklara den <em>totala variationen</em> i responsvariabeln på bästa sätt. Allting som de förklarande variablerna hjälper till att beskriva kallas för den <em>förklarade variationen</em> och det som modellen inte lyckas förklara (felet) är den <em>oförklarade variationen</em>.</p>
+<p><span id="eq-variation-components"><span class="math display">\[
+\underbrace{\mathbf{Y}}_\text{total variation} = \underbrace{\mathbf{X} \boldsymbol{\beta}}_\text{förklarad variation} + \underbrace{\mathbf{E}}_\text{oförklarad variation}
+\tag{5.1}\]</span></span></p>
+<p><a href="#eq-variation-components" class="quarto-xref">Ekvation&nbsp;<span>5.1</span></a> visar att den totala variationen är en summa av den förklarade och oförklarade variationen vilket också ses i formlerna för dessa. Respektive komponent beräknas enligt:</p>
+<p><span class="math display">\[
+  \text{total variation} = SST = \mathbf{Y}'\mathbf{Y} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}
+\]</span> där <span class="math inline">\(\mathbf{J}\)</span> är enhetsmatrisen, en <span class="math inline">\(n \times n\)</span> matris endast innehållande 1:or.</p>
+<p>Det kanske inte är så lätt att se vad dessa matrisberäkningar faktiskt beskriver men beräkningen motsvarar <span class="math inline">\(\sum_{i=1}^n(Y_i - \bar{Y})^2\)</span>, alltså täljaren i en variansberäkning för <span class="math inline">\(Y\)</span>. Den vänstra termen (<span class="math inline">\(\mathbf{Y}'\mathbf{Y}\)</span>) motsvarar <span class="math inline">\(Y_i\)</span> och den högra termen (<span class="math inline">\(\left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}\)</span>) motsvarar <span class="math inline">\(\bar{Y}\)</span>, responsvariabelns medelvärde. Den totala variationen beskriver hur mycket variation som uppkommer ifall vi skulle använda medelvärdet av <span class="math inline">\(Y\)</span> som modell.</p>
+<p><span class="math display">\[
+  \text{oförklarad variation} = SSE = \mathbf{Y}'\mathbf{Y} - \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y}
+\]</span> SSE har vi tidigare använt som ett mått på felet i modellen, se <a href="02-model-structure.html#eq-sse" class="quarto-xref">Ekvation&nbsp;<span>3.4</span></a>, vilket betyder att <span class="math inline">\(\boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y}\)</span> motsvarar <span class="math inline">\(\hat{Y}_i\)</span>.</p>
+<p><span class="math display">\[
+  \text{förklarad variation} = SSR = \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}
+\]</span></p>
+<p>SSR beskriver variationen mellan modellens anpassade värde och medelvärdet av <span class="math inline">\(Y\)</span>. Det kan i sin tur kan tolkas som hur mycket mer variation som modellen bidrar med jämfört med medelvärdet, eller kort sagt hur mycket bättre modellen är på att förklara variationen i <span class="math inline">\(Y\)</span>.</p>
+<p>Vi har tidigare använt en annan matrisformel för SSE men med hjälp av omformuleringen kan vi tydligt se hur SST = SSR + SSE: <span class="math display">\[
+\mathbf{Y}'\mathbf{Y} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y} = \mathbf{Y}'\mathbf{Y} \underbrace{-  \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y} + \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y}}_\text{summerar till 0} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}
+\]</span> Vi kan också visualisera denna relation i ett stackat stapeldiagram. Den totala höjden av stapeln är SST medan de olika delarna beskriver hur stor del av den totala variationen som är förklarad eller oförklarad i en viss modell.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="04-statistical-inference_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Visualisering av de olika källor av variation</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="anova-tabellen" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="anova-tabellen"><span class="header-section-number">5.1.1</span> ANOVA-tabellen</h3>
+<p>En ANOVA-tabell är ett sätt att effektivt få en översikt av dessa olika komponenter samt visa ytterligare information, såsom <em>frihetsgraderna</em> (<span class="math inline">\(df\)</span>) för respektive komponent och <em>medelkvadratsummor</em>.</p>
+<p>Frihetsgrader beskriver hur många lutningsparametrar som skattas för respektive del<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> och medelkvadratsummor visar den genomsnittliga variationen per frihetsgrad, <span class="math inline">\(\frac{SS}{df}\)</span>.</p>
+<div class="cell" data-tbl-cap-location="top">
+<div id="tbl-anova-example" class="cell quarto-float anchored" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;5.1: Enkel ANOVA-tabell
+</figcaption>
+<div aria-describedby="tbl-anova-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 61%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Source</th>
+<th style="text-align: left;">DF</th>
+<th style="text-align: left;">Sum of Squares</th>
+<th style="text-align: left;">Mean Square</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Model (Regression)</td>
+<td style="text-align: left;"><span class="math inline">\(df_R = k\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(SSR = \boldsymbol{\hat{\beta}}' \mathbf{X}' \mathbf{Y} - \frac{1}{n} \mathbf{Y}' \mathbf{J} \mathbf{Y}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(MSR = \frac{SSR}{df_R}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Error</td>
+<td style="text-align: left;"><span class="math inline">\(df_E = n - (k + 1)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(SSE = \mathbf{Y}' \mathbf{Y} - \boldsymbol{\hat{\beta}}' \mathbf{X}' \mathbf{Y}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(MSE = \frac{SSE}{df_E}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: left;"><span class="math inline">\(df_T = n - 1\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(SSY = \mathbf{Y}' \mathbf{Y} - \frac{1}{n} \mathbf{Y}' \mathbf{J} \mathbf{Y}\)</span></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>En enkel ANOVA-tabell som <a href="#tbl-anova-example" class="quarto-xref">Tabell&nbsp;<span>5.1</span></a> visar endast de tre huvudsakliga komponenterna, men olika programvaror kan ibland visa andra uppdelningar som standard. I en multipel linjär regressionsmodell är det vanligt att dela upp den förklarade variationen ytterligare, exempelvis i <em>sekventiella kvadratsummor</em>.</p>
+</section>
+<section id="sekventiella-kvadratsummor" class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="sekventiella-kvadratsummor"><span class="header-section-number">5.1.2</span> Sekventiella kvadratsummor</h3>
+<p>Beräkningarna för en ANOVA-tabell sker automatiskt i R när vi använder <code>lm()</code> och vi kan plocka ut tabellen från modellobjektet med hjälp av <code>anova()</code>, (se <a href="02-model-structure.html#tip-lm-objects" class="quarto-xref">Tip&nbsp;<span>3.1</span></a>).</p>
+<div class="cell" data-tbl-cap-location="top">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(simpleModel) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-anova-example-R" class="cell quarto-float anchored" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-R-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;5.2: ANOVA-tabell från R
+</figcaption>
+<div aria-describedby="tbl-anova-example-R-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Df </th>
+   <th style="text-align:right;"> Sum Sq </th>
+   <th style="text-align:right;"> Mean Sq </th>
+   <th style="text-align:right;"> F value </th>
+   <th style="text-align:right;"> Pr(&gt;F) </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> species </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 7015.3857 </td>
+   <td style="text-align:right;"> 3507.6929 </td>
+   <td style="text-align:right;"> 713.4929 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> bill_depth_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 818.5050 </td>
+   <td style="text-align:right;"> 818.5050 </td>
+   <td style="text-align:right;"> 166.4905 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> flipper_length_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 198.2269 </td>
+   <td style="text-align:right;"> 198.2269 </td>
+   <td style="text-align:right;"> 40.3210 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> body_mass_g </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 160.3760 </td>
+   <td style="text-align:right;"> 160.3760 </td>
+   <td style="text-align:right;"> 32.6218 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> sex </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 133.7191 </td>
+   <td style="text-align:right;"> 133.7191 </td>
+   <td style="text-align:right;"> 27.1995 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Residuals </td>
+   <td style="text-align:right;"> 326 </td>
+   <td style="text-align:right;"> 1602.6899 </td>
+   <td style="text-align:right;"> 4.9162 </td>
+   <td style="text-align:right;">  </td>
+   <td style="text-align:right;">  </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Som standard, delar R upp modellens kvadratsumma (SSR) i de enskilda förklarande variablerna med hjälp av sekventiella (även kallad betingade) kvadratsummor. En sekventiell kvadratsumma beskriver hur mycket variation en förklarande variabel bidrar med givet att modellen redan innehåller andra förklarande variabler.</p>
+<p>Ordningen som presenteras i <a href="#tbl-anova-example-R" class="quarto-xref">Tabell&nbsp;<span>5.2</span></a> är ordningen som variablerna läggs till i modellen, till exempel visar andra raden <span class="math inline">\(SS(\text{bill\_depth\_mm} | \text{species})\)</span>, att näbbredden bidrar med 818.505 ytterligare unik förklarad variation av responsvariabeln som art inte redan har förklarat. Den tredje raden visar <span class="math inline">\(SS(\text{flipper\_length\_mm} | \text{species}, \text{bill\_depth\_mm})\)</span>, det vill säga hur mycket ytterligare unik variation som fenlängden förklarar i en modell som inkluderar näbbredd och art.</p>
+<p>Rent matematiskt beräknas den sekventiella kvadratsumman som en summa av antingen SSE eller SSR mellan två olika modeller, en utan den tillagda variabeln och en med variabeln inkluderad. Anta att vi vill lägga till variabel <span class="math inline">\(X^*\)</span> till en modell som har <span class="math inline">\(k\)</span> andra variabler, då ser beräkningen ut som följer:</p>
+<p><span id="eq-seq-ss"><span class="math display">\[
+\begin{aligned}
+SS(X^*|X_1, \ldots, X_k) &amp;= SSE_{X_1, \ldots, X_k} - SSE_{X_1, \ldots, X_k, X^*} = \\
+&amp;= SSR_{X_1, \ldots, X_k, X^*} - SSR_{X_1, \ldots, X_k}
+\end{aligned}
+\tag{5.2}\]</span></span></p>
+<p>Notera att SSR ökar för varje ytterligare variabel som läggs till i modellen, medan SSE alltid minskar. En variation måste alltid vara positiv, därav beräknas <span class="math inline">\(SSE_{reducerad} - SSE_{komplett}\)</span> eller <span class="math inline">\(SSR_{komplett} - SSR_{reducerad}\)</span>.</p>
+<p>Sekventiella kvadratsummor påverkas av ordningen variablerna läggs till i modellen. Låt oss byta ordning på de förklarande variablerna när vi anpassar modellen:</p>
+<div class="cell" data-tbl-cap-location="top">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> bill_length_mm <span class="sc">~</span> sex <span class="sc">+</span> ., <span class="at">data =</span> modelData)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-anova-example-sex" class="cell quarto-float anchored" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-sex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;5.3: Annan ordning på modellernas variabler
+</figcaption>
+<div aria-describedby="tbl-anova-example-sex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Df </th>
+   <th style="text-align:right;"> Sum Sq </th>
+   <th style="text-align:right;"> Mean Sq </th>
+   <th style="text-align:right;"> F value </th>
+   <th style="text-align:right;"> Pr(&gt;F) </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> sex </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 1175.4780 </td>
+   <td style="text-align:right;"> 1175.4780 </td>
+   <td style="text-align:right;"> 239.1017 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> species </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 6975.5916 </td>
+   <td style="text-align:right;"> 3487.7958 </td>
+   <td style="text-align:right;"> 709.4457 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> bill_depth_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 64.4987 </td>
+   <td style="text-align:right;"> 64.4987 </td>
+   <td style="text-align:right;"> 13.1196 </td>
+   <td style="text-align:right;"> 0.0003 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> flipper_length_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 78.3815 </td>
+   <td style="text-align:right;"> 78.3815 </td>
+   <td style="text-align:right;"> 15.9434 </td>
+   <td style="text-align:right;"> 0.0001 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> body_mass_g </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 32.2629 </td>
+   <td style="text-align:right;"> 32.2629 </td>
+   <td style="text-align:right;"> 6.5625 </td>
+   <td style="text-align:right;"> 0.0109 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Residuals </td>
+   <td style="text-align:right;"> 326 </td>
+   <td style="text-align:right;"> 1602.6899 </td>
+   <td style="text-align:right;"> 4.9162 </td>
+   <td style="text-align:right;">  </td>
+   <td style="text-align:right;">  </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>I <a href="#tbl-anova-example-sex" class="quarto-xref">Tabell&nbsp;<span>5.3</span></a> ser vi att <span class="math inline">\(SS(\text{sex}) = 1175.478\)</span> vilket är betydligt högre än <span class="math inline">\(SS(\text{sex}|\text{species}, \text{bill\_depth\_mm}, \text{flipper\_length\_mm}, \text{body\_mass\_g}) = 133.7191\)</span> från <a href="#tbl-anova-example-R" class="quarto-xref">Tabell&nbsp;<span>5.2</span></a>. Variabeln kön bidrar med mycket variation när den är ensam i en modell, men när den läggs till i en modell som redan har andra variabler bidrar den inte med lika mycket unik information. Detta betyder att den förklarade variationen som variabeln bidrar med verkar finnas i övriga variabler också. Denna iakttagelse kommer vi komma tillbaka till i ett senare kapitel.</p>
+<p>Någonting som är lika i de två tabellerna är SSE. Vi har i båda modellerna inkluderad samma variabler vilket innebör att SST, SSR, och SSE överlag är densamma. Summan av alla sekventiella kvadratsummor ska fortfarande bli SSR oavsett ordningen på variablerna och på grund av den additiva egenskapen hos variationen har SST och SSE inte heller förändrats.</p>
+</section>
+</section>
+<section id="sec-stat-inference" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-stat-inference"><span class="header-section-number">5.2</span> Statistisk inferens</h2>
+<p>Med hjälp av de olika källorna av variation kan vi beräkna tester för hela eller delar av modellen i olika F-test, medan de enskilda parameterskattningarna och dess tillhörande medelfel kan användas i tester för enskilda lutningsparametrar.</p>
+<section id="f-test-för-modellen" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="f-test-för-modellen"><span class="header-section-number">5.2.1</span> F-test för modellen</h3>
+<p>I en multipel linjär regression är ett F-test för hela modellen bra att börja med för att se ifall minst en lutningsparameter är signifikant. Vi undersöker hypoteserna:</p>
+<p><span class="math display">\[\begin{align*}
+H_0&amp;: \beta_1 = \beta_2 = \beta_3 = \cdots = \beta_k = 0\\
+H_a&amp;: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
+\end{align*}\]</span></p>
+<p>Om minst en lutningsparameter är signifikant betyder det att det finns åtminstone en variabel som bidrar med förklarad variation, att modellen är bättre än att använda enbart <span class="math inline">\(\bar{Y}\)</span>. Testvariabeln undersöker relationen mellan den förklarande och oförklarande variationen genom dess medelkvadratsummor.</p>
+<p><span class="math display">\[
+F_{test} = \frac{SSR / k}{SSE / (n - (k+1))} = \frac{MSR}{MSE}
+\]</span></p>
+<p>Testvariabeln följer en <em>F-fördelning</em> som styrs av två frihetsgrader; <span class="math inline">\(df1\)</span> från täljaren och <span class="math inline">\(df2\)</span> från nämnaren i beräkningen, det vill säga modellens och felets frihetsgrader. Om <span class="math inline">\(H_0\)</span> är sann kommer testvariabeln bli 0, medan om <span class="math inline">\(H_a\)</span> är sann kommer testvariabeln bli ett stort positivt tal. Eftersom båda medelkvadratsummorna är positiva tal innebär det att kvoten alltid kommer vara positiv och vi kan förkasta <span class="math inline">\(H_0\)</span> om testvariabeln befinner sig nog långt från 0.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en funktion för att generera olika F-fördelningar</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>generateFdistribution <span class="ot">&lt;-</span> <span class="cf">function</span>(df1, df2, <span class="at">n =</span> <span class="dv">1000</span>) {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="at">length.out =</span> n)  </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">df</span>(x, df1, df2)  </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">df1 =</span> df1, <span class="at">df2 =</span> df2)  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en lista med olika frihetsgrader</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>dfs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">30</span>), <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">100</span>), <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">50</span>), <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">300</span>))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Genererar data</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>Fdistributions <span class="ot">&lt;-</span> dfs <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map_df</span>(<span class="sc">~</span><span class="fu">generateFdistribution</span>(.x[<span class="dv">1</span>], .x[<span class="dv">2</span>]), <span class="at">.id =</span> <span class="st">"Distribution"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Distribution =</span> <span class="fu">paste0</span>(<span class="st">"df1 = "</span>, df1, <span class="st">", df2 = "</span>, df2))</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the F-distributions using ggplot2</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Fdistributions) <span class="sc">+</span> </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> Distribution) <span class="sc">+</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"F-värde"</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Densitet"</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Frihetsgrader"</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"#d9230f"</span>, <span class="st">"black"</span>, <span class="st">"grey50"</span>))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="04-statistical-inference_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Olika F-fördelningar och deras frihetsgrader</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>För att få fram SSR från en ANOVA-tabell i R behöver vi summera de sekventiella kvadratsummorna. Vi kan sedan bearbeta tabellen för att få fram testvariabeln och använda frihetsgraderna för respektive källa i <code>pf(lower.tail = FALSE)</code> för att få fram p-värdet för testet.</p>
+<div class="cell" data-tbl-cap-location="top">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>anovaTable <span class="ot">&lt;-</span> <span class="fu">anova</span>(simpleModel)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar raden för SSR utifrån alla rader förutom SSE</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>SSR <span class="ot">&lt;-</span> anovaTable[<span class="sc">-</span><span class="fu">nrow</span>(anovaTable),] <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(Df<span class="sc">:</span><span class="st">`</span><span class="at">Sum Sq</span><span class="st">`</span>, <span class="sc">~</span><span class="fu">sum</span>(.x))) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Sum Sq</span><span class="st">`</span> <span class="sc">/</span> Df,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">F value</span><span class="st">`</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> <span class="cn">NA</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Kombinerar SSR med SSE från ursprungliga tabellen</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>simpleAnova <span class="ot">&lt;-</span> SSR <span class="sc">%&gt;%</span> </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(anovaTable[<span class="fu">nrow</span>(anovaTable),]) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">F value</span><span class="st">`</span> <span class="ot">=</span> </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">1</span>] <span class="sc">/</span> <span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">2</span>], </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="cn">NA</span>),</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span> <span class="ot">=</span> </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">==</span> <span class="dv">1</span>, </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>              <span class="fu">pf</span>(<span class="at">q =</span> <span class="st">`</span><span class="at">F value</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">df1 =</span> Df[<span class="dv">1</span>], <span class="at">df2 =</span> Df[<span class="dv">2</span>], <span class="at">lower.tail =</span> <span class="cn">FALSE</span>), </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>              <span class="cn">NA</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(simpleAnova) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Model"</span>, <span class="st">"Residuals"</span>)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(simpleAnova, <span class="at">digits =</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-anova-example-simple" class="cell quarto-float anchored" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-simple-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;5.4: Bearbetad och förenklad ANOVA tabell
+</figcaption>
+<div aria-describedby="tbl-anova-example-simple-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Df </th>
+   <th style="text-align:right;"> Sum Sq </th>
+   <th style="text-align:right;"> Mean Sq </th>
+   <th style="text-align:right;"> F value </th>
+   <th style="text-align:right;"> Pr(&gt;F) </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Model </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 8326.213 </td>
+   <td style="text-align:right;"> 1387.7021 </td>
+   <td style="text-align:right;"> 282.2698 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Residuals </td>
+   <td style="text-align:right;"> 326 </td>
+   <td style="text-align:right;"> 1602.690 </td>
+   <td style="text-align:right;"> 4.9162 </td>
+   <td style="text-align:right;">  </td>
+   <td style="text-align:right;">  </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Eftersom p-värdet är mindre än 5 procent, kan <span class="math inline">\(H_0\)</span> förkastas och minst en av variablerna har ett samband med responsvariabeln.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+</section>
+<section id="partiella-f-test-för-grupper-av-parametrar" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="partiella-f-test-för-grupper-av-parametrar"><span class="header-section-number">5.2.2</span> Partiella F-test för grupper av parametrar</h3>
+<p>Ibland är vi intresserade att undersöka delar av modellen, en grupp med lutningsparametrar. Ett sådant fall är om vi vill undersöka en kvalitativ variabels påverkan eftersom den kan ha transformerats till flera indikatorvariabler alla med en tillhörande lutningsparameter. Ett annat tillfälle är om vi vill undersöka om flera variabler tillsammans bidrar med förklarad variation till modellen.</p>
+<p>Istället för att undersöka alla lutningsparametrar undersöks nu ett urval: <span class="math display">\[\begin{align*}
+H_0&amp;: \beta_1 = \beta_2 = \beta_3 = \cdots = \beta_s = 0\\
+H_a&amp;: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
+\end{align*}\]</span> där <span class="math inline">\(s\)</span> är antalet parametrar som undersöks.</p>
+<p>Testvariabeln för ett partiellt F-test kräver en komplett (betecknad <span class="math inline">\(_F\)</span>) och en reducerad modell (betecknad <span class="math inline">\(_R\)</span>). Den kompletta modellen består av alla variabler medan den reducerade modellen utgår från att <span class="math inline">\(H_0\)</span> är sann och variablerna som undersöks har plockats bort från anpassningen. Vi kan välja att antingen använda SSR eller SSE för att beräkna hur mycket förklarad variation som försvinner mellan de två modellerna enligt samma princip som <a href="#eq-seq-ss" class="quarto-xref">Ekvation&nbsp;<span>5.2</span></a>.</p>
+<p><span id="eq-partial-f"><span class="math display">\[
+F_{test} = \frac{(SSR_F - SSR_R) / s}{SSE_F / (n - (k+1))} = \frac{(SSE_R - SSE_F) / s}{SSE_F / (n - (k+1))}
+\tag{5.3}\]</span></span></p>
+<p>Testvariabeln är fortfarande F-fördelat med <span class="math inline">\(s\)</span> respektive <span class="math inline">\(n - (k+1)\)</span> frihetsgrader.</p>
+<section id="räkneknep-för-partiella-f-test" class="level4" data-number="5.2.2.1">
+<h4 data-number="5.2.2.1" class="anchored" data-anchor-id="räkneknep-för-partiella-f-test"><span class="header-section-number">5.2.2.1</span> Räkneknep för partiella F-test</h4>
+<p>Med hjälp av <a href="#eq-seq-ss" class="quarto-xref">Ekvation&nbsp;<span>5.2</span></a> kan <a href="#eq-partial-f" class="quarto-xref">Ekvation&nbsp;<span>5.3</span></a> formuleras på ett tredje sätt som underlättar vår analysprocess. Vi kan skriva om skillnaden i förklarad variation mellan den kompletta och reducerade modellen som en sekventiell kvadratsumma. Exempelvis kan vi vilja undersöka om variabeln art har ett samband med responsvariabeln. Eftersom den variabeln transformeras till två indikatorvariabler omfattar hypoteserna två lutningsparametrar.</p>
+<p><span class="math display">\[\begin{align*}
+H_0&amp;: \beta_{Chinstrap} = \beta_{Gentoo} = 0\\
+H_a&amp;: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
+\end{align*}\]</span></p>
+<p>Den reducerade modellen skapas utifrån att <span class="math inline">\(H_0\)</span> är sann, det vill säga <span class="math inline">\(\beta_{Chinstrap} = \beta_{Gentoo} = 0\)</span> och de två modellernas förklarade variation skulle betecknas som: <span class="math display">\[
+\begin{aligned}
+  SSR_{R} &amp;= SSR_{bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex} \\
+  SSR_{F} &amp;= SSR_{bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex, species}
+\end{aligned}
+\]</span></p>
+<p>Vi kan omformulera täljaren i <a href="#eq-partial-f" class="quarto-xref">Ekvation&nbsp;<span>5.3</span></a> till: <span class="math display">\[
+SS(species|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex)
+\]</span> I de ANOVA-tabeller som presenterats tidigare kan vi få fram denna kvadratsumma direkt om art läggs till som den sista variabeln i modellen.</p>
+<div class="cell" data-tbl-cap-location="top">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> body_mass_g <span class="sc">+</span> sex <span class="sc">+</span> species, <span class="at">data =</span> modelData)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-anova-example-species" class="cell quarto-float anchored" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-example-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;5.5: ANOVA-tabell från en modell där art läggs till sist
+</figcaption>
+<div aria-describedby="tbl-anova-example-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Df </th>
+   <th style="text-align:right;"> Sum Sq </th>
+   <th style="text-align:right;"> Mean Sq </th>
+   <th style="text-align:right;"> F value </th>
+   <th style="text-align:right;"> Pr(&gt;F) </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> bill_depth_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 518.9806 </td>
+   <td style="text-align:right;"> 518.9806 </td>
+   <td style="text-align:right;"> 105.5648 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> flipper_length_mm </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 4045.7248 </td>
+   <td style="text-align:right;"> 4045.7248 </td>
+   <td style="text-align:right;"> 822.9329 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> body_mass_g </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 6.1329 </td>
+   <td style="text-align:right;"> 6.1329 </td>
+   <td style="text-align:right;"> 1.2475 </td>
+   <td style="text-align:right;"> 0.2649 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> sex </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 68.4245 </td>
+   <td style="text-align:right;"> 68.4245 </td>
+   <td style="text-align:right;"> 13.9181 </td>
+   <td style="text-align:right;"> 0.0002 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> species </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 3686.9500 </td>
+   <td style="text-align:right;"> 1843.4750 </td>
+   <td style="text-align:right;"> 374.9776 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Residuals </td>
+   <td style="text-align:right;"> 326 </td>
+   <td style="text-align:right;"> 1602.6899 </td>
+   <td style="text-align:right;"> 4.9162 </td>
+   <td style="text-align:right;">  </td>
+   <td style="text-align:right;">  </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>En ANOVA-tabell med sekventiella kvadratsummor beräknar ett partiellt F-test för respektive variabel (och dess parameter/parametrar) som undersöker huruvida variabeln bidrar med en signifikant ökning av den förklarade variationen till en modell som redan inkluderar variablerna ovanför. <a href="#tbl-anova-example-species" class="quarto-xref">Tabell&nbsp;<span>5.5</span></a> beräknar nu det partiella F-test för art (<span class="math inline">\(F_{test} = 374.9776\)</span>) som vi var intresserade av och vi kan direkt tolka p-värdet för testet (<span class="math inline">\(p-värde &lt; 0.001\)</span>) som att minst en av lutningsparametrarna är signifikant skild från 0.</p>
+<p>Om vi genomför ett partiellt F-test för <strong>flera variabler</strong> kan vi inte använda p-värden som anges i tabellen då hypoteserna omfattar fler lutningsparametrar/variabler än vad de sekventiella kvadratsummorna visar. Anta att vi vill undersöka om art och kön tillsammans bidrar något till modellen. Hypotesprövningen skulle då omfatta:</p>
+<p><span class="math display">\[
+\begin{aligned}
+H_0&amp;: \beta_{sexMale} = \beta_{Chinstrap} = \beta_{Gentoo} = 0\\
+H_a&amp;: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
+\end{aligned}
+\]</span></p>
+<p>Den sekventiella kvadratsumman som vi vill använda anges som <span class="math inline">\(SS(species, sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g)\)</span> och vi kan beräkna fram detta värde genom att summera de två variablernas SS från <a href="#tbl-anova-example-species" class="quarto-xref">Tabell&nbsp;<span>5.5</span></a>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+SS(species, sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g) = \\
+SS(species|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex) + \\
+SS(sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g)
+\end{aligned}
+\]</span> Alternativet är att anpassa två modeller i R, den kompletta och reducerade och läsa av SSE eller summera SSR från respektive ANOVA-tabell.</p>
+</section>
+<section id="partiellt-f-test-för-specifika-värden" class="level4" data-number="5.2.2.2">
+<h4 data-number="5.2.2.2" class="anchored" data-anchor-id="partiellt-f-test-för-specifika-värden"><span class="header-section-number">5.2.2.2</span> Partiellt F-test för specifika värden</h4>
+<p>Vi kan ställa upp en generell modell som: <span class="math display">\[\begin{align*}
+  Y = \beta_0 + \beta_1 \cdot X_1 + \beta_2 \cdot X_2 + \beta_3 \cdot X_3 +\beta_4 \cdot X_4 +\beta_5 \cdot X_5+ E
+\end{align*}\]</span></p>
+<p>Om vi ska undersöka specifika parametrars värden (som inte är 0) kan vi genomföra följande härledning. Anta <span class="math inline">\(H_0:\)</span> <span class="math inline">\(\beta_2=4\)</span> och <span class="math inline">\(\beta_5 = -2\)</span> som ska undersökas med ett test.</p>
+<p><span class="math display">\[\begin{align*}
+Y &amp;= \beta_0 + \beta_1 \cdot X_1 + 4 \cdot X_2 + \beta_3 \cdot X_3 +\beta_4 \cdot X_4 - 2 \cdot X_5+ E\\
+Y - 4 \cdot X_2 + 2 \cdot X_5 &amp;= \beta_0 + \beta_1 \cdot X_1  + \beta_3 \cdot X_3 +\beta_4 \cdot X_4 + E \\
+Y^* &amp;= \beta_0 + \beta_1 \cdot X_1  + \beta_3 \cdot X_3 +\beta_4 \cdot X_4 + E
+\end{align*}\]</span></p>
+<p><span class="math inline">\(Y^*\)</span> kan anses vara en reducerad modell för ett F-test. I R kan detta inte lösas genom <code>anova()</code> utan måste beräknas ‘’för hand’’ genom att anpassa två modeller, den kompletta och den reducerade.</p>
+</section>
+</section>
+<section id="t-test-för-enskilda-parametrar" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="t-test-för-enskilda-parametrar"><span class="header-section-number">5.2.3</span> t-test för enskilda parametrar</h3>
+<p>Att använda ANOVA-tabellen för att undersöka enskilda parametrar är inte lämpligt då det kräver att variabeln anges sist i modelleringen för att det partiella F-testet undersöker just den enskilda variabeln i relation till övriga modellen. Istället bör vi använda t-test för respektive parameter.</p>
+<p>Formellt undersöks hypoteserna: <span class="math display">\[
+\begin{aligned}
+  H_0&amp;: \beta_j = 0\\
+  H_a&amp;: \beta_j \ne 0
+\end{aligned}
+\]</span> där <span class="math inline">\(j\)</span> är någon av lutningsparametrarna i en anpassad modell.</p>
+<p>Testvariabeln beräknas utifrån den skattade lutningsparametern och dess medelfel: <span class="math display">\[
+\begin{aligned}
+t_{test} = \frac{b_j - 0}{s_{b_j}}
+\end{aligned}
+\]</span></p>
+<p>Testvariabeln är t-fördelad givet <span class="math inline">\(H_0\)</span> med <span class="math inline">\(n-(k+1)\)</span> frihetsgrader.</p>
+<p>I R används t-test i koefficienttabellen som vi kan plocka ut ur <code>summary()</code>-objektet genom <code>coef()</code>.</p>
+<div class="cell" data-tbl-cap-location="top">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(simpleModel) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">format =</span> <span class="st">"markdown"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Parameter"</span>, <span class="st">"Estimate"</span>, <span class="st">"Std. Error"</span>, <span class="st">"t value"</span>, <span class="st">"Pr(&gt;t)"</span>), </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">parse =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-coef-example" class="cell quarto-float anchored" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coef-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;5.6: Koefficienttabell för en modell med tillhörande t-test för enskilda parametrar
+</figcaption>
+<div aria-describedby="tbl-coef-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Parameter </th>
+   <th style="text-align:right;"> Estimate </th>
+   <th style="text-align:right;"> Std. Error </th>
+   <th style="text-align:right;"> t value </th>
+   <th style="text-align:right;"> Pr(&gt;t) </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 15.0166 </td>
+   <td style="text-align:right;"> 4.3742 </td>
+   <td style="text-align:right;"> 3.4330 </td>
+   <td style="text-align:right;"> 0.0007 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> speciesChinstrap </td>
+   <td style="text-align:right;"> 9.5655 </td>
+   <td style="text-align:right;"> 0.3497 </td>
+   <td style="text-align:right;"> 27.3508 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> speciesGentoo </td>
+   <td style="text-align:right;"> 6.4044 </td>
+   <td style="text-align:right;"> 1.0304 </td>
+   <td style="text-align:right;"> 6.2154 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> bill_depth_mm </td>
+   <td style="text-align:right;"> 0.3130 </td>
+   <td style="text-align:right;"> 0.1541 </td>
+   <td style="text-align:right;"> 2.0316 </td>
+   <td style="text-align:right;"> 0.0430 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> flipper_length_mm </td>
+   <td style="text-align:right;"> 0.0686 </td>
+   <td style="text-align:right;"> 0.0232 </td>
+   <td style="text-align:right;"> 2.9608 </td>
+   <td style="text-align:right;"> 0.0033 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> body_mass_g </td>
+   <td style="text-align:right;"> 0.0011 </td>
+   <td style="text-align:right;"> 0.0004 </td>
+   <td style="text-align:right;"> 2.5617 </td>
+   <td style="text-align:right;"> 0.0109 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> sexmale </td>
+   <td style="text-align:right;"> 2.0297 </td>
+   <td style="text-align:right;"> 0.3892 </td>
+   <td style="text-align:right;"> 5.2153 </td>
+   <td style="text-align:right;"> 0.0000 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>I <a href="#tbl-coef-example" class="quarto-xref">Tabell&nbsp;<span>5.6</span></a> ser vi att p-värdet för alla t-testen är väldigt låga (nära 0). För varje enskilda hypotesprövning kan vi på fem procents signifikans förkasta <span class="math inline">\(H_0\)</span> vilket betyder att variabeln har en signifikant påverkan på responsvariabeln.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Om en parameter inte anses signifikant är det en motivering till att variabeln kan plockas bort, vi anpassar en reducerad modell och en ny analys påbörjas. Om en variabel plockas bort kommer de övriga parameterskattningarna förändras och tolkningar samt inferens behöver uppdateras.</p>
+</div>
+</div>
+</section>
+<section id="konfidensintervall-för-beta" class="level3" data-number="5.2.4">
+<h3 data-number="5.2.4" class="anchored" data-anchor-id="konfidensintervall-för-beta"><span class="header-section-number">5.2.4</span> Konfidensintervall för <span class="math inline">\(\beta\)</span></h3>
+<p>Slutsatsen vi kan dra från dessa hypotesprövningar är att modellen innehåller variabler som alla har ett signifikant samband med responsvariabeln. Om vi vill tolka magnituden av effekten gentemot populationen, inte bara om sambandet är signifikant, behöver vi beräkna intervallskattningar.</p>
+<p><span class="math display">\[
+\begin{aligned}
+b_j \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_j}
+\end{aligned}
+\]</span></p>
+</section>
+</section>
+<section id="enkla-utvärderingsmått" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="enkla-utvärderingsmått"><span class="header-section-number">5.3</span> Enkla utvärderingsmått</h2>
+<p>Bara för att en modell är lämplig, uppfyller modellantaganden och innehåller signifikanta parametrar, betyder det inte att modellen är den bästa som kan skapas eller överhuvudtaget bra. Med hjälp av olika utvärderingsmått kan vi få en överblick på hur bra modellen är.</p>
+<p><em>Förklaringsgraden</em> (<span class="math inline">\(R^2\)</span>) beskriver hur stor andel av den totala variationen som förklaras av modellens förklarande variabler. Med denna beskrivning kan vi beräkna <span class="math inline">\(R^2\)</span> som: <span class="math display">\[
+\begin{aligned}
+  R^2 = \frac{SSR}{SST} = 1 - \frac{SSE}{SST}
+\end{aligned}
+\]</span> På grund av att SSR alltid blir större ju fler variabler som en modell innehåller, behöver vi justera måttet för att kunna jämföra modeller av olika storlekar. Istället bör vi titta på den justerade förklaringsgraden (<span class="math inline">\(R^2_{a}\)</span>) för att se vilken modell som är bäst. En förbättrad <span class="math inline">\(R^2_{a}\)</span> betyder att modellen har tagit bort onödig komplexitet.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  R^2_a = 1 - \frac{SSE / (n - (k+1))}{SST / (n - 1)}
+\end{aligned}
+\]</span></p>
+<!-- ## Övningsuppgifter {#sec-exercise-evaluate} -->
+<!-- Använd återigen `marketing` från @sec-exercise-explore. -->
+<!-- 1. Undersök med ett -->
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Frihetsgrader beskriver egentligen hur många bitar oberoende information som finns för en beräkning. Tänk tillbaka på beräkningen av en stickprovsstandardavvikelse vars frihetsgrader är <span class="math inline">\(n - 1\)</span>, antalet observationer - 1, för att vi skattar medelvärdet när vi beräknar standardavvikelsen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Om vi hade tagit ett annat beslut (att inte förkasta nollhypotesen) hade det inte varit relevant att fortsätta med analysen, eller åtminstone att fokusera resterande analys på att undersöka varför en multipel linjär regressionsmodell som vi förväntar har ett samband utifrån parvisa spridningsdiagram inte visar på det tillsammans.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Kopierat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Kopierat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../01-regression/03-model-assessment.html" class="pagination-link" aria-label="Modellutvärdering">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../01-regression/05-using-the-model.html" class="pagination-link" aria-label="Använda modellen">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Använda modellen</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
