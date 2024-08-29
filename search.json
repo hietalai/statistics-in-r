@@ -161,8 +161,8 @@
     ]
   },
   {
-    "objectID": "01-regression/02-model-structure.html#sec-exercise-fit",
-    "href": "01-regression/02-model-structure.html#sec-exercise-fit",
+    "objectID": "01-regression/02-model-structure.html#sec-exercise-model-fit",
+    "href": "01-regression/02-model-structure.html#sec-exercise-model-fit",
     "title": "3  Modellanpassning",
     "section": "3.4 Övningsuppgifter",
     "text": "3.4 Övningsuppgifter\nVi kommer återigen använda datamaterialet marketing.\n\nAnpassa en linjär regressionsmodell med lm() som inkluderar de variabler som du valt ut i Avsnitt 2.4.\nSammanställ en tabell över de skattade koefficienterna och tolka respektive.\nSkapa designmatrisen och en matris för responsvariabeln och skatta lutningsparametrarna med hjälp av dessa. Kontrollera att du får samma värden som i tabellen från lm().\nAnvänd matrisberäkningar för att beräkna medelfelet för respektive parameter.",
@@ -198,7 +198,7 @@
     "href": "01-regression/03-model-assessment.html#sec-exercise-evaluate",
     "title": "4  Modellutvärdering",
     "section": "4.2 Övningsuppgifter",
-    "text": "4.2 Övningsuppgifter\nAnvänd återigen marketing från Avsnitt 2.4.\n\nGenomför en enkel residualanalys med hjälp av residualdiagrammen. Kontrollera respektive antagande och bedöm ifall modellen uppfyller modellantaganden.",
+    "text": "4.2 Övningsuppgifter\nAnvänd återigen marketing från Avsnitt 2.4.\n\nSkatta residualerna genom att beräkna skillnaden mellan de observerade och anpassade värdena på responsvariabeln.\nSkapa ett histogram och ett kvantildiagram (QQ diagram) över residualerna och kontrollera antagandet om normalfördelning.\nSkapa ett spridningsdiagram med residualerna på y-axeln och de anpassade värdena på x-axeln och kontroller antagandet om lika varians.\nSammanfatta dina slutatser och bedöm om modellen som anpassats i Avsnitt 3.4 uppfyller modellantaganden.",
     "crumbs": [
       "Regressionsanalys",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modellutvärdering</span>"
