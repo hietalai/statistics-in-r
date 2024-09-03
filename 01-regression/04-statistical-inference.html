@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../01-regression/05-using-the-model.html" rel="next">
+<link href="../01-regression/05-simultaneous-inference.html" rel="next">
 <link href="../01-regression/03-model-assessment.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -224,8 +224,8 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../01-regression/05-using-the-model.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Använda modellen</span></span></a>
+  <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -257,6 +257,11 @@ window.Quarto = {
   <li><a href="#konfidensintervall-för-beta" id="toc-konfidensintervall-för-beta" class="nav-link" data-scroll-target="#konfidensintervall-för-beta"><span class="header-section-number">5.2.4</span> Konfidensintervall för <span class="math inline">\(\beta\)</span></a></li>
   </ul></li>
   <li><a href="#enkla-utvärderingsmått" id="toc-enkla-utvärderingsmått" class="nav-link" data-scroll-target="#enkla-utvärderingsmått"><span class="header-section-number">5.3</span> Enkla utvärderingsmått</a></li>
+  <li><a href="#sec-predictions" id="toc-sec-predictions" class="nav-link" data-scroll-target="#sec-predictions"><span class="header-section-number">5.4</span> Prediktioner</a>
+  <ul class="collapse">
+  <li><a href="#medelvärdet-av-y-för-givna-mathbfx" id="toc-medelvärdet-av-y-för-givna-mathbfx" class="nav-link" data-scroll-target="#medelvärdet-av-y-för-givna-mathbfx"><span class="header-section-number">5.4.1</span> Medelvärdet av Y för givna <span class="math inline">\(\mathbf{X}\)</span></a></li>
+  <li><a href="#enskild-prediktion-av-y-för-givna-mathbfx" id="toc-enskild-prediktion-av-y-för-givna-mathbfx" class="nav-link" data-scroll-target="#enskild-prediktion-av-y-för-givna-mathbfx"><span class="header-section-number">5.4.2</span> Enskild prediktion av Y för givna <span class="math inline">\(\mathbf{X}\)</span></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -285,6 +290,9 @@ window.Quarto = {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
+<div class="video-container">
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/tFJhALxNH-A" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</div>
 <p>När vi anser oss ha hittat en lämplig modell kan vi fokusera på att tolka modellens resultat avseende populationen. Inom regressionsmodellering kan vi genomföra flera olika typer av statistisk inferens; på hela modellen, på grupper av parametrar, eller på enskilda parametrar.</p>
 <p>Vi kan börja med ett <em>F-test</em> för hela modellen för att se ifall minst en parameter är signifikant, att modellen är värd att undersöka vidare, för att sedan genomföra enskilda <em>t-test</em> för respektive parameter och bedöma vilka förklarande variabler har en signifikant påverkan på responsvariabeln. Då kvalitativa variabler ofta består utav flera parametrar behöver dessa slås samman för att undersöka variabelns samband vilket vi kan göra med ett <em>partiellt F-test</em>.</p>
 <p>Innan vi går in på de olika testerna behöver vi presentera <em>ANOVA</em>-tabellen som används för att dela upp responsvariabelns variation i modellens olika komponenter; modellens förklarande variabler och feltermen.</p>
@@ -980,11 +988,42 @@ b_j \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_j}
   R^2_a = 1 - \frac{SSE / (n - (k+1))}{SST / (n - 1)}
 \end{aligned}
 \]</span></p>
+</section>
+<section id="sec-predictions" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="sec-predictions"><span class="header-section-number">5.4</span> Prediktioner</h2>
+<p>Prediktioner innebär att vi skattar värdet på Y givet observerade värden på X med hjälp av den anpassade regressionslinjen. Dessa prediktioner kommer falla längsmed linjen vilket ytterligare motiverar att modellen behöver vara lämplig och bra. Vi vill inte att en prediktion i ett område är mer träffsäker än en prediktion i en annan eller att regressionslinjen generellt är en dålig representation av responsvariabeln.</p>
+<p>Modellen utgår från en specifik <em>definitionsmängd</em>, de observerade värdena på <span class="math inline">\(\mathbf{X}\)</span>, och det är även inom denna mängd som prediktioner bör göras. Det finns vissa tillfällen, till exempel inom tidsserieanalys, där prediktioner görs utanför definitionsmängden men där finns ett beroende i tiden som möjliggör dessa <em>extrapoleringar</em>. Inom “vanlig” regression bör vi undvika att extrapolera regressionslinjen utanför definitionsmängden.</p>
+<section id="medelvärdet-av-y-för-givna-mathbfx" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="medelvärdet-av-y-för-givna-mathbfx"><span class="header-section-number">5.4.1</span> Medelvärdet av Y för givna <span class="math inline">\(\mathbf{X}\)</span></h3>
+<p>Om vi är intresserad av det genomsnittliga värdet på responsvariabeln för alla nya observationer med givna värden på <span class="math inline">\(\mathbf{X}\)</span> kan vi skatta <span class="math inline">\(\mu_{Y|{\mathbf{X}_0}}\)</span> där <span class="math inline">\(\mathbf{X}_0\)</span> innehåller värden för den nya observationen.</p>
+<p><span class="math display">\[
+\mathbf{X}_0 = \begin{bmatrix}
+    1 \\
+    X_{1,0}\\
+    \vdots\\
+    X_{k,0}
+    \end{bmatrix}
+\]</span> Vi utgår från den anpassade regressionsmodellen och beräknar en punktprediktion av responsvariabeln enligt: <span class="math display">\[
+\hat{Y}_{\mathbf{X}_0} = \mathbf{X}_0'\boldsymbol{\hat{\beta}}
+\]</span></p>
+<p>Medelfelet för skattningen tar hänsyn till:</p>
+<p><span class="math display">\[
+s^2_{\hat{Y}_{\mathbf{X}_0}} = \mathbf{X}_0'\mathbf{s}^2_{\boldsymbol{\hat{\beta}}}\mathbf{X}_0
+\]</span></p>
+<p>Intervallskattningen för ett genomsnitt blir ett konfidensintervall.</p>
+</section>
+<section id="enskild-prediktion-av-y-för-givna-mathbfx" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="enskild-prediktion-av-y-för-givna-mathbfx"><span class="header-section-number">5.4.2</span> Enskild prediktion av Y för givna <span class="math inline">\(\mathbf{X}\)</span></h3>
+<p>Om vi istället är intresserad av ett enskilt värde på Y med givna värden på <span class="math inline">\(\mathbf{X}\)</span>, kan vi skatta <span class="math inline">\(Y_{\mathbf{X}_0}\)</span>.</p>
+<p><span class="math display">\[
+s^2_{pred} = MSE + s^2_{\hat{Y}_{\mathbf{X}_0}}
+\]</span> Intervallskattningen för ett värde av Y blir ett prediktionsintervall.</p>
 <!-- ## Övningsuppgifter {#sec-exercise-evaluate} -->
 <!-- Använd återigen `marketing` från @sec-exercise-explore. -->
 <!-- 1. Undersök med ett -->
 
 
+</section>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
@@ -1411,8 +1450,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../01-regression/05-using-the-model.html" class="pagination-link" aria-label="Använda modellen">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Använda modellen</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../01-regression/05-simultaneous-inference.html" class="pagination-link" aria-label="Simultan inferens">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
