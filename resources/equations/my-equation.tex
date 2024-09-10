@@ -18,8 +18,12 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat = 1.17}
+\usepgfplotslibrary{groupplots}
 \usetikzlibrary{3d, graphs, shapes.geometric,decorations, arrows, positioning, arrows.meta, calc}
 \color{white}
+
+\definecolor{steelblue}{RGB}{70,130,180}
+\definecolor{firered}{rgb}{1.0, 0.4, 0.36}
 
 \geometry{
     a3paper,
@@ -32,117 +36,137 @@
 \thispagestyle{empty}  
 \begin{document}
 
+% <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
 
-% \begin{displaymath}
-%     E \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)
-% \end{displaymath}
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \ldots & X_{1k}\\1 & X_{21} & X_{22} & \ldots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \ldots & X_{nk}\end{bmatrix}
+}
 
-% \begin{tikzpicture}[
-%     node distance=1.5cm, % Distance between nodes
-%     every node/.style={draw, rectangle}, % Default node style
-%     dashednode/.style={draw, rectangle, dashed} % Dashed rectangle style
-% ]
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
 
 
-% % Nodes
-% \node (Z) [dashednode] {OKÄND};
-% \node (X) [below left=of Z] {Filmer};
-% \node (Y) [below right=of Z] {Drunkningsolyckor};
 
-% % Edges
-% \draw (Z) -- (Y) [-{Stealth[length=3mm, width=2mm]}];
-% \draw (Z) -- (X) [-{Stealth[length=3mm, width=2mm]}];
-% \draw [-{Stealth[length=3mm, width=2mm]}] (X) -- (Y);
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}{l|r|r|r|r}
+%         \hline
+%           & Estimate & Std. Error & t value & $Pr(>|t|)$\\
+%         \hline
+%         (Intercept) & 15.0166 & 4.3742 & 3.4330 & 0.0007\\
+%         \hline
+%         speciesChinstrap & 9.5655 & 0.3497 & 27.3508 & 0.0000\\
+%         \hline
+%         speciesGentoo & 6.4044 & 1.0304 & 6.2154 & 0.0000\\
+%         \hline
+%         bill\_depth\_mm & 0.3130 & 0.1541 & 2.0316 & 0.0430\\
+%         \hline
+%         flipper\_length\_mm & 0.0686 & 0.0232 & 2.9608 & 0.0033\\
+%         \hline
+%         body\_mass\_g & 0.0011 & 0.0004 & 2.5617 & 0.0109\\
+%         \hline
+%         sexmale & 2.0297 & 0.3892 & 5.2153 & 0.0000\\
+%         \hline
+%         \end{tabular}
+%     \end{table}
 
-% % Aligning Filmer and Dödsfall on the same level
-% \coordinate (Midpoint) at ($(X)!0.5!(Y)$);
-% \draw [draw=none] (Midpoint) -- ++(0,-0.01) coordinate (align1);
-% \draw [draw=none] (Midpoint) -- ++(0,0.01) coordinate (align2);
-% \path [draw=none] (align1) edge[draw=none] (align2);
+\begin{displaymath}
+    e_i = Y_i - \hat{Y}_i
+\end{displaymath}
 
-% \end{tikzpicture}
+% \begin{align*}
+%     b_j \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_j}
+% \end{align*}
 
-\begin{tikzpicture}
-    % Scatter plot settings
-    \begin{axis}[
-        view={50}{30}, % Adjusted viewpoint slightly to the right
-        domain=0:10, 
-        samples=100,
-        xlabel={$x$},
-        ylabel={$y$},
-        zlabel={$f(y)$},
-        xtick align = outside,
-        xmajorticks = false,
-        ymajorticks = false,
-        ytick align = outside,
-        zmajorgrids = false,
-        ztick = \empty,
-        axis on top = false,
-        grid=major,
-        grid style = {dashed, gray!30},
-        width=12cm, 
-        height=8cm,
-        scatter/classes={
-            a={mark=x,draw=white,fill=white}
-        },
-        colormap/viridis,
-        zmin = 0,
-        zmax = 5
-    ]
+% \begin{tikzpicture}
+%     % Scatter plot settings
+%     \begin{axis}[
+%         view={50}{30}, % Adjusted viewpoint slightly to the right
+%         domain=0:10, 
+%         samples=100,
+%         xlabel={$x$},
+%         ylabel={$y$},
+%         zlabel={$f(y)$},
+%         xtick align = outside,
+%         xmajorticks = false,
+%         ymajorticks = false,
+%         ytick align = outside,
+%         zmajorgrids = false,
+%         ztick = \empty,
+%         axis on top = false,
+%         grid=major,
+%         grid style = {dashed, gray!30},
+%         width=12cm, 
+%         height=8cm,
+%         scatter/classes={
+%             a={mark=x,draw=white,fill=white}
+%         },
+%         colormap/viridis,
+%         zmin = 0,
+%         zmax = 5
+%     ]
 
-    % Scatter points (random observations along the line y = 4 + 1.5x)
-    \addplot3[only marks, scatter, scatter src=explicit symbolic] 
-        coordinates {
-            (0, 4, 0)   [a]
-            (1, 5.2, 0) [a]
-            (2, 7.3, 0) [a]
-            (3, 8.7, 0) [a]
-            (4, 10.6, 0) [a]
-            (5, 11.5, 0) [a]
-            (6, 13.8, 0) [a]
-            (7, 14.4, 0) [a]
-            (8, 16.2, 0) [a]
-            (9, 17.9, 0) [a]
-            (10, 19.7, 0) [a]
-            (1.5, 6.1, 0) [a]
-            (2.5, 7.6, 0) [a]
-            (3.5, 9.5, 0) [a]
-            (4.5, 11.3, 0) [a]
-            (5.5, 12.6, 0) [a]
-            (6.5, 14.9, 0) [a]
-            (7.5, 15.7, 0) [a]
-            (8.5, 17.3, 0) [a]
-            (9.5, 18.6, 0) [a]
-        };
+%     % Scatter points (random observations along the line y = 4 + 1.5x)
+%     \addplot3[only marks, scatter, scatter src=explicit symbolic] 
+%         coordinates {
+%             (0, 4, 0)   [a]
+%             (1, 5.2, 0) [a]
+%             (2, 7.3, 0) [a]
+%             (3, 8.7, 0) [a]
+%             (4, 10.6, 0) [a]
+%             (5, 11.5, 0) [a]
+%             (6, 13.8, 0) [a]
+%             (7, 14.4, 0) [a]
+%             (8, 16.2, 0) [a]
+%             (9, 17.9, 0) [a]
+%             (10, 19.7, 0) [a]
+%             (1.5, 6.1, 0) [a]
+%             (2.5, 7.6, 0) [a]
+%             (3.5, 9.5, 0) [a]
+%             (4.5, 11.3, 0) [a]
+%             (5.5, 12.6, 0) [a]
+%             (6.5, 14.9, 0) [a]
+%             (7.5, 15.7, 0) [a]
+%             (8.5, 17.3, 0) [a]
+%             (9.5, 18.6, 0) [a]
+%         };
 
-    % Normal distribution at x = 2
-    \addplot3[fill= {rgb,255:red,255;green,102;blue,92}, fill opacity = 0.3, domain=2:12,samples=40] 
-        ({2}, {y}, {exp(-0.5*((y-7)^2))});
-    \addplot3[thick, color={rgb,255:red,217;green,35;blue,15}, domain=7-4:7+4, samples=40] 
-        ({2}, {y}, {exp(-0.5*((y-7)^2))});
+%     % Normal distribution at x = 2
+%     \addplot3[fill= {rgb,255:red,255;green,102;blue,92}, fill opacity = 0.3, domain=2:12,samples=40] 
+%         ({2}, {y}, {exp(-0.5*((y-7)^2))});
+%     \addplot3[thick, color={rgb,255:red,217;green,35;blue,15}, domain=7-4:7+4, samples=40] 
+%         ({2}, {y}, {exp(-0.5*((y-7)^2))});
 
-    % Normal distribution at x = 4
-    \addplot3[fill= {rgb,255:red,255;green,102;blue,92}, fill opacity = 0.3, domain=4:14,samples=40] 
-        ({4}, {y}, {exp(-0.5*((y-10)^2))});
-    \addplot3[thick, color={rgb,255:red,217;green,35;blue,15}, domain=10-4:10+4, samples=40] 
-        ({4}, {y}, {exp(-0.5*((y-10)^2))});
+%     % Normal distribution at x = 4
+%     \addplot3[fill= {rgb,255:red,255;green,102;blue,92}, fill opacity = 0.3, domain=4:14,samples=40] 
+%         ({4}, {y}, {exp(-0.5*((y-10)^2))});
+%     \addplot3[thick, color={rgb,255:red,217;green,35;blue,15}, domain=10-4:10+4, samples=40] 
+%         ({4}, {y}, {exp(-0.5*((y-10)^2))});
 
-    % Normal distribution at x = 6
-    \addplot3[fill= {rgb,255:red,255;green,102;blue,92}, fill opacity = 0.3, domain=7:17,samples=40] 
-        ({6}, {y}, {exp(-0.5*((y-13)^2))});
-    \addplot3[thick, color={rgb,255:red,217;green,35;blue,15}, domain=13-4:13+4, samples=40] 
-        ({6}, {y}, {exp(-0.5*((y-13)^2))});
+%     % Normal distribution at x = 6
+%     \addplot3[fill= {rgb,255:red,255;green,102;blue,92}, fill opacity = 0.3, domain=7:17,samples=40] 
+%         ({6}, {y}, {exp(-0.5*((y-13)^2))});
+%     \addplot3[thick, color={rgb,255:red,217;green,35;blue,15}, domain=13-4:13+4, samples=40] 
+%         ({6}, {y}, {exp(-0.5*((y-13)^2))});
     
-        % Normal distribution at x = 8
-    \addplot3[fill= {rgb,255:red,255;green,102;blue,92}, fill opacity = 0.3, domain=10:20,samples=40] 
-        ({8}, {y}, {exp(-0.5*((y-16)^2))});
-    \addplot3[thick, color={rgb,255:red,217;green,35;blue,15}, domain=16-4:16+4, samples=40] 
-        ({8}, {y}, {exp(-0.5*((y-16)^2))});
+%         % Normal distribution at x = 8
+%     \addplot3[fill= {rgb,255:red,255;green,102;blue,92}, fill opacity = 0.3, domain=10:20,samples=40] 
+%         ({8}, {y}, {exp(-0.5*((y-16)^2))});
+%     \addplot3[thick, color={rgb,255:red,217;green,35;blue,15}, domain=16-4:16+4, samples=40] 
+%         ({8}, {y}, {exp(-0.5*((y-16)^2))});
     
 
 
-    \end{axis}
+%     \end{axis}
     
-    \end{tikzpicture}
+%     \end{tikzpicture}
+
 
 \end{document}

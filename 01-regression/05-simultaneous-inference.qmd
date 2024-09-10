@@ -1,0 +1,238 @@
+---
+title: "Simultan inferens"
+editor_options: 
+  chunk_output_type: console
+---
+<!-- New commands for matrices in regression -->
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
+}
+
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
+
+ <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
+
+<!-- CONTENT -->
+När en modell har undersökts med hjälp av residualanalys och statistisk inferens och vi kommit fram till att den är en lämplig och bra förenkling av verkligheten, kan vi börja använda den för att dra lärdomar om sambandet och prediktera nya observationer. Vi har i @sec-stat-inference redan fått några lärdomar om hur sambandet mellan vissa variabler ser ut men om vi vill tolka flera parametrar från modellen samtidigt bör vi tillämpa någon form av *simultan inferens*. En utav regressionsmodellers huvudsakliga användningsområden är att *prediktera* nya observationer. Till exempel kan responsvariabeln vara väldigt kostsam att mäta jämfört med de förklarande variablerna. Då kan en lämplig och bra regressionsmodellen minska kostnaderna genom att intervallskatta värdet på responsvariabeln utifrån givna värden på de förklarande variablerna. Prediktioner kan också användas för beslutsunderlag, till exempel kan en regressionsmodell ge information om förväntade inkomster givet en viss reklambudget.
+
+## Simultan inferens
+När en modell innehåller flera förklarande variabler, alla med minst en tillhörande lutningsparameter, kommer vi genomföra flera inferensberäkningar om vi vill dra slutsatser om flera parametrar eller intervallskatta prediktioner för flera nya observationer. Varje hypotesprövning eller intervallskattning som beräknas utgår från att vi alltid har en risk att fatta fel beslut, vilket innebär att denna risk inflateras ju fler parametrar eller värden som undersöks med enskilda beräkningar. Typ I felet (signifikansnivån) beskriver risken att förkasta en sann $H_0$.
+
+Den satiriska vetenskapliga serietecknaren [xkcd](https://xkcd.com) har publicerat en serie som berör signifikansen av hypotesprövningar. 
+
+::: {#fig-jelly-bean}
+```{r}
+#| echo: false
+#| out-width: 600px
+knitr::include_graphics("https://imgs.xkcd.com/comics/significant.png")
+```
+[xkcd](https://xkcd.com/882), [CC BY-NC 2.5](https://creativecommons.org/licenses/by-nc/2.5/)
+:::
+
+En grupp forskare, som hellre vill spela Minecraft,  har fått i uppdrag att undersöka effekten av Jelly Beans på förekomsten av acne. Forskarna undersöker 20 olika färger av Jelly Beans med en signifikansnivå på fem procent. En utav färgerna visade sig ha en signifikant påverkan på förekomsten av acne och som vi ser i nyhetsartikeln allra sist i serien blir denna upptäckt innehållet på första sidan. 
+
+Vad är det som faktiskt har hänt här och är det korrekt att annonsera ut detta för världen? Vi kan skapa ett liknande simulerat exempel genom att genomföra 20 stycken urval från en population där vi vet det sanna medelvärdet. 
+
+### Simulering
+
+```{r}
+## Anger ett seed
+set.seed(12345)
+
+## Simulerar ett datamaterial från en given population med sanna värden
+data <- 
+  replicate(
+    n = 20,
+    expr = rnorm(n = 30, mean = 0, sd = 1)
+  )
+
+```
+
+Objektet `data` innehåller nu 20 stycken kolumner med 30 observationer i varje och varje kolumn är ett nytt urval (motsvarande en undersökning av en färg Jelly Bean). Alla dessa urval kommer från en population där $\mu = 0$ och det skulle vi kunna undersöka genom ett enkelt t-test för ett medelvärde. Formellt undersöks hypoteserna:
+
+$$
+\begin{aligned}
+  H_0 &: \mu = 0\\
+  H_A &: \mu \ne 0
+\end{aligned}
+$$
+
+där testvariabeln är
+$$
+t_{test} = \frac{\bar{x} - 0}{ \frac{s}{\sqrt{n}}}
+$$
+
+```{r}
+
+## Testvariabeln för första urvalet
+tTest <- (mean(data[,1]) - 0) / (sd(data[,1]) / sqrt(nrow(data))) 
+
+```
+
+p-värdet för testet kan beräknas utifrån t-fördelningen med $n - 1$ frihetsgrader. Vi måste dock ta hänsyn till att vi undersöker en dubbelsidig mothypotes vilket innebär att p-värdet är både större än den positiva testvariabeln och mindre än den negativa testvariabeln. Med hjälp av symmetrin i t-fördelningen kan vi räkna ut detta genom att beräkna absolutbeloppet av testvariabeln och multiplicera ytan större än detta värde med $2$.
+
+```{r}
+
+## Beräkning av p-värdet
+pValue <- 2 * pt(q = abs(tTest), df = nrow(data) - 1, lower.tail = FALSE) 
+
+```
+
+Vi kan också använda inbyggda funktionen `t.test()` för att få fram samma resultat, där standardargumentet är att vi undersöker om populationsmedelvärdet är skilt från 0.
+
+```{r}
+#| results: markup
+
+t.test(data[,1])
+
+```
+
+Vi kan replikera detta test och spara p-värdet för alla 20 olika utval med hjälp av `apply()`. Funktionen genomför en angiven funktion för varje element i ett objekt, i detta fall anger vi att den ska genomföra beräkningen för varje kolumn (`MARGIN = 2`) i objektet `data`.
+
+```{r}
+
+## Kör samma funktion (t.test) för varje kolumn (MARGIN = 2) av datamaterialet
+pValues <- 
+  apply(
+    X = data,
+    MARGIN = 2,
+    FUN = function(x){
+      t.test(x)$p.value
+    }
+  )
+
+```
+
+```{r}
+#| echo: false
+#| tbl-cap-location: top
+#| tbl-cap: p-värden för t-testet i respektive urval
+#| label: tbl-family-confidence
+
+tibble(`p-värde` = pValues) %>% 
+  kable(digits = 3, caption.placement = "top") %>% 
+  kable_styling("striped", full_width = FALSE) %>% 
+  row_spec(3, bold = TRUE)
+
+```
+
+I @tbl-family-confidence är det endast ett test vars tillhörande p-värde är mindre än $\alpha = 0.05$ (urval 3), motsvarande den gröna Jelly Bean. Eftersom vi skapat dessa urval från en sann fördelning, vet vi att populationen har medelvärde 0 vilket innebär att vi gör ett fel av typ I, förkastar en sann $H_0$. Med en signifikansnivå på 5 procent räknar vi att i 1 av 20 fall (5%) så fattar vi fel beslut utav ren slump. Desto fler tester som genomförs desto större risk att minst en av dessa tester kommer generera ett typ I-fel och att tolka ett enskilt test med 5 procents signifikans är missvisande. 
+
+Under antagandet att de olika urvalen är oberoende av varandra kan vi räkna ut den slutgiltiga risken för typ-I fel i minst en av testerna med hjälp av multiplikationssatsen för oberoende händelser:
+
+$$
+\begin{aligned}
+1 - (0.95 \cdot 0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 &\cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95 \cdot  0.95)\\
+&1 - (0.95^{20})\\
+&`r 1 - 0.95^(20)`
+\end{aligned}
+$$
+Risken att minst en utav 20 tester har förkastat en sann $H_0$ är istället ca 64% istället för 5%. 
+
+### Familjekonfidens
+När vi genomför flera tester kan vi istället justera konfidensgraden för varje individuella test så att vi får en sammanfattande konfidensnivå som vi också använder i tolkningen. Den enklaste varianten är att beräkna Bonferronis familjekonfidens där konfidensgraden beräknas enligt:
+$$
+\begin{aligned}
+  1 - \alpha/2 \Rightarrow 1 - \alpha/(2 \cdot g)
+\end{aligned}
+$$
+där $g$ är antalet tester som genomförs. 
+
+```{r}
+#| tbl-cap: Beräknad testvariabel för respektive urval
+#| tbl-cap-location: top
+#| label: tbl-family-statistic
+
+# Plockar ur testvariabeln
+statistic <- 
+  apply(
+    X = data,
+    MARGIN = 2,
+    FUN = function(x){
+      t.test(x)$statistic
+    }
+  )
+
+tibble(`Testvariabel` = statistic) %>% 
+  kable(digits = 3, caption.placement = "top") %>% 
+  kable_styling("striped", full_width = FALSE) 
+
+```
+
+Det justerade kritiska tabellvärdet är $\pm t_{30 - 1, 1 - 0.05 / (2 \cdot 20)} = \pm$ `r qt(p = 1 - 0.05/(2*20), df = nrow(data) - 1) %>% round(3)` istället för $\pm t_{30 - 1, 1 - 0.05 / (2)} = \pm$ `r qt(p = 1 - 0.05/(2), df = nrow(data) - 1) %>% round(3)` vilket innebär att ingen testvariabel i @tbl-family-statistic ligger extremare än det justerade. Med en simultan signifikansnivå på fem procent förkastas ingen av testernas nollhypoteser.
+
+### Familjekonfidens för lutningsparametrar
+Med hjälp av Bonferroni:s familjekonfidens kan vi justera formlerna för intervallskattning av lutningsparametrarna. En generell formel för en intervallskattning kan skrivas såsom:
+$$
+\text{punktskattning} \pm \text{tabellvärde} \cdot \text{medelfel}
+$$ {#eq-interval-base}
+
+I fallet för $\beta_1$ blir formeln:
+$$
+    b_1 \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_1}
+$$
+Bonferroni:s familjekonfidens leder till att formeln justeras enligt:
+$$
+    b_1 \pm t_{n - (k+1); 1- \alpha/(2\cdot g)} \cdot s_{b_1}
+$$
+, där $g$ är antalet lutningsparametrar som ska undersökas samtidigt. 
+
+$t_{n-(k+1); 1 - \alpha/(2\cdot g)}$ brukar också anges som $B$. När $g$ är stort, kommer värden från $t$-fördelningen också vara stora vilket i slutändan kan leda till intervall som inte ger någon vettig information. Därför följer att Bonferronis metod är lämpligast att användas när antalet intervall eller tester är få. 
+
+## Intervallskattning av flera prediktioner
+Om vi är intresserade av att prediktera flera nya observationer kommer vi behöva använda simultan inferens för att samtidigt dra slutsatser om de alla.
+
+### Skattning av flera konfidensintervall
+Om vi vill beräkna konfidensband för hela regressionslinjen, i.e. $\mu_Y$ för alla punkter av $\mathbf{X}$, kan *Working-Hotelling*:s metod skapa denna region. Strukturen från formel @eq-interval-base ger då följande formel:
+
+$$
+\begin{aligned}
+  \hat{Y}_{\mathbf{X}_0} \pm W \cdot s_{\hat{Y}_{\mathbf{X}_0}}
+\end{aligned}
+$$ {#eq-interval-working-hotelling}
+
+där $W^2 = 2\cdot F_{k+1; n-(k+1); 1-\alpha}$.
+
+Denna beräkning tar redan hänsyn till alla möjliga punkter av $\mathbf{X}$ som regressionslinjen täcker, vilket innebär att samma formler kan användas för enstaka nya observationer, $\mathbf{X}_{\mathbf{X}_0}$. 
+
+Även för prediktioner av responsvariabeln kan Bonferroni användas enligt:
+$$
+  \hat{Y}_{\mathbf{X}_0} \pm B \cdot s_{\hat{Y}_{\mathbf{X}_0}}
+$$ {#eq-interval-bonf-y}
+där $B = t_{n-(k+1); 1 - \alpha/(2\cdot g)}$
+
+@eq-interval-working-hotelling ger generellt smalare intervall än @eq-interval-bonf-y då $W$ är samma värde oavsett hur många intervall som skattas medan $B$ ökar med antalet $g$. 
+
+### Skattning av flera prediktionsintervall
+För enstaka nya observationer beräknas istället prediktionsintervall vilket innebär att skattningens medelfel förändras. Metoder för att beräkna $g$ prediktionsintervall är *Scheffé* och *Bonferronis* metoder.
+
+Scheffés metod:
+\begin{align}
+   \hat{Y}_{\mathbf{X}_0} \pm S \cdot s_{pred}
+\end{align}
+där
+\begin{align*}
+    S &= g \cdot F_{g; n-k+1; 1 - \alpha}\\
+    s_{pred} &= \sqrt{MSE + s^2_{\hat{Y}_{\mathbf{X}_0}}}
+\end{align*}
+
+Bonferronis metod: 
+\begin{align}
+    \hat{Y}_{\mathbf{X}_0} \pm B \cdot s_{pred}
+\end{align}
+där
+\begin{align*}
+    B = t_{n-k+1; 1 - \alpha/(2\cdot g)}
+\end{align*}
+
+Båda dessa metoder kommer skapa bredare intervall i relation till antalet intervall som skattas eftersom $g$ inkluderas i båda beräkningarna. Detta skiljer sig från @eq-interval-working-hotelling där $W$ inte blir större desto fler intervall. 
+
+

@@ -1,0 +1,317 @@
+---
+title: "Komplexa samband"
+editor_options: 
+  chunk_output_type: console
+---
+<!-- New commands for matrices in regression -->
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
+}
+
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
+
+ <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
+
+<!-- CONTENT -->
+I det utforskande steget av en undersökning kan vi ibland identifiera mer komplexa typer av samband mellan en förklarande variabel och responsvariabeln. Exempelvis identifierade vi i @fig-width-length-annot grupper av punkter som visade ett positivt samband medan punktsvärmen överlag visade på ett negativt samband. Den linjära regressionsmodellen kan också med hjälp av vissa transformeringar modellera icke-linjära samband.
+
+## Interaktioner {#sec-interaction}
+Ibland kan en kombination av flera variabler förändra effekten som variablerna har enskilt med en responsvariabel. Till exempel kan temperaturens effekt på elkonsumtionen ([länk till datamaterialet](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/electricityconsumption.csv) ) i en bostad påverkas av förekomsten av bergvärme.
+
+```{r}
+#| include: false
+
+power <- read.csv2(file = "../resources/data/electricityconsumption.csv", dec = ".") %>% 
+  mutate(Bergsvärme = Bergsvärme %>% as_factor()) %>% 
+  dplyr::filter(!(Bergsvärme %>% is.na() | Dygnsmedel %>% is.na()))
+
+```
+
+
+Läs in materialet och filtera bort saknade värden med:
+```{r}
+#| eval: false
+#| code-fold: false
+
+power <- read.csv2(file = "electricityconsumption.csv", dec = ".") %>% 
+  dplyr::mutate(Bergsvärme = Bergsvärme %>% as_factor()) %>% 
+  dplyr::filter(!(Bergsvärme %>% is.na() | Dygnsmedel %>% is.na()))
+
+```
+
+```{r}
+#| fig-cap: Sambandet mellan temperatur och elkonsumtion uppdelat på förekomsten av bergsvärme
+#| fig-height: 3
+#| fig-width: 5 
+#| label: fig-interaction-electricity
+#| warning: false
+
+ggplot(power) + 
+  aes(x = Dygnsmedel, y = Energi_KWh, color = Bergsvärme) + 
+  geom_point() + 
+  theme_bw() + 
+  scale_color_manual(values = c("steelblue", "#d9230f"), 
+                     labels = c("Ej installerad", "Installerad")) +
+  labs(x = "Temperatur", y = "Elkonsumtion (kWh)")
+
+```
+
+@fig-interaction-electricity visar två olika samband mellan temperatur och elkonsumtion beroende på om observationen (tidpunkten) mätte sambandet när bergsvärme var installerad i bostaden eller ej. När bergsvärme finns verkar påverkan av temperatur vara mindre ($\beta = `r lm(Energi_KWh ~ Dygnsmedel, data = power %>% dplyr::filter(Bergsvärme == 1)) %>% coef(.) %>% .[2] %>% round(3)`$) än när bergsvärme saknas ($\beta = `r lm(Energi_KWh ~ Dygnsmedel, data = power %>% dplyr::filter(Bergsvärme == 0)) %>% coef(.) %>% .[2] %>% round(3)`$), förändringen i elkonsumtion för varje ökad grad av temperatur har förändrats. 
+
+För att modellen ska plocka upp variablernas synergi med varandra skapas en *interaktion* som en produkt av, i det enklaste fallet, de två variablerna och läggs till i modellen med en ytterligare tillhörande lutningsparameter. 
+
+### Interaktion mellan en kvalitativ och en kvantitativ variabel {#sec-interaction-qual-quant}
+En utav de enklare formerna av en interaktion är mellan en kvalitativ och en kvantitativ variabel, som vi såg ett exempel på i @fig-interaction-electricity. Om vi ser ett sådant fenomen i ett spridningsdiagram tyder det på att de två variablerna interagerar med varandra för att skapa olika lutningsparametrar.
+
+$$
+\begin{aligned}
+  Y_i = \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 \cdot \text{bergsvärme}_i + \beta_3 \cdot \text{temperatur}_i \cdot \text{bergsvärme}_i + E_i
+\end{aligned} 
+$$
+där $\text{bergsvärme}_i$ är en indikatorvariabel som indikerar 1 om bergsvärme förekommer och 0 annars. 
+
+Kodningen av indikatorvariabeln betyder att vi egentligen får två olika möjliga utfall av modellen, en när $\text{bergsvärme}_i = 1$ och en när $\text{bergsvärme}_i = 0$.
+
+$$
+\begin{aligned}
+  Y_{i|\text{bergsvärme} = 1} &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 \cdot 1 + \beta_3 \cdot \text{temperatur}_i \cdot 1 + E_i \\
+  &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 + \beta_3 \cdot \text{temperatur}_i + E\\
+  &= ( \beta_0 + \beta_2 ) + (\beta_1 + \beta_3) \cdot \text{temperatur}_i + E\\
+  \\
+  Y_{i|\text{bergsvärme} = 0} &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 \cdot 0 + \beta_3 \cdot \text{temperatur}_i \cdot 0 + E\\
+  &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + E
+\end{aligned}
+$$
+När $\text{bergsvärme}_i = 1$ skapas en enkel linjär modell med ett 'nytt' intercept $\beta_0 + \beta_2$ och en ny lutningsparameter $\beta_1 + \beta_3$. $\beta_2$ och $\beta_3$ är alltså den kategoriska variabelns påverkan på regressionslinjens intercept och lutning. Vi kan generellt säga att med flera kategorier (indikatorvariabler) skapas flera varianter av modellen med en referenslinje när alla indikatorer är 0, och en linje för varje indikator som blir 1 där interceptet och lutningen förändras jämfört med referenslinjen.
+
+För att skapa en interaktion i modellen med hjälp av R kan symbolen `*` användas:
+```{r}
+model <- lm(Energi_KWh ~ Dygnsmedel * Bergsvärme, data = power)
+
+summary(model) %>% 
+  coef() %>% 
+  round(3) %>% 
+  kable(caption = "Koefficienttabell från en modell med en interaktion",
+        col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+  kable_styling("striped")
+
+```
+
+Eftersom bergsvärme är en faktorvariabel hanterar R detta korrekt (se @sec-indicator-variable) och hade även gjort det om det fanns flera kategorier. I detta fall skapas en ny variabel mellan indikatorvariabeln och den numeriska då det endast fanns två kategorier (en indikatorvariabel).
+
+Vi kan tolka dessa skattningar som att om bostaden har bergsvärme installerad, förändras interceptet med den anställda jobbar på ett kontor, sänks förbrukningen vid 0 grader med ca 45 kWh och temperaturens påverkan på konsumtionen förändras med ca 2.2 kWh mindre per ökad grad^[Tänk på att temperatur har ett negativt samband som blir ett värde närmare 0 med interaktionen.] **jämfört med en bostad utan bergsvärme**. Vi får alltså två modeller:
+
+$$
+\begin{aligned}
+  \hat{Y}_{i|\text{bergsvärme} = 1} &= ( `r coef(model)[1] %>% round(3)` + `r coef(model)[3] %>% round(3)` ) + (`r coef(model)[2] %>% round(3)` + `r coef(model)[4] %>% round(3)`) \cdot \text{temperatur}_i \\
+  \\
+  \hat{Y}_{i|\text{bergsvärme} = 0} &= `r coef(model)[1] %>% round(3)` + `r coef(model)[2] %>% round(3)` \cdot \text{temperatur}_i
+\end{aligned}
+$$
+som vi kan visualisera i det tidigare diagrammet med:
+
+```{r}
+#| fig-cap: Spridningsdiagram med gruppvisa regressionslinjer
+#| fig-height: 3
+#| fig-width: 5 
+
+ggplot(power) + 
+  aes(x = Dygnsmedel, y = Energi_KWh, color = Bergsvärme) + 
+  geom_point() + 
+  theme_bw() + 
+  scale_color_manual(values = c("steelblue", "#d9230f"), 
+                     labels = c("Ej installerad", "Installerad")) +
+  labs(x = "Temperatur", y = "Elkonsumtion (kWh)") +
+  ## Lägga till regressionslinjer
+  #  Ej installerad (Referenslinjen)
+  geom_abline(
+    intercept = coef(model)[1],
+    slope = coef(model)[2],
+    color = "black",
+    linewidth = 1,
+    linetype = 2
+  ) + 
+  #  Installerad
+  geom_abline(
+    intercept = coef(model)[1] + coef(model)[3],
+    slope = coef(model)[2] + coef(model)[4],
+    color = "black",
+    linewidth = 1
+  )
+
+```
+#### Simpson's paradox
+
+### Interaktion mellan två kvantitativa variabler {#sec-interaction-quant-quant}
+En interaktion mellan två kvantitativa variabler är svårare att visualisera och identifiera. 
+
+### Identifiera interaktion
+Vanligtvis kan vi få ledtrådar om interaktioner i de parvisa sambanden, speciellt om det är en interaktion beskriven i @sec-interaction-qual-quant, men ibland är det svårt att direkt se ifall en interaktion behövs. Det är också svårt att utläsa mellan exakt vilka variabler som interaktionen finns. Med hjälp av grupperade spridningsdiagram (kvalitativa och kvantitativa) eller 3D-diagram (kvantitativa och kvantitativa) kan sambandet mellan par av förklarande variabler och responsvariabeln undersökas.
+
+Det går också att utläsa från residualanalysen ifall modellen inte plockar upp något samband med responsvariabeln men även med hjälp av dessa diagram kan det vara svårt att utläsa exakt vad för samband som saknas och vilka variabler som behöver justeras. Det är i detta läge som spridningsdiagram över residualerna uppdelat på de olika förklarande variablerna kan ge en indikation på vad som behöver justeras.
+
+Låt oss anpassa en felaktig modell utan interaktion och titta på residualerna:
+```{r}
+
+residualPlots(model = lm(Energi_KWh ~ Dygnsmedel + Bergsvärme, data = power))
+
+```
+
+Det är framförallt i diagrammet överst till höger som det syns att modellen saknar att modellera någon form av samband mellan variablerna. 
+
+```{r}
+#| fig-cap: Residualer mot förklarande variabler
+#| fig-height: 3
+#| fig-width: 5 
+
+
+
+modelNoInt <- lm(Energi_KWh ~ Dygnsmedel + Bergsvärme, data = power)
+
+visData <- 
+  tibble(
+    Residualer = resid(modelNoInt),
+    X1 = power$Dygnsmedel,
+    X2 = power$Bergsvärme
+  ) 
+
+ggplot(visData) + aes(x = X1, y = Residualer) + 
+  geom_point(color = "steelblue") +
+  theme_bw() + labs(x = "Temperatur")
+
+ggplot(visData) + aes(x = X2, y = Residualer) + 
+  geom_violin(fill = "steelblue") +
+  theme_bw() + labs(x = "Bergsvärme")
+
+```
+
+Om vi sedan visualiserar residualerna uppdelat på de två förklarande variablerna kan vi utläsa ett korsliknande mönster i den kvantitativa variabeln vilket antyder att vi har gruppvisa samband.
+
+
+```{r}
+residualPlots(model = model) 
+```
+
+När interaktionen lagts till ser residualerna mycket bättre ut, dock inte helt perfekta för just denna modell. 
+
+```{r}
+#| fig-cap: Residualer mot förklarande variabler
+#| fig-height: 3
+#| fig-width: 5 
+
+modelInt <- lm(Energi_KWh ~ Dygnsmedel * Bergsvärme, data = power)
+
+visData <- 
+  tibble(
+    Residualer = resid(modelInt),
+    X1 = power$Dygnsmedel,
+    X2 = power$Bergsvärme
+  ) 
+
+ggplot(visData) + aes(x = X1, y = Residualer) + 
+  geom_point(color = "steelblue") +
+  theme_bw() + labs(x = "Temperatur")
+
+```
+
+Residualerna mot temperatur har nu inte samma korsliknande mönster vilket har plockats upp av interaktionen dock syns ett svagt icke-linjärt mönster och framförallt problem med lika varians.
+
+## Polynom
+Vi kan modellera vissa typer av icke-linjära samband mellan x och y genom att genomföra lämpliga transformationer av x, exempelvis polynomtermer. Vi simulerar ett datamaterial för att illustrera detta.
+
+```{r}
+#| code-fold: false
+
+## Simulera data
+set.seed(2323)
+
+# Skapa 100 observationer
+n <- 100
+
+# Slumpa värden mellan -5 och 15 från den likformiga fördelningen
+x <- runif(n = n, min = -5, max = 15)
+
+# Skapa responsvariabeln genom en kvadratisk funktion och lägg till slumpvariation med rnorm()
+y <- 4-1*x+0.2*x^2 + rnorm(n = n)
+
+```
+
+Vi kan visualisera detta datamaterial för att se ett icke-linjärt samband mellan de två variablerna. Eftersom vi utför simulering vet vi också vad de sanna parametrarna för modellen ska vara, vilket vi kan stämma av i senare utskrifter.
+
+```{r}
+#| fig-cap: Exempel på icke-linjärt samband mellan X och Y
+#| fig-height: 3
+#| fig-width: 5 
+
+
+## Lägg in de två variablerna i ett datamaterial för ggplot2
+data <- 
+  tibble(
+    X = x,
+    Y = y
+  )
+
+ggplot(data) + aes(x = X, y = Y) + 
+  geom_point() + theme_bw()  
+
+```
+
+Om vi testar att först anpassa en "vanlig" linjär regression och utvärderar residualerna kommer vi se att residualantagandet om linjäritet inte uppfylls.
+
+```{r}
+#| fig-cap: Residualdiagram från en linjär modell med ett icke-linjärt samband
+#| fig-height: 3
+#| fig-width: 5 
+
+
+model <- lm(Y ~ X, data = data)
+
+residualPlots(model)
+
+```
+
+Dessa residualer ser inte bra ut, egentligen inte för någon utav antaganden, men det är främst residualerna mot de anpassade värdena som visar på det största problemet. Vi ser ett tydligt krökt mönster i punkterna som indikerar på att modellen inte är korrekt strukturerad.
+
+Vi kan anpassa polynom på olika sätt. Ett enkelt sätt att göra är att inkludera en ny variabel i datamaterialet som är en transformation av den förklarande variabeln, till exempel skapa $X^2$ som en ny kolumn.
+
+```{r}
+#| fig-cap: Residualdiagram från en modell med polynom
+#| fig-height: 3
+#| fig-width: 5 
+
+
+# Sparar över det gamla materialet
+data <- 
+  data %>% 
+  # Skapar en ny variabel som kvadraten av x
+  mutate(
+    X2 = x^2
+  )
+
+# Anpassa en ny modell
+model <- lm(Y ~ ., data = data)
+
+summary(model) %>% 
+  coef() %>% 
+  round(3) %>% 
+  kable(caption = "Skattade koefficienter från en modell med polynom",
+        col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+  kable_styling("striped")
+
+residualPlots(model)
+
+```
+
+Denna modell ser ut att uppfylla modellantaganden eftersom vi har lagt till en variabel som tar hänsyn till det icke-linjära samband som X har med Y. Parameterskattningarna som vi får från modellen stämmer också till stor del överens med den sanna modell som vi simulerat materialet ifrån. 
+
+
+## Multikollinearitet
+Bla

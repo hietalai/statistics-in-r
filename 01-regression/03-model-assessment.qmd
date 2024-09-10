@@ -22,12 +22,17 @@ editor_options:
 \newcommand{\Sum}[1]{\sum_{i=1}^#1}
 
 <!-- CONTENT -->
+
+::: {.video-container}
+{{< video https://youtu.be/Nr-vtnNZk78 >}}
+:::
+
 Efter att vi har anpassat en modell baserat på iakttagelser från visualiseringar och beskrivande statistik har vi möjlighet att tolka det skattade sambandet mellan de förklarande variablerna och responsvariabeln, vilket vi också gjorde i @sec-model-fit-example. Det finns dock två aspekter som vi ännu inte funderat på; 
 
 - vi kan inte anse att dessa tolkningar beskriver det sanna sambandet då vi ännu inte vet om modellen är lämplig,
 - dessa tolkningar beskriver endast urvalet som samlats in, inte den population som vi vill dra slutsatser om.
 
-För att kunna bedöma lämpligheten av modellen måste vi undersöka huruvida modellen uppfyller de antaganden som presenterades i @sec-model-assumptions genom *residualanalys* och slutsatser om populationen kan göras med hjälp av statistisk inferens.
+För att kunna bedöma lämpligheten av modellen måste vi undersöka huruvida modellen uppfyller de antaganden som presenterades i @sec-model-assumptions genom *residualanalys* och slutsatser om populationen kan göras med hjälp av statistisk inferens. Vi börjar alltid med att undersöka modellens lämplighet eftersom inferensmetodernas beräkningar också förutsätter att dessa antaganden är uppfyllda. 
 
 ## Residualanalys
 Residualanalys innebär att beräkna och visuellt utforska residualerna från en modell gentemot modellantaganden $E\overset{iid}{\sim}N(0, \sigma^2)$, det vill säga att residualerna är oberoende, normalfördelade med väntevärde 0 och lika varians. Residualerna kan också användas för att undersöka ifall den linjära modell som anpassats är lämplig. Vi kommer titta närmare på mer detaljerad residualanalys i ett senare kapitel.
@@ -86,7 +91,6 @@ ggplot(residualData) +
 #| include: false
 #| eval: false
 
-
   # Markerar potentiella extremvärden
   geom_mark_ellipse(
     aes(x = seq(0.5 / nrow(residualData), 1 - 0.5 / nrow(residualData), length = nrow(residualData)) %>% 
@@ -106,9 +110,69 @@ ggplot(residualData) +
 ```
 
 
-I histogrammet vill vi se normalfördelningens symmetriska och klockliknande form centrerad kring 0 vilket ibland kan vara svårt att utläsa speciellt om datamaterialet är litet. QQ-diagrammet visar de observerade och de teoretiska kvantilerna där vi vill att punkterna ska följa den inritade linjen för en "perfekt" normalfördelning. För denna modell ser vi inga tydliga avvikelser från det mönster vi vill se, men vi kan utläsa ett fåtal avvikande observationer som skulle kunna betraktas som extremvärden. Två stora positiva residualer kan identifieras i  diagrammet men det finns även enstaka negativa som ligger långt från linjen.
+I histogrammet vill vi se normalfördelningens symmetriska och klockliknande form centrerad kring 0 vilket ibland kan vara svårt att utläsa speciellt om datamaterialet är litet. QQ-diagrammet visar de observerade och de teoretiska kvantilerna där vi vill att punkterna ska följa den inritade linjen för en "perfekt" normalfördelning. 
+
+För denna modell ser vi inga tydliga avvikelser från det mönster vi vill se, men vi kan utläsa ett fåtal avvikande observationer som skulle kunna betraktas som extremvärden. Två stora positiva residualer kan identifieras i  diagrammen men det finns även enstaka negativa som ligger långt från de övriga.
 
 ::: {.callout-important}
+Vi kan betrakta antagandet om normalfördelning som inte uppfyllt om dessa diagram visar på starka avvikelser från det vi vill se. Även när vi vet att ett urval är draget från en normalfördelning är det inte alltid som histogrammet visar den form som vi söker.
+
+```{r}
+#| fig-cap: Fördelning av ett urval från den faktiska normalfördelningen
+#| fig-height: 3
+#| fig-width: 5 
+set.seed(1234)
+
+tibble(
+  x = rnorm(30)
+) %>% 
+ ggplot() + 
+  aes(x = x, y = after_stat(density)) +
+  geom_histogram(bins = 10, fill = "steelblue", color = "black") + 
+  theme_bw() + 
+  labs(x = "x", y = "Densitet")
+
+```
+
+Starka avvikelser från normalfördelningen innebär exempelvis att vi ser flera områden med hög densitet:
+
+```{r}
+#| fig-cap: Fördelning av ett urval från andra fördelningar
+#| fig-height: 3
+#| fig-width: 5 
+set.seed(1234)
+
+tibble(
+  x = runif(30)
+) %>% 
+ ggplot() + 
+  aes(x = x, y = after_stat(density)) +
+  geom_histogram(bins = 10, fill = "steelblue", color = "black") + 
+  theme_bw() + 
+  labs(x = "x", y = "Densitet")
+
+```
+
+eller en väldigt skev fördelning:
+
+```{r}
+#| fig-cap: Fördelning av ett urval från andra fördelningar
+#| fig-height: 3
+#| fig-width: 5
+set.seed(1234)
+
+tibble(
+  x = rchisq(30, df = 2)
+) %>% 
+ ggplot() + 
+  aes(x = x, y = after_stat(density)) +
+  geom_histogram(bins = 10, fill = "steelblue", color = "black") + 
+  theme_bw() + 
+  labs(x = "x", y = "Densitet")
+```
+
+Dessa diagram indikerar att modellen saknar en förklarande variabel eller måste transformeras på något sätt för att uppfylla antagandet.
+
 Om QQ-diagrammet uppvisar tydliga mönster, till exempel om punkterna är krökta runt linjen, betyder det att modellen inte uppfyller antagandet om linjärt samband.
 
 ```{r}
@@ -240,6 +304,8 @@ ggplot(tibble(residuals = resid(model2), yHat = fitted(model2))) +
 
 ```
 
+Dessa fenomen betyder oftast att hela eller delar av modellen behöver transformeras för att uppfylla antagandet om lika varians. 
+
 Vi kan också identifiera problem med linjäritet i detta spridningsdiagram. Figuren nedan uppvisar någorlunda konstant varians i avseende på variationen i varje tvärsnitt av x-axeln, men det finns ett tydligt mönster i residualerna. Detta betyder att modellen inte lyckats modellera sambandet på rätt sätt. I detta läge vore det lämpligt att visualisera residualerna mot respektive förklarande variabel för att identifiera vilken/vilka utav de som verkar bidra med det icke-linjära sambandet.
 
 ```{r}
@@ -264,7 +330,7 @@ ggplot(tibble(residuals = resid(model3), yHat = fitted(model3))) +
 :::
 
 ### Oberoende
-Ofta är det svårt eller omöjligt att undersöka om det är oberoende observationer i ett datamaterial med avseeende på alla ordningar som data kan samlas in på. Undantaget är ifall vi vet hur datainsamlingen har gått till och om det finns någon tydlig tidsaspekt (till exempel i tidsseriedata) eller att samma enhet har uppmätts flera gånger som gör att vi att observationerna blir beroende. Vi vill att den modell som anpassas tar bort det beroende som finns i data så att de efterföljande residualerna endast uppvisar oberoende. 
+Ofta är det svårt eller omöjligt att undersöka om observationerna är oberoende med avseeende på alla ordningar som data kan samlas in på. Undantaget är ifall vi vet hur datainsamlingen har gått till och om det finns någon tydlig tidsaspekt, till exempel i tidsseriedata, eller att samma enhet har uppmätts flera gånger som gör att vi vet att observationerna blir beroende. Vi vill att den modell som anpassas tar hänsyn till det beroende som finns i data så att de efterföljande residualerna endast uppvisar oberoende. 
 
 Ett linjediagram över residualerna i observationsordning kan användas för att undersöka oberoende, men det är som sagt endast i specialfall som denna visualisering används. Linjediagrammet ska uppvisa "slump", det vill säga inga tydliga mönster i residualerna.
 
@@ -302,7 +368,7 @@ Dessa diagram kommer vara återkommande i regressionsmodellering så vi kan skap
 
 
 # Funktionen kräver två argument, modellen som anpassats och bredden på staplarna i histogrammet.
-residualPlots <- function(model, binwidth = 1) {
+residualPlots <- function(model) {
   
   residualData <- 
     data.frame(
@@ -315,7 +381,7 @@ residualPlots <- function(model, binwidth = 1) {
   
   p1 <- ggplot(residualData) + 
     aes(x = residuals, y = after_stat(density)) +
-    geom_histogram(binwidth = binwidth, fill = "steelblue", color = "black") + 
+    geom_histogram(bins = 20, fill = "steelblue", color = "black") + 
     theme_bw() + 
     labs(x = "Residualer", y = "Densitet")
   
@@ -339,400 +405,20 @@ residualPlots <- function(model, binwidth = 1) {
   
 }
 
-residualPlots(simpleModel, 1)
+residualPlots(simpleModel)
 
 ```
 
 Sammanfattningsvis visar @fig-penguin-resid att residualerna uppfyller antagandet om normalfördelning med väntevärde 0 och lika varians. Det finns inga tydliga mönster i något diagram som indikerar på motsatsen eller att modellen missar att plocka upp något av sambandet. Några enstaka extremvärden har identifierats, specifikt två stycken stora positiva residualer som kommer undersökas mer i senare kapitel. Slutsatsen är att modellen är en lämplig förenkling av verkligheten.
 
-## Statistisk inferens
-När vi anser oss ha hittat en lämplig modell kan vi fokusera på att tolka modellens resultat avseende populationen. Inom regressionsmodellering kan vi genomföra flera olika typer av statistisk inferens; på hela modellen, på grupper av parametrar, eller på enskilda parametrar. 
+## Övningsuppgifter {#sec-exercise-evaluate}
+Använd återigen `marketing` från @sec-exercise-explore.
 
-Vi kan börja med ett *F-test* för hela modellen för att se ifall minst en parameter är signifikant, att modellen är värd att undersöka vidare, för att sedan genomföra enskilda *t-test* för respektive parameter och bedöma vilka förklarande variabler har en signifikant påverkan på responsvariabeln. Då kvalitativa variabler ofta består utav flera parametrar behöver dessa slås samman för att undersöka variabelns samband vilket vi kan göra med ett *partiellt F-test*.
+1. Skatta residualerna genom att beräkna skillnaden mellan de observerade och anpassade värdena på responsvariabeln.
 
-Innan vi går in på de olika testerna behöver vi presentera *ANOVA*-tabellen som används för att dela upp responsvariabelns variation i modellens olika komponenter; modellens förklarande variabler och feltermen.
+2. Skapa ett histogram och ett kvantildiagram (QQ diagram) över residualerna och kontrollera antagandet om normalfördelning.
 
-### ANOVA
-**An**alysis **o**f **Va**riance är en samling metoder som beräknar variationen av olika modellkomponenter. Målet med en modell är att förklara den *totala variationen* i responsvariabeln på bästa sätt. Allting som de förklarande variablerna hjälper till att beskriva kallas för den *förklarade variationen* och det som modellen inte lyckas förklara (felet) är den *oförklarade variationen*.
+3. Skapa ett spridningsdiagram med residualerna på y-axeln och de anpassade värdena på x-axeln och kontroller antagandet om lika varians.
 
-$$
-\underbrace{\mathbf{Y}}_\text{total variation} = \underbrace{\mathbf{X} \boldsymbol{\beta}}_\text{förklarad variation} + \underbrace{\mathbf{E}}_\text{oförklarad variation}
-$$ {#eq-variation-components}
-
-@eq-variation-components visar att den totala variationen är en summa av den förklarade och oförklarade variationen vilket också ses i formlerna för dessa. Respektive komponent beräknas enligt:
-
-$$
-  \text{total variation} = SST = \mathbf{Y}'\mathbf{Y} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}
-$$
-där $\mathbf{J}$ är enhetsmatrisen, en $n \times n$ matris endast innehållande 1:or. 
-
-Det kanske inte är så lätt att se vad dessa matrisberäkningar faktiskt beskriver men beräkningen motsvarar $\Sum{n}(Y_i - \bar{Y})^2$, alltså täljaren i en variansberäkning för $Y$. Den vänstra termen ($\mathbf{Y}'\mathbf{Y}$) motsvarar $Y_i$ och den högra termen ($\left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}$) motsvarar $\bar{Y}$, responsvariabelns medelvärde. Den totala variationen beskriver hur mycket variation som uppkommer ifall vi skulle använda medelvärdet av $Y$ som modell.
-
-$$
-  \text{oförklarad variation} = SSE = \mathbf{Y}'\mathbf{Y} - \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y}
-$$
-SSE har vi tidigare använt som ett mått på felet i modellen, se @eq-sse, vilket betyder att $\boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y}$ motsvarar $\hat{Y}_i$. 
-
-$$
-  \text{förklarad variation} = SSR = \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}
-$$
-
-SSR beskriver variationen mellan modellens anpassade värde och medelvärdet av $Y$. Det kan i sin tur kan tolkas som hur mycket mer variation som modellen bidrar med jämfört med medelvärdet, eller kort sagt hur mycket bättre modellen är på att förklara variationen i $Y$.
-
-Vi har tidigare använt en annan matrisformel för SSE men med hjälp av omformuleringen kan vi tydligt se hur SST = SSR + SSE:
-$$
-\mathbf{Y}'\mathbf{Y} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y} = \mathbf{Y}'\mathbf{Y} \underbrace{-  \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y} + \boldsymbol{\hat{\beta}}'\mathbf{X}'\mathbf{Y}}_\text{summerar till 0} - \left(\frac{1}{n}\right)\mathbf{Y}'\mathbf{J}\mathbf{Y}
-$$
-Vi kan också visualisera denna relation i ett stackat stapeldiagram. Den totala höjden av stapeln är SST medan de olika delarna beskriver hur stor del av den totala variationen som är förklarad eller oförklarad i en viss modell.
-
-```{r}
-#| fig-cap: Visualisering av de olika källor av variation
-#| fig-height: 3
-#| fig-width: 5 
-#| echo: false
-
-anovaTable <- anova(simpleModel) %>% 
-  rownames_to_column(var = "Source") %>% 
-  mutate(Source = factor(Source, levels = Source)) %>% 
-  mutate(
-    Source = if_else(Source != "Residuals", "Förklarad", "Oförklarad")
-  ) %>% 
-  group_by(Source) %>% 
-  summarize(
-    `Sum Sq` = sum(`Sum Sq`)
-  ) %>% 
-  ungroup()
-
-ggplot(anovaTable, aes(x = "Total Variation", y = `Sum Sq`, fill = Source)) +
-  geom_bar(width = 0.75, stat = "identity", position = "stack", color = "black") +
-  theme_minimal() +
-  theme(
-    panel.grid.major.x = element_blank()
-  ) +
-  labs(x = "",
-       y = "Sum of Squares") +
-  scale_fill_manual("Variation", values = c("steelblue", "#d9230f"))
-
-
-```
-
-#### ANOVA-tabellen
-En ANOVA-tabell är ett sätt att effektivt få en översikt av dessa olika komponenter samt visa ytterligare information, såsom *frihetsgraderna* ($df$) för respektive komponent och *medelkvadratsummor*. 
-
-Frihetsgrader beskriver hur många lutningsparametrar som skattas för respektive del^[Frihetsgrader beskriver egentligen hur många bitar oberoende information som finns för en beräkning. Tänk tillbaka på beräkningen av en stickprovsstandardavvikelse vars frihetsgrader är $n - 1$, antalet observationer - 1, för att vi skattar medelvärdet när vi beräknar standardavvikelsen.] och medelkvadratsummor visar den genomsnittliga variationen per frihetsgrad, $\frac{SS}{df}$.
-
-```{r}
-#| echo: false
-#| tbl-cap: Enkel ANOVA-tabell
-#| tbl-cap-location: top
-#| label: tbl-anova-example
-
-anova_table <- data.frame(
-  Source = c("Model (Regression)", "Error", "Total"),
-  DF = c("$df_R = k$", "$df_E = n - (k + 1)$", "$df_T = n - 1$"),
-  `Sum of Squares` = c(
-    "$SSR = \\boldsymbol{\\hat{\\beta}}' \\mathbf{X}' \\mathbf{Y} - \\frac{1}{n} \\mathbf{Y}' \\mathbf{J} \\mathbf{Y}$",
-    "$SSE = \\mathbf{Y}' \\mathbf{Y} - \\boldsymbol{\\hat{\\beta}}' \\mathbf{X}' \\mathbf{Y}$",
-    "$SSY = \\mathbf{Y}' \\mathbf{Y} - \\frac{1}{n} \\mathbf{Y}' \\mathbf{J} \\mathbf{Y}$"
-  ),
-  `Mean Square` = c("$MSR = \\frac{SSR}{df_R}$", "$MSE = \\frac{SSE}{df_E}$", "")
-)
-
-kable(anova_table, format = "markdown", booktabs = TRUE, escape = FALSE, col.names = c("Source", "DF", "Sum of Squares", "Mean Square"), parse = TRUE) 
-
-```
-
-En enkel ANOVA-tabell som @tbl-anova-example visar endast de tre huvudsakliga komponenterna, men olika programvaror kan ibland visa andra uppdelningar som standard. I en multipel linjär regressionsmodell är det vanligt att dela upp den förklarade variationen ytterligare, exempelvis i *sekventiella kvadratsummor*.
-
-#### Sekventiella kvadratsummor
-Beräkningarna för en ANOVA-tabell sker automatiskt i R när vi använder `lm()` och vi kan plocka ut tabellen från modellobjektet med hjälp av `anova()`, (se @tip-lm-objects).
-
-```{r}
-#| tbl-cap: ANOVA-tabell från R
-#| tbl-cap-location: top
-#| label: tbl-anova-example-R
-
-anova(simpleModel) %>% 
-  round(4) %>% 
-  kable() %>% 
-  kable_styling("striped")
-
-```
-
-Som standard, delar R upp modellens kvadratsumma (SSR) i de enskilda förklarande variablerna med hjälp av sekventiella (även kallad betingade) kvadratsummor. En sekventiell kvadratsumma beskriver hur mycket variation en förklarande variabel bidrar med givet att modellen redan innehåller andra förklarande variabler. 
-
-Ordningen som presenteras i @tbl-anova-example-R är ordningen som variablerna läggs till i modellen, till exempel visar andra raden $SS(\text{bill\_depth\_mm} | \text{species})$, att näbbredden bidrar med `r anova(simpleModel)[2,2] %>% round(4)` ytterligare unik förklarad variation av responsvariabeln som art inte redan har förklarat. Den tredje raden visar $SS(\text{flipper\_length\_mm} | \text{species}, \text{bill\_depth\_mm})$, det vill säga hur mycket ytterligare unik variation som fenlängden förklarar i en modell som inkluderar näbbredd och art.
-
-Rent matematiskt beräknas den sekventiella kvadratsumman som en summa av antingen SSE eller SSR mellan två olika modeller, en utan den tillagda variabeln och en med variabeln inkluderad. Anta att vi vill lägga till variabel $X^*$ till en modell som har $k$ andra variabler, då ser beräkningen ut som följer:
-
-$$
-\begin{aligned}
-SS(X^*|X_1, \ldots, X_k) &= SSE_{X_1, \ldots, X_k} - SSE_{X_1, \ldots, X_k, X^*} = \\
-&= SSR_{X_1, \ldots, X_k, X^*} - SSR_{X_1, \ldots, X_k}
-\end{aligned}
-$$ {#eq-seq-ss}
-
-Notera att SSR ökar för varje ytterligare variabel som läggs till i modellen, medan SSE alltid minskar. En variation måste alltid vara positiv, därav beräknas $SSE_{reducerad} - SSE_{komplett}$ eller $SSR_{komplett} - SSR_{reducerad}$.
-
-Sekventiella kvadratsummor påverkas av ordningen variablerna läggs till i modellen. Låt oss byta ordning på de förklarande variablerna när vi anpassar modellen:
-
-```{r}
-#| tbl-cap: Annan ordning på modellernas variabler
-#| tbl-cap-location: top
-#| label: tbl-anova-example-sex
-
-model <- lm(formula = bill_length_mm ~ sex + ., data = modelData)
-
-anova(model) %>% 
-  round(4) %>% 
-  kable() %>% 
-  kable_styling("striped")
-
-```
-
-I @tbl-anova-example-sex ser vi att $SS(\text{sex}) = `r anova(model)[1,2] %>% round(4)`$ vilket är betydligt högre än $SS(\text{sex}|\text{species}, \text{bill\_depth\_mm}, \text{flipper\_length\_mm}, \text{body\_mass\_g}) = `r anova(simpleModel)[5,2] %>% round(4)`$ från @tbl-anova-example-R. Variabeln kön bidrar med mycket variation när den är ensam i en modell, men när den läggs till i en modell som redan har andra variabler bidrar den inte med lika mycket unik information. Detta betyder att den förklarade variationen som variabeln bidrar med verkar finnas i övriga variabler också. Denna iakttagelse kommer vi komma tillbaka till i ett senare kapitel. 
-
-Någonting som är lika i de två tabellerna är SSE. Vi har i båda modellerna inkluderad samma variabler vilket innebör att SST, SSR, och SSE överlag är densamma. Summan av alla sekventiella kvadratsummor ska fortfarande bli SSR oavsett ordningen på variablerna och på grund av den additiva egenskapen hos variationen har SST och SSE inte heller förändrats.
-
-### F-test för modellen
-I en multipel linjär regression är ett F-test för hela modellen bra att börja med för att se ifall minst en lutningsparameter är signifikant. Vi undersöker hypoteserna:
-
-\begin{align*}
-H_0&: \beta_1 = \beta_2 = \beta_3 = \cdots = \beta_k = 0\\
-H_a&: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
-\end{align*}
-
-Om minst en lutningsparameter är signifikant betyder det att det finns åtminstone en variabel som bidrar med förklarad variation, att modellen är bättre än att använda enbart $\bar{Y}$. Testvariabeln undersöker relationen mellan den förklarande och oförklarande variationen genom dess medelkvadratsummor. 
-
-$$
-F_{test} = \frac{SSR / k}{SSE / (n - (k+1))} = \frac{MSR}{MSE} 
-$$
-
-Testvariabeln följer en *F-fördelning* som styrs av två frihetsgrader; $df1$ från täljaren och $df2$ från nämnaren i beräkningen, det vill säga modellens och felets frihetsgrader. Om $H_0$ är sann kommer testvariabeln bli 0, medan om $H_a$ är sann kommer testvariabeln bli ett stort positivt tal. Eftersom båda medelkvadratsummorna är positiva tal innebär det att kvoten alltid kommer vara positiv och vi kan förkasta $H_0$ om testvariabeln befinner sig nog långt från 0.
-
-```{r}
-#| fig-cap: Olika F-fördelningar och deras frihetsgrader
-#| fig-height: 4
-#| fig-width: 7 
-
-# Skapar en funktion för att generera olika F-fördelningar
-generateFdistribution <- function(df1, df2, n = 1000) {
-  x <- seq(0, 5, length.out = n)  
-  y <- df(x, df1, df2)  
-  tibble(x = x, y = y, df1 = df1, df2 = df2)  
-}
-
-# Skapar en lista med olika frihetsgrader
-dfs <- list(c(5, 30), c(10, 100), c(20, 50), c(30, 300))
-
-# Genererar data
-Fdistributions <- dfs %>%
-  purrr::map_df(~generateFdistribution(.x[1], .x[2]), .id = "Distribution") %>%
-  mutate(Distribution = paste0("df1 = ", df1, ", df2 = ", df2))
-
-# Plot the F-distributions using ggplot2
-ggplot(Fdistributions) + 
-  aes(x = x, y = y, color = Distribution) +
-  geom_line(linewidth = 1) +
-  labs(
-    x = "F-värde",
-    y = "Densitet",
-    color = "Frihetsgrader"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-    legend.position = "right",
-    legend.title = element_text(face = "bold")
-  ) +
-  scale_color_manual(values = c("steelblue", "#d9230f", "black", "grey50"))
-
-
-```
-
-För att få fram SSR från en ANOVA-tabell i R behöver vi summera de sekventiella kvadratsummorna. Vi kan sedan bearbeta tabellen för att få fram testvariabeln och använda frihetsgraderna för respektive källa i `pf(lower.tail = FALSE)` för att få fram p-värdet för testet.
-
-```{r}
-#| tbl-cap: Bearbetad och förenklad ANOVA tabell
-#| tbl-cap-location: top
-#| label: tbl-anova-example-simple
-
-
-anovaTable <- anova(simpleModel)
-
-# Beräknar raden för SSR utifrån alla rader förutom SSE
-SSR <- anovaTable[-nrow(anovaTable),] %>% 
-  summarize(across(Df:`Sum Sq`, ~sum(.x))) %>% 
-  mutate(`Mean Sq` = `Sum Sq` / Df,
-         `F value` = NA,
-         `Pr(>F)` = NA)
-
-# Kombinerar SSR med SSE från ursprungliga tabellen
-simpleAnova <- SSR %>% 
-  add_row(anovaTable[nrow(anovaTable),]) %>% 
-  mutate(
-    `F value` = 
-      ifelse(row_number() == 1,
-            `Mean Sq`[1] / `Mean Sq`[2], 
-            NA),
-    `Pr(>F)` = 
-        ifelse(row_number() == 1, 
-              pf(q = `F value`[1], df1 = Df[1], df2 = Df[2], lower.tail = FALSE), 
-              NA)
-    )
-
-rownames(simpleAnova) <- c("Model", "Residuals")
-
-kable(simpleAnova, digits = 4) %>% 
-  kable_styling("striped")
-
-```
-
-Eftersom p-värdet är mindre än 5 procent, kan $H_0$ förkastas och minst en av variablerna har ett samband med responsvariabeln.^[Om vi hade tagit ett annat beslut (att inte förkasta nollhypotesen) hade det inte varit relevant att fortsätta med analysen, eller åtminstone att fokusera resterande analys på att undersöka varför en multipel linjär regressionsmodell som vi förväntar har ett samband utifrån parvisa spridningsdiagram inte visar på det tillsammans.]
-
-### Partiella F-test för grupper av parametrar
-Ibland är vi intresserade att undersöka delar av modellen, en grupp med lutningsparametrar. Ett sådant fall är om vi vill undersöka en kvalitativ variabels påverkan eftersom den kan ha transformerats till flera indikatorvariabler alla med en tillhörande lutningsparameter. Ett annat tillfälle är om vi vill undersöka om flera variabler tillsammans bidrar med förklarad variation till modellen.
-
-Istället för att undersöka alla lutningsparametrar undersöks nu ett urval:
-\begin{align*}
-H_0&: \beta_1 = \beta_2 = \beta_3 = \cdots = \beta_s = 0\\
-H_a&: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
-\end{align*}
-där $s$ är antalet parametrar som undersöks.
-
-Testvariabeln för ett partiellt F-test kräver en komplett (betecknad $_F$) och en reducerad modell (betecknad $_R$). Den kompletta modellen består av alla variabler medan den reducerade modellen utgår från att $H_0$ är sann och variablerna som undersöks har plockats bort från anpassningen. Vi kan välja att antingen använda SSR eller SSE för att beräkna hur mycket förklarad variation som försvinner mellan de två modellerna enligt samma princip som @eq-seq-ss.
-
-$$
-F_{test} = \frac{(SSR_F - SSR_R) / s}{SSE_F / (n - (k+1))} = \frac{(SSE_R - SSE_F) / s}{SSE_F / (n - (k+1))}
-$$ {#eq-partial-f}
-
-Testvariabeln är fortfarande F-fördelat med $s$ respektive $n - (k+1)$ frihetsgrader.
-
-#### Räkneknep för partiella F-test
-Med hjälp av @eq-seq-ss kan @eq-partial-f formuleras på ett tredje sätt som underlättar vår analysprocess. Vi kan skriva om skillnaden i förklarad variation mellan den kompletta och reducerade modellen som en sekventiell kvadratsumma. Exempelvis kan vi vilja undersöka om variabeln art har ett samband med responsvariabeln. Eftersom den variabeln transformeras till två indikatorvariabler omfattar hypoteserna två lutningsparametrar.
-
-\begin{align*}
-H_0&: \beta_{Chinstrap} = \beta_{Gentoo} = 0\\
-H_a&: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
-\end{align*}
-
-Den reducerade modellen skapas utifrån att $H_0$ är sann, det vill säga $\beta_{Chinstrap} = \beta_{Gentoo} = 0$ och de två modellernas förklarade variation skulle betecknas som:
-$$
-\begin{aligned}
-  SSR_{R} &= SSR_{bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex} \\
-  SSR_{F} &= SSR_{bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex, species}
-\end{aligned}
-$$
-
-Vi kan omformulera täljaren i @eq-partial-f till: 
-$$
-SS(species|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex)
-$$
-I de ANOVA-tabeller som presenterats tidigare kan vi få fram denna kvadratsumma direkt om art läggs till som den sista variabeln i modellen.
-
-```{r}
-#| tbl-cap: ANOVA-tabell från en modell där art läggs till sist
-#| tbl-cap-location: top
-#| label: tbl-anova-example-species
-
-model <- lm(bill_length_mm ~ bill_depth_mm + flipper_length_mm + body_mass_g + sex + species, data = modelData)
-
-anova(model) %>% 
-  round(4) %>% 
-  kable() %>% 
-  kable_styling("striped")
-
-```
-
-En ANOVA-tabell med sekventiella kvadratsummor beräknar ett partiellt F-test för respektive variabel (och dess parameter/parametrar) som undersöker huruvida variabeln bidrar med en signifikant ökning av den förklarade variationen till en modell som redan inkluderar variablerna ovanför. @tbl-anova-example-species beräknar nu det partiella F-test för art ($F_{test} = `r anova(model)[5, 4] %>% round(4)`$) som vi var intresserade av och vi kan direkt tolka p-värdet för testet ($p-värde < 0.001$) som att minst en av lutningsparametrarna är signifikant skild från 0. 
-
-Om vi genomför ett partiellt F-test för **flera variabler** kan vi inte använda p-värden som anges i tabellen då hypoteserna omfattar fler lutningsparametrar/variabler än vad de sekventiella kvadratsummorna visar. Anta att vi vill undersöka om art och kön tillsammans bidrar något till modellen. Hypotesprövningen skulle då omfatta:
-
-$$
-\begin{aligned}
-H_0&: \beta_{sexMale} = \beta_{Chinstrap} = \beta_{Gentoo} = 0\\
-H_a&: \text{Minst en av } \beta_j \text{ i } H_0 \text{ är skild från } 0
-\end{aligned}
-$$
-
-Den sekventiella kvadratsumman som vi vill använda anges som $SS(species, sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g)$ och vi kan beräkna fram detta värde genom att summera de två variablernas SS från @tbl-anova-example-species.
-
-
-$$
-\begin{aligned}
-SS(species, sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g) = \\
-SS(species|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g, sex) + \\
-SS(sex|bill\_depth\_mm, flipper\_length\_mm, body\_mass\_g)
-\end{aligned}
-$$
-Alternativet är att anpassa två modeller i R, den kompletta och reducerade och läsa av SSE eller summera SSR från respektive ANOVA-tabell.
-
-### t-test för enskilda parametrar
-Att använda ANOVA-tabellen för att undersöka enskilda parametrar är inte lämpligt då det kräver att variabeln anges sist i modelleringen för att det partiella F-testet undersöker just den enskilda variabeln i relation till övriga modellen. Istället bör vi använda t-test för respektive parameter.
-
-Formellt undersöks hypoteserna:
-$$
-\begin{aligned}
-  H_0&: \beta_j = 0\\
-  H_a&: \beta_j \ne 0
-\end{aligned}
-$$
-där $j$ är någon av lutningsparametrarna i en anpassad modell. 
-
-Testvariabeln beräknas utifrån den skattade lutningsparametern och dess medelfel:
-$$
-\begin{aligned}
-t_{test} = \frac{b_j - 0}{s_{b_j}}
-\end{aligned}
-$$
-
-Testvariabeln är t-fördelad givet $H_0$ med $n-(k+1)$ frihetsgrader.
-
-I R används t-test i koefficienttabellen som vi kan plocka ut ur `summary()`-objektet genom `coef()`.
-
-```{r}
-#| tbl-cap: Koefficienttabell för en modell med tillhörande t-test för enskilda parametrar
-#| tbl-cap-location: top
-#| label: tbl-coef-example
-
-summary(simpleModel) %>% 
-  coef() %>% 
-  round(4) %>% 
-  kable(format = "markdown",
-        col.names = c("Parameter", "Estimate", "Std. Error", "t value", "Pr(>t)"), 
-        parse = TRUE) %>% 
-  kable_styling("striped")
-```
-
-I @tbl-coef-example ser vi att p-värdet för alla t-testen är väldigt låga (nära 0). För varje enskilda hypotesprövning kan vi på fem procents signifikans förkasta $H_0$ vilket betyder att variabeln har en signifikant påverkan på responsvariabeln. 
-
-::: {.callout-tip}
-Om en parameter inte anses signifikant är det en motivering till att variabeln kan plockas bort, vi anpassar en reducerad modell och en ny analys påbörjas. Om en variabel plockas bort kommer de övriga parameterskattningarna förändras och tolkningar samt inferens behöver uppdateras. 
-:::
-
-### Konfidensintervall för $\beta$
-Slutsatsen vi kan dra från dessa hypotesprövningar är att modellen innehåller variabler som alla har ett signifikant samband med responsvariabeln. Om vi vill tolka magnituden av effekten gentemot populationen, inte bara om sambandet är signifikant, behöver vi beräkna intervallskattningar.
-
-$$
-\begin{aligned}
-b_j \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_j}
-\end{aligned}
-$$
-
-## Utvärderingsmått
-Bara för att en modell är lämplig, uppfyller modellantaganden och innehåller signifikanta parametrar, betyder det inte att modellen är den bästa som kan skapas eller överhuvudtaget bra. Med hjälp av olika utvärderingsmått kan vi få en överblick på hur bra modellen är.
-
-*Förklaringsgraden* ($R^2$) beskriver hur stor andel av den totala variationen som förklaras av modellens förklarande variabler. Med denna beskrivning kan vi beräkna $R^2$ som:
-$$
-\begin{aligned}
-  R^2 = \frac{SSR}{SST} = 1 - \frac{SSE}{SST}
-\end{aligned}
-$$
-På grund av att SSR alltid blir större ju fler variabler som en modell innehåller, behöver vi justera måttet för att kunna jämföra modeller av olika storlekar. Istället bör vi titta på den justerade förklaringsgraden ($R^2_{a}$) för att se vilken modell som är bäst. En förbättrad $R^2_{a}$ betyder att modellen har tagit bort onödig komplexitet.
-
-$$
-\begin{aligned}
-  R^2_a = 1 - \frac{SSE / (n - (k+1))}{SST / (n - 1)}
-\end{aligned}
-$$
+4. Sammanfatta dina slutatser och bedöm om modellen som anpassats i @sec-exercise-model-fit uppfyller modellantaganden.
 

@@ -23,13 +23,20 @@ editor_options:
 
 <!-- CONTENT -->
 
-Efter att ha sammanställt iaktaggelser från visualiseringar och beskrivande statistik, är nästa steg i processen att bygga modellen. Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i @sec-model-assumptions. Det enklaste är att börja med de kvantitativa variablerna som (vanligtvis) endast kräver en term vardera i modellen.
+
+::: {.video-container}
+{{< video https://youtu.be/Io1KMfzhQYc >}}
+:::
+
+Efter att ha sammanställt iaktaggelser från visualiseringar och beskrivande statistik, är nästa steg i processen att bygga modellens struktur. Det enklaste är att börja med de kvantitativa variablerna som (vanligtvis) endast kräver en term vardera i modellen.
 
 $$
 \text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \cdots + E
 $$ {#eq-penguin-quant}
 
-## Indikatorvariabler
+Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i @sec-model-assumptions framförallt antagandet om linjäritet. Har vi upptäckt icke-linjära samband i de parvisa visualiseringarna räcker det oftast inte med att inkludera en term i modellen. Detta kommer vi återkomma till i @sec-komplex-modell.
+
+## Indikatorvariabler {#sec-indicator-variable}
 En regressionsmodell kan inte hantera kvalitativa variabler direkt, exempelvis $\beta_4 \cdot \text{art}$, då variabelns värden beskriver kategorier inte värden från en numerisk skala. Detta gäller även om den kvalitativa variabeln är kodad numerisk. En lutningsparameter beskriver den konstanta förändring i responsvariabeln när den tillhörande förklarande variabeln ökar med en enhet, men en kvalitativ variabel har oftast ingen enhet och inte heller konstanta förändringar mellan intilliggande värden. Istället måste vi transformera den kvalitativa variabeln numerisk genom *indikatorvariabler* (även kallad dummyvariabler). 
 
 Som namnet antyder används indikatorvariabler för att indikera vilken kategori en observation har uppmätt på den kvalitativa variabeln. Vi behöver då skapa en begränsad mängd indikatorvariabler som på ett tydligt sätt visar exakt en kategori per observation. 
@@ -163,10 +170,19 @@ I en enkel linjär regression går det att härleda fram analytiska lösningar f
 ::: {.callout-important}
 Formler för parameterskattningarna i en enkel linjär regression är:
 \begin{align*}
-  b_1 &= \frac{\Sum{n}(X_i - \bar{X})(Y_i - \bar{Y})}{\Sum{n}(X_i - \bar{X})^2} \\
+  b_1 &= \frac{\Sum{n}(X_i - \bar{X})(Y_i - \bar{Y})}{\Sum{n}(X_i - \bar{X})^2}\\
   b_0 &= \bar{Y} - b_1 \cdot \bar{X}
 \end{align*}
+
+$b_1$ kan också omformuleras till beräkningsformeln:
+$$
+\begin{aligned}
+ \frac{\Sum{n}(X_i \cdot Y_i) - \frac{\Sum{n}X_i \cdot \Sum{n}Y_i}{n}}{\Sum{n}X_i^2 - \frac{(\Sum{n}X_i)^2}{n}}
+\end{aligned}
+$$
 :::
+
+Vi kan också använda den anpassade modellen för att *prediktera* nya värden på responsvariabeln för nya observationer. Från den anpassade regressionslinjen byter vi ut respektive variabel med observationens faktiska värde och får till slut en enkel summa som beskriver responsvariabelns värde på linjen. Mer om hur prediktioner används i relation till populationen tas upp i @sec-predictions.
 
 ### Modellanpassning i R {#sec-model-fit-example}
 För att anpassa en linjär regressionsmodell i R används funktionen `lm()` med följande argument: 
@@ -392,6 +408,13 @@ s2Beta %>%
 
 Vi ser även i @tbl-se-matrix samma värden som @tbl-reg-summary-good.
 
+## Övningsuppgifter {#sec-exercise-model-fit}
+Vi kommer återigen använda datamaterialet `marketing`.
 
+1. Anpassa en linjär regressionsmodell med `lm()` som inkluderar de variabler som du valt ut i @sec-exercise-explore.
+2. Sammanställ en tabell över de skattade koefficienterna och tolka respektive.
+
+3. Skapa designmatrisen och en matris för responsvariabeln och skatta lutningsparametrarna med hjälp av dessa. Kontrollera att du får samma värden som i tabellen från `lm()`.
+4. Använd matrisberäkningar för att beräkna medelfelet för respektive parameter.
 
 
