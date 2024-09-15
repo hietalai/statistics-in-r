@@ -156,9 +156,6 @@ window.Quarto = {
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/00-intro-regression.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
   </nav>
 </header>
@@ -166,11 +163,6 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Sök"></div>
-        </div>
-        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -215,6 +207,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet (WIP)</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -229,7 +227,7 @@ window.Quarto = {
   <li><a href="#sec-model-assumptions" id="toc-sec-model-assumptions" class="nav-link" data-scroll-target="#sec-model-assumptions"><span class="header-section-number">1.2</span> Modellens antaganden</a></li>
   <li><a href="#studier-och-andra-variabler" id="toc-studier-och-andra-variabler" class="nav-link" data-scroll-target="#studier-och-andra-variabler"><span class="header-section-number">1.3</span> Studier och andra variabler</a>
   <ul class="collapse">
-  <li><a href="#kontrollvariabler" id="toc-kontrollvariabler" class="nav-link" data-scroll-target="#kontrollvariabler"><span class="header-section-number">1.3.1</span> Kontrollvariabler</a></li>
+  <li><a href="#sec-control" id="toc-sec-control" class="nav-link" data-scroll-target="#sec-control"><span class="header-section-number">1.3.1</span> Kontrollvariabler</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -370,8 +368,8 @@ Figur&nbsp;1.3: Sambandet mellan antalet filmer som Nicolas Cage medverkade i oc
 <p><a href="#fig-correlation" class="quarto-xref">Figur&nbsp;<span>1.3</span></a> uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. Att beskriva detta samband skulle inte ge någon information om verkligheten så en viktig del av regressionsanalys är att bedöma lämpligheten och relevansen av utvalda variabler. Rent matematiskt kan inte heller en regressionsmodell urskilja mellan kausala eller korrelationssamband vilket innebär att vi som analytiker måste ta hänsyn till vilken sorts data och hur data har samlats in för att använda och tolka modellerna på rätt sätt.</p>
 <p>Exemplet i figuren är insamlad som en <em>observationsstudie</em> där mätvärden (antal dödsfall och filmer) på enheterna (år) har observerats från olika registerdata. Vi har inte kunnat styra vilken relation dessa variabler har till varandra och studien i sig har inte tagit hänsyn till någon specifik orsak och verkan mellan de två. Vi kan därför endast dra slutsatser om korrelationssamband från en observationsstudie, vi kan säga att desto fler filmer Nicolas Cage medverkar i medför ett större antal dödsfall, vilket egentligen inte är relevant, men vi kan inte säga något om den kausala effekten.</p>
 <p>För att kunna dra slutsatser om kausala samband behöver vi genomföra en <em>experimentell studie</em> där vi styr vilka mätvärden som enheter får eller har och responsvariablen antas vara en direkt effekt från de förklarande variablerna. Medicinska studier, till exempel studier om Covid-vaccinets effektivitet på att motverka en infektion, är typiska exempel på experimentella studier där en förklarande variabel (dos) ges till vissa grupper av enheter där andra påverkande effekter kontrolleras för att justera den förklarande variabelns verkliga påverkan.</p>
-<section id="kontrollvariabler" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="kontrollvariabler"><span class="header-section-number">1.3.1</span> Kontrollvariabler</h3>
+<section id="sec-control" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="sec-control"><span class="header-section-number">1.3.1</span> Kontrollvariabler</h3>
 <p>I en observationsstudie kan vi ibland observera <em>kontrollvariabler</em> som kan justera den förklarande variabelns faktiska påverkan men det är främst i experimentella studier som dessa typer av variabler kan användas. Okända variabler kallas för <em>confounding</em>-effekter och antas påverka både den förklarande och responsvariabeln.</p>
 <p>I följande två figurer visas den huvudsakliga förklarande variabeln och den valda responsvariabeln med ovaler. De kända (heldragen) och okända (streckade) kontrollvariablerna visas som rektanglar.</p>
 <div id="fig-obs-relation" class="quarto-figure quarto-figure-center quarto-float anchored">

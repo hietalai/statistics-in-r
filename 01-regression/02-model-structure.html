@@ -175,9 +175,6 @@ window.Quarto = {
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/02-model-structure.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
   </nav>
 </header>
@@ -185,11 +182,6 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Sök"></div>
-        </div>
-        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -234,6 +226,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet (WIP)</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -244,7 +242,7 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#indikatorvariabler" id="toc-indikatorvariabler" class="nav-link active" data-scroll-target="#indikatorvariabler"><span class="header-section-number">3.1</span> Indikatorvariabler</a></li>
+  <li><a href="#sec-indicator-variable" id="toc-sec-indicator-variable" class="nav-link active" data-scroll-target="#sec-indicator-variable"><span class="header-section-number">3.1</span> Indikatorvariabler</a></li>
   <li><a href="#modellanpassning" id="toc-modellanpassning" class="nav-link" data-scroll-target="#modellanpassning"><span class="header-section-number">3.2</span> Modellanpassning</a>
   <ul class="collapse">
   <li><a href="#sec-model-fit-example" id="toc-sec-model-fit-example" class="nav-link" data-scroll-target="#sec-model-fit-example"><span class="header-section-number">3.2.1</span> Modellanpassning i R</a></li>
@@ -289,9 +287,9 @@ window.Quarto = {
 <p><span id="eq-penguin-quant"><span class="math display">\[
 \text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \cdots + E
 \tag{3.1}\]</span></span></p>
-<p>Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 1.2</span></a> framförallt antagandet om linjäritet. Har vi upptäckt icke-linjära samband i de parvisa visualiseringarna räcker det oftast inte med att inkludera en term i modellen. Detta kommer vi återkomma till i <a href="06-complex-predictors.html#sec-komplex-modell" class="quarto-xref"><span>Avsnitt 7.1</span></a>.</p>
-<section id="indikatorvariabler" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="indikatorvariabler"><span class="header-section-number">3.1</span> Indikatorvariabler</h2>
+<p>Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i <a href="00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 1.2</span></a> framförallt antagandet om linjäritet. Har vi upptäckt icke-linjära samband i de parvisa visualiseringarna räcker det oftast inte med att inkludera en term i modellen. Detta kommer vi återkomma till i <span class="quarto-unresolved-ref">?sec-komplex-modell</span>.</p>
+<section id="sec-indicator-variable" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-indicator-variable"><span class="header-section-number">3.1</span> Indikatorvariabler</h2>
 <p>En regressionsmodell kan inte hantera kvalitativa variabler direkt, exempelvis <span class="math inline">\(\beta_4 \cdot \text{art}\)</span>, då variabelns värden beskriver kategorier inte värden från en numerisk skala. Detta gäller även om den kvalitativa variabeln är kodad numerisk. En lutningsparameter beskriver den konstanta förändring i responsvariabeln när den tillhörande förklarande variabeln ökar med en enhet, men en kvalitativ variabel har oftast ingen enhet och inte heller konstanta förändringar mellan intilliggande värden. Istället måste vi transformera den kvalitativa variabeln numerisk genom <em>indikatorvariabler</em> (även kallad dummyvariabler).</p>
 <p>Som namnet antyder används indikatorvariabler för att indikera vilken kategori en observation har uppmätt på den kvalitativa variabeln. Vi behöver då skapa en begränsad mängd indikatorvariabler som på ett tydligt sätt visar exakt en kategori per observation.</p>
 <p>Anta att en kvalitativ variabel har 3 kategorier: <span class="math display">\[

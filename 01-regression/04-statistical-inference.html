@@ -175,9 +175,6 @@ window.Quarto = {
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/04-statistical-inference.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
   </nav>
 </header>
@@ -185,11 +182,6 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Sök"></div>
-        </div>
-        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -234,6 +226,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet (WIP)</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -256,7 +254,7 @@ window.Quarto = {
   <li><a href="#t-test-för-enskilda-parametrar" id="toc-t-test-för-enskilda-parametrar" class="nav-link" data-scroll-target="#t-test-för-enskilda-parametrar"><span class="header-section-number">5.2.3</span> t-test för enskilda parametrar</a></li>
   <li><a href="#konfidensintervall-för-beta" id="toc-konfidensintervall-för-beta" class="nav-link" data-scroll-target="#konfidensintervall-för-beta"><span class="header-section-number">5.2.4</span> Konfidensintervall för <span class="math inline">\(\beta\)</span></a></li>
   </ul></li>
-  <li><a href="#enkla-utvärderingsmått" id="toc-enkla-utvärderingsmått" class="nav-link" data-scroll-target="#enkla-utvärderingsmått"><span class="header-section-number">5.3</span> Enkla utvärderingsmått</a></li>
+  <li><a href="#sec-r-square" id="toc-sec-r-square" class="nav-link" data-scroll-target="#sec-r-square"><span class="header-section-number">5.3</span> Enkla utvärderingsmått</a></li>
   <li><a href="#sec-predictions" id="toc-sec-predictions" class="nav-link" data-scroll-target="#sec-predictions"><span class="header-section-number">5.4</span> Prediktioner</a>
   <ul class="collapse">
   <li><a href="#medelvärdet-av-y-för-givna-mathbfx" id="toc-medelvärdet-av-y-för-givna-mathbfx" class="nav-link" data-scroll-target="#medelvärdet-av-y-för-givna-mathbfx"><span class="header-section-number">5.4.1</span> Medelvärdet av Y för givna <span class="math inline">\(\mathbf{X}\)</span></a></li>
@@ -871,7 +869,7 @@ t_{test} = \frac{b_j - 0}{s_{b_j}}
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">format =</span> <span class="st">"markdown"</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Parameter"</span>, <span class="st">"Estimate"</span>, <span class="st">"Std. Error"</span>, <span class="st">"t value"</span>, <span class="st">"Pr(&gt;t)"</span>), </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variabel"</span>, <span class="st">"Skattning"</span>, <span class="st">"Medelfel"</span>, <span class="st">"t-värde"</span>, <span class="st">"p-värde"</span>), </span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">parse =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -885,11 +883,11 @@ Tabell&nbsp;5.6: Koefficienttabell för en modell med tillhörande t-test för e
 <table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
  <thead>
   <tr>
-   <th style="text-align:left;"> Parameter </th>
-   <th style="text-align:right;"> Estimate </th>
-   <th style="text-align:right;"> Std. Error </th>
-   <th style="text-align:right;"> t value </th>
-   <th style="text-align:right;"> Pr(&gt;t) </th>
+   <th style="text-align:left;"> Variabel </th>
+   <th style="text-align:right;"> Skattning </th>
+   <th style="text-align:right;"> Medelfel </th>
+   <th style="text-align:right;"> t-värde </th>
+   <th style="text-align:right;"> p-värde </th>
   </tr>
  </thead>
 <tbody>
@@ -975,8 +973,8 @@ b_j \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_j}
 \]</span></p>
 </section>
 </section>
-<section id="enkla-utvärderingsmått" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="enkla-utvärderingsmått"><span class="header-section-number">5.3</span> Enkla utvärderingsmått</h2>
+<section id="sec-r-square" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sec-r-square"><span class="header-section-number">5.3</span> Enkla utvärderingsmått</h2>
 <p>Bara för att en modell är lämplig, uppfyller modellantaganden och innehåller signifikanta parametrar, betyder det inte att modellen är den bästa som kan skapas eller överhuvudtaget bra. Med hjälp av olika utvärderingsmått kan vi få en överblick på hur bra modellen är.</p>
 <p><em>Förklaringsgraden</em> (<span class="math inline">\(R^2\)</span>) beskriver hur stor andel av den totala variationen som förklaras av modellens förklarande variabler. Med denna beskrivning kan vi beräkna <span class="math inline">\(R^2\)</span> som: <span class="math display">\[
 \begin{aligned}

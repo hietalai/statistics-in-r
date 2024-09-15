@@ -175,9 +175,6 @@ window.Quarto = {
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/05-simultaneous-inference.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
   </nav>
 </header>
@@ -185,11 +182,6 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Sök"></div>
-        </div>
-        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -232,6 +224,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet (WIP)</span></span></a>
   </div>
 </li>
     </ul>
@@ -498,7 +496,7 @@ Tabell&nbsp;6.1: p-värden för t-testet i respektive urval
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="st">`</span><span class="at">Testvariabel</span><span class="st">`</span> <span class="ot">=</span> statistic) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption.placement =</span> <span class="st">"top"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>, <span class="at">full_width =</span> <span class="cn">FALSE</span>) </span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="tbl-family-statistic" class="cell quarto-float anchored" data-tbl-cap-location="top">

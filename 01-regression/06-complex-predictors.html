@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,6 +84,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../01-regression/07-multicollinearity.html" rel="next">
 <link href="../01-regression/05-simultaneous-inference.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -67,7 +122,40 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Sök"
   }
 }</script>
+<script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
 
+<link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -107,9 +195,6 @@ ul.task-list li input[type="checkbox"] {
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/06-complex-predictors.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
   </nav>
 </header>
@@ -117,11 +202,6 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Sök"></div>
-        </div>
-        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -166,6 +246,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet (WIP)</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -176,12 +262,22 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#sec-komplex-modell" id="toc-sec-komplex-modell" class="nav-link active" data-scroll-target="#sec-komplex-modell"><span class="header-section-number">7.1</span> Interaktioner</a>
+  <li><a href="#sec-interaction" id="toc-sec-interaction" class="nav-link active" data-scroll-target="#sec-interaction"><span class="header-section-number">7.1</span> Interaktioner</a>
   <ul class="collapse">
-  <li><a href="#simpsons-paradox" id="toc-simpsons-paradox" class="nav-link" data-scroll-target="#simpsons-paradox"><span class="header-section-number">7.1.1</span> Simpson’s paradox</a></li>
+  <li><a href="#sec-interaction-qual-quant" id="toc-sec-interaction-qual-quant" class="nav-link" data-scroll-target="#sec-interaction-qual-quant"><span class="header-section-number">7.1.1</span> Interaktion mellan en kvalitativ och en kvantitativ variabel</a></li>
+  <li><a href="#sec-interaction-quant-quant" id="toc-sec-interaction-quant-quant" class="nav-link" data-scroll-target="#sec-interaction-quant-quant"><span class="header-section-number">7.1.2</span> Interaktion mellan två kvantitativa variabler</a></li>
+  <li><a href="#identifiera-interaktion" id="toc-identifiera-interaktion" class="nav-link" data-scroll-target="#identifiera-interaktion"><span class="header-section-number">7.1.3</span> Identifiera interaktion</a></li>
   </ul></li>
-  <li><a href="#polynom" id="toc-polynom" class="nav-link" data-scroll-target="#polynom"><span class="header-section-number">7.2</span> Polynom</a></li>
-  <li><a href="#multikollinearitet" id="toc-multikollinearitet" class="nav-link" data-scroll-target="#multikollinearitet"><span class="header-section-number">7.3</span> Multikollinearitet</a></li>
+  <li><a href="#polynom" id="toc-polynom" class="nav-link" data-scroll-target="#polynom"><span class="header-section-number">7.2</span> Polynom</a>
+  <ul class="collapse">
+  <li><a href="#centrering" id="toc-centrering" class="nav-link" data-scroll-target="#centrering"><span class="header-section-number">7.2.1</span> Centrering</a></li>
+  </ul></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">7.3</span> Övningsuppgifter</a>
+  <ul class="collapse">
+  <li><a href="#infektionsrisker-vid-sjukhus" id="toc-infektionsrisker-vid-sjukhus" class="nav-link" data-scroll-target="#infektionsrisker-vid-sjukhus"><span class="header-section-number">7.3.1</span> Infektionsrisker vid sjukhus</a></li>
+  <li><a href="#bostadsuthyrning" id="toc-bostadsuthyrning" class="nav-link" data-scroll-target="#bostadsuthyrning"><span class="header-section-number">7.3.2</span> Bostadsuthyrning</a></li>
+  </ul></li>
+  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
     </div>
@@ -210,21 +306,844 @@ ul.task-list li input[type="checkbox"] {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
-<p>När vi i <a href="01-explorative-analysis.html#sec-pairwise-visualization" class="quarto-xref"><span>Avsnitt 2.3</span></a> visualiserade de parvisa sambanden mellan</p>
-<section id="sec-komplex-modell" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="sec-komplex-modell"><span class="header-section-number">7.1</span> Interaktioner</h2>
-<section id="simpsons-paradox" class="level3" data-number="7.1.1">
-<h3 data-number="7.1.1" class="anchored" data-anchor-id="simpsons-paradox"><span class="header-section-number">7.1.1</span> Simpson’s paradox</h3>
+<p>I det utforskande steget av en undersökning kan vi ibland identifiera mer komplexa typer av samband mellan en förklarande variabel och responsvariabeln. Exempelvis identifierade vi i <a href="01-explorative-analysis.html#fig-width-length-annot" class="quarto-xref">Figur&nbsp;<span>2.6</span></a> grupper av punkter som visade ett positivt samband medan punktsvärmen överlag visade på ett negativt samband. Den linjära regressionsmodellen kan också med hjälp av vissa transformeringar modellera icke-linjära samband.</p>
+<section id="sec-interaction" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="sec-interaction"><span class="header-section-number">7.1</span> Interaktioner</h2>
+<p>Ibland kan en kombination av flera variabler förändra effekten som variablerna har enskilt med en responsvariabel. Till exempel kan temperaturens effekt på elkonsumtionen (<a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/electricityconsumption.csv">länk till datamaterialet</a> ) i en bostad påverkas av förekomsten av bergvärme.</p>
+<p>Läs in materialet och filtera bort saknade värden med:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>power <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="at">file =</span> <span class="st">"electricityconsumption.csv"</span>, <span class="at">dec =</span> <span class="st">"."</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(Bergsvärme <span class="ot">=</span> Bergsvärme <span class="sc">%&gt;%</span> <span class="fu">as_factor</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span>(Bergsvärme <span class="sc">%&gt;%</span> <span class="fu">is.na</span>() <span class="sc">|</span> Dygnsmedel <span class="sc">%&gt;%</span> <span class="fu">is.na</span>()))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(power) <span class="sc">+</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Dygnsmedel, <span class="at">y =</span> Energi_KWh, <span class="at">color =</span> Bergsvärme) <span class="sc">+</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"#d9230f"</span>), </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Ej installerad"</span>, <span class="st">"Installerad"</span>)) <span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatur"</span>, <span class="at">y =</span> <span class="st">"Elkonsumtion (kWh)"</span>, <span class="at">caption =</span> <span class="st">"Källa: Insamlad data från en bostad i Norrbotten."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-interaction-electricity" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-interaction-electricity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-complex-predictors_files/figure-html/fig-interaction-electricity-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-interaction-electricity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;7.1: Sambandet mellan temperatur och elkonsumtion uppdelat på förekomsten av bergsvärme
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-interaction-electricity" class="quarto-xref">Figur&nbsp;<span>7.1</span></a> visar två olika samband mellan temperatur och elkonsumtion beroende på om observationen (tidpunkten) mätte sambandet när bergsvärme var installerad i bostaden eller ej. När bergsvärme finns verkar påverkan av temperatur vara mindre (<span class="math inline">\(\beta = -1.432\)</span>) än när bergsvärme saknas (<span class="math inline">\(\beta = -3.626\)</span>), förändringen i elkonsumtion för varje ökad grad av temperatur har förändrats.</p>
+<p>För att modellen ska plocka upp variablernas synergi med varandra skapas en <em>interaktion</em> som en produkt av, i det enklaste fallet, de två variablerna och läggs till i modellen med en ytterligare tillhörande lutningsparameter.</p>
+<section id="sec-interaction-qual-quant" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="sec-interaction-qual-quant"><span class="header-section-number">7.1.1</span> Interaktion mellan en kvalitativ och en kvantitativ variabel</h3>
+<p>En utav de enklare formerna av en interaktion är mellan en kvalitativ och en kvantitativ variabel, som vi såg ett exempel på i <a href="#fig-interaction-electricity" class="quarto-xref">Figur&nbsp;<span>7.1</span></a>. Om vi ser ett sådant fenomen i ett spridningsdiagram tyder det på att de två variablerna interagerar med varandra för att skapa olika lutningsparametrar.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  Y_i = \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 \cdot \text{bergsvärme}_i + \beta_3 \cdot \text{temperatur}_i \cdot \text{bergsvärme}_i + E_i
+\end{aligned}
+\]</span> där <span class="math inline">\(\text{bergsvärme}_i\)</span> är en indikatorvariabel som indikerar 1 om bergsvärme förekommer och 0 annars.</p>
+<p>Kodningen av indikatorvariabeln betyder att vi egentligen får två olika möjliga utfall av modellen, en när <span class="math inline">\(\text{bergsvärme}_i = 1\)</span> och en när <span class="math inline">\(\text{bergsvärme}_i = 0\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  Y_{i|\text{bergsvärme} = 1} &amp;= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 \cdot 1 + \beta_3 \cdot \text{temperatur}_i \cdot 1 + E_i \\
+  &amp;= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 + \beta_3 \cdot \text{temperatur}_i + E_i\\
+  &amp;= \underbrace{( \beta_0 + \beta_2 )}_{\beta_0^*} + \underbrace{(\beta_1 + \beta_3)}_{\beta_1^*} \cdot \text{temperatur}_i + E_i\\
+  \\
+  Y_{i|\text{bergsvärme} = 0} &amp;= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 \cdot 0 + \beta_3 \cdot \text{temperatur}_i \cdot 0 + E_i\\
+  &amp;= \beta_0 + \beta_1 \cdot \text{temperatur}_i + E_i
+\end{aligned}
+\]</span> När <span class="math inline">\(\text{bergsvärme}_i = 1\)</span> skapas en enkel linjär modell med ett ‘nytt’ intercept <span class="math inline">\(\beta_0^*\)</span> och en ny lutningsparameter <span class="math inline">\(\beta_1^*\)</span>. <span class="math inline">\(\beta_2\)</span> och <span class="math inline">\(\beta_3\)</span> är alltså den kategoriska variabelns påverkan på regressionslinjens intercept respektive lutning. Vi kan generellt säga att med flera kategorier (indikatorvariabler) skapas flera varianter av modellen med en referenslinje när alla indikatorer är 0, och en linje för varje indikator som blir 1 där interceptet och lutningen förändras jämfört med referenslinjen.</p>
+<p>För att skapa en interaktion i modellen med hjälp av R kan symbolen <code>*</code> användas:</p>
+<div class="cell tbl-cap-location-top">
+<div class="sourceCode cell-code" id="cb3" data-cap-location="top"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Energi_KWh <span class="sc">~</span> Dygnsmedel <span class="sc">*</span> Bergsvärme, <span class="at">data =</span> power)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variabel"</span>, <span class="st">"Skattning"</span>, <span class="st">"Medelfel"</span>, <span class="st">"t-värde"</span>, <span class="st">"p-värde"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;"><caption><p>Koefficienttabell från en modell med en interaktion</p></caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Variabel </th>
+   <th style="text-align:right;"> Skattning </th>
+   <th style="text-align:right;"> Medelfel </th>
+   <th style="text-align:right;"> t-värde </th>
+   <th style="text-align:right;"> p-värde </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 80.115 </td>
+   <td style="text-align:right;"> 0.328 </td>
+   <td style="text-align:right;"> 244.008 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Dygnsmedel </td>
+   <td style="text-align:right;"> -3.626 </td>
+   <td style="text-align:right;"> 0.030 </td>
+   <td style="text-align:right;"> -119.777 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Bergsvärme1 </td>
+   <td style="text-align:right;"> -45.664 </td>
+   <td style="text-align:right;"> 0.375 </td>
+   <td style="text-align:right;"> -121.610 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Dygnsmedel:Bergsvärme1 </td>
+   <td style="text-align:right;"> 2.194 </td>
+   <td style="text-align:right;"> 0.035 </td>
+   <td style="text-align:right;"> 62.308 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>Eftersom bergsvärme anges som en faktorvariabel hanterar R detta korrekt (se <a href="02-model-structure.html#sec-indicator-variable" class="quarto-xref"><span>Avsnitt 3.1</span></a>) och hade även gjort det om det fanns flera kategorier. I detta fall skapas endast en ny variabel mellan indikatorvariabeln och den numeriska då det endast fanns två kategorier (en indikatorvariabel). Om fler indikatorvariabler hade skapats från den kvalitativa variabeln, hade fler interaktioner skapats, en för varje kombination av indikatorvariabel och kontinuerlig variabel.</p>
+<p>Vi kan tolka dessa skattningar som att om bostaden har bergsvärme installerad, sänks förbrukningen vid 0 grader med ca 45 kWh och temperaturens påverkan på konsumtionen förändras med ca 2.2 kWh mindre per ökad grad<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <strong>jämfört med en bostad utan bergsvärme</strong>. Vi får alltså två modeller:</p>
+<p><span class="math display">\[
+\begin{aligned}
+  \hat{Y}_{i|\text{bergsvärme} = 1} &amp;= ( 80.115 + -45.664 ) + (-3.626 + 2.194) \cdot \text{temperatur}_i \\
+  \\
+  \hat{Y}_{i|\text{bergsvärme} = 0} &amp;= 80.115 + -3.626 \cdot \text{temperatur}_i
+\end{aligned}
+\]</span> som vi kan visualisera i det tidigare diagrammet med:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(power) <span class="sc">+</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Dygnsmedel, <span class="at">y =</span> Energi_KWh, <span class="at">color =</span> Bergsvärme) <span class="sc">+</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"#d9230f"</span>), </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Ej installerad"</span>, <span class="st">"Installerad"</span>)) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatur"</span>, <span class="at">y =</span> <span class="st">"Elkonsumtion (kWh)"</span>, <span class="at">caption =</span> <span class="st">"Källa: Insamlad data från en bostad i Norrbotten."</span>) <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Lägga till regressionslinjer</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  Ej installerad (Referenslinjen)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="fu">coef</span>(model)[<span class="dv">1</span>],</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">slope =</span> <span class="fu">coef</span>(model)[<span class="dv">2</span>],</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="dv">1</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="dv">2</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  Installerad</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="fu">coef</span>(model)[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">coef</span>(model)[<span class="dv">3</span>],</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">slope =</span> <span class="fu">coef</span>(model)[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">coef</span>(model)[<span class="dv">4</span>],</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="dv">1</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Spridningsdiagram med gruppvisa regressionslinjer</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="simpsons-paradox" class="level4" data-number="7.1.1.1">
+<h4 data-number="7.1.1.1" class="anchored" data-anchor-id="simpsons-paradox"><span class="header-section-number">7.1.1.1</span> Simpson’s paradox</h4>
+</section>
+</section>
+<section id="sec-interaction-quant-quant" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="sec-interaction-quant-quant"><span class="header-section-number">7.1.2</span> Interaktion mellan två kvantitativa variabler</h3>
+<p>En interaktion mellan två kvantitativa variabler är svårare att visualisera och identifiera. Anta att vi har ett datamaterial som består av två förklarande variabler och en responsvariabel där det sanna sambandet inkluderar en interaktion mellan de förklarande variablerna.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Antal observationer</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">64</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Skapa ett datamaterial</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x1 =</span> <span class="fu">runif</span>(<span class="at">n =</span> n, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">5</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x2 =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">3</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span>x1 <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span>x2 <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>x1<span class="sc">*</span>x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Utforskning av materialet</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> y) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x2, <span class="at">y =</span> y) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> x2) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>cowplot<span class="sc">::</span><span class="fu">plot_grid</span>(p1, p2, p3)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Spridningsdiagram över de olika variablerna i materialet.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Med detta enkla exempel med endast två variabler och deras interaktion kan vi visualisera materialet med ett fåtal diagram och utläsa att modellen uppvisar någon form av komplext samband som inte de enskilda förklarande variablerna kan modellera. Desto fler förklarande variabler som finns minskar effektiviteten att identifiera interaktioner från enskilda parvisa diagram, vilket innebär att vi oftast identifierar behov av interaktioner utifrån modellanpassningar och residualanalys.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dåligModell <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> data)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(dåligModell)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Residualer från den felaktigt formulerade modellen.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Likt när vi tittar på en potentiell interaktion mellan en kvalitativ och kvantitativ variabel visas det tydligt i residualerna mot de anpassade värdena att det saknas något samband i modellen då residualerna inte uppvisar konstant varians. Även normalfördelningsdiagrammen identifierar långa svansar med många värden i extremerna.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>braModell <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">*</span> x2, <span class="at">data =</span> data)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(braModell)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Residualerna från en lämplig modell</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Nu ser residualerna bättre ut och det verkar som att modellen är en korrekt representation av sambandet.</p>
+<p>Till skillnad från <a href="#sec-interaction-qual-quant" class="quarto-xref"><span>Avsnitt 7.1.1</span></a> kommer tolkningar av interaktioner mellan två kvantitativa variabler bli betydligt svårare. Modellen kan inte på ett enkelt sätt ‘förenklas’ likt i det kvalitativa fallet men på ett ungefär kan vi säga att lutningsparametern för interaktionen påverkar lutningsparametern för respektive grundvariabel.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  Y_i &amp;= \beta_0 + \beta_1 \cdot X_{i1} + \beta_2 \cdot X_{i2} + \beta_3 \cdot X_{i1} \cdot X_{i2} + E_i \\
+  &amp;\qquad \qquad \qquad \text{alternativt}  \\
+  Y_i &amp;= \beta_0 + \beta_1 \cdot X_{i1} + (\beta_2 + \beta_3 \cdot X_{i1}) \cdot X_{i2} + E_i\\
+  \\
+  Y_i &amp;= \beta_0 + (\beta_1 + \beta_3 \cdot X_{i2}) \cdot X_{i1} + \beta_2 \cdot X_{i2} + E_i
+\end{aligned}
+\]</span> Eftersom vi i en multipel linjär regression tolkar parameterskattningar som att den förklarande variabeln förändrar responsvariabeln <strong>givet att alla andra variabler är fixa</strong> kommer en tolkning av en förändring i en förklarande variabel innebära att Y förändras på två platser. I den första alternativa formuleringen ser vi hur en förändring av <span class="math inline">\(X_{i1}\)</span> leder till att Y förändras både via <span class="math inline">\(\beta_1\)</span> och hur <span class="math inline">\(X_{i2}\)</span>s samband med Y (<span class="math inline">\(\beta_2\)</span>) förändras med anledning av <span class="math inline">\(\beta_3\)</span>.</p>
+<p>Det vi kan göra för att tolka en variabels effekt på responsvariabeln är att kombinera alla termer som omfattar variabeln och visualisera dens sammanfattande effekt givet att alla andra variabler är konstanta. För en interaktion mellan två kontinuerliga variabler kan vi fixera olika värden på den ena variabeln och modellera den andra variabelns effekt mot responsvariabeln. Ett vanligt sätt att göra detta är att fixera med hjälp av medelvärdet och en standardavvikelse åt båda hållen.</p>
+<div class="cell" data-tbl-cap-location="top">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(braModell) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variabel"</span>, <span class="st">"Skattning"</span>, <span class="st">"Medelfel"</span>, <span class="st">"t-värde"</span>, <span class="st">"p-värde"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-interaction" class="cell quarto-float anchored" data-tbl-cap-location="top">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-interaction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;7.1: Koefficienttabell från en modell med en interaktion
+</figcaption>
+<div aria-describedby="tbl-interaction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Variabel </th>
+   <th style="text-align:right;"> Skattning </th>
+   <th style="text-align:right;"> Medelfel </th>
+   <th style="text-align:right;"> t-värde </th>
+   <th style="text-align:right;"> p-värde </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 9.960 </td>
+   <td style="text-align:right;"> 0.155 </td>
+   <td style="text-align:right;"> 64.063 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> x1 </td>
+   <td style="text-align:right;"> 1.466 </td>
+   <td style="text-align:right;"> 0.052 </td>
+   <td style="text-align:right;"> 28.279 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> x2 </td>
+   <td style="text-align:right;"> -1.538 </td>
+   <td style="text-align:right;"> 0.053 </td>
+   <td style="text-align:right;"> -29.287 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> x1:x2 </td>
+   <td style="text-align:right;"> -2.981 </td>
+   <td style="text-align:right;"> 0.017 </td>
+   <td style="text-align:right;"> -176.049 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar ut skattade koefficienter från modellen med interaktion</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(braModell)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>meanX2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(data<span class="sc">$</span>x2)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>sdX2 <span class="ot">&lt;-</span> <span class="fu">sd</span>(data<span class="sc">$</span>x2)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>intData <span class="ot">&lt;-</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Skapa olika värden av x1 givet värdemängden</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x1 =</span> <span class="fu">seq</span>(<span class="fu">min</span>(data<span class="sc">$</span>x1), <span class="fu">max</span>(data<span class="sc">$</span>x1), <span class="at">by =</span> <span class="fl">0.01</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y1 =</span> b[<span class="dv">1</span>] <span class="sc">+</span> (b[<span class="dv">2</span>] <span class="sc">+</span> b[<span class="dv">4</span>]<span class="sc">*</span>(meanX2 <span class="sc">-</span> sdX2))<span class="sc">*</span>x1 <span class="sc">+</span> b[<span class="dv">3</span>] <span class="sc">*</span> (meanX2 <span class="sc">-</span> sdX2),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y2 =</span> b[<span class="dv">1</span>] <span class="sc">+</span> (b[<span class="dv">2</span>] <span class="sc">+</span> b[<span class="dv">4</span>]<span class="sc">*</span>(meanX2))<span class="sc">*</span>x1 <span class="sc">+</span> b[<span class="dv">3</span>] <span class="sc">*</span> (meanX2),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y3 =</span> b[<span class="dv">1</span>] <span class="sc">+</span> (b[<span class="dv">2</span>] <span class="sc">+</span> b[<span class="dv">4</span>]<span class="sc">*</span>(meanX2 <span class="sc">+</span> sdX2))<span class="sc">*</span>x1 <span class="sc">+</span> b[<span class="dv">3</span>] <span class="sc">*</span> (meanX2 <span class="sc">+</span> sdX2)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span>x1</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(intData) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> value, <span class="at">color =</span> name) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="fu">expression</span>(X[<span class="dv">2</span>]), <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"#d9230f"</span>, <span class="st">"black"</span>), <span class="at">labels =</span> <span class="fu">expression</span>(mu <span class="sc">-</span> sigma, mu, mu <span class="sc">+</span> sigma)) <span class="sc">+</span> </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(X[<span class="dv">1</span>]), <span class="at">y =</span> <span class="st">"Y"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-interaction-quant-quant" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-interaction-quant-quant-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-complex-predictors_files/figure-html/fig-interaction-quant-quant-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-interaction-quant-quant-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;7.2: <span class="math inline">\(X_1\)</span>:s effekt på responsvariabeln för ett givet värde på <span class="math inline">\(X_2\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Varning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Om fördelningen av <span class="math inline">\(X_2\)</span> <strong>inte</strong> är symmetrisk kan valet av ovanstående fixa värden vara missvisande. Om vi vill visualisera olika värden bör vi fundera över vilka som faktiskt är lämpliga att använda.</p>
+</div>
+</div>
+<p>Det vi kan utläsa från <a href="#fig-interaction-quant-quant" class="quarto-xref">Figur&nbsp;<span>7.2</span></a> är att effekten av <span class="math inline">\(X_1\)</span> är positiv för låga värden av <span class="math inline">\(X_2\)</span> och vänder till negativ för höga värden av <span class="math inline">\(X_2\)</span>. I ett enkelt fall som denna går det att visa och till viss del tolka interaktionens effekt på ett någorlunda tydligt sätt, men i en mer komplex modell blir det direkt rörigt. Vi bör istället titta på residualanalyser och annan utvärdering av modellen för att bedöma om interkationen gör att modellen blir bättre. Avvägningen mellan modellens komplexitet och dess träffsäkerhet är än mer viktig att diskutera för att modellen ska uppnå sitt syfte.</p>
+</section>
+<section id="identifiera-interaktion" class="level3" data-number="7.1.3">
+<h3 data-number="7.1.3" class="anchored" data-anchor-id="identifiera-interaktion"><span class="header-section-number">7.1.3</span> Identifiera interaktion</h3>
+<p>Vanligtvis kan vi få ledtrådar om interaktioner i de parvisa sambanden, speciellt om det är en interaktion beskriven i <a href="#sec-interaction-qual-quant" class="quarto-xref"><span>Avsnitt 7.1.1</span></a>, men ibland är det svårt att direkt se ifall en interaktion behövs. Det är också svårt att utläsa mellan exakt vilka variabler som interaktionen finns. Med hjälp av grupperade spridningsdiagram likt <a href="#fig-interaction-electricity" class="quarto-xref">Figur&nbsp;<span>7.1</span></a> (kvalitativa och kvantitativa) eller 3D-diagram (kvantitativa och kvantitativa) kan sambandet mellan par av förklarande variabler och responsvariabeln undersökas. Vi kan också skapa potentiella interaktioner och modellera dessa mot responsvariabeln i ett spridningsdiagram.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x1<span class="sc">*</span>x2, <span class="at">y =</span> y) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Interaktion"</span>, <span class="at">y =</span> <span class="st">"Y"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Interaktionen mellan <span class="math inline">\(X_1\)</span> och <span class="math inline">\(X_2\)</span> och dess samband med Y</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Diagrammet visar ett starkt negativt linjärt samband mellan interaktionen och responsvariabeln, vilket antyder att interaktionen har en betydande roll i modelleringen. Med flera variabler kommer antalet interaktioner som skulle kunna skapas öka exponentiellt</p>
+<p>Det går också att utläsa från residualanalysen ifall modellen inte plockar upp något samband med responsvariabeln men även med hjälp av dessa diagram kan det vara svårt att utläsa exakt vad för samband som saknas och vilka variabler som behöver justeras. Det är i detta läge som spridningsdiagram över residualerna uppdelat på de olika förklarande variablerna kan ge en indikation på vad som behöver justeras.</p>
+<p>Låt oss anpassa en felaktig modell utan interaktion och titta på residualerna:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(<span class="at">model =</span> <span class="fu">lm</span>(Energi_KWh <span class="sc">~</span> Dygnsmedel <span class="sc">+</span> Bergsvärme, <span class="at">data =</span> power))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Det är framförallt i diagrammet överst till höger som det syns att modellen saknar att modellera någon form av samband mellan variablerna.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>modelNoInt <span class="ot">&lt;-</span> <span class="fu">lm</span>(Energi_KWh <span class="sc">~</span> Dygnsmedel <span class="sc">+</span> Bergsvärme, <span class="at">data =</span> power)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>visData <span class="ot">&lt;-</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Residualer =</span> <span class="fu">resid</span>(modelNoInt),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">X1 =</span> power<span class="sc">$</span>Dygnsmedel,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">X2 =</span> power<span class="sc">$</span>Bergsvärme</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(visData) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> X1, <span class="at">y =</span> Residualer) <span class="sc">+</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatur"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Residualer mot förklarande variabler</figcaption>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(visData) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> X2, <span class="at">y =</span> Residualer) <span class="sc">+</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Bergsvärme"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-13-2.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Residualer mot förklarande variabler</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Om vi sedan visualiserar residualerna uppdelat på de två förklarande variablerna kan vi utläsa ett korsliknande mönster i den kvantitativa variabeln vilket antyder att vi har gruppvisa samband.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(<span class="at">model =</span> model) </span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>När interaktionen lagts till ser residualerna mycket bättre ut, dock inte helt perfekta för just denna modell.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>modelInt <span class="ot">&lt;-</span> <span class="fu">lm</span>(Energi_KWh <span class="sc">~</span> Dygnsmedel <span class="sc">*</span> Bergsvärme, <span class="at">data =</span> power)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>visData <span class="ot">&lt;-</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Residualer =</span> <span class="fu">resid</span>(modelInt),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">X1 =</span> power<span class="sc">$</span>Dygnsmedel,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">X2 =</span> power<span class="sc">$</span>Bergsvärme</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(visData) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> X1, <span class="at">y =</span> Residualer) <span class="sc">+</span> </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperatur"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Residualer mot förklarande variabler</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Residualerna mot temperatur har nu inte samma korsliknande mönster vilket har plockats upp av interaktionen dock syns ett svagt icke-linjärt mönster och framförallt problem med lika varians.</p>
 </section>
 </section>
 <section id="polynom" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="polynom"><span class="header-section-number">7.2</span> Polynom</h2>
+<p>Vi kan modellera vissa typer av icke-linjära samband mellan x och y genom att genomföra lämpliga transformationer av x, exempelvis polynomtermer. Vi simulerar ett datamaterial för att illustrera detta.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Simulera data</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2323</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapa 100 observationer</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Slumpa värden mellan -5 och 15 från den likformiga fördelningen</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> n, <span class="at">min =</span> <span class="sc">-</span><span class="dv">5</span>, <span class="at">max =</span> <span class="dv">15</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapa responsvariabeln genom en kvadratisk funktion och lägg till slumpvariation med rnorm()</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">4-1</span><span class="sc">*</span>x<span class="fl">+0.2</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vi kan visualisera detta datamaterial för att se ett icke-linjärt samband mellan de två variablerna. Eftersom vi utför simulering vet vi också vad de sanna parametrarna för modellen ska vara, vilket vi kan stämma av i senare utskrifter.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Lägg in de två variablerna i ett datamaterial för ggplot2</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">X =</span> x,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y =</span> y</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> X, <span class="at">y =</span> Y) <span class="sc">+</span> </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()  </span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Exempel på icke-linjärt samband mellan X och Y</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Om vi testar att först anpassa en “vanlig” linjär regression och utvärderar residualerna kommer vi se att residualantagandet om linjäritet inte uppfylls.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X, <span class="at">data =</span> data)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(model)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Residualdiagram från en linjär modell med ett icke-linjärt samband</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Dessa residualer ser inte bra ut, egentligen inte för någon utav antaganden, men det är främst residualerna mot de anpassade värdena som visar på det största problemet. Vi ser ett tydligt krökt mönster i punkterna som indikerar på att modellen inte är korrekt strukturerad.</p>
+<p>Vi kan anpassa polynom på olika sätt. Ett enkelt sätt att göra är att inkludera en ny variabel i datamaterialet som är en transformation av den förklarande variabeln, till exempel skapa <span class="math inline">\(X^2\)</span> som en ny kolumn.</p>
+<div class="cell" data-cap-location="top">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sparar över det gamla materialet</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Skapar en ny variabel som kvadraten av x</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">X2 =</span> x<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Anpassa en ny modell</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> ., <span class="at">data =</span> data)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variabel"</span>, <span class="st">"Skattning"</span>, <span class="st">"Medelfel"</span>, <span class="st">"t-värde"</span>, <span class="st">"p-värde"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-polynom-coefficient" class="cell quarto-float anchored" data-cap-location="top">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-polynom-coefficient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;7.2: Skattade koefficienter från en modell med polynom
+</figcaption>
+<div aria-describedby="tbl-polynom-coefficient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Variabel </th>
+   <th style="text-align:right;"> Skattning </th>
+   <th style="text-align:right;"> Medelfel </th>
+   <th style="text-align:right;"> t-värde </th>
+   <th style="text-align:right;"> p-värde </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 4.240 </td>
+   <td style="text-align:right;"> 0.151 </td>
+   <td style="text-align:right;"> 28.103 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:right;"> -1.057 </td>
+   <td style="text-align:right;"> 0.042 </td>
+   <td style="text-align:right;"> -24.930 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> X2 </td>
+   <td style="text-align:right;"> 0.204 </td>
+   <td style="text-align:right;"> 0.004 </td>
+   <td style="text-align:right;"> 55.630 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(model)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Residualdiagram från en modell med polynom</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Denna modell ser ut att uppfylla modellantaganden eftersom vi har lagt till en variabel som tar hänsyn till det icke-linjära samband som X har med Y. Parameterskattningarna som vi får från modellen stämmer också till stor del överens med den sanna modell som vi simulerat materialet ifrån.</p>
+<section id="centrering" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="centrering"><span class="header-section-number">7.2.1</span> Centrering</h3>
+<p>När polynom används är det önskvärt att centrera eller standardisera grundvariablerna som används för polynomen. Detta görs för att minska de värden som modellen använder till sin anpassning (beräkningskomplexitet) och för att variablerna skapas utifrån varandra och har ett starkt beroende mellan sig (multikollinearitet, <a href="07-multicollinearity.html#sec-multicollinearity" class="quarto-xref"><span>Avsnitt 8.1</span></a>). Det finns många problem med starka beroenden mellan förklarande variabler och ett utav dem är att höga kovarianser leder till icke-informativ inferens.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapa centrerad data</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dataCent <span class="ot">&lt;-</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Centrera variabeln x med hjälp av scale()</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Standardisering kan göras genom argument scale = TRUE </span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">XCent =</span> X <span class="sc">%&gt;%</span> <span class="fu">scale</span>(<span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">X2Cent =</span> XCent<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Vi kan med hjälp av <code>colMeans()</code> se medelvärden för de icke-centrerade och centrerade variablerna. Det finns en stor skillnad, främst för polynomens medelvärde vilket visar på syftet med centrering, att reducera värden som används inom modellanpassningen.</p>
+<div class="cell" data-cap-location="top">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb22" data-cap-location="top"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(dataCent) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="st">"Medelvärde"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table" style="width: auto !important; margin-left: auto; margin-right: auto;"><caption><p>Variablernas medelvärden</p></caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Medelvärde </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:right;"> 5.399 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Y </td>
+   <td style="text-align:right;"> 11.555 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> X2 </td>
+   <td style="text-align:right;"> 63.871 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> XCent </td>
+   <td style="text-align:right;"> 0.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> X2Cent </td>
+   <td style="text-align:right;"> 34.727 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>När vi anpassar en modell med polynom finns det också ett alternativt sätt att göra det på. Vi har i de tidigare exemplen skapat polynomet som en ny variabel i datamaterialet och kan inkludera den variabeln (<code>X2</code> eller <code>X2Cent</code>) i modellstrukturen för <code>lm()</code>. Vi <em>behöver</em> egentligen inte skapa en ny variabel, och det brukar vi inte heller göra i praktiken om det ska skapas flera polynom av olika grad. Istället kan vi i formeln ange hur vi vill transformera grundvariabler med hjälp av <code>I(X^2)</code> där exponenten anger graden av polynomet. Om vi inte använder <code>I()</code> runt vår beräkning kommer R inte skapa ett polynom.</p>
+<div class="cell" data-cap-location="top">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Anpassa ny modell med centrerad x</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>modelCent <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> XCent <span class="sc">+</span> X2Cent, <span class="at">data =</span> dataCent)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternativt </span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>modelCent <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> XCent <span class="sc">+</span> <span class="fu">I</span>(XCent<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> dataCent)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelCent) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variabel"</span>, <span class="st">"Skattning"</span>, <span class="st">"Medelfel"</span>, <span class="st">"t-värde"</span>, <span class="st">"p-värde"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-polynom-coefficient-center" class="cell quarto-float anchored" data-cap-location="top">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-polynom-coefficient-center-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;7.3: Skattade koefficienter från en modell med centrerade polynom
+</figcaption>
+<div aria-describedby="tbl-polynom-coefficient-center-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table quarto-disable-processing="true" class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Variabel </th>
+   <th style="text-align:right;"> Skattning </th>
+   <th style="text-align:right;"> Medelfel </th>
+   <th style="text-align:right;"> t-värde </th>
+   <th style="text-align:right;"> p-värde </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 4.475 </td>
+   <td style="text-align:right;"> 0.168 </td>
+   <td style="text-align:right;"> 26.681 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> XCent </td>
+   <td style="text-align:right;"> 1.144 </td>
+   <td style="text-align:right;"> 0.019 </td>
+   <td style="text-align:right;"> 61.526 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> I(XCent^2) </td>
+   <td style="text-align:right;"> 0.204 </td>
+   <td style="text-align:right;"> 0.004 </td>
+   <td style="text-align:right;"> 55.630 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(modelCent)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-complex-predictors_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Residualdiagram från en modell med centrerade polynom</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Modellen får olika parameterskattningar för grundvariabeln jämfört med den icke-centrerade modellen (<a href="#tbl-polynom-coefficient" class="quarto-xref">Tabell&nbsp;<span>7.2</span></a>) eftersom variablerna som används till anpassningen har olika tolkningar. När vi centrerar en variabel tolkas lutningsparametern som när den förklarand variabelns <em>avstånd från sitt medelvärde</em> ökar med ett, förändras y med parameterns värde. Däremot ser vi att parametern för polynomet är densamma samt att residualerna från modellen också är det.</p>
+<p>En centrering av variabler för polynom ändrar alltså inte hur bra modellen är på att anpassa responsvariabeln men förenklar bakomliggande beräkningar och förändrar tolkningar av parameterskattningar.</p>
 </section>
-<section id="multikollinearitet" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="multikollinearitet"><span class="header-section-number">7.3</span> Multikollinearitet</h2>
-<p>Bla</p>
+</section>
+<section id="övningsuppgifter" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">7.3</span> Övningsuppgifter</h2>
+<p>I detta kapitel introduceras två datamaterial som kommer återkomma i efterföljande kapitel.</p>
+<section id="infektionsrisker-vid-sjukhus" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="infektionsrisker-vid-sjukhus"><span class="header-section-number">7.3.1</span> Infektionsrisker vid sjukhus</h3>
+<p><code>SENIC</code> står för the Study on the Efficacy of Nosocomial Infection Control <span class="citation" data-cites="senic1980">(<a href="#ref-senic1980" role="doc-biblioref">Haley m.fl. 1980</a>)</span> och behandlar olika sätt att identifiera och kontrollera infektioner som uppstår på sjukhus. Datamaterialet består utav ett slumpmässigt urval om 113 sjukhus från de 338 undersökta. Materialet inkluderar följande variabler:</p>
+<ul>
+<li><code>ID</code>: Ett ID nummer för respektive sjukhus,</li>
+<li><code>Length_of_stay</code>: Genomsnittligt antal dagar en patient stannar på sjukhuset,</li>
+<li><code>Age</code>: Genomsnittlig ålder (år) på en patient,</li>
+<li><code>Infection_risk</code>: Genomsnittlig uppskattad sannolikhet (i procent) att smittas av en infection på sjukhuset,</li>
+<li><code>Routine_culturing_ratio</code>: Kvoten mellan antalet odlingar som genomförts med antalet patienter utan symtom på infektion (multiplicerat med 100),</li>
+<li><code>Routine_chest_X_ray_ratio</code>: Kvoten mellan antalet röntgenbilder som genomförts med antalet patienter utan symtom på lunginflammation (multiplicerat med 100),</li>
+<li><code>Number_of_beds</code>: Genomsnittlig antal sjukhussängar (platser) vid sjukhuset under undersökningsperioden,</li>
+<li><code>Medical_school_affiliation</code>: Ja/Nej om sjukhuset är kopplat till en läkarutbildning (1 = Ja, 2 = Nej),</li>
+<li><code>Region</code>: Sjukhusets geografiska område (1 = Nordost, 2 = Mellanvästern, 3 = Syd, 4 = Väst),<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li><code>Average_daily_census</code>: Genomsnittligt antal patienter vid sjukhuset under undersökningsperioden,</li>
+<li><code>Number_of_nurses</code>: Genomsnittligt antal heltidsanställda licensierade sjuksköterskor under undersökningsperioden (antal heltids + 0.5 antal deltidsanställda),</li>
+<li><code>Available_facilties_and_services</code>: Andel av 35 möjliga anläggningar och tjänster ett sjukhus kan erjbuda.</li>
+</ul>
+<p>Datamaterialet kan laddas ner <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/SENIC.csv">här</a>.</p>
+<p>Efter att ha laddat ner datamaterialet, skapa en designmatris med variablerna:</p>
+<ul>
+<li><span class="math inline">\(X_1 =\)</span> <code>Length_of_stay</code></li>
+<li><span class="math inline">\(X_2 =\)</span> <code>Age</code></li>
+<li><span class="math inline">\(X_3 =\)</span> <code>Routine_chest_X_ray_ratio</code></li>
+<li><span class="math inline">\(X_4 =\)</span> <code>Medical_shool_affiliation</code></li>
+</ul>
+<p>Koda <span class="math inline">\(X_4\)</span> så att 1 betyder att sjukhuset är kopplat till en läkarutbildning och 0 annars.</p>
+<ol type="a">
+<li><p>Visualisera de parvisa samband mellan de fyra förklarande variablerna och responsvariabeln. Är det något i dessa diagram som sticker ut som motiverar att en mer komplex modell behöver anpassas?</p></li>
+<li><p>Anpassa en regressionsmodell med infektionsrisken (<code>Infection_risk</code>) som responsvariabel och alla variablerna i designmatrisen ni skapat som förklarande variabler. Utvärdera modellen med hjälp av residualanalys och fokusera på att kontrollera antagandet om linjäritet.</p></li>
+<li><p>Vissa forskare tror att det kan finnas en interaktion mellan variablerna <span class="math inline">\(X_2\)</span> och <span class="math inline">\(X_4\)</span> samt mellan <span class="math inline">\(X_3\)</span> och <span class="math inline">\(X_4\)</span> i relation till responsvariabeln. Utgå från modellen i b) och lägg till lämpliga interaktionstermer till designmatrisen för dessa två samband och anpassa en ny modell (med sex förklarande variabler).</p>
+<ol type="i">
+<li>Utvärdera modellen med hjälp av residualanalys och jämför med diagrammen från b). Hur har modellen blivit bättre?</li>
+<li>Testa med <strong>ett test</strong> om interaktionstermerna kan uteslutas.</li>
+</ol></li>
+</ol>
+</section>
+<section id="bostadsuthyrning" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="bostadsuthyrning"><span class="header-section-number">7.3.2</span> Bostadsuthyrning</h3>
+<p>Datamaterialet för denna övning innehåller en responsvariabel (<span class="math inline">\(Y\)</span> = uthyrningskostnad i tusentals dollar) och fyra förklarande variabler:</p>
+<ul>
+<li><span class="math inline">\(X_1\)</span> = ålder (år),</li>
+<li><span class="math inline">\(X_2\)</span> = driftkostnad och skatt (tusentals dollar),</li>
+<li><span class="math inline">\(X_3\)</span> = vakansgrad (andel),</li>
+<li><span class="math inline">\(X_4\)</span> = yta (kvadratfot)</li>
+</ul>
+<p>Datamaterialet kan laddas ner <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/properties.csv">här</a>.</p>
+<ol type="a">
+<li><p>Visualisera de parvisa samband mellan de fyra förklarande variablerna och responsvariabeln. Är det något i dessa diagram som sticker ut som motiverar att en mer komplex modell behöver anpassas?</p></li>
+<li><p>Anpassa en regressionsmodell där Y förklaras av <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span> och <span class="math inline">\(X_4\)</span>. Utvärdera modellen med hjälp av residualanalys och fokusera på att kontrollera antagandet om linjäritet.</p></li>
+<li><p>Anpassa två regressionsmodeller:</p>
+<ul>
+<li>Modell 1: <span class="math inline">\(Y\)</span> som responsvariabel och <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_1^2\)</span>, <span class="math inline">\(X_2\)</span> och <span class="math inline">\(X_4\)</span> som förklarande variabler.</li>
+<li>Modell 2: Samma variabler som i modell 1, men <span class="math inline">\(X_1\)</span> centreras: <span class="math inline">\(X_{1,c} = X_1 - \bar{X}_1\)</span> där <span class="math inline">\(\bar{X}_1\)</span> är medelvärdet för <span class="math inline">\(X_1\)</span>.</li>
+</ul>
+<p>Ta fram parameterskattningarna för de båda modellerna och jämför koefficienterna för de icke-centrerade och centrerade variablerna.</p></li>
+<li><p>Beräkna korrelationsmatrisen för designmatrisen från de båda modellerna, avrundade till 2 decimaler. Undersök hur de två matriserna skiljer sig åt och fundera kring vilken effekt som centrering haft.</p></li>
+</ol>
+<p>Följande uppgifter använder sig av modell 2.</p>
+<ol start="5" type="a">
+<li><p>Utvärdera modellen med hjälp av residualanalys och jämför med diagrammen från b). Hur har modellen blivit bättre?</p></li>
+<li><p>Skatta medelvärdet av <span class="math inline">\(Y\)</span> med ett 95-procentigt konfidensintervall för följande observation <span class="math inline">\(\{X_1 = 8, X_2 = 16, X4 = 250 000\}\)</span>. Tolka intervallet.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p></li>
+</ol>
+</section>
+</section>
+<section id="referenser" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-senic1980" class="csl-entry" role="listitem">
+Haley, Robert, DANA QUADE, HOWARD FREEMAN, och JOHN BENNETT. 1980. <span>”The SENIC Project. Study on the efficacy of nosocomial infection control (SENIC Project). Summary of study design”</span>. <em>American journal of epidemiology</em> 111 (juni): 472–85. <a href="https://doi.org/10.1093/oxfordjournals.aje.a112928">https://doi.org/10.1093/oxfordjournals.aje.a112928</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Tänk på att temperatur har ett negativt samband som blir ett värde närmare 0 med interaktionen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Se <a href="https://en.wikipedia.org/wiki/List_of_regions_of_the_United_States">Wikipedia</a> för en beskrivning av dessa regioner<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Notera att modellen utgår från ett centrerad <span class="math inline">\(X_1\)</span>, vilket innebär att vi måste centrera den nya observationens värde innan prediktionen beräknas.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -644,6 +1563,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../01-regression/07-multicollinearity.html" class="pagination-link" aria-label="Multikollinearitet (WIP)">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet (WIP)</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

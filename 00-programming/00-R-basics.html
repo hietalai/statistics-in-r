@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.553">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Statistisk teori och tillämpningar i R - 1&nbsp; Grunder i R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../00-programming/01-packages-and-functions.html" rel="next">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Inget resultat",
+    "search-matching-documents-text": "matchande dokument",
+    "search-copy-link-title": "Kopiera länk för att söka",
+    "search-hide-matches-text": "Göm ytterligare resultat",
+    "search-more-match-text": "annat resultat i detta dokument",
+    "search-more-matches-text": "fler resultat i detta dokument",
+    "search-clear-button-title": "Rensa",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Verkställ",
+    "search-label": "Sök"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Sök"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Skifta navigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../00-programming/00-R-basics.html" aria-current="page"> 
+<span class="menu-text">Programmering i R</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../01-regression/00-intro-regression.html"> 
+<span class="menu-text">Regressionsanalys</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-R-basics.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunder i R</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/00-R-basics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunder i R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innehållsförteckning</h2>
+   
+  <ul>
+  <li><a href="#introduktion" id="toc-introduktion" class="nav-link active" data-scroll-target="#introduktion"><span class="header-section-number">1.1</span> Introduktion</a>
+  <ul class="collapse">
+  <li><a href="#starta-rstudio" id="toc-starta-rstudio" class="nav-link" data-scroll-target="#starta-rstudio"><span class="header-section-number">1.1.1</span> Starta RStudio</a></li>
+  <li><a href="#r-kod-i-underlaget" id="toc-r-kod-i-underlaget" class="nav-link" data-scroll-target="#r-kod-i-underlaget"><span class="header-section-number">1.1.2</span> R kod i underlaget</a></li>
+  </ul></li>
+  <li><a href="#sec-basics-R" id="toc-sec-basics-R" class="nav-link" data-scroll-target="#sec-basics-R"><span class="header-section-number">1.2</span> Grundläggande programmering i R</a>
+  <ul class="collapse">
+  <li><a href="#r-som-miniräknare" id="toc-r-som-miniräknare" class="nav-link" data-scroll-target="#r-som-miniräknare"><span class="header-section-number">1.2.1</span> R som miniräknare</a></li>
+  <li><a href="#sec-objectTypes" id="toc-sec-objectTypes" class="nav-link" data-scroll-target="#sec-objectTypes"><span class="header-section-number">1.2.2</span> Objekt och dess typer</a></li>
+  <li><a href="#felsökning" id="toc-felsökning" class="nav-link" data-scroll-target="#felsökning"><span class="header-section-number">1.2.3</span> Felsökning</a></li>
+  <li><a href="#datastrukturer" id="toc-datastrukturer" class="nav-link" data-scroll-target="#datastrukturer"><span class="header-section-number">1.2.4</span> Datastrukturer</a></li>
+  </ul></li>
+  <li><a href="#sammanfattning" id="toc-sammanfattning" class="nav-link" data-scroll-target="#sammanfattning"><span class="header-section-number">1.3</span> Sammanfattning</a></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">1.4</span> Övningsuppgifter</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunder i R</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>R är ett så kallat open-source programmeringsspråk. Open-source betyder att programmet är gratis att ladda ner och använda, samt att vem som helst har möjlighet att skapa egna, skräddarsydda metoder eller analyser som enkelt kan delas med omvärlden. R har använts av statistiker och analytiker i mer än 20 års tid och många bidrag har byggt upp ett starkt och flexibelt verktyg som kan anpassas för många ändamål.</p>
+<section id="introduktion" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="introduktion"><span class="header-section-number">1.1</span> Introduktion</h2>
+<p>R kännetecknas av sina <em>paket</em> med <em>funktioner</em> som vi kan använda för att genomföra olika <em>operationer</em>. Vi kan se på funktionerna som olika verktyg ämnade att lösa specifika problem, till exempel om vi vill slå in en spik i en bräda kan vi använda en hammare, och paketen som olika verktygslådor fokuserade på att genomföra en viss form utav arbete. När vi installerar R för första gången får vi tillgång till en stor mängd olika paket, men vi har möjligheten att utöka dessa väldigt enkelt. Vem som helst skapa funktioner och paket för allmänheten och ibland finns det ett behov av att ladda ner nya paket (motsv. köpa in nya verktygslådor) för att genomföra en viss sorts analys.</p>
+<p>Det finns flertalet gränssnitt som hjälper till att programmera med R, men vi rekommenderar att använda RStudio. Detta visuella gränssnitt medför att vi inte behöver programmera med en kommandotolk. För att installera R och RStudio kan du följa instruktionerna <a href="https://posit.co/download/rstudio-desktop/">här</a>. Detta underlag är skapad med R version 4.4.1 (2024-06-14 ucrt).</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>När vi programmerar i R, sparas objekt som vi skapar i datorns arbetsminne (RAM-minne). Arbetsminnet kan vi säga motsvarar ett korttidsminne, vilket innebär att vi har ett mindre utrymme att arbeta med än datorns hårddisk och information finns endast där temporärt. När vi startar upp R börjar vi en <code>session</code> som avslutas när vi stänger ner programmet. Vi kan spara objekt för att använda de senare i samma session, men dessa rensas när vi stänger ner programmet. Om vi vill använda objekt mellan sessioner kan vi spara ner information till datorns hårddisk, eller dess långtidsminne, på några olika sätt.</p>
+</div>
+</div>
+<section id="starta-rstudio" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="starta-rstudio"><span class="header-section-number">1.1.1</span> Starta RStudio</h3>
+<p>När vi startar RStudio för första gången, delas programmet in i tre olika fönster. Det är starkt rekommenderat att alltid börja med att öppna eller skapa ett dokument där kod sparas (även kallad ett <code>R Script</code> eller <em>skript</em>) genom <strong>File</strong> -&gt; <strong>New file</strong> -&gt; <strong>R Script</strong> (eller kortkommandot <em>Ctrl</em> el. <em>Command</em> + <em>Shift</em> + <em>N</em>). När detta skript öppnas delas RStudio in i fyra olika fönster. Ett skript har ändelsen <code>.R</code> men är i grunden en textfil och kan öppnas i alla enkla texthanterare, t.ex. Notepad, om vi vill redigera koden utanför R eller RStudio.</p>
+<section id="kort-genomgång-av-rstudio" class="level4" data-number="1.1.1.1">
+<h4 data-number="1.1.1.1" class="anchored" data-anchor-id="kort-genomgång-av-rstudio"><span class="header-section-number">1.1.1.1</span> Kort genomgång av RStudio</h4>
+<p>När ett skript skapats innehåller nu det övre vänstra fönstret denna fil. Här kan vi skriva kod som kan sparas ned och användas igen nästa gång vi öppnar programmet. Skriptet kan också skickas mellan datorer och är ett bra sätt att kunna dela med sig utav vad det är man jobbar med. Det rekommenderas starkt att alltid skriva kod i ett skript för att ha möjligheten att återanvända och redigera koden på ett lätt sätt.</p>
+<p>Det nedre vänstra fönstret innehåller en <em>konsol</em>. Här visas all kod som vi kör och tillhörande utskrifter och vi kan också skriva kod direkt i konsollen. Det som skiljer användandet av konsollen med ett skript är att all kod som vi skriver i konsollen inte sparas någonstans och kommer försvinna nästa gång vi startar upp programmet. Det är också svårt att redigera kod, till exempel om man gjort något stavfel eller måste revidera kod som man skrivit för länge sedan.</p>
+<p>I det nedre högra fönstret kan vi se olika flikar som visar filer från datorn, skapade visualiseringar, en översikt av de paket som vi har tillgängliga, samt få hjälp om olika funktioner i hjälpdokumentationen. Paket i R har inbyggda hjälpfiler som kan underlätta förståelsen av vad en funktion gör, hur den arbetar, vad den behöver för att köras med mera. Det rekommenderas att alltid börja med att titta i dokumentationen för en funktion om man är osäker på vad det är den gör.</p>
+<p>Det övre högra fönstret innehåller en översikt av alla objekt som vi skapar under en session och som R lagrar i korttidsminnet. Objekten som vi ser i RStudios <em>Environment</em>-flik kan vi klicka på för att antingen få mer detaljer om objektet, exempelvis hur stort ett visst objekt är eller om den innehåller fler delobjekt.</p>
+<p>Vi kommer återkomma till dessa olika fönster senare i underlaget.</p>
+</section>
+</section>
+<section id="r-kod-i-underlaget" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="r-kod-i-underlaget"><span class="header-section-number">1.1.2</span> R kod i underlaget</h3>
+<p>I detta underlag kommer kodexempel (ljus bakgrund) visas som du kan kopiera till din egna dator. En knapp finns överst i det högra hörnet som kopierar allt innehåll i kodblocket. Från exemplena visas också utskrifter (mörk bakgrund) från koden som vi i RStudio ser i konsollen.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exempelkod som kan kopieras med en knapp i det övra högra hörnet.</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Utskrift från koder.</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-basics-R" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-basics-R"><span class="header-section-number">1.2</span> Grundläggande programmering i R</h2>
+<p>R är ett kraftfullt språk som kan genomföra väldigt komplexa och avancerade beräkningar. Innan vi kommer dit måste vi första börja med grunderna i R och en utav de vanligaste användningsområdena för R är att använda språket som en vanlig miniräknare. R kommer läsa varje rad kod som en enskild operation och vi kan <code>köra</code> kod på flera olika sätt.</p>
+<p>Vi kan antingen använda knappen uppe till höger av skriptet som heter Run eller använda kortkommandot <em>Ctrl</em> el. <em>Command</em> + <em>Enter</em> för att köra enstaka rader kod. R kan också köra flera rader kod samtidigt om vi markerar flera rader och klickar på Run eller använder kortkommandot.</p>
+<section id="r-som-miniräknare" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="r-som-miniräknare"><span class="header-section-number">1.2.1</span> R som miniräknare</h3>
+<p>Till att börja med kan vi använda matematiska operatorer såsom <code>+</code>, <code>-</code>, <code>*</code>, och <code>/</code>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Addition</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Subtraktion</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="sc">-</span> <span class="dv">2</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Multiplikation</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span> <span class="sc">*</span> <span class="dv">5</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Division</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="dv">20</span> <span class="sc">/</span> <span class="dv">4</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+</div>
+<p>R kommer genomföra dessa operationer mellan siffrorna och skriva ut svaret i konsollen. De vanliga räknereglerna för matematiska operatorer gäller här vilket innebär att t.ex. kommer:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Räkneregler</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">3</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+</div>
+<p>generera ett annorlunda svar än:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Räkneregler forts.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">*</span> <span class="dv">3</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9</code></pre>
+</div>
+</div>
+<section id="kommentarer-i-koden" class="level4" data-number="1.2.1.1">
+<h4 data-number="1.2.1.1" class="anchored" data-anchor-id="kommentarer-i-koden"><span class="header-section-number">1.2.1.1</span> Kommentarer i koden</h4>
+<p>I ovanstående kodexempel ser vi också något speciellt. Om du kopierar all text från ett utav blocken och kör den på egen hand, kommer R endast skriva ut resultat från raden som inte innehåller <code>#</code>. En rad som börjar med <code>#</code> kommer R istället läsa som en kommentar. Detta medför att vi kan kommentera kod som vi skriver vilket har många fördelar.</p>
+<p>Dels kan vi i anslutning till specifika bitar kod själva beskriva vad koden gör och vad för resultat som vi förväntar oss att få. Det är väldigt lätt att man i ett stort skript tappar bort sig själv, eller när man öppnar skriptet vid nästa session har glömt bort vad det är koden gör. Med kommentarer kan vi lättare komma ihåg vad de olika delarna gör, men framförallt om vi skickar koden till någon annan kan vi skicka med tillhörande instruktioner så att det blir lättare att följa vad det är som händer. <strong>Försök att få in en rutin att kommentera kod som du skriver redan från början!</strong></p>
+</section>
+</section>
+<section id="sec-objectTypes" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="sec-objectTypes"><span class="header-section-number">1.2.2</span> Objekt och dess typer</h3>
+<p>I tidigare exempel kommer svaret på beräkningarna endast skrivas ut i konsollen, men om vi hade varit intresserade av att spara ner informationen och använda den senare behöver vi specifikt säga till R att göra det.</p>
+<p>Vi kan spara resultat av en operation till ett <em>objekt</em> med hjälp av <code>&lt;-</code>. När vi vill ge ett objekt ett värde är det praxis att använda <code>&lt;-</code> och vi kan skriva detta som en kombination av symbolerna, <code>&lt;</code> och <code>-</code>. Vi kan läsa det som ’‘<em>ett värde ges till objektet i pilens riktning</em>’’.</p>
+<p>Objekt kan heta nästintill vadsomhelst men vi måste förhålla oss till ett par begränsningar:</p>
+<ul>
+<li>ett objektnamn kan <strong>inte</strong> börja med en siffa, ex. <code>9tal &lt;- 9</code> är inte tillåtet.</li>
+<li>ett objektnamn kan <strong>inte</strong> innehålla mellanslag, ex. <code>ett tal &lt;- 2</code> är inte tillåtet. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+</ul>
+<p>Istället kan vi använda siffror och andra symboler <em>inuti</em> namnet, ex. <code>tal9</code>. Istället för mellanslag för att separera ord kan vi använda ett system kallad <em>camelCase</em>. Detta sätt att namnge objekt medför att vi tar bort alla mellanslag, slår ihop orden, och använder stor bokstav för att urskilja enskilda delar, ex. <code>ettTal</code>.</p>
+<p>Vi kan spara några matematiska operationer för att använda de senare.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Summan av 2 + 3 tilldelas till ett objekt, döpt till a</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Vi kan använda en högerriktad pil, men detta är inte praxis</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span> <span class="ot">-&gt;</span> a</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Vi kan nu använda <code>a</code> i senare delar av vår kod och R kommer veta att objektet innehåller summan av <code>2 + 3</code>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## a (5) + 3</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>a <span class="sc">+</span> <span class="dv">3</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## a (5) / 5</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>a <span class="sc">/</span> <span class="dv">5</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<section id="typer" class="level4" data-number="1.2.2.1">
+<h4 data-number="1.2.2.1" class="anchored" data-anchor-id="typer"><span class="header-section-number">1.2.2.1</span> Typer</h4>
+<p>R kan utföra olika operationer beroende på vilken typ av objekt som vi har sparat. En fördel jämfört med andra programmeringsspråk är att vi, i majoriteten av fallen, inte behöver säga till R vilken typ ett objekt är, R kan läsa av kontexten relativt bra. Till exempel kommer objektet <code>a</code> vara numeriskt (mer specifikt typen <em>numeric</em>) och vi kan kontrollera detta genom funktionen <code>class()</code>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(a)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+</div>
+<p>Utöver numeriska typer finns även:</p>
+<ul>
+<li>textsträng (<em>character</em>): ex. <code>"hej"</code>, <code>"Anna"</code>,</li>
+<li>logisk (<em>logical</em>): ex. <code>TRUE</code> eller <code>FALSE</code>,</li>
+</ul>
+<p>samt två specialfall av siffror:</p>
+<ul>
+<li>heltal (<em>integer</em>), ett specialfall av numeriskt när det bara förekommer heltal: <code>2L</code> där <code>L</code> anger till R att objektet ska vara av typen <code>integer</code>,</li>
+<li>komplex (<em>complex</em>) innehållande komplexa tal</li>
+</ul>
+<p>Vanligtvis räcker det med att använda <code>numeric</code>, <code>character</code> och <code>logical</code>-typer. I praktiken använder sig R utav ytterligare ett specialfall för textsträngar, <em>Factor</em>. Ett <code>Factor</code>-objekt är en blandning av en siffra och text där R lagrar en siffra men har ett lexikon där varje siffra egentligen representerar en textsträng.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Siffror anges bara som de är</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>valfrittNummer <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="do">## För att man ska ange text måste de omges av " " (citattecken) för att R ska läsa de som text</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>valfriText <span class="ot">&lt;-</span> <span class="st">"Hello world!"</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Om något är sant </span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Med hjälp av dessa objekt kan vi använda dess värden senare.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a är summan av 2 + 3, och valfrittNummer har värdet 3</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>a <span class="sc">+</span> valfrittNummer</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lägg märke till att om vi genomför någon matematisk beräkning på ett sparat objekt, till exempel <code>a + 3</code> så kommer objektet <code>a</code> fortfarande ha samma värde som när vi skapade det. Vi ser enbart resultatet av beräkningen i konsollen och måste tilldela värdet på nytt om vi vill spara det. R uppdaterar inte värdet på ett objekt såvida vi inte ‘’skriver över’’ det.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="felsökning" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="felsökning"><span class="header-section-number">1.2.3</span> Felsökning</h3>
+<p>Vad händer om vi försöker genomföra en matematisk operation på två objekt som inte båda är numeriska?</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Ett numeriskt objekt - text</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>valfrittNummer <span class="sc">-</span> valfriText</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-error">
+<pre><code>Error in valfrittNummer - valfriText: non-numeric argument to binary operator</code></pre>
+</div>
+</div>
+<p>Vi får nu inte ut något värde i konsollen utan får istället ett <em>felmeddelande</em>. Felmeddelanden och felsökning är en stor del av programmering och kommer vara mycket frustrerande till en början. R ger oss dock (ofta) en indikation på vad som har gått fel och efter ett tag kommer du börja känna igen vanligt förekommande fel och hur man ska lösa dem.</p>
+<p>I detta fall säger R att vi har en ’‘<em>non-numeric argument to binary operator</em>’’ vilket kanske inte är jättetydligt vad det egentligen betyder, men den första delen av meddelandet är viktigt. Vi har ett icke-numeriskt objekt i en operation som kräver numeriska värden. Detta vet vi ju eftersom <code>valfriText</code> är en textsträng och vi kan då lätt lösa felet genom att ange ett annat numeriskt objekt istället.</p>
+</section>
+<section id="datastrukturer" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" class="anchored" data-anchor-id="datastrukturer"><span class="header-section-number">1.2.4</span> Datastrukturer</h3>
+<p>I de tidigare exemplen har ett objekt endast haft ett värde, men vi kan tillåta att ett objekt har en samling med värden istället. Detta kallar vi för <em>datastrukturer</em> då vi på olika sätt strukturerar data. Vanligen kräver en datastruktur att värdena är av samma typ, men vissa strukturer tillåter en blandning av typer.</p>
+<section id="vektorer" class="level4" data-number="1.2.4.1">
+<h4 data-number="1.2.4.1" class="anchored" data-anchor-id="vektorer"><span class="header-section-number">1.2.4.1</span> Vektorer</h4>
+<p>Låt oss säga att vi har en massa kläder som ligger kaotiskt utspritt i ett rum. För att strukturera dessa kan vi exempelvis ta alla sockar och lägga dem i en låda. Lådan innehåller därmed en grupp av liknande objekt, som i R motsvarar en <em>vektor</em>.</p>
+<p>En vektor måste innehålla värden av samma typ, siffror, text, eller logiska värden. För att skapa en vektor använder vi funktionen <code>c()</code>, där varje delobjekt kallas för <em>element</em>. Vi separarar elementen i funktionen med ett kommatecken.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="do">## En vektor med numeriska värden</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">7</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="do">## En vektor med textstränger</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>ord <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Apelsin"</span>, <span class="st">"Banan"</span>, <span class="st">"Citron"</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Skriver ut respektive vektor</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>A</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3 5 3 7</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>B</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 3 2 4</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ord</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Apelsin" "Banan"   "Citron" </code></pre>
+</div>
+</div>
+<p>Vektor <code>A</code> och <code>B</code> har fyra element och vektor <code>ord</code> har tre element, alla av samma typ. Om vi vill titta på ett element kan vi <em>indexera</em> vektorn. Indexering innebär att vi säger till R att plocka ut angivna element ur objektets <em>dimensionser</em>. En vektor har bara en dimension vilket innebär att indexfunktionen <code>[]</code> endast behöver ett värde.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>R börjar räkna från 1 när det kommer till index. Detta skiljer sig från andra programmeringsspråk som oftast börjar på 0.</p>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut det fjärde elementet ur vektorn A</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>A[<span class="dv">4</span>]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut det andra elementet ur vektorn ord</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>ord[<span class="dv">2</span>]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Banan"</code></pre>
+</div>
+</div>
+<p>Vi kan också plocka ut flera element genom att i indexeringen ange en vektor med numeriska index.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Plockar ut det andra och fjärde elementet ur vektorn B</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>B[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3 4</code></pre>
+</div>
+</div>
+</section>
+<section id="matriser" class="level4" data-number="1.2.4.2">
+<h4 data-number="1.2.4.2" class="anchored" data-anchor-id="matriser"><span class="header-section-number">1.2.4.2</span> Matriser</h4>
+<p>Låt oss anta att vi har två vektorer med lika många element. Vi kan slå ihop dessa till en <em>matris</em> genom funktionen <code>matrix()</code>. En matris måste, likt vektorer, innehålla värden av samma typ, vi kan alltså inte kombinera en numerisk vektor och en textvektor oavsett om de har lika många element.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="do">## En matris med värdena från vektor A och B där vi anger att vi har 2 kolumner</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>matris <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(A,B), <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Skriver ut matrisen</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>matris</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,]    3    1
+[2,]    5    3
+[3,]    3    2
+[4,]    7    4</code></pre>
+</div>
+</div>
+<p>Vi ser nu i marginalerna (raderna och kolumnerna) att R använder två dimensioner för att peka på ett element. Indexeringen behöver nu två värden <code>[radindex, kolumnindex]</code> för att plocka ut enskilda element. Ordningen av dessa värden spelar roll eftersom R först letar efter en specifik rad (före ,) och sedan en specifik kolumn (efter ,). Om inget värde anges som rad- eller kolumnindex förutsätter R att vi vill se alla index från den dimensionen.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Plockar ut den andra kolumnen ur matris, vektor B</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>matris[,<span class="dv">2</span>]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 3 2 4</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Plockar ut elementet från den andra raden och första kolumnen, värdet 5</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>matris[<span class="dv">2</span>,<span class="dv">1</span>]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Plockar ut elementet från den första raden och andra kolumnen, värdet 1</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>matris[<span class="dv">1</span>,<span class="dv">2</span>]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+</section>
+<section id="sec-data-frame" class="level4" data-number="1.2.4.3">
+<h4 data-number="1.2.4.3" class="anchored" data-anchor-id="sec-data-frame"><span class="header-section-number">1.2.4.3</span> Listor och data frames</h4>
+<p>Det är ibland begränsande att kräva samma typ av objekt i en vektor eller matris, men som tur är finns det en datastruktur som faktiskt tillåter oss att kombinera objekt av olika typ. Denna struktur kallas för en <em>lista</em> och vi kan se en lista lite som en byrålåda. I en byrålåda kan vi samla ihop lådor av olika storlek och form och detsamma kan vi göra i en lista. Vi kan kombinera vektorer av olika typer med matriser eller enskilda värden i en och samma lista, vi kan till och med lägga in en lista inuti en annan lista.</p>
+<p>Följande exempel är en lista med fyra olika objekt.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>lista <span class="ot">&lt;-</span> <span class="fu">list</span>(A, B, ord, matris)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>lista</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] 3 5 3 7
+
+[[2]]
+[1] 1 3 2 4
+
+[[3]]
+[1] "Apelsin" "Banan"   "Citron" 
+
+[[4]]
+     [,1] [,2]
+[1,]    3    1
+[2,]    5    3
+[3,]    3    2
+[4,]    7    4</code></pre>
+</div>
+</div>
+<p>För att plocka ut ett element från listan behöver vi använda ytterligare en form av indexering. Vi behöver först ta oss in i en utav lådorna för att indexera den som vanligt, och det gör vi genom <code>[[element]]</code>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Plockar ut det fjärde elementet ur vektorn A, listans första element</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>lista[[<span class="dv">1</span>]][<span class="dv">4</span>]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Plockar ut elementet från den andra raden och första kolumnen i listans fjärde element</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>lista[[<span class="dv">4</span>]][<span class="dv">2</span>,<span class="dv">1</span>]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+</div>
+<p>Flexibiliteten i en lista gör det däremot väldigt svårt att arbeta med den, mer specifikt att en lista kan innehålla objekt av olika storlekar. En mer strukturerad datastruktur som tillåter olika typer av objekt är en <em>data frame</em>. Likt en matris innehåller en data frame vektorer av samma längd och likt en lista tillåter en data frame att vektorerna är av olika typ, vi kombinerar alltså strukturen från en matris med flexibiliteten från en lista. Ytterligare en fördel med en data frame är att kolumnerna (vektorerna) kan ha namn för att lättare urskilja vad objektet innehåller.</p>
+<!-- BILDER PÅ EN STRUKTURERAD BYRÅLÅDA (DATA FRAME) OCH EN FLEXIBEL BYRÅLÅDA (LIST) -->
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Skapar en data frame med hjälp av funktionen data.frame() och döper de två kolumnerna till Var1 och Var2</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">Var1 =</span> A, <span class="at">Var2 =</span> B)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Var1 Var2
+1    3    1
+2    5    3
+3    3    2
+4    7    4</code></pre>
+</div>
+</div>
+<p>När vi samlar in data inom statistik brukar vi ställa upp informationen med samma struktur som en data frame, där varje rad är en observerad enhet och varje kolumn är en variabel som vi gör mätningar på. Varje enskilda cell blir då enhetens uppmätta värde på den angivna variabeln, till exempel halten kväveoxid i Vänern. Detta kallar vi ofta för <em>rådata</em>-format.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Skapar data</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>student <span class="ot">&lt;-</span> </span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">namn =</span> <span class="fu">c</span>(<span class="st">"Anna"</span>, <span class="st">"Oscar"</span>, <span class="st">"Jakob"</span>, <span class="st">"Noor"</span>),</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    längd <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">158</span>, <span class="dv">164</span>, <span class="dv">180</span>, <span class="dv">174</span>),</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">utbildning =</span> <span class="fu">c</span>(<span class="st">"Biologi"</span>, <span class="st">"Biologi"</span>, <span class="st">"Matematik"</span>, <span class="st">"Statistik"</span>)</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Skriver ut data</span></span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>student</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   namn längd utbildning
+1  Anna   158    Biologi
+2 Oscar   164    Biologi
+3 Jakob   180  Matematik
+4  Noor   174  Statistik</code></pre>
+</div>
+</div>
+<p>Vi kan i objektet <code>student</code> till exempel läsa att den första studenten Anna är 158 cm lång och studerar Biologi. Om vi är intresserade av en specifik variabel ur denna data frame kan vi återigen indexera med hjälp av <code>[]</code> men det vanligaste är att istället använda <code>$</code>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Indexerar variabeln "utbildning" ur data frame "student"</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>student<span class="sc">$</span>utbildning</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Biologi"   "Biologi"   "Matematik" "Statistik"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Gör samma indexering med hjälp av [], där "utbildning" är den tredje kolumnen</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>student[,<span class="dv">3</span>]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Biologi"   "Biologi"   "Matematik" "Statistik"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Gör återigen samma men använder namnet på variabeln</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>student[, <span class="st">"utbildning"</span>]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Biologi"   "Biologi"   "Matematik" "Statistik"</code></pre>
+</div>
+</div>
+<p>För att plocka ut enskilda rader (observationer) eller celler kan vi indexera med <code>[radindex, kolumnindex]</code> likt en matris.</p>
+</section>
+</section>
+</section>
+<section id="sammanfattning" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sammanfattning"><span class="header-section-number">1.3</span> Sammanfattning</h2>
+<p>Nu har vi fått en genomgång av grunderna i R, hur man kodar enkla matematiska operationer, vilka typer av objekt som R kan arbeta med, och hur vi sparar information till arbetsminnet på olika sätt som kan användas senare i samma session. Vi kommer i nästkommande kapitel gå igenom olika hjälpmedel som R och RStudio erbjuder så att vi inte alltid behöver koda allting från grunden.</p>
+</section>
+<section id="övningsuppgifter" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">1.4</span> Övningsuppgifter</h2>
+<p>Med hjälp av R på din egna dator försök att lösa följande uppgifter. Efter varje uppgift får du en utskrift som visar hur resultatet ska se ut från din kod.</p>
+<ol type="a">
+<li>Spara en numerisk vektor med alla värden från 1 till och med 6 i ökande ordning.</li>
+</ol>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5 6</code></pre>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Spara en textvektor med sex element där den första, tredje och fjärde elementet är Hund och resterande är Katt.</li>
+</ol>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Hund" "Katt" "Hund" "Hund" "Katt" "Katt"</code></pre>
+</div>
+</div>
+<ol start="3" type="a">
+<li>Skapa en data frame med två kolumner. Den första kolumnen ska heta “ID” och innehålla vektorn från a) och den andra kolumnen ska heta “Art” och innehålla vektorn från b).</li>
+</ol>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID  Art
+1  1 Hund
+2  2 Katt
+3  3 Hund
+4  4 Hund
+5  5 Katt
+6  6 Katt</code></pre>
+</div>
+</div>
+<ol start="4" type="a">
+<li>Plocka ut den fjärde observationen.</li>
+</ol>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID  Art
+4  4 Hund</code></pre>
+</div>
+</div>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Det finns ett sätt att tillåta detta som vi kommer till i kapitel <span class="quarto-unresolved-ref">?sec-tidyverse</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Kopierat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Kopierat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../00-programming/01-packages-and-functions.html" class="pagination-link" aria-label="Paket och funktioner">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
