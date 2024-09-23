@@ -76,18 +76,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "navbar",
+  "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "end",
-  "type": "overlay",
+  "panel-placement": "start",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": "tree",
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "Inget resultat",
     "search-matching-documents-text": "matchande dokument",
@@ -147,7 +147,6 @@ window.Quarto = {
     <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Sök"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Skifta navigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -175,6 +174,9 @@ window.Quarto = {
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html"><strong>DEL II - Regressionsanalys</strong></a></li><li class="breadcrumb-item"><a href="../01-regression/03-model-assessment.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
     </div>
   </nav>
 </header>
@@ -182,6 +184,11 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Sök"></div>
+        </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -305,7 +312,7 @@ window.Quarto = {
   <li><a href="#normalfördelning" id="toc-normalfördelning" class="nav-link" data-scroll-target="#normalfördelning"><span class="header-section-number">4.1.1</span> Normalfördelning</a></li>
   <li><a href="#lika-varians" id="toc-lika-varians" class="nav-link" data-scroll-target="#lika-varians"><span class="header-section-number">4.1.2</span> Lika varians</a></li>
   <li><a href="#oberoende" id="toc-oberoende" class="nav-link" data-scroll-target="#oberoende"><span class="header-section-number">4.1.3</span> Oberoende</a></li>
-  <li><a href="#funktion-med-alla-diagram" id="toc-funktion-med-alla-diagram" class="nav-link" data-scroll-target="#funktion-med-alla-diagram"><span class="header-section-number">4.1.4</span> Funktion med alla diagram</a></li>
+  <li><a href="#funktion-med-alla-diagram-residualplots" id="toc-funktion-med-alla-diagram-residualplots" class="nav-link" data-scroll-target="#funktion-med-alla-diagram-residualplots"><span class="header-section-number">4.1.4</span> Funktion med alla diagram (<code>residualPlots</code>)</a></li>
   </ul></li>
   <li><a href="#sec-exercise-evaluate" id="toc-sec-exercise-evaluate" class="nav-link" data-scroll-target="#sec-exercise-evaluate"><span class="header-section-number">4.2</span> Övningsuppgifter</a></li>
   </ul>
@@ -616,8 +623,8 @@ Viktigt
 <li>Vi samlar in spatiala (rumsliga) data, till exempel temperatur eller regnmängd på olika platser i Östergötland. Då är det vanligt att det finns en positiv korrelation mellan geografiskt närliggande observationer.</li>
 </ul>
 </section>
-<section id="funktion-med-alla-diagram" class="level3" data-number="4.1.4">
-<h3 data-number="4.1.4" class="anchored" data-anchor-id="funktion-med-alla-diagram"><span class="header-section-number">4.1.4</span> Funktion med alla diagram</h3>
+<section id="funktion-med-alla-diagram-residualplots" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="funktion-med-alla-diagram-residualplots"><span class="header-section-number">4.1.4</span> Funktion med alla diagram (<code>residualPlots</code>)</h3>
 <p>Dessa diagram kommer vara återkommande i regressionsmodellering så vi kan skapa en funktion för att automatiskt generera alla fyra diagram samtidigt. Vi får genom paketet <code>cowplot</code> tillgång till en funktion (<code>plot_grid</code>) som kan kombinera flera diagram till en och samma.</p>
 <div class="cell">
 <details class="code-fold">
