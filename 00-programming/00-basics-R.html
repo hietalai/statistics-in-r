@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk teori och tillämpningar i R - 1&nbsp; Grunder i R</title>
+<title>Statistisk teori och tillämpningar i R - Grunderna i R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,6 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../00-programming/01-packages-and-functions.html" rel="next">
+<link href="../index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -106,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -124,11 +125,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../00-programming/00-R-basics.html" aria-current="page"> 
+    <a class="nav-link" href="../00-programming/index.qmd"> 
 <span class="menu-text">Programmering i R</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../01-regression/00-intro-regression.html"> 
+    <a class="nav-link active" href="../01-regression/00-intro-regression.html" aria-current="page"> 
 <span class="menu-text">Regressionsanalys</span></a>
   </li>  
 </ul>
@@ -142,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-R-basics.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunder i R</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html">Grunderna i R</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -151,27 +152,115 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../00-programming/00-R-basics.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunder i R</span></span></a>
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inledning</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Grunderna i R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
+ <span class="menu-text">Paket och funktioner</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span></a>
+ <span class="menu-text">tidyverse</span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text"><strong>DEL II - Regressionsanalys</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Förord</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -182,29 +271,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#introduktion" id="toc-introduktion" class="nav-link active" data-scroll-target="#introduktion"><span class="header-section-number">1.1</span> Introduktion</a>
+  <li><a href="#introduktion" id="toc-introduktion" class="nav-link active" data-scroll-target="#introduktion">Introduktion</a>
   <ul class="collapse">
-  <li><a href="#starta-rstudio" id="toc-starta-rstudio" class="nav-link" data-scroll-target="#starta-rstudio"><span class="header-section-number">1.1.1</span> Starta RStudio</a></li>
-  <li><a href="#r-kod-i-underlaget" id="toc-r-kod-i-underlaget" class="nav-link" data-scroll-target="#r-kod-i-underlaget"><span class="header-section-number">1.1.2</span> R kod i underlaget</a></li>
+  <li><a href="#starta-rstudio" id="toc-starta-rstudio" class="nav-link" data-scroll-target="#starta-rstudio">Starta RStudio</a></li>
+  <li><a href="#r-kod-i-underlaget" id="toc-r-kod-i-underlaget" class="nav-link" data-scroll-target="#r-kod-i-underlaget">R kod i underlaget</a></li>
   </ul></li>
-  <li><a href="#sec-basics-R" id="toc-sec-basics-R" class="nav-link" data-scroll-target="#sec-basics-R"><span class="header-section-number">1.2</span> Grundläggande programmering i R</a>
+  <li><a href="#sec-basics-R" id="toc-sec-basics-R" class="nav-link" data-scroll-target="#sec-basics-R">Grundläggande programmering i R</a>
   <ul class="collapse">
-  <li><a href="#r-som-miniräknare" id="toc-r-som-miniräknare" class="nav-link" data-scroll-target="#r-som-miniräknare"><span class="header-section-number">1.2.1</span> R som miniräknare</a></li>
-  <li><a href="#sec-objectTypes" id="toc-sec-objectTypes" class="nav-link" data-scroll-target="#sec-objectTypes"><span class="header-section-number">1.2.2</span> Objekt och dess typer</a></li>
-  <li><a href="#felsökning" id="toc-felsökning" class="nav-link" data-scroll-target="#felsökning"><span class="header-section-number">1.2.3</span> Felsökning</a></li>
-  <li><a href="#datastrukturer" id="toc-datastrukturer" class="nav-link" data-scroll-target="#datastrukturer"><span class="header-section-number">1.2.4</span> Datastrukturer</a></li>
+  <li><a href="#r-som-miniräknare" id="toc-r-som-miniräknare" class="nav-link" data-scroll-target="#r-som-miniräknare">R som miniräknare</a></li>
+  <li><a href="#sec-objectTypes" id="toc-sec-objectTypes" class="nav-link" data-scroll-target="#sec-objectTypes">Objekt och dess typer</a></li>
+  <li><a href="#felsökning" id="toc-felsökning" class="nav-link" data-scroll-target="#felsökning">Felsökning</a></li>
+  <li><a href="#datastrukturer" id="toc-datastrukturer" class="nav-link" data-scroll-target="#datastrukturer">Datastrukturer</a></li>
   </ul></li>
-  <li><a href="#sammanfattning" id="toc-sammanfattning" class="nav-link" data-scroll-target="#sammanfattning"><span class="header-section-number">1.3</span> Sammanfattning</a></li>
-  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">1.4</span> Övningsuppgifter</a></li>
+  <li><a href="#sammanfattning" id="toc-sammanfattning" class="nav-link" data-scroll-target="#sammanfattning">Sammanfattning</a></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter">Övningsuppgifter</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html">Grunderna i R</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunder i R</span></h1>
+<h1 class="title">Grunderna i R</h1>
 </div>
 
 
@@ -222,8 +311,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>R är ett så kallat open-source programmeringsspråk. Open-source betyder att programmet är gratis att ladda ner och använda, samt att vem som helst har möjlighet att skapa egna, skräddarsydda metoder eller analyser som enkelt kan delas med omvärlden. R har använts av statistiker och analytiker i mer än 20 års tid och många bidrag har byggt upp ett starkt och flexibelt verktyg som kan anpassas för många ändamål.</p>
-<section id="introduktion" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="introduktion"><span class="header-section-number">1.1</span> Introduktion</h2>
+<section id="introduktion" class="level2">
+<h2 class="anchored" data-anchor-id="introduktion">Introduktion</h2>
 <p>R kännetecknas av sina <em>paket</em> med <em>funktioner</em> som vi kan använda för att genomföra olika <em>operationer</em>. Vi kan se på funktionerna som olika verktyg ämnade att lösa specifika problem, till exempel om vi vill slå in en spik i en bräda kan vi använda en hammare, och paketen som olika verktygslådor fokuserade på att genomföra en viss form utav arbete. När vi installerar R för första gången får vi tillgång till en stor mängd olika paket, men vi har möjligheten att utöka dessa väldigt enkelt. Vem som helst skapa funktioner och paket för allmänheten och ibland finns det ett behov av att ladda ner nya paket (motsv. köpa in nya verktygslådor) för att genomföra en viss sorts analys.</p>
 <p>Det finns flertalet gränssnitt som hjälper till att programmera med R, men vi rekommenderar att använda RStudio. Detta visuella gränssnitt medför att vi inte behöver programmera med en kommandotolk. För att installera R och RStudio kan du följa instruktionerna <a href="https://posit.co/download/rstudio-desktop/">här</a>. Detta underlag är skapad med R version 4.4.1 (2024-06-14 ucrt).</p>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -239,11 +328,11 @@ Viktigt
 <p>När vi programmerar i R, sparas objekt som vi skapar i datorns arbetsminne (RAM-minne). Arbetsminnet kan vi säga motsvarar ett korttidsminne, vilket innebär att vi har ett mindre utrymme att arbeta med än datorns hårddisk och information finns endast där temporärt. När vi startar upp R börjar vi en <code>session</code> som avslutas när vi stänger ner programmet. Vi kan spara objekt för att använda de senare i samma session, men dessa rensas när vi stänger ner programmet. Om vi vill använda objekt mellan sessioner kan vi spara ner information till datorns hårddisk, eller dess långtidsminne, på några olika sätt.</p>
 </div>
 </div>
-<section id="starta-rstudio" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="starta-rstudio"><span class="header-section-number">1.1.1</span> Starta RStudio</h3>
+<section id="starta-rstudio" class="level3">
+<h3 class="anchored" data-anchor-id="starta-rstudio">Starta RStudio</h3>
 <p>När vi startar RStudio för första gången, delas programmet in i tre olika fönster. Det är starkt rekommenderat att alltid börja med att öppna eller skapa ett dokument där kod sparas (även kallad ett <code>R Script</code> eller <em>skript</em>) genom <strong>File</strong> -&gt; <strong>New file</strong> -&gt; <strong>R Script</strong> (eller kortkommandot <em>Ctrl</em> el. <em>Command</em> + <em>Shift</em> + <em>N</em>). När detta skript öppnas delas RStudio in i fyra olika fönster. Ett skript har ändelsen <code>.R</code> men är i grunden en textfil och kan öppnas i alla enkla texthanterare, t.ex. Notepad, om vi vill redigera koden utanför R eller RStudio.</p>
-<section id="kort-genomgång-av-rstudio" class="level4" data-number="1.1.1.1">
-<h4 data-number="1.1.1.1" class="anchored" data-anchor-id="kort-genomgång-av-rstudio"><span class="header-section-number">1.1.1.1</span> Kort genomgång av RStudio</h4>
+<section id="kort-genomgång-av-rstudio" class="level4">
+<h4 class="anchored" data-anchor-id="kort-genomgång-av-rstudio">Kort genomgång av RStudio</h4>
 <p>När ett skript skapats innehåller nu det övre vänstra fönstret denna fil. Här kan vi skriva kod som kan sparas ned och användas igen nästa gång vi öppnar programmet. Skriptet kan också skickas mellan datorer och är ett bra sätt att kunna dela med sig utav vad det är man jobbar med. Det rekommenderas starkt att alltid skriva kod i ett skript för att ha möjligheten att återanvända och redigera koden på ett lätt sätt.</p>
 <p>Det nedre vänstra fönstret innehåller en <em>konsol</em>. Här visas all kod som vi kör och tillhörande utskrifter och vi kan också skriva kod direkt i konsollen. Det som skiljer användandet av konsollen med ett skript är att all kod som vi skriver i konsollen inte sparas någonstans och kommer försvinna nästa gång vi startar upp programmet. Det är också svårt att redigera kod, till exempel om man gjort något stavfel eller måste revidera kod som man skrivit för länge sedan.</p>
 <p>I det nedre högra fönstret kan vi se olika flikar som visar filer från datorn, skapade visualiseringar, en översikt av de paket som vi har tillgängliga, samt få hjälp om olika funktioner i hjälpdokumentationen. Paket i R har inbyggda hjälpfiler som kan underlätta förståelsen av vad en funktion gör, hur den arbetar, vad den behöver för att köras med mera. Det rekommenderas att alltid börja med att titta i dokumentationen för en funktion om man är osäker på vad det är den gör.</p>
@@ -251,8 +340,8 @@ Viktigt
 <p>Vi kommer återkomma till dessa olika fönster senare i underlaget.</p>
 </section>
 </section>
-<section id="r-kod-i-underlaget" class="level3" data-number="1.1.2">
-<h3 data-number="1.1.2" class="anchored" data-anchor-id="r-kod-i-underlaget"><span class="header-section-number">1.1.2</span> R kod i underlaget</h3>
+<section id="r-kod-i-underlaget" class="level3">
+<h3 class="anchored" data-anchor-id="r-kod-i-underlaget">R kod i underlaget</h3>
 <p>I detta underlag kommer kodexempel (ljus bakgrund) visas som du kan kopiera till din egna dator. En knapp finns överst i det högra hörnet som kopierar allt innehåll i kodblocket. Från exemplena visas också utskrifter (mörk bakgrund) från koden som vi i RStudio ser i konsollen.</p>
 <div class="cell">
 <details class="code-fold">
@@ -267,12 +356,12 @@ Viktigt
 </div>
 </section>
 </section>
-<section id="sec-basics-R" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="sec-basics-R"><span class="header-section-number">1.2</span> Grundläggande programmering i R</h2>
+<section id="sec-basics-R" class="level2">
+<h2 class="anchored" data-anchor-id="sec-basics-R">Grundläggande programmering i R</h2>
 <p>R är ett kraftfullt språk som kan genomföra väldigt komplexa och avancerade beräkningar. Innan vi kommer dit måste vi första börja med grunderna i R och en utav de vanligaste användningsområdena för R är att använda språket som en vanlig miniräknare. R kommer läsa varje rad kod som en enskild operation och vi kan <code>köra</code> kod på flera olika sätt.</p>
 <p>Vi kan antingen använda knappen uppe till höger av skriptet som heter Run eller använda kortkommandot <em>Ctrl</em> el. <em>Command</em> + <em>Enter</em> för att köra enstaka rader kod. R kan också köra flera rader kod samtidigt om vi markerar flera rader och klickar på Run eller använder kortkommandot.</p>
-<section id="r-som-miniräknare" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="r-som-miniräknare"><span class="header-section-number">1.2.1</span> R som miniräknare</h3>
+<section id="r-som-miniräknare" class="level3">
+<h3 class="anchored" data-anchor-id="r-som-miniräknare">R som miniräknare</h3>
 <p>Till att börja med kan vi använda matematiska operatorer såsom <code>+</code>, <code>-</code>, <code>*</code>, och <code>/</code>.</p>
 <div class="cell">
 <details class="code-fold">
@@ -330,14 +419,14 @@ Viktigt
 <pre><code>[1] 9</code></pre>
 </div>
 </div>
-<section id="kommentarer-i-koden" class="level4" data-number="1.2.1.1">
-<h4 data-number="1.2.1.1" class="anchored" data-anchor-id="kommentarer-i-koden"><span class="header-section-number">1.2.1.1</span> Kommentarer i koden</h4>
+<section id="kommentarer-i-koden" class="level4">
+<h4 class="anchored" data-anchor-id="kommentarer-i-koden">Kommentarer i koden</h4>
 <p>I ovanstående kodexempel ser vi också något speciellt. Om du kopierar all text från ett utav blocken och kör den på egen hand, kommer R endast skriva ut resultat från raden som inte innehåller <code>#</code>. En rad som börjar med <code>#</code> kommer R istället läsa som en kommentar. Detta medför att vi kan kommentera kod som vi skriver vilket har många fördelar.</p>
 <p>Dels kan vi i anslutning till specifika bitar kod själva beskriva vad koden gör och vad för resultat som vi förväntar oss att få. Det är väldigt lätt att man i ett stort skript tappar bort sig själv, eller när man öppnar skriptet vid nästa session har glömt bort vad det är koden gör. Med kommentarer kan vi lättare komma ihåg vad de olika delarna gör, men framförallt om vi skickar koden till någon annan kan vi skicka med tillhörande instruktioner så att det blir lättare att följa vad det är som händer. <strong>Försök att få in en rutin att kommentera kod som du skriver redan från början!</strong></p>
 </section>
 </section>
-<section id="sec-objectTypes" class="level3" data-number="1.2.2">
-<h3 data-number="1.2.2" class="anchored" data-anchor-id="sec-objectTypes"><span class="header-section-number">1.2.2</span> Objekt och dess typer</h3>
+<section id="sec-objectTypes" class="level3">
+<h3 class="anchored" data-anchor-id="sec-objectTypes">Objekt och dess typer</h3>
 <p>I tidigare exempel kommer svaret på beräkningarna endast skrivas ut i konsollen, men om vi hade varit intresserade av att spara ner informationen och använda den senare behöver vi specifikt säga till R att göra det.</p>
 <p>Vi kan spara resultat av en operation till ett <em>objekt</em> med hjälp av <code>&lt;-</code>. När vi vill ge ett objekt ett värde är det praxis att använda <code>&lt;-</code> och vi kan skriva detta som en kombination av symbolerna, <code>&lt;</code> och <code>-</code>. Vi kan läsa det som ’‘<em>ett värde ges till objektet i pilens riktning</em>’’.</p>
 <p>Objekt kan heta nästintill vadsomhelst men vi måste förhålla oss till ett par begränsningar:</p>
@@ -376,8 +465,8 @@ Viktigt
 <pre><code>[1] 1</code></pre>
 </div>
 </div>
-<section id="typer" class="level4" data-number="1.2.2.1">
-<h4 data-number="1.2.2.1" class="anchored" data-anchor-id="typer"><span class="header-section-number">1.2.2.1</span> Typer</h4>
+<section id="typer" class="level4">
+<h4 class="anchored" data-anchor-id="typer">Typer</h4>
 <p>R kan utföra olika operationer beroende på vilken typ av objekt som vi har sparat. En fördel jämfört med andra programmeringsspråk är att vi, i majoriteten av fallen, inte behöver säga till R vilken typ ett objekt är, R kan läsa av kontexten relativt bra. Till exempel kommer objektet <code>a</code> vara numeriskt (mer specifikt typen <em>numeric</em>) och vi kan kontrollera detta genom funktionen <code>class()</code>.</p>
 <div class="cell">
 <details class="code-fold">
@@ -438,8 +527,8 @@ Viktigt
 </div>
 </section>
 </section>
-<section id="felsökning" class="level3" data-number="1.2.3">
-<h3 data-number="1.2.3" class="anchored" data-anchor-id="felsökning"><span class="header-section-number">1.2.3</span> Felsökning</h3>
+<section id="felsökning" class="level3">
+<h3 class="anchored" data-anchor-id="felsökning">Felsökning</h3>
 <p>Vad händer om vi försöker genomföra en matematisk operation på två objekt som inte båda är numeriska?</p>
 <div class="cell">
 <details class="code-fold">
@@ -454,11 +543,11 @@ Viktigt
 <p>Vi får nu inte ut något värde i konsollen utan får istället ett <em>felmeddelande</em>. Felmeddelanden och felsökning är en stor del av programmering och kommer vara mycket frustrerande till en början. R ger oss dock (ofta) en indikation på vad som har gått fel och efter ett tag kommer du börja känna igen vanligt förekommande fel och hur man ska lösa dem.</p>
 <p>I detta fall säger R att vi har en ’‘<em>non-numeric argument to binary operator</em>’’ vilket kanske inte är jättetydligt vad det egentligen betyder, men den första delen av meddelandet är viktigt. Vi har ett icke-numeriskt objekt i en operation som kräver numeriska värden. Detta vet vi ju eftersom <code>valfriText</code> är en textsträng och vi kan då lätt lösa felet genom att ange ett annat numeriskt objekt istället.</p>
 </section>
-<section id="datastrukturer" class="level3" data-number="1.2.4">
-<h3 data-number="1.2.4" class="anchored" data-anchor-id="datastrukturer"><span class="header-section-number">1.2.4</span> Datastrukturer</h3>
+<section id="datastrukturer" class="level3">
+<h3 class="anchored" data-anchor-id="datastrukturer">Datastrukturer</h3>
 <p>I de tidigare exemplen har ett objekt endast haft ett värde, men vi kan tillåta att ett objekt har en samling med värden istället. Detta kallar vi för <em>datastrukturer</em> då vi på olika sätt strukturerar data. Vanligen kräver en datastruktur att värdena är av samma typ, men vissa strukturer tillåter en blandning av typer.</p>
-<section id="vektorer" class="level4" data-number="1.2.4.1">
-<h4 data-number="1.2.4.1" class="anchored" data-anchor-id="vektorer"><span class="header-section-number">1.2.4.1</span> Vektorer</h4>
+<section id="vektorer" class="level4">
+<h4 class="anchored" data-anchor-id="vektorer">Vektorer</h4>
 <p>Låt oss säga att vi har en massa kläder som ligger kaotiskt utspritt i ett rum. För att strukturera dessa kan vi exempelvis ta alla sockar och lägga dem i en låda. Lådan innehåller därmed en grupp av liknande objekt, som i R motsvarar en <em>vektor</em>.</p>
 <p>En vektor måste innehålla värden av samma typ, siffror, text, eller logiska värden. För att skapa en vektor använder vi funktionen <code>c()</code>, där varje delobjekt kallas för <em>element</em>. Vi separarar elementen i funktionen med ett kommatecken.</p>
 <div class="cell">
@@ -537,8 +626,8 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="matriser" class="level4" data-number="1.2.4.2">
-<h4 data-number="1.2.4.2" class="anchored" data-anchor-id="matriser"><span class="header-section-number">1.2.4.2</span> Matriser</h4>
+<section id="matriser" class="level4">
+<h4 class="anchored" data-anchor-id="matriser">Matriser</h4>
 <p>Låt oss anta att vi har två vektorer med lika många element. Vi kan slå ihop dessa till en <em>matris</em> genom funktionen <code>matrix()</code>. En matris måste, likt vektorer, innehålla värden av samma typ, vi kan alltså inte kombinera en numerisk vektor och en textvektor oavsett om de har lika många element.</p>
 <div class="cell">
 <details class="code-fold">
@@ -585,8 +674,8 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="sec-data-frame" class="level4" data-number="1.2.4.3">
-<h4 data-number="1.2.4.3" class="anchored" data-anchor-id="sec-data-frame"><span class="header-section-number">1.2.4.3</span> Listor och data frames</h4>
+<section id="sec-data-frame" class="level4">
+<h4 class="anchored" data-anchor-id="sec-data-frame">Listor och data frames</h4>
 <p>Det är ibland begränsande att kräva samma typ av objekt i en vektor eller matris, men som tur är finns det en datastruktur som faktiskt tillåter oss att kombinera objekt av olika typ. Denna struktur kallas för en <em>lista</em> och vi kan se en lista lite som en byrålåda. I en byrålåda kan vi samla ihop lådor av olika storlek och form och detsamma kan vi göra i en lista. Vi kan kombinera vektorer av olika typer med matriser eller enskilda värden i en och samma lista, vi kan till och med lägga in en lista inuti en annan lista.</p>
 <p>Följande exempel är en lista med fyra olika objekt.</p>
 <div class="cell">
@@ -703,12 +792,12 @@ Viktigt
 </section>
 </section>
 </section>
-<section id="sammanfattning" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="sammanfattning"><span class="header-section-number">1.3</span> Sammanfattning</h2>
+<section id="sammanfattning" class="level2">
+<h2 class="anchored" data-anchor-id="sammanfattning">Sammanfattning</h2>
 <p>Nu har vi fått en genomgång av grunderna i R, hur man kodar enkla matematiska operationer, vilka typer av objekt som R kan arbeta med, och hur vi sparar information till arbetsminnet på olika sätt som kan användas senare i samma session. Vi kommer i nästkommande kapitel gå igenom olika hjälpmedel som R och RStudio erbjuder så att vi inte alltid behöver koda allting från grunden.</p>
 </section>
-<section id="övningsuppgifter" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">1.4</span> Övningsuppgifter</h2>
+<section id="övningsuppgifter" class="level2">
+<h2 class="anchored" data-anchor-id="övningsuppgifter">Övningsuppgifter</h2>
 <p>Med hjälp av R på din egna dator försök att lösa följande uppgifter. Efter varje uppgift får du en utskrift som visar hur resultatet ska se ut från din kod.</p>
 <ol type="a">
 <li>Spara en numerisk vektor med alla värden från 1 till och med 6 i ökande ordning.</li>
@@ -1171,10 +1260,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../index.html" class="pagination-link" aria-label="Inledning">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Inledning</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../00-programming/01-packages-and-functions.html" class="pagination-link" aria-label="Paket och funktioner">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Paket och funktioner</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

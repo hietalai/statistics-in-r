@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk teori och tillämpningar i R - 1&nbsp; Introduktion till regression</title>
+<title>Statistisk teori och tillämpningar i R - Förord</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -50,8 +30,8 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../01-regression/01-explorative-analysis.html" rel="next">
-<link href="../01-regression/index.html" rel="prev">
+<link href="../01-regression/00-intro-regression.html" rel="next">
+<link href="../00-programming/02-tidyverse.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -89,35 +69,6 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -158,7 +109,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html"><strong>DEL II - Regressionsanalys</strong></a></li><li class="breadcrumb-item"><a href="../01-regression/00-intro-regression.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html"><strong>DEL II - Regressionsanalys</strong></a></li><li class="breadcrumb-item"><a href="../01-regression/index.html">Förord</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -216,13 +167,13 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Förord</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link active">
+  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
   </div>
 </li>
@@ -282,25 +233,14 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Innehållsförteckning</h2>
-   
-  <ul>
-  <li><a href="#den-linjära-regressionsmodellen" id="toc-den-linjära-regressionsmodellen" class="nav-link active" data-scroll-target="#den-linjära-regressionsmodellen"><span class="header-section-number">1.1</span> Den linjära regressionsmodellen</a></li>
-  <li><a href="#sec-model-assumptions" id="toc-sec-model-assumptions" class="nav-link" data-scroll-target="#sec-model-assumptions"><span class="header-section-number">1.2</span> Modellens antaganden</a></li>
-  <li><a href="#studier-och-andra-variabler" id="toc-studier-och-andra-variabler" class="nav-link" data-scroll-target="#studier-och-andra-variabler"><span class="header-section-number">1.3</span> Studier och andra variabler</a>
-  <ul class="collapse">
-  <li><a href="#sec-control" id="toc-sec-control" class="nav-link" data-scroll-target="#sec-control"><span class="header-section-number">1.3.1</span> Kontrollvariabler</a></li>
-  </ul></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html"><strong>DEL II - Regressionsanalys</strong></a></li><li class="breadcrumb-item"><a href="../01-regression/00-intro-regression.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html"><strong>DEL II - Regressionsanalys</strong></a></li><li class="breadcrumb-item"><a href="../01-regression/index.html">Förord</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></h1>
+<h1 class="title">Förord</h1>
 </div>
 
 
@@ -317,271 +257,32 @@ window.Quarto = {
 </header>
 
 
-<div class="video-container">
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/bcnEg8pE2IA" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-</div>
-<p>Att undersöka samband mellan variabler är ett vanligt steg i att förstå relationer eller fenomen. Till exempel hur åldern på ett träd påverkar dess volym, hur olika doser av en medicin påverkar en individs blodtryck, eller hur en persons ålder och utbildningsnivå påverkar dens ingångslön.</p>
-<p>Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. Generellt är modeller någon form av konstruktion som skapas för att öka förståelsen av någonting verkligt. Till exempel är en flygplansmodell inte ett riktigt flygplan men kan användas för att förstå hur ett flygplan är uppbyggd och hur den kan hantera luftströmmar och andra fenomen. Ett klassiskt exempel är tavlan “Ceci n’est pas une pipe” av René Magritte (<a href="#fig-pipe" class="quarto-xref">Figur&nbsp;<span>1.1</span></a>) som visar en representation (en modell) av en pipa, inte en fungerande pipa.</p>
-<div id="fig-pipe" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-pipe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/Ceci_n%27est_pas_une_pipe_graffiti_in_Bucharest.jpg" class="img-fluid figure-img" width="400"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pipe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1.1: <a href="https://commons.wikimedia.org/wiki/File:Ceci_n%27est_pas_une_pipe_graffiti_in_Bucharest.jpg">bixentro</a>, <a href="https://creativecommons.org/licenses/by/2.0">CC BY 2.0</a>, via Wikimedia Commons
-</figcaption>
-</figure>
-</div>
-<section id="den-linjära-regressionsmodellen" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="den-linjära-regressionsmodellen"><span class="header-section-number">1.1</span> Den linjära regressionsmodellen</h2>
-<p>Det finns många olika sorters modeller inom regressionsanalys, men i det allra enklaste fallet anpassas en linjär modell där variablernas samband antas enkelriktat och konstant. <span id="eq-lin-reg"><span class="math display">\[
-Y = \beta_0 + \beta_1 \cdot X + E
-\tag{1.1}\]</span></span></p>
-<p>där:</p>
+<p>Till denna del förutsätts att du har vissa förkunskaper för att ta till dig materialet på bästa sätt. Dessa är:</p>
+<p><strong>Programmering</strong></p>
 <ul>
-<li><span class="math inline">\(Y\)</span> är den <em>beroende/respons- variabeln</em> som antas påverkas av <span class="math inline">\(X\)</span>.</li>
-<li><span class="math inline">\(X\)</span> är den <em>oberoende/förklarande variabeln</em> som antas påverka <span class="math inline">\(Y\)</span>.</li>
-<li><span class="math inline">\(\beta_0\)</span> är modellens <em>intercept</em> där linjen skär y-axeln när <span class="math inline">\(X = 0\)</span>.</li>
-<li><span class="math inline">\(\beta_1\)</span> är <em>lutningen</em> som beskriver det enkelriktade samband mellan <span class="math inline">\(X\)</span> och <span class="math inline">\(Y\)</span>. Mer specifikt beskriver parametern förändringen i <span class="math inline">\(Y\)</span> när <span class="math inline">\(X\)</span> ökar med en enhet.</li>
-<li><span class="math inline">\(E\)</span> är modellens <em>felterm</em>, avståndet mellan det observerade värdet på <span class="math inline">\(Y\)</span> och modellens skattade värde <span class="math inline">\(\hat{Y}\)</span>.</li>
+<li>kan installera och ladda paket i R</li>
+<li>kan läsa in data i R i olika filformat, t.ex. <code>.csv</code>, <code>.txt</code> eller <code>.xslx</code></li>
+<li>kan databearbetning i R, t.ex. med hjälp av <code>dplyr</code>-paketet</li>
+<li>kan använda “pipes”, <code>%&gt;%</code> eller <code>|&gt;</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>kan skapa visualiseringar i R med hjälp av <code>ggplot2</code>-paketet</li>
 </ul>
-<p>Om flera förklarande variabler antas påverka responsvariabeln utökas den linjära modellen med flera <span class="math inline">\(\beta_j\)</span>, en för varje förklarande variabel <span class="math inline">\(X_j\)</span>. Senare kapitel kommer titta närmare på utökningar av denna linjära modell.</p>
-</section>
-<section id="sec-model-assumptions" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="sec-model-assumptions"><span class="header-section-number">1.2</span> Modellens antaganden</h2>
-<p>Syftet med en modell är att ge en lämplig förenkling av verkligheten. En linjär regressionsmodell kan vara en lämplig förenkling av ett samband om följande antaganden uppfylls:</p>
-<ol type="1">
-<li>att det för varje <span class="math inline">\(X\)</span> finns en slumpvariabel <span class="math inline">\(Y\)</span> med ett ändligt medelvärde och varians,</li>
-<li>observationerna är oberoende av varandra,</li>
-<li>medelvärdet, <span class="math inline">\(\mu_{Y|X}\)</span>, kan modelleras linjärt,</li>
-<li>variansen för <span class="math inline">\(Y\)</span> är lika för alla värden av <span class="math inline">\(X\)</span>, <span class="math inline">\(\sigma^2_{Y|X} \equiv \sigma^2\)</span>,</li>
-<li>slumpvariabeln <span class="math inline">\(Y\)</span> är normalfördelad för alla värden av <span class="math inline">\(X\)</span>.</li>
+<p><strong>Statistik</strong></p>
+<ul>
+<li>kan identifiera variabeltyper och variabelskalor</li>
+<li>kan sammanfatta datamaterial med beskrivande mått och fördelningar</li>
+<li>kan genomföra fullständiga hypotesprövningar med hjälp av t-fördelningen</li>
+<li>kan tolka p-värden</li>
+<li>kan beräkna intervallskattningar med hjälp av t-fördelningen</li>
+</ul>
+<p>Känner du att du saknas vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.</p>
+<p>För alla dessa kapitel förutsätts att du har laddat paketet <code>tidyverse</code> som innehåller flera paket såsom <code>readr</code>, <code>dplyr</code>, <code>ggplot2</code> med flera. Andra paket kan behövas installeras och laddas för olika kapitel men detta bör anges specifikt.</p>
+
+
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Detta material använder sig av <code>%&gt;%</code> men <code>|&gt;</code> bör kunna användas istället i de allra flesta exemplen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-<p>Vi kan sammanfatta majoriteten av dessa antaganden med: <span class="math display">\[
-   Y|X \overset{\mathrm{iid}}{\sim} N(\mu_{Y|X}, \sigma^2_{Y|X})
-\]</span> där <span class="math inline">\(\mathrm{iid}\)</span> betyder “independent and identically distributed” motsvarande antagande 2.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Viktigt
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Det finns inget antagande om att <span class="math inline">\(Y \sim N(\mu_Y, \sigma^2_Y)\)</span>! Alla antaganden för en linjär regressionsmodell fokuserar på att vi <strong>med hjälp av <span class="math inline">\(X\)</span></strong> har en normalfördelad slumpvariabel <span class="math inline">\(Y\)</span>.</p>
-</div>
-</div>
-<p>Om det tredje antagandet uppfylls kan vi modellera väntevärdet av <span class="math inline">\(Y|X\)</span> med den linjära modellen: <span id="eq-lin-reg-exp"><span class="math display">\[
-  E[Y|X] = \beta_0 + \beta_1 \cdot X
-\tag{1.2}\]</span></span> så att: <span class="math display">\[
-Y|X \overset{\mathrm{iid}}{\sim} N(\beta_0 + \beta_1 \cdot X, \sigma^2_{Y|X})
-\]</span></p>
-<p>Till skillnad från <a href="#eq-lin-reg" class="quarto-xref">Ekvation&nbsp;<span>1.1</span></a> saknar <a href="#eq-lin-reg-exp" class="quarto-xref">Ekvation&nbsp;<span>1.2</span></a> modellens felterm på grund av att vi nu modellerar endast medelvärdet av slumpvariabelns fördelning, <span class="math inline">\(\mu_{Y|X}\)</span>. Osäkerheten runtomkring medelvärdet är variansen av fördelningen.</p>
-<p>När vi modellerar varje enskilda observation inkluderas <span class="math inline">\(E\)</span> vilket innebär att vi kan flytta modellens antaganden från <span class="math inline">\(Y|X\)</span> till <span class="math inline">\(E\)</span>. <span id="eq-lin-reg-assumptions"><span class="math display">\[
-  E \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)
-\tag{1.3}\]</span></span></p>
-<p>Denna omskrivning ger oss en bra utgångspunkt att utvärdera lämpligheten av en anpassad modell.</p>
-<div id="fig-airplane-ai" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-airplane-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="../images/model_airplane_chatgpt.webp" class="img-fluid figure-img" width="400"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airplane-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1.2: Ej lämplig flygplansmodell, <span class="citation" data-cites="chatgpt2024">(<a href="#ref-chatgpt2024" role="doc-biblioref"><span>”Create a model of a commercial airplane where some parts are taken from a car or a boat”</span> 2024</a>)</span>
-</figcaption>
-</figure>
-</div>
-<p>Om en flygplansmodell ser endast till viss del ut som ett flygplan kommer modellen inte vara lämplig att använda för att förstå eller förenkla verkligheten. Detsamma gäller för regressionsmodeller; om modellen inte uppfyller dess antaganden riskerar slutsatser som dras inte stämma överens med verkligheten.</p>
-</section>
-<section id="studier-och-andra-variabler" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="studier-och-andra-variabler"><span class="header-section-number">1.3</span> Studier och andra variabler</h2>
-<p>En regressionsmodell behöver nödvändigtvis inte beskriva ett “orsak-och-verkan” samband, eller som vi brukar benämna det, ett <em>kausalt</em> samband. Samband kan ibland uppstå utav ren slump där det inte finns någon logisk koppling mellan variablerna. Denna typ av samband benämns som <em>korrelation</em>ssamband. Trots att korrelationssamband rent matematiskt beskriver en relation mellan den ena variabeln och den andra, är det i vissa fall inte lämpligt eller relevant att använda eller tolka modellen i verkligheten.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-correlation" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-correlation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="00-intro-regression_files/figure-html/fig-correlation-1.png" class="img-fluid figure-img" width="480">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-correlation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1.3: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och antalet dödsfall av drunkning mellan 1999 och 2009 i USA <span class="citation" data-cites="cdcNCHSNational imdbNicolasCage">(<a href="#ref-cdcNCHSNational" role="doc-biblioref"><span>”<span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — cdc.gov”</span></a>; <a href="#ref-imdbNicolasCage" role="doc-biblioref"><span>”<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — imdb.com”</span></a>)</span>
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p><a href="#fig-correlation" class="quarto-xref">Figur&nbsp;<span>1.3</span></a> uppvisar ett exempel på korrelationssamband där de två variablerna inte har någon logisk koppling till varandra utan endast har observerats ha en positiv korrelation. Att beskriva detta samband skulle inte ge någon information om verkligheten så en viktig del av regressionsanalys är att bedöma lämpligheten och relevansen av utvalda variabler. Rent matematiskt kan inte heller en regressionsmodell urskilja mellan kausala eller korrelationssamband vilket innebär att vi som analytiker måste ta hänsyn till vilken sorts data och hur data har samlats in för att använda och tolka modellerna på rätt sätt.</p>
-<p>Exemplet i figuren är insamlad som en <em>observationsstudie</em> där mätvärden (antal dödsfall och filmer) på enheterna (år) har observerats från olika registerdata. Vi har inte kunnat styra vilken relation dessa variabler har till varandra och studien i sig har inte tagit hänsyn till någon specifik orsak och verkan mellan de två. Vi kan därför endast dra slutsatser om korrelationssamband från en observationsstudie, vi kan säga att desto fler filmer Nicolas Cage medverkar i medför ett större antal dödsfall, vilket egentligen inte är relevant, men vi kan inte säga något om den kausala effekten.</p>
-<p>För att kunna dra slutsatser om kausala samband behöver vi genomföra en <em>experimentell studie</em> där vi styr vilka mätvärden som enheter får eller har och responsvariablen antas vara en direkt effekt från de förklarande variablerna. Medicinska studier, till exempel studier om Covid-vaccinets effektivitet på att motverka en infektion, är typiska exempel på experimentella studier där en förklarande variabel (dos) ges till vissa grupper av enheter där andra påverkande effekter kontrolleras för att justera den förklarande variabelns verkliga påverkan.</p>
-<section id="sec-control" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="sec-control"><span class="header-section-number">1.3.1</span> Kontrollvariabler</h3>
-<p>I en observationsstudie kan vi ibland observera <em>kontrollvariabler</em> som kan justera den förklarande variabelns faktiska påverkan men det är främst i experimentella studier som dessa typer av variabler kan användas. Okända variabler kallas för <em>confounding</em>-effekter och antas påverka både den förklarande och responsvariabeln.</p>
-<p>I följande två figurer visas den huvudsakliga förklarande variabeln och den valda responsvariabeln med ovaler. De kända (heldragen) och okända (streckade) kontrollvariablerna visas som rektanglar.</p>
-<div id="fig-obs-relation" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell" data-fig-height="2" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<svg width="672" height="192" viewbox="0.00 0.00 188.08 116.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
-<title>G</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-112 184.08,-112 184.08,4 -4,4"></polygon>
-<!-- Okänd -->
-<g id="node1" class="node">
-<title>Okänd</title>
-<polygon fill="none" stroke="black" stroke-dasharray="5,2" points="112.9,-108 58.68,-108 58.68,-72 112.9,-72 112.9,-108"></polygon>
-<text text-anchor="middle" x="85.79" y="-85.8" font-family="Times,serif" font-size="14.00">Okänd</text>
-</g>
-<!-- Filmer -->
-<g id="node2" class="node">
-<title>Filmer</title>
-<ellipse fill="none" stroke="black" cx="36.79" cy="-18" rx="36.57" ry="18"></ellipse>
-<text text-anchor="middle" x="36.79" y="-13.8" font-family="Times,serif" font-size="14.00">Filmer</text>
-</g>
-<!-- Okänd&#45;&gt;Filmer -->
-<g id="edge2" class="edge">
-<title>Okänd-&gt;Filmer</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M73.67,-71.7C67.75,-63.23 60.51,-52.89 54.01,-43.61"></path>
-<polygon fill="black" stroke="black" points="56.69,-41.33 48.09,-35.14 50.96,-45.34 56.69,-41.33"></polygon>
-</g>
-<!-- Dödsfall -->
-<g id="node3" class="node">
-<title>Dödsfall</title>
-<ellipse fill="none" stroke="black" cx="135.79" cy="-18" rx="44.09" ry="18"></ellipse>
-<text text-anchor="middle" x="135.79" y="-13.8" font-family="Times,serif" font-size="14.00">Dödsfall</text>
-</g>
-<!-- Okänd&#45;&gt;Dödsfall -->
-<g id="edge3" class="edge">
-<title>Okänd-&gt;Dödsfall</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M98.15,-71.7C104.11,-63.35 111.37,-53.18 117.92,-44.02"></path>
-<polygon fill="black" stroke="black" points="120.95,-45.79 123.91,-35.62 115.25,-41.73 120.95,-45.79"></polygon>
-</g>
-<!-- Filmer&#45;&gt;Dödsfall -->
-<g id="edge1" class="edge">
-<title>Filmer-&gt;Dödsfall</title>
-<path fill="none" stroke="black" d="M73.91,-18C76.36,-18 78.81,-18 81.25,-18"></path>
-<polygon fill="black" stroke="black" points="81.31,-21.5 91.31,-18 81.31,-14.5 81.31,-21.5"></polygon>
-</g>
-</g>
-</svg>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1.4: Exempel på relationen mellan variabler i en observationsstudie.
-</figcaption>
-</figure>
-</div>
-<p>Eftersom sambandet mellan filmer och dödsfall förmodligen endast uppkommit av slumpen kan det finnas andra okända variabler som påverkar de båda.</p>
-<div id="fig-obs-relation" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell" data-fig-height="2" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<svg width="672" height="192" viewbox="0.00 0.00 225.22 116.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
-<title>G</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-112 221.22,-112 221.22,4 -4,4"></polygon>
-<!-- Ålder -->
-<g id="node1" class="node">
-<title>Ålder</title>
-<polygon fill="none" stroke="black" points="145.22,-108 91.22,-108 91.22,-72 145.22,-72 145.22,-108"></polygon>
-<text text-anchor="middle" x="118.22" y="-85.8" font-family="Times,serif" font-size="14.00">Ålder</text>
-</g>
-<!-- Blodtryck -->
-<g id="node4" class="node">
-<title>Blodtryck</title>
-<ellipse fill="none" stroke="black" cx="154.22" cy="-18" rx="49.82" ry="18"></ellipse>
-<text text-anchor="middle" x="154.22" y="-13.8" font-family="Times,serif" font-size="14.00">Blodtryck</text>
-</g>
-<!-- Ålder&#45;&gt;Blodtryck -->
-<g id="edge2" class="edge">
-<title>Ålder-&gt;Blodtryck</title>
-<path fill="none" stroke="black" d="M127.12,-71.7C131.22,-63.73 136.17,-54.1 140.71,-45.26"></path>
-<polygon fill="black" stroke="black" points="143.96,-46.6 145.42,-36.1 137.74,-43.4 143.96,-46.6"></polygon>
-</g>
-<!-- Kön -->
-<g id="node2" class="node">
-<title>Kön</title>
-<polygon fill="none" stroke="black" points="217.22,-108 163.22,-108 163.22,-72 217.22,-72 217.22,-108"></polygon>
-<text text-anchor="middle" x="190.22" y="-85.8" font-family="Times,serif" font-size="14.00">Kön</text>
-</g>
-<!-- Kön&#45;&gt;Blodtryck -->
-<g id="edge3" class="edge">
-<title>Kön-&gt;Blodtryck</title>
-<path fill="none" stroke="black" d="M181.32,-71.7C177.22,-63.73 172.27,-54.1 167.73,-45.26"></path>
-<polygon fill="black" stroke="black" points="170.7,-43.4 163.01,-36.1 164.48,-46.6 170.7,-43.4"></polygon>
-</g>
-<!-- Medicin -->
-<g id="node3" class="node">
-<title>Medicin</title>
-<ellipse fill="none" stroke="black" cx="43.22" cy="-18" rx="43.44" ry="18"></ellipse>
-<text text-anchor="middle" x="43.22" y="-13.8" font-family="Times,serif" font-size="14.00">Medicin</text>
-</g>
-<!-- Medicin&#45;&gt;Blodtryck -->
-<g id="edge1" class="edge">
-<title>Medicin-&gt;Blodtryck</title>
-<path fill="none" stroke="black" d="M86.58,-18C89.2,-18 91.82,-18 94.44,-18"></path>
-<polygon fill="black" stroke="black" points="94.54,-21.5 104.54,-18 94.54,-14.5 94.54,-21.5"></polygon>
-</g>
-</g>
-</svg>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obs-relation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1.5: Exempel på relationen mellan variabler i en experimentell studie.
-</figcaption>
-</figure>
-</div>
-<p>Effekten av en medicin på blodtryck kan också påverkas av personens ålder och kön <span class="citation" data-cites="gu2008">(<a href="#ref-gu2008" role="doc-biblioref">Gu m.fl. 2008</a>)</span> vilka inkluderas i modellen för att isolera den förklarande variabelns effekt. I alla dessa exempel är det endast en effekt som är av intresse att undersöka, trots att modellen innehåller flera variabler och tillhörande lutningsparametrar.</p>
-
-
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-cdcNCHSNational" class="csl-entry" role="listitem">
-<span>”<span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — cdc.gov”</span>. <a href="https://www.cdc.gov/nchs/" class="uri">https://www.cdc.gov/nchs/</a>.
-</div>
-<div id="ref-chatgpt2024" class="csl-entry" role="listitem">
-<span>”Create a model of a commercial airplane where some parts are taken from a car or a boat”</span>. 2024. OpenAI. <a href="https://chat.openai.com/chat">https://chat.openai.com/chat</a>.
-</div>
-<div id="ref-gu2008" class="csl-entry" role="listitem">
-Gu, Qiuping, Vicki L. Burt, Ryne Paulose-Ram, och Charles F. Dillon. 2008. <span>”<span>Gender Differences in Hypertension Treatment, Drug Utilization Patterns, and Blood Pressure Control Among US Adults With Hypertension: Data From the National Health and Nutrition Examination Survey 1999–2004</span>”</span>. <em>American Journal of Hypertension</em> 21 (7): 789–98. <a href="https://doi.org/10.1038/ajh.2008.185">https://doi.org/10.1038/ajh.2008.185</a>.
-</div>
-<div id="ref-imdbNicolasCage" class="csl-entry" role="listitem">
-<span>”<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — imdb.com”</span>. <a href="https://www.imdb.com/name/nm0000115/" class="uri">https://www.imdb.com/name/nm0000115/</a>.
-</div>
-</div>
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -996,13 +697,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../01-regression/index.html" class="pagination-link" aria-label="Förord">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Förord</span>
+      <a href="../00-programming/02-tidyverse.html" class="pagination-link" aria-label="tidyverse">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">tidyverse</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../01-regression/01-explorative-analysis.html" class="pagination-link" aria-label="Utforska samband">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../01-regression/00-intro-regression.html" class="pagination-link" aria-label="Introduktion till regression">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

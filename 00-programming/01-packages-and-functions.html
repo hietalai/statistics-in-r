@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk teori och tillämpningar i R - 2&nbsp; Paket och funktioner</title>
+<title>Statistisk teori och tillämpningar i R - Paket och funktioner</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../00-programming/02-tidyverse.html" rel="next">
-<link href="../00-programming/00-R-basics.html" rel="prev">
+<link href="../00-programming/00-basics-R.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -107,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -125,11 +125,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../00-programming/00-R-basics.html" aria-current="page"> 
+    <a class="nav-link" href="../00-programming/index.qmd"> 
 <span class="menu-text">Programmering i R</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../01-regression/00-intro-regression.html"> 
+    <a class="nav-link active" href="../01-regression/00-intro-regression.html" aria-current="page"> 
 <span class="menu-text">Regressionsanalys</span></a>
   </li>  
 </ul>
@@ -143,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/01-packages-and-functions.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/01-packages-and-functions.html">Paket och funktioner</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -152,27 +152,115 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../00-programming/00-R-basics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunder i R</span></span></a>
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inledning</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Grunderna i R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
+ <span class="menu-text">Paket och funktioner</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span></a>
+ <span class="menu-text">tidyverse</span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text"><strong>DEL II - Regressionsanalys</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Förord</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -183,20 +271,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#paket-och-funktioner" id="toc-paket-och-funktioner" class="nav-link active" data-scroll-target="#paket-och-funktioner"><span class="header-section-number">2.1</span> Paket och funktioner</a></li>
-  <li><a href="#sec-readData" id="toc-sec-readData" class="nav-link" data-scroll-target="#sec-readData"><span class="header-section-number">2.2</span> Ladda in datamaterial</a></li>
-  <li><a href="#arbetsmappar" id="toc-arbetsmappar" class="nav-link" data-scroll-target="#arbetsmappar"><span class="header-section-number">2.3</span> Arbetsmappar</a></li>
-  <li><a href="#help" id="toc-help" class="nav-link" data-scroll-target="#help"><span class="header-section-number">2.4</span> Hjälpdokumentation</a></li>
-  <li><a href="#chat-GPT" id="toc-chat-GPT" class="nav-link" data-scroll-target="#chat-GPT"><span class="header-section-number">2.5</span> ChatGPT eller annan AI</a></li>
+  <li><a href="#paket-och-funktioner" id="toc-paket-och-funktioner" class="nav-link active" data-scroll-target="#paket-och-funktioner">Paket och funktioner</a></li>
+  <li><a href="#sec-readData" id="toc-sec-readData" class="nav-link" data-scroll-target="#sec-readData">Ladda in datamaterial</a></li>
+  <li><a href="#arbetsmappar" id="toc-arbetsmappar" class="nav-link" data-scroll-target="#arbetsmappar">Arbetsmappar</a></li>
+  <li><a href="#help" id="toc-help" class="nav-link" data-scroll-target="#help">Hjälpdokumentation</a></li>
+  <li><a href="#chat-GPT" id="toc-chat-GPT" class="nav-link" data-scroll-target="#chat-GPT">ChatGPT eller annan AI</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/01-packages-and-functions.html">Paket och funktioner</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></h1>
+<h1 class="title">Paket och funktioner</h1>
 </div>
 
 
@@ -214,8 +302,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Det kommer bli väldigt jobbigt om vi alltid måste skapa data för hand eller beräkna summor som <code>a + b + c + ...</code>. Användandet av en programvara ska underlätta de statistiska beräkningarna och i den andan följer här några kapitel om hur R eller RStudio kan hjälpa till.</p>
-<section id="paket-och-funktioner" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="paket-och-funktioner"><span class="header-section-number">2.1</span> Paket och funktioner</h2>
+<section id="paket-och-funktioner" class="level2">
+<h2 class="anchored" data-anchor-id="paket-och-funktioner">Paket och funktioner</h2>
 <p>Inom programmering är det vanligt att man genomför samma komplexa operation flera gånger och ett enkelt sätt att underlätta kodningen är att skapa en <em>funktion</em> som förkortar flera rader kod till en. Flera liknande funktioner samlas i olika <em>paket</em> som antingen redan är installerade på datorn eller måste installeras en gång.</p>
 <p>Installerade paket måste också <em>laddas</em> till arbetsminnet för att R ska kunna använda sig utav dem. Vi kan visualisera detta som att även fast vi har köpt in en verktygslåda, måste vi ställa upp den på arbetsbänken för att kunna använda verktygen däri. Om du inte har verktygslådan bredvid dig kommer det bli svårt att använda något av verktygen. Vi kan ladda upp ett paket till arbetsminnet med hjälp av <code>library()</code> eller <code>require()</code>, där namnet på paketet anges inuti parenteserna.</p>
 <div class="cell">
@@ -270,8 +358,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>En annan fördel med att skriva funktioner på flera rader är att vi kan kommentera varje enskilda argument som används. Detta kommer vi se exempel på senare.</p>
 </section>
-<section id="sec-readData" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="sec-readData"><span class="header-section-number">2.2</span> Ladda in datamaterial</h2>
+<section id="sec-readData" class="level2">
+<h2 class="anchored" data-anchor-id="sec-readData">Ladda in datamaterial</h2>
 <p>Vid datainsamling, eller vid inhämtning av material som någon annan har samlat in, är det vanligt att vi sammanställer informationen utanför R, till exempel skulle ett arbetsblad i Microsoft Excel ge oss ett lätt sätt att strukturera information. Istället för att behöva återskapa materialet från grunden i R kan vi läsa in information från andra typer av filer på datorn.</p>
 <p>Den enklaste formen av fil som R läser in är rena textfiler (med filändelser <code>.txt</code>, <code>.csv</code>, <code>.dat</code>) som på olika sätt sparat ner datans struktur på ett organiserat sätt. Vi kan läsa in informationen från dessa sorters filer till R med hjälp av specifika funktioner.</p>
 <p>Inom statistik är det vanligt att använda kommaseparerade filer, <code>.csv</code>, som vi kan skapa från Excel genom menyn <code>Spara som...</code>. Med hjälp av funktionen <code>read.csv</code> och dess argument kan vi säga till R vilken struktur som filen har och få samma struktur i en data frame. Ett tips är att öppna datafilen i <strong>Notepad</strong>, <strong>Anteckningar</strong> eller annan enkel ordbehandlare för att se vilka symboler som används för att beskriva strukturen.</p>
@@ -290,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-notepad-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.1: Exempel på en fil öppnad i Notepad
+Figur&nbsp;1: Exempel på en fil öppnad i Notepad
 </figcaption>
 </figure>
 </div>
@@ -311,8 +399,8 @@ Figur&nbsp;2.1: Exempel på en fil öppnad i Notepad
 </details>
 </div>
 </section>
-<section id="arbetsmappar" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="arbetsmappar"><span class="header-section-number">2.3</span> Arbetsmappar</h2>
+<section id="arbetsmappar" class="level2">
+<h2 class="anchored" data-anchor-id="arbetsmappar">Arbetsmappar</h2>
 <p>Att importera datamaterial är endast ett sätt där vi interagerar med datorns hårddisk. Vi kan ibland vilja spara ner objekt eller visualiseringar mer permanent och då kommer vi återigen behöva ange en <em>sökväg</em> till någonstans på datorn. För att underlätta denna process kan vi använda oss utav <em>arbetsmappar</em> (eng. working directory).</p>
 <p>En arbetsmapp är ett sätt för oss att snabbt och enkelt ge information till R att den ska leta i en specifik del av datorns hårddisk. Om vi arbetar med ett projekt, till exempel datorlaborationer i en specifik kurs, kan det vara lämpligt att skapa en mapp på datorn där all information som hör till kursen sparas ner. Då är det också lämpligt att i R säga att denna mapp är den arbetsmapp som vi ska importera från och exportera till under en session. Vi behöver dock först veta vilken sökväg som leder oss in till mappen.</p>
 <p>För att hitta denna sökväg, kan du öppna upp mappen i ditt operativssystems filhanterare. Du kan följa lämplig instruktion för just ditt operativsystem via någon av följande länkar:</p>
@@ -331,8 +419,8 @@ Figur&nbsp;2.1: Exempel på en fil öppnad i Notepad
 </div>
 <p>Vi måste lägga in sökvägen inom <code>"sökväg"</code> för att R ska kunna läsa av den som en textsträng och inte en massa objekt. Låt oss säga att vi har en fil i denna mapp som heter <code>dataOmEkar.csv</code>. Om vi inte har en arbetsmapp i sessionen behöver vi ange hela sökvägen till filen om vi ska importera den till R via <code>read.csv("C:/Users/MIN ANVÄNDARE/MAPPENS NAMN/dataOmEkar.csv)"</code>. Däremot efter att ha kört raden kod vet R att den ska leta efter filen i arbetsmappen och vi behöver därför bara använda filens namn likt <code>read.csv("dataOmEkar.csv")</code>. I det långa loppet kommer arbetsmappar underlätta kodningen avsevärt om vi organiserar filer på datorn på ett strukturerat sätt. Om vi endast är intresserade av någon enstaka fil kanske vi kan klara oss att skriva den långa sökvägen en eller två gånger, men det blir lätt mycket text om fler filer behöver importeras.</p>
 </section>
-<section id="help" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="help"><span class="header-section-number">2.4</span> Hjälpdokumentation</h2>
+<section id="help" class="level2">
+<h2 class="anchored" data-anchor-id="help">Hjälpdokumentation</h2>
 <p>Att alltid komma ihåg vad R kan göra, vilka funktioner som finns, vilka argument som de behöver, är omöjligt. Som tur är finns många resurser att hjälpa oss, inte minst den interna dokumentationen.</p>
 <p>Genom att använda <code>?</code> och ett funktionsnamn letar R upp den tillhörande hjälpdokumentationen för funktionen. Den innehåller en detaljerad beskrivning av funktionens syfte, hur man använder den, vilka argument som finns och vad respektive styr, mer djupgående detaljer om funktionen och dess resultat, ytterligare referenser, och allra sist exempel när funktionen används som man kan ta inspiration från.</p>
 <p>Läs hjälpdokumentationen för funktionen att skapa en vektor och testa några av de exempel som visas allra sist i artikeln.</p>
@@ -344,8 +432,8 @@ Figur&nbsp;2.1: Exempel på en fil öppnad i Notepad
 </div>
 <p>Eftersom R är open-source finns det väldigt mycket material tillgänglig på internet, detta underlag kan ses som en sådan resurs. Genom att använda en sökmotor där man beskriver det problem som man stött på eller fråga hur en funktion fungerar kommer du hitta en stor samling av sidor som säkerligen beskriver exakt det du är ute efter.</p>
 </section>
-<section id="chat-GPT" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="chat-GPT"><span class="header-section-number">2.5</span> ChatGPT eller annan AI</h2>
+<section id="chat-GPT" class="level2">
+<h2 class="anchored" data-anchor-id="chat-GPT">ChatGPT eller annan AI</h2>
 <p>Ytterligare en resurs som kan både hjälpa och stjälpa är ChatGPT och andra liknande AI-program. Genom att ställa frågor av olika slag till programmet kan man få resultat som dels ger kommenterad kod som (förhoppningsvis) löser det problem som man frågar efter och beskriver mer i detalj koden som den producerat.</p>
 <div id="fig-chatgpt" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -361,7 +449,7 @@ Figur&nbsp;2.1: Exempel på en fil öppnad i Notepad
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-chatgpt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2.2: Exempel på en fråga och svar med ChatGPT
+Figur&nbsp;2: Exempel på en fråga och svar med ChatGPT
 </figcaption>
 </figure>
 </div>
@@ -788,13 +876,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../00-programming/00-R-basics.html" class="pagination-link" aria-label="Grunder i R">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunder i R</span></span>
+      <a href="../00-programming/00-basics-R.html" class="pagination-link" aria-label="Grunderna i R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Grunderna i R</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../00-programming/02-tidyverse.html" class="pagination-link" aria-label="tidyverse">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">tidyverse</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

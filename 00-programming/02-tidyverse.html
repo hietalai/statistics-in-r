@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk teori och tillämpningar i R - 3&nbsp; tidyverse</title>
+<title>Statistisk teori och tillämpningar i R - tidyverse</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../01-regression/index.html" rel="next">
 <link href="../00-programming/01-packages-and-functions.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -106,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -124,11 +125,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../00-programming/00-R-basics.html" aria-current="page"> 
+    <a class="nav-link" href="../00-programming/index.qmd"> 
 <span class="menu-text">Programmering i R</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../01-regression/00-intro-regression.html"> 
+    <a class="nav-link active" href="../01-regression/00-intro-regression.html" aria-current="page"> 
 <span class="menu-text">Regressionsanalys</span></a>
   </li>  
 </ul>
@@ -142,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/02-tidyverse.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/02-tidyverse.html">tidyverse</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -151,27 +152,115 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../00-programming/00-R-basics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunder i R</span></span></a>
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inledning</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Grunderna i R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
+ <span class="menu-text">Paket och funktioner</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span></a>
+ <span class="menu-text">tidyverse</span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text"><strong>DEL II - Regressionsanalys</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Förord</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -182,14 +271,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#sec-readr" id="toc-sec-readr" class="nav-link active" data-scroll-target="#sec-readr"><span class="header-section-number">3.1</span> Läsa in filer med <code>readr</code></a></li>
-  <li><a href="#sec-tibble" id="toc-sec-tibble" class="nav-link" data-scroll-target="#sec-tibble"><span class="header-section-number">3.2</span> <code>tibble</code></a></li>
-  <li><a href="#sec-tidyr" id="toc-sec-tidyr" class="nav-link" data-scroll-target="#sec-tidyr"><span class="header-section-number">3.3</span> <code>tidyr</code></a></li>
-  <li><a href="#programmeringsrör-pipes" id="toc-programmeringsrör-pipes" class="nav-link" data-scroll-target="#programmeringsrör-pipes"><span class="header-section-number">3.4</span> Programmerings”rör” (pipes)</a></li>
-  <li><a href="#följande-kapitel-är-under-uppbyggnad" id="toc-följande-kapitel-är-under-uppbyggnad" class="nav-link" data-scroll-target="#följande-kapitel-är-under-uppbyggnad"><span class="header-section-number">4</span> FÖLJANDE KAPITEL ÄR UNDER UPPBYGGNAD</a>
+  <li><a href="#sec-readr" id="toc-sec-readr" class="nav-link active" data-scroll-target="#sec-readr">Läsa in filer med <code>readr</code></a></li>
+  <li><a href="#sec-tibble" id="toc-sec-tibble" class="nav-link" data-scroll-target="#sec-tibble"><code>tibble</code></a></li>
+  <li><a href="#sec-tidyr" id="toc-sec-tidyr" class="nav-link" data-scroll-target="#sec-tidyr"><code>tidyr</code></a></li>
+  <li><a href="#programmeringsrör-pipes" id="toc-programmeringsrör-pipes" class="nav-link" data-scroll-target="#programmeringsrör-pipes">Programmerings”rör” (pipes)</a></li>
+  <li><a href="#följande-kapitel-är-under-uppbyggnad" id="toc-följande-kapitel-är-under-uppbyggnad" class="nav-link" data-scroll-target="#följande-kapitel-är-under-uppbyggnad">FÖLJANDE KAPITEL ÄR UNDER UPPBYGGNAD</a>
   <ul class="collapse">
-  <li><a href="#databearbetning-med-dplyr" id="toc-databearbetning-med-dplyr" class="nav-link" data-scroll-target="#databearbetning-med-dplyr"><span class="header-section-number">4.1</span> Databearbetning med <code>dplyr</code></a></li>
-  <li><a href="#hantering-av-text-med-stringr-och-forcats" id="toc-hantering-av-text-med-stringr-och-forcats" class="nav-link" data-scroll-target="#hantering-av-text-med-stringr-och-forcats"><span class="header-section-number">4.2</span> Hantering av text med <code>stringr</code> och <code>forcats</code></a></li>
+  <li><a href="#databearbetning-med-dplyr" id="toc-databearbetning-med-dplyr" class="nav-link" data-scroll-target="#databearbetning-med-dplyr">Databearbetning med <code>dplyr</code></a></li>
+  <li><a href="#hantering-av-text-med-stringr-och-forcats" id="toc-hantering-av-text-med-stringr-och-forcats" class="nav-link" data-scroll-target="#hantering-av-text-med-stringr-och-forcats">Hantering av text med <code>stringr</code> och <code>forcats</code></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -197,9 +286,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/02-tidyverse.html">tidyverse</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></h1>
+<h1 class="title">tidyverse</h1>
 </div>
 
 
@@ -217,7 +306,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>En stor del utav statistisk analys består utav att bearbeta datamaterial som samlats in till ett format som lämpar sig för de olika metoder. Ett datamaterial som man själv samlar in (<em>primärdata</em>) eller datamaterial som hämtas från någon annan källa (<em>sekundärdata</em>) är inte alltid strukturerat på det sätt som vi önskar. <code>tidyverse</code> är en samling paket i R som baseras på ett liknande sätt att programmera i dess syntax och grammatik.</p>
-<p>Inom statistik önskas data följa formatet: “en rad är en observation”, “en kolumn är en variabel” och “en cell är ett värde”, så att vi med lätthet kan hantera datamaterialet på ett flertal olika sätt. Detta kan vi kalla för <em>rådata</em> eller <em>tidy data</em>. <a href="../01-regression/01-explorative-analysis.html#sec-example-data" class="quarto-xref"><span>Avsnitt 5.1</span></a> visar på data på just detta format. Varje rad är en uppmätt pingvin, och varje kolumn är mätvärden för varje variabel. Exempel på en struktur som inte följer denna praxis är frekvenstabeller där varje rad visar flera observationer som har samma variabelvärde.</p>
+<p>Inom statistik önskas data följa formatet: “en rad är en observation”, “en kolumn är en variabel” och “en cell är ett värde”, så att vi med lätthet kan hantera datamaterialet på ett flertal olika sätt. Detta kan vi kalla för <em>rådata</em> eller <em>tidy data</em>. <a href="../01-regression/01-explorative-analysis.html#sec-example-data" class="quarto-xref"><span>2.1 Pingviner vid Antarktis</span></a> visar på data på just detta format. Varje rad är en uppmätt pingvin, och varje kolumn är mätvärden för varje variabel. Exempel på en struktur som inte följer denna praxis är frekvenstabeller där varje rad visar flera observationer som har samma variabelvärde.</p>
 <p>Vi kan installera de paketen som ingår i <code>tidyverse</code> genom att installera paketet med samma namn och ladda in det i arbetsminnet med <code>require()</code> eller <code>library()</code>.</p>
 <div class="cell">
 <details class="code-fold">
@@ -228,9 +317,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p>I detta kapitel kommer vi gå igenom de olika paketen som behandlar datastrukturer och olika variablertyper medan senare kapitel kommer fortsätta med paket för visualisering (<code>ggplot2</code>) och mer avancerad kodning (<code>purrr</code>).</p>
-<section id="sec-readr" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="sec-readr"><span class="header-section-number">3.1</span> Läsa in filer med <code>readr</code></h2>
-<p>R innehåller många inbyggda funktioner (se <a href="01-packages-and-functions.html#sec-readData" class="quarto-xref"><span>Avsnitt 2.2</span></a>) för hur man kan läsa in filer av olika format från hårddisken. Vi har tidigare tittat på <code>read.csv2()</code> som är en grundfunktion i R, men <code>readr</code> har liknande funktioner utöver flera andra specialfall som utgår från vissa standardformat för filer.</p>
+<section id="sec-readr" class="level2">
+<h2 class="anchored" data-anchor-id="sec-readr">Läsa in filer med <code>readr</code></h2>
+<p>R innehåller många inbyggda funktioner (se <a href="01-packages-and-functions.html#sec-readData" class="quarto-xref"><span>Ladda in datamaterial</span></a>) för hur man kan läsa in filer av olika format från hårddisken. Vi har tidigare tittat på <code>read.csv2()</code> som är en grundfunktion i R, men <code>readr</code> har liknande funktioner utöver flera andra specialfall som utgår från vissa standardformat för filer.</p>
 <p>Det är starkt rekommenderat att läsa in text-filer i R, inte Excelfiler då Excel kan innehålla specialformat som R inte kan läsa in korrekt. Vi kan från Excel spara om en .xlsx fil till en .txt-, .tsv- eller .csv-fil.</p>
 <div class="cell">
 <details class="code-fold">
@@ -249,9 +338,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Resultatet av dessa funktioner blir en formatterad <em>tibble</em>.</p>
 <p><strong>Se till att datamaterialet som laddats in ser ut som vi förväntar att det ska göra</strong>, exempelvis är decimaler korrekt angivna, har vi lika många variabler i R som i originalfilen och liknande.</p>
 </section>
-<section id="sec-tibble" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="sec-tibble"><span class="header-section-number">3.2</span> <code>tibble</code></h2>
-<p>I <a href="00-R-basics.html#sec-data-frame" class="quarto-xref"><span>Avsnitt 1.2.4.3</span></a> presenterades datastrukturen <code>data frame</code> som ett sätt för oss att i R spara information i ett standard format. En tibble är en utveckling av denna datastruktur som rensat bort egenskaper som inte längre används och lägger till egenskaper som ofta vill användas vid behandling av data.</p>
+<section id="sec-tibble" class="level2">
+<h2 class="anchored" data-anchor-id="sec-tibble"><code>tibble</code></h2>
+<p>I <a href="00-basics-R.html#sec-data-frame" class="quarto-xref"><span>Listor och data frames</span></a> presenterades datastrukturen <code>data frame</code> som ett sätt för oss att i R spara information i ett standard format. En tibble är en utveckling av denna datastruktur som rensat bort egenskaper som inte längre används och lägger till egenskaper som ofta vill användas vid behandling av data.</p>
 <p>Likt en data frame, innehåller en tibble en samling lika långa kolumner och dessa kolumner kan vara av olika objekttyper. Till exempel kan vi blanda listor och vektorer så länge de innehåller lika många element.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -308,8 +397,8 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="sec-tidyr" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="sec-tidyr"><span class="header-section-number">3.3</span> <code>tidyr</code></h2>
+<section id="sec-tidyr" class="level2">
+<h2 class="anchored" data-anchor-id="sec-tidyr"><code>tidyr</code></h2>
 <p>Om data inte är på det format som vi önskar eller om någon statistisk metod behöver ett material som har ett annat format än tidy-data. Detta paket kommer vi inte titta på just nu i detalj men följande Cheat Sheets innehåller exempel på olika bearbetningar som vi kan vara intresserade av att genomföra med data.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -317,8 +406,8 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="programmeringsrör-pipes" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="programmeringsrör-pipes"><span class="header-section-number">3.4</span> Programmerings”rör” (pipes)</h2>
+<section id="programmeringsrör-pipes" class="level2">
+<h2 class="anchored" data-anchor-id="programmeringsrör-pipes">Programmerings”rör” (pipes)</h2>
 <p>Det är vanligt att vi vill genomföra flera operationer på ett och samma objekt, speciellt när vi har att göra med databearbetning. Att nästla funktioner i varandra blir lätt väldigt krångligt att båda skriva och läsa av. Om argument ska läggas till i de olika funktionerna är det svårt att läsa av exakt vilken funktion de tillhör, och det blir i princip bara programmering med parenteser. Alternativt kan objektet sparas om vid varje steg men det skapas många onödiga objekt som man måste hålla koll på när det egentligen bara är det sista steget som är relevant.</p>
 <div class="cell">
 <details class="code-fold">
@@ -359,10 +448,10 @@ Viktigt
 </div>
 <p>I resterande kodexempel kommer denna pipe operator användas frekvent för att underlätta läsningen av koden.</p>
 </section>
-<section id="följande-kapitel-är-under-uppbyggnad" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> FÖLJANDE KAPITEL ÄR UNDER UPPBYGGNAD</h1>
-<section id="databearbetning-med-dplyr" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="databearbetning-med-dplyr"><span class="header-section-number">4.1</span> Databearbetning med <code>dplyr</code></h2>
+<section id="följande-kapitel-är-under-uppbyggnad" class="level1">
+<h1>FÖLJANDE KAPITEL ÄR UNDER UPPBYGGNAD</h1>
+<section id="databearbetning-med-dplyr" class="level2">
+<h2 class="anchored" data-anchor-id="databearbetning-med-dplyr">Databearbetning med <code>dplyr</code></h2>
 <p>Datamaterialet behöver rensas från saknade värden för dessa kommer ställa till problem. I denna kod används <code>filter()</code> från paketet <code>dplyr</code> där datamaterialet <code>penguins</code> rensas från observationer där <code>sex</code> är <code>NA</code>, Rs sätt att ange saknade värden (not available). Mer om databearbetning kommer visas i kapitel <span class="quarto-unresolved-ref">?sec-tidyverse</span>.</p>
 <div class="cell">
 <details class="code-fold">
@@ -379,8 +468,8 @@ Viktigt
 <p>mutate transmute</p>
 <p>group_by summarize</p>
 </section>
-<section id="hantering-av-text-med-stringr-och-forcats" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="hantering-av-text-med-stringr-och-forcats"><span class="header-section-number">4.2</span> Hantering av text med <code>stringr</code> och <code>forcats</code></h2>
+<section id="hantering-av-text-med-stringr-och-forcats" class="level2">
+<h2 class="anchored" data-anchor-id="hantering-av-text-med-stringr-och-forcats">Hantering av text med <code>stringr</code> och <code>forcats</code></h2>
 
 
 </section>
@@ -799,10 +888,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../00-programming/01-packages-and-functions.html" class="pagination-link" aria-label="Paket och funktioner">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Paket och funktioner</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../01-regression/index.html" class="pagination-link" aria-label="Förord">
+        <span class="nav-page-text">Förord</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
