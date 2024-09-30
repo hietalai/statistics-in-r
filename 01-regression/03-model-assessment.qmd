@@ -34,7 +34,7 @@ Efter att vi har anpassat en modell baserat på iakttagelser från visualisering
 
 För att kunna bedöma lämpligheten av modellen måste vi undersöka huruvida modellen uppfyller de antaganden som presenterades i @sec-model-assumptions genom *residualanalys* och slutsatser om populationen kan göras med hjälp av statistisk inferens. Vi börjar alltid med att undersöka modellens lämplighet eftersom inferensmetodernas beräkningar också förutsätter att dessa antaganden är uppfyllda. 
 
-## Residualanalys
+## Residualanalys {#sec-residual-simple}
 Residualanalys innebär att beräkna och visuellt utforska residualerna från en modell gentemot modellantaganden $E\overset{iid}{\sim}N(0, \sigma^2)$, det vill säga att residualerna är oberoende, normalfördelade med väntevärde 0 och lika varians. Residualerna kan också användas för att undersöka ifall den linjära modell som anpassats är lämplig. Vi kommer titta närmare på mer detaljerad residualanalys i ett senare kapitel.
 
 För enkelhetens skull kan vi plocka ut residualerna samt de observerade och skattade värdena på responsvariabeln från den skattade modellen (se @tip-lm-objects).
@@ -357,7 +357,7 @@ Andra exempel på data som har ett beroende är:
 - Vi samlar in data från personer, men vissa personer kommer ifrån samma famlij, detta kan göra att det finns ett beroende mellan dessa personer.
 - Vi samlar in spatiala (rumsliga) data, till exempel temperatur eller regnmängd på olika platser i Östergötland. Då är det vanligt att det finns en positiv korrelation mellan geografiskt närliggande observationer.
 
-### Funktion med alla diagram
+### Funktion med alla diagram (`residualPlots`)
 Dessa diagram kommer vara återkommande i regressionsmodellering så vi kan skapa en funktion för att automatiskt generera alla fyra diagram samtidigt. Vi får genom paketet `cowplot` tillgång till en funktion (`plot_grid`) som kan kombinera flera diagram till en och samma. 
 
 ```{r}

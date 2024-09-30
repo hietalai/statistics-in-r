@@ -21,11 +21,14 @@ Några punkter som vi behöver få svar på är:
 När vi fått svar på alla dessa punkter är det mycket lättare att skapa en korrekt modellstruktur och även att utvärdera anpassade modeller. Vi kan undersöka dessa punkter genom enklare funktioner (ex. `mean()`, `min()`, `summary(variabel)`) men vi kan också få relevant information genom enskilda och parvisa visualiseringar av variablerna. 
 
 ## Pingviner vid Antarktis {#sec-example-data}
-Återkommande i underlaget kommer ett insamlat datamaterial från ett forskarteam vid Antarktis användas. Teamet har mellan 2007 och 2009 samlat in information om `r nrow(penguins)` pingviner vid tre öar runtomkring [Palmer Research Station](https://pal.lternet.edu/). Datamaterialet kan hämtas via paketet `palmerpenguins` [@penguins2020] och laddas in i R via följande kod:
+Återkommande i underlaget kommer ett insamlat datamaterial från ett forskarteam vid Antarktis användas. Teamet har mellan 2007 och 2009 samlat in information om `r nrow(penguins)` pingviner vid tre öar runtomkring [Palmer Research Station](https://pal.lternet.edu/). Datamaterialet kan hämtas via paketet `palmerpenguins` [@penguins2020] och läsas in i R via följande kod:
 
 ```{r}
 #| eval: false
 #| code-fold: false
+
+# Glöm inte att installera paketet om du inte har gjort det förut
+# install.packages("palmerpenguins")
 
 # Laddar paketet med datamaterialet
 require(palmerpenguins)
@@ -37,7 +40,7 @@ penguins <-
 
 ```
 
-::: {.callout-important}
+::: {.callout-note}
 Som en del av utforskningen kan vi identifiera saknade värden på vissa variabler och väljer att filtrera bort dessa variabler i just detta exempel. Hantering av saknade värden är ett stort fält inom statistiken och det finns flertalet metoder som kan *imputera* (skatta det saknade värdet) värden så att vi inte behöver ta bort hela observationer från undersökningen. 
 
 En enkel imputeringsmetod är medelvärdesimputering där vi byter ut det saknade värdet med medelvärdet av de övriga mätvärdena eller typvärdet ifall en kvalitativ variabel ska imputeras. I praktiken används mer avancerade metoder som kan tillämpas i många olika fall där vi också tar hänsyn till annan information om observationerna. 
@@ -49,13 +52,19 @@ Vi kan titta närmare på ett urval av datamaterialet i @tbl-penguins-sample.
 #| tbl-cap: Urval av observationer från datamaterialet.
 #| label: tbl-penguins-sample
 
-# Generera en formaterad tabell med hjälp av kable()
+# Generera en formaterad tabell med hjälp av kable() och formatera den med hjälp av kable_styling()
 penguins %>% 
   slice_head(n = 5) %>% 
   kable() %>% 
   kable_styling("striped")
 
 ```
+
+:::{.callout-note}
+
+Funktionen `kable()` kommer från paketet `knitr` som måste (installeras och) laddas in innan vi kan använda den. Funktionen `kable_styling()` kommer från paketet `kableExtra` som på samma vis måste (installeras och) laddas in innan vi kan använda den.
+
+:::
 
 Från tabellen kan vi utläsa följande variabler: 
 

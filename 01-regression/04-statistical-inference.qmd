@@ -418,7 +418,7 @@ b_j \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_j}
 \end{aligned}
 $$
 
-## Enkla utvärderingsmått
+## Enkla utvärderingsmått {#sec-r-square}
 Bara för att en modell är lämplig, uppfyller modellantaganden och innehåller signifikanta parametrar, betyder det inte att modellen är den bästa som kan skapas eller överhuvudtaget bra. Med hjälp av olika utvärderingsmått kan vi få en överblick på hur bra modellen är.
 
 *Förklaringsgraden* ($R^2$) beskriver hur stor andel av den totala variationen som förklaras av modellens förklarande variabler. Med denna beskrivning kan vi beräkna $R^2$ som:

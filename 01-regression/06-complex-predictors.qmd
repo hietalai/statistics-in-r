@@ -35,7 +35,6 @@ power <- read.csv2(file = "../resources/data/electricityconsumption.csv", dec = 
 
 ```
 
-
 Läs in materialet och filtera bort saknade värden med:
 ```{r}
 #| eval: false
@@ -60,7 +59,7 @@ ggplot(power) +
   theme_bw() + 
   scale_color_manual(values = c("steelblue", "#d9230f"), 
                      labels = c("Ej installerad", "Installerad")) +
-  labs(x = "Temperatur", y = "Elkonsumtion (kWh)")
+  labs(x = "Temperatur", y = "Elkonsumtion (kWh)", caption = "Källa: Insamlad data från en bostad i Norrbotten.")
 
 ```
 
@@ -83,31 +82,34 @@ Kodningen av indikatorvariabeln betyder att vi egentligen får två olika möjli
 $$
 \begin{aligned}
   Y_{i|\text{bergsvärme} = 1} &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 \cdot 1 + \beta_3 \cdot \text{temperatur}_i \cdot 1 + E_i \\
-  &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 + \beta_3 \cdot \text{temperatur}_i + E\\
-  &= ( \beta_0 + \beta_2 ) + (\beta_1 + \beta_3) \cdot \text{temperatur}_i + E\\
+  &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 + \beta_3 \cdot \text{temperatur}_i + E_i\\
+  &= \underbrace{( \beta_0 + \beta_2 )}_{\beta_0^*} + \underbrace{(\beta_1 + \beta_3)}_{\beta_1^*} \cdot \text{temperatur}_i + E_i\\
   \\
-  Y_{i|\text{bergsvärme} = 0} &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 \cdot 0 + \beta_3 \cdot \text{temperatur}_i \cdot 0 + E\\
-  &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + E
+  Y_{i|\text{bergsvärme} = 0} &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + \beta_2 \cdot 0 + \beta_3 \cdot \text{temperatur}_i \cdot 0 + E_i\\
+  &= \beta_0 + \beta_1 \cdot \text{temperatur}_i + E_i
 \end{aligned}
 $$
-När $\text{bergsvärme}_i = 1$ skapas en enkel linjär modell med ett 'nytt' intercept $\beta_0 + \beta_2$ och en ny lutningsparameter $\beta_1 + \beta_3$. $\beta_2$ och $\beta_3$ är alltså den kategoriska variabelns påverkan på regressionslinjens intercept och lutning. Vi kan generellt säga att med flera kategorier (indikatorvariabler) skapas flera varianter av modellen med en referenslinje när alla indikatorer är 0, och en linje för varje indikator som blir 1 där interceptet och lutningen förändras jämfört med referenslinjen.
+När $\text{bergsvärme}_i = 1$ skapas en enkel linjär modell med ett 'nytt' intercept $\beta_0^*$ och en ny lutningsparameter $\beta_1^*$. $\beta_2$ och $\beta_3$ är alltså den kategoriska variabelns påverkan på regressionslinjens intercept respektive lutning. Vi kan generellt säga att med flera kategorier (indikatorvariabler) skapas flera varianter av modellen med en referenslinje när alla indikatorer är 0, och en linje för varje indikator som blir 1 där interceptet och lutningen förändras jämfört med referenslinjen.
 
 För att skapa en interaktion i modellen med hjälp av R kan symbolen `*` användas:
 ```{r}
+#| code-fold: false
+#| tbl-cap: Koefficienttabell från en modell med en interaktion
+#| tbl-cap-location: top
+
 model <- lm(Energi_KWh ~ Dygnsmedel * Bergsvärme, data = power)
 
 summary(model) %>% 
   coef() %>% 
   round(3) %>% 
-  kable(caption = "Koefficienttabell från en modell med en interaktion",
-        col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
   kable_styling("striped")
 
 ```
 
-Eftersom bergsvärme är en faktorvariabel hanterar R detta korrekt (se @sec-indicator-variable) och hade även gjort det om det fanns flera kategorier. I detta fall skapas en ny variabel mellan indikatorvariabeln och den numeriska då det endast fanns två kategorier (en indikatorvariabel).
+Eftersom bergsvärme anges som en faktorvariabel hanterar R detta korrekt (se @sec-indicator-variable) och hade även gjort det om det fanns flera kategorier. I detta fall skapas endast en ny variabel mellan indikatorvariabeln och den numeriska då det endast fanns två kategorier (en indikatorvariabel). Om fler indikatorvariabler hade skapats från den kvalitativa variabeln, hade fler interaktioner skapats, en för varje kombination av indikatorvariabel och kontinuerlig variabel. 
 
-Vi kan tolka dessa skattningar som att om bostaden har bergsvärme installerad, förändras interceptet med den anställda jobbar på ett kontor, sänks förbrukningen vid 0 grader med ca 45 kWh och temperaturens påverkan på konsumtionen förändras med ca 2.2 kWh mindre per ökad grad^[Tänk på att temperatur har ett negativt samband som blir ett värde närmare 0 med interaktionen.] **jämfört med en bostad utan bergsvärme**. Vi får alltså två modeller:
+Vi kan tolka dessa skattningar som att om bostaden har bergsvärme installerad, sänks förbrukningen vid 0 grader med ca 45 kWh och temperaturens påverkan på konsumtionen förändras med ca 2.2 kWh mindre per ökad grad^[Tänk på att temperatur har ett negativt samband som blir ett värde närmare 0 med interaktionen.] **jämfört med en bostad utan bergsvärme**. Vi får alltså två modeller:
 
 $$
 \begin{aligned}
@@ -129,7 +131,7 @@ ggplot(power) +
   theme_bw() + 
   scale_color_manual(values = c("steelblue", "#d9230f"), 
                      labels = c("Ej installerad", "Installerad")) +
-  labs(x = "Temperatur", y = "Elkonsumtion (kWh)") +
+  labs(x = "Temperatur", y = "Elkonsumtion (kWh)", caption = "Källa: Insamlad data från en bostad i Norrbotten.") +
   ## Lägga till regressionslinjer
   #  Ej installerad (Referenslinjen)
   geom_abline(
@@ -151,10 +153,143 @@ ggplot(power) +
 #### Simpson's paradox
 
 ### Interaktion mellan två kvantitativa variabler {#sec-interaction-quant-quant}
-En interaktion mellan två kvantitativa variabler är svårare att visualisera och identifiera. 
+En interaktion mellan två kvantitativa variabler är svårare att visualisera och identifiera. Anta att vi har ett datamaterial som består av två förklarande variabler och en responsvariabel där det sanna sambandet inkluderar en interaktion mellan de förklarande variablerna.
+
+```{r}
+#| fig-cap: Spridningsdiagram över de olika variablerna i materialet.
+#| fig-height: 3
+#| fig-width: 5 
+
+# Antal observationer
+n <- 200
+
+set.seed(64)
+
+## Skapa ett datamaterial
+data <- 
+  tibble(
+    x1 = runif(n = n, min = 0, max = 5),
+    x2 = rnorm(n = n, mean = 0, sd = 3),
+    y = 10 + 1.5*x1 - 1.5*x2 - 3*x1*x2 + rnorm(n = n)
+  )
+
+## Utforskning av materialet
+p1 <- ggplot(data) + aes(x = x1, y = y) + geom_point(color = "steelblue") + theme_bw()
+
+p2 <- ggplot(data) + aes(x = x2, y = y) + geom_point(color = "steelblue") + theme_bw()
+
+p3 <- ggplot(data) + aes(x = x1, y = x2) + geom_point(color = "steelblue") + theme_bw()
+
+cowplot::plot_grid(p1, p2, p3)
+
+```
+
+Med detta enkla exempel med endast två variabler och deras interaktion kan vi visualisera materialet med ett fåtal diagram och utläsa att modellen uppvisar någon form av komplext samband som inte de enskilda förklarande variablerna kan modellera. Desto fler förklarande variabler som finns minskar effektiviteten att identifiera interaktioner från enskilda parvisa diagram, vilket innebär att vi oftast identifierar behov av interaktioner utifrån modellanpassningar och residualanalys.
+
+```{r}
+#| fig-cap: Residualer från den felaktigt formulerade modellen.
+#| fig-height: 3
+#| fig-width: 5 
+
+dåligModell <- lm(y ~ x1 + x2, data = data)
+
+residualPlots(dåligModell)
+
+```
+
+Likt när vi tittar på en potentiell interaktion mellan en kvalitativ och kvantitativ variabel visas det tydligt i residualerna mot de anpassade värdena att det saknas något samband i modellen då residualerna inte uppvisar konstant varians. Även normalfördelningsdiagrammen identifierar långa svansar med många värden i extremerna.
+
+```{r}
+#| fig-cap: Residualerna från en lämplig modell
+#| fig-height: 3
+#| fig-width: 5 
+
+braModell <- lm(y ~ x1 * x2, data = data)
+
+residualPlots(braModell)
+
+```
+
+Nu ser residualerna bättre ut och det verkar som att modellen är en korrekt representation av sambandet. 
+
+Till skillnad från @sec-interaction-qual-quant kommer tolkningar av interaktioner mellan två kvantitativa variabler bli betydligt svårare. Modellen kan inte på ett enkelt sätt 'förenklas' likt i det kvalitativa fallet men på ett ungefär kan vi säga att lutningsparametern för interaktionen påverkar lutningsparametern för respektive grundvariabel.
+
+$$
+\begin{aligned}
+  Y_i &= \beta_0 + \beta_1 \cdot X_{i1} + \beta_2 \cdot X_{i2} + \beta_3 \cdot X_{i1} \cdot X_{i2} + E_i \\
+  &\qquad \qquad \qquad \text{alternativt}  \\
+  Y_i &= \beta_0 + \beta_1 \cdot X_{i1} + (\beta_2 + \beta_3 \cdot X_{i1}) \cdot X_{i2} + E_i\\
+  \\
+  Y_i &= \beta_0 + (\beta_1 + \beta_3 \cdot X_{i2}) \cdot X_{i1} + \beta_2 \cdot X_{i2} + E_i
+\end{aligned}
+$$
+Eftersom vi i en multipel linjär regression tolkar parameterskattningar som att den förklarande variabeln förändrar responsvariabeln **givet att alla andra variabler är fixa** kommer en tolkning av en förändring i en förklarande variabel innebära att Y förändras på två platser. I den första alternativa formuleringen ser vi hur en förändring av $X_{i1}$ leder till att Y förändras både via $\beta_1$ och hur $X_{i2}$s samband med Y ($\beta_2$) förändras med anledning av $\beta_3$.
+
+Det vi kan göra för att tolka en variabels effekt på responsvariabeln är att kombinera alla termer som omfattar variabeln och visualisera dens sammanfattande effekt givet att alla andra variabler är konstanta. För en interaktion mellan två kontinuerliga variabler kan vi fixera olika värden på den ena variabeln och modellera den andra variabelns effekt mot responsvariabeln. Ett vanligt sätt att göra detta är att fixera med hjälp av medelvärdet och en standardavvikelse åt båda hållen.
+
+```{r}
+#| tbl-cap: Koefficienttabell från en modell med en interaktion
+#| tbl-cap-location: top
+#| label: tbl-interaction
+
+summary(braModell) %>% 
+  coef() %>% 
+  round(3) %>% 
+  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+  kable_styling("striped")
+
+```
+
+```{r}
+#| fig-cap: $X_1$:s effekt på responsvariabeln för ett givet värde på $X_2$
+#| fig-height: 3
+#| fig-width: 5 
+#| label: fig-interaction-quant-quant
+
+# Tar ut skattade koefficienter från modellen med interaktion
+b <- coef(braModell)
+meanX2 <- mean(data$x2)
+sdX2 <- sd(data$x2)
+
+intData <- 
+  tibble(
+    # Skapa olika värden av x1 givet värdemängden
+    x1 = seq(min(data$x1), max(data$x1), by = 0.01),
+    y1 = b[1] + (b[2] + b[4]*(meanX2 - sdX2))*x1 + b[3] * (meanX2 - sdX2),
+    y2 = b[1] + (b[2] + b[4]*(meanX2))*x1 + b[3] * (meanX2),
+    y3 = b[1] + (b[2] + b[4]*(meanX2 + sdX2))*x1 + b[3] * (meanX2 + sdX2)
+  ) %>% 
+  pivot_longer(
+    !x1
+  )
+
+ggplot(intData) + aes(x = x1, y = value, color = name) + geom_line(linewidth = 1) + 
+  scale_color_manual(expression(X[2]), values = c("steelblue", "#d9230f", "black"), labels = expression(mu - sigma, mu, mu + sigma)) + 
+  theme_bw() + labs(x = expression(X[1]), y = "Y")
+
+```
+
+:::{.callout-warning}
+Om fördelningen av $X_2$ **inte** är symmetrisk kan valet av ovanstående fixa värden vara missvisande. Om vi vill visualisera olika värden bör vi fundera över vilka som faktiskt är lämpliga att använda. 
+::: 
+
+Det vi kan utläsa från @fig-interaction-quant-quant är att effekten av $X_1$ är positiv för låga värden av $X_2$ och vänder till negativ för höga värden av $X_2$. I ett enkelt fall som denna går det att visa och till viss del tolka interaktionens effekt på ett någorlunda tydligt sätt, men i en mer komplex modell blir det direkt rörigt. Vi bör istället titta på residualanalyser och annan utvärdering av modellen för att bedöma om interkationen gör att modellen blir bättre. Avvägningen mellan modellens komplexitet och dess träffsäkerhet är än mer viktig att diskutera för att modellen ska uppnå sitt syfte.
 
 ### Identifiera interaktion
-Vanligtvis kan vi få ledtrådar om interaktioner i de parvisa sambanden, speciellt om det är en interaktion beskriven i @sec-interaction-qual-quant, men ibland är det svårt att direkt se ifall en interaktion behövs. Det är också svårt att utläsa mellan exakt vilka variabler som interaktionen finns. Med hjälp av grupperade spridningsdiagram (kvalitativa och kvantitativa) eller 3D-diagram (kvantitativa och kvantitativa) kan sambandet mellan par av förklarande variabler och responsvariabeln undersökas.
+Vanligtvis kan vi få ledtrådar om interaktioner i de parvisa sambanden, speciellt om det är en interaktion beskriven i @sec-interaction-qual-quant, men ibland är det svårt att direkt se ifall en interaktion behövs. Det är också svårt att utläsa mellan exakt vilka variabler som interaktionen finns. Med hjälp av grupperade spridningsdiagram likt @fig-interaction-electricity (kvalitativa och kvantitativa) eller 3D-diagram (kvantitativa och kvantitativa) kan sambandet mellan par av förklarande variabler och responsvariabeln undersökas. Vi kan också skapa potentiella interaktioner och modellera dessa mot responsvariabeln i ett spridningsdiagram.
+
+```{r}
+#| fig-cap: Interaktionen mellan $X_1$ och $X_2$ och dess samband med Y
+#| fig-height: 3
+#| fig-width: 5 
+
+
+ggplot(data) + aes(x = x1*x2, y = y) + geom_point(color = "steelblue") + 
+theme_bw() + labs(x = "Interaktion", y = "Y")
+
+```
+
+Diagrammet visar ett starkt negativt linjärt samband mellan interaktionen och responsvariabeln, vilket antyder att interaktionen har en betydande roll i modelleringen. Med flera variabler kommer antalet interaktioner som skulle kunna skapas öka exponentiellt 
 
 Det går också att utläsa från residualanalysen ifall modellen inte plockar upp något samband med responsvariabeln men även med hjälp av dessa diagram kan det vara svårt att utläsa exakt vad för samband som saknas och vilka variabler som behöver justeras. Det är i detta läge som spridningsdiagram över residualerna uppdelat på de olika förklarande variablerna kan ge en indikation på vad som behöver justeras.
 
@@ -171,8 +306,6 @@ Det är framförallt i diagrammet överst till höger som det syns att modellen 
 #| fig-cap: Residualer mot förklarande variabler
 #| fig-height: 3
 #| fig-width: 5 
-
-
 
 modelNoInt <- lm(Energi_KWh ~ Dygnsmedel + Bergsvärme, data = power)
 
@@ -260,7 +393,7 @@ data <-
   )
 
 ggplot(data) + aes(x = X, y = Y) + 
-  geom_point() + theme_bw()  
+  geom_point(color = "steelblue") + theme_bw()  
 
 ```
 
@@ -282,11 +415,11 @@ Dessa residualer ser inte bra ut, egentligen inte för någon utav antaganden, m
 
 Vi kan anpassa polynom på olika sätt. Ett enkelt sätt att göra är att inkludera en ny variabel i datamaterialet som är en transformation av den förklarande variabeln, till exempel skapa $X^2$ som en ny kolumn.
 
-```{r}
-#| fig-cap: Residualdiagram från en modell med polynom
-#| fig-height: 3
-#| fig-width: 5 
 
+```{r}
+#| cap-location: top
+#| tbl-cap: Skattade koefficienter från en modell med polynom
+#| label: tbl-polynom-coefficient
 
 # Sparar över det gamla materialet
 data <- 
@@ -302,9 +435,15 @@ model <- lm(Y ~ ., data = data)
 summary(model) %>% 
   coef() %>% 
   round(3) %>% 
-  kable(caption = "Skattade koefficienter från en modell med polynom",
-        col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
   kable_styling("striped")
+```
+
+
+```{r}
+#| fig-cap: Residualdiagram från en modell med polynom
+#| fig-height: 3
+#| fig-width: 5 
 
 residualPlots(model)
 
@@ -312,6 +451,138 @@ residualPlots(model)
 
 Denna modell ser ut att uppfylla modellantaganden eftersom vi har lagt till en variabel som tar hänsyn till det icke-linjära samband som X har med Y. Parameterskattningarna som vi får från modellen stämmer också till stor del överens med den sanna modell som vi simulerat materialet ifrån. 
 
+### Centrering
+När polynom används är det önskvärt att centrera eller standardisera grundvariablerna som används för polynomen. Detta görs för att minska de värden som modellen använder till sin anpassning (beräkningskomplexitet) och för att variablerna skapas utifrån varandra och har ett starkt beroende mellan sig (multikollinearitet, @sec-multicollinearity). Det finns många problem med starka beroenden mellan förklarande variabler och ett utav dem är att höga kovarianser leder till icke-informativ inferens.
 
-## Multikollinearitet
-Bla
+```{r}
+
+# Skapa centrerad data
+dataCent <- 
+  data %>% 
+  mutate(
+    # Centrera variabeln x med hjälp av scale()
+    # Standardisering kan göras genom argument scale = TRUE 
+    XCent = X %>% scale(center = TRUE, scale = FALSE),
+    X2Cent = XCent^2
+  )
+
+```
+
+Vi kan med hjälp av `colMeans()` se medelvärden för de icke-centrerade och centrerade variablerna. Det finns en stor skillnad, främst för polynomens medelvärde vilket visar på syftet med centrering, att reducera värden som används inom modellanpassningen.
+
+```{r}
+#| cap-location: top
+#| tbl-cap: Variablernas medelvärden
+
+
+colMeans(dataCent) %>% 
+  round(3) %>% 
+  kable(col.names = "Medelvärde") %>% 
+  kable_styling(full_width = FALSE)
+
+```
+
+När vi anpassar en modell med polynom finns det också ett alternativt sätt att göra det på. Vi har i de tidigare exemplen skapat polynomet som en ny variabel i datamaterialet och kan inkludera den variabeln (`X2` eller `X2Cent`) i modellstrukturen för `lm()`. Vi *behöver* egentligen inte skapa en ny variabel, och det brukar vi inte heller göra i praktiken om det ska skapas flera polynom av olika grad. Istället kan vi i formeln ange hur vi vill transformera grundvariabler med hjälp av `I(X^2)` där exponenten anger graden av polynomet. Om vi inte använder `I()` runt vår beräkning kommer R inte skapa ett polynom.
+
+```{r}
+#| cap-location: top
+#| tbl-cap: Skattade koefficienter från en modell med centrerade polynom
+#| label: tbl-polynom-coefficient-center
+
+
+# Anpassa ny modell med centrerad x
+modelCent <- lm(Y ~ XCent + X2Cent, data = dataCent)
+
+# Alternativt 
+modelCent <- lm(Y ~ XCent + I(XCent^2), data = dataCent)
+
+summary(modelCent) %>% 
+  coef() %>% 
+  round(3) %>% 
+  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+  kable_styling("striped")
+
+```
+
+```{r}
+#| fig-cap: Residualdiagram från en modell med centrerade polynom
+#| fig-height: 3
+#| fig-width: 5 
+
+
+residualPlots(modelCent)
+```
+
+
+Modellen får olika parameterskattningar för grundvariabeln jämfört med den icke-centrerade modellen (@tbl-polynom-coefficient) eftersom variablerna som används till anpassningen har olika tolkningar. När vi centrerar en variabel tolkas lutningsparametern som när den förklarand variabelns *avstånd från sitt medelvärde* ökar med ett, förändras y med parameterns värde. Däremot ser vi att parametern för polynomet är densamma samt att residualerna från modellen också är det. 
+
+En centrering av variabler för polynom ändrar alltså inte hur bra modellen är på att anpassa responsvariabeln men förenklar bakomliggande beräkningar och förändrar tolkningar av parameterskattningar.
+
+## Övningsuppgifter {#sec-exercises-complex}
+I detta kapitel introduceras två datamaterial som kommer återkomma i efterföljande kapitel.
+
+### Infektionsrisker vid sjukhus
+`SENIC` står för the Study on the Efficacy of Nosocomial Infection Control [@senic1980] och behandlar olika sätt att identifiera och kontrollera infektioner som uppstår på sjukhus. Datamaterialet består utav ett slumpmässigt urval om 113 sjukhus från de 338 undersökta. Materialet inkluderar följande variabler:
+
+- `ID`: Ett ID nummer för respektive sjukhus,
+- `Length_of_stay`: Genomsnittligt antal dagar en patient stannar på sjukhuset,
+- `Age`: Genomsnittlig ålder (år) på en patient,
+- `Infection_risk`: Genomsnittlig uppskattad sannolikhet (i procent) att smittas av en infection på sjukhuset,
+- `Routine_culturing_ratio`: Kvoten mellan antalet odlingar som genomförts med antalet patienter utan symtom på infektion (multiplicerat med 100),
+- `Routine_chest_X_ray_ratio`: Kvoten mellan antalet röntgenbilder som genomförts med antalet patienter utan symtom på lunginflammation (multiplicerat med 100),
+- `Number_of_beds`: Genomsnittlig antal sjukhussängar (platser) vid sjukhuset under undersökningsperioden,
+- `Medical_school_affiliation`: Ja/Nej om sjukhuset är kopplat till en läkarutbildning (1 = Ja, 2 = Nej),
+- `Region`: Sjukhusets geografiska område (1 = Nordost, 2 = Mellanvästern, 3 = Syd, 4 = Väst),^[Se     [Wikipedia](https://en.wikipedia.org/wiki/List_of_regions_of_the_United_States) för en beskrivning av dessa regioner]
+- `Average_daily_census`: Genomsnittligt antal patienter vid sjukhuset under undersökningsperioden,
+- `Number_of_nurses`: Genomsnittligt antal heltidsanställda licensierade sjuksköterskor under undersökningsperioden (antal heltids + 0.5 antal deltidsanställda),
+- `Available_facilties_and_services`: Andel av 35 möjliga anläggningar och tjänster ett sjukhus kan erjbuda.
+
+Datamaterialet kan laddas ner [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/SENIC.csv). 
+
+Efter att ha laddat ner datamaterialet, skapa en designmatris med variablerna:
+  
+  - $X_1 =$ `Length_of_stay`
+  - $X_2 =$ `Age`
+  - $X_3 =$ `Routine_chest_X_ray_ratio`
+  - $X_4 =$ `Medical_shool_affiliation`
+
+Koda $X_4$ så att 1 betyder att sjukhuset är kopplat till en läkarutbildning och 0 annars. 
+  
+a) Visualisera de parvisa samband mellan de fyra förklarande variablerna och responsvariabeln. Är det något i dessa diagram som sticker ut som motiverar att en mer komplex modell behöver anpassas?
+
+b) Anpassa en regressionsmodell med infektionsrisken (`Infection_risk`) som responsvariabel och alla variablerna i designmatrisen ni skapat som förklarande variabler. Utvärdera modellen med hjälp av residualanalys och fokusera på att kontrollera antagandet om linjäritet.
+
+c) Vissa forskare tror att det kan finnas en interaktion mellan variablerna $X_2$ och $X_4$ samt mellan $X_3$ och $X_4$ i relation till responsvariabeln. Utgå från modellen i b) och lägg till lämpliga interaktionstermer till designmatrisen för dessa två samband och anpassa en ny modell (med sex förklarande variabler).
+    i. Utvärdera modellen med hjälp av residualanalys och jämför med diagrammen från b). Hur har modellen blivit bättre?
+    ii. Testa med **ett test** om interaktionstermerna kan uteslutas. 
+
+### Bostadsuthyrning
+Datamaterialet för denna övning innehåller en responsvariabel ($Y$ = uthyrningskostnad i tusentals dollar) och fyra förklarande variabler:
+
+- $X_1$ = ålder (år),
+- $X_2$ = driftkostnad och skatt (tusentals dollar),
+- $X_3$ = vakansgrad (andel),
+- $X_4$ = yta (kvadratfot)
+
+Datamaterialet kan laddas ner [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/properties.csv). 
+
+a) Visualisera de parvisa samband mellan de fyra förklarande variablerna och responsvariabeln. Är det något i dessa diagram som sticker ut som motiverar att en mer komplex modell behöver anpassas?
+
+b) Anpassa en regressionsmodell där Y förklaras av $X_1$, $X_2$ och $X_4$. Utvärdera modellen med hjälp av residualanalys och fokusera på att kontrollera antagandet om linjäritet.
+
+c) Anpassa två regressionsmodeller:
+    - Modell 1: $Y$ som responsvariabel och $X_1$, $X_1^2$, $X_2$ och $X_4$ som förklarande variabler.
+    - Modell 2: Samma variabler som i modell 1, men $X_1$ centreras: $X_{1,c} = X_1 - \bar{X}_1$ där $\bar{X}_1$ är medelvärdet för $X_1$. 
+    
+    Ta fram parameterskattningarna för de båda modellerna och jämför koefficienterna för de icke-centrerade och centrerade variablerna. 
+    
+d) Beräkna korrelationsmatrisen för designmatrisen från de båda modellerna, avrundade till 2 decimaler. Undersök hur de två matriserna skiljer sig åt och fundera kring vilken effekt som centrering haft.
+
+Följande uppgifter använder sig av modell 2. 
+
+e) Utvärdera modellen med hjälp av residualanalys och jämför med diagrammen från b). Hur har modellen blivit bättre?
+
+f) Skatta medelvärdet av $Y$ med ett 95-procentigt konfidensintervall för följande observation $\{X_1 = 8, X_2 = 16, X4 = 250 000\}$. Tolka intervallet.^[Notera att modellen utgår från ett centrerad $X_1$, vilket innebär att vi måste centrera den nya observationens värde innan prediktionen beräknas.]
+
+
+## Referenser {-}

@@ -6,6 +6,7 @@ suppressMessages({
   require(plotly, quietly = TRUE)
   require(kableExtra, quietly = TRUE)
   require(ggforce, quietly = TRUE)
+  require(olsrr)
 })
 
 utils::data(penguins)
@@ -22,6 +23,9 @@ modelData <-
 simpleModel <- stats::lm(formula = bill_length_mm ~ ., data = modelData)
 
 options(knitr.kable.NA = '', knitr.table.html.attr = "quarto-disable-processing=true")
+
+senic <- readr::read_csv("resources/data/SENIC.csv") %>% 
+  dplyr::mutate(Medical_school_affiliation = ifelse(Medical_school_affiliation == 1, 1, 0) %>% as.factor())
 
 
 residualPlots <- function(model) {

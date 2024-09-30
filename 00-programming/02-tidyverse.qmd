@@ -1,9 +1,10 @@
 ---
-title: "tidyverse"
 editor_options: 
   chunk_output_type: console
   
 ---
+# tidyverse {.unnumbered}
+
 En stor del utav statistisk analys består utav att bearbeta datamaterial som samlats in till ett format som lämpar sig för de olika metoder. Ett datamaterial som man själv samlar in (*primärdata*) eller datamaterial som hämtas från någon annan källa (*sekundärdata*) är inte alltid strukturerat på det sätt som vi önskar. `tidyverse` är en samling paket i R som baseras på ett liknande sätt att programmera i dess syntax och grammatik. 
 
 Inom statistik önskas data följa formatet: "en rad är en observation", "en kolumn är en variabel" och "en cell är ett värde", så att vi med lätthet kan hantera datamaterialet på ett flertal olika sätt. Detta kan vi kalla för *rådata* eller *tidy data*. @sec-example-data visar på data på just detta format. Varje rad är en uppmätt pingvin, och varje kolumn är mätvärden för varje variabel. Exempel på en struktur som inte följer denna praxis är frekvenstabeller där varje rad visar flera observationer som har samma variabelvärde. 

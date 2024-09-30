@@ -118,7 +118,7 @@ pValues <-
 #| label: tbl-family-confidence
 
 tibble(`p-värde` = pValues) %>% 
-  kable(digits = 3, caption.placement = "top") %>% 
+  kable(digits = 3) %>% 
   kable_styling("striped", full_width = FALSE) %>% 
   row_spec(3, bold = TRUE)
 
@@ -162,7 +162,7 @@ statistic <-
   )
 
 tibble(`Testvariabel` = statistic) %>% 
-  kable(digits = 3, caption.placement = "top") %>% 
+  kable(digits = 3) %>% 
   kable_styling("striped", full_width = FALSE) 
 
 ```

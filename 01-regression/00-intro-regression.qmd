@@ -1,14 +1,13 @@
 ---
-title: "Introduktion till regression"
 editor_options: 
   chunk_output_type: console
 ---
 
+# Introduktion till regression
+
 ::: {.video-container}
 {{< video https://youtu.be/bcnEg8pE2IA >}}
 :::
-
-
 Att undersöka samband mellan variabler är ett vanligt steg i att förstå relationer eller fenomen. Till exempel hur åldern på ett träd påverkar dess volym, hur olika doser av en medicin påverkar en individs blodtryck, eller hur en persons ålder och utbildningsnivå påverkar dens ingångslön.
 
 Regressionsanalys omfattar metoder som anpassar matematiska modeller vilka på bästa sätt kan ge en förenklad bild av verkligheten. Generellt är modeller någon form av konstruktion som skapas för att öka förståelsen av någonting verkligt. Till exempel är en flygplansmodell inte ett riktigt flygplan men kan användas för att förstå hur ett flygplan är uppbyggd och hur den kan hantera luftströmmar och andra fenomen. Ett klassiskt exempel är tavlan "Ceci n'est pas une pipe" av René Magritte (@fig-pipe) som visar en representation (en modell) av en pipa, inte en fungerande pipa. 
@@ -117,7 +116,7 @@ Exemplet i figuren är insamlad som en *observationsstudie* där mätvärden (an
 
 För att kunna dra slutsatser om kausala samband behöver vi genomföra en *experimentell studie* där vi styr vilka mätvärden som enheter får eller har och responsvariablen antas vara en direkt effekt från de förklarande variablerna. Medicinska studier, till exempel studier om Covid-vaccinets effektivitet på att motverka en infektion, är typiska exempel på experimentella studier där en förklarande variabel (dos) ges till vissa grupper av enheter där andra påverkande effekter kontrolleras för att justera den förklarande variabelns verkliga påverkan. 
 
-### Kontrollvariabler
+### Kontrollvariabler {#sec-control}
 I en observationsstudie kan vi ibland observera *kontrollvariabler* som kan justera den förklarande variabelns faktiska påverkan men det är främst i experimentella studier som dessa typer av variabler kan användas. Okända variabler kallas för *confounding*-effekter och antas påverka både den förklarande och responsvariabeln.
 
 I följande två figurer visas den huvudsakliga förklarande variabeln och den valda responsvariabeln med ovaler. De kända (heldragen) och okända (streckade) kontrollvariablerna visas som rektanglar.
