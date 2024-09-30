@@ -1,0 +1,30 @@
+# Förord {.unnumbered}
+
+Till denna del förutsätts att du har vissa förkunskaper för att ta till dig materialet på bästa sätt. Dessa är:
+
+**Programmering**
+
+- kan installera och ladda paket i R
+- kan läsa in data i R i olika filformat, t.ex. `.csv`, `.txt` eller `.xslx`
+- kan databearbetning i R, t.ex. med hjälp av `dplyr`-paketet
+- kan använda "pipes", ` %>% ` eller ` |> `^[Detta material använder sig av ` %>% ` men `|>` bör kunna användas istället i de allra flesta exemplen.]
+- kan skapa visualiseringar i R med hjälp av `ggplot2`-paketet
+
+**Statistik**
+
+- kan identifiera variabeltyper och variabelskalor
+- kan sammanfatta datamaterial med beskrivande mått och lämpliga fördelningar
+- kan genomföra fullständiga hypotesprövningar med hjälp av t-fördelningen
+- kan tolka p-värden
+- kan beräkna intervallskattningar med hjälp av t-fördelningen
+- kan tolka intervallskattningar
+
+**Matematik** *endast för statistiker*
+
+- kan skapa matriser
+- kan förstå matrisformuleringar
+- kan förstå enkla matrisberäkningar, såsom multiplikation, transponat, och invers
+
+Känner du att du saknas vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.
+
+För alla dessa kapitel förutsätts att du har laddat paketet `tidyverse` som innehåller flera paket såsom `readr`, `dplyr`, `ggplot2` med flera. Andra paket kan behövas installeras och laddas för olika kapitel men detta bör anges specifikt. 

@@ -1,0 +1,341 @@
+---
+title: "Multikollinearitet"
+editor_options: 
+  chunk_output_type: console
+---
+<!-- New commands for matrices in regression -->
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
+}
+
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
+
+ <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
+
+<!-- CONTENT -->
+I en multipel linjär regression behöver vi inte bara ta hänsyn till sambandet mellan de förklarande variablerna (X) och responsvariabeln (Y) utan vi behöver också ta hänsyn till sambandet mellan de förklarande variablerna. Detta kallas för *multikollinearitet*. Om det huvudsakliga syftet med en regressionsmodell är att beskriva sambandet mellan $\mathbf{X}$ och Y, och flera $X_j$ beskriver samma sorts samband, kommer modellen fokusera på en av dessa och anse att de övriga variablerna inte har något samband. Modellen kan också överskatta variansen i parameterskattningen vilket i sin tur leder till icke-informativ inferens. 
+
+Till viss del relaterar denna sorts samband till användandet av kontrollvariabler som diskuterades i @sec-control där vi inkluderade andra variabler för att den förklarande variabeln av intresse ska uppvisa dens korrekta samband med responsvariabeln. När vi inte använder oss av kontrollvariabler för att korrigera den huvudsakliga effekten av intresse, kommer samband mellan de förklarande variablerna orsaka stora problem både för modellanpassningen och tolkningar av modellen. 
+
+```{r}
+#| echo: false
+
+data(trees)
+
+```
+
+Vi kommer i detta kapitel använda datamaterialet `trees` som går att ladda in i R genom `data(trees)`. I hjälpdokumentationen finns det information om vilka variabler som inkluderas i datamaterialet `trees`. Vi kan nå denna sida genom att köra koden `?trees`. Under rubriken `Format` får vi information om att datamaterialet innehåller tre stycken variabler, `Girth`, `Height` och `Volume`. Dessa tre variabler beskriver olika mått på `r nrow(trees)` stycken fällda körsbärsträd och att `Girth` egentligen beskriver trädets diameter (i tum/inches) ca 137 cm ovanför marken (4 ft 6 in). De övriga två variablerna mäter trädets höjd (i fot/feet) och trädets volym (i kubikfot/cubic feet). 
+
+## Multikollinearitet {#sec-multicollinearity}
+Vi börjar med att undersöka de parvisa sambanden mellan de två förklarande variablerna, trädets höjd och diameter, och responsvariabeln, trädets volym.
+
+
+```{r}
+#| fig-cap: Samband mellan förklarande variabler och responsvariabeln
+#| fig-height: 3
+#| fig-width: 5 
+
+trees %>% 
+  pivot_longer(!Volume) %>% 
+  ggplot() + aes(x = value, y = Volume) + geom_point(color = "steelblue") + 
+  facet_wrap(vars(name), scale = "free") + theme_bw() +
+  labs(x = "Förklarande variabel")
+
+```
+
+Båda variablerna verkar ha ett måttligt starkt, positivt, och linjärt samband, där diameterns samband verkar vara starkare än höjden. Vi kan då ställa upp modellen med båda förklarande variablerna enligt: 
+
+$$
+\begin{aligned}
+  Y_i &= \beta_0 + \beta_1 \cdot X_{i1} + \beta_2 \cdot X_{i2} + E_i\\
+ \\
+ &\text{eller i matrisform}\\
+ \\
+\mathbf{Y} &= \mathbf{X} \boldsymbol{\beta} + \mathbf{E}
+\end{aligned}
+$$
+
+där
+$$
+\begin{aligned}
+  \mathbf{Y} = \begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_{31}\end{bmatrix} \quad \mathbf{X} = \begin{bmatrix}1 & X_{1,1} & X_{1,2} \\1 & X_{2,1} & X_{2,2} \\\vdots & \vdots & \vdots \\1 & X_{31,1} & X_{31,2} \end{bmatrix} \quad \boldsymbol{\beta} = \begin{bmatrix}\beta_0\\\beta_1\\\beta_2\end{bmatrix} \quad \mathbf{E} = \begin{bmatrix}E_1\\E_2\\\vdots\\E_{31}\end{bmatrix}
+\end{aligned}
+$$
+Vi anpassar modellen in R och kan se de skattade koefficienterna i följande tabell: 
+
+```{r}
+#| tbl-cap-location: top
+#| tbl-cap: Anpassad modell där volymen av ett träd förklaras av dess diameter och dess höjd
+
+model <- lm(formula = Volume ~ ., data = trees)
+
+summary(model) %>% 
+  coef() %>% 
+  round(3) %>% 
+  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+  kable_styling("striped")
+
+```
+
+ANOVA-tabellen visar hur responsvariabelns variation fördelar sig på modellens olika förklarande variabler och den oförklarade variationen (felet). Vi kan plocka ut denna information från modellobjektet genom `anova()`.
+
+```{r}
+#| tbl-cap-location: top
+#| tbl-cap: Anpassad modell där volymen av ett träd förklaras av dess diameter och dess höjd
+
+anova(model) %>% 
+  kable(col.names = c("Källa", "df", "SS", "MS", "F-värde", "p-värde")) %>% 
+  kable_styling("striped")
+
+```
+
+Vi kan läsa av de sekventiella kvadratsummorna $SS(Girth)$ och $SS(Height|Girth)$, alltså hur mycket förklarande variation diametern bidrar med **och** hur mycket förklarande variation höjden bidrar med **givet att diametern redan finns med i modellen**. Vi kan också uttrycka det som att höjden bidrar med ca 102.4 ytterligare unik förklarad variation av responsvariabeln som diametern inte redan har förklarat, vilket relativt den totala variationen på ca 8000 inte är mycket trots det starka parvisa sambandet. 
+
+Eftersom tabellen visar sekventiella kvadratsummor kommer värdena påverkas av vilken ordning variablerna inkluderas i modellen. Låt oss byta ordning på de förklarande variablerna när vi anpassar modellen:
+
+```{r}
+#| tbl-cap-location: top
+#| tbl-cap: Anpassad modell där volymen av ett träd förklaras av dess diameter och dess höjd, men annan ordning på variablerna
+
+model <- lm(formula = Volume ~ Height + Girth, data = trees)
+
+anova(model) %>% 
+  kable(col.names = c("Källa", "df", "SS", "MS", "F-värde", "p-värde")) %>% 
+  kable_styling("striped")
+
+```
+
+I denna tabell ser vi att $SS(Height) = 2901.2$ vilket är betydligt högre än $SS(Height|Girth) = 102.4$. När dessa två kvadratsummor är olika indikerar det att de förklarande variablerna förklarar samma sak/del av responsvariabeln, där diametern verkar vara den variabel som enskilt har mest unik information, $SS(Girth) = 7581.7813$.
+
+Vi ser också att p-värden för de olika F-testen förändras beroende på ordningen och det är självklart eftersom de undersöker olika modeller. Alla testen som genomförs är partiella F-test, eftersom vi testar enskilda parametrar och inte hela modellen, men den kompletta och reducerade modellen förändras i de två tabellerna. 
+
+Exempelvis, $SS(Height)$ betyder att den kompletta modellen endast inkluderar höjden medan den reducerade modellen är en tom modell. $SS(Height|Girth)$ betyder att den kompletta modellen inkluderar två variabler medan den reducerade modellen endast inkluderar diametern. Vi kan därför dra slutsatsen att, med en procents signifikansnivå vardera, höjden bidrar till att förklara volymen om det är den enda variabeln i modellen, men att höjden **inte** bidrar någon ytterligare information om diametern redan inkluderats.
+
+Någonting som är lika i de två tabellerna är $SSE$. Detta gäller för att den additiva egenskapen för kvadratsummor delar upp den totala variationen ($SSY$) i den förklarade variationen ($SSR$) och den oförklarade variationen ($SSE$). Vi har i båda tabellerna tagit med samma variabler så den totala och förklarade variationen har inte förändrats. Vi kan matematiskt uttrycka det som:
+$$
+\begin{aligned}
+    SSR &= SS(Height) + SS(Girth|Height) \\
+    &= SS(Girth) + SS(Height|Girth)
+\end{aligned}
+$$
+
+### Variance Inflating Factors (VIF) {#sec-vif}
+I en multipel linjär regression kan en förklarande variabel enskilt, eller flera förklarande variabler tillsammans, beskriva en annan förklarande variabel och enkla parvisa korrelationer eller spridningsdiagram kan inte på ett lätt sätt identifiera detta. Istället kan vi undersöka de förklarande variablerna effekt med varandra med hjälp av *variance inflating factors*, härmed kallad för VIF. 
+
+:::{.callout-note}
+Namnet VIF uppkommer på grund av att variansen för parameterskattningarna inflateras om flera förklarande variabler har starka samband med varandra. 
+
+$$
+\begin{aligned}
+  \sigma^2_{\boldsymbol{\hat{\beta}}} = (\mathbf{X}'\mathbf{X})^{-1} \sigma^2
+\end{aligned}
+$$
+I värsta fall är $(\mathbf{X}'\mathbf{X})$ singulär och kan inte inverteras, som leder till att vi kan inte beräkna variansen överhuvudtaget.  
+:::
+
+VIF beräknas genom att mäta hur mycket en förklarande variabel förklaras av de övriga förklarande variablerna. Detta har vi ju ett mått på sedan tidigare i relation till regressionsmodellen, nämligen förklaringsgraden (@sec-r-square), men istället för att modellera responsvariabeln skapas en regressionsmodell per förklarande variabel som beskrivs av de övriga variablerna **förutom responsvariabeln**.
+
+VIF beräknas enligt:
+$$
+\begin{aligned}
+  VIF_j = \frac{1}{1-R^2_{j}}
+\end{aligned}
+$$
+där $j$ är den j:te förklarande variabeln och $R^2_j$ är förklaringsgraden från en regressionsmodell med $X_j$ som responsvariabel. Eftersom en förklaringsgrad är begränsad mellan 0 och 1 kan vi visualisera vilka värden på VIF som skapas för olika nivåer av samband mellan de förklarande variablerna.
+
+```{r}
+#| fig-cap: VIF för olika förklaringsgrader, där VIF = 5 är markerad
+#| fig-height: 3
+#| fig-width: 5 
+#| label: fig-vif-r2
+  
+tibble(
+  R2 = seq(0, 1, by = 0.001),
+  VIF = 1 / (1 - R2)
+  ) %>% 
+  ggplot() + aes(x = R2, y = VIF) + geom_line(color = "steelblue", linewidth = 1) + 
+  theme_bw() + labs(x = expression(R[j]^2)) + 
+  scale_x_continuous(breaks = seq(0, 1, by = 0.1)) + 
+  scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(0, 100)) +
+  geom_hline(yintercept = 5, color = "#d9230f", linetype = 2)
+
+```
+
+Tolkningen av VIF är väldigt subjektivt men @fig-vif-r2 visar att VIF-värden kring 5 eller större motsvarar en förklaringsgrad på 75% eller större. När vi tolkar förklaringsgraden för en "vanlig" regressionsmodell är 75-80% där vi kan säga att modellen beskriver responsvariabeln bra, och vi kan använda samma värde även här, fast vi nu menar något negativt. Vi kan använda följande tumregler: 
+
+- när VIF för en enskild variabel överskrider 10 
+- när genomsnittliga VIF för alla variabler överskrider 5
+
+Om modellen uppvisar någon av dessa bör vi undersöka modellens förklarande variabler vidare då risken för problem med multikollinearitet är hög. 
+
+Från paketet `car` får vi en funktion (`vif()`) som beräknar VIF för varje förklarande variabel i en regressionsmodell. 
+
+```{r}
+#| message: false
+
+require(car)
+
+vif(model) %>% 
+  round(3) %>% 
+  kable(col.names = c("Variabel", "VIF")) %>% 
+  kable_styling("striped", full_width = FALSE)
+
+```
+
+För modellen över trädens volym verkar inte VIF indikera på några risker med multikollinearitet då alla värden är <5. 
+
+### Generaliserade VIF (GVIF)
+När vi använder kvalitativa förklarande variabler kommer förklaringsgraden i beräkningen för VIF inte kunna använda en linjär regressionsmodell då indikatorvariabler som skapas från den variabeln inte längre är kontinuerliga. Detta specialfall löses genom att skapa generaliserade VIF som tar hänsyn till den binära variabelns struktur. Istället för att använda förklaringsgraden $R^2_j$ beräknas effekten som de övriga förklarande variablerna har med $X_j$ med hjälp av determinanter av korrelationsmatriser mellan olika förklarande variabler. [@fox92]
+
+Värden på GVIF kan tolkas på likt VIF, vi vill inte ha höga värden och tumregeln <5 för genomsnittet eller <10 för enskilda parametrar indikerar på en modell med låg risk för multikollinearitetsproblem. 
+
+## Specialfall med polynom och interaktioner
+Om en modell inkluderar polynom eller interaktioner har vi artificiellt skapat ett samband mellan variabler och då kommer VIF, eller GVIF, vara högre än vad som vi förväntar. Multikollinearitet medför problem med tolkningar och inferens av enskilda parametrar men en modell innehållande polynom eller interaktioner har redan detta problem. Om en variabel förekommer i flera termer av modellen kan en enskild lutningsparameter inte tolkas och inferens för variabelns effekt mot responsvariabeln omfattar fler parametrar än bara grundvariabelns enskilda effekt. Därför bör tolkningar av VIF fokusera på de enskilda variablerna.
+
+Vi kan titta närmare på @tbl-interaction och @tbl-polynom-coefficient som exempel. I dessa två modeller har vi skapat en interaktion och polynom vilket innebär att vi har skapat variabler som har ett tydligt samband med de övriga.
+
+```{r}
+#| include: false
+
+# Antal observationer
+n <- 200
+
+set.seed(64)
+
+## Skapa ett datamaterial
+intData <- 
+  tibble(
+    x1 = runif(n = n, min = 0, max = 5),
+    x2 = rnorm(n = n, mean = 0, sd = 3),
+    y = 10 + 1.5*x1 - 1.5*x2 - 3*x1*x2 + rnorm(n = n)
+  )
+
+## Simulera data
+set.seed(2323)
+
+# Skapa 100 observationer
+n <- 100
+
+polyData <- 
+  tibble(
+    # Slumpa värden mellan -5 och 15 från den likformiga fördelningen
+    X = runif(n = n, min = -5, max = 15),
+    X2 = X^2,
+    # Skapa responsvariabeln genom en kvadratisk funktion och lägg till slumpvariation med rnorm()
+    Y = 4-1*X+0.2*X^2 + rnorm(n = n)
+  )
+
+# Skapa centrerad data
+dataCent <- 
+  polyData %>% 
+  mutate(
+    # Centrera variabeln x med hjälp av scale()
+    # Standardisering kan göras genom argument scale = TRUE 
+    XCent = X %>% scale(center = TRUE, scale = FALSE),
+    X2Cent = XCent^2
+  )
+
+braModell <- lm(y ~ x1 * x2, data = intData)
+model <- lm(Y ~ ., data = polyData)
+centModel <- lm(Y ~ XCent + X2Cent, data = dataCent)
+```
+
+```{r}
+#| message: false
+#| error: false
+#| tbl-cap: VIF för modellens variabler inklusive interaktionen
+
+vif(braModell) %>% 
+  round(3) %>% 
+  kable(col.names = c("Variabel", "VIF")) %>% 
+  kable_styling("striped", full_width = FALSE)
+
+```
+
+:::{.callout-important}
+`vif()` varnar faktiskt när vi beräknar VIF på en modell innehållande interaktioner just för att den identifierar att vi skapat variabler av en högre "ordning" och grundvariablerna förekommer på flera ställen i modellen. Vi kan med hjälp av argumentet `vif(type = "predictor")` beräkna GVIF som grupperar sambandet endast mellan grundvariablerna.
+
+```{r}
+#| message: false
+#| error: false
+#| tbl-cap: Generaliserade VIF beräknad per variabel istället för per term i modellen
+
+gvif <- vif(braModell, type = "predictor") 
+
+gvif %>% 
+  tibble() %>% 
+  select(1:3) %>% 
+  round(3) %>% 
+  mutate(Variabel = rownames(gvif)) %>% 
+  relocate(Variabel) %>% 
+  kable() %>% 
+  kable_styling("striped", full_width = FALSE)
+
+```
+:::
+
+När polynom introduceras till en modell är det endast en variabel som bidrar till sambandet till skillnad från två, eller fler, i en interaktion. På grund utav det starka beroende som då uppkommer är centrering ett måste om vi vill kunna bedöma enskilda parametrars bidrag till modellen. Vi kan i följande två tabeller se effekten av centrering på VIF
+
+```{r}
+#| message: false
+#| error: false
+#| tbl-cap: VIF för en modell med icke-centrerade polynom
+
+vif(model) %>% 
+  round(3) %>% 
+  kable(col.names = c("Variabel", "VIF")) %>% 
+  kable_styling("striped", full_width = FALSE)
+
+```
+
+```{r}
+#| message: false
+#| error: false
+#| tbl-cap: VIF för en modell med centrerade polynom
+#| tbl-cap-location: top
+
+
+vif(centModel) %>% 
+  round(3) %>% 
+  kable(col.names = c("Variabel", "VIF")) %>% 
+  kable_styling("striped", full_width = FALSE)
+
+```
+
+## Övningsuppgifter 
+Vi kommer återigen använda SENIC data från @sec-exercises-complex.
+
+1. Anpassa en modell som förklarar infektionsrisken vid sjukhuset med hjälp av följande variabler:
+    
+    - $X_1$ = `Length_of_stay`
+    - $X_2$ = `Average_daily_census`
+    - $X_3$ = `Number_of_beds`
+    - $X_4$ = `Routine_chest_X_ray_ratio`
+    
+```{r}
+#| echo: false
+
+data <- 
+  senic %>% 
+  select(Infection_risk, Length_of_stay, Average_daily_census, Number_of_beds, Routine_chest_X_ray_ratio)
+
+```
+
+2. Beräkna en korrelationsmatris för de förklarande variablerna och identifiera de tre största parvisa korrelationerna. 
+
+3. Visualisera de parvisa sambanden mellan de förklarande variablerna och bedöm om korrelationerna i 2. är missvisande eller ej.
+
+4. Jämför de riktningen av de skattade koefficienterna i 1. och signifikansen av de enskilda testen med parvisa samband mellan respektive förklarande variabel och responsvariabeln. Jämför resultaten för respektive variabel. Visar de på samma sorts samband?
+
+5. Beräkna VIF för modellen och bedöm, tillsammans med informationen i tidigare uppgifter, vilka variabler som verkar bidra allra mest till en hög risk för multikollinearitetsproblem.
+
+
+## Referenser {-}

@@ -1,0 +1,332 @@
+---
+title: "Modellvalidering och variabelselektion"
+editor_options: 
+  chunk_output_type: console
+---
+<!-- New commands for matrices in regression -->
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
+}
+
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
+
+ <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
+
+<!-- CONTENT -->
+Om ett datamaterial innehåller ett stort antal variabler finns det mängder med potentiella modeller av olika storlek som skulle kunna anpassas. Vi har i tidigare kapitel enbart fokuserat på enstaka modeller som baserat sin struktur utifrån ledtrådar som identifierats i det utforskande steget, men detta blir snabbt tidskrävande vid 10, 20, eller 50 förklarande variabler. 
+
+För att effektivisera processen med att hitta en lämplig modell behöver vi dels tydliga instruktioner för hur vi ska gå till väga för att utveckla/förbättra modellerna och olika sätt att kunna utvärdera modellerna i olika aspekter. Vi kommer i detta kapitel presentera olika variabelselektionsalgoritmer och introducera ytterligare mått som vi kan använda för att utvärdera en modell.
+
+## Modellvalidering
+En bra regressionsmodell beskriver inte bara det stickprov som vi använt för att anpassa modellen utan kan också anpassa ny liknande data så bra som möjligt. "Så bra som möjligt" betyder i praktiken att vi vill ha säkra prediktioner för ny data, i fall där vi endast har de förklarande variablernas värden att utgå från. Till exempel skulle vi kunna ha anpassat en modell där responsvariabeln är dyr eller svår att mäta (identifiera elakartade tumörer) men de förklarande variablerna är enklare att samla in (andra medicinska mätningar såsom blodvärden etc.).
+
+Eftersom vi inte har tillgång till all potentiell ny och okänd data behöver vi metoder för att utvärdera vår nuvarande modell givet den data vi har. Detta kallas för *validering* och kan delas upp i två olika sätt att validera modellens *generaliserbarhet*, det vill säga hur bra modellen är på att beskriva ny liknande data.
+
+*Intern* validering är mått som beskriver modellen på det data som används för modellanpassningen. Ofta baseras valideringen på något enkelt anpassningsmått, till exempel SSE, eller något mått som också straffar modellen för dess komplexitet, till exempel den justerade förklaringsgraden. Eftersom vi tittar på modeller av olika storlek är det vanligtvis lämpligare att använda mått som tar hänsyn till modellens komplexitet för att jämförelsen ska bli rättvis. I linjära modeller mäts komplexiteten av antalet förklarande variabler, ju fler variabler desto mer komplex är modellen, och valideringen blir då en avvägning mellan en bra modellanpassning och en lagom komplex modell. 
+
+Intern validering beskriver endast modellens anpassning på det insamlade datamaterialet och undersöker inte hur modellen skulle prestera på ny information. Fördelen med intern validering är att den är enkel att använda, vi har faktiskt redan gjort detta i tidigare kapitel, men kan inte hjälpa oss att dra slutsatser om hur bra modellen är på att generalisera sambandet
+
+I *extern* validering utvärderar vi den anpassade modellen på ny okänd data som vi själva skapar genom att exempelvis slumpmässigt ta bort en del av observationerna i det insamlade materialet. Denna uppdelning av data medför att vi betecknar data som vi anpassar (tränar) modellen på för *träningsmängd* och data som vi utvärderar modellen på för *validerings*- eller *testmängd* beroende på vad syftet med utvärderingen är.
+
+En valideringsmängd används för att jämföra modeller med varandra och undersöka vilken som är bäst på att generalisera sambandet medan en testmängd används för att få en väntevärdesriktig skattning på något mått i den slutgiltigt valda modellen.^[Viss litteratur blandar dessa termer, man delar upp data i två delar och använder det 'nya' materialet som en valideringsmängd för att jämföra olika modeller men kallar den för testmängd.] 
+
+Fördelen med extern validering är att vi kan få mer information om modellens generaliserbarhet men det kräver att vi också har ny och okänd data att undersöka modellen på. Om vi har tillgång till tillräckligt många observationer i vårt stickprov och kan dela upp materialet i lagom stora mängder eller om vi under modellanpassningen också samlat in ny data, har vi tillfällen där extern validering kan användas.
+
+### Generaliserbarhet
+En modell som anses lämplig och innehåller variabler som alla verkar ha en signifikant påverkan på responsvariabeln, och på alla sätt och vis kan anses en bra modell för det urval vi har samlat in, behöver inte nödvändigtvis vara en modell som kan prestera lika bra på ny liknande data. Vi kan råka ut för både *underanpassning* (underfitting) eller *överanpassning* (overfitting), där den senare av de två är mest vanligt förekommande. 
+
+- Underanpassning betyder att modellen är för enkel och inte fångar upp relevanta samband mellan responsvariablen och de förklarande variablerna, exempelvis att vi modellerar ett tredjegradspolynom med en linjär funktion.
+- Överanpassning betyder att modellen är för komplex eller avancerad och då börjar modellen att beskriva bruset som finns i data, vilket gör att generaliserbarheten minskar, exempelvis att vi modellerar ett tredjegradspolynom med ett sjättegradspolynom.
+
+När fokus är att undersöka generaliserbarheten används extern validering där det är vanligt att vi slumpmässigt delar upp data i en träningsmängd och en valideringsmängd och förutsätter att vi har oberoende observationer i vårt data. Om vi inte har ett oberoende observationer kommer en slumpmässig uppdelning inte behålla det beroende som modellen ska försöka hantera och vi behöver istället använda speciella metoder för att skapa valideringdata, till exempel att i tidseriedata dela upp serien i två delar vid en viss tidpunkt.
+
+Ofta väljer vi att träningsmängden ska vara minst 50% av alla observationer för att modellen som anpassas ska få hjälp av den största majoriteten av informationen. Valideringsmängden brukar få det som då blir över men bör minst bestå av 10% av alla observationer för att också kunna ha nog mycket information att valideras på. Det finns ingen "rätt andel" storlek på valideringsmängden som passar alla situationer utan vi styrs ofta utav antalet observationer. Har vi många brukar vi låta valideringsdata utgöra en mindre andel eftersom vi fortfarande får möjlighet att validera modellerna på många observationer.
+
+För att skapa en slumpmässig uppdelning av data i R kan vi antingen använda oss utav slumpmässiga index eller randomisering för att dela upp observationerna.
+
+```{r}
+#| code-fold: false
+
+# Antalet observationer totalt
+n <- nrow(penguins)
+
+# Antalet som tilldelas till träningsmängden utifrån en andel på 2/3
+nTrain <- n*(2/3) 
+
+# Sätter ett seed för reproducerbarhet
+set.seed(355)
+
+# Index (utvalda observationer) till träningsmängden
+indexTrain <- sample(x = n, size = nTrain, replace = FALSE)
+
+# Plockar ut utvalda observationer från materialet med positiv 
+# indexering (lägger till) för träning och negativ indexering 
+# (tar bort) för validering
+dataTrain <- penguins[indexTrain,]
+dataValid <- penguins[-indexTrain,]
+
+```
+
+Vi kan också med hjälp av `dplyr` funktioner dela upp materialet:
+```{r}
+
+listaMedMängder <- 
+  penguins %>% 
+  # Skapar en variabel med 1/0 som indikerar på träningsmängden med 2/3
+  mutate(
+    split = rbinom(n = n(), size = 1, prob = 2/3)
+  ) %>% 
+  # Grupperar och delar upp materialet utefter denna nya variabel
+  group_by(split) %>% 
+  group_split()
+
+# Plockar ut de olika listorna till separata objekt
+dataTrain <- listaMedMängder[[2]]
+dataValid <- listaMedMängder[[1]]
+
+```
+
+Efter att data är uppdelat kan vi anpassa ett antal modeller och jämföra utvärderingsmått mellan tränings- och valideringsmängden.
+
+```{r}
+#| tbl-cap: Enkla utvärderingsmått för jämförelse av de tre anpassade modellerna på träningsdata
+#| label: tbl-training-comparison
+
+model1 <- lm(bill_length_mm ~ species + bill_depth_mm + flipper_length_mm + body_mass_g + sex, 
+             data =  dataTrain)
+
+model2 <- lm(bill_length_mm ~ species + bill_depth_mm + sex, 
+             data = dataTrain)
+
+model3 <- lm(bill_length_mm ~ species * bill_depth_mm, 
+             data = dataTrain)
+
+# Förklaringsgraden för modellerna anpassade på träningsmängden
+tibble(
+  Modell = c(1:3),
+  `$R^2_{adj}$` = c(summary(model1)$adj.r.squared,
+                    summary(model2)$adj.r.squared,
+                    summary(model3)$adj.r.squared),
+  MSE = c(summary(model1)$sigma^2,
+          summary(model2)$sigma^2,
+          summary(model3)$sigma^2)
+) %>% 
+  kable(digits = 3, escape = FALSE)
+
+```
+
+@tbl-training-comparison visar att den första modellen har störst justerad förklaringsgrad och lägst MSE vilket motiverar att den modellen preseterar bäst på träningsmängden. När vi sedan ska utvärdera modellen på valideringsmängden kan vi till viss del använda samma enkla mått men vi behöver ta hänsyn till att modellen som anpassats inte har sett den nya datan. MSE:s motsvarighet för ny data är MSPR (Mean Squared Prediction Error) som beskriver det genomsnittliga felet som modellen gör på ny data.
+
+$$
+\begin{aligned}
+  MSPR = \frac{\sum_{i^*}{(Y_{i^*} - \hat{Y}_{i^*})^2}}{n^*}
+\end{aligned}
+$$
+där $i^*$ är observation $i$ i valideringsmängden och $n^*$ är antalet observationer totalt i valideringsmängden.
+
+
+```{r}
+#| tbl-cap: Enkla utvärderingsmått för jämförelse av de tre anpassade modellerna på valideringsdata
+#| label: tbl-validation-comparison
+
+# Prediktera nya anpassade värden på Y för valideringsmängden
+predict1 <- predict(object = model1, newdata = dataValid)
+
+predict2 <- predict(object = model2, newdata = dataValid)
+
+predict3 <- predict(object = model3, newdata = dataValid)
+
+# Beräkna ex. MSPR där y - yhat används
+MSPR <- function(y, yhat){
+  (y - yhat)^2 %>% 
+    mean()
+}
+
+tibble(
+  Modell = c(1:3),
+  `$R^2_{adj}$` = c(summary(model1)$adj.r.squared,
+                    summary(model2)$adj.r.squared,
+                    summary(model3)$adj.r.squared),
+  MSE = c(summary(model1)$sigma^2,
+          summary(model2)$sigma^2,
+          summary(model3)$sigma^2),
+  MSPR = c(MSPR(dataValid$bill_length_mm, predict1),
+           MSPR(dataValid$bill_length_mm, predict2),
+           MSPR(dataValid$bill_length_mm, predict3))  
+) %>% 
+  kable(digits = 3, escape = FALSE)
+```
+
+@tbl-validation-comparison visar på samma relation mellan de tre modellerna, att den första är bäst, men vi ser generellt att felet har blivit större i valideringsmängden. Detta fenomen orsakas av att modellen inte längre har anpassats på det data som och att modellen då till viss del har överanpassats till data i träningsmängden. Om MSE och MSPR är nära varandra ger det en indikation på att modellen har lyckats generalisera sambandet bra och stora avvikelser betyder att vi har en mycket överanpassad modell. I just detta fall är skillnaderna inte jättestora så vi kan nog dra slutsatsen att modellen är någorlunda bra.
+
+Att modellerna följer samma ordning för både tränings- och valideringsmängden är inte självklart. Vi kan se olika resultat beroende på hur under- eller överanpassad modellerna har blivit givet dess struktur och komplexitet, men fokus bör vara att jämföra valideringsmängdens mått.
+
+```{r}
+#| tbl-cap: Ytterligare exempel på datamaterialet `mtcars`
+
+# Antalet observationer totalt
+n <- nrow(mtcars)
+
+# Antalet som tilldelas till träningsmängden utifrån en andel på 2/3
+nTrain <- n*(2/3) 
+
+# Sätter ett seed för reproducerbarheten
+set.seed(355)
+
+# Index (utvalda observationer) till träningsmängden
+indexTrain <- sample(x = n, size = nTrain, replace = FALSE)
+
+# Plockar ut utvalda observationer från materialet med positiv indexering (lägger till) 
+# för träning och negativ indexering (tar bort) för validering
+dataTrain <- mtcars[indexTrain,]
+dataValid <- mtcars[-indexTrain,]
+
+# Anpassa modellerna
+model1 <- lm(mpg ~ disp + hp + wt + qsec, data =  dataTrain)
+
+model2 <- lm(mpg ~ disp + hp, data = dataTrain)
+
+model3 <- lm(mpg ~ hp * wt, data = dataTrain)
+
+## Prediktera nya anpassade värden på Y för valideringsmängden
+predict1 <- predict(object = model1, newdata = dataValid)
+
+predict2 <- predict(object = model2, newdata = dataValid)
+
+predict3 <- predict(object = model3, newdata = dataValid)
+
+tibble(
+  Modell = c(1:3),
+  `$R^2_{adj}$` = c(summary(model1)$adj.r.squared,
+                    summary(model2)$adj.r.squared,
+                    summary(model3)$adj.r.squared),
+  MSE = c(summary(model1)$sigma^2,
+          summary(model2)$sigma^2,
+          summary(model3)$sigma^2),
+  MSPR = c(MSPR(dataValid$mpg, predict1),
+           MSPR(dataValid$mpg, predict2),
+           MSPR(dataValid$mpg, predict3))  
+) %>% 
+  kable(digits = 3, escape = FALSE)
+
+```
+
+## "Automatisk" variabelselektion
+Arbetet med att hitta potentiella kandidatmodeller att jämföra med en valideringsmängd kan ta väldigt lång tid. Antalet potentiella modeller av olika storlekar ökar exponentiellt enligt $2^k -1$.
+$$
+\begin{aligned}
+  2^5 -1 = 31 \qquad 2^{10} -1 = 1023\qquad 2^{20} -1 = 1048575
+\end{aligned}
+$$
+Om vi skulle genomföra alla dessa modellanpassningar för hand skulle det lätt gå överstyr och vi skulle säkerligen missa att anpassa några av de möjliga kandidaterna. Istället kan vi ta hjälp av *algoritmer* som systematiskt beskriver en process för hur vi kan anpassa möjliga modeller. 
+
+En utav de mest omfattande är *best subset*-algoritmen som undersöker alla modeller av olika storlekar, från 1 till $k$, och redovisar ett urval av de bästa modellerna för respektive storlek givet ett valt utvärderingsmått. Denna algoritm kan vara lämplig när vill hitta en bra modell då den faktiskt utforskar alla möjliga modeller som kan anpassas, men den kräver att vi inte har allt för många förklarande variabler att välja från. Olika utvärderingsmått, till exempel residualspridningen (S) eller den justerade förklaringsgraden ($R^2_{adj}$), kan också visa på olika modeller som "bäst" presterande inom de olika storlekarna vilket innebär att vi behöver väga samman olika utvärderingsmått eller genomföra ytterligare analyser, till exempel residualanalys, för att bedöma vilken modell som är bäst. 
+
+Utöver den uttömmande algoritmen finns andra algoritmer som inte anpassar alla möjliga modeller utan utgår från en stegvis förbättring av modellen. Dessa delas upp i tre olika varianter, en algoritm som alltid tar bort variabler, en algoritm som alltid lägger till variabler och en modell som kan göra båda. Algoritmerna väljer hur den ska gå vidare i modellanpassningen utifrån ett valt utvärderingsmått och anser sig "färdig" när utvärderingsmåttet inte förbättras.
+
+### Avancerade utvärderingsmått
+Alla dessa metoder utgår från att vi steg för steg undersöker kandidatmodeller av mindre/större storlek och väljer att ta bort/lägga till den variabel som ger den bästa förbättringen av ett valt utvärderingsmått, oftast används $AIC$, $AIC_p$ eller $AIC_{p(c)}$, $BIC_p$. Notera att framåtval eller stegvis regression där man börjar med en tom modell kan användas även i fall där vi har fler parametrar än observationer, $p \ge n$. 
+
+### Analytikers roll
+Alla dessa algoritmer har en stor nackdel. **Att hitta ett optimum av ett valt utvärderingsmått betyder inte nödvändigtvis att modellen är rimlig!** Implementationen av dessa algoritmer i programvaror kräver att den som använder metoderna inte tar resultaten som givna utan utvärderar modellerna i detalj sedan. Vi kan låta algoritmerna dra det tunga lasset att beräkna fram några förslag på modeller som är rimliga givet en större mängd förklarande variabler men måste själva genomföra det sista steget av utvärderingen för att komma fram till en modell som vi sedan vill använda.
+
+### Algoritmerna i R
+Olika paket och funktioner i R kan hjälpa till att använda dessa algoritmer. Vi kommer titta närmare på funktionerna i paketet `olsrr` men det finns också andra paket med liknande funktioner:
+
+- `leaps`, se [här](https://rstudio-pubs-static.s3.amazonaws.com/2897_9220b21cfc0c43a396ff9abf122bb351.html),
+- `bigstep` (bra för stora datamängder), se [här](https://cran.r-project.org/web/packages/bigstep/vignettes/bigstep.html),
+- `rms`, se [här](https://raw.githubusercontent.com/STIMALiU/RegVar_student/main/lab5_code/rms_example.R),
+- `step()` från baspaketet, se [här](https://www.biostat.jhsph.edu/~iruczins/teaching/jf/ch10.pdf),
+- några fler exempel [här](https://advstats.psychstat.org/book/mregression/selection.php#all-possible-best-subsets)
+
+Det som kännetecknar funktionerna från `olsrr` är att vi alltid börjar med att ange den modell som vi anser vara den största möjliga modellen som kan anpassas. I det enkla fallet skulle det vara en modell med alla $k$ variabler men om vi vill inkludera möjligheten för polynom och interaktioner i algoritmernas process behöver dessa inkluderas i den största modellen.
+
+#### Best subsets
+Funktionen `ols_step_all_possible()` och `ols_step_best_possible()` från paketet `olsrr` kan anpassa alla möjliga modeller av olika storlekar och presenterar resultatet i (en stor) tabell med många olika utvärderingsmått. Dessa funktioner kommer kräva mycket av programmet, speciellt om vi har många förklarande variabler.
+
+```{r}
+#| tbl-cap: De första fem raderna från ett `ols_step_all_possible()` objekt
+require(olsrr)
+
+# Anpassar den största modellen
+model <- lm(bill_length_mm ~ ., data = penguins)
+
+# Ger en lista med ALLA modellerna av olika storlek och tillhörande utvärderingsmått
+result <- ols_step_all_possible(model)
+
+result[[1]] %>% 
+  head(n = 5) %>% 
+  kable(digits = 3)
+
+```
+
+```{r}
+#| tbl-cap: De första fem raderna från ett `ols_step_best_possible()` objekt
+#| 
+# Ger en lista med de "bästa" modellerna av olika storlekar
+result <- ols_step_best_subset(model)
+
+result[[1]] %>% 
+  head(n = 5) %>% 
+  kable(digits = 3)
+```
+
+Det finns väldigt mycket information i dessa tabeller som inte är relevant (vissa mått har vi aldrig har sett förr) utan vi bör sålla bland de angivna måtten, noggrannt avväga vilka mått som vi anser är viktigare än andra, och väga skillnaderna i måtten för att till slut komma fram till den modell som vi ska analysera vidare.
+
+ Vi ser också att utskrifterna, främst för `ols_step_best_subset()`, innehåller många olika utvärderingsmått  som inte alla indikerar på att samma modell är den bästa. 
+
+#### Bakåteliminering
+När vi har en komplett modell som är rimligt stor kan vi utgå från denna modell och successivt ta bort variabler där den reducerade modellen får bättre värden på något utvald utvärderingsmått.
+
+```{r}
+
+## Bakåteliminering utifrån p-värden för enskilda t-test 
+ols_step_backward_p(model)
+
+## Bakåteliminering utifrån modellernas AIC värde
+ols_step_backward_aic(model)
+
+## Lägg till argumentet details = TRUE för att få mer detaljer i utskriften
+## Plocka ut modellen som algoritmen tar fram genom att spara det till ett objekt
+bakåtModell <- ols_step_backward_aic(model, details = TRUE)
+
+bakåtModell$model
+
+```
+
+Dessa två metoder producerar olika resultat. Att ta bort icke-signifikanta variabler genererar en modell med endast 3 variabler medan AIC väljer en modell med 2 variabler. Detta är ett välkänt fenomen och innebär att vi bör anse dessa resultat som kandidater till en bra modell och analysera dessa vidare själva.
+
+#### Framåtvalsmetoden
+Om vi istället börjar med en tom modell och successivt lägger till variabler utifrån ett valt mått kan vi undvika mycket av den problematik som uppkommer med att anpassa en komplett modell om antalet variabler är väldigt många.
+
+```{r}
+
+## Framåtval utifrån modellernas AIC värde
+ols_step_forward_aic(model)
+
+## details = TRUE för mer detaljer
+
+```
+
+Med hjälp av AIC fås samma modell som i bakåtelimineringen men detta resultat är inte garanterat eftersom ordningen av variabler som läggs till behöver inte vara samma variabler som bakåtelimineringen utgår från när den ska ta bort en variabel. 
+
+#### Stegvis regression
+Nackdelen med de enkelriktade algoritmerna (framåtval och bakåteliminering) är att när en variabel lagts till eller tagits bort, kommer den aldrig förändras. Det kan mycket väl vara så att en variabel bidrar med multikollinearitet eller att en interaktion mellan vissa variabler bidrar med information till modellen. Vi kan istället låta algoritmen lägga till och ta bort variabler vid behov.
+
+```{r}
+
+## Stegvis regression
+ols_step_both_aic(model)
+
+```
+
+Algoritmen börjar från en tom modell och först lägger till variabler. I denna utskrift ser vi att algoritmen kommer fram till samma modell som framåtvalsmetoden. 
+

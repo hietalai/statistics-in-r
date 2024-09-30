@@ -8,38 +8,42 @@ book:
   # ## REMOVED DUE TO FORMATTING AS BOOK
   navbar:
     left:
-      - href: 00-programming/00-R-basics.qmd
+      - href: 00-programming/index.qmd
         text: "Programmering i R"
       - href: 01-regression/00-intro-regression.qmd
         text: "Regressionsanalys"
-  sidebar:
-    - title: "Regressionsanalys"
-      style: "docked"
-      # search: true
-      contents:
-        - 01-regression/00-intro-regression.qmd
-        - 01-regression/01-explorative-analysis.qmd
-        - 01-regression/02-model-structure.qmd
-        - 01-regression/03-model-assessment.qmd
-        - 01-regression/04-statistical-inference.qmd
-        - 01-regression/05-simultaneous-inference.qmd
-        - 01-regression/06-complex-predictors.qmd
-    - title: "Programmering i R"
-      style: "docked"
-      # search: true
-      contents:
-        - 00-programming/00-R-basics.qmd
-        - 00-programming/01-packages-and-functions.qmd
-        - 00-programming/02-tidyverse.qmd
+  # sidebar:
+  #   - title: "Regressionsanalys"
+  #     style: "docked"
+  #     # search: true
+  #     contents:
+  #       - 01-regression/preface.qmd
+  #       - 01-regression/00-intro-regression.qmd
+  #       - 01-regression/01-explorative-analysis.qmd
+  #       - 01-regression/02-model-structure.qmd
+  #       - 01-regression/03-model-assessment.qmd
+  #       - 01-regression/04-statistical-inference.qmd
+  #       - 01-regression/05-simultaneous-inference.qmd
+  #       - 01-regression/06-complex-predictors.qmd
+  #       - 01-regression/07-multicollinearity.qmd
+  #       - 01-regression/08-detailed-residuals.qmd
+  #   - title: "Programmering i R"
+  #     style: "docked"
+  #     # search: true
+  #     contents:
+  #       - 00-programming/00-R-basics.qmd
+  #       - 00-programming/01-packages-and-functions.qmd
+  #       - 00-programming/02-tidyverse.qmd
   chapters: 
     - index.qmd
-    - part: "R och RStudio"
-      chapters: 
-        - 00-programming/00-R-basics.qmd
+    - part: "**DEL I - Programmering i R**"
+      chapters:
+        - 00-programming/00-basics-R.qmd
         - 00-programming/01-packages-and-functions.qmd
         - 00-programming/02-tidyverse.qmd
-    - part: "Regressionsanalys"
+    - part: "**DEL II - Regressionsanalys**"
       chapters: 
+        - 01-regression/index.qmd
         - 01-regression/00-intro-regression.qmd
         - 01-regression/01-explorative-analysis.qmd
         - 01-regression/02-model-structure.qmd
@@ -47,8 +51,14 @@ book:
         - 01-regression/04-statistical-inference.qmd
         - 01-regression/05-simultaneous-inference.qmd
         - 01-regression/06-complex-predictors.qmd
+        - 01-regression/07-multicollinearity.qmd
+        - 01-regression/08-detailed-residuals.qmd
+        - 01-regression/09-variable-selection.qmd
+  search: 
+    location: sidebar
+    show-item-context: false
     
-bibliography: bibliography.bib
+bibliography: bibliography.bib 
 
 format:
   html:
