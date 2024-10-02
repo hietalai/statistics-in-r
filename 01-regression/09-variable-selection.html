@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.553">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Statistisk teori och tillämpningar i R - 10&nbsp; Modellvalidering och variabelselektion</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../01-regression/08-detailed-residuals.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Inget resultat",
+    "search-matching-documents-text": "matchande dokument",
+    "search-copy-link-title": "Kopiera länk för att söka",
+    "search-hide-matches-text": "Göm ytterligare resultat",
+    "search-more-match-text": "annat resultat i detta dokument",
+    "search-more-matches-text": "fler resultat i detta dokument",
+    "search-clear-button-title": "Rensa",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Verkställ",
+    "search-label": "Sök"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Skifta navigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../00-programming/index.qmd"> 
+<span class="menu-text">Programmering i R</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../01-regression/00-intro-regression.html" aria-current="page"> 
+<span class="menu-text">Regressionsanalys</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html"><strong>DEL II - Regressionsanalys</strong></a></li><li class="breadcrumb-item"><a href="../01-regression/09-variable-selection.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Sök"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inledning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Grunderna i R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Paket och funktioner</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">tidyverse</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text"><strong>DEL II - Regressionsanalys</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Förord</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/09-variable-selection.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innehållsförteckning</h2>
+   
+  <ul>
+  <li><a href="#modellvalidering" id="toc-modellvalidering" class="nav-link active" data-scroll-target="#modellvalidering"><span class="header-section-number">10.1</span> Modellvalidering</a>
+  <ul class="collapse">
+  <li><a href="#generaliserbarhet" id="toc-generaliserbarhet" class="nav-link" data-scroll-target="#generaliserbarhet"><span class="header-section-number">10.1.1</span> Generaliserbarhet</a></li>
+  <li><a href="#korsvalidering" id="toc-korsvalidering" class="nav-link" data-scroll-target="#korsvalidering"><span class="header-section-number">10.1.2</span> Korsvalidering</a></li>
+  </ul></li>
+  <li><a href="#automatisk-variabelselektion" id="toc-automatisk-variabelselektion" class="nav-link" data-scroll-target="#automatisk-variabelselektion"><span class="header-section-number">10.2</span> “Automatisk” variabelselektion</a>
+  <ul class="collapse">
+  <li><a href="#avancerade-utvärderingsmått" id="toc-avancerade-utvärderingsmått" class="nav-link" data-scroll-target="#avancerade-utvärderingsmått"><span class="header-section-number">10.2.1</span> Avancerade utvärderingsmått</a></li>
+  <li><a href="#implementation-i-r" id="toc-implementation-i-r" class="nav-link" data-scroll-target="#implementation-i-r"><span class="header-section-number">10.2.2</span> Implementation i R</a></li>
+  <li><a href="#best-subsets" id="toc-best-subsets" class="nav-link" data-scroll-target="#best-subsets"><span class="header-section-number">10.2.3</span> Best subsets</a></li>
+  <li><a href="#bakåteliminering" id="toc-bakåteliminering" class="nav-link" data-scroll-target="#bakåteliminering"><span class="header-section-number">10.2.4</span> Bakåteliminering</a></li>
+  <li><a href="#framåtvalsmetoden" id="toc-framåtvalsmetoden" class="nav-link" data-scroll-target="#framåtvalsmetoden"><span class="header-section-number">10.2.5</span> Framåtvalsmetoden</a></li>
+  <li><a href="#stegvis-regression" id="toc-stegvis-regression" class="nav-link" data-scroll-target="#stegvis-regression"><span class="header-section-number">10.2.6</span> Stegvis regression</a></li>
+  </ul></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">10.3</span> Övningsuppgifter</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html"><strong>DEL II - Regressionsanalys</strong></a></li><li class="breadcrumb-item"><a href="../01-regression/09-variable-selection.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- New commands for matrices in regression -->
+<!-- Creates a shortcommand for sums -->
+<!-- CONTENT -->
+<p>Om ett datamaterial innehåller ett stort antal variabler finns det mängder med potentiella modeller av olika storlek som skulle kunna anpassas. Vi har i tidigare kapitel enbart fokuserat på enstaka modeller som baserat sin struktur utifrån ledtrådar som identifierats i det utforskande steget, men detta blir snabbt tidskrävande vid 10, 20, eller 50 förklarande variabler.</p>
+<p>För att effektivisera processen med att hitta en lämplig modell behöver vi dels tydliga instruktioner för hur vi ska gå till väga för att utveckla/förbättra modellerna och olika sätt att kunna utvärdera modellerna i olika aspekter. Vi kommer i detta kapitel presentera olika variabelselektionsalgoritmer och introducera ytterligare mått som vi kan använda för att utvärdera en modell.</p>
+<section id="modellvalidering" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="modellvalidering"><span class="header-section-number">10.1</span> Modellvalidering</h2>
+<p>En bra regressionsmodell beskriver inte bara det stickprov som vi använt för att anpassa modellen utan kan också anpassa ny liknande data så bra som möjligt. “Så bra som möjligt” betyder i praktiken att vi vill ha säkra prediktioner för ny data, i fall där vi endast har de förklarande variablernas värden att utgå från. Till exempel skulle vi kunna ha anpassat en modell där responsvariabeln är dyr eller svår att mäta (identifiera elakartade tumörer) men de förklarande variablerna är enklare att samla in (andra medicinska mätningar såsom blodvärden etc.).</p>
+<p>Eftersom vi inte har tillgång till all potentiell ny och okänd data behöver vi metoder för att utvärdera vår nuvarande modell givet den data vi har. Detta kallas för <em>validering</em> och kan delas upp i två olika sätt att validera modellens <em>generaliserbarhet</em>, det vill säga hur bra modellen är på att beskriva ny liknande data.</p>
+<p><em>Intern</em> validering är mått som beskriver modellen på det data som används för modellanpassningen. Ofta baseras valideringen på något enkelt anpassningsmått, till exempel SSE, eller något mått som också straffar modellen för dess komplexitet, till exempel den justerade förklaringsgraden. Eftersom vi tittar på modeller av olika storlek är det vanligtvis lämpligare att använda mått som tar hänsyn till modellens komplexitet för att jämförelsen ska bli rättvis. I linjära modeller mäts komplexiteten av antalet förklarande variabler, ju fler variabler desto mer komplex är modellen, och valideringen blir då en avvägning mellan en bra modellanpassning och en lagom komplex modell.</p>
+<p>Intern validering beskriver endast modellens anpassning på det insamlade datamaterialet och undersöker inte hur modellen skulle prestera på ny information. Fördelen med intern validering är att den är enkel att använda, vi har faktiskt redan gjort detta i tidigare kapitel, men kan inte hjälpa oss att dra slutsatser om hur bra modellen är på att generalisera sambandet</p>
+<p>I <em>extern</em> validering utvärderar vi den anpassade modellen på ny okänd data som vi själva skapar genom att exempelvis slumpmässigt ta bort en del av observationerna i det insamlade materialet. Denna uppdelning av data medför att vi betecknar data som vi anpassar (tränar) modellen på för <em>träningsmängd</em> och data som vi utvärderar modellen på för <em>validerings</em>- eller <em>testmängd</em> beroende på vad syftet med utvärderingen är.</p>
+<p>En valideringsmängd används för att jämföra modeller med varandra och undersöka vilken som är bäst på att generalisera sambandet medan en testmängd används för att få en väntevärdesriktig skattning på något mått i den slutgiltigt valda modellen.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Fördelen med extern validering är att vi kan få mer information om modellens generaliserbarhet men det kräver att vi också har ny och okänd data att undersöka modellen på. Om vi har tillgång till tillräckligt många observationer i vårt stickprov och kan dela upp materialet i lagom stora mängder eller om vi under modellanpassningen också samlat in ny data, har vi tillfällen där extern validering kan användas.</p>
+<section id="generaliserbarhet" class="level3" data-number="10.1.1">
+<h3 data-number="10.1.1" class="anchored" data-anchor-id="generaliserbarhet"><span class="header-section-number">10.1.1</span> Generaliserbarhet</h3>
+<p>En modell som anses lämplig och innehåller variabler som alla verkar ha en signifikant påverkan på responsvariabeln, och på alla sätt och vis kan anses en bra modell för det urval vi har samlat in, behöver inte nödvändigtvis vara en modell som kan prestera lika bra på ny liknande data. Vi kan råka ut för både <em>underanpassning</em> (underfitting) eller <em>överanpassning</em> (overfitting), där den senare av de två är mest vanligt förekommande.</p>
+<ul>
+<li>Underanpassning betyder att modellen är för enkel och inte fångar upp relevanta samband mellan responsvariablen och de förklarande variablerna, exempelvis att vi modellerar ett tredjegradspolynom med en linjär funktion.</li>
+<li>Överanpassning betyder att modellen är för komplex eller avancerad och då börjar modellen att beskriva bruset som finns i data, vilket gör att generaliserbarheten minskar, exempelvis att vi modellerar ett tredjegradspolynom med ett sjättegradspolynom.</li>
+</ul>
+<!-- TODO Bild på överanpassning -->
+<p>När fokus är att undersöka generaliserbarheten används extern validering där det är vanligt att vi slumpmässigt delar upp data i en träningsmängd och en valideringsmängd och förutsätter att vi har oberoende observationer i vårt data. Om vi inte har ett oberoende observationer kommer en slumpmässig uppdelning inte behålla det beroende som modellen ska försöka hantera och vi behöver istället använda speciella metoder för att skapa valideringdata, till exempel att i tidseriedata dela upp serien i två delar vid en viss tidpunkt.</p>
+<p>Ofta väljer vi att träningsmängden ska innehålla minst 50% av alla observationer för att modellen som anpassas ska få hjälp av den största majoriteten av informationen. Valideringsmängden brukar få det som “blir över” men bör minst bestå av 10% av alla observationer för att också kunna ha nog mycket information att genomföra någon vettig validering. Det finns ingen “rätt andel” storlek på valideringsmängden som passar alla situationer utan vi styrs ofta utav antalet observationer. Har vi ett stort antal obsevationer brukar vi låta valideringsdata utgöra en mindre andel eftersom vi fortfarande får möjlighet att validera modellerna på många observationer.</p>
+<p>För att skapa en slumpmässig uppdelning av data i R kan vi antingen använda oss utav slumpmässiga index eller randomisering för att dela upp observationerna.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Antalet observationer totalt</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(penguins)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Antalet som tilldelas till träningsmängden utifrån en andel på 2/3</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>nTrain <span class="ot">&lt;-</span> n<span class="sc">*</span>(<span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>) </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Sätter ett seed för reproducerbarhet</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">355</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Index (utvalda observationer) till träningsmängden</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>indexTrain <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> n, <span class="at">size =</span> nTrain, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut utvalda observationer från materialet med positiv </span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># indexering (lägger till) för träning och negativ indexering </span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># (tar bort) för validering</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>dataTrain <span class="ot">&lt;-</span> penguins[indexTrain,]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>dataValid <span class="ot">&lt;-</span> penguins[<span class="sc">-</span>indexTrain,]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vi kan också med hjälp av <code>dplyr</code> funktioner dela upp materialet:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>listaMedMängder <span class="ot">&lt;-</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Skapar en variabel med 1/0 som indikerar på träningsmängden med 2/3</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">split =</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grupperar och delar upp materialet utefter denna nya variabel</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(split) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_split</span>()</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut de olika listorna till separata objekt</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>dataTrain <span class="ot">&lt;-</span> listaMedMängder[[<span class="dv">2</span>]]</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>dataValid <span class="ot">&lt;-</span> listaMedMängder[[<span class="dv">1</span>]]</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Efter att data är uppdelat kan vi anpassa ett antal modeller och jämföra utvärderingsmått mellan tränings- och valideringsmängden.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> species <span class="sc">+</span> bill_depth_mm <span class="sc">+</span> flipper_length_mm <span class="sc">+</span> body_mass_g <span class="sc">+</span> sex, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span>  dataTrain)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> species <span class="sc">+</span> bill_depth_mm <span class="sc">+</span> sex, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> dataTrain)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> species <span class="sc">*</span> bill_depth_mm, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> dataTrain)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Förklaringsgraden för modellerna anpassade på träningsmängden</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Modell =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">$R^2_{adj}$</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">summary</span>(model1)<span class="sc">$</span>adj.r.squared,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summary</span>(model2)<span class="sc">$</span>adj.r.squared,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summary</span>(model3)<span class="sc">$</span>adj.r.squared),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">MSE =</span> <span class="fu">c</span>(<span class="fu">summary</span>(model1)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summary</span>(model2)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summary</span>(model3)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-training-comparison" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-training-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;10.1: Enkla utvärderingsmått för jämförelse av de tre anpassade modellerna på träningsdata
+</figcaption>
+<div aria-describedby="tbl-training-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Modell</th>
+<th style="text-align: right;"><span class="math inline">\(R^2_{adj}\)</span></th>
+<th style="text-align: right;">MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.843</td>
+<td style="text-align: right;">4.472</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.829</td>
+<td style="text-align: right;">4.869</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.798</td>
+<td style="text-align: right;">5.760</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-training-comparison" class="quarto-xref">Tabell&nbsp;<span>10.1</span></a> visar att den första modellen har störst justerad förklaringsgrad och lägst MSE vilket motiverar att den modellen preseterar bäst på träningsmängden. När vi sedan ska utvärdera modellen på valideringsmängden kan vi till viss del använda samma enkla mått men vi behöver ta hänsyn till att modellen som anpassats inte har sett den nya datan. MSE:s motsvarighet för ny data är MSPR (Mean Squared Prediction Error) som beskriver det genomsnittliga felet som modellen gör på ny data.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  MSPR = \frac{\sum_{i^*}{(Y_{i^*} - \hat{Y}_{i^*})^2}}{n^*}
+\end{aligned}
+\]</span> där <span class="math inline">\(i^*\)</span> är observation <span class="math inline">\(i\)</span> i valideringsmängden och <span class="math inline">\(n^*\)</span> är antalet observationer totalt i valideringsmängden.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediktera nya anpassade värden på Y för valideringsmängden</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>predict1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> model1, <span class="at">newdata =</span> dataValid)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>predict2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> model2, <span class="at">newdata =</span> dataValid)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>predict3 <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> model3, <span class="at">newdata =</span> dataValid)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräkna ex. MSPR där y - yhat används</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>MSPR <span class="ot">&lt;-</span> <span class="cf">function</span>(y, yhat){</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  (y <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span> <span class="sc">%&gt;%</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>()</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">Modell =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">$R^2_{adj}$</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">summary</span>(model1)<span class="sc">$</span>adj.r.squared,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summary</span>(model2)<span class="sc">$</span>adj.r.squared,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summary</span>(model3)<span class="sc">$</span>adj.r.squared),</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">MSE =</span> <span class="fu">c</span>(<span class="fu">summary</span>(model1)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summary</span>(model2)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summary</span>(model3)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>),</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">MSPR =</span> <span class="fu">c</span>(<span class="fu">MSPR</span>(dataValid<span class="sc">$</span>bill_length_mm, predict1),</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>           <span class="fu">MSPR</span>(dataValid<span class="sc">$</span>bill_length_mm, predict2),</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>           <span class="fu">MSPR</span>(dataValid<span class="sc">$</span>bill_length_mm, predict3))  </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-validation-comparison" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-validation-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;10.2: Enkla utvärderingsmått för jämförelse av de tre anpassade modellerna på valideringsdata
+</figcaption>
+<div aria-describedby="tbl-validation-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Modell</th>
+<th style="text-align: right;"><span class="math inline">\(R^2_{adj}\)</span></th>
+<th style="text-align: right;">MSE</th>
+<th style="text-align: right;">MSPR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.843</td>
+<td style="text-align: right;">4.472</td>
+<td style="text-align: right;">5.894</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.829</td>
+<td style="text-align: right;">4.869</td>
+<td style="text-align: right;">6.005</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.798</td>
+<td style="text-align: right;">5.760</td>
+<td style="text-align: right;">6.487</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-validation-comparison" class="quarto-xref">Tabell&nbsp;<span>10.2</span></a> visar på samma relation mellan de tre modellerna, att den första är bäst, men vi ser generellt att felet har blivit större i valideringsmängden. Detta fenomen orsakas av att modellen inte längre har anpassats på det data som och att modellen då till viss del har överanpassats till data i träningsmängden. Om MSE och MSPR är nära varandra ger det en indikation på att modellen har lyckats generalisera sambandet bra och stora avvikelser betyder att vi har en mycket överanpassad modell. I just detta fall är skillnaderna inte jättestora så vi kan nog dra slutsatsen att modellen är någorlunda bra.</p>
+<p>Att modellerna följer samma ordning för både tränings- och valideringsmängden är inte självklart. Vi kan se olika resultat beroende på hur under- eller överanpassad modellerna har blivit givet dess struktur och komplexitet, men fokus bör vara att jämföra valideringsmängdens mått.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Antalet observationer totalt</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(mtcars)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Antalet som tilldelas till träningsmängden utifrån en andel på 2/3</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>nTrain <span class="ot">&lt;-</span> n<span class="sc">*</span>(<span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>) </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Sätter ett seed för reproducerbarheten</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">355</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Index (utvalda observationer) till träningsmängden</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>indexTrain <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> n, <span class="at">size =</span> nTrain, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut utvalda observationer från materialet med positiv indexering (lägger till) </span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># för träning och negativ indexering (tar bort) för validering</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>dataTrain <span class="ot">&lt;-</span> mtcars[indexTrain,]</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>dataValid <span class="ot">&lt;-</span> mtcars[<span class="sc">-</span>indexTrain,]</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Anpassa modellerna</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp <span class="sc">+</span> hp <span class="sc">+</span> wt <span class="sc">+</span> qsec, <span class="at">data =</span>  dataTrain)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp <span class="sc">+</span> hp, <span class="at">data =</span> dataTrain)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">*</span> wt, <span class="at">data =</span> dataTrain)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediktera nya anpassade värden på Y för valideringsmängden</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>predict1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> model1, <span class="at">newdata =</span> dataValid)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>predict2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> model2, <span class="at">newdata =</span> dataValid)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>predict3 <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> model3, <span class="at">newdata =</span> dataValid)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">Modell =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">$R^2_{adj}$</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">summary</span>(model1)<span class="sc">$</span>adj.r.squared,</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summary</span>(model2)<span class="sc">$</span>adj.r.squared,</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summary</span>(model3)<span class="sc">$</span>adj.r.squared),</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">MSE =</span> <span class="fu">c</span>(<span class="fu">summary</span>(model1)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summary</span>(model2)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summary</span>(model3)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>),</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">MSPR =</span> <span class="fu">c</span>(<span class="fu">MSPR</span>(dataValid<span class="sc">$</span>mpg, predict1),</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>           <span class="fu">MSPR</span>(dataValid<span class="sc">$</span>mpg, predict2),</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>           <span class="fu">MSPR</span>(dataValid<span class="sc">$</span>mpg, predict3))  </span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Ytterligare exempel på datamaterialet <code>mtcars</code></caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Modell</th>
+<th style="text-align: right;"><span class="math inline">\(R^2_{adj}\)</span></th>
+<th style="text-align: right;">MSE</th>
+<th style="text-align: right;">MSPR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.783</td>
+<td style="text-align: right;">8.908</td>
+<td style="text-align: right;">6.538</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.786</td>
+<td style="text-align: right;">8.776</td>
+<td style="text-align: right;">11.789</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.862</td>
+<td style="text-align: right;">5.657</td>
+<td style="text-align: right;">3.608</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="korsvalidering" class="level3" data-number="10.1.2">
+<h3 data-number="10.1.2" class="anchored" data-anchor-id="korsvalidering"><span class="header-section-number">10.1.2</span> Korsvalidering</h3>
+<p>Istället för att dela upp datamaterialet en gång i tränings- och valideringsmängd kan vi dela upp materialet i m lika stora grupper och successivt utvärdera en tränad modell på respektive grupp. Den tränade modellen använder då alla andra grupper som dess träningsmängd vilket innebär att vi får m stycken olika modeller och m stycken utvärderingar.</p>
+</section>
+</section>
+<section id="automatisk-variabelselektion" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="automatisk-variabelselektion"><span class="header-section-number">10.2</span> “Automatisk” variabelselektion</h2>
+<p>Arbetet med att hitta potentiella kandidatmodeller att jämföra med en valideringsmängd kan ta väldigt lång tid. Antalet potentiella modeller av olika storlekar ökar exponentiellt enligt <span class="math inline">\(2^k -1\)</span>. <span class="math display">\[
+\begin{aligned}
+  2^5 -1 = 31 \qquad 2^{10} -1 = 1023\qquad 2^{20} -1 = 1048575
+\end{aligned}
+\]</span> Om vi skulle genomföra alla dessa modellanpassningar för hand skulle det lätt gå överstyr och vi skulle säkerligen missa att anpassa några av de möjliga kandidaterna. Istället kan vi ta hjälp av <em>algoritmer</em> som systematiskt beskriver en process för hur vi kan anpassa möjliga modeller.</p>
+<p>En utav de mest omfattande är <em>best subset</em>-algoritmen som undersöker alla modeller av olika storlekar, från 1 till <span class="math inline">\(k\)</span>, och redovisar ett urval av de bästa modellerna för respektive storlek givet ett valt utvärderingsmått. Denna algoritm kan vara lämplig när vill inte vill missa en potentiell bra modell då den faktiskt utforskar alla möjliga modeller som kan anpassas, men den kräver att vi inte har allt för många förklarande variabler att välja från. Olika utvärderingsmått, till exempel residualspridningen (S) eller den justerade förklaringsgraden (<span class="math inline">\(R^2_{adj}\)</span>), kan också visa på olika modeller som “bäst” presterande inom de olika storlekarna vilket innebär att vi behöver väga samman olika utvärderingsmått eller genomföra ytterligare analyser, till exempel residualanalys, för att bedöma vilken modell som är bäst.</p>
+<p>Utöver den uttömmande algoritmen finns andra algoritmer som inte anpassar alla möjliga modeller utan utgår från en stegvis förbättring av modellen. Dessa delas upp i tre olika varianter;</p>
+<ul>
+<li><em>bakåteliminering</em>: en algoritm som bara tar bort variabler,</li>
+<li><em>framåtvalsmetoden</em>: en algoritm som bara lägger till variabler,</li>
+<li><em>stegvis regression</em>: en algoritm som kan göra båda.</li>
+</ul>
+<p>Algoritmerna väljer hur den ska gå vidare i modellanpassningen utifrån ett valt utvärderingsmått och anser sig “färdig” när utvärderingsmåttet inte förbättras. En stor nackdel med alla tre algoritmer är att de anses giriga eftersom de vill förbättra modellen bara “här och nu” och kan inte se flera steg framåt i processen. Det skulle mycket väl inträffa att en sämre förbättring just nu genererar en betydligt bättre slutgiltig modell än den “bästa” förbättringen just nu.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Istället för ett utvärderingsmått kan modellerna förändras utefter vilken variabel som anses vara “minst”/“mest” signifikant, lägst eller högst p-värde. Denna process är dock väldigt känslig för problem med multikollinearitet och när det kommer till signifikans anser vi inte oss kunna gradera variablers effekt utefter p-värdet; antingen har en variabel en signifikant effekt (p-värde &lt; <span class="math inline">\(\alpha\)</span>) eller så har variabeln inte en signifikant effekt (p-värde &gt; <span class="math inline">\(\alpha\)</span>).</p>
+<p>Resten av detta underlag kommer fokusera på utvärderingsmått i relation till dessa algoritmer.</p>
+</div>
+</div>
+<p>Alla dessa algoritmer har en stor nackdel; <strong>Att hitta det bästa värdet på ett valt utvärderingsmått betyder inte nödvändigtvis att modellen är lämplig!</strong></p>
+<p>Implementationen av dessa algoritmer i programvaror kräver att den som använder metoderna inte tar resultaten som givna utan utvärderar modellerna i detalj sedan. Vi kan låta algoritmerna dra det tunga lasset att beräkna fram några förslag på modeller som är rimliga givet en större mängd förklarande variabler men vi måste själva genomföra det sista steget av utvärderingen, med bland annat residualanalys, ytterligare hypotesprövningar eller modellvalidering, för att komma fram till en modell som vi sedan vill använda.</p>
+<p>Detta är än mer viktigt om vi inkluderar polynom eller interaktioner i modellen då algoritmerna hanterar dessa som separata variabler och kan anse en modell med en variabel av högre ordning utan att inkludera grundvariablerna som “den bästa”. En sådan modell skulle inte kunna användas för att beskriva sambandet.</p>
+<section id="avancerade-utvärderingsmått" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="avancerade-utvärderingsmått"><span class="header-section-number">10.2.1</span> Avancerade utvärderingsmått</h3>
+<p>Alla dessa metoder utgår från att vi steg för steg undersöker kandidatmodeller av mindre/större storlek och väljer att ta bort/lägga till den variabel som ger den bästa förbättringen av ett valt utvärderingsmått. Vi har tidigare tittat på enkla mått som kan användas men i dessa algoritmer används mer avancerade mått som på ett bättre sätt tar hänsyn till både modellens prestanda och komplexitet.</p>
+<p>Akaike’s Information Criterion, <span class="math inline">\(AIC_p\)</span>, är ett mått som straffar modeller utefter deras komplexitet.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  AIC_p = n \cdot log\left( \frac{SSE}{n} \right) + 2(p + 1)
+\end{aligned}
+\]</span> där <span class="math inline">\(n\)</span> är antalet observationer i träningsmängden och <span class="math inline">\(p\)</span> är antalet parametrar (<span class="math inline">\(k + 1\)</span>) i modellen.</p>
+<p>Vi vill uppnå så små värden på AIC som möjligt.</p>
+<!-- TODO Korrigerad AIC för små mängder -->
+</section>
+<section id="implementation-i-r" class="level3" data-number="10.2.2">
+<h3 data-number="10.2.2" class="anchored" data-anchor-id="implementation-i-r"><span class="header-section-number">10.2.2</span> Implementation i R</h3>
+<p>Olika paket och funktioner i R kan hjälpa till att använda dessa algoritmer. Vi kommer titta närmare på funktionerna i paketet <code>olsrr</code> men det finns andra paket med liknande funktioner, bland andra:</p>
+<ul>
+<li><code>leaps</code>, se <a href="https://rstudio-pubs-static.s3.amazonaws.com/2897_9220b21cfc0c43a396ff9abf122bb351.html">här</a>,</li>
+<li><code>bigstep</code> (bra för stora datamängder), se <a href="https://cran.r-project.org/web/packages/bigstep/vignettes/bigstep.html">här</a>,</li>
+<li><code>rms</code>, se <a href="https://raw.githubusercontent.com/STIMALiU/RegVar_student/main/lab5_code/rms_example.R">här</a>,</li>
+<li><code>step()</code> från baspaketet, se <a href="https://www.biostat.jhsph.edu/~iruczins/teaching/jf/ch10.pdf">här</a>,</li>
+<li>några fler exempel <a href="https://advstats.psychstat.org/book/mregression/selection.php#all-possible-best-subsets">här</a></li>
+</ul>
+<p>Det som kännetecknar funktionerna från <code>olsrr</code> är att vi alltid börjar med att ange den modell som vi anser vara den största möjliga modellen som kan anpassas. I det enkla fallet skulle det vara en modell med alla <span class="math inline">\(k\)</span> variabler men om vi vill inkludera möjligheten för polynom och interaktioner i algoritmernas process behöver dessa inkluderas i den största modellen.</p>
+</section>
+<section id="best-subsets" class="level3" data-number="10.2.3">
+<h3 data-number="10.2.3" class="anchored" data-anchor-id="best-subsets"><span class="header-section-number">10.2.3</span> Best subsets</h3>
+<p>Funktionen <code>ols_step_all_possible()</code> och <code>ols_step_best_possible()</code> från paketet <code>olsrr</code> kan anpassa alla möjliga modeller av olika storlekar och presenterar resultatet i (en stor) tabell med många olika utvärderingsmått. Dessa funktioner kommer kräva mycket av programmet, speciellt om vi har många förklarande variabler. Vi måste som sagt börja med att ange den största möjliga modellen som vi tänker är en kandidat till analysen för att sedan låta algoritmen arbeta fram de olika modellerna som ska jämföras.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(olsrr)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Anpassar den största modellen</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>completeModel <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> ., <span class="at">data =</span> penguins)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ger en lista med ALLA modellerna av olika storlek och tillhörande utvärderingsmått</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">ols_step_all_possible</span>(completeModel)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>result[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>De första fem raderna från ett <code>ols_step_all_possible()</code> objekt</caption>
+<colgroup>
+<col style="width: 2%">
+<col style="width: 5%">
+<col style="width: 2%">
+<col style="width: 14%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 4%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">mindex</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: left;">predictors</th>
+<th style="text-align: right;">rsquare</th>
+<th style="text-align: right;">adjr</th>
+<th style="text-align: right;">rmse</th>
+<th style="text-align: right;">predrsq</th>
+<th style="text-align: right;">cp</th>
+<th style="text-align: right;">aic</th>
+<th style="text-align: right;">sbic</th>
+<th style="text-align: right;">sbc</th>
+<th style="text-align: right;">msep</th>
+<th style="text-align: right;">fpe</th>
+<th style="text-align: right;">apc</th>
+<th style="text-align: right;">hsp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">species</td>
+<td style="text-align: right;">0.707</td>
+<td style="text-align: right;">0.705</td>
+<td style="text-align: right;">2.958</td>
+<td style="text-align: right;">0.701</td>
+<td style="text-align: right;">265.542</td>
+<td style="text-align: right;">1675.281</td>
+<td style="text-align: right;">726.132</td>
+<td style="text-align: right;">1690.514</td>
+<td style="text-align: right;">2931.122</td>
+<td style="text-align: right;">8.882</td>
+<td style="text-align: right;">0.297</td>
+<td style="text-align: right;">0.027</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">flipper_length_mm</td>
+<td style="text-align: right;">0.427</td>
+<td style="text-align: right;">0.425</td>
+<td style="text-align: right;">4.135</td>
+<td style="text-align: right;">0.421</td>
+<td style="text-align: right;">829.005</td>
+<td style="text-align: right;">1896.402</td>
+<td style="text-align: right;">947.524</td>
+<td style="text-align: right;">1907.827</td>
+<td style="text-align: right;">5728.294</td>
+<td style="text-align: right;">17.305</td>
+<td style="text-align: right;">0.580</td>
+<td style="text-align: right;">0.052</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">body_mass_g</td>
+<td style="text-align: right;">0.347</td>
+<td style="text-align: right;">0.345</td>
+<td style="text-align: right;">4.411</td>
+<td style="text-align: right;">0.341</td>
+<td style="text-align: right;">988.694</td>
+<td style="text-align: right;">1939.421</td>
+<td style="text-align: right;">990.302</td>
+<td style="text-align: right;">1950.845</td>
+<td style="text-align: right;">6518.229</td>
+<td style="text-align: right;">19.692</td>
+<td style="text-align: right;">0.660</td>
+<td style="text-align: right;">0.059</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">island</td>
+<td style="text-align: right;">0.143</td>
+<td style="text-align: right;">0.138</td>
+<td style="text-align: right;">5.056</td>
+<td style="text-align: right;">0.129</td>
+<td style="text-align: right;">1404.088</td>
+<td style="text-align: right;">2032.285</td>
+<td style="text-align: right;">1080.737</td>
+<td style="text-align: right;">2047.518</td>
+<td style="text-align: right;">8563.160</td>
+<td style="text-align: right;">25.948</td>
+<td style="text-align: right;">0.868</td>
+<td style="text-align: right;">0.078</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">sex</td>
+<td style="text-align: right;">0.118</td>
+<td style="text-align: right;">0.116</td>
+<td style="text-align: right;">5.127</td>
+<td style="text-align: right;">0.108</td>
+<td style="text-align: right;">1451.243</td>
+<td style="text-align: right;">2039.609</td>
+<td style="text-align: right;">1090.023</td>
+<td style="text-align: right;">2051.034</td>
+<td style="text-align: right;">8806.316</td>
+<td style="text-align: right;">26.604</td>
+<td style="text-align: right;">0.892</td>
+<td style="text-align: right;">0.080</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Istället för alla modeller av olika storlekar kan vi plocka ut de bästa modellerna för varje storlek som underlättar jämförelsen.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ger en lista med de "bästa" modellerna av olika storlekar</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">ols_step_best_subset</span>(completeModel)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>result[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>De första fem raderna från ett <code>ols_step_best_possible()</code> objekt</caption>
+<colgroup>
+<col style="width: 4%">
+<col style="width: 2%">
+<col style="width: 37%">
+<col style="width: 5%">
+<col style="width: 4%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">mindex</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: left;">predictors</th>
+<th style="text-align: right;">rsquare</th>
+<th style="text-align: right;">adjr</th>
+<th style="text-align: right;">predrsq</th>
+<th style="text-align: right;">cp</th>
+<th style="text-align: right;">aic</th>
+<th style="text-align: right;">sbic</th>
+<th style="text-align: right;">sbc</th>
+<th style="text-align: right;">msep</th>
+<th style="text-align: right;">fpe</th>
+<th style="text-align: right;">apc</th>
+<th style="text-align: right;">hsp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">species</td>
+<td style="text-align: right;">0.707</td>
+<td style="text-align: right;">0.705</td>
+<td style="text-align: right;">0.701</td>
+<td style="text-align: right;">265.542</td>
+<td style="text-align: right;">1675.281</td>
+<td style="text-align: right;">726.132</td>
+<td style="text-align: right;">1690.514</td>
+<td style="text-align: right;">2931.122</td>
+<td style="text-align: right;">8.882</td>
+<td style="text-align: right;">0.297</td>
+<td style="text-align: right;">0.027</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">species sex</td>
+<td style="text-align: right;">0.821</td>
+<td style="text-align: right;">0.819</td>
+<td style="text-align: right;">0.816</td>
+<td style="text-align: right;">36.570</td>
+<td style="text-align: right;">1512.791</td>
+<td style="text-align: right;">565.291</td>
+<td style="text-align: right;">1531.831</td>
+<td style="text-align: right;">1794.012</td>
+<td style="text-align: right;">5.452</td>
+<td style="text-align: right;">0.182</td>
+<td style="text-align: right;">0.016</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">species flipper_length_mm sex</td>
+<td style="text-align: right;">0.832</td>
+<td style="text-align: right;">0.830</td>
+<td style="text-align: right;">0.826</td>
+<td style="text-align: right;">16.323</td>
+<td style="text-align: right;">1493.644</td>
+<td style="text-align: right;">546.481</td>
+<td style="text-align: right;">1516.493</td>
+<td style="text-align: right;">1688.762</td>
+<td style="text-align: right;">5.148</td>
+<td style="text-align: right;">0.172</td>
+<td style="text-align: right;">0.016</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">species flipper_length_mm body_mass_g sex</td>
+<td style="text-align: right;">0.837</td>
+<td style="text-align: right;">0.834</td>
+<td style="text-align: right;">0.830</td>
+<td style="text-align: right;">9.077</td>
+<td style="text-align: right;">1486.444</td>
+<td style="text-align: right;">539.520</td>
+<td style="text-align: right;">1513.101</td>
+<td style="text-align: right;">1647.768</td>
+<td style="text-align: right;">5.038</td>
+<td style="text-align: right;">0.168</td>
+<td style="text-align: right;">0.015</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">species bill_depth_mm flipper_length_mm body_mass_g sex</td>
+<td style="text-align: right;">0.839</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">0.831</td>
+<td style="text-align: right;">6.950</td>
+<td style="text-align: right;">1484.255</td>
+<td style="text-align: right;">537.500</td>
+<td style="text-align: right;">1514.720</td>
+<td style="text-align: right;">1632.158</td>
+<td style="text-align: right;">5.005</td>
+<td style="text-align: right;">0.167</td>
+<td style="text-align: right;">0.015</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Det finns väldigt mycket information i dessa tabeller som inte är relevant (vissa mått har vi aldrig har sett förr) utan vi bör sålla bland de angivna måtten, noggrannt avväga vilka mått som vi anser är viktigare än andra, och väga skillnaderna i måtten för att till slut komma fram till den modell som vi ska analysera vidare.</p>
+<p>Om vi plockar ut de mått som vi har sett tidigare får vi en tabell som är betydlig lättare att läsa av och jämföra modeller av olika storlek.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>result[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(n, predictors, rsquare, adjr, aic) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Storlek"</span>, <span class="st">"Variabler"</span>, <span class="st">"$R^2$"</span>, <span class="st">"$R^2_{adj}$"</span>, <span class="st">"AIC"</span>), </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>De fem första raderna från algoritmen med utvalda utvärderingsmått</caption>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 66%">
+<col style="width: 5%">
+<col style="width: 11%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Storlek</th>
+<th style="text-align: left;">Variabler</th>
+<th style="text-align: right;"><span class="math inline">\(R^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(R^2_{adj}\)</span></th>
+<th style="text-align: right;">AIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">species</td>
+<td style="text-align: right;">0.707</td>
+<td style="text-align: right;">0.705</td>
+<td style="text-align: right;">1675.281</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">species sex</td>
+<td style="text-align: right;">0.821</td>
+<td style="text-align: right;">0.819</td>
+<td style="text-align: right;">1512.791</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">species flipper_length_mm sex</td>
+<td style="text-align: right;">0.832</td>
+<td style="text-align: right;">0.830</td>
+<td style="text-align: right;">1493.644</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">species flipper_length_mm body_mass_g sex</td>
+<td style="text-align: right;">0.837</td>
+<td style="text-align: right;">0.834</td>
+<td style="text-align: right;">1486.444</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">species bill_depth_mm flipper_length_mm body_mass_g sex</td>
+<td style="text-align: right;">0.839</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">1484.255</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">species bill_depth_mm flipper_length_mm body_mass_g sex year</td>
+<td style="text-align: right;">0.839</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">1484.537</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">species island bill_depth_mm flipper_length_mm body_mass_g sex year</td>
+<td style="text-align: right;">0.840</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">1487.227</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>För både den justerade förklaringsgraden (högst) och AIC (lägst) är modellen med 5 förklarande variabler som den bästa och vi kan nu gå vidare med att utvärdera den med metoder från <a href="03-model-assessment.html#sec-residual-simple" class="quarto-xref"><span>Avsnitt 4.1</span></a>.</p>
+</section>
+<section id="bakåteliminering" class="level3" data-number="10.2.4">
+<h3 data-number="10.2.4" class="anchored" data-anchor-id="bakåteliminering"><span class="header-section-number">10.2.4</span> Bakåteliminering</h3>
+<p>Den första utav de stegvisa algoritmerna innebär att vi börjar med den absolut största modellen vi kan tänka oss och successivt tar bort variabler tills den reducerade modellen inte längre anses vara en bättre modell. Algoritmen väljer vilken variabel som ska plockas bort vid varje steg genom att anpassa alla modeller med en färre variabel och välja den modell vars utvärderingsmått är “bäst”. Om den största modellen är lagomt stor kommer denna algoritm fungera bra, men om den största modellen är alldeles för komplex kommer algoritmen få jobba mycket att anpassa alla modeller av storlek <span class="math inline">\(k-1\)</span>, <span class="math inline">\(k-2\)</span> osv.</p>
+<p>Med hjälp av <code>ols_step_backward_aic()</code> används AIC som utvärderingsmått. Utskriften från denna funktion är väldigt omfattande, speciellt om vi använder argumentet <code>details = TRUE</code>, och bör <strong>inte</strong> presenteras utan används för internt bruk att förstå processen som algoritmen har tagit. Om vi sparar resultatet i ett separat R-objekt kan vi plocka ut förenklade tabeller med mått som vi förstår och kan tolka.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lägg till argumentet details = TRUE för att få mer detaljer i utskriften</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bakåtModell <span class="ot">&lt;-</span> <span class="fu">ols_step_backward_aic</span>(completeModel)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>bakåtModell<span class="sc">$</span>metrics <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(step, variable, r2, adj_r2, aic) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Steg"</span>, <span class="st">"Variabel"</span>, <span class="st">"$R^2$"</span>, <span class="st">"$R^2_{adj}$"</span>, <span class="st">"AIC"</span>),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Resultat av bakåtelimineringens steg att plocka bort variabler</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Steg</th>
+<th style="text-align: left;">Variabel</th>
+<th style="text-align: right;"><span class="math inline">\(R^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(R^2_{adj}\)</span></th>
+<th style="text-align: right;">AIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">island</td>
+<td style="text-align: right;">0.839</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">1484.537</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">year</td>
+<td style="text-align: right;">0.839</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">1484.255</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>bakåtModell<span class="sc">$</span>model <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variabel"</span>, <span class="st">"Skattning"</span>, <span class="st">"Medelfel"</span>, <span class="st">"t-värde"</span>, <span class="st">"p-värde"</span>))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Den utvalda modellen från bakåtelimineringen</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variabel</th>
+<th style="text-align: right;">Skattning</th>
+<th style="text-align: right;">Medelfel</th>
+<th style="text-align: right;">t-värde</th>
+<th style="text-align: right;">p-värde</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">15.017</td>
+<td style="text-align: right;">4.374</td>
+<td style="text-align: right;">3.433</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">speciesChinstrap</td>
+<td style="text-align: right;">9.566</td>
+<td style="text-align: right;">0.350</td>
+<td style="text-align: right;">27.351</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">speciesGentoo</td>
+<td style="text-align: right;">6.404</td>
+<td style="text-align: right;">1.030</td>
+<td style="text-align: right;">6.215</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bill_depth_mm</td>
+<td style="text-align: right;">0.313</td>
+<td style="text-align: right;">0.154</td>
+<td style="text-align: right;">2.032</td>
+<td style="text-align: right;">0.043</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">flipper_length_mm</td>
+<td style="text-align: right;">0.069</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">2.961</td>
+<td style="text-align: right;">0.003</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">body_mass_g</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2.562</td>
+<td style="text-align: right;">0.011</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sexmale</td>
+<td style="text-align: right;">2.030</td>
+<td style="text-align: right;">0.389</td>
+<td style="text-align: right;">5.215</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>AIC för den största modellen är <span class="math inline">\(AIC = 1487.227\)</span> och kan tas fram med hjälp av funktionen <code>AIC(modellobjektet)</code>. Jämfört med det sista steget från algoritmen, <span class="math inline">\(AIC = 1484.255\)</span>, ser vi att AIC blivit mindre vilket är önskvärt. Att algoritmen inte längre väljer att ta bort några ytterligare variabler innebär att AIC har blivit så liten som den kan bli med denna modellstruktur.</p>
+</section>
+<section id="framåtvalsmetoden" class="level3" data-number="10.2.5">
+<h3 data-number="10.2.5" class="anchored" data-anchor-id="framåtvalsmetoden"><span class="header-section-number">10.2.5</span> Framåtvalsmetoden</h3>
+<p>I de fall där den största modellen är alldeles för stor för att ens anpassa starten av bakåtelimineringsalgoritmen kan vi istället börja med en tom modell och successivt lägga till variabler. Processen för varje steg är densamma, avseende hur algoritmen väljer att gå vidare till nästa steg, men vi tittar nu på kandidater med en fler variabel och väljer den modell som har minst AIC.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lägg till argumentet details = TRUE för att få mer detaljer i utskriften</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>framåtModell <span class="ot">&lt;-</span> <span class="fu">ols_step_forward_aic</span>(completeModel)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>framåtModell<span class="sc">$</span>metrics <span class="sc">%&gt;%</span> </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(step, variable, r2, adj_r2, aic) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Steg"</span>, <span class="st">"Variabel"</span>, <span class="st">"$R^2$"</span>, <span class="st">"$R^2_{adj}$"</span>, <span class="st">"AIC"</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Resultat av framåtvalsmetodens steg att lägga till variabler</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Steg</th>
+<th style="text-align: left;">Variabel</th>
+<th style="text-align: right;"><span class="math inline">\(R^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(R^2_{adj}\)</span></th>
+<th style="text-align: right;">AIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">species</td>
+<td style="text-align: right;">0.707</td>
+<td style="text-align: right;">0.705</td>
+<td style="text-align: right;">1675.281</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">sex</td>
+<td style="text-align: right;">0.821</td>
+<td style="text-align: right;">0.819</td>
+<td style="text-align: right;">1512.791</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">flipper_length_mm</td>
+<td style="text-align: right;">0.832</td>
+<td style="text-align: right;">0.830</td>
+<td style="text-align: right;">1493.644</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">body_mass_g</td>
+<td style="text-align: right;">0.837</td>
+<td style="text-align: right;">0.834</td>
+<td style="text-align: right;">1486.444</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">bill_depth_mm</td>
+<td style="text-align: right;">0.839</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">1484.255</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>framåtModell<span class="sc">$</span>model <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variabel"</span>, <span class="st">"Skattning"</span>, <span class="st">"Medelfel"</span>, <span class="st">"t-värde"</span>, <span class="st">"p-värde"</span>))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Den utvalda modellen från framåtvalsmetoden</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variabel</th>
+<th style="text-align: right;">Skattning</th>
+<th style="text-align: right;">Medelfel</th>
+<th style="text-align: right;">t-värde</th>
+<th style="text-align: right;">p-värde</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">15.017</td>
+<td style="text-align: right;">4.374</td>
+<td style="text-align: right;">3.433</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">speciesChinstrap</td>
+<td style="text-align: right;">9.566</td>
+<td style="text-align: right;">0.350</td>
+<td style="text-align: right;">27.351</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">speciesGentoo</td>
+<td style="text-align: right;">6.404</td>
+<td style="text-align: right;">1.030</td>
+<td style="text-align: right;">6.215</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sexmale</td>
+<td style="text-align: right;">2.030</td>
+<td style="text-align: right;">0.389</td>
+<td style="text-align: right;">5.215</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">flipper_length_mm</td>
+<td style="text-align: right;">0.069</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">2.961</td>
+<td style="text-align: right;">0.003</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">body_mass_g</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">2.562</td>
+<td style="text-align: right;">0.011</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bill_depth_mm</td>
+<td style="text-align: right;">0.313</td>
+<td style="text-align: right;">0.154</td>
+<td style="text-align: right;">2.032</td>
+<td style="text-align: right;">0.043</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>I just detta fall får vi samma modell som bakåtelimineringen men det är inte garanterat att inträffa. Ordningen av variablerna som läggs till behöver inte vara samma variabler som bakåtelimineringen utgår från när den ska ta bort en variabel.</p>
+</section>
+<section id="stegvis-regression" class="level3" data-number="10.2.6">
+<h3 data-number="10.2.6" class="anchored" data-anchor-id="stegvis-regression"><span class="header-section-number">10.2.6</span> Stegvis regression</h3>
+<p>Nackdelen med de enkelriktade algoritmerna (bakåteliminering och framåtval) är att när en variabel lagts till eller tagits bort, är detta beslut permanent. Algoritmens girighet kan för hindra att vi hittar den bästa modellen efter några steg. Det kan mycket väl vara så att en variabel bidrar med multikollinearitet som resulterar i att en viktig variabel plockas bort eller att en interaktion mellan vissa variabler bidrar med information till modellen men som aldrig läggs till.</p>
+<p>Lösningen är att släppa på begränsningen och tillåta algoritmen att vid varje steg både lägga till och ta bort variabler. Detta kan vi genomföra med hjälp av <code>ols_step_both_aic()</code>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lägg till argumentet details = TRUE för att få mer detaljer i utskriften</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>stegModell <span class="ot">&lt;-</span> <span class="fu">ols_step_both_aic</span>(completeModel)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>stegModell<span class="sc">$</span>metrics <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(step, variable, r2, adj_r2, aic) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Steg"</span>, <span class="st">"Variabel"</span>, <span class="st">"$R^2$"</span>, <span class="st">"$R^2_{adj}$"</span>, <span class="st">"AIC"</span>),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Resultat av stegvis regression</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Steg</th>
+<th style="text-align: left;">Variabel</th>
+<th style="text-align: right;"><span class="math inline">\(R^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(R^2_{adj}\)</span></th>
+<th style="text-align: right;">AIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">species</td>
+<td style="text-align: right;">0.707</td>
+<td style="text-align: right;">0.705</td>
+<td style="text-align: right;">1675.281</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">sex</td>
+<td style="text-align: right;">0.821</td>
+<td style="text-align: right;">0.819</td>
+<td style="text-align: right;">1512.791</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">flipper_length_mm</td>
+<td style="text-align: right;">0.832</td>
+<td style="text-align: right;">0.830</td>
+<td style="text-align: right;">1493.644</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">body_mass_g</td>
+<td style="text-align: right;">0.837</td>
+<td style="text-align: right;">0.834</td>
+<td style="text-align: right;">1486.444</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">bill_depth_mm</td>
+<td style="text-align: right;">0.839</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">1484.255</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Algoritmen börjar från en tom modell och först lägger till variabler. I denna utskrift ser vi att algoritmen kommer fram till samma modell som framåtvalsmetoden, men det behöver inte alltid vara fallet.</p>
+</section>
+</section>
+<section id="övningsuppgifter" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">10.3</span> Övningsuppgifter</h2>
+<p>Vi ska i dessa uppgifter använda samma SENIC material om sjukhusinfektioner från <a href="06-complex-predictors.html#sec-exercises-complex" class="quarto-xref"><span>Avsnitt 7.3</span></a>.</p>
+<p>Vi anser att den största modellen som ska förklara infektionsrisken innehåller alla förklarande variabler förutom ID och interaktioner av ordning 2. Denna modell kan anpassas med <code>lm(Infection_risk ~ (.)^2, data = senic %&gt;% select(!ID))</code>.</p>
+<ol type="a">
+<li><p>Dela upp datamaterialet i en träningsmängd (2/3 av data) och en valideringsmängd (1/3 av data). Tänk på att använda <code>set.seed()</code> för att randomiseringen av data ska vara samma varje gång ni kör koden.</p></li>
+<li><p>Anpassa den största modellen på träningsmängden och beräkna modellens AIC.</p></li>
+<li><p>Presentera den “bästa” modellen enligt följande modellvalsalgoritmer. Visa “vägen” algoritmen gått för att komma fram till denna modell och visa en sammanfattning av modellen med dess tillhörande AIC-värde.</p>
+<ol type="1">
+<li>Framåtval med AIC som kriterium. (Modell 1)</li>
+<li>Bakåteliminering med AIC som kriterium. (Modell 2)</li>
+</ol></li>
+<li><p>Sammanställ de tre modellernas (kompletta, modell 1 och 2) AIC värden. Kommentera och analysera resultatet. Vilken modell fick bäst AIC-värde?</p></li>
+<li><p>Utvärdera respektive modell avseende dess lämplighet med hjälp av residualanalys och analys av modellens variabler. Tänk på att en modell med interaktioner bör inkludera alla grundvariabler oavsett om de är signifikanta eller inte.</p></li>
+<li><p>Genomför ytterligare justeringar av varje modell så att ni anser var och en vara lämplig.</p></li>
+<li><p>Beräkna MSE i träningsmängden och MSPR i valideringsmängden för respektive justerad modell. Lägg till måtten i tabellen från d) och kommentera samt analysera resultatet. Skiljer sig jämförelsen mellan träning och valideringsmängden? Vad säger det om ev. överanpassning av modellerna?</p></li>
+</ol>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Viss litteratur blandar dessa termer, man delar upp data i två delar och använder det ‘nya’ materialet som en valideringsmängd för att jämföra olika modeller men kallar den för testmängd.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Kopierat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Kopierat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../01-regression/08-detailed-residuals.html" class="pagination-link" aria-label="Detaljerad residualanalys">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
