@@ -1417,7 +1417,7 @@ Viktigt
 <section id="övningsuppgifter" class="level2" data-number="10.3">
 <h2 data-number="10.3" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">10.3</span> Övningsuppgifter</h2>
 <p>Vi ska i dessa uppgifter använda samma SENIC material om sjukhusinfektioner från <a href="06-complex-predictors.html#sec-exercises-complex" class="quarto-xref"><span>Avsnitt 7.3</span></a>.</p>
-<p>Vi anser att den största modellen som ska förklara infektionsrisken innehåller alla förklarande variabler förutom ID och interaktioner av ordning 2. Denna modell kan anpassas med <code>lm(Infection_risk ~ (.)^2, data = senic %&gt;% select(!ID))</code>.</p>
+<p>Vi anser att den största modellen som ska förklara infektionsrisken innehåller alla förklarande variabler, ID exkluderas, och interaktioner av ordning 2. Denna modell kan anpassas med <code>lm(Infection_risk ~ (.)^2, data = senic %&gt;% select(!ID))</code>.</p>
 <ol type="a">
 <li><p>Dela upp datamaterialet i en träningsmängd (2/3 av data) och en valideringsmängd (1/3 av data). Tänk på att använda <code>set.seed()</code> för att randomiseringen av data ska vara samma varje gång ni kör koden.</p></li>
 <li><p>Anpassa den största modellen på träningsmängden och beräkna modellens AIC.</p></li>
