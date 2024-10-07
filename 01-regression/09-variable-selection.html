@@ -325,6 +325,7 @@ window.Quarto = {
   <li><a href="#bakåteliminering" id="toc-bakåteliminering" class="nav-link" data-scroll-target="#bakåteliminering"><span class="header-section-number">10.2.4</span> Bakåteliminering</a></li>
   <li><a href="#framåtvalsmetoden" id="toc-framåtvalsmetoden" class="nav-link" data-scroll-target="#framåtvalsmetoden"><span class="header-section-number">10.2.5</span> Framåtvalsmetoden</a></li>
   <li><a href="#stegvis-regression" id="toc-stegvis-regression" class="nav-link" data-scroll-target="#stegvis-regression"><span class="header-section-number">10.2.6</span> Stegvis regression</a></li>
+  <li><a href="#visuell-jämförelse-av-modellerna" id="toc-visuell-jämförelse-av-modellerna" class="nav-link" data-scroll-target="#visuell-jämförelse-av-modellerna"><span class="header-section-number">10.2.7</span> Visuell jämförelse av modellerna</a></li>
   </ul></li>
   <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">10.3</span> Övningsuppgifter</a></li>
   </ul>
@@ -701,6 +702,7 @@ Viktigt
 <li>några fler exempel <a href="https://advstats.psychstat.org/book/mregression/selection.php#all-possible-best-subsets">här</a></li>
 </ul>
 <p>Det som kännetecknar funktionerna från <code>olsrr</code> är att vi alltid börjar med att ange den modell som vi anser vara den största möjliga modellen som kan anpassas. I det enkla fallet skulle det vara en modell med alla <span class="math inline">\(k\)</span> variabler men om vi vill inkludera möjligheten för polynom och interaktioner i algoritmernas process behöver dessa inkluderas i den största modellen.</p>
+<p>Alla funktioner från <code>olsrr</code> hanterar kvalitativa variabler med fler än två kategorier som en grupp av variabler såvida variabeln är angiven som en <code>factor</code> i R. Detta är viktigt för att algoritmen inte ska inkludera enskilda indikatorvariabler i en modell som då får en otydlig referenskategori.</p>
 </section>
 <section id="best-subsets" class="level3" data-number="10.2.3">
 <h3 data-number="10.2.3" class="anchored" data-anchor-id="best-subsets"><span class="header-section-number">10.2.3</span> Best subsets</h3>
@@ -1412,6 +1414,24 @@ Viktigt
 </div>
 </div>
 <p>Algoritmen börjar från en tom modell och först lägger till variabler. I denna utskrift ser vi att algoritmen kommer fram till samma modell som framåtvalsmetoden, men det behöver inte alltid vara fallet.</p>
+</section>
+<section id="visuell-jämförelse-av-modellerna" class="level3" data-number="10.2.7">
+<h3 data-number="10.2.7" class="anchored" data-anchor-id="visuell-jämförelse-av-modellerna"><span class="header-section-number">10.2.7</span> Visuell jämförelse av modellerna</h3>
+<p>Resultatet från algoritmen kan visualiseras i figurer istället för i en tabell. Funktionen <code>plot()</code> tar resultatet av modellvalsalgoritmen och visualiserar utvecklingen av utvärderingsmåtten för respektive modellstorlek. Beroende på vilken algoritm som har använts kommer resultatet visa olika diagram och för de stegvisa processerna visas utvecklingen av AIC för varje steg.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(bakåtModell)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="09-variable-selection_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Visuell representation av de stegen som algoritmen tar och utvecklingen av utvärderingsmått</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="övningsuppgifter" class="level2" data-number="10.3">
