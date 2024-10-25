@@ -10,12 +10,25 @@
 .video-container {
   position: fixed; /* Fixed position relative to the viewport */
   bottom: 0; /* Align to the bottom */
-  left: 0; /* Align to the left */
+  right: 10px; /* Align to the right with a small offset */
   margin: 10px; /* Add margin for spacing */
   z-index: 1000; /* Ensure it's above other content */
   overflow: auto; /* Add scrollbars if needed */
   min-width: 260px; /* Minimum width */
   min-height: 150px; /* Minimum height */
+  transition: transform 0.3s ease; /* Smooth slide effect */
+}
+
+/* Hide partially when viewport is below X pixels */
+@media (max-width: 800px) {
+  .video-container {
+    transform: translateX(95%); /* Move 80% of the container offscreen */
+  }
+}
+
+/* Optional: Show full container on hover */
+.video-container:hover {
+  transform: translateX(0); /* Slide into view */
 }
 
 .quarto-video {
