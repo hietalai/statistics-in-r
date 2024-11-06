@@ -64,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../01-regression/11-other-link-functions.html" rel="next">
 <link href="../01-regression/09-variable-selection.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -304,6 +305,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../01-regression/10-logistic-regression.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/11-other-link-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
   </div>
 </li>
       </ul>
@@ -578,6 +585,19 @@ Number of Fisher Scoring iterations: 7</code></pre>
 </div>
 </div>
 <p>I summary-utskriften får vi nu annan information än vad vi är vana vid. Koefficienttabellen finns fortfarande kvar med lite andra rubriker, men sedan saknas en modellutvärdering som vi är van att se. Istället presenteras modellens <em>devians</em>, ett tillhörande AIC-värde och ett resultat från optimeringsalgoritmen. I och med att vi nu genomför optimering måste vi kontrollera att optimeringen faktiskt har <em>konvergerat</em>, det vill säga nått sitt maximum, vilket innebär att vi behöver vara uppmärksamma på fel- eller varningsmeddelanden som R ger oss relaterat till konvergensen. I detta fall funkade allting utan problem och optimeringen har konvergerat efter 7 iterationer.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Om en modell inte konvergerar kan vi öka antalet iterationer vi tillåter optimeringsalgoritmen att gå innan den stannar. Vi behöver då lägga till <code>glm(..., control = list(maxit = 50))</code> eller något annat större värde. Standardargumentet är att algoritmen genomför 25 iterationer.</p>
+</div>
+</div>
 <p>Tänk på att en utskrift direkt från R för denna modell inte är lämpligt att använda i presentationssyften utan vi behöver återigen plocka ut de olika delarna och skapa snyggare tabeller.</p>
 <div class="cell">
 <details class="code-fold">
@@ -1332,6 +1352,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../01-regression/11-other-link-functions.html" class="pagination-link" aria-label="Andra länkfunktioner">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
