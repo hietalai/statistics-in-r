@@ -19,6 +19,10 @@
   transition: transform 0.3s ease; /* Smooth slide effect */
 }
 
+.tippy-box .video-container{
+  visibility: hidden;
+}
+
 /* Hide partially when viewport is below X pixels */
 @media (max-width: 800px) {
   .video-container {

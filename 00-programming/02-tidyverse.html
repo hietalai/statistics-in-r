@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistisk teori och tillämpningar i R - tidyverse</title>
+<title>tidyverse – Statistisk teori och tillämpningar i R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Skifta navigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Skifta navigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -128,24 +128,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Programmering i R</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../01-regression/00-intro-regression.html" aria-current="page"> 
+    <a class="nav-link active" href="../01-regression/index.html" aria-current="page"> 
 <span class="menu-text">Regressionsanalys</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../02-variance/index.html"> 
+<span class="menu-text">Varianssanalys</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/02-tidyverse.html">tidyverse</a></li></ol></nav>
-        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -170,9 +174,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -199,9 +203,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text"><strong>DEL II - Regressionsanalys</strong></span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -286,6 +290,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>DEL III - Variansanalys</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Förord</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -297,13 +330,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#sec-readr" id="toc-sec-readr" class="nav-link active" data-scroll-target="#sec-readr">Läsa in filer med <code>readr</code></a></li>
-  <li><a href="#sec-tibble" id="toc-sec-tibble" class="nav-link" data-scroll-target="#sec-tibble"><code>tibble</code></a></li>
-  <li><a href="#sec-tidyr" id="toc-sec-tidyr" class="nav-link" data-scroll-target="#sec-tidyr"><code>tidyr</code></a></li>
-  <li><a href="#programmeringsrör-pipes" id="toc-programmeringsrör-pipes" class="nav-link" data-scroll-target="#programmeringsrör-pipes">Programmerings”rör” (pipes)</a></li>
-  <li><a href="#följande-kapitel-är-under-uppbyggnad" id="toc-följande-kapitel-är-under-uppbyggnad" class="nav-link" data-scroll-target="#följande-kapitel-är-under-uppbyggnad">FÖLJANDE KAPITEL ÄR UNDER UPPBYGGNAD</a>
+  <li><a href="#sec-tibble" id="toc-sec-tibble" class="nav-link" data-scroll-target="#sec-tibble">Dataobjektet <code>tibble</code></a></li>
+  <li><a href="#sec-tidyr" id="toc-sec-tidyr" class="nav-link" data-scroll-target="#sec-tidyr">Omformatera data med <code>tidyr</code></a></li>
+  <li><a href="#koppla-samman-funktioner-med-pipes" id="toc-koppla-samman-funktioner-med-pipes" class="nav-link" data-scroll-target="#koppla-samman-funktioner-med-pipes">Koppla samman funktioner med pipes</a></li>
+  <li><a href="#databearbetning-med-dplyr" id="toc-databearbetning-med-dplyr" class="nav-link" data-scroll-target="#databearbetning-med-dplyr">Databearbetning med <code>dplyr</code></a>
   <ul class="collapse">
-  <li><a href="#databearbetning-med-dplyr" id="toc-databearbetning-med-dplyr" class="nav-link" data-scroll-target="#databearbetning-med-dplyr">Databearbetning med <code>dplyr</code></a></li>
-  <li><a href="#hantering-av-text-med-stringr-och-forcats" id="toc-hantering-av-text-med-stringr-och-forcats" class="nav-link" data-scroll-target="#hantering-av-text-med-stringr-och-forcats">Hantering av text med <code>stringr</code> och <code>forcats</code></a></li>
+  <li><a href="#byta-namn-på-variabler-med-rename" id="toc-byta-namn-på-variabler-med-rename" class="nav-link" data-scroll-target="#byta-namn-på-variabler-med-rename">Byta namn på variabler med <code>rename()</code></a></li>
+  <li><a href="#plocka-ut-rader-med-filter" id="toc-plocka-ut-rader-med-filter" class="nav-link" data-scroll-target="#plocka-ut-rader-med-filter">Plocka ut rader med <code>filter()</code></a></li>
+  <li><a href="#plocka-ut-kolumner-med-select" id="toc-plocka-ut-kolumner-med-select" class="nav-link" data-scroll-target="#plocka-ut-kolumner-med-select">Plocka ut kolumner med <code>select()</code></a></li>
+  <li><a href="#byta-plats-på-variabler-med-relocate" id="toc-byta-plats-på-variabler-med-relocate" class="nav-link" data-scroll-target="#byta-plats-på-variabler-med-relocate">Byta plats på variabler med <code>relocate()</code></a></li>
+  <li><a href="#sortera-data-med-arrange" id="toc-sortera-data-med-arrange" class="nav-link" data-scroll-target="#sortera-data-med-arrange">Sortera data med <code>arrange()</code></a></li>
+  <li><a href="#skapa-nya-variabler-med-mutate" id="toc-skapa-nya-variabler-med-mutate" class="nav-link" data-scroll-target="#skapa-nya-variabler-med-mutate">Skapa nya variabler med <code>mutate()</code></a></li>
+  <li><a href="#gruppera-beräkningar-med-group_by" id="toc-gruppera-beräkningar-med-group_by" class="nav-link" data-scroll-target="#gruppera-beräkningar-med-group_by">Gruppera beräkningar med <code>group_by()</code></a></li>
+  <li><a href="#sammanfatta-data-med-summarize" id="toc-sammanfatta-data-med-summarize" class="nav-link" data-scroll-target="#sammanfatta-data-med-summarize">Sammanfatta data med <code>summarize()</code></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -313,7 +352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/02-tidyverse.html">tidyverse</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">tidyverse</h1>
+<h1 class="title"><span id="sec-tidyverse" class="quarto-section-identifier">tidyverse</span></h1>
 </div>
 
 
@@ -330,43 +369,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>En stor del utav statistisk analys består utav att bearbeta datamaterial som samlats in till ett format som lämpar sig för de olika metoder. Ett datamaterial som man själv samlar in (<em>primärdata</em>) eller datamaterial som hämtas från någon annan källa (<em>sekundärdata</em>) är inte alltid strukturerat på det sätt som vi önskar. <code>tidyverse</code> är en samling paket i R som baseras på ett liknande sätt att programmera i dess syntax och grammatik.</p>
-<p>Inom statistik önskas data följa formatet: “en rad är en observation”, “en kolumn är en variabel” och “en cell är ett värde”, så att vi med lätthet kan hantera datamaterialet på ett flertal olika sätt. Detta kan vi kalla för <em>rådata</em> eller <em>tidy data</em>. <a href="../01-regression/01-explorative-analysis.html#sec-example-data" class="quarto-xref"><span>2.1 Pingviner vid Antarktis</span></a> visar på data på just detta format. Varje rad är en uppmätt pingvin, och varje kolumn är mätvärden för varje variabel. Exempel på en struktur som inte följer denna praxis är frekvenstabeller där varje rad visar flera observationer som har samma variabelvärde.</p>
+<p>En stor del utav statistisk analys omfattar bearbetning av datamaterial som samlats in till ett format som lämpar sig för olika statistiska analysmetoder. Ett datamaterial som man själv samlar in (<em>primärdata</em>) eller datamaterial som hämtas från någon annan källa (<em>sekundärdata</em>) är inte alltid strukturerat på det sätt som vi, eller metoderna, önskar. <code>tidyverse</code> är en samling paket i R som har en gemensam grund att programmera, både i dess syntax och grammatik.</p>
+<p>Inom statistik önskas data ofta följa formatet: “en rad är en observation”, “en kolumn är en variabel” och “en cell är ett värde”, så att vi med lätthet kan hantera datamaterialet på ett flertal olika sätt. Detta kan vi kalla för <em>rådata</em> eller <em>tidy data</em> och <a href="../01-regression/01-explorative-analysis.html#sec-example-data" class="quarto-xref"><span>2.1 Pingviner vid Antarktis</span></a> visar data på just detta format. Varje rad är en uppmätt pingvin och varje kolumn är mätvärden för varje variabel. Exempel på en struktur som inte följer denna praxis är frekvenstabeller där varje rad visar flera observationer som har samma variabelvärde.</p>
 <p>Vi kan installera de paketen som ingår i <code>tidyverse</code> genom att installera paketet med samma namn och ladda in det i arbetsminnet med <code>require()</code> eller <code>library()</code>.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>I detta kapitel kommer vi gå igenom de olika paketen som behandlar datastrukturer och olika variablertyper medan senare kapitel kommer fortsätta med paket för visualisering (<code>ggplot2</code>) och mer avancerad kodning (<code>purrr</code>).</p>
 <section id="sec-readr" class="level2">
 <h2 class="anchored" data-anchor-id="sec-readr">Läsa in filer med <code>readr</code></h2>
 <p>R innehåller många inbyggda funktioner (se <a href="01-packages-and-functions.html#sec-readData" class="quarto-xref"><span>Ladda in datamaterial</span></a>) för hur man kan läsa in filer av olika format från hårddisken. Vi har tidigare tittat på <code>read.csv2()</code> som är en grundfunktion i R, men <code>readr</code> har liknande funktioner utöver flera andra specialfall som utgår från vissa standardformat för filer.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Det är starkt rekommenderat att läsa in text-filer i R, inte Excelfiler då Excel kan innehålla specialformat som R inte kan läsa in korrekt. Vi kan från Excel spara om en .xlsx fil till en .txt-, .tsv- eller .csv-fil.</p>
+</div>
+</div>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Läser in en textfil där kolumner separeras med en (eller flera) mellanslag (.txt)</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Läser in en textfil där kolumner separeras med en (eller flera) mellanslag (.txt)</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">read_table</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Läser in en textfil där kolumner separeras med tab (.tsv)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Läser in en textfil där kolumner separeras med tab (.tsv)</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Läser in en textfil där kolumner separeras med , (read_csv) eller ; (read_csv2)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Läser in en textfil där kolumner separeras med , (read_csv) eller ; (read_csv2)</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv2</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
-<p>Resultatet av dessa funktioner blir en formatterad <em>tibble</em>.</p>
-<p><strong>Se till att datamaterialet som laddats in ser ut som vi förväntar att det ska göra</strong>, exempelvis är decimaler korrekt angivna, har vi lika många variabler i R som i originalfilen och liknande.</p>
-</section>
-<section id="sec-tibble" class="level2">
-<h2 class="anchored" data-anchor-id="sec-tibble"><code>tibble</code></h2>
-<p>I <a href="00-basics-R.html#sec-data-frame" class="quarto-xref"><span>Listor och data frames</span></a> presenterades datastrukturen <code>data frame</code> som ett sätt för oss att i R spara information i ett standard format. En tibble är en utveckling av denna datastruktur som rensat bort egenskaper som inte längre används och lägger till egenskaper som ofta vill användas vid behandling av data.</p>
-<p>Likt en data frame, innehåller en tibble en samling lika långa kolumner och dessa kolumner kan vara av olika objekttyper. Till exempel kan vi blanda listor och vektorer så länge de innehåller lika många element.</p>
+<p>Resultatet av dessa funktioner blir en formatterad <em>tibble</em>, vilket är <code>tidyverse</code> version av en <code>data frame</code>.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -377,24 +416,42 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>En <code>tibble</code> konverterar inte textvektorer till faktorer per automatik. Det vill säga om ett datamaterial som läses in via <code>read_csv2()</code> innehåller text, kommer denna variabel vara ett character-objekt, inte ett Factor-objekt.</p>
+<p>Se till att datamaterialet som laddats in ser ut som vi förväntar att det ska göra, exempelvis är decimaler korrekt angivna, har vi lika många variabler i R som i originalfilen och liknande.</p>
 </div>
 </div>
-<p>Vi kan skapa en tibble från grunden genom att ange vilka objekt vi vill inkludera och vad de ska heta:</p>
+</section>
+<section id="sec-tibble" class="level2">
+<h2 class="anchored" data-anchor-id="sec-tibble">Dataobjektet <code>tibble</code></h2>
+<p>I <a href="00-basics-R.html#sec-data-frame" class="quarto-xref"><span>Listor och data frames</span></a> presenterades datastrukturen <code>data frame</code> som ett sätt för oss att i R spara information i ett strukturerat rådataformat. En <code>tibble</code> är en utbyggnad av denna datastruktur som rensat bort egenskaper av objektet som inte längre används och lägger till egenskaper som vi ofta vill använda när vi bearbetar data. Likt en <code>data frame</code>, innehåller en <code>tibble</code> en samling lika långa kolumner och dessa kolumner kan vara av olika objekttyper. Till exempel kan vi blanda listor och vektorer så länge de innehåller lika många element.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En <code>tibble</code> konverterar inte textvektorer till faktorer per automatik. Det vill säga om ett datamaterial som läses in via <code>read_csv2()</code> innehåller text, kommer denna variabel vara ett <code>character</code>-objekt, inte ett <code>Factor</code>-objekt.</p>
+</div>
+</div>
+<p>Vi kan skapa en <code>tibble</code> från grunden genom att ange vilka objekt vi vill inkludera och vad de ska heta:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Skapar en tibble utifrån angivna vektorer</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Var1 =</span> a,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Var2 =</span> b,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Var3 =</span> c</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en tibble utifrån angivna vektorer</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Var1 =</span> a,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Var2 =</span> b,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Var3 =</span> c</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriver ut tibble till konsollen</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(data)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
    Var1  Var2 Var3 
@@ -404,13 +461,17 @@ Viktigt
 3     3     6 c    </code></pre>
 </div>
 </div>
+<p>En direkt utskrift av en <code>tibble</code> innehåller både dimensionerna av hela objektet och vad för typ respektive variabel är.</p>
 <p>Om vi har en matris eller något annat objekt som ser ut som en tibble men inte är det, kan vi konvertera den till en tibble med hjälp av <code>as_tibble()</code>.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Tar objektet a (en vektor) och gör om den till en tibble med en kolumn</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>a <span class="sc">%&gt;%</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar objektet a (en vektor) och gör om den till en tibble med en kolumn</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>vectorToTibble <span class="ot">&lt;-</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  a <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>()</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(vectorToTibble)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 1
@@ -423,7 +484,8 @@ Viktigt
 </div>
 </section>
 <section id="sec-tidyr" class="level2">
-<h2 class="anchored" data-anchor-id="sec-tidyr"><code>tidyr</code></h2>
+<h2 class="anchored" data-anchor-id="sec-tidyr">Omformatera data med <code>tidyr</code></h2>
+<p>En utav de tyngsta delarna av statistisk analys är ofta att bearbeta data till det format som önskas. Paketet <code>tidyr</code> innehåller ett flertal funktioner som kan bearbeta data på många olika sätt</p>
 <p>Om data inte är på det format som vi önskar eller om någon statistisk metod behöver ett material som har ett annat format än tidy-data. Detta paket kommer vi inte titta på just nu i detalj men följande Cheat Sheets innehåller exempel på olika bearbetningar som vi kan vara intresserade av att genomföra med data.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -431,16 +493,14 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="programmeringsrör-pipes" class="level2">
-<h2 class="anchored" data-anchor-id="programmeringsrör-pipes">Programmerings”rör” (pipes)</h2>
-<p>Det är vanligt att vi vill genomföra flera operationer på ett och samma objekt, speciellt när vi har att göra med databearbetning. Att nästla funktioner i varandra blir lätt väldigt krångligt att båda skriva och läsa av. Om argument ska läggas till i de olika funktionerna är det svårt att läsa av exakt vilken funktion de tillhör, och det blir i princip bara programmering med parenteser. Alternativt kan objektet sparas om vid varje steg men det skapas många onödiga objekt som man måste hålla koll på när det egentligen bara är det sista steget som är relevant.</p>
+<section id="koppla-samman-funktioner-med-pipes" class="level2">
+<h2 class="anchored" data-anchor-id="koppla-samman-funktioner-med-pipes">Koppla samman funktioner med pipes</h2>
+<p>Inom programmering, speciellt databearbetning, är det vanligt att vi vill skapa ett objekt, göra någon bearbetning på den, använda den i en statistisk analys och så vidare. Att nästla funktioner inuti varandra blir lätt väldigt krångligt att läsa och förstå vad som faktiskt händer eller vilka argument som hör till vilken funktion. Alternativet är att spara om objektet flera gånger men då skapas många onödiga objekt som vi måste hålla koll på och som egentligen bara tar upp plats i arbetsminnet.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Fyra nästlade funktioner som ska appliceras på ett objekt med olika argument</span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fyra nästlade funktioner som ska appliceras på ett objekt med olika argument</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">funktion4</span>(<span class="fu">funktion3</span>(<span class="fu">funktion2</span>(<span class="fu">funktion1</span>(objekt), <span class="at">argument2 =</span> X)), <span class="at">argument4 =</span> Y)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Fyra funktioner som sparas vid varje steg</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fyra funktioner som sparas vid varje steg</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">funktion1</span>(objekt)</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">funktion2</span>(A, <span class="at">argument2 =</span> X)</span>
@@ -448,56 +508,278 @@ Viktigt
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">funktion3</span>(B)</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">funktion4</span>(C, <span class="at">argument4 =</span> Y)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
-<p>Istället kan vi använda en <em>pipe</em> operator för att skapa sekvenser av funktioner. Från paketet <code>dplyr</code> används operatorn <code>%&gt;%</code> för detta. Denna operator läses som att resultatet innan <code>%&gt;%</code> skickas vidare till det första argumentet i funktionen efter <code>%&gt;%</code>.</p>
+<p>Inom <code>tidyverse</code> används istället en annan process som kallas för programmeringspipes som kan skapa sekvenser av funktioner som är sammanlänkade i varandra.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Från paketet <code>dplyr</code> används operatorn <code>%&gt;%</code> som kan skapas med kortkommandot Ctrl + Shift + M (CMD + Shift + M). Denna operator tar resultatet från funktionen innan <code>%&gt;%</code> och skickar vidare det som det första argumentet i funktionen efter <code>%&gt;%</code>.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>objekt <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion1</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion2</span>(<span class="at">argument2 =</span> X) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion3</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion4</span>(<span class="at">argument4 =</span> Y)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Samma operation av fyra funktioner men med piping</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>objekt <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion1</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion2</span>(<span class="at">argument2 =</span> X) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion3</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion4</span>(<span class="at">argument4 =</span> Y)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Funktioner som inte behöver fler än ett argument skrivs bara som funktionen med tomma parenteser. Funktioner som har ytterligare argument anger bara dessa nya.</p>
-<p>Det kan finnas funktioner vars argument vi vill lägga in resultatet från en tidigare funktion <strong>inte</strong> är det första argumentet. Som tur är kan vi lösa detta genom att använda <code>.</code> som symbolen för det tidigare resultatet och ange det vid argumentet som är aktuellt.</p>
+<p>Funktioner som inte behöver fler än ett argument skrivs bara ut som funktionen med tomma parenteser då resultatet används automatiskt som värdet på det argumentet. Funktioner som har ytterligare argument behöver bara ange de argument som inte använder sig av det tidigare resultatet.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det kan finnas funktioner som vill använda det tidigare resultatet i ett argument som inte är det första i funktionen. Som tur är kan vi lösa detta genom att använda <code>.</code> som symbolen för det tidigare resultatet och ange det vid argumentet som är aktuellt.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Objektet (.) läggs här in som värde för det andra argumentet i funktionen</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Objektet (.) läggs här in som värde för det andra argumentet i funktionen</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>objekt <span class="sc">%&gt;%</span> </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion5</span>(<span class="at">argument1 =</span> X, <span class="at">argument2 =</span> .)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
-<p>I resterande kodexempel kommer denna pipe operator användas frekvent för att underlätta läsningen av koden.</p>
+</div>
+</div>
 </section>
-<section id="följande-kapitel-är-under-uppbyggnad" class="level1">
-<h1>FÖLJANDE KAPITEL ÄR UNDER UPPBYGGNAD</h1>
 <section id="databearbetning-med-dplyr" class="level2">
 <h2 class="anchored" data-anchor-id="databearbetning-med-dplyr">Databearbetning med <code>dplyr</code></h2>
-<p>Datamaterialet behöver rensas från saknade värden för dessa kommer ställa till problem. I denna kod används <code>filter()</code> från paketet <code>dplyr</code> där datamaterialet <code>penguins</code> rensas från observationer där <code>sex</code> är <code>NA</code>, Rs sätt att ange saknade värden (not available). Mer om databearbetning kommer visas i kapitel <span class="quarto-unresolved-ref">?sec-tidyverse</span>.</p>
+<p>Med hjälp av de tidigare kapitlen och det “nya” sättet att skriva sekvenser av funktioner med pipes kan vi nu börja titta närmare på databearbetning av objekt till en <code>tibble</code>. Det är vanligt att vi i databearbetning behöver göra flera steg för att skapa det objekt vi sen vill analysera och då kommer <code>%&gt;%</code> mycket väl till pass.</p>
+<p><code>dplyr</code> innehåller ett flertal olika “verb” som på ett sätt eller annat bearbetar data. Det första argumentet i alla dessa funktioner är ett dataobjekt men om vi använder pipes kommer det ske per automatik och vi behöver endast fokusera på de andra argumentet som beskriver hur “verbet” används.</p>
+<section id="byta-namn-på-variabler-med-rename" class="level3">
+<h3 class="anchored" data-anchor-id="byta-namn-på-variabler-med-rename">Byta namn på variabler med <code>rename()</code></h3>
+<p>Data som läses in till R kan ibland ha konstiga och långa namn som vid programmering kan bli svåra att hantera. Ett sätt att underlätta detta problem är att döpa om variablerna till ett enkelt ord som vi sedan kan använda i efterföljande steg.</p>
+<p>Vi kan döpa om variabler med hjälp av <code>rename()</code> där vi anger det nya namnet givet det gamla namnet på variabeln eller variabelns kolumnindex.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(dplyr)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Filtrerar bort observationer som saknar information</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">filter</span>(penguins, <span class="sc">!</span><span class="fu">is.na</span>(sex))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Döper om variabler till svenska namn utifrån det gamla namnet</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">art =</span> species,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    näbblängd <span class="ot">=</span> bill_length_mm</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 333 × 8
+   art    island    näbblängd bill_depth_mm flipper_length_mm body_mass_g sex   
+   &lt;fct&gt;  &lt;fct&gt;         &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt; 
+ 1 Adelie Torgersen      39.1          18.7               181        3750 male  
+ 2 Adelie Torgersen      39.5          17.4               186        3800 female
+ 3 Adelie Torgersen      40.3          18                 195        3250 female
+ 4 Adelie Torgersen      36.7          19.3               193        3450 female
+ 5 Adelie Torgersen      39.3          20.6               190        3650 male  
+ 6 Adelie Torgersen      38.9          17.8               181        3625 female
+ 7 Adelie Torgersen      39.2          19.6               195        4675 male  
+ 8 Adelie Torgersen      41.1          17.6               182        3200 female
+ 9 Adelie Torgersen      38.6          21.2               191        3800 male  
+10 Adelie Torgersen      34.6          21.1               198        4400 male  
+# ℹ 323 more rows
+# ℹ 1 more variable: year &lt;int&gt;</code></pre>
 </div>
-<p>select filter</p>
-<p>rename relocate arrange</p>
-<p>mutate transmute</p>
-<p>group_by summarize</p>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Döper om variabler till svenska namn utifrån dess kolumnindex</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">art =</span> <span class="dv">1</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    näbblängd <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 333 × 8
+   art    island    näbblängd bill_depth_mm flipper_length_mm body_mass_g sex   
+   &lt;fct&gt;  &lt;fct&gt;         &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt; 
+ 1 Adelie Torgersen      39.1          18.7               181        3750 male  
+ 2 Adelie Torgersen      39.5          17.4               186        3800 female
+ 3 Adelie Torgersen      40.3          18                 195        3250 female
+ 4 Adelie Torgersen      36.7          19.3               193        3450 female
+ 5 Adelie Torgersen      39.3          20.6               190        3650 male  
+ 6 Adelie Torgersen      38.9          17.8               181        3625 female
+ 7 Adelie Torgersen      39.2          19.6               195        4675 male  
+ 8 Adelie Torgersen      41.1          17.6               182        3200 female
+ 9 Adelie Torgersen      38.6          21.2               191        3800 male  
+10 Adelie Torgersen      34.6          21.1               198        4400 male  
+# ℹ 323 more rows
+# ℹ 1 more variable: year &lt;int&gt;</code></pre>
+</div>
+</div>
 </section>
-<section id="hantering-av-text-med-stringr-och-forcats" class="level2">
-<h2 class="anchored" data-anchor-id="hantering-av-text-med-stringr-och-forcats">Hantering av text med <code>stringr</code> och <code>forcats</code></h2>
+<section id="plocka-ut-rader-med-filter" class="level3">
+<h3 class="anchored" data-anchor-id="plocka-ut-rader-med-filter">Plocka ut rader med <code>filter()</code></h3>
+<p>Om vi är intresserade av att plocka ut vissa rader ur ett objekt, till exempel om vi vill rensa bort saknade värden, kan vi använda <code>filter()</code> med någon logisk operator som säger vilka rader vi vill ha kvar.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrerar bort observationer som saknar information ur variabeln "sex"</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>penguinsNonMissing <span class="ot">&lt;-</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(penguinsNonMissing)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 333 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           36.7          19.3               193        3450
+ 5 Adelie  Torgersen           39.3          20.6               190        3650
+ 6 Adelie  Torgersen           38.9          17.8               181        3625
+ 7 Adelie  Torgersen           39.2          19.6               195        4675
+ 8 Adelie  Torgersen           41.1          17.6               182        3200
+ 9 Adelie  Torgersen           38.6          21.2               191        3800
+10 Adelie  Torgersen           34.6          21.1               198        4400
+# ℹ 323 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>Vi kan också plocka ut rader som uppfyller ett visst kriterie, till exempel plocka ut alla Adelie pingviner.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Adelie"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 146 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           36.7          19.3               193        3450
+ 5 Adelie  Torgersen           39.3          20.6               190        3650
+ 6 Adelie  Torgersen           38.9          17.8               181        3625
+ 7 Adelie  Torgersen           39.2          19.6               195        4675
+ 8 Adelie  Torgersen           41.1          17.6               182        3200
+ 9 Adelie  Torgersen           38.6          21.2               191        3800
+10 Adelie  Torgersen           34.6          21.1               198        4400
+# ℹ 136 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="plocka-ut-kolumner-med-select" class="level3">
+<h3 class="anchored" data-anchor-id="plocka-ut-kolumner-med-select">Plocka ut kolumner med <code>select()</code></h3>
+<p>Anta att vi bara är intresserade av vissa kolumner från ett stort datamaterial, till exempel art och fenlängd av pingvinerna kan vi plocka ut de med hjälp av <code>select()</code>. Vi kan antingen använda variablernas faktiska namn eller variablernas kolumnindex för att specificera vilka variabler som ska plockas ut.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select med variabelnamn</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(species, flipper_length_mm)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 333 × 2
+   species flipper_length_mm
+   &lt;fct&gt;               &lt;int&gt;
+ 1 Adelie                181
+ 2 Adelie                186
+ 3 Adelie                195
+ 4 Adelie                193
+ 5 Adelie                190
+ 6 Adelie                181
+ 7 Adelie                195
+ 8 Adelie                182
+ 9 Adelie                191
+10 Adelie                198
+# ℹ 323 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select med kolumnindex</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span>, <span class="dv">5</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 333 × 2
+   species flipper_length_mm
+   &lt;fct&gt;               &lt;int&gt;
+ 1 Adelie                181
+ 2 Adelie                186
+ 3 Adelie                195
+ 4 Adelie                193
+ 5 Adelie                190
+ 6 Adelie                181
+ 7 Adelie                195
+ 8 Adelie                182
+ 9 Adelie                191
+10 Adelie                198
+# ℹ 323 more rows</code></pre>
+</div>
+</div>
+<p>Det rekommenderas att använda variabelnamnen för att koden ska vara tydlig att läsa av och vi vet vilka variabler som faktiskt plockas ut och ev. skickas vidare till efterföljande funktioner.</p>
+<p>Om vi har flera variabler som följer efter varandra behöver vi inte skriva upp varje enskilda variabelnamn som argument utan kan använda <code>Var1:Var5</code> för att säga åt funktionen att plocka ut alla variabler från och med <code>Var1</code> till och med <code>Var5</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(species, bill_length_mm<span class="sc">:</span>body_mass_g)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 333 × 5
+   species bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;            &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie            39.1          18.7               181        3750
+ 2 Adelie            39.5          17.4               186        3800
+ 3 Adelie            40.3          18                 195        3250
+ 4 Adelie            36.7          19.3               193        3450
+ 5 Adelie            39.3          20.6               190        3650
+ 6 Adelie            38.9          17.8               181        3625
+ 7 Adelie            39.2          19.6               195        4675
+ 8 Adelie            41.1          17.6               182        3200
+ 9 Adelie            38.6          21.2               191        3800
+10 Adelie            34.6          21.1               198        4400
+# ℹ 323 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="byta-plats-på-variabler-med-relocate" class="level3">
+<h3 class="anchored" data-anchor-id="byta-plats-på-variabler-med-relocate">Byta plats på variabler med <code>relocate()</code></h3>
+<p>Ibland kan vi vilja byta ordning på variablerna i datamaterialet utan att välja dem. Med <code>select()</code> får vi en möjlighet att välja vilken ordning som variablerna plockas ut, den ordning som vi anger dem i funktionen, men om vi bara vill flytta på variabler utan att plocka ut vissa kan <code>relocate()</code> användas istället.</p>
+<p>Funktionen använder sig av tre argument, vilka variabler som ska flyttas och var de ska placeras. Som standard placeras de i början av datamaterialet.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Placerar fenlängd som första kolumnen</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(flipper_length_mm)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 333 × 8
+   flipper_length_mm species island    bill_length_mm bill_depth_mm body_mass_g
+               &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;       &lt;int&gt;
+ 1               181 Adelie  Torgersen           39.1          18.7        3750
+ 2               186 Adelie  Torgersen           39.5          17.4        3800
+ 3               195 Adelie  Torgersen           40.3          18          3250
+ 4               193 Adelie  Torgersen           36.7          19.3        3450
+ 5               190 Adelie  Torgersen           39.3          20.6        3650
+ 6               181 Adelie  Torgersen           38.9          17.8        3625
+ 7               195 Adelie  Torgersen           39.2          19.6        4675
+ 8               182 Adelie  Torgersen           41.1          17.6        3200
+ 9               191 Adelie  Torgersen           38.6          21.2        3800
+10               198 Adelie  Torgersen           34.6          21.1        4400
+# ℹ 323 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Placerar art efter näbbreddens variabel</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, <span class="at">.after =</span> bill_depth_mm)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 333 × 8
+   island    bill_length_mm bill_depth_mm species flipper_length_mm body_mass_g
+   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt; &lt;fct&gt;               &lt;int&gt;       &lt;int&gt;
+ 1 Torgersen           39.1          18.7 Adelie                181        3750
+ 2 Torgersen           39.5          17.4 Adelie                186        3800
+ 3 Torgersen           40.3          18   Adelie                195        3250
+ 4 Torgersen           36.7          19.3 Adelie                193        3450
+ 5 Torgersen           39.3          20.6 Adelie                190        3650
+ 6 Torgersen           38.9          17.8 Adelie                181        3625
+ 7 Torgersen           39.2          19.6 Adelie                195        4675
+ 8 Torgersen           41.1          17.6 Adelie                182        3200
+ 9 Torgersen           38.6          21.2 Adelie                191        3800
+10 Torgersen           34.6          21.1 Adelie                198        4400
+# ℹ 323 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="sortera-data-med-arrange" class="level3">
+<h3 class="anchored" data-anchor-id="sortera-data-med-arrange">Sortera data med <code>arrange()</code></h3>
+</section>
+<section id="skapa-nya-variabler-med-mutate" class="level3">
+<h3 class="anchored" data-anchor-id="skapa-nya-variabler-med-mutate">Skapa nya variabler med <code>mutate()</code></h3>
+</section>
+<section id="gruppera-beräkningar-med-group_by" class="level3">
+<h3 class="anchored" data-anchor-id="gruppera-beräkningar-med-group_by">Gruppera beräkningar med <code>group_by()</code></h3>
+</section>
+<section id="sammanfatta-data-med-summarize" class="level3">
+<h3 class="anchored" data-anchor-id="sammanfatta-data-med-summarize">Sammanfatta data med <code>summarize()</code></h3>
+<!-- ## Hantering av text med `stringr` och `forcats` -->
 
 
 </section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Även basversionen av R/RStudio har anammat denna process och det finns nu två varianter av en pipe. Detta underlag kommer använda <code>tidyverse</code> varianten.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -536,18 +818,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -579,7 +850,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -587,7 +880,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

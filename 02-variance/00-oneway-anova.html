@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>13&nbsp; Introduktion till variansanalys – Statistisk teori och tillämpningar i R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../02-variance/01-random-factors.html" rel="next">
+<link href="../02-variance/index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content="..">
+<script src="../site_libs/quarto-contrib/shinylive-0.5.0/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="../site_libs/quarto-contrib/shinylive-0.5.0/shinylive/run-python-blocks.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/shinylive-0.5.0/shinylive/shinylive.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Inget resultat",
+    "search-matching-documents-text": "matchande dokument",
+    "search-copy-link-title": "Kopiera länk för att söka",
+    "search-hide-matches-text": "Göm ytterligare resultat",
+    "search-more-match-text": "annat resultat i detta dokument",
+    "search-more-matches-text": "fler resultat i detta dokument",
+    "search-clear-button-title": "Rensa",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Verkställ",
+    "search-label": "Sök"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Skifta navigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../00-programming/index.qmd"> 
+<span class="menu-text">Programmering i R</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../01-regression/index.html" aria-current="page"> 
+<span class="menu-text">Regressionsanalys</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../02-variance/index.html"> 
+<span class="menu-text">Varianssanalys</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html"><strong>DEL III - Variansanalys</strong></a></li><li class="breadcrumb-item"><a href="../02-variance/00-oneway-anova.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Sök"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inledning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Grunderna i R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Paket och funktioner</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">tidyverse</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>DEL II - Regressionsanalys</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Förord</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/09-variable-selection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/10-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/11-other-link-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>DEL III - Variansanalys</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Förord</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innehållsförteckning</h2>
+   
+  <ul>
+  <li><a href="#envägs-anova" id="toc-envägs-anova" class="nav-link active" data-scroll-target="#envägs-anova"><span class="header-section-number">13.1</span> Envägs-ANOVA</a>
+  <ul class="collapse">
+  <li><a href="#faktoreffektkodning-av-kvalitativa-variabler" id="toc-faktoreffektkodning-av-kvalitativa-variabler" class="nav-link" data-scroll-target="#faktoreffektkodning-av-kvalitativa-variabler"><span class="header-section-number">13.1.1</span> Faktoreffektkodning av kvalitativa variabler</a></li>
+  </ul></li>
+  <li><a href="#analys-av-metoder-för-ogräsbekämpning" id="toc-analys-av-metoder-för-ogräsbekämpning" class="nav-link" data-scroll-target="#analys-av-metoder-för-ogräsbekämpning"><span class="header-section-number">13.2</span> Analys av metoder för ogräsbekämpning</a>
+  <ul class="collapse">
+  <li><a href="#kodning-av-faktorer" id="toc-kodning-av-faktorer" class="nav-link" data-scroll-target="#kodning-av-faktorer"><span class="header-section-number">13.2.1</span> Kodning av faktorer</a></li>
+  <li><a href="#modellanpassning" id="toc-modellanpassning" class="nav-link" data-scroll-target="#modellanpassning"><span class="header-section-number">13.2.2</span> Modellanpassning</a></li>
+  </ul></li>
+  <li><a href="#residualanalys" id="toc-residualanalys" class="nav-link" data-scroll-target="#residualanalys"><span class="header-section-number">13.3</span> Residualanalys</a></li>
+  <li><a href="#inferens" id="toc-inferens" class="nav-link" data-scroll-target="#inferens"><span class="header-section-number">13.4</span> Inferens</a>
+  <ul class="collapse">
+  <li><a href="#f-test-för-faktoreffekt" id="toc-f-test-för-faktoreffekt" class="nav-link" data-scroll-target="#f-test-för-faktoreffekt"><span class="header-section-number">13.4.1</span> F-test för faktoreffekt</a></li>
+  <li><a href="#multipla-jämförelser-med-familjekonfidens" id="toc-multipla-jämförelser-med-familjekonfidens" class="nav-link" data-scroll-target="#multipla-jämförelser-med-familjekonfidens"><span class="header-section-number">13.4.2</span> Multipla jämförelser med familjekonfidens</a></li>
+  </ul></li>
+  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html"><strong>DEL III - Variansanalys</strong></a></li><li class="breadcrumb-item"><a href="../02-variance/00-oneway-anova.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- New commands for matrices in regression -->
+<!-- Creates a shortcommand for sums -->
+<!-- CONTENT -->
+<p>I <a href="../01-regression/00-intro-regression.html" class="quarto-xref"><span>Kapitel 1</span></a> studerade vi förhållandet mellan en responsvariabel och en eller flera förklarande variabler. Om en förklarande variabel är kvalitativ transformerade vi variabeln till indikatorvariabler för att kunna matematiskt hantera variabeln på ett korrekt sätt.</p>
+<p>Om en regressionsmodell endast skulle bestå utav kvalitativa variabler är regressionsmodellen ekvivalent med att jämföra medelvärden för varje värde av den kvalitativa variabeln. Att undersöka flera medelvärden med varandra kan också kallas för <em>variansanalys</em> och används ofta inom experimentella studier. I variansanalys kallas de förklarande variablerna för <em>faktorer</em> och dess kategorier för <em>faktornivåer</em>.</p>
+<section id="envägs-anova" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="envägs-anova"><span class="header-section-number">13.1</span> Envägs-ANOVA</h2>
+<p>En regressionsmodell med en kontinuerligt kvantitativ responsvariabel och en kvalitativ faktor (förklarande variabel) kallas för en <em>envägs-ANOVA</em>. Eftersom detta är i grunden en regressionsmodell kan vi formulera modellen som vi gjort i del II:</p>
+<p><span class="math display">\[
+\begin{aligned}
+  Y_{ij} = \beta_0 + \beta_1 \cdot X_{1j} + \dots + \beta_{A-1}\cdot X_{(A-1)j} + E_{ij}
+\end{aligned}
+\]</span> där</p>
+<ul>
+<li><span class="math inline">\(j\)</span> är observationsindex som går mellan 1:<span class="math inline">\(n_i\)</span> där <span class="math inline">\(n_i\)</span> är antalet observationer inom nivå <span class="math inline">\(i\)</span> av faktorn,</li>
+<li><span class="math inline">\(A\)</span> är antalet nivåer av faktorn,</li>
+<li>respektive <span class="math inline">\(X_{ij}\)</span> är indikatorkodade variabler som indikerar på nivå <span class="math inline">\(i\)</span> av faktorn.</li>
+</ul>
+<p>När alla indikatorvariabler är 0 identifieras den sista kategorin <span class="math inline">\(i = A\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Till skillnad från den vanliga regressionsmodellen har <span class="math inline">\(Y\)</span> nu fått två index, en för nivån av faktorn och en för observationerna inuti faktorn. Vi kommer se flera modeller inom variansanalys där vi ytterligare utökar index men det vi kan ha i åtanke är att det sista indexet alltid kommer vara observationsindex.</p>
+</div>
+</div>
+<p>I praktiken kommer denna modell prediktera ett och samma värde för varje observation som har samma nivå av faktorn eftersom högst en indikatorvariabel kan vara 1 och ge en effekt av det tillhörande <span class="math inline">\(\beta_i\)</span> på det anpassade värdet. Detta anpassade värde kommer beskriva respektive nivås medelvärde enligt:</p>
+<p><span class="math display">\[
+\begin{aligned}
+Y_{j = 1} &amp;= \mu_1 = \beta_0 + \beta_1 \\
+Y_{j = 2} &amp;= \mu_2 = \beta_0 + \beta_2 \\
+&amp;\vdots \\
+Y_{j = J-1} &amp;= \mu_{J-1} = \beta_0 + \beta_{J-1} \\
+Y_{j = J} &amp;= \mu_J = \beta_0
+\end{aligned}
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Inom variansanalys kan denna sorts modell direkt modelleras utefter respektive nivås medelvärden istället för regressionsmodellen. Detta kallas för en <em>cellmedelvärdesmodell</em> som beräknar medelvärdet för varje cell av data, i envägs-ANOVA innebär detta för varje faktornivå.</p>
+<p><span class="math display">\[
+\begin{aligned}
+Y_{ij} = \mu_i + E_{ij}
+\end{aligned}
+\]</span> där <span class="math inline">\(j\)</span> är observationsindex och <span class="math inline">\(\mu_i\)</span> är cellmedelvärdet för nivå <span class="math inline">\(i\)</span> av faktorn.</p>
+</div>
+</div>
+<p>I och med att en ANOVA-modell endast är ett specialfall av linjär regression gäller fortfarande att <span class="math inline">\(E_{ij} \sim N(0, \sigma^2)\)</span> och att modellen bör utvärderas med hjälp av residualanalys från <a href="../01-regression/03-model-assessment.html" class="quarto-xref"><span>Kapitel 4</span></a> innan vi går vidare till inferensmetoder.</p>
+<section id="faktoreffektkodning-av-kvalitativa-variabler" class="level3" data-number="13.1.1">
+<h3 data-number="13.1.1" class="anchored" data-anchor-id="faktoreffektkodning-av-kvalitativa-variabler"><span class="header-section-number">13.1.1</span> Faktoreffektkodning av kvalitativa variabler</h3>
+<p>Ett alternativt sätt att koda en kvalitativ variabel är att använda <em>faktoreffektkodning</em>. Istället för att parametern vid indikatorkodning mäter varje nivås effekt jämfört med en referenskategori, som i många fall väljs godtyckligt och påverkar varje parametervärde därefter, mäter parametern vid faktoreffektkodning <strong>effekten jämfört med det övergripande medelvärdet</strong>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  Y_{ij} = \mu + \beta_1 \cdot X_{1j} + \dots + \beta_{A-1}\cdot X_{(A-1)j} + E_{ij}
+\end{aligned}
+\]</span> där</p>
+<ul>
+<li><span class="math inline">\(\mu\)</span> är det oviktade medelvärdet av <span class="math inline">\(Y_{ij}\)</span> enligt: <span class="math display">\[
+\begin{aligned}
+\mu &amp;= \frac{\mu_1 + \mu_2 + \cdots + \mu_A}{A}
+\end{aligned}
+\]</span></li>
+<li><span class="math inline">\(\beta_i\)</span> är skillnaden/effekten av nivå <span class="math inline">\(i\)</span> på det övergripande medelvärdet <span class="math inline">\(\mu\)</span> enligt: <span class="math display">\[
+\begin{aligned}
+  \beta_i = \mu_i - \mu
+\end{aligned}
+\]</span></li>
+<li><span class="math inline">\(X_{ij}\)</span> är en faktoreffektkodad variabel enligt: <span class="math display">\[
+\begin{aligned}
+  X_{ij} =
+  \begin{cases}
+      1 \quad &amp;\text{om nivå i}\\
+      -1      &amp;\text{om nivå A}\\
+      0       &amp;\text{annars}
+  \end{cases}
+\end{aligned}
+\]</span></li>
+</ul>
+<p>Med hjälp av denna kodning kan vi beräkna fram nivå <span class="math inline">\(A\)</span>s effekt som den negativa summan av de övriga parametrarna trots att den inte anges direkt i modellen.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  \beta_A = -(\beta_1 + \beta_2 + \cdots + \beta_{A-1}) = \mu_A - \mu
+\end{aligned}
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Viss litteratur börjar vid dessa modeller att byta beteckningar på parametrarna. Till exempel använder <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span> <span class="math inline">\(\alpha_i\)</span> som beteckning för faktoreffekten av nivå <span class="math inline">\(i\)</span> istället för att fortsätta med regressionsmodellens beteckningar. Detta underlag kommer bibehålla användandet av <span class="math inline">\(\beta\)</span> men beskriva parametrar och tillhörande variabler så att det går att särskilja modeller från varandra.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="analys-av-metoder-för-ogräsbekämpning" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="analys-av-metoder-för-ogräsbekämpning"><span class="header-section-number">13.2</span> Analys av metoder för ogräsbekämpning</h2>
+<p>Anta att experiment genomförst som undersöker hur olika ogräsbekämpningar i Etiopien påverkar skörden av durra (i kg per hektar). Mer specifikt är de olika bekämpningsmetoderna:</p>
+<ul>
+<li><em>1</em> - Hacka, 1 ggr (hacka för hand en gång, fyra veckor efter att första grödan grott)</li>
+<li><em>2</em> - Hacka, 2 ggr (hacka för hand två gånger, fyra och åtta veckor efter att första grödan grott)</li>
+<li><em>3</em> - Samodling med kikärter (kikärter agerar som en täckningsgröda som motverkar tillväxten av ogräs)</li>
+<li><em>4</em> - Samodling med kikärter, hacka 1 ggr (kombination av samodling och hacka för hand en gång, fyra veckor efter att första grödan grott)</li>
+<li><em>5</em> - Ogräsfri kontroll (konstant bekämpning av ogräs med hacka)</li>
+<li><em>6</em> - Ingen bekämpning</li>
+<li><em>7</em> - Herbicid (ogräsmedlet 2,4-D appliceras sex veckor efter att första grödan grott)</li>
+</ul>
+<p>Datamaterialet kan laddas ner <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/weeds.csv">här</a>. Mer information om detta material finns att läsa via <a href="http://www.bioone.org/doi/abs/10.1614/WT-03-033R">denna länk</a>.</p>
+<p>Vi kan läsa in datamaterialet till R och döpa om variablerna till enklare namn för att underlätta vår senare kodning. Vi måste också säkerställa att faktorn av intresse också kodas som en kategorisk variabel i R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>weeds <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">"DIN SÖKVÄG/weeds.csv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">metod =</span> <span class="dv">1</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    skörd <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Måste säkerställa att den kvalitativa variabeln är en faktor</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">metod =</span> <span class="fu">as.factor</span>(metod)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>För att få en bild av materialet och responsvariabeln uppdelat på de olika faktornivåerna kan vi visualisera responsvariabelns fördelning med grupperade histogram, lådagram eller fioldiagram.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>weeds <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> metod, <span class="at">y =</span> skörd) <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="00-oneway-anova_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Fördelningen av skörd uppdelat på de olika bekämpningsnivåerna</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Vi kan i visualiseringen se att den uppmätta skörden skiljer sig åt mellan de olika bekämpningsmetoderna.</p>
+<p>Anta att vi använder faktoreffektkodning för att skapa följande modell som ska anpassas: <span id="eq-effect-code-model-example"><span class="math display">\[
+\begin{aligned}
+    Y_{ij} = \mu + \beta_1 \cdot X_{1j} + \beta_{2}\cdot X_{2j} +\dots + \beta_{6}\cdot X_{6j} + E_{ij}
+\end{aligned}
+\tag{13.1}\]</span></span> där <span class="math display">\[
+\begin{aligned}
+    \mu &amp;= \frac{\mu_1 + \mu_2 + \dots + \mu_6 + \mu_7}{7} \\
+    X_{1j} &amp;=
+    \begin{cases}
+        1 \quad &amp;\text{om bekämpningsmetod 1}\\
+        -1      &amp;\text{om bekämpningsmetod 7}\\
+        0       &amp;\text{annars}
+    \end{cases} \\
+    X_{2j} &amp;=
+    \begin{cases}
+        1 \quad &amp;\text{om bekämpningsmetod 2}\\
+        -1      &amp;\text{om bekämpningsmetod 7}\\
+        0       &amp;\text{annars}
+    \end{cases} \\
+    X_{3j} &amp;=
+    \begin{cases}
+        1 \quad &amp;\text{om bekämpningsmetod 3}\\
+        -1      &amp;\text{om bekämpningsmetod 7}\\
+        0       &amp;\text{annars}
+    \end{cases} \\
+    X_{4j} &amp;=
+    \begin{cases}
+        1 \quad &amp;\text{om bekämpningsmetod 4}\\
+        -1      &amp;\text{om bekämpningsmetod 7}\\
+        0       &amp;\text{annars}
+    \end{cases} \\
+    X_{5j} &amp;=
+    \begin{cases}
+        1 \quad &amp;\text{om bekämpningsmetod 5}\\
+        -1      &amp;\text{om bekämpningsmetod 7}\\
+        0       &amp;\text{annars}
+    \end{cases} \\
+    X_{6j} &amp;=
+    \begin{cases}
+        1 \quad &amp;\text{om bekämpningsmetod 6}\\
+        -1      &amp;\text{om bekämpningsmetod 7}\\
+        0       &amp;\text{annars}
+    \end{cases}
+\end{aligned}
+\]</span> och <span class="math inline">\(E_{ij} \sim N(0, \sigma^2)\)</span>.</p>
+<section id="kodning-av-faktorer" class="level3" data-number="13.2.1">
+<h3 data-number="13.2.1" class="anchored" data-anchor-id="kodning-av-faktorer"><span class="header-section-number">13.2.1</span> Kodning av faktorer</h3>
+<p>Eftersom standard i R är att koda kategoriska variabler med indikatorkodning (1/0) behöver vi först göra ytterligare ett steg innan vi anpassar modellen. R har flera sätt att ange hur en kategorisk variabel kodas, standard är att i bakgrunden köra <code>contr.treatment(A)</code> där A är antalet nivåer av faktorn.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contr.treatment</span>(<span class="dv">7</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  2 3 4 5 6 7
+1 0 0 0 0 0 0
+2 1 0 0 0 0 0
+3 0 1 0 0 0 0
+4 0 0 1 0 0 0
+5 0 0 0 1 0 0
+6 0 0 0 0 1 0
+7 0 0 0 0 0 1</code></pre>
+</div>
+</div>
+<p>Den resulterande matrisen visar strukturen för hur R indikatorkodar en faktor, där den första nivån blivit referenskategorin (alla kolumner är 0) och A-1 indikatorvariabler skapas.</p>
+<p>Om vi vill använda effektkodning behöver vi spara denna information i dataobjektet. Strukturen vi följer är att använda <code>contrasts(variabel) &lt;- kodning</code>. Effektkodning anges med hjälp av <code>contr.sum(A)</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contr.sum</span>(<span class="dv">7</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [,1] [,2] [,3] [,4] [,5] [,6]
+1    1    0    0    0    0    0
+2    0    1    0    0    0    0
+3    0    0    1    0    0    0
+4    0    0    0    1    0    0
+5    0    0    0    0    1    0
+6    0    0    0    0    0    1
+7   -1   -1   -1   -1   -1   -1</code></pre>
+</div>
+</div>
+<p>vars struktur kan sparas i dataobjektet genom:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(weeds<span class="sc">$</span>metod) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">7</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Med effektkodning blir den sista nivån angiven som “den saknade” vilket nu stämmer överens med <a href="#eq-effect-code-model-example" class="quarto-xref">Ekvation&nbsp;<span>13.1</span></a>. R kommer nu använda denna kodning när den linjära modellen anpassas.</p>
+</section>
+<section id="modellanpassning" class="level3" data-number="13.2.2">
+<h3 data-number="13.2.2" class="anchored" data-anchor-id="modellanpassning"><span class="header-section-number">13.2.2</span> Modellanpassning</h3>
+<p>Eftersom envägs-ANOVA endast är ett specialfall av en regression används <code>lm()</code> för att anpassa modellen.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(skörd <span class="sc">~</span> metod, <span class="at">data =</span> weeds)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellens koefficienter"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Modellens koefficienter</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">t value</th>
+<th style="text-align: right;">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">998.119</td>
+<td style="text-align: right;">83.006</td>
+<td style="text-align: right;">12.025</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod1</td>
+<td style="text-align: right;">-95.119</td>
+<td style="text-align: right;">203.323</td>
+<td style="text-align: right;">-0.468</td>
+<td style="text-align: right;">0.645</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod2</td>
+<td style="text-align: right;">500.159</td>
+<td style="text-align: right;">203.323</td>
+<td style="text-align: right;">2.460</td>
+<td style="text-align: right;">0.023</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod3</td>
+<td style="text-align: right;">-667.758</td>
+<td style="text-align: right;">203.323</td>
+<td style="text-align: right;">-3.284</td>
+<td style="text-align: right;">0.004</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod4</td>
+<td style="text-align: right;">90.214</td>
+<td style="text-align: right;">203.323</td>
+<td style="text-align: right;">0.444</td>
+<td style="text-align: right;">0.662</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod5</td>
+<td style="text-align: right;">1070.881</td>
+<td style="text-align: right;">203.323</td>
+<td style="text-align: right;">5.267</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod6</td>
+<td style="text-align: right;">-625.619</td>
+<td style="text-align: right;">203.323</td>
+<td style="text-align: right;">-3.077</td>
+<td style="text-align: right;">0.006</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Vi kan presentera modellens koefficienter i en tabell men eftersom kodningen har ändrats gentemot tidigare modeller, behöver vi också justera tolkningen. Till exempel får vi att den genomsnittliga skörden oavsett metod är ca 998.119 kg/hektar och metod 1 får i genomsnitt 95.119 kg/hektar mindre skörd än genomsnittet. Metod 7s effekt kan beräknas genom den negativa summan av alla lutningskoefficienter till -272.758 kg/hektar.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det finns ett alternativt sätt att anpassa just en ANOVA-modell, genom att använda funktionen <code>aov()</code>. <code>aov()</code> är egentligen bara en kombination av <code>lm()</code> och <code>anova()</code> där objektet fokuserar på att presentera ANOVA-tabellen istället för koefficienterna. Andra paket och funktioner än vad som tas upp i detta kapitel inom variansanalys kan ibland förutsätta att vi skapat ett <code>aov</code>-objekt istället för ett <code>lm</code>-objekt.</p>
+</div>
+</div>
+<p>Modellens predikterade värden kommer representera medelvärdesskattningar för respektive nivå och dessa kan beräknas enkelt med hjälp av paketet <code>emmeans</code>. Följande medelvärden beräknas:</p>
+<p><span class="math display">\[
+\begin{aligned}
+    \hat{\mu}_1 &amp;= \hat{\mu} + \beta_1\\
+    \hat{\mu}_2 &amp;= \hat{\mu} + \beta_2\\
+    &amp;\quad\vdots\\
+    \hat{\mu}_6 &amp;= \hat{\mu} + \beta_6\\
+    \hat{\mu}_7 &amp;= \hat{\mu} - \sum_{j = 1}^{A-1}\beta_j
+\end{aligned}
+\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(emmeans)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Anger vilka faktorer som medelvärden ska beräknas på</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(model, <span class="at">specs =</span> <span class="sc">~</span>metod) </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>means <span class="sc">%&gt;%</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Faktornivåernas medelvärden"</span>, </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Metod"</span>, <span class="st">"Faktormedelvärde"</span>, <span class="st">"Medelfel"</span>, <span class="st">"Frihetsgrader"</span>, <span class="st">"Nedre KI gräns"</span>, <span class="st">"Övre KI gräns"</span>))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Faktornivåernas medelvärden</caption>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 22%">
+<col style="width: 12%">
+<col style="width: 18%">
+<col style="width: 20%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metod</th>
+<th style="text-align: right;">Faktormedelvärde</th>
+<th style="text-align: right;">Medelfel</th>
+<th style="text-align: right;">Frihetsgrader</th>
+<th style="text-align: right;">Nedre KI gräns</th>
+<th style="text-align: right;">Övre KI gräns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">903.000</td>
+<td style="text-align: right;">219.614</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">446.287</td>
+<td style="text-align: right;">1359.713</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1498.278</td>
+<td style="text-align: right;">219.614</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1041.565</td>
+<td style="text-align: right;">1954.991</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">330.361</td>
+<td style="text-align: right;">219.614</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-126.352</td>
+<td style="text-align: right;">787.074</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">1088.333</td>
+<td style="text-align: right;">219.614</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">631.620</td>
+<td style="text-align: right;">1545.046</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">2069.000</td>
+<td style="text-align: right;">219.614</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1612.287</td>
+<td style="text-align: right;">2525.713</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">372.500</td>
+<td style="text-align: right;">219.614</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-84.213</td>
+<td style="text-align: right;">829.213</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7</td>
+<td style="text-align: right;">725.361</td>
+<td style="text-align: right;">219.614</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">268.648</td>
+<td style="text-align: right;">1182.074</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Konfidensintervallen som beräknas i detta resultat bör inte tolkas innan en residualanalys genomförts.</p>
+</section>
+</section>
+<section id="residualanalys" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="residualanalys"><span class="header-section-number">13.3</span> Residualanalys</h2>
+<p>Modellens lämplighet kan utvärderas på samma sätt som linjär regression från <a href="../01-regression/03-model-assessment.html" class="quarto-xref"><span>Kapitel 4</span></a>. Då modellen endast består av kategoriska nivåer och de predikterade värdena är samma för varje observation inom respektive nivå, kommer dessa observationer få samma predikterade värde, <span class="math inline">\(\hat{\mu}_j\)</span>. Residualerna kommer därför att grupperas i de olika nivåerna.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(model)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="00-oneway-anova_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Residualdiagram för modellen</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Utöver att modellerna grupperar residualerna baseras ofta experimentella studier på ett begränsat antal observationer jämfört med observationsstudier. Detta medför att slutsatser om modellens lämplighet är ibland rätt så svåra att bedöma på grund utav det låga stickprovsantalet.</p>
+<p>Den största avvikelsen som kan läsas i diagrammet är antagandet om lika varians där punktsvärmen för metod 1 har betydligt mindre varians än de övriga grupperna. Detta ger en antydan till att antagandet om lika varians inte uppfylls.</p>
+<!-- TODO ADD MORE ABOUT ASSUMPTIONS IN ANOVA -->
+</section>
+<section id="inferens" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="inferens"><span class="header-section-number">13.4</span> Inferens</h2>
+<p>För envägs-ANOVA är vi intresserade av två aspekter; bidrar faktorn överhuvudtaget med någon effekt som kan hjälpa till att förklara responsvariabeln och i sådana fall vilken (eller vilka) nivå(er) bidrar till denna effekt.</p>
+<section id="f-test-för-faktoreffekt" class="level3" data-number="13.4.1">
+<h3 data-number="13.4.1" class="anchored" data-anchor-id="f-test-för-faktoreffekt"><span class="header-section-number">13.4.1</span> F-test för faktoreffekt</h3>
+<p>Eftersom modellen endast består av en enstaka faktor kan ett F-test för modellen användas för att bedöma om faktorn har någon signifikant effekt. Vi undersöker: <span class="math display">\[
+\begin{aligned}
+    H_0&amp;: \beta_1 = \beta_2 = \dots = \beta_{A-1} = 0 \\
+    H_A&amp;: \text{Minst en av } \beta_i \text{ i } H_0 \ne 0
+\end{aligned}
+\]</span> Oavsett vilken kodning som används för att transformera den kvalitativa variabeln kommer <span class="math inline">\(H_0\)</span> beskriva fallet när det inte finns någon effekt oberoende på vilken faktornivå som observerats.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Eftersom vi kan förenkla modellen till att anpassa ett medelvärde för respektive nivå kan vi också formulera hypoteserna enligt: <span class="math display">\[
+\begin{aligned}
+    H_0&amp;: \mu_1 = \mu_2 = \dots = \mu_{A-1} = \mu_A \\
+    H_A&amp;: \text{Minst två av } \mu_i \text{ i } H_0 \text{ skiljer sig åt}
+\end{aligned}
+\]</span></p>
+<p>En effekt av faktorn skulle i denna formulering visas som en skillnad mellan (minst) två nivåers medelvärden. Vi skulle kunna anse denna form av hypoteser som en utveckling av jämförelser mellan två medelvärden som används i grundkurser av statistik.</p>
+</div>
+</div>
+<p>Namnet variansanalys uppkommer då vi för dessa hypotesprövningar vill jämföra varianser av olika komponenter, likt vi gjort för regressionsmodeller i <a href="../01-regression/04-statistical-inference.html" class="quarto-xref"><span>Kapitel 5</span></a>. Mer specifikt undersöker vi relationen mellan den förklarande variationen och den oförklarande variationen vars formler vi nu kan förenkla när vi bara har kvalitativa förklarande variabler.</p>
+<p>Vi kan definiera följande kvadratsummor för modellen:</p>
+<p><span class="math display">\[
+\begin{aligned}
+  SSY &amp;= \sum_{i=1}^A\sum_{j=1}^{n_i}{(Y_{ij} - \overline{Y})^2} \\
+  SSR &amp;= \sum_{i=1}^A{n_i \cdot (\overline{Y}_i - \overline{Y})^2} \\
+  SSE &amp;= \sum_{i=1}^A\sum_{j=1}^{n_i}{(Y_{ij} - \overline{Y}_i)^2}
+\end{aligned}
+\]</span> där:</p>
+<ul>
+<li>SSY beskriver den totala variationen i hela datamaterialet, avståndet mellan varje observation, <span class="math inline">\(Y_{ij}\)</span>, och responsvariabelns medelvärde, <span class="math inline">\(\overline{Y}\)</span>.</li>
+<li>SSR beskriver den förklarade variationen, avståndet mellan varje nivås medelvärde, <span class="math inline">\(\overline{Y}_i\)</span>, och responsvariabelns medelvärde.</li>
+<li>SSE beskriver den oförklarade variationen, avståndet mellan varje observation, <span class="math inline">\(Y_{ij}\)</span> och dess nivås medelvärde.</li>
+</ul>
+<p>Vi kan se det som att den totala variationen beskriver Y bara genom sitt medelvärde, den förklarade variationen beskriver Y genom grupperade medelvärden, och den oförklarade variationen beskriver variationen inom respektive nivå.</p>
+<p>Om <span class="math inline">\(H_0\)</span> är sann betyder det att alla medelvärden är lika, eller att nivåernas effekt inte skiljer sig från det övergripande medelvärdet, <span class="math inline">\(\beta_i = 0 \text{ eller } \mu_i = \mu\)</span>. Detta skulle synas i kvadratsummorna som att SSR är nära 0 och att SSE i princip är lika stor som SSY. Om <span class="math inline">\(H_0\)</span> inte är sann betyder det att minst två medelvärden skiljer sig åt eller att minst en av nivåernas effekt är skild från det övergripande medelvärdet. Detta skulle synas i kvadratsummorna som att SSR är stort, närmare SSY, och att SSE är litet.</p>
+<p>Testvariabeln för denna hypotesprövning blir då en jämförelse mellan SSR och SSE enligt: <span class="math display">\[
+\begin{aligned}
+  F_{test} = \frac{SSR / df_R}{SSE / df_E} = \frac{MSR}{MSE}
+\end{aligned}
+\]</span> Testvariabeln anses följa F-fördelningen med <span class="math inline">\(df_R\)</span> och <span class="math inline">\(df_E\)</span> frihetsgrader. Tänk på att dessa tester alltid är enkelsidiga vilket innebär att vi letar upp kritiska värden till höger av fördelningen.</p>
+<section id="interaktiv-visualisering" class="level4" data-number="13.4.1.1">
+<h4 data-number="13.4.1.1" class="anchored" data-anchor-id="interaktiv-visualisering"><span class="header-section-number">13.4.1.1</span> Interaktiv visualisering</h4>
+<p>I följande interaktiva visualisering simuleras ett urval av en kontinuerlig responsvariabel uppdelat på fyra olika nivåer. I menyn till vänster kan vi styra vilket medelvärde i populationen som respektive nivå har och visualiseringen till höger visar fördelningen av simulerade utfallet med ett histogram. Visualiseringarna innehåller också två linjer, en heldragen röd för det övergripande medelvärdet och streckade svarta linjer för respektive nivås medelvärde, <span class="math inline">\(\hat{\mu}_i = \overline{Y}_i\)</span>. Titta specifikt på vad som händer med kvoten mellan de två medelkvadratsummorna när det simulerade datamaterialet har lika medelvärden och när de har olika medelvärden.</p>
+<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
+#|   shinylive does not work in self-contained HTML documents.
+#|   Please set `embed-resources: false` in your metadata.
+#| standalone: true
+#| viewerHeight: 1000
+
+require(shiny)
+require(bslib)
+require(ggplot2)
+require(tidyverse)
+require(stringr)
+
+# Define UI for app that draws a histogram ----
+ui &lt;- page_sidebar(
+  sidebar = sidebar(open = "open",
+    sliderInput("group_1", "Medelvärde för Grupp 1", min = -10, max = 10, value = 0, step = 0.1),
+    sliderInput("group_2", "Medelvärde för Grupp 2", min = -10, max = 10, value = 0, step = 0.1),
+    sliderInput("group_3", "Medelvärde för Grupp 3", min = -10, max = 10, value = 0, step = 0.1),
+    sliderInput("group_4", "Medelvärde för Grupp 4", min = -10, max = 10, value = 0, step = 0.1),
+    numericInput("sample_size", "Stickprovsstorlek", value = 30, min = 1, step = 1),
+    actionButton("new_sample", "Klicka här för ett nytt urval."),
+    uiOutput("variances"),
+  ),
+  plotOutput("plot", height = "600px")
+)
+
+server &lt;- function(input, output, session) {
+  data_input &lt;- reactive({
+    means &lt;- c(input$group_1, input$group_2, input$group_3, input$group_4)
+    seed &lt;- today() + input$new_sample
+    set.seed(seed = seed)
+    samples &lt;- sapply(means, FUN = function(x) {
+        rnorm(n = input$sample_size, mean = x, sd = 1)
+    }) %&gt;% 
+      as.data.frame()
+    data_samples &lt;- pivot_longer(samples, cols = everything()) %&gt;% 
+      mutate(
+        name = str_replace(name, "V", "Grupp ")
+      )
+  })
+  
+  output$plot &lt;- renderPlot({
+    data_samples &lt;- data_input()
+    sample_means &lt;- aggregate(value ~ name, data_samples, mean)
+
+    ggplot(data = data_samples) + aes(x = value) + 
+    geom_histogram(binwidth = 0.25, color = "black", fill = "steelblue") +
+    geom_vline(data = sample_means, aes(xintercept = value), linetype = 2, linewidth = 1.2) +
+    geom_vline(aes(xintercept = mean(value)), color = "#d9230f", linewidth = 1) +
+            scale_x_continuous(breaks = seq(-20, 20, by = 1)) +
+            facet_grid(rows = vars(name)) + theme_bw() +
+            theme(strip.text.y = element_text(angle = 0, color = "white", size = 14),
+                  strip.background.y = element_rect(fill = "black"),
+                  axis.title.y = element_blank()) +
+            labs(x = "Y") 
+  })
+
+  output$variances &lt;- renderUI({
+    data_samples &lt;- data_input()
+    sample_means &lt;- aggregate(value ~ name, data_samples, mean)
+    sample_sizes &lt;- aggregate(value ~ name, data_samples, length)
+
+    SSY &lt;- sum((data_samples$value - mean(data_samples$value))^2)
+
+    SSR &lt;- sum(sample_sizes$value * (sample_means$value - mean(data_samples$value))^2)
+    MSR &lt;- SSR/(nrow(sample_means) - 1)
+
+    SSE &lt;- SSY-SSR
+    MSE &lt;- SSE/(nrow(data_samples) - nrow(sample_means))
+    
+    pvalue &lt;- pf(
+      round(MSR / MSE, 3), 
+      df1 = (nrow(sample_means) - 1), 
+      df2 = (nrow(data_samples) - nrow(sample_means)),
+      lower.tail = FALSE
+    )
+
+    withMathJax(
+      paste("$$SSY = ", round(SSY, 3), "\\\\",
+            "SSR = ", round(SSR, 3), "\\\\",
+            "SSE = ", round(SSE, 3), "\\\\",
+            "F_{test} = ", round(MSR / MSE, 3), "\\\\",
+            "\\text{p-värde} = ", pvalue %&gt;% round(3), "$$")
+    )
+  })
+}
+
+# Create Shiny app ----
+shinyApp(ui = ui, server = server)
+</code></pre>
+</section>
+</section>
+<section id="multipla-jämförelser-med-familjekonfidens" class="level3" data-number="13.4.2">
+<h3 data-number="13.4.2" class="anchored" data-anchor-id="multipla-jämförelser-med-familjekonfidens"><span class="header-section-number">13.4.2</span> Multipla jämförelser med familjekonfidens</h3>
+<p>Om <span class="math inline">\(H_0\)</span> förkastas anser vi att faktorn i sin helhet har en signifikant påverkan på responsvariabeln men vi har ingen uppfattning om exakt vilken eller vilka nivåer som ger denna effekt och ifall nivåernas effekter skiljer sig från varandra. I många av dessa fall betyder detta att jämföra flera par av medelvärden med varandra men där vi vill kunna dra slutsatser om alla jämförelser på en och samma gång. Vi introducerade konceptet av simultan inferens i <a href="../01-regression/05-simultaneous-inference.html" class="quarto-xref"><span>Kapitel 6</span></a> och samma lösning kan vi nu tillämpa här.</p>
+<p>Antalet jämförelser som ska undersökas ökar drastiskt med antalet nivåer av faktorn enligt <span class="math inline">\(\binom{A}{2}\)</span> och för att kunna genomföra en sammanfattande tolkning utan risk för ett inflaterat typ I fel använder vi en <em>familjekonfidens</em>.</p>
+<p>Vi kan definiera en parvis jämförelse som <span class="math display">\[
+\begin{aligned}
+  \hat{D}_{i i'} = \overline{Y}_{i\cdot} - \overline{Y}_{i'\cdot}
+\end{aligned}
+\]</span> där <span class="math inline">\(i \ne i'\)</span>.</p>
+<p>Variansen för denna jämförelse beräknas utifrån den anpassade modellen där vi använder MSE som ett mått på modellens osäkerhet. <span class="math display">\[
+\begin{aligned}
+Var(\hat{D}_{i i'}) = MSE \cdot \left(\frac{1}{n_i} + \frac{1}{n_{i'}}\right)
+\end{aligned}
+\]</span></p>
+<p>Det finns olika metoder att skapa familjekonfidensen som alla är lämpliga för olika ändamål. Vi väljer metod utifrån vilken som ger det smalaste intervallbredden givet samma valda familjekonfidensgrad.</p>
+<section id="tukey" class="level4" data-number="13.4.2.1">
+<h4 data-number="13.4.2.1" class="anchored" data-anchor-id="tukey"><span class="header-section-number">13.4.2.1</span> Tukey</h4>
+<p>Tukey-Kramer-metoden används för att jämföra alla parvisa skillnader mellan gruppmedelvärden efter att ett F-test för hela faktorn har visat att det finns en signfikant effekt. Tabellvärdet kan beräknas som:</p>
+<p><span class="math display">\[
+\begin{aligned}
+  \hat{D}_{i i'} \pm \frac{q_{A; n-A; 1 - \alpha}}{\sqrt{2}} \cdot \sqrt{Var(\hat{D}_{ii'})}
+\end{aligned}
+\]</span> där <span class="math inline">\(q_{A; n-A; 1 - \alpha}\)</span> är ett tabellvärde från den <em>studentiserade variationsviddsfördelningen</em> (eng. Studentized range distribution) med <span class="math inline">\(A\)</span> respektive <span class="math inline">\(n-A\)</span> frihetsgrader.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>För att förstå den studentiserade variationsvidden, anta att vi har ett urval av storlek (<span class="math inline">\(n\)</span>) från var och en av (<span class="math inline">\(A\)</span>) populationer med samma normalfördelning (<span class="math inline">\(N(\mu, \sigma^2)\)</span>). Om vi antar att (<span class="math inline">\(\overline{Y}{\max}\)</span>) är det största av dessa urvalsmedelvärden och (<span class="math inline">\(\overline{Y}{\min}\)</span>) är det minsta, och (<span class="math inline">\(s^2\)</span>) är den poolade urvalsvariansen från dessa urval, så har följande statistika en studentiserad variationsviddsfördelning:</p>
+<p><span class="math display">\[ q = \frac{\overline{Y}{\max} - \overline{Y}{\min}}{s / \sqrt{n}} \]</span></p>
+</div>
+</div>
+<p>Om 0 täcks av intervallet innebär det att differensen inte är signifikant skild från varandra. Tukey-metoden genererar generellt smalare intervall än övriga metoder när alla par av jämförelser ska beräknas och anses därför vara “starkare.”</p>
+<p>Beräkningen av dessa parvisa jämförelser är ofta tidskrävande men med hjälp av paketet <code>emmeans</code> kan vi använda det skapade objektet med faktornivåmedelvärden (hädanefter kallad faktormedelvärden) för att sedan undersöka alla par av medelvärden.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tukey <span class="ot">&lt;-</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(means, <span class="at">adjust =</span> <span class="st">"tukey"</span>) </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>tukey <span class="sc">%&gt;%</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">%&gt;%</span> <span class="fu">desc</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Parvisa jämförelser av faktormedelvärden med Tukey familjekonfidens"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Parvisa jämförelser av faktormedelvärden med Tukey familjekonfidens</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">t.ratio</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">metod3 - metod5</td>
+<td style="text-align: right;">-1738.639</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-5.598</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod5 - metod6</td>
+<td style="text-align: right;">1696.500</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">5.462</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod5 - metod7</td>
+<td style="text-align: right;">1343.639</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">4.326</td>
+<td style="text-align: right;">0.005</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod2 - metod3</td>
+<td style="text-align: right;">1167.917</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">3.760</td>
+<td style="text-align: right;">0.017</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod1 - metod5</td>
+<td style="text-align: right;">-1166.000</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-3.754</td>
+<td style="text-align: right;">0.017</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod2 - metod6</td>
+<td style="text-align: right;">1125.778</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">3.625</td>
+<td style="text-align: right;">0.023</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod4 - metod5</td>
+<td style="text-align: right;">-980.667</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-3.158</td>
+<td style="text-align: right;">0.061</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod2 - metod7</td>
+<td style="text-align: right;">772.917</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">2.489</td>
+<td style="text-align: right;">0.213</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod3 - metod4</td>
+<td style="text-align: right;">-757.972</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-2.440</td>
+<td style="text-align: right;">0.231</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod4 - metod6</td>
+<td style="text-align: right;">715.833</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">2.305</td>
+<td style="text-align: right;">0.287</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod1 - metod2</td>
+<td style="text-align: right;">-595.278</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-1.917</td>
+<td style="text-align: right;">0.492</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod1 - metod3</td>
+<td style="text-align: right;">572.639</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1.844</td>
+<td style="text-align: right;">0.536</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod2 - metod5</td>
+<td style="text-align: right;">-570.722</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-1.838</td>
+<td style="text-align: right;">0.539</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod1 - metod6</td>
+<td style="text-align: right;">530.500</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1.708</td>
+<td style="text-align: right;">0.618</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod2 - metod4</td>
+<td style="text-align: right;">409.944</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1.320</td>
+<td style="text-align: right;">0.835</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod3 - metod7</td>
+<td style="text-align: right;">-395.000</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-1.272</td>
+<td style="text-align: right;">0.857</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod4 - metod7</td>
+<td style="text-align: right;">362.972</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1.169</td>
+<td style="text-align: right;">0.898</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod6 - metod7</td>
+<td style="text-align: right;">-352.861</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-1.136</td>
+<td style="text-align: right;">0.909</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod1 - metod4</td>
+<td style="text-align: right;">-185.333</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-0.597</td>
+<td style="text-align: right;">0.996</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod1 - metod7</td>
+<td style="text-align: right;">177.639</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">0.572</td>
+<td style="text-align: right;">0.997</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod3 - metod6</td>
+<td style="text-align: right;">-42.139</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-0.136</td>
+<td style="text-align: right;">1.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Vi kan välja att sortera de parvisa jämförelserna i storleksordning eftersom vi så småningom når en gräns där skillnaden inte längre anses vara signifikant. Tolkningen av resultatet blir då enklare eftersom vi kan lista differenserna från “metod 3 mot metod 5” till “metod 2 mot metod 6” som signifikanta på fem procents signifikans.</p>
+</section>
+<section id="bonferroni" class="level4" data-number="13.4.2.2">
+<h4 data-number="13.4.2.2" class="anchored" data-anchor-id="bonferroni"><span class="header-section-number">13.4.2.2</span> Bonferroni</h4>
+<p>Undersöker <span class="math inline">\(g\)</span> jämförelser. Använder sig av t-fördelningen men signifikansnivån beräknas <span class="math inline">\(\alpha / g\)</span>. Anta att vi bara vill jämföra metoderna som innehåller hackning med varandra.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>selectedMeans <span class="ot">&lt;-</span> means[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>),]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>bonferroni <span class="ot">&lt;-</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(selectedMeans, <span class="at">adjust =</span> <span class="st">"bonferroni"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>bonferroni <span class="sc">%&gt;%</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">|&gt;</span> <span class="fu">desc</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Parvisa jämförelser av utvalda faktormedelvärden med Bonferroni familjekonfidens"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Parvisa jämförelser av utvalda faktormedelvärden med Bonferroni familjekonfidens</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">t.ratio</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">metod1 - metod2</td>
+<td style="text-align: right;">-595.278</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-1.917</td>
+<td style="text-align: right;">0.207</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metod2 - metod4</td>
+<td style="text-align: right;">409.944</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1.320</td>
+<td style="text-align: right;">0.603</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">metod1 - metod4</td>
+<td style="text-align: right;">-185.333</td>
+<td style="text-align: right;">310.581</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">-0.597</td>
+<td style="text-align: right;">1.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="scheffé" class="level4" data-number="13.4.2.3">
+<h4 data-number="13.4.2.3" class="anchored" data-anchor-id="scheffé"><span class="header-section-number">13.4.2.3</span> Scheffé</h4>
+<!-- TODO DESCRIBE SCHEFFÉ MORE -->
+<p>Vi behöver inte begränsa våra jämförelser till att endast titta på par av nivåer. <span class="math inline">\(\hat{D}_{ii'}\)</span> är ett specialfall av en <em>kontrast</em> där endast två nivåer jämförs men vi kan formulera en generell kontrast som: <span class="math display">\[
+\begin{aligned}
+  L = \sum_{j = 1}^A{c_j \cdot \mu_j}
+\end{aligned}
+\]</span> där <span class="math inline">\(\sum{c_j} = 0\)</span>.</p>
+<p>I specialfallet med en parvis jämförelse mellan exempelvis metod 1 och 2 är kontrasten: <span class="math display">\[
+\begin{aligned}
+    L &amp;= 1 \cdot \mu_1 + (-1) \cdot \mu_2 + 0 \cdot \mu_3 + 0 \cdot \mu_4 + 0 \cdot \mu_5 + 0 \cdot \mu_6 + 0 \cdot \mu_7 \\
+    &amp;= \mu_1 -  \mu_2
+\end{aligned}
+\]</span> där <span class="math inline">\(c_1 = 1\)</span>, <span class="math inline">\(c_2 = -1\)</span> och resterande <span class="math inline">\(c_j = 0\)</span>. Detta uppfyller begränsningen på <em>konstanterna</em> i kontrasten.</p>
+<p>Vi kan skapa egna kontraster av många olika former, med begränsningen att konstanterna ska summera till 0, genom <code>contrast()</code>. Till exempel skulle det kanske vara intressant att undersöka följande jämförelse mellan de två nivåerna som innehöll hackning och nivån beskrivande endast samodling. <span class="math display">\[
+\begin{aligned}
+  L = \frac{\mu_1 + \mu_2}{2} - \mu_3
+\end{aligned}
+\]</span> där <span class="math inline">\(c_1 = c_2 = \frac{1}{2} = 0.5\)</span> och <span class="math inline">\(c_3 = -1\)</span>.</p>
+<p>Från de skattade medelvärdena kan kontrasten skattas till: <span class="math display">\[
+\begin{aligned}
+    \hat{L} &amp;= 0.5 \cdot 903 + 0.5 \cdot 1498.278 - 330.361\\
+&amp;= 870.278
+\end{aligned}
+\]</span> där värden tas från tabellen som <code>emmeans()</code> producerat. Medelfelet för denna jämförelse beräknas enligt: <span class="math display">\[
+\begin{aligned}
+SE_{\hat{L}} &amp;= \sqrt{1.929217\times 10^{5} \cdot \left( \frac{0.5^2}{4} + \frac{0.5^2}{4} + \frac{(-1)^2}{4}\right)} \\
+&amp;= 268.971
+\end{aligned}
+\]</span> där <span class="math inline">\(MSE = 1.929217\times 10^{5}\)</span> är tagen från ANOVA-tabellen för den anpassade modellen.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scheffé kontraster</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  means, </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Anger konstanterna för respektive nivå i kontrasten</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">L1 =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Anger vilken familjekonfidensmetod som ska genomföras</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjust =</span> <span class="st">"scheffe"</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Beräknad kontrast med tillhörande p-värde."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Beräknad kontrast med tillhörande p-värde.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">t.ratio</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">L1</td>
+<td style="text-align: right;">870.278</td>
+<td style="text-align: right;">268.971</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">3.236</td>
+<td style="text-align: right;">0.004</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Med hjälp av skattningen och medelfelet kan vi också beräkna ett konfidensintervall enligt formler från <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span>.</p>
+</section>
+</section>
+</section>
+<section id="referenser" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-kleinbaum2013" class="csl-entry" role="listitem">
+Kleinbaum, D. G., L. L. Kupper, A. Nizam, och E. S. Rosenberg. 2013. <em>Applied Regression Analysis and Other Multivariable Methods</em>. Cengage Learning. <a href="https://books.google.se/books?id=v590AgAAQBAJ">https://books.google.se/books?id=v590AgAAQBAJ</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Kopierat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Kopierat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../02-variance/index.html" class="pagination-link" aria-label="Förord">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Förord</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../02-variance/01-random-factors.html" class="pagination-link" aria-label="Slumpmässiga faktorer">
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
