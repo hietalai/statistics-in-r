@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -68,6 +88,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -89,11 +138,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../00-programming/index.qmd"> 
+    <a class="nav-link active" href="../00-programming/00-basics-R.html" aria-current="page"> 
 <span class="menu-text">Programmering i R</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../01-regression/index.html" aria-current="page"> 
+    <a class="nav-link" href="../01-regression/index.html"> 
 <span class="menu-text">Regressionsanalys</span></a>
   </li>  
   <li class="nav-item">
@@ -289,8 +338,17 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innehållsförteckning</h2>
+   
+  <ul>
+  <li><a href="#modellens-formulering" id="toc-modellens-formulering" class="nav-link active" data-scroll-target="#modellens-formulering"><span class="header-section-number">14.1</span> Modellens formulering</a></li>
+  <li><a href="#inferens-på-en-slumpmässig-faktor" id="toc-inferens-på-en-slumpmässig-faktor" class="nav-link" data-scroll-target="#inferens-på-en-slumpmässig-faktor"><span class="header-section-number">14.2</span> Inferens på en slumpmässig faktor</a></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">14.3</span> Övningsuppgifter</a></li>
+  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -317,9 +375,156 @@ ul.task-list li input[type="checkbox"] {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
-<p>Alla tidigare modeller</p>
+<p>I alla tidigare regressionsmodeller förutsätter vi till viss del att de nivåer som finns i det insamlade data är de nivåer som faktorn innehåller och som vi är intresserade att dra slutsatser om, detta kallas för <em>fixa</em> effekter. Det finns tillfällen där vi kan vilja inkludera en faktor som endast består av ett urval av faktorns alla nivåer, till exempel hur olika skolor kan påverka prestationsgraden inom ett visst ämne. Det kan vara så att vi har en faktor i vår undersökning som har ett stort antal nivåer, fler än vi kan undersöka, och vi väljer istället att dra ett urval av nivåer från populationen av alla nivåer. Det vore omöjligt att skapa ett experiment med alla olika skolor i Sverige, så istället dras ett urval av säg 10 skolor där vår undersökning genomförs. Detta är ett exempel på en <em>slumpmässig faktor</em>. Med en slumpmässig faktor är vi inte intresserad av skatta effekterna för just de nivåer som vi råkade dra i vårt urval, utan vi vill dra slutsater om faktorn generellt på populationsnivå.</p>
+<section id="modellens-formulering" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="modellens-formulering"><span class="header-section-number">14.1</span> Modellens formulering</h2>
+<p>Det finns flera olika sätt att formulera en modell som innehåller en slumpmässig faktor, men det viktiga är att vi beskriver egenskaperna i modellens komponenter så att det blir tydligt, oavsett de beteckningar som används, att faktorn numera är slumpmässig. Givet att detta underlag grundar sig i regressionsformuleringen till skillnad från den “klassiska” variansanalysformuleringen hänvisad i <a href="00-oneway-anova.html#nte-anova-formulation" class="quarto-xref">Note&nbsp;<span>13.1</span></a>, kommer en regressionsformulering fortsätta användas även för slumpmässiga faktorer.</p>
+<p>Vi kan formulera en modell där vi tillåter responsvariabeln variera beroende på vilken nivå en observation tillhör som: <span class="math display">\[
+\begin{aligned}
+  Y_{ij} &amp;= \beta_{0i} + E_{ij}\\
+  \text{där}\\
+  \beta_{0i} &amp;= \gamma_{00} + U_{0i}
+\end{aligned}
+\]</span> där <span class="math inline">\(i\)</span> är de uppmätta nivåerna av faktorn, <span class="math inline">\(\gamma_{00}\)</span> är det övergripande medelvärdet (motsvarande <span class="math inline">\(\mu\)</span> i <a href="00-oneway-anova.html#eq-fix-effect-anova" class="quarto-xref">Ekvation&nbsp;<span>13.1</span></a>), och <span class="math inline">\(U_{0i}\)</span> är den avvikelse som nivå <span class="math inline">\(i\)</span> har på det övergripande medelvärdet.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Om vi skriver ut modellen i sin helhet: <span id="eq-random-effect-anova"><span class="math display">\[
+\begin{aligned}
+  Y_{ij} &amp;= \gamma_{00} + U_{0i} + E_{ij}
+\end{aligned}
+\tag{14.1}\]</span></span> ser vi tydliga likheter med den fixa modellen, men också några skillnader. Vi visar inga kodade variabler eftersom de enskilda effekterna <span class="math inline">\(U_{0i}\)</span> är inte lika intressant att titta på som <span class="math inline">\(\beta_i\)</span> i den fixa modellen. Däremot kan vi beskriva att de enskilda effekterna är slumpmässigt dragna från en normalfördelad population med väntevärde 0 och en specifik varians: <span class="math display">\[
+\begin{aligned}
+  U_{0i} \sim N(0, \sigma^2_A)
+\end{aligned}
+\]</span> där <span class="math inline">\(\sigma^2_A\)</span> är variansen för faktorn.</p>
+<p>Fortfarande råder att <span class="math inline">\(E_{ij} \sim N(0, \sigma^2)\)</span> vilket innebär att vi har en modell bestående av två olika varianskomponenter, <span class="math inline">\(\sigma^2_A\)</span> och <span class="math inline">\(\sigma^2\)</span>, som anses vara oberoende av varandra. Detta leder också att vi kan beskriva fördelningen av Y|X som: <span id="eq-distr-random-factor"><span class="math display">\[
+\begin{aligned}
+  Y_{ij}|\mathbf{X_j} \sim N(\gamma_{00}, \sigma^2_A + \sigma^2)
+\end{aligned}
+\tag{14.2}\]</span></span></p>
+</section>
+<section id="inferens-på-en-slumpmässig-faktor" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="inferens-på-en-slumpmässig-faktor"><span class="header-section-number">14.2</span> Inferens på en slumpmässig faktor</h2>
+<p>Om vi antar en modell som inte har någon faktor ser den ut som: <span class="math display">\[
+\begin{aligned}
+  Y_j = \gamma_{00} + E_{j}
+\end{aligned}
+\]</span> där <span class="math inline">\(j = 1, \dots, n\)</span>. Som en följd innebär det att responsvariabelns fördelning blir <span class="math inline">\(Y_{j}\sim N(\gamma{00}, \sigma^2)\)</span>, det vill säga att den enda variationen runt väntevärdet kommer från felets variation. Skillnaden gentemot <a href="#eq-distr-random-factor" class="quarto-xref">Ekvation&nbsp;<span>14.2</span></a> är att variationen också beror på variationen i den slumpmässiga faktorn. Om den slumpmässiga faktorn har en effekt på responsvariabeln betyder detta att <span class="math inline">\(\sigma^2_A &gt; 0\)</span>, det vill säga det är inte bara felet som bidrar till osäkerheten.</p>
+<p>På samma sätt som vi med kvadratsummor kan dela upp den totala variationen av en responsvariabel i modellens förklarade och oförklarade variation, kan vi med en slumpmässig faktor göra detsamma dock med några justeringar. Vi betecknar de olika delarna med komponenternas olika varianser och andelen förklarad variation beräknas som: <span class="math display">\[
+\begin{aligned}
+  \frac{\sigma_A^2}{\sigma^2_Y} = \frac{\sigma^2_A}{\sigma^2 + \sigma^2_A}
+\end{aligned}
+\]</span> där <span class="math inline">\(\sigma^2_Y\)</span> är den totala varians som finns i responsvariabeln.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Något som är speciellt med slumpmässiga faktorer är att observationerna inom en faktornivå <strong>inte</strong> är oberoende eftersom de uppkommer från samma delgrupp av faktorn. Vi kan beräkna kovariansen mellan observationer inom en faktornivå: <span class="math display">\[
+\begin{aligned}
+  \sigma(Y_{ij}, Y_{ij'}) = \sigma^2_A
+\end{aligned}
+\]</span> där <span class="math inline">\(j \ne j'\)</span>.</p>
+<p>Kovariansen mellan observationer i olika faktornivåer antas oberoende: <span class="math display">\[
+\begin{aligned}
+  \sigma(Y_{ij}, Y_{i'j'}) = 0
+\end{aligned}
+\]</span> där <span class="math inline">\(i \ne i'\)</span>.</p>
+<p>Anta att en faktor har två faktornivåer och tre observationer i varje cell (faktornivå). Om vi lägger dessa observationer i en vektor sorterade efter faktorn får vi följande kovariansmatris: <span class="math display">\[
+\begin{aligned}
+\sigma^2(\mathbf{Y})= \begin{bmatrix}
+        \sigma^2 + \sigma^2_A   &amp; \sigma^2_A              &amp; \sigma^2_A              &amp; 0 &amp; 0 &amp; 0\\
+        \sigma^2_A            &amp; \sigma^2 + \sigma^2_A     &amp; \sigma^2_A              &amp; 0 &amp; 0 &amp; 0\\
+        \sigma^2_A            &amp; \sigma^2_A              &amp; \sigma^2 + \sigma^2_A     &amp; 0 &amp; 0 &amp; 0\\
+        0                       &amp; 0                         &amp; 0                         &amp; \sigma^2 + \sigma^2_A &amp; \sigma^2_A          &amp; \sigma^2_A\\
+        0                       &amp; 0                         &amp; 0                         &amp; \sigma^2_A          &amp; \sigma^2 + \sigma^2_A &amp; \sigma^2_A \\
+        0                       &amp; 0                         &amp; 0                         &amp; \sigma^2_A          &amp; \sigma^2_A          &amp; \sigma^2 + \sigma^2_A
+    \end{bmatrix}
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+<p>För att undersöka om den slumpmässiga faktorn bidrar med en signifikant effekt formuleras följande hypoteser: <span class="math display">\[
+\begin{aligned}
+  &amp;H_0: \sigma^2_A = 0\\
+  &amp;H_a: \sigma^2_A &gt; 0
+\end{aligned}
+\]</span> Om <span class="math inline">\(H_0: \sigma_A^2 = 0\)</span> är sann betyder det att alla dragningar från populationen av alla nivåer är lika, en konstant, och att faktorn därav inte har någon effekt. Om <span class="math inline">\(H_a\)</span> är sann betyder det däremot att faktorn har en effekt och att dragningar från populationen av alla nivåer generar olika effekter.</p>
+<p>För att beräkna testvariabeln för denna hypotesprövning används kvadratsummorna från den linjära modellen som en skattning av varianserna. Vi utgår från att de förväntade medelkvadratsummorna för <span class="math inline">\(MSE\)</span> och <span class="math inline">\(MSA\)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> är: <span class="math display">\[
+\begin{aligned}
+    E[MSE] &amp;= \sigma^2 \\
+    E[MSA] &amp;= \sigma^2 + n_i\cdot \sigma^2_A
+\end{aligned}
+\]</span> Om <span class="math inline">\(H_0\)</span> är sann betyder det att <span class="math inline">\(E[MSE] = E[MSA]\)</span> men om <span class="math inline">\(H_a\)</span> är sann betyder det att <span class="math inline">\(E[MSA] &gt; E[MSE]\)</span> eftersom <span class="math inline">\(n_i &gt; 0\)</span>. En lämplig testvariabel formuleras då som: <span class="math display">\[
+\begin{aligned}
+  F_{test} = \frac{MSA}{MSE}
+\end{aligned}
+\]</span> där <span class="math inline">\(F_{test} \sim F_{A - 1; A\cdot(n_i - 1)}\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Frihetsgraderna för nämnaren är en omskrivning av “den vanliga” <span class="math inline">\(n - (k + 1)\)</span> enligt: <span class="math display">\[
+\begin{aligned}
+    n - (k + 1) &amp;= \\
+    n - (A - 1 + 1) &amp;=\\
+    n_i \cdot A - A &amp;= A \cdot (n_i - 1)
+\end{aligned}
+\]</span> där <span class="math inline">\(n_i\)</span> är antalet observationer inom en nivå. Vi förutsätter att modellen är <em>balanserad</em>, det vill säga att alla nivåer har lika många observationer, <span class="math inline">\(n_i = n / A\)</span>.</p>
+</div>
+</div>
+<p>I R kommer denna hypotesprövning beräknas på samma sätt som ett övergripande F-test i en fix modell beskriven i <a href="00-oneway-anova.html#sec-fix-effect-inference" class="quarto-xref"><span>Avsnitt 13.4.1</span></a> eftersom testvariabeln beräknas på samma sätt som det tidigare F-testet. Med en slumpmässig faktor kommer dock hypoteserna beskriva någonting annat och slutsatser som vi drar behöver ta hänsyn till variationen i faktorn, inte de enskilda faktormedelvärdena.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Om <span class="math inline">\(H_0\)</span> förkastas vill vi <strong>inte</strong> genomföra multipla jämförelser för att bedöma specifikt vilka nivåer som skiljer sig åt. Med en slumpmässig faktor är de utvalda nivåerna inte intressanta att jämföra.</p>
+</div>
+</div>
+<!-- TODO MORE ABOUT INFERENCE (INTERVALS) OF DIFFERENT SIGMA -->
+</section>
+<section id="övningsuppgifter" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">14.3</span> Övningsuppgifter</h2>
+<p>Dessa övningar använder sig av ett datamaterial från en fabrik som skapar spolar (tråd som är lindad i en spiral för diverse elektronik). I fabriken väljs fyra maskiner slumpmässigt ut från alla maskiner som finns i fabriken. Sedan väljs 10 skapade spolar ut slumpmässigt från respektive maskin. Mätvariabeln (<code>coil_characteristic</code>) är en egenskap (oklart vad) hos spolarna. Materialet finns tillgängligt <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/coils.csv">här</a>.</p>
+<ol type="a">
+<li><p>Motivera varför en modell med en slumpmässiga faktor är lämplig för att analysera detta material. Formulera modellen och beskriv varje komponent.</p></li>
+<li><p>Undersök om det finns en signifikant effekt av maskinerna på egenskaperna med 5 procents signifikans.</p></li>
+<li><p>Skatta <span class="math inline">\(\sigma^2_{A}\)</span> med ett 90% approximativt konfidensintervall med hjälp av Satterthwaites metod. Tolka intervallet.</p></li>
+<li><p>Skatta kvoten av <span class="math inline">\(\frac{\sigma^2_{A}}{\sigma^2_Y}\)</span> med ett 95% intervall. Tolka intervallet.</p></li>
+</ol>
+</section>
+<section id="referenser" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-kleinbaum2013" class="csl-entry" role="listitem">
+Kleinbaum, D. G., L. L. Kupper, A. Nizam, och E. S. Rosenberg. 2013. <em>Applied Regression Analysis and Other Multivariable Methods</em>. Cengage Learning. <a href="https://books.google.se/books?id=v590AgAAQBAJ">https://books.google.se/books?id=v590AgAAQBAJ</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Detta är ekvivalent som <span class="math inline">\(Y_{ij} = \mu + A_i + E_{ij}\)</span> från <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><span class="math inline">\(MSA\)</span> är specifikt medelkvadratsumman för faktorn. I en envägs-ANOVA är detta samma som <span class="math inline">\(MSR\)</span>, men i tvåvägs-ANOVA kommer vi vilja dela upp <span class="math inline">\(MSR\)</span> i dess mindre beståndsdelar.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

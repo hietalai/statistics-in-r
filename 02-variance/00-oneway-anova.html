@@ -178,11 +178,11 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../00-programming/index.qmd"> 
+    <a class="nav-link active" href="../00-programming/00-basics-R.html" aria-current="page"> 
 <span class="menu-text">Programmering i R</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../01-regression/index.html" aria-current="page"> 
+    <a class="nav-link" href="../01-regression/index.html"> 
 <span class="menu-text">Regressionsanalys</span></a>
   </li>  
   <li class="nav-item">
@@ -395,9 +395,10 @@ window.Quarto = {
   <li><a href="#residualanalys" id="toc-residualanalys" class="nav-link" data-scroll-target="#residualanalys"><span class="header-section-number">13.3</span> Residualanalys</a></li>
   <li><a href="#inferens" id="toc-inferens" class="nav-link" data-scroll-target="#inferens"><span class="header-section-number">13.4</span> Inferens</a>
   <ul class="collapse">
-  <li><a href="#f-test-för-faktoreffekt" id="toc-f-test-för-faktoreffekt" class="nav-link" data-scroll-target="#f-test-för-faktoreffekt"><span class="header-section-number">13.4.1</span> F-test för faktoreffekt</a></li>
+  <li><a href="#sec-fix-effect-inference" id="toc-sec-fix-effect-inference" class="nav-link" data-scroll-target="#sec-fix-effect-inference"><span class="header-section-number">13.4.1</span> F-test för faktoreffekt</a></li>
   <li><a href="#multipla-jämförelser-med-familjekonfidens" id="toc-multipla-jämförelser-med-familjekonfidens" class="nav-link" data-scroll-target="#multipla-jämförelser-med-familjekonfidens"><span class="header-section-number">13.4.2</span> Multipla jämförelser med familjekonfidens</a></li>
   </ul></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">13.5</span> Övningsuppgifter</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -459,11 +460,11 @@ Notera
 <p>I praktiken kommer denna modell prediktera ett och samma värde för varje observation som har samma nivå av faktorn eftersom högst en indikatorvariabel kan vara 1 och ge en effekt av det tillhörande <span class="math inline">\(\beta_i\)</span> på det anpassade värdet. Detta anpassade värde kommer beskriva respektive nivås medelvärde enligt:</p>
 <p><span class="math display">\[
 \begin{aligned}
-Y_{j = 1} &amp;= \mu_1 = \beta_0 + \beta_1 \\
-Y_{j = 2} &amp;= \mu_2 = \beta_0 + \beta_2 \\
+Y_{i = 1} &amp;= \mu_1 = \beta_0 + \beta_1 \\
+Y_{i = 2} &amp;= \mu_2 = \beta_0 + \beta_2 \\
 &amp;\vdots \\
-Y_{j = J-1} &amp;= \mu_{J-1} = \beta_0 + \beta_{J-1} \\
-Y_{j = J} &amp;= \mu_J = \beta_0
+Y_{i = A-1} &amp;= \mu_{A-1} = \beta_0 + \beta_{A-1} \\
+Y_{i = A} &amp;= \mu_A = \beta_0
 \end{aligned}
 \]</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -488,11 +489,11 @@ Y_{ij} = \mu_i + E_{ij}
 <section id="faktoreffektkodning-av-kvalitativa-variabler" class="level3" data-number="13.1.1">
 <h3 data-number="13.1.1" class="anchored" data-anchor-id="faktoreffektkodning-av-kvalitativa-variabler"><span class="header-section-number">13.1.1</span> Faktoreffektkodning av kvalitativa variabler</h3>
 <p>Ett alternativt sätt att koda en kvalitativ variabel är att använda <em>faktoreffektkodning</em>. Istället för att parametern vid indikatorkodning mäter varje nivås effekt jämfört med en referenskategori, som i många fall väljs godtyckligt och påverkar varje parametervärde därefter, mäter parametern vid faktoreffektkodning <strong>effekten jämfört med det övergripande medelvärdet</strong>.</p>
-<p><span class="math display">\[
+<p><span id="eq-fix-effect-anova"><span class="math display">\[
 \begin{aligned}
   Y_{ij} = \mu + \beta_1 \cdot X_{1j} + \dots + \beta_{A-1}\cdot X_{(A-1)j} + E_{ij}
 \end{aligned}
-\]</span> där</p>
+\tag{13.1}\]</span></span> där</p>
 <ul>
 <li><span class="math inline">\(\mu\)</span> är det oviktade medelvärdet av <span class="math inline">\(Y_{ij}\)</span> enligt: <span class="math display">\[
 \begin{aligned}
@@ -521,17 +522,17 @@ Y_{ij} = \mu_i + E_{ij}
   \beta_A = -(\beta_1 + \beta_2 + \cdots + \beta_{A-1}) = \mu_A - \mu
 \end{aligned}
 \]</span></p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div id="nte-anova-formulation" class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Notera
+Note&nbsp;13.1
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Viss litteratur börjar vid dessa modeller att byta beteckningar på parametrarna. Till exempel använder <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span> <span class="math inline">\(\alpha_i\)</span> som beteckning för faktoreffekten av nivå <span class="math inline">\(i\)</span> istället för att fortsätta med regressionsmodellens beteckningar. Detta underlag kommer bibehålla användandet av <span class="math inline">\(\beta\)</span> men beskriva parametrar och tillhörande variabler så att det går att särskilja modeller från varandra.</p>
+<p>Viss litteratur börjar vid dessa modeller att byta beteckningar på parametrarna. Till exempel använder <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span> <span class="math inline">\(\alpha_i\)</span> som beteckning för faktoreffekten av nivå <span class="math inline">\(i\)</span> och undviker att visa indikator/effektkodade variabler istället för att fortsätta med regressionsmodellens beteckningar. Detta underlag kommer bibehålla användandet av <span class="math inline">\(\beta\)</span> men beskriva parametrar och tillhörande variabler så att det går att tydligt särskilja modeller från varandra.</p>
 </div>
 </div>
 </section>
@@ -583,7 +584,7 @@ Notera
 \begin{aligned}
     Y_{ij} = \mu + \beta_1 \cdot X_{1j} + \beta_{2}\cdot X_{2j} +\dots + \beta_{6}\cdot X_{6j} + E_{ij}
 \end{aligned}
-\tag{13.1}\]</span></span> där <span class="math display">\[
+\tag{13.2}\]</span></span> där <span class="math display">\[
 \begin{aligned}
     \mu &amp;= \frac{\mu_1 + \mu_2 + \dots + \mu_6 + \mu_7}{7} \\
     X_{1j} &amp;=
@@ -659,7 +660,7 @@ Notera
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(weeds<span class="sc">$</span>metod) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">7</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Med effektkodning blir den sista nivån angiven som “den saknade” vilket nu stämmer överens med <a href="#eq-effect-code-model-example" class="quarto-xref">Ekvation&nbsp;<span>13.1</span></a>. R kommer nu använda denna kodning när den linjära modellen anpassas.</p>
+<p>Med effektkodning blir den sista nivån angiven som “den saknade” vilket nu stämmer överens med <a href="#eq-effect-code-model-example" class="quarto-xref">Ekvation&nbsp;<span>13.2</span></a>. R kommer nu använda denna kodning när den linjära modellen anpassas.</p>
 </section>
 <section id="modellanpassning" class="level3" data-number="13.2.2">
 <h3 data-number="13.2.2" class="anchored" data-anchor-id="modellanpassning"><span class="header-section-number">13.2.2</span> Modellanpassning</h3>
@@ -761,7 +762,7 @@ Notera
     \hat{\mu}_2 &amp;= \hat{\mu} + \beta_2\\
     &amp;\quad\vdots\\
     \hat{\mu}_6 &amp;= \hat{\mu} + \beta_6\\
-    \hat{\mu}_7 &amp;= \hat{\mu} - \sum_{j = 1}^{A-1}\beta_j
+    \hat{\mu}_7 &amp;= \hat{\mu} - \sum_{i = 1}^{A-1}\beta_i
 \end{aligned}
 \]</span></p>
 <div class="cell">
@@ -863,7 +864,7 @@ Notera
 </section>
 <section id="residualanalys" class="level2" data-number="13.3">
 <h2 data-number="13.3" class="anchored" data-anchor-id="residualanalys"><span class="header-section-number">13.3</span> Residualanalys</h2>
-<p>Modellens lämplighet kan utvärderas på samma sätt som linjär regression från <a href="../01-regression/03-model-assessment.html" class="quarto-xref"><span>Kapitel 4</span></a>. Då modellen endast består av kategoriska nivåer och de predikterade värdena är samma för varje observation inom respektive nivå, kommer dessa observationer få samma predikterade värde, <span class="math inline">\(\hat{\mu}_j\)</span>. Residualerna kommer därför att grupperas i de olika nivåerna.</p>
+<p>Modellens lämplighet kan utvärderas på samma sätt som linjär regression från <a href="../01-regression/03-model-assessment.html" class="quarto-xref"><span>Kapitel 4</span></a>. Då modellen endast består av kategoriska nivåer och de predikterade värdena är samma för varje observation inom respektive nivå, kommer dessa observationer få samma predikterade värde, <span class="math inline">\(\hat{\mu}_i\)</span>. Residualerna kommer därför att grupperas i de olika nivåerna.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
@@ -885,8 +886,8 @@ Notera
 <section id="inferens" class="level2" data-number="13.4">
 <h2 data-number="13.4" class="anchored" data-anchor-id="inferens"><span class="header-section-number">13.4</span> Inferens</h2>
 <p>För envägs-ANOVA är vi intresserade av två aspekter; bidrar faktorn överhuvudtaget med någon effekt som kan hjälpa till att förklara responsvariabeln och i sådana fall vilken (eller vilka) nivå(er) bidrar till denna effekt.</p>
-<section id="f-test-för-faktoreffekt" class="level3" data-number="13.4.1">
-<h3 data-number="13.4.1" class="anchored" data-anchor-id="f-test-för-faktoreffekt"><span class="header-section-number">13.4.1</span> F-test för faktoreffekt</h3>
+<section id="sec-fix-effect-inference" class="level3" data-number="13.4.1">
+<h3 data-number="13.4.1" class="anchored" data-anchor-id="sec-fix-effect-inference"><span class="header-section-number">13.4.1</span> F-test för faktoreffekt</h3>
 <p>Eftersom modellen endast består av en enstaka faktor kan ett F-test för modellen användas för att bedöma om faktorn har någon signifikant effekt. Vi undersöker: <span class="math display">\[
 \begin{aligned}
     H_0&amp;: \beta_1 = \beta_2 = \dots = \beta_{A-1} = 0 \\
@@ -1330,15 +1331,15 @@ Tips
 <!-- TODO DESCRIBE SCHEFFÉ MORE -->
 <p>Vi behöver inte begränsa våra jämförelser till att endast titta på par av nivåer. <span class="math inline">\(\hat{D}_{ii'}\)</span> är ett specialfall av en <em>kontrast</em> där endast två nivåer jämförs men vi kan formulera en generell kontrast som: <span class="math display">\[
 \begin{aligned}
-  L = \sum_{j = 1}^A{c_j \cdot \mu_j}
+  L = \sum_{i = 1}^A{c_i \cdot \mu_i}
 \end{aligned}
-\]</span> där <span class="math inline">\(\sum{c_j} = 0\)</span>.</p>
+\]</span> där <span class="math inline">\(\sum{c_i} = 0\)</span>.</p>
 <p>I specialfallet med en parvis jämförelse mellan exempelvis metod 1 och 2 är kontrasten: <span class="math display">\[
 \begin{aligned}
     L &amp;= 1 \cdot \mu_1 + (-1) \cdot \mu_2 + 0 \cdot \mu_3 + 0 \cdot \mu_4 + 0 \cdot \mu_5 + 0 \cdot \mu_6 + 0 \cdot \mu_7 \\
     &amp;= \mu_1 -  \mu_2
 \end{aligned}
-\]</span> där <span class="math inline">\(c_1 = 1\)</span>, <span class="math inline">\(c_2 = -1\)</span> och resterande <span class="math inline">\(c_j = 0\)</span>. Detta uppfyller begränsningen på <em>konstanterna</em> i kontrasten.</p>
+\]</span> där <span class="math inline">\(c_1 = 1\)</span>, <span class="math inline">\(c_2 = -1\)</span> och resterande <span class="math inline">\(c_i = 0\)</span>. Detta uppfyller begränsningen på <em>konstanterna</em> i kontrasten.</p>
 <p>Vi kan skapa egna kontraster av många olika former, med begränsningen att konstanterna ska summera till 0, genom <code>contrast()</code>. Till exempel skulle det kanske vara intressant att undersöka följande jämförelse mellan de två nivåerna som innehöll hackning och nivån beskrivande endast samodling. <span class="math display">\[
 \begin{aligned}
   L = \frac{\mu_1 + \mu_2}{2} - \mu_3
@@ -1399,6 +1400,18 @@ SE_{\hat{L}} &amp;= \sqrt{1.929217\times 10^{5} \cdot \left( \frac{0.5^2}{4} + \
 <p>Med hjälp av skattningen och medelfelet kan vi också beräkna ett konfidensintervall enligt formler från <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span>.</p>
 </section>
 </section>
+</section>
+<section id="övningsuppgifter" class="level2" data-number="13.5">
+<h2 data-number="13.5" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">13.5</span> Övningsuppgifter</h2>
+<p>Det första datamaterial som behandlas i denna övning kommer från en undersökning av olika fodertyper på 21 slumpmässigt utvalda grisar på en bondgård. Fyra stycken olika fodertyper har undersökts för att se vilken som leder till den största viktökningen (i kg) av grisarna. Materialet finns att hämta <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/feed.csv">här</a></p>
+<ol type="a">
+<li><p>Anpassa en envägs-ANOVA modell med hjälp av <code>lm()</code>.</p></li>
+<li><p>Undersök med hjälp av ANOVA-tabellen om den genomsnittliga viktökningen är densamma för de undersökta fodertyperna.</p></li>
+</ol>
+<p>I föregående uppgift ska ni ha kommit fram till att det finns skillnad mellan minst två av de undersökta fodertyperna med avseende på genomsnittlig viktökning. Då kan det vara intressant att undersöka mellan specifikt vilka fodertyper det finns skillnad.</p>
+<ol start="3" type="a">
+<li>Genomför alla multipla jämförelser med hjälp av Tukey:s metod. Orientera er i utskriften och utred mellan vilka fodertyper det är en signifikant skillnad i genomsnittlig viktökning utifrån signifikansnivå 5 procent.</li>
+</ol>
 </section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
