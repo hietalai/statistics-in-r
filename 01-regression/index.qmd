@@ -25,6 +25,6 @@ Till denna del förutsätts att du har vissa förkunskaper för att ta till dig 
 - kan förstå matrisformuleringar
 - kan förstå enkla matrisberäkningar, såsom multiplikation, transponat, och invers
 
-Känner du att du saknas vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.
+Känner du att du saknar vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.
 
 För alla dessa kapitel förutsätts att du har laddat paketet `tidyverse` som innehåller flera paket såsom `readr`, `dplyr`, `ggplot2` med flera. Andra paket kan behövas installeras och laddas för olika kapitel men detta bör anges specifikt. 
