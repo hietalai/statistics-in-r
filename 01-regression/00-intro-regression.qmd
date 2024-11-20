@@ -3,7 +3,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Introduktion till regression
+# Introduktion till regression {#sec-regression}
 
 ::: {.video-container}
 {{< video https://youtu.be/bcnEg8pE2IA >}}

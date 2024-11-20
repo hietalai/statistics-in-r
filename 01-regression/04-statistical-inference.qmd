@@ -1,5 +1,4 @@
 ---
-title: "Statistisk inferens"
 editor_options: 
   chunk_output_type: console
 
@@ -22,6 +21,8 @@ editor_options:
 \newcommand{\Sum}[1]{\sum_{i=1}^#1}
 
 <!-- CONTENT -->
+
+# Statistisk inferens {#sec-inference}
 ::: {.video-container}
 {{< video https://youtu.be/tFJhALxNH-A >}}
 :::

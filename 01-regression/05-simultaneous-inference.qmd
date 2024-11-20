@@ -1,5 +1,4 @@
 ---
-title: "Simultan inferens"
 editor_options: 
   chunk_output_type: console
 ---
@@ -21,6 +20,7 @@ editor_options:
 \newcommand{\Sum}[1]{\sum_{i=1}^#1}
 
 <!-- CONTENT -->
+# Simultan inferens {#sec-family-confidence}
 När en modell har undersökts med hjälp av residualanalys och statistisk inferens och vi kommit fram till att den är en lämplig och bra förenkling av verkligheten, kan vi börja använda den för att dra lärdomar om sambandet och prediktera nya observationer. Vi har i @sec-stat-inference redan fått några lärdomar om hur sambandet mellan vissa variabler ser ut men om vi vill tolka flera parametrar från modellen samtidigt bör vi tillämpa någon form av *simultan inferens*. En utav regressionsmodellers huvudsakliga användningsområden är att *prediktera* nya observationer. Till exempel kan responsvariabeln vara väldigt kostsam att mäta jämfört med de förklarande variablerna. Då kan en lämplig och bra regressionsmodellen minska kostnaderna genom att intervallskatta värdet på responsvariabeln utifrån givna värden på de förklarande variablerna. Prediktioner kan också användas för beslutsunderlag, till exempel kan en regressionsmodell ge information om förväntade inkomster givet en viss reklambudget.
 
 ## Simultan inferens
