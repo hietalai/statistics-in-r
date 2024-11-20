@@ -1,0 +1,17 @@
+# Förord {.unnumbered}
+
+Till denna del förutsätts att du har vissa förkunskaper för att ta till dig materialet på bästa sätt. Utöver förkunskaper från tidigare delar bör du nu också kunna:
+
+**Statistik**
+
+- identifiera variabler för regressionsmodellering
+- anpassa regressionsmodeller med kvantitativa och kvalitativa förklarande variabler
+- utvärdera lämpligheten i en regressionsmodell med hjälp av residualanalys och utvärderingsmått
+- genomföra inferens på hela och delar av en regressionsmodell
+- identifiera avvikande och inflytelserika observationer
+- förstå konceptet bakom simultan inferens
+- förstå innebörden av en interaktion mellan två eller fler variabler
+
+Känner du att du saknar vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.
+
+För alla dessa kapitel förutsätts att du har laddat paketet `tidyverse` som innehåller flera paket såsom `readr`, `dplyr`, `ggplot2` med flera. Andra paket kan behövas installeras och laddas för olika kapitel men detta bör anges specifikt. 

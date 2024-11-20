@@ -1,6 +1,8 @@
 project:
   type: book
   output-dir: _site
+  resources:
+  - shinylive-sw.js
   
 book:
   title: "Statistisk teori och tillämpningar i R"
@@ -8,10 +10,12 @@ book:
   # ## REMOVED DUE TO FORMATTING AS BOOK
   navbar:
     left:
-      - href: 00-programming/index.qmd
+      - href: 00-programming/00-basics-R.qmd
         text: "Programmering i R"
-      - href: 01-regression/00-intro-regression.qmd
+      - href: 01-regression/index.qmd
         text: "Regressionsanalys"
+      - href: 02-variance/index.qmd
+        text: "Varianssanalys"
   # sidebar:
   #   - title: "Regressionsanalys"
   #     style: "docked"
@@ -54,6 +58,13 @@ book:
         - 01-regression/07-multicollinearity.qmd
         - 01-regression/08-detailed-residuals.qmd
         - 01-regression/09-variable-selection.qmd
+        - 01-regression/10-logistic-regression.qmd
+        - 01-regression/11-other-link-functions.qmd
+    - part: "**DEL III - Variansanalys**"
+      chapters: 
+        - 02-variance/index.qmd
+        - 02-variance/00-oneway-anova.qmd
+        - 02-variance/01-random-factors.qmd
   search: 
     location: sidebar
     show-item-context: false
@@ -70,9 +81,8 @@ format:
     tbl-cap-location: top
     code-fold: true
     code-summary: "Visa kod"
-    grid: 
-      sidebar-width: 320px
-    
+    # grid: 
+    #   sidebar-width: 320px
 
 
 # quarto publish gh-pages

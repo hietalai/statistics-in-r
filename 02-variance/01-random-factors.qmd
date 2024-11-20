@@ -1,0 +1,155 @@
+---
+editor_options: 
+  chunk_output_type: console
+filters: 
+  - shinylive
+---
+<!-- New commands for matrices in regression -->
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
+}
+
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
+
+ <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
+
+<!-- CONTENT -->
+# Slumpmässiga faktorer {#sec-random-effects}
+I alla tidigare regressionsmodeller förutsätter vi till viss del att de nivåer som finns i det insamlade data är de nivåer som faktorn innehåller och som vi är intresserade att dra slutsatser om, detta kallas för *fixa* effekter. Det finns tillfällen där vi kan vilja inkludera en faktor som endast består av ett urval av faktorns alla nivåer, till exempel hur olika skolor kan påverka prestationsgraden inom ett visst ämne. Det kan vara så att vi har en faktor i vår undersökning som har ett stort antal nivåer, fler än vi kan undersöka, och vi väljer istället att dra ett urval av nivåer från populationen av alla nivåer. Det vore omöjligt att skapa ett experiment med alla olika skolor i Sverige, så istället dras ett urval av säg 10
+skolor där vår undersökning genomförs. Detta är ett exempel på en *slumpmässig faktor*. Med en slumpmässig faktor är vi inte intresserad av skatta effekterna för just de nivåer som vi råkade dra i vårt urval, utan vi vill dra slutsater om faktorn generellt på populationsnivå. 
+
+## Modellens formulering
+Det finns flera olika sätt att formulera en modell som innehåller en slumpmässig faktor, men det viktiga är att vi beskriver egenskaperna i modellens komponenter så att det blir tydligt, oavsett de beteckningar som används, att faktorn numera är slumpmässig. Givet att detta underlag grundar sig i regressionsformuleringen till skillnad från den "klassiska" variansanalysformuleringen hänvisad i @nte-anova-formulation, kommer en regressionsformulering fortsätta användas även för slumpmässiga faktorer.
+
+Vi kan formulera en modell där vi tillåter responsvariabeln variera beroende på vilken nivå en observation tillhör som:
+$$
+\begin{aligned}
+  Y_{ij} &= \beta_{0i} + E_{ij}\\
+  \text{där}\\
+  \beta_{0i} &= \gamma_{00} + U_{0i}
+\end{aligned}
+$$
+där $i$ är de uppmätta nivåerna av faktorn, $\gamma_{00}$ är det övergripande medelvärdet (motsvarande $\mu$ i @eq-fix-effect-anova), och $U_{0i}$ är den avvikelse som nivå $i$ har på det övergripande medelvärdet.^[Detta är ekvivalent som $Y_{ij} = \mu + A_i + E_{ij}$ från @kleinbaum2013.]
+
+Om vi skriver ut modellen i sin helhet:
+$$
+\begin{aligned}
+  Y_{ij} &= \gamma_{00} + U_{0i} + E_{ij}
+\end{aligned}
+$$ {#eq-random-effect-anova}
+ser vi tydliga likheter med den fixa modellen, men också några skillnader. Vi visar inga kodade variabler eftersom de enskilda effekterna $U_{0i}$ är inte lika intressant att titta på som $\beta_i$ i den fixa modellen. Däremot kan vi beskriva att de enskilda effekterna är slumpmässigt dragna från en normalfördelad population med väntevärde 0 och en specifik varians: 
+$$
+\begin{aligned}
+  U_{0i} \sim N(0, \sigma^2_A)
+\end{aligned}
+$$
+där $\sigma^2_A$ är variansen för faktorn. 
+
+Fortfarande råder att $E_{ij} \sim N(0, \sigma^2)$ vilket innebär att vi har en modell bestående av två olika varianskomponenter, $\sigma^2_A$ och $\sigma^2$, som anses vara oberoende av varandra. Detta leder också att vi kan beskriva fördelningen av Y|X som:
+$$
+\begin{aligned}
+  Y_{ij}|\mathbf{X_j} \sim N(\gamma_{00}, \sigma^2_A + \sigma^2)
+\end{aligned}
+$$ {#eq-distr-random-factor}
+
+## Inferens på en slumpmässig faktor
+Om vi antar en modell som inte har någon faktor ser den ut som:
+$$
+\begin{aligned}
+  Y_j = \gamma_{00} + E_{j}
+\end{aligned}
+$$
+där $j = 1, \dots, n$. Som en följd innebär det att responsvariabelns fördelning blir $Y_{j}\sim N(\gamma{00}, \sigma^2)$, det vill säga att den enda variationen runt väntevärdet kommer från felets variation. Skillnaden gentemot @eq-distr-random-factor är att variationen också beror på variationen i den slumpmässiga faktorn. Om den slumpmässiga faktorn har en effekt på responsvariabeln betyder detta att $\sigma^2_A > 0$, det vill säga det är inte bara felet som bidrar till osäkerheten.
+
+På samma sätt som vi med kvadratsummor kan dela upp den totala variationen av en responsvariabel i modellens förklarade och oförklarade variation, kan vi med en slumpmässig faktor göra detsamma dock med några justeringar. Vi betecknar de olika delarna med komponenternas olika varianser och andelen förklarad variation beräknas som:
+$$
+\begin{aligned}
+  \frac{\sigma_A^2}{\sigma^2_Y} = \frac{\sigma^2_A}{\sigma^2 + \sigma^2_A}
+\end{aligned}
+$$
+där $\sigma^2_Y$ är den totala varians som finns i responsvariabeln.
+
+::: {.callout-note}
+Något som är speciellt med slumpmässiga faktorer är att observationerna inom en faktornivå **inte** är oberoende eftersom de uppkommer från samma delgrupp av faktorn. Vi kan beräkna kovariansen mellan observationer inom en faktornivå:
+$$
+\begin{aligned}
+  \sigma(Y_{ij}, Y_{ij'}) = \sigma^2_A 
+\end{aligned}
+$$
+där $j \ne j'$. 
+
+Kovariansen mellan observationer i olika faktornivåer antas oberoende:
+$$
+\begin{aligned}
+  \sigma(Y_{ij}, Y_{i'j'}) = 0
+\end{aligned}
+$$
+där $i \ne i'$.
+
+Anta att en faktor har två faktornivåer och tre observationer i varje cell (faktornivå). Om vi lägger dessa observationer i en vektor sorterade efter faktorn får vi följande kovariansmatris:
+$$
+\begin{aligned}
+\sigma^2(\mathbf{Y})= \begin{bmatrix}
+        \sigma^2 + \sigma^2_A   & \sigma^2_A              & \sigma^2_A              & 0 & 0 & 0\\
+        \sigma^2_A            & \sigma^2 + \sigma^2_A     & \sigma^2_A              & 0 & 0 & 0\\
+        \sigma^2_A            & \sigma^2_A              & \sigma^2 + \sigma^2_A     & 0 & 0 & 0\\
+        0                       & 0                         & 0                         & \sigma^2 + \sigma^2_A & \sigma^2_A          & \sigma^2_A\\
+        0                       & 0                         & 0                         & \sigma^2_A          & \sigma^2 + \sigma^2_A & \sigma^2_A \\
+        0                       & 0                         & 0                         & \sigma^2_A          & \sigma^2_A          & \sigma^2 + \sigma^2_A
+    \end{bmatrix}
+\end{aligned}
+$$
+:::
+
+För att undersöka om den slumpmässiga faktorn bidrar med en signifikant effekt formuleras följande hypoteser:
+$$
+\begin{aligned}
+  &H_0: \sigma^2_A = 0\\
+  &H_a: \sigma^2_A > 0
+\end{aligned}
+$$
+Om $H_0: \sigma_A^2 = 0$ är sann betyder det att alla dragningar från populationen av alla nivåer är lika, en konstant, och att faktorn därav inte har någon effekt. Om $H_a$ är sann betyder det däremot att faktorn har en effekt och att dragningar från populationen av alla nivåer generar olika effekter.
+
+För att beräkna testvariabeln för denna hypotesprövning används kvadratsummorna från den linjära modellen som en skattning av varianserna. Vi utgår från att de förväntade medelkvadratsummorna för $MSE$ och $MSA$^[$MSA$ är specifikt medelkvadratsumman för faktorn. I en envägs-ANOVA är detta samma som $MSR$, men i tvåvägs-ANOVA kommer vi vilja dela upp $MSR$ i dess mindre beståndsdelar.] är:
+$$
+\begin{aligned}
+    E[MSE] &= \sigma^2 \\
+    E[MSA] &= \sigma^2 + n_i\cdot \sigma^2_A
+\end{aligned}
+$$
+Om $H_0$ är sann betyder det att $E[MSE] = E[MSA]$ men om $H_a$ är sann betyder det att $E[MSA] > E[MSE]$ eftersom $n_i > 0$. En lämplig testvariabel formuleras då som:
+$$
+\begin{aligned}
+  F_{test} = \frac{MSA}{MSE}
+\end{aligned}
+$$
+där $F_{test} \sim F_{A - 1; A\cdot(n_i - 1)}$.
+
+::: {.callout-note}
+Frihetsgraderna för nämnaren är en omskrivning av "den vanliga" $n - (k + 1)$ enligt:
+$$
+\begin{aligned}
+    n - (k + 1) &= \\
+    n - (A - 1 + 1) &=\\
+    n_i \cdot A - A &= A \cdot (n_i - 1)
+\end{aligned}
+$$
+där $n_i$ är antalet observationer inom en nivå. Vi förutsätter att modellen är *balanserad*, det vill säga att alla nivåer har lika många observationer, $n_i = n / A$.
+:::
+
+I R kommer denna hypotesprövning beräknas på samma sätt som ett övergripande F-test i en fix modell beskriven i @sec-fix-effect-inference eftersom testvariabeln beräknas på samma sätt som det tidigare F-testet. Med en slumpmässig faktor kommer dock hypoteserna beskriva någonting annat och slutsatser som vi drar behöver ta hänsyn till variationen i faktorn, inte de enskilda faktormedelvärdena. 
+
+::: {.callout-important}
+Om $H_0$ förkastas vill vi **inte** genomföra multipla jämförelser för att bedöma specifikt vilka nivåer som skiljer sig åt. Med en slumpmässig faktor är de utvalda nivåerna inte intressanta att jämföra.
+:::
+
+
+
