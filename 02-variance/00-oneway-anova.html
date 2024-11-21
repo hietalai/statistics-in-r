@@ -1356,20 +1356,30 @@ SE_{\hat{L}} &amp;= \sqrt{1.929217\times 10^{5} \cdot \left( \frac{0.5^2}{4} + \
 &amp;= 268.971
 \end{aligned}
 \]</span> där <span class="math inline">\(MSE = 1.929217\times 10^{5}\)</span> är tagen från ANOVA-tabellen för den anpassade modellen.</p>
+<p>Vi antar att denna kontrast är fördelad enligt: <span class="math display">\[
+\begin{aligned}
+  \sqrt{(A-1)\cdot F_{A-1, n - A, 1-\alpha}}
+\end{aligned}
+\]</span></p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scheffé kontraster</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  means, </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Anger konstanterna för respektive nivå i kontrasten</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">L1 =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Anger vilken familjekonfidensmetod som ska genomföras</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjust =</span> <span class="st">"scheffe"</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Beräknad kontrast med tillhörande p-värde."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>contr <span class="ot">&lt;-</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">contrast</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    means, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger konstanterna för respektive nivå i kontrasten</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">L1 =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger vilken familjekonfidensmetod som ska genomföras</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">adjust =</span> <span class="st">"scheffe"</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Vi behöver säga till R att vi har A-1 "rang"</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>contr <span class="sc">%&gt;%</span> </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(<span class="at">scheffe.rank =</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Beräknad kontrast med tillhörande p-värde."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -1391,12 +1401,13 @@ SE_{\hat{L}} &amp;= \sqrt{1.929217\times 10^{5} \cdot \left( \frac{0.5^2}{4} + \
 <td style="text-align: right;">268.971</td>
 <td style="text-align: right;">21</td>
 <td style="text-align: right;">3.236</td>
-<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.16</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
+<p><code>emmeans</code> beräknar dock kontrasterna under antagandet att det endast är de angivna kontrasterna som modellen undersöker vilket vi i vissa lägen, till exempel detta tillfälle, inte vill använda. Vi behöver då säga till R att rangen av jämförelserna är <span class="math inline">\(A-1\)</span> genom argumentet <code>scheffe.rank = 6</code> i <code>summary()</code>.</p>
 <p>Med hjälp av skattningen och medelfelet kan vi också beräkna ett konfidensintervall enligt formler från <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span>.</p>
 </section>
 </section>
