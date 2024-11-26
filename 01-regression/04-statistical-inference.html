@@ -350,6 +350,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/02-control-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -362,9 +368,9 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#anova" id="toc-anova" class="nav-link active" data-scroll-target="#anova"><span class="header-section-number">5.1</span> ANOVA</a>
+  <li><a href="#sec-regression-anova" id="toc-sec-regression-anova" class="nav-link active" data-scroll-target="#sec-regression-anova"><span class="header-section-number">5.1</span> ANOVA</a>
   <ul class="collapse">
-  <li><a href="#anova-tabellen" id="toc-anova-tabellen" class="nav-link" data-scroll-target="#anova-tabellen"><span class="header-section-number">5.1.1</span> ANOVA-tabellen</a></li>
+  <li><a href="#sec-regression-anova-table" id="toc-sec-regression-anova-table" class="nav-link" data-scroll-target="#sec-regression-anova-table"><span class="header-section-number">5.1.1</span> ANOVA-tabellen</a></li>
   <li><a href="#sekventiella-kvadratsummor" id="toc-sekventiella-kvadratsummor" class="nav-link" data-scroll-target="#sekventiella-kvadratsummor"><span class="header-section-number">5.1.2</span> Sekventiella kvadratsummor</a></li>
   </ul></li>
   <li><a href="#sec-stat-inference" id="toc-sec-stat-inference" class="nav-link" data-scroll-target="#sec-stat-inference"><span class="header-section-number">5.2</span> Statistisk inferens</a>
@@ -414,8 +420,8 @@ window.Quarto = {
 <p>När vi anser oss ha hittat en lämplig modell kan vi fokusera på att tolka modellens resultat avseende populationen. Inom regressionsmodellering kan vi genomföra flera olika typer av statistisk inferens; på hela modellen, på grupper av parametrar, eller på enskilda parametrar.</p>
 <p>Vi kan börja med ett <em>F-test</em> för hela modellen för att se ifall minst en parameter är signifikant, att modellen är värd att undersöka vidare, för att sedan genomföra enskilda <em>t-test</em> för respektive parameter och bedöma vilka förklarande variabler har en signifikant påverkan på responsvariabeln. Då kvalitativa variabler ofta består utav flera parametrar behöver dessa slås samman för att undersöka variabelns samband vilket vi kan göra med ett <em>partiellt F-test</em>.</p>
 <p>Innan vi går in på de olika testerna behöver vi presentera <em>ANOVA</em>-tabellen som används för att dela upp responsvariabelns variation i modellens olika komponenter; modellens förklarande variabler och feltermen.</p>
-<section id="anova" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="anova"><span class="header-section-number">5.1</span> ANOVA</h2>
+<section id="sec-regression-anova" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="sec-regression-anova"><span class="header-section-number">5.1</span> ANOVA</h2>
 <p><strong>An</strong>alysis <strong>o</strong>f <strong>Va</strong>riance är en samling metoder som beräknar variationen av olika modellkomponenter. Målet med en modell är att förklara den <em>totala variationen</em> i responsvariabeln på bästa sätt. Allting som de förklarande variablerna hjälper till att beskriva kallas för den <em>förklarade variationen</em> och det som modellen inte lyckas förklara (felet) är den <em>oförklarade variationen</em>.</p>
 <p><span id="eq-variation-components"><span class="math display">\[
 \underbrace{\mathbf{Y}}_\text{total variation} = \underbrace{\mathbf{X} \boldsymbol{\beta}}_\text{förklarad variation} + \underbrace{\mathbf{E}}_\text{oförklarad variation}
@@ -445,8 +451,8 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<section id="anova-tabellen" class="level3" data-number="5.1.1">
-<h3 data-number="5.1.1" class="anchored" data-anchor-id="anova-tabellen"><span class="header-section-number">5.1.1</span> ANOVA-tabellen</h3>
+<section id="sec-regression-anova-table" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="sec-regression-anova-table"><span class="header-section-number">5.1.1</span> ANOVA-tabellen</h3>
 <p>En ANOVA-tabell är ett sätt att effektivt få en översikt av dessa olika komponenter samt visa ytterligare information, såsom <em>frihetsgraderna</em> (<span class="math inline">\(df\)</span>) för respektive komponent och <em>medelkvadratsummor</em>.</p>
 <p>Frihetsgrader beskriver hur många lutningsparametrar som skattas för respektive del<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> och medelkvadratsummor visar den genomsnittliga variationen per frihetsgrad, <span class="math inline">\(\frac{SS}{df}\)</span>.</p>
 <div class="cell" data-tbl-cap-location="top">

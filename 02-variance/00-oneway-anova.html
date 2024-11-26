@@ -371,6 +371,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/02-control-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -915,13 +921,13 @@ Notera
 </div>
 <p>Namnet variansanalys uppkommer då vi för dessa hypotesprövningar vill jämföra varianser av olika komponenter, likt vi gjort för regressionsmodeller i <a href="../01-regression/04-statistical-inference.html" class="quarto-xref"><span>Kapitel 5</span></a>. Mer specifikt undersöker vi relationen mellan den förklarande variationen och den oförklarande variationen vars formler vi nu kan förenkla när vi bara har kvalitativa förklarande variabler.</p>
 <p>Vi kan definiera följande kvadratsummor för modellen:</p>
-<p><span class="math display">\[
+<p><span id="eq-anova-sum-squares"><span class="math display">\[
 \begin{aligned}
   SSY &amp;= \sum_{i=1}^A\sum_{j=1}^{n_i}{(Y_{ij} - \overline{Y})^2} \\
   SSR &amp;= \sum_{i=1}^A{n_i \cdot (\overline{Y}_i - \overline{Y})^2} \\
   SSE &amp;= \sum_{i=1}^A\sum_{j=1}^{n_i}{(Y_{ij} - \overline{Y}_i)^2}
 \end{aligned}
-\]</span> där:</p>
+\tag{13.3}\]</span></span> där:</p>
 <ul>
 <li>SSY beskriver den totala variationen i hela datamaterialet, avståndet mellan varje observation, <span class="math inline">\(Y_{ij}\)</span>, och responsvariabelns medelvärde, <span class="math inline">\(\overline{Y}\)</span>.</li>
 <li>SSR beskriver den förklarade variationen, avståndet mellan varje nivås medelvärde, <span class="math inline">\(\overline{Y}_i\)</span>, och responsvariabelns medelvärde.</li>

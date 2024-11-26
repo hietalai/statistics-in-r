@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -68,6 +102,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -300,8 +363,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#sec-ancova" id="toc-sec-ancova" class="nav-link active" data-scroll-target="#sec-ancova"><span class="header-section-number">15.1</span> Kovariansanalys</a></li>
-  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
+  <li><a href="#sec-ancova" id="toc-sec-ancova" class="nav-link active" data-scroll-target="#sec-ancova"><span class="header-section-number">15.1</span> Kovariansanalys</a>
+  <ul class="collapse">
+  <li><a href="#inferens" id="toc-inferens" class="nav-link" data-scroll-target="#inferens"><span class="header-section-number">15.1.1</span> Inferens</a></li>
+  </ul></li>
+  <li><a href="#randomiserade-blockförsök" id="toc-randomiserade-blockförsök" class="nav-link" data-scroll-target="#randomiserade-blockförsök"><span class="header-section-number">15.2</span> Randomiserade blockförsök</a></li>
   </ul>
 </nav>
     </div>
@@ -378,10 +444,10 @@ Figur&nbsp;15.1: Relationen mellan modellen av skottkärra och den uppmätta tid
 </figcaption>
 </figure>
 </div>
-<p>I detta experiment antas det rimligt att även vikten på gruset som skottkärran får påverkar tiden det tar. Vi kan förmodligen inte lasta exakt lika mycket grus varje gång så istället lastar vi gruset i skottkärran när den står på en våg och noterar vikten av gruset (totalvikt - skottkärrans vikt).</p>
-<div id="fig-wheelbarrow" class="quarto-float quarto-figure quarto-figure-center anchored">
+<p>I detta experiment antas det rimligt att även vikten på gruset som skottkärran får påverkar tiden det tar. Vi kan förmodligen inte lasta exakt lika mycket grus varje gång för att hålla den variabeln konstant så istället lastar vi gruset i skottkärran när den står på en våg och noterar vikten av gruset (totalvikt - skottkärrans vikt).</p>
+<div id="fig-wheelbarrow-weight" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-wheelbarrow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="fig-wheelbarrow-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell" data-fig-width="3" data-fig-height="2" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -429,14 +495,193 @@ Figur&nbsp;15.1: Relationen mellan modellen av skottkärra och den uppmätta tid
 </div>
 </div>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wheelbarrow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;15.2: Relationen mellan modellen av skottkärra och den uppmätta tiden.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wheelbarrow-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;15.2: Relationen mellan modellen av skottkärra och den uppmätta tiden där vi kontrollerar för lastens vikt.
 </figcaption>
 </figure>
 </div>
+<p>Effekten av skottkärran kommer då justeras med avseende på kontrollvariabeln.</p>
+<p>Modellen som formuleras blir då: <span class="math display">\[
+\begin{aligned}
+  Y_{ij} = \mu + \beta_1 \cdot X_{1j} + \beta_{2}\cdot X_{2j} + \beta_{3}\cdot X_{3j} + \beta_4 \cdot (Z_{ij} - \overline{Z}) + E_{ij}
+\end{aligned}
+\]</span> där <span class="math display">\[
+\begin{aligned}
+    \mu &amp;= \frac{\mu_1 + \mu_2 + \mu_3 + \mu_4}{4} \\
+    X_{1j} &amp;=
+    \begin{cases}
+        1 \quad &amp;\text{om modell 1}\\
+        -1      &amp;\text{om modell 4}\\
+        0       &amp;\text{annars}
+    \end{cases} \\
+    X_{2j} &amp;=
+    \begin{cases}
+        1 \quad &amp;\text{om modell 2}\\
+        -1      &amp;\text{om modell 4}\\
+        0       &amp;\text{annars}
+    \end{cases} \\
+    X_{3j} &amp;=
+    \begin{cases}
+        1 \quad &amp;\text{om modell 3}\\
+        -1      &amp;\text{om modell 4}\\
+        0       &amp;\text{annars}
+    \end{cases} \\
+    \overline{Z} &amp;= \frac{\sum{Z_{ij}}}{n} \\
+    E_{ij} &amp;\sim N(0, \sigma^2)
+\end{aligned}
+\]</span> Anledningen till att kontrollvariabeln centreras i modellen är för att tillåta <span class="math inline">\(\mu\)</span> fortsätta vara det övergripande medelvärdet vilket underlättar beräkningar.</p>
+<p>I koden nedan skapas datamaterialet, den kvalitativa variabeln modell anges som en faktor med effektkodning och den kontinuerliga kontrollvariabeln centreras.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>wheelbarrow <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">c</span>(<span class="st">"Model_A"</span>, <span class="st">"Model_A"</span>, <span class="st">"Model_A"</span>, <span class="st">"Model_A"</span>, <span class="st">"Model_A"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Model_B"</span>, <span class="st">"Model_B"</span>, <span class="st">"Model_B"</span>, <span class="st">"Model_B"</span>, <span class="st">"Model_B"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Model_C"</span>, <span class="st">"Model_C"</span>, <span class="st">"Model_C"</span>, <span class="st">"Model_C"</span>, <span class="st">"Model_C"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Model_D"</span>, <span class="st">"Model_D"</span>, <span class="st">"Model_D"</span>, <span class="st">"Model_D"</span>, <span class="st">"Model_D"</span>) <span class="sc">%&gt;%</span> <span class="fu">factor</span>(),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Weight =</span> <span class="fu">c</span>(<span class="fl">49.53</span>, <span class="fl">49.53</span>, <span class="fl">53.16</span>, <span class="fl">51.53</span>, <span class="fl">49.06</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>             <span class="fl">51.09</span>, <span class="fl">49.07</span>, <span class="fl">49.07</span>, <span class="fl">50.48</span>, <span class="fl">46.17</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>             <span class="fl">46.55</span>, <span class="fl">48.88</span>, <span class="fl">47.97</span>, <span class="fl">50.63</span>, <span class="fl">48.18</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>             <span class="fl">47.18</span>, <span class="fl">52.93</span>, <span class="fl">49.55</span>, <span class="fl">50.14</span>, <span class="fl">47.15</span>),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Time =</span> <span class="fu">c</span>(<span class="fl">15.66</span>, <span class="fl">16.31</span>, <span class="fl">15.41</span>, <span class="fl">16.78</span>, <span class="fl">15.55</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>           <span class="fl">16.75</span>, <span class="fl">16.24</span>, <span class="fl">18.69</span>, <span class="fl">16.97</span>, <span class="fl">15.49</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           <span class="fl">18.30</span>, <span class="fl">16.49</span>, <span class="fl">17.83</span>, <span class="fl">15.93</span>, <span class="fl">16.31</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>           <span class="fl">19.68</span>, <span class="fl">20.79</span>, <span class="fl">19.89</span>, <span class="fl">19.66</span>, <span class="fl">19.18</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Weight =</span> <span class="fu">scale</span>(Weight, <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(wheelbarrow<span class="sc">$</span>Model) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">4</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Modellen anpassas på samma sätt som en envägs-ANOVA men vi lägger till den centrerade kovariaten.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Time <span class="sc">~</span> Model <span class="sc">+</span> Weight, <span class="at">data =</span> wheelbarrow)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"ANOVA-modell för kovariansmodellen"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>ANOVA-modell för kovariansmodellen</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Model</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">42.948</td>
+<td style="text-align: right;">14.316</td>
+<td style="text-align: right;">17.311</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Weight</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.233</td>
+<td style="text-align: right;">0.233</td>
+<td style="text-align: right;">0.281</td>
+<td style="text-align: right;">0.604</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">12.405</td>
+<td style="text-align: right;">0.827</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="inferens" class="level3" data-number="15.1.1">
+<h3 data-number="15.1.1" class="anchored" data-anchor-id="inferens"><span class="header-section-number">15.1.1</span> Inferens</h3>
+<p>Vi måste nu undersöka effekten av faktorn genom ett partiellt F-test då modellen innehåller fler komponenter. <span class="math display">\[
+\begin{aligned}
+  &amp;H_0: \beta_1 = \beta_2 = \beta_3 = 0\\
+  &amp;H_a: \text{Minst en av } \beta_i \text{ i } H_0 \ne 0
+\end{aligned}
+\]</span></p>
+<p>Vi jämför alltså två modeller, den kompletta med faktorn och kovariaten och den reducerade med enbart kovariaten. Om vi ändrar ordningen på variablerna kan vi med hjälp av sekventiella kvadratsummor få både testvariabeln och p-värdet för testet i ANOVA-tabellen.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Time <span class="sc">~</span> Weight <span class="sc">+</span> Model, <span class="at">data =</span> wheelbarrow)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"ANOVA-modell för kovariansmodellen"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>ANOVA-modell för kovariansmodellen</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Weight</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.070</td>
+<td style="text-align: right;">0.070</td>
+<td style="text-align: right;">0.085</td>
+<td style="text-align: right;">0.775</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Model</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">43.111</td>
+<td style="text-align: right;">14.370</td>
+<td style="text-align: right;">17.376</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">12.405</td>
+<td style="text-align: right;">0.827</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Inferens för kovariaten är inte relevant eftersom detta samband inte är intressant för undersökningens syfte utan inkluderas endast för att faktorns samband ska justeras.</p>
 </section>
-<section id="referenser" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
+</section>
+<section id="randomiserade-blockförsök" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="randomiserade-blockförsök"><span class="header-section-number">15.2</span> Randomiserade blockförsök</h2>
+<p>I fall där mätenheterna är heterogena men kan delas upp i mindre homogena grupper, är det lämpligt att genomföra ett <em>randomiserat blockförsök</em>. Detta motsvarar en kvalitativ kontrollvariabel.</p>
+<p>Dessa homogena grupperna kallas för <em>block</em> och rent praktiskt tilldelas behandlingarna slumpmässigt <strong>inom</strong> varje block. För att relatera detta till urvalsundersökningar kan vi säga att komplett randomisering motsvarar ett OSU och randomiserade blockförsök motsvarar ett stratifierat urval. En modell kan innehålla ett block vars nivåer är en kombination av flera kontrollvariabler <strong>eller</strong> flera kontrollvariabler som separata block.</p>
+<p>Modellen som anpassas försöker nu beskriva <span class="math inline">\(Y_{ijk}\)</span> där <span class="math inline">\(i \in {1, \dots, A}\)</span>, <span class="math inline">\(j \in {1, \dots, B}\)</span>, och <span class="math inline">\(k \in {1, \dots, n_{ij}}\)</span> för A nivåer av faktorn och B olika block.</p>
+<p>Om undersökningen endast består av en observation per cell, en observation per nivå av faktorn i vardera block, kan inte SSE beräknas enligt tidigare formler (<a href="00-oneway-anova.html#eq-anova-sum-squares" class="quarto-xref">Ekvation&nbsp;<span>13.3</span></a>) då <span class="math inline">\(\left(Y_{ijk} - \overline{Y}_{ij}\right) = 0\)</span>. Vi behöver då anta att modellen inte har någon interaktion och skatta den oförklarade variationen med interaktionens kvadratsumma.</p>
+<p><span class="math display">\[
+\begin{aligned}
+SSAB = \sum_{i = 1}^A \sum_{j=1}^B \left(\overline{Y}_{ij} - \overline{Y}_{i} - \overline{Y}_{j} + \overline{Y}\right)^2
+\end{aligned}
+\]</span></p>
+<p>Om undersökningen har flera observationer beräknas den oförklarade variationen som vanligt med hjälp av SSE.</p>
+<!-- TODO MORE ABOUT BLOCKS AND RANDOMIZATION -->
+<!-- ## Referenser {.unnumbered} -->
 
 
 </section>
