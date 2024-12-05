@@ -33,7 +33,7 @@ Vi kan börja med ett *F-test* för hela modellen för att se ifall minst en par
 
 Innan vi går in på de olika testerna behöver vi presentera *ANOVA*-tabellen som används för att dela upp responsvariabelns variation i modellens olika komponenter; modellens förklarande variabler och feltermen.
 
-## ANOVA
+## ANOVA {#sec-regression-anova}
 **An**alysis **o**f **Va**riance är en samling metoder som beräknar variationen av olika modellkomponenter. Målet med en modell är att förklara den *totala variationen* i responsvariabeln på bästa sätt. Allting som de förklarande variablerna hjälper till att beskriva kallas för den *förklarade variationen* och det som modellen inte lyckas förklara (felet) är den *oförklarade variationen*.
 
 $$
@@ -97,7 +97,7 @@ ggplot(anovaTable, aes(x = "Total Variation", y = `Sum Sq`, fill = Source)) +
 
 ```
 
-### ANOVA-tabellen
+### ANOVA-tabellen {#sec-regression-anova-table}
 En ANOVA-tabell är ett sätt att effektivt få en översikt av dessa olika komponenter samt visa ytterligare information, såsom *frihetsgraderna* ($df$) för respektive komponent och *medelkvadratsummor*. 
 
 Frihetsgrader beskriver hur många lutningsparametrar som skattas för respektive del^[Frihetsgrader beskriver egentligen hur många bitar oberoende information som finns för en beräkning. Tänk tillbaka på beräkningen av en stickprovsstandardavvikelse vars frihetsgrader är $n - 1$, antalet observationer - 1, för att vi skattar medelvärdet när vi beräknar standardavvikelsen.] och medelkvadratsummor visar den genomsnittliga variationen per frihetsgrad, $\frac{SS}{df}$.

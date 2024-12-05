@@ -1,0 +1,515 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+<!-- New commands for matrices in regression -->
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
+}
+
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
+
+ <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
+
+<!-- CONTENT -->
+# Tvåvägs-ANOVA
+I @sec-one-way-anova studerade vi förhållandet mellan en responsvariabel och en förklarande faktor (med flera faktornivåer) och @sec-control-anova utökade vi modellen till att också inkludera kontrollvariabler för att justera effekten av faktorn och ta hänsyn till confounding effekter. 
+
+Ett experiment behöver inte begränsa sig till endast en faktor av intresse utan kan utökas till flera förklarande faktorer. I detta kapitel utvidgar vi modellen till två förklarande faktorer och vi vill studera förhållandet mellan varje faktor och en kombination av dessa gentemot responsvariabeln. 
+
+När vi undersöker flera faktorer kan vi kombinera fixa och slumpmässiga faktorer i olika konstellationer och skillnaden mellan dessa modeller påverkar både den teoretiska grunden och hur vi genomför inferens på dess olika delar. 
+
+## Typer av kvadratsummor
+I envägs-ANOVA kan vi undersöka faktorns effekt med ett F-test där kvadratsumman för faktorn är den enda komponenten i den förklarade variationen. Med en modell som nu inkluderar flera faktorer kommer den förklarade variationen bestå av flera komponenter, en för vardera faktor och en för interaktionen mellan dem, på samma sätt som i en multipel linjär regressionsmodell. 
+
+I @sec-regression-anova-table beskrev vi sekventiella kvadratsummor (SS) som ett sätt att dela upp den förklarade variationen i dess mindre beståndsdelar. Sekventiella kvadratsummor är endast en variant av kvadratsumma som vi kan använda för att presentera den förklarade variationen.
+
+**Typ I SS** kallas oftast för sekventiella eller betingade kvadratsummor eftersom de beräknas enligt den ordning som variablerna läggs till i modellen. I en tvåvägs-ANOVA med interaktioner har modellen tre källor av variation. Notera att kategoriska variabler grupperas till en och samma källa oavsett hur många kodade variabler eller tillhörande parameterskattningar som den innehåller. Givet att vi skattar modellen `lm(Y ~ A * B)` där $A$ och $B$ är två faktorer beräknas SS av typ I som följer:
+
+- Faktor A: $SS(A)$
+- Faktor B: $SS(B | A)$
+- Interaktion: $SS(AB | A, B)$
+
+Om vi vill undersöka faktor As huvudsakliga effekter kommer dessa SS endast ta hänsyn till Faktor A, alltså vi får samma värden som om vi hade anpassat en envägs-ANOVA med enbart faktor A. Detta är inte målet med en tvåvägs-ANOVA, vi vill ta hänsyn till båda faktorerna som modellen innehåller.
+
+**Typ II SS** beräknar kvadratsummor betingat på andra variabler av samma grad eller lägre. I praktiken betyder detta att huvudeffekterna är av grad 1 medan interaktionen är av grad 2 och betingade kvadratsummor för en huvudeffekt kommer endast ta hänsyn till den andra huvudeffekten.
+
+- Faktor A: $SS(A | B)$
+- Faktor B: $SS(B | A)$
+- Interaktion: $SS(AB | A, B)$
+
+Denna kvadratsumma kommer undersöka de huvudsakliga effekterna under antagandet att det inte finns någon interaktion med i modellen, vilket i R beräkningsmässigt skulle motsvara en `lm(Y ~ A + B)` modell med typ III SS. Typ II SS ger oss dock möjligheten att få ut dessa värden utan att behöva skatta om modellen ifall interaktionseffekten visat sig vara icke-signifikant.
+
+**Typ III SS** beräknar kvadratsummor betingat på alla andra variabler som inkluderas i modellen oavsett ordningen vi lägger in dem. 
+
+- Faktor A: $SS(A | B, AB)$
+- Faktor B: $SS(B | A, AB)$
+- Interaktion: $SS(AB | A, B)$
+
+Jämfört med typ II SS beräknas de betingade kvadratsummorna för huvudeffekterna med interaktionen i åtanke vilket innebär att dessa kvadratsummor för huvudeffekterna kommer vara korrekt ifall interaktionen är signifikant. 
+
+::: {.callout-important}
+För typ III SS när interaktionen är inkluderad **måste** vi koda våra faktorer enligt effektkodning. Orsaken bakom detta är att för flervägs-ANOVA med interaktioner kräver att summan av kodningen för varje variabel är 0, annars undersöks fel hypoteser. 
+:::
+
+Typ II och typ III SS har inte samma additiva egenskap som typ I SS vilket innebär att den totala förklarade variationen inte kan beräknas genom deras summa, utan vi behöver då beräkna $SSR = SSY - SSE$. 
+
+En **balanserad** ANOVA-modell ger dock ett specialfall av dessa kvadratsummor, nämligen att de alla är lika varandra. Vad detta betyder för vår inferens är att vi kan undersöka den enskilda faktorns effekt direkt från ANOVA-tabellen oavsett vilken sorts kvadratsumma som används.
+
+<!-- TODO SHOW MATH FOR WHY THIS IS THE CASE -->
+
+## Tvåvägs-ANOVA
+Anta att vi genomför ett experiment för att mäta effekten av C-vitamin på tillväxten av tänder hos marsvin. De två faktorerna som undersöks är doseringen av vitamin (faktor A) och intagningsmetoden (faktor B). 
+
+Tre specifika doser undersöks:
+
+- 0.5 mg/dag
+- 1 mg/dag
+- 2 mg/dag
+
+Två olika sätt att ge C-vitamin till marsvinen undersöks:
+
+- Apelsinjuice (kodad `OJ`)
+- Askorbinsyra (kodad `VC`)
+
+Modellen måste nu ta hänsyn till att vi har två index för faktorerna ($i$ och $j$) och ett index för observationerna ($k$).
+
+$$
+\begin{aligned}
+  Y_{ijk} = \mu + \underbrace{\beta_1 \cdot X_{1jk} + \beta_2 \cdot X_{2jk}}_{\text{Faktor A}} + \underbrace{\beta_3 \cdot X_{i1k}}_{\text{Faktor B}} + \underbrace{\beta_4 \cdot X_{1jk} \cdot X_{i1k} + \beta_5 \cdot X_{2jk} \cdot X_{i1k}}_{\text{Interaktion}}+ E_{ijk}
+\end{aligned}
+$$ {#eq-twoway-anova-fix}
+
+När vi lägger till ytterligare en faktor och interaktionen mellan de två innebär det att vi undersöker tre olika potentiella effekter; interaktionseffekter, och två huvudsakliga faktoreffekter, en för respektive faktor. Däremot kommer interaktionseffektens förekomst eller avsaknad påverka hur vi undersöker de huvudsakliga effekterna.
+
+Vi kan visualisera en tvåvägs-ANOVA likt vi gjort tidigare, genom grupperade diagram, men vi måste också ta hänsyn till att interaktionen mellan de två faktorerna kan vara av intresse. Därför behöver vi gruppera diagrammet på båda faktorerna.
+
+```{r}
+#| fig-cap: Fördelning av längder för respektive kombination av dos och intagningssätt.
+#| fig-height: 3
+#| fig-width: 5 
+
+ToothGrowth <- 
+  ToothGrowth  %>% 
+  mutate(
+    dose = factor(dose)
+  )
+
+contrasts(ToothGrowth$dose) <- contr.sum(3)
+contrasts(ToothGrowth$supp) <- contr.sum(2)
+
+ggplot(ToothGrowth) + aes(x = dose, y = len, fill = supp) +
+  geom_violin() + theme_bw() + 
+  scale_fill_manual(
+    "Metod",
+    values = c("steelblue", "#d9230f")
+  ) + labs(x = "Dosering", y = "Längd")
+
+```
+
+Med detta fioldiagram kan vi se skillnader i faktormedelvärden, fördelningen för respektive färg, men för att tydligt kunna utläsa interaktioner behöver vi göra ett *interaktionsdiagram*. Ett interaktionsdiagram är ett linjediagram över cellmedelvärdena, alltså medelvärden för varje kombination av nivåer från respektive faktor.
+
+```{r}
+#| fig-cap: Interaktionsdiagram över cellmedelvärden.
+#| fig-height: 3
+#| fig-width: 5 
+#| message: false
+#| label: fig-cellmeans
+  
+
+# Beräknar cellmedelvärden
+means <- 
+  ToothGrowth %>% 
+  group_by(supp, dose) %>% 
+  summarize(
+    mean = mean(len)
+  )
+
+# Visar respektive cellmedelvärde
+ggplot(ToothGrowth) + 
+  aes(x = dose, y = len, group = supp, color = supp) + 
+  geom_point(alpha = 0.5) + theme_bw() + 
+  scale_color_manual("Metod", values = c("steelblue", "#d9230f")) + 
+  geom_line(
+    data = means,
+    aes(y = mean), 
+    linewidth = 1.2
+  ) + 
+  labs(x = "Dosering", y = "Längd")
+
+```
+
+Vi kan identifiera en antydan till en interaktion genom icke-parallella linjer som i praktiken betyder att effekten av en faktor påverkas av vilken nivå av den andra faktorn som också ges. I just detta fall ser linjerna ut att korsas vid dos 2 vilket ger en svag antydan till att en interaktion förekommer. Som alla former av visualiseringar beskriver detta endast det urval som har genomförts och för att dra slutsatser om populationen behöver vi genomföra inferens.
+
+### Modellanpassning i R
+Att skatta en tvåvägs-ANOVA i R är inte svårare än att skatta en regressionsmodell med flera variabler. För att få en interaktion mellan de två faktorerna behöver vi använda `*` istället för `+`.
+
+```{r}
+
+model <- lm(len ~ supp*dose, data = ToothGrowth)
+
+anova(model) %>% 
+  kable(digits = 3, caption = "Modellens ANOVA-tabell.")
+
+```
+
+::: {.callout-tip}
+För att visa att de sekventiella kvadratsummorna som R anger är lika de andra typerna av kvadratsumma kan vi ändra ordning på modellen och ändå få samma kvadratsummor för alla komponenter.
+```{r}
+
+model <- lm(len ~ dose*supp, data = ToothGrowth)
+
+anova(model) %>% 
+  kable(digits = 3, caption = "Modellens ANOVA-tabell.")
+
+```
+:::
+
+### Inferens
+Utifrån tabellen kan vi dra slutsatser om respektive komponent i modellen men vi **börjar alltid med interaktionseffekter**. 
+
+Hypoteserna som undersöks för respektive del kan grupperas i flera partiella F-test utifrån @eq-twoway-anova-fix. Interaktionen består i detta exempel av parametrarna $\beta_4$ och $\beta_5$ så den formella hypotesen för interaktionseffekten är:
+$$
+\begin{aligned}
+  &H_0: \beta_4 = \beta_5 = 0\\
+  &H_a: \text{Minst en av } \beta \text{ i } H_0 \ne 0
+\end{aligned}
+$$
+
+Testvariabeln beräknas genom:
+$$
+\begin{aligned}
+  F_{test} = \frac{MSAB}{MSE}
+\end{aligned}
+$$
+där $MSAB$ är interaktionens medelkvadratsumma. Testvariabeln anses följa $F_{(A-1)(B-1), A \cdot B(n-1), 1-\alpha}$.
+
+P-värdet för testet (`r anova(model)[3,5] %>% round(4)`) är mindre än fem procent vilket innebär att vi kan förkasta $H_0$ att det inte finns någon interaktion mellan faktorerna. 
+
+Detta kommer påverka våra nästa steg i analysen eftersom en interaktion innebär att sambandet mellan en faktor och mätvariabeln förändras beroende på den andra faktorn. Den direkta konsekvensen är att de huvudsakliga faktoreffekterna inte längre är relevant att undersöka eftersom de kommer ge missvisande resultat. Vi kommer **inte** vilja undersöka skillnader mellan specifika faktornivåer utan fokuserar på cellmedelvärdena, alltså skillnader i medelvärden när vi tar hänsyn till **båda** faktorerna.
+
+Paketet `emmeans` kan skapa cellmedelvärden genom:
+```{r}
+#| label: tbl-cellmeans
+
+means <- emmeans(model, specs = ~supp*dose)
+
+means %>% 
+  kable(digits = 3, caption = "Cellernas medelvärden", 
+        col.names = c("Metod", "Dosering", "Medelvärde", "Medelfel", "Frihetsgrader", "Nedre KI gräns", "Övre KI gräns"))
+
+```
+
+@tbl-cellmeans visar de specifika värden som vi såg i @fig-cellmeans. Inferens över multipla jämförelser innebär nu att vi skapar par av cellmedelvärden och genomför hypotesprövningar eller intervallskattningar med någon form av familjekonfidens. Formellt undersöks par av medelvärden med båda index, t.ex. $H_0: \mu_{11} - \mu_{12} = 0$.
+
+```{r}
+#| label: tbl-twoway-anova-tukey
+
+tukey <- 
+  pairs(means, adjust = "tukey") 
+
+tukey %>% 
+  as_tibble() %>% 
+  arrange(abs(estimate) %>% desc()) %>% 
+  kable(digits = 3, caption = "Parvisa jämförelser av cellmedelvärden med Tukey familjekonfidens")
+
+selectedMeans <- means[c(1:4),]
+
+bonferroni <- 
+  pairs(selectedMeans, adjust = "bonferroni")
+
+bonferroni %>% 
+  as_tibble() %>% 
+  arrange(abs(estimate) |> desc()) %>% 
+  kable(digits = 3, caption = "Parvisa jämförelser av utvalda cellmedelvärden med Bonferroni familjekonfidens")
+
+```
+
+
+## Slumpmässiga faktorer
+Hittintills har vi bara ägnat oss åt modeller där vi endast har fixa effekter. I praktiken har vi många situationer där nivåerna på en faktor är dragna slumpmässigt från en population vilket innebär att inferensen som vi genomför tittar på hela population och inte bara de utvalda nivåerna. Detta är en modell med slumpmässiga effekter och i en flervägs-modell kan vi inkludera en blandning av fixa och slumpmässiga effekter (*mixed effects model*) eller enbart slumpmässiga (*random effects model*). I fallet med två slumpmässiga faktorer kan vi utveckla @eq-random-effect-anova till att ta hänsyn till flera slumpmässiga effekter:
+$$
+\begin{aligned}
+  Y_{ijk} = \gamma_{000} + U_{0i0} + U_{00j} + U_{0ij} + E_{ijk}
+\end{aligned}
+$$
+där
+
+- $i$ är de uppmätta nivåerna av faktor A, 
+- $j$ är nivåer av faktor B, 
+- $\gamma_{000}$ är det övergripande medelvärdet (motsvarande $\mu$ i @eq-fix-effect-anova), 
+- $U_{0i0} \sim N(0, \sigma_A^2)$ är den avvikelse som nivå $i$ har på det övergripande medelvärdet, 
+- $U_{00j} \sim N(0, \sigma_B^2)$ är den avvikelse nivå $j$ har på medelvärdet, 
+- $U_{0ij} \sim N(0, \sigma_{AB}^2)$ är den avvikelse respektive kombination av nivåer från de två faktorerna har på medelvärdet,
+- till sist $E_{ijk} \sim N(0, \sigma^2)$.
+
+Modellen innehåller nu fyra olika varianser, $\sigma^2_A$, $\sigma^2_B$, $\sigma^2_{AB}$ och $\sigma^2$ som tillsammans bildar den totala variansen av $Y$.
+
+### Inferens
+Vi beräknar kvadratsummor på samma sätt som i fallet med en tvåvägs-ANOVA med två fixa faktorer. Däremot ser väntevärdena för kvadratsummorna annorlunda ut och påverkar hur testvariabeln beräknas för respektive faktor.
+
+På samma sätt som i @sec-random-effects kommer inferens inte längre fokusera på de enskilda lutningsparametrarna utan istället undersöka variansen av respektive komponent. Till exempel ett test för signifikanta interaktionseffekter undersöker $H_0: \sigma^2_{AB} = 0$ mot $H_a: \sigma_{AB}^2 > 0$.
+
+Testvariabeln utgår från följande väntevärden av medelkvadratsummor:
+$$
+\begin{aligned}
+    E[MSE] &= \sigma^2 \\
+    E[MSAB] &= \sigma^2 + n_{ij} \sigma^2_{AB} \\
+    E[MSA] &= \sigma^2 + n_{ij} \sigma^2_{AB} + B \cdot n_{ij} \sigma^2_A\\
+    E[MSB] &= \sigma^2 + n_{ij} \sigma^2_{AB} + A \cdot n_{ij} \sigma^2_B
+\end{aligned}
+$$
+där $n_{ij}$ är antalet i respektive cell vilket i en balanserad modell är samma värde för alla celler, $n_{ij} = \frac{n}{A\cdot B}$.
+
+::: {.callout-important}
+För en obalanserad modell är dessa väntevärden mycket mer komplicerade eftersom varje cell ger en viktad effekt på variansen givet sin storlek.
+:::
+
+Testvariablerna kan nu skapas genom att ställa upp en kvot av två medelkvadratsummor som är lika om $H_0$ är sann och större än 1 om $H_a$ är sann. För interaktionen innebär det:
+
+$$
+\begin{aligned}
+    F_{test} = \frac{MSAB}{MSE} = \frac{\sigma^2 + n_{ij} \sigma^2_{AB}}{\sigma^2}
+\end{aligned}
+$$
+
+Testvariabeln följer F-fördelningen med täljarens och nämnarens frihetsgrader.
+
+Det som är speciellt med slumpmässiga faktorer är hur vi undersöker de huvudsakliga faktoreffekterna för faktor A och B. Hypoteser för dessa komponenter fokuserar enbart på $\sigma^2_A$ eller $\sigma_B^2$ respektive och då räcker det inte att jämföra MSA med MSE som vi gör i en fix modell.
+
+$$
+\begin{aligned}
+  F_{test} = \frac{MSA}{MSE} = \frac{\sigma^2 + n_{ij} \sigma^2_{AB} + B \cdot n_{ij} \sigma^2_A}{\sigma^2}
+\end{aligned}
+$$
+Med den "vanliga" testvariabeln skulle vi inte kunna särskilja om variansen från faktor A eller interaktionen leder till att $H_0$ förkastas. Istället behöver vi jämföra med MSAB i nämnaren:
+
+$$
+\begin{aligned}
+  F_{test} = \frac{MSA}{MSAB} = \frac{\sigma^2 + n_{ij} \sigma^2_{AB} + B \cdot n_{ij} \sigma^2_A}{\sigma^2 + n_{ij} \sigma^2_{AB}}
+\end{aligned}
+$$
+
+När vi använder R för att anpassa modellen och skapa ANOVA-tabeller kan vi inte läsa av tabellens F-test direkt då R inte vet om att vi har slumpmässiga faktorer. 
+
+### Exempel
+
+En biolog vill undersöka om kackerlackor växer snabbare i varma och fuktiga miljöer. 27 identiska kackerlackor delas upp på nio olika kombinationer av temperatur och luftfuktighet. Det är inte just dessa temperaturer och luftfuktigheter som är av intresse, dessa olika kombinationer har blivit slumpmässigt valda av alla möjliga kombinatoner av luftfuktigheter och temperaturer. Kackerlackorna får vara i de olika förhållandena i två veckor, och efter dessa två veckor observeras deras längdökning i millimeter. Datamaterialet finns tillgängligt [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/roaches.csv).
+
+Modellen anpassas på samma sätt som tidigare men vi behöver hålla koll på vad för värden som vi sedan tolkar. 
+
+::: {.callout-tip}
+Man kan i `lm` ange hur vi vill att kvalitativa variabler ska kodas istället för att spara kodningen i datamaterialet. Vi kan i argumentet `contrasts` ange en namngiven lista med faktorer och vilken form av `contr.X` som ska användas. 
+
+För effektkodning anger vi `contr.sum`.
+:::
+
+```{r}
+
+model <- lm(
+  length_increase ~ humidity * temperature,
+    data = roach,
+    # Faktoreffektkodar faktorerna enbart för modellanpassningen
+    contrasts = 
+      list(
+        humidity = "contr.sum",
+        temperature = "contr.sum"
+      )
+  )
+
+anova(model) %>% 
+  kable(digits = 3, caption = "Modellens felaktiga ANOVA-tabell.")
+
+```
+
+Tabellen visar endast ett korrekt test, det för interaktionseffekten, och vi behöver själv beräkna det korrekta testet för de huvudsakliga faktorerna
+
+```{r}
+#| code-fold: false
+
+# Skapar en korrigerad ANOVA-tabell utifrån en skattad tvåvägs-ANOVAmodell med två slumpmässiga faktorer
+mainEffectCorrection <- function(model){
+  anovaTabell <- anova(model)
+  
+  # Testvariabel för faktor A (MSA / MSAB)
+  anovaTabell[1,4] <- anovaTabell[1,3] / anovaTabell[3,3]
+  
+  # Testvariabel för faktor B (MSB / MSAB)
+  anovaTabell[2,4] <- anovaTabell[2,3] / anovaTabell[3,3]
+  
+  # Beräknar nya p-värden
+  anovaTabell[1:2,5] <- 
+    pf(
+      q = anovaTabell[1:2, 4], 
+      df1 = anovaTabell[1:2,1], 
+      df2 = anovaTabell[3,1], 
+      lower.tail = FALSE
+    )
+  
+  return(anovaTabell)
+}
+
+mainEffectCorrection(model) %>% 
+  kable(digits = 3, caption = "Modellens korrigerade ANOVA-tabell.")
+
+```
+
+Den korrigerade tabellen visar att interaktionen inte har någon signifikant effekt (p-värde = 0.413) medan de två huvudsakliga faktorerna har båda en signifikant effekt på mätvariabeln (p-värde < 0.001 och 0.001 respektive). 
+
+Med slumpmässiga faktorer är vi inte intresserade av att undersöka faktornivåerna vidare med multipla jämförelser eftersom de endast är ett slumpmässigt urval av alla nivåer vi vill dra slutsatser om. Däremot kan det vara av intresse att undersöka respektive varians ytterligare.
+
+### Varianskomponenter
+En tvåvägs-ANOVA med interaktion består av fyra stycken olika varianser där den totala variansen av Y, $\sigma^2_Y$ delas upp i dess mindre beståndsdelar. 
+$$
+\begin{aligned}
+  Y &\sim N(\mu_{Y|\mathbf{X}}, \sigma^2_Y)\\
+  Y &\sim N(\mu_{Y|\mathbf{X}}, \sigma^2_A + \sigma^2_B + \sigma^2_{AB} + \sigma^2)
+\end{aligned}
+$$
+Vi nu intresserade av att skatta varianserna för respektive komponent, istället för multipla jämförelser, för att få en indikation på hur stor del av den totala variansen (och hur stora skillnader vi kan förvänta oss bland valda nivåer av en faktor). Återigen används väntevärden för medelkvadratsummorna som grund för våra omskrivningar till skattningarna av variansen.
+
+```{r}
+
+# Sparar ner ANOVA-tabellen
+anovaTabell <- anova(model)
+
+# Plockar ut MSx från tabellen
+MSA <- anovaTabell$`Mean Sq`[1]
+MSB <- anovaTabell$`Mean Sq`[2]
+MSAB <- anovaTabell$`Mean Sq`[3]
+MSE <- anovaTabell$`Mean Sq`[4]
+
+# Sparar antalet nivåer för varje faktor
+A <- anovaTabell$Df[1] + 1
+B <- anovaTabell$Df[2] + 1
+
+# Sparar antalet observationer per cell 
+n <- (sum(anovaTabell$Df) + 1) / (A * B)
+
+# Beräknar variansskattningarna
+sigmaEst <- MSE
+
+sigmaAEst <- (MSA - MSAB) / (B*n)
+sigmaBEst <- (MSB - MSAB) / (A*n)
+sigmaABEst <- (MSAB - MSE) / n
+
+# Sammanställer skattningarna och presenterar som en tabell
+tibble(
+    Parameter = 
+      c("$\\sigma^2_A$","$\\sigma^2_B$","$\\sigma^2_{AB}$", "$\\sigma^2$",),
+    Skattning =
+      c(sigmaAEst,sigmaBEst,sigmaABEst, sigmaEst)
+  ) %>% 
+  kable(digits = 3)
+
+```
+
+
+
+## Obalanserad tvåvägs-ANOVA
+Antagandet om att experimentet undersöker lika många observationer i varje kombination av behandlingar är kanske inte alltid så rimligt. ANOVA-modeller går att tillämpa även på observationsstudier där det i de allra flesta fallen inte går att kontrollera att undersökningen blir balanserad. Även i experimentella studier kan observationer som antas medverka försvinna av olika anledningar vilket resulterar i ett obalanserat experiment. 
+
+Konsekvensen av att analysera en obalanserad studie är att vi måste vara tydliga med vilken typ av SS som används då de inte kommer visa samma värden. Vanligast är att vi vill använda typ II eller III SS för att kunna genomföra lämplig inferens för de olika faktorerna.
+
+Anta att vi i en studie gett samma koffeindos till 18 personer där två faktorer uppmättes, ifall kaffet blandades med mjölk och vilken form av socker (riktig, artificiellt, ingen) det innehöll, och hur mycket personen i fråga "babblade" efter att ha druckit kaffet. Enheten och vad denna mätvariabel faktiskt betyder är inte viktig men vi kan anta att högre värden kopplas till en mer pratglad person. Datamaterialet finns att laddas ner [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/coffee.csv) (@navarro2018).
+
+```{r}
+#| fig-cap: Interaktionsdiagram av babblande uppdelat på två faktorer
+#| fig-height: 3
+#| fig-width: 5 
+#| message: false
+
+
+# Beräknar cellmedelvärden
+means <- 
+  coffee %>% 
+  group_by(milk, sugar) %>% 
+  summarize(
+    mean = mean(babble)
+  )
+
+# Visar respektive cellmedelvärde
+ggplot(coffee) + 
+  aes(x = sugar, y = babble, group = milk, color = milk) + 
+  geom_point(alpha = 0.5) + theme_bw() + 
+  scale_color_manual("Mjölk", values = c("steelblue", "#d9230f")) + 
+  geom_line(
+    data = means,
+    aes(y = mean), 
+    linewidth = 1.2
+  ) + 
+  labs(x = "Socker", y = "Babblande")
+
+```
+
+I interaktionsdiagrammet ser vi antydan till en interaktion, men vi ser också att antalet observationer för varje kombination av nivåer inte är lika, studien är obalanserad. Vi har inte kunnat kontrollera att lika många tar mjölk till kaffet och använder sig av samma sorts socker.
+
+```{r}
+
+model <- lm(babble ~ milk*sugar, data = coffee)
+
+anova(model) %>% 
+  kable(digits = 3, caption = "Modellen ANOVA-tabell med typ I kvadratsummor.")
+
+```
+
+Modellen anpassas på samma sätt som innan men ordningen av variablerna kommer nu påverka vad vi ser för värden på kvadratsummorna.
+
+```{r}
+
+model2 <- lm(babble ~ sugar*milk, data = coffee)
+
+anova(model2) %>% 
+  kable(digits = 3, caption = "Annan ordning på modellens ANOVA-tabell med typ I kvadratsummor.")
+
+```
+
+Den enda av faktorernas kvadratsummor som blivit samma är interaktionen eftersom den beräknas på samma sätt med de två olika modellordningarna och denna typ av kvadratsumma. Detta blir lite rörigt att hålla koll på om vi ska undersöka både interaktionseffekter och huvudsakliga effekter så istället kan vi titta på typ III SS.
+
+I paketet `car` får vi tillgång till funktionen `Anova()` (stort A) som ger oss möjligheten att ange vilken typ av SS som vi vill visa i ANOVA-tabellen.
+
+```{r}
+
+Anova(model, type = 3) %>% 
+  kable(digits = 3, caption = "Modellen ANOVA-tabell med typ III kvadratsummor.")
+
+```
+
+ANOVA-tabellen ser något annorlunda ut jämfört med vad vi är vana vid. Vi får en ny första rad (Intercept) som vi inte alls ska läsa av eller ta hänsyn till i vår analys, och vi saknar helt medelkvadratsummor. Dessa kan vi enkelt beräkna enligt $\frac{SS}{df}$ men det som vi kanske främst är intresserade av är testvariabeln och det tillhörande p-värdet. Alla dessa tester undersöker hur mycket ytterligare variation faktorn eller interaktionen bidrar med givet de andra faktorerna och interaktion redan inkluderad i modellen.
+
+### Multipla jämförelser
+Även för obalanserade modeller vill vi undersöka jämförelser mellan faktor- eller cellmedelvärden för att specifikt veta var skillnader råder. 
+
+```{r}
+
+means <- emmeans(model, specs = ~milk*sugar)
+
+tukey <- 
+  pairs(means, adjust = "tukey") 
+
+tukey %>% 
+  as_tibble() %>% 
+  arrange(abs(estimate) %>% desc()) %>% 
+  kable(digits = 3, caption = "Parvisa jämförelser av cellmedelvärden med Tukey familjekonfidens")
+
+```
+
+Till skillnad från @tbl-twoway-anova-tukey ser vi att varje medelfel är olika på grund av att vi har olika antal observationer i varje cell. Argumentet `adjust` kan ändras till `bonferroni` eller `scheffe` beroende på vilken familjekonfidens vi vill beräkna. Liknande funktioner för kontraster som vi tidigare använt är också användbara här.
+
+
+## Referenser {.unnumbered}
+
+
+
+
+
+
+

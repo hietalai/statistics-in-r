@@ -9,6 +9,7 @@ suppressMessages({
   require(olsrr)
   require(nnet)
   require(emmeans)
+  require(car)
 })
 
 utils::data(penguins)
@@ -41,6 +42,12 @@ weeds <- readr::read_csv2("resources/data/weeds.csv") %>%
   ) %>% 
   suppressMessages()
 
+coffee <- readr::read_csv2("resources/data/coffee.csv") %>% 
+  suppressMessages()
+
+roach <- readr::read_csv2("resources/data/roaches.csv") %>% 
+  mutate(across(humidity:temperature, ~ as.factor(.x))) %>% 
+  suppressMessages()
 
 residualPlots <- function(model) {
   

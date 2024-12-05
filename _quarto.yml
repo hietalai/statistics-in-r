@@ -65,6 +65,8 @@ book:
         - 02-variance/index.qmd
         - 02-variance/00-oneway-anova.qmd
         - 02-variance/01-random-factors.qmd
+        - 02-variance/02-control-variables.qmd
+        - 02-variance/03-twoway-anova.qmd
   search: 
     location: sidebar
     show-item-context: false
