@@ -1,8 +1,6 @@
 ---
 editor_options: 
   chunk_output_type: console
-filters: 
-  - shinylive
 ---
 <!-- New commands for matrices in regression -->
 \newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
@@ -151,5 +149,20 @@ I R kommer denna hypotesprövning beräknas på samma sätt som ett övergripand
 Om $H_0$ förkastas vill vi **inte** genomföra multipla jämförelser för att bedöma specifikt vilka nivåer som skiljer sig åt. Med en slumpmässig faktor är de utvalda nivåerna inte intressanta att jämföra.
 :::
 
+<!-- TODO MORE ABOUT INFERENCE (INTERVALS) OF DIFFERENT SIGMA -->
 
+
+## Övningsuppgifter
+Dessa övningar använder sig av ett datamaterial från en fabrik som skapar spolar (tråd som är lindad i en spiral för diverse elektronik). I fabriken väljs fyra maskiner slumpmässigt ut från alla maskiner som finns i fabriken. Sedan väljs 10 skapade spolar ut slumpmässigt från respektive maskin. Mätvariabeln (`coil_characteristic`) är en egenskap (oklart vad) hos spolarna. Materialet finns tillgängligt [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/coils.csv).
+
+a) Motivera varför en modell med en slumpmässiga faktor är lämplig för att analysera detta material. Formulera modellen och beskriv varje komponent.
+
+b) Undersök om det finns en signifikant effekt av maskinerna på egenskaperna med 5 procents signifikans.
+
+c) Skatta $\sigma^2_{A}$ med ett 90% approximativt konfidensintervall med hjälp av Satterthwaites metod. Tolka intervallet.
+
+d) Skatta kvoten av $\frac{\sigma^2_{A}}{\sigma^2_Y}$ med ett 95% intervall. Tolka intervallet.
+
+
+## Referenser {.unnumbered}
 

@@ -22,7 +22,7 @@ filters:
 \newcommand{\Sum}[1]{\sum_{i=1}^#1}
 
 <!-- CONTENT -->
-# Introduktion till variansanalys
+# Introduktion till variansanalys {#sec-one-way-anova}
 I @sec-regression studerade vi förhållandet mellan en responsvariabel och en eller flera förklarande variabler. Om en förklarande variabel är kvalitativ transformerade vi variabeln till indikatorvariabler för att kunna matematiskt hantera variabeln på ett korrekt sätt. 
 
 Om en regressionsmodell endast skulle bestå utav kvalitativa variabler är regressionsmodellen ekvivalent med att jämföra medelvärden för varje värde av den kvalitativa variabeln. Att undersöka flera medelvärden med varandra kan också kallas för *variansanalys* och används ofta inom experimentella studier. I variansanalys kallas de förklarande variablerna för *faktorer* och dess kategorier för *faktornivåer*. 
@@ -349,7 +349,7 @@ $$
   SSR &= \sum_{i=1}^A{n_i \cdot (\overline{Y}_i - \overline{Y})^2} \\
   SSE &= \sum_{i=1}^A\sum_{j=1}^{n_i}{(Y_{ij} - \overline{Y}_i)^2}
 \end{aligned}
-$$
+$$ {#eq-anova-sum-squares}
 där:
 
 - SSY beskriver den totala variationen i hela datamaterialet, avståndet mellan varje observation, $Y_{ij}$, och responsvariabelns medelvärde, $\overline{Y}$. 
@@ -579,22 +579,47 @@ SE_{\hat{L}} &= \sqrt{`r anova(model)[2,3] %>% round(3)` \cdot \left( \frac{0.5^
 $$
 där $MSE = `r anova(model)[2,3]`$ är tagen från ANOVA-tabellen för den anpassade modellen.
 
+Vi antar att denna kontrast är fördelad enligt:
+$$
+\begin{aligned}
+  \sqrt{(A-1)\cdot F_{A-1, n - A, 1-\alpha}}
+\end{aligned}
+$$
+
 ```{r}
 # Scheffé kontraster
-contrast(
-  means, 
-  # Anger konstanterna för respektive nivå i kontrasten
-  list(
-    L1 = c(0.5, 0.5, -1, 0, 0, 0, 0)
-  ),
-  # Anger vilken familjekonfidensmetod som ska genomföras
-  adjust = "scheffe"
-) %>% 
+contr <- 
+  contrast(
+    means, 
+    # Anger konstanterna för respektive nivå i kontrasten
+    list(
+      L1 = c(0.5, 0.5, -1, 0, 0, 0, 0)
+    ),
+    # Anger vilken familjekonfidensmetod som ska genomföras
+    adjust = "scheffe"
+  ) 
+
+# Vi behöver säga till R att vi har A-1 "rang"
+contr %>% 
+  summary(scheffe.rank = 6) %>% 
   kable(digits = 3, caption = "Beräknad kontrast med tillhörande p-värde.")
 
 ```
 
+`emmeans` beräknar dock kontrasterna under antagandet att det endast är de angivna kontrasterna som modellen undersöker vilket vi i vissa lägen, till exempel detta tillfälle, inte vill använda. Vi behöver då säga till R att rangen av jämförelserna är $A-1$ genom argumentet `scheffe.rank = 6` i `summary()`.
+
 Med hjälp av skattningen och medelfelet kan vi också beräkna ett konfidensintervall enligt formler från @kleinbaum2013.
+
+## Övningsuppgifter
+Det första datamaterial som behandlas i denna övning kommer från en undersökning av olika fodertyper på 21 slumpmässigt utvalda grisar på en bondgård. Fyra stycken olika fodertyper har undersökts för att se vilken som leder till den största viktökningen (i kg) av grisarna. Materialet finns att hämta [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/feed.csv)
+
+a) Anpassa en envägs-ANOVA modell med hjälp av `lm()`.
+
+b) Undersök med hjälp av ANOVA-tabellen om den genomsnittliga viktökningen är densamma för de undersökta fodertyperna.
+
+I föregående uppgift ska ni ha kommit fram till att det finns skillnad mellan minst två av de undersökta fodertyperna med avseende på genomsnittlig viktökning. Då kan det vara intressant att undersöka mellan specifikt vilka fodertyper det finns skillnad.
+
+c) Genomför alla multipla jämförelser med hjälp av Tukey:s metod. Orientera er i utskriften och utred mellan vilka fodertyper det är en signifikant skillnad i genomsnittlig viktökning utifrån signifikansnivå 5 procent.
 
 ## Referenser {.unnumbered}
 

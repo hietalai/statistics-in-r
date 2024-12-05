@@ -1,0 +1,189 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+<!-- New commands for matrices in regression -->
+\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
+}
+
+\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
+
+\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
+
+\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
+
+\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
+
+\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
+
+ <!-- Creates a shortcommand for sums -->
+\newcommand{\Sum}[1]{\sum_{i=1}^#1}
+
+<!-- CONTENT -->
+# Kontrollvariabler {#sec-control-anova}
+I @sec-control tog vi upp konceptet om kontrollvariabler, variabler som kan användas för att justera effekten av faktorn av intresse så att vi får parameterskattningar som ligger närmare sanningen. Inom experimentella studier används dessa frekvent för detta ändamål men vi gör skillnad på hur kvalitativa och kvantativa kontrollvariabler påverkar studien.
+
+## Kovariansanalys {#sec-ancova}
+*Kovariansanalys*^[Även kallad ANACOVA eller ANCOVA för ANalysis of COVAriance.] omfattar en modell där vi har kvantitativa kontrollvariabler, här kallad för *kovariater*, som vi vet på något sätt påverkar responsvariabeln och kanske också den kvalitativa faktorn som studien fokuserar på. 
+
+Anta att vi vill jämföra olika skottkärror av fyra olika modeller, och bedöma vilken utav modellerna som är lättast att använda och vi mäter tiden det tar att flytta en mängd grus mellan två punkter. Vi kan visualisera relationen mellan de två variablerna i en graf:
+
+::: {#fig-wheelbarrow}
+```{dot}
+//| fig-width: 3
+//| fig-height: 2
+digraph G {
+  layout=dot
+  overlap=false
+  
+  A [label="Modell"]
+  B [label="Tid"]
+  
+  A -> B
+  
+  {rank=same; A; B;}
+}
+```
+
+Relationen mellan modellen av skottkärra och den uppmätta tiden.
+:::
+
+I detta experiment antas det rimligt att även vikten på gruset som skottkärran får påverkar tiden det tar. Vi kan förmodligen inte lasta exakt lika mycket grus varje gång för att hålla den variabeln konstant så istället lastar vi gruset i skottkärran när den står på en våg och noterar vikten av gruset (totalvikt - skottkärrans vikt).
+
+::: {#fig-wheelbarrow-weight}
+```{dot}
+//| fig-width: 3
+//| fig-height: 2
+digraph G {
+  layout=dot
+  overlap=false
+  
+  A [label="Modell"]
+  B [label="Tid"]
+  C [label="Vikt", shape = rectangle]
+  
+  A -> B
+  C -> B
+  
+  {rank=same; A; B;}
+}
+```
+
+Relationen mellan modellen av skottkärra och den uppmätta tiden där vi kontrollerar för lastens vikt.
+:::
+
+Effekten av skottkärran kommer då justeras med avseende på kontrollvariabeln.
+
+Modellen som formuleras blir då:
+$$
+\begin{aligned}
+  Y_{ij} = \mu + \beta_1 \cdot X_{1j} + \beta_{2}\cdot X_{2j} + \beta_{3}\cdot X_{3j} + \beta_4 \cdot (Z_{ij} - \overline{Z}) + E_{ij}
+\end{aligned}
+$$
+där 
+$$
+\begin{aligned}
+    \mu &= \frac{\mu_1 + \mu_2 + \mu_3 + \mu_4}{4} \\
+    X_{1j} &= 
+    \begin{cases}
+        1 \quad &\text{om modell 1}\\
+        -1      &\text{om modell 4}\\
+        0       &\text{annars}
+    \end{cases} \\
+    X_{2j} &= 
+    \begin{cases}
+        1 \quad &\text{om modell 2}\\
+        -1      &\text{om modell 4}\\
+        0       &\text{annars}
+    \end{cases} \\
+    X_{3j} &= 
+    \begin{cases}
+        1 \quad &\text{om modell 3}\\
+        -1      &\text{om modell 4}\\
+        0       &\text{annars}
+    \end{cases} \\
+    \overline{Z} &= \frac{\sum{Z_{ij}}}{n} \\
+    E_{ij} &\sim N(0, \sigma^2)
+\end{aligned}
+$$
+Anledningen till att kontrollvariabeln centreras i modellen är för att tillåta $\mu$ fortsätta vara det övergripande medelvärdet vilket underlättar beräkningar.
+
+I koden nedan skapas datamaterialet, den kvalitativa variabeln modell anges som en faktor med effektkodning och den kontinuerliga kontrollvariabeln centreras.
+```{r}
+
+wheelbarrow <- tibble(
+  Model = c("Model_A", "Model_A", "Model_A", "Model_A", "Model_A",
+            "Model_B", "Model_B", "Model_B", "Model_B", "Model_B",
+            "Model_C", "Model_C", "Model_C", "Model_C", "Model_C",
+            "Model_D", "Model_D", "Model_D", "Model_D", "Model_D") %>% factor(),
+  Weight = c(49.53, 49.53, 53.16, 51.53, 49.06,
+             51.09, 49.07, 49.07, 50.48, 46.17,
+             46.55, 48.88, 47.97, 50.63, 48.18,
+             47.18, 52.93, 49.55, 50.14, 47.15),
+  Time = c(15.66, 16.31, 15.41, 16.78, 15.55,
+           16.75, 16.24, 18.69, 16.97, 15.49,
+           18.30, 16.49, 17.83, 15.93, 16.31,
+           19.68, 20.79, 19.89, 19.66, 19.18)
+) %>% 
+  mutate(
+    Weight = scale(Weight, scale = FALSE)
+  )
+
+contrasts(wheelbarrow$Model) <- contr.sum(4)
+
+```
+
+Modellen anpassas på samma sätt som en envägs-ANOVA men vi lägger till den centrerade kovariaten.
+
+```{r}
+
+model <- lm(Time ~ Model + Weight, data = wheelbarrow)
+
+anova(model) %>% 
+  kable(digits = 3, caption = "ANOVA-modell för kovariansmodellen")
+
+```
+
+### Inferens
+Vi måste nu undersöka effekten av faktorn genom ett partiellt F-test då modellen innehåller fler komponenter. 
+$$
+\begin{aligned}
+  &H_0: \beta_1 = \beta_2 = \beta_3 = 0\\
+  &H_a: \text{Minst en av } \beta_i \text{ i } H_0 \ne 0
+\end{aligned}
+$$
+
+Vi jämför alltså två modeller, den kompletta med faktorn och kovariaten och den reducerade med enbart kovariaten. Om vi ändrar ordningen på variablerna kan vi med hjälp av sekventiella kvadratsummor få både testvariabeln och p-värdet för testet i ANOVA-tabellen.
+
+```{r}
+
+model <- lm(Time ~ Weight + Model, data = wheelbarrow)
+
+anova(model) %>% 
+  kable(digits = 3, caption = "ANOVA-modell för kovariansmodellen")
+
+```
+
+Inferens för kovariaten är inte relevant eftersom detta samband inte är intressant för undersökningens syfte utan inkluderas endast för att faktorns samband ska justeras.
+
+## Randomiserade blockförsök
+I fall där mätenheterna är heterogena men kan delas upp i mindre homogena grupper, är det lämpligt att genomföra ett *randomiserat blockförsök*. Detta motsvarar en kvalitativ kontrollvariabel.
+
+Dessa homogena grupperna kallas för *block* och rent praktiskt tilldelas behandlingarna slumpmässigt **inom** varje block. För att relatera detta till urvalsundersökningar kan vi säga att komplett randomisering motsvarar ett OSU och randomiserade blockförsök motsvarar ett stratifierat urval. En modell kan innehålla ett block vars nivåer är en kombination av flera kontrollvariabler **eller** flera kontrollvariabler som separata block.
+
+Modellen som anpassas försöker nu beskriva $Y_{ijk}$ där $i \in {1, \dots, A}$, $j \in {1, \dots, B}$, och $k \in {1, \dots, n_{ij}}$ för A nivåer av faktorn och B olika block. 
+
+Om undersökningen endast består av en observation per cell, en observation per nivå av faktorn i vardera block, kan inte SSE beräknas enligt tidigare formler (@eq-anova-sum-squares) då $\left(Y_{ijk} - \overline{Y}_{ij}\right) = 0$. Vi behöver då anta att modellen inte har någon interaktion och skatta den oförklarade variationen med  interaktionens kvadratsumma.
+
+$$
+\begin{aligned}
+SSAB = \sum_{i = 1}^A \sum_{j=1}^B \left(\overline{Y}_{ij} - \overline{Y}_{i} - \overline{Y}_{j} + \overline{Y}\right)^2
+\end{aligned}
+$$
+
+Om undersökningen har flera observationer beräknas den oförklarade variationen som vanligt med hjälp av SSE.
+
+<!-- TODO MORE ABOUT BLOCKS AND RANDOMIZATION -->
+
+<!-- ## Referenser {.unnumbered} -->
+
