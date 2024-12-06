@@ -149,8 +149,50 @@ I R kommer denna hypotesprövning beräknas på samma sätt som ett övergripand
 Om $H_0$ förkastas vill vi **inte** genomföra multipla jämförelser för att bedöma specifikt vilka nivåer som skiljer sig åt. Med en slumpmässig faktor är de utvalda nivåerna inte intressanta att jämföra.
 :::
 
-<!-- TODO MORE ABOUT INFERENCE (INTERVALS) OF DIFFERENT SIGMA -->
+### Varianskomponenter
+Istället för att beräkna multipla jämförelser för de uppmätta slumpmässiga effekterna kan vi istället skatta varianskomponenten för faktorn. Detta kommer ge oss en indikation på magnituden av variation som finns inuti faktorn. Med hjälp av omskrivningar av väntevärden kan vi beräkna skattningen genom:
+$$
+\begin{aligned}
+    s^2 &= MSE\\
+    s^2_A &= \frac{MSA - MSE}{n}
+\end{aligned}
+$$
 
+där $n$ är antalet observationer inom en faktornivå. Kom ihåg att vi här behandlar en balanserad modell vilket betyder att $n_i = n$.
+
+```{r}
+
+## Sparar ner ANOVA-tabellen som en data.frame
+anovaTabell <- anova(model)
+
+## Plockar ut MSA och MSE från tabellen
+MSA <- anovaTabell$`Mean Sq`[1]
+MSE <- anovaTabell$`Mean Sq`[2]
+
+## Plockar ut antalet observationer per cell 
+n <- (sum(anovaTabell$Df) + 1) / (anovaTabell$Df[1] + 1)
+
+## Beräknar variansskattningarna
+sigmaEst <- MSE
+sigmaAEst <- (MSA - MSE) / n
+
+## Sammanställer skattningarna och presenterar som en tabell
+tibble(
+    Parameter = 
+      c("$\\sigma^2$","$\\sigma^2_A$"),
+    Skattning =
+      c(sigmaEst,sigmaAEst)
+  ) %>% 
+  kable(
+    caption = "Skattade varianser.", 
+    digits = 3
+  ) 
+
+```
+
+Med hjälp av dessa skattningar skulle vi kunna göra intervallskattningar för exempelvis $\sigma_A^2$ (se kapitel 6.1 i Teorikompendiet för Satterthwaite intervall).
+
+<!-- TODO MORE ABOUT INFERENCE (INTERVALS) OF DIFFERENT SIGMA -->
 
 ## Övningsuppgifter
 Dessa övningar använder sig av ett datamaterial från en fabrik som skapar spolar (tråd som är lindad i en spiral för diverse elektronik). I fabriken väljs fyra maskiner slumpmässigt ut från alla maskiner som finns i fabriken. Sedan väljs 10 skapade spolar ut slumpmässigt från respektive maskin. Mätvariabeln (`coil_characteristic`) är en egenskap (oklart vad) hos spolarna. Materialet finns tillgängligt [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/coils.csv).
