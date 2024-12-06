@@ -352,6 +352,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/03-twoway-anova.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -684,9 +690,7 @@ Viktigt
 <h3 data-number="4.1.4" class="anchored" data-anchor-id="funktion-med-alla-diagram-residualplots"><span class="header-section-number">4.1.4</span> Funktion med alla diagram (<code>residualPlots</code>)</h3>
 <p>Dessa diagram kommer vara återkommande i regressionsmodellering så vi kan skapa en funktion för att automatiskt generera alla fyra diagram samtidigt. Vi får genom paketet <code>cowplot</code> tillgång till en funktion (<code>plot_grid</code>) som kan kombinera flera diagram till en och samma.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Funktionen kräver två argument, modellen som anpassats och bredden på staplarna i histogrammet.</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Funktionen kräver endast ett argument, modellen som anpassats</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>residualPlots <span class="ot">&lt;-</span> <span class="cf">function</span>(model) {</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  residualData <span class="ot">&lt;-</span> </span>
@@ -725,7 +729,6 @@ Viktigt
 <span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(simpleModel)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <div id="fig-penguin-resid" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">

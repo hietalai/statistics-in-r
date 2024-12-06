@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>16&nbsp; Tvåvägs-ANOVA – Statistisk teori och tillämpningar i R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../02-variance/02-control-variables.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Inget resultat",
+    "search-matching-documents-text": "matchande dokument",
+    "search-copy-link-title": "Kopiera länk för att söka",
+    "search-hide-matches-text": "Göm ytterligare resultat",
+    "search-more-match-text": "annat resultat i detta dokument",
+    "search-more-matches-text": "fler resultat i detta dokument",
+    "search-clear-button-title": "Rensa",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Verkställ",
+    "search-label": "Sök"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Skifta navigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../00-programming/00-basics-R.html" aria-current="page"> 
+<span class="menu-text">Programmering i R</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../01-regression/index.html"> 
+<span class="menu-text">Regressionsanalys</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../02-variance/index.html"> 
+<span class="menu-text">Varianssanalys</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html"><strong>DEL III - Variansanalys</strong></a></li><li class="breadcrumb-item"><a href="../02-variance/03-twoway-anova.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Sök"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inledning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Grunderna i R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Paket och funktioner</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">tidyverse</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>DEL II - Regressionsanalys</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Förord</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/09-variable-selection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/10-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/11-other-link-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>DEL III - Variansanalys</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Förord</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/02-control-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/03-twoway-anova.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innehållsförteckning</h2>
+   
+  <ul>
+  <li><a href="#typer-av-kvadratsummor" id="toc-typer-av-kvadratsummor" class="nav-link active" data-scroll-target="#typer-av-kvadratsummor"><span class="header-section-number">16.1</span> Typer av kvadratsummor</a></li>
+  <li><a href="#tvåvägs-anova" id="toc-tvåvägs-anova" class="nav-link" data-scroll-target="#tvåvägs-anova"><span class="header-section-number">16.2</span> Tvåvägs-ANOVA</a>
+  <ul class="collapse">
+  <li><a href="#modellanpassning-i-r" id="toc-modellanpassning-i-r" class="nav-link" data-scroll-target="#modellanpassning-i-r"><span class="header-section-number">16.2.1</span> Modellanpassning i R</a></li>
+  <li><a href="#inferens" id="toc-inferens" class="nav-link" data-scroll-target="#inferens"><span class="header-section-number">16.2.2</span> Inferens</a></li>
+  </ul></li>
+  <li><a href="#slumpmässiga-faktorer" id="toc-slumpmässiga-faktorer" class="nav-link" data-scroll-target="#slumpmässiga-faktorer"><span class="header-section-number">16.3</span> Slumpmässiga faktorer</a>
+  <ul class="collapse">
+  <li><a href="#inferens-1" id="toc-inferens-1" class="nav-link" data-scroll-target="#inferens-1"><span class="header-section-number">16.3.1</span> Inferens</a></li>
+  <li><a href="#exempel" id="toc-exempel" class="nav-link" data-scroll-target="#exempel"><span class="header-section-number">16.3.2</span> Exempel</a></li>
+  <li><a href="#varianskomponenter" id="toc-varianskomponenter" class="nav-link" data-scroll-target="#varianskomponenter"><span class="header-section-number">16.3.3</span> Varianskomponenter</a></li>
+  </ul></li>
+  <li><a href="#obalanserad-tvåvägs-anova" id="toc-obalanserad-tvåvägs-anova" class="nav-link" data-scroll-target="#obalanserad-tvåvägs-anova"><span class="header-section-number">16.4</span> Obalanserad tvåvägs-ANOVA</a>
+  <ul class="collapse">
+  <li><a href="#multipla-jämförelser" id="toc-multipla-jämförelser" class="nav-link" data-scroll-target="#multipla-jämförelser"><span class="header-section-number">16.4.1</span> Multipla jämförelser</a></li>
+  </ul></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">16.5</span> Övningsuppgifter</a></li>
+  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html"><strong>DEL III - Variansanalys</strong></a></li><li class="breadcrumb-item"><a href="../02-variance/03-twoway-anova.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- New commands for matrices in regression -->
+<!-- Creates a shortcommand for sums -->
+<!-- CONTENT -->
+<p>I <a href="00-oneway-anova.html" class="quarto-xref"><span>Kapitel 13</span></a> studerade vi förhållandet mellan en responsvariabel och en förklarande faktor (med flera faktornivåer) och <a href="02-control-variables.html" class="quarto-xref"><span>Kapitel 15</span></a> utökade vi modellen till att också inkludera kontrollvariabler för att justera effekten av faktorn och ta hänsyn till confounding effekter.</p>
+<p>Ett experiment behöver inte begränsa sig till endast en faktor av intresse utan kan utökas till flera förklarande faktorer. I detta kapitel utvidgar vi modellen till två förklarande faktorer och vi vill studera förhållandet mellan varje faktor och en kombination av dessa gentemot responsvariabeln.</p>
+<p>När vi undersöker flera faktorer kan vi kombinera fixa och slumpmässiga faktorer i olika konstellationer och skillnaden mellan dessa modeller påverkar både den teoretiska grunden och hur vi genomför inferens på dess olika delar.</p>
+<section id="typer-av-kvadratsummor" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="typer-av-kvadratsummor"><span class="header-section-number">16.1</span> Typer av kvadratsummor</h2>
+<p>I envägs-ANOVA kan vi undersöka faktorns effekt med ett F-test där kvadratsumman för faktorn är den enda komponenten i den förklarade variationen. Med en modell som nu inkluderar flera faktorer kommer den förklarade variationen bestå av flera komponenter, en för vardera faktor och en för interaktionen mellan dem, på samma sätt som i en multipel linjär regressionsmodell.</p>
+<p>I <a href="../01-regression/04-statistical-inference.html#sec-regression-anova-table" class="quarto-xref"><span>Avsnitt 5.1.1</span></a> beskrev vi sekventiella kvadratsummor (SS) som ett sätt att dela upp den förklarade variationen i dess mindre beståndsdelar. Sekventiella kvadratsummor är endast en variant av kvadratsumma som vi kan använda för att presentera den förklarade variationen.</p>
+<p><strong>Typ I SS</strong> kallas oftast för sekventiella eller betingade kvadratsummor eftersom de beräknas enligt den ordning som variablerna läggs till i modellen. I en tvåvägs-ANOVA med interaktioner har modellen tre källor av variation. Notera att kategoriska variabler grupperas till en och samma källa oavsett hur många kodade variabler eller tillhörande parameterskattningar som den innehåller. Givet att vi skattar modellen <code>lm(Y ~ A * B)</code> där <span class="math inline">\(A\)</span> och <span class="math inline">\(B\)</span> är två faktorer beräknas SS av typ I som följer:</p>
+<ul>
+<li>Faktor A: <span class="math inline">\(SS(A)\)</span></li>
+<li>Faktor B: <span class="math inline">\(SS(B | A)\)</span></li>
+<li>Interaktion: <span class="math inline">\(SS(AB | A, B)\)</span></li>
+</ul>
+<p>Om vi vill undersöka faktor As huvudsakliga effekter kommer dessa SS endast ta hänsyn till Faktor A, alltså vi får samma värden som om vi hade anpassat en envägs-ANOVA med enbart faktor A. Detta är inte målet med en tvåvägs-ANOVA, vi vill ta hänsyn till båda faktorerna som modellen innehåller.</p>
+<p><strong>Typ II SS</strong> beräknar kvadratsummor betingat på andra variabler av samma grad eller lägre. I praktiken betyder detta att huvudeffekterna är av grad 1 medan interaktionen är av grad 2 och betingade kvadratsummor för en huvudeffekt kommer endast ta hänsyn till den andra huvudeffekten.</p>
+<ul>
+<li>Faktor A: <span class="math inline">\(SS(A | B)\)</span></li>
+<li>Faktor B: <span class="math inline">\(SS(B | A)\)</span></li>
+<li>Interaktion: <span class="math inline">\(SS(AB | A, B)\)</span></li>
+</ul>
+<p>Denna kvadratsumma kommer undersöka de huvudsakliga effekterna under antagandet att det inte finns någon interaktion med i modellen, vilket i R beräkningsmässigt skulle motsvara en <code>lm(Y ~ A + B)</code> modell med typ III SS. Typ II SS ger oss dock möjligheten att få ut dessa värden utan att behöva skatta om modellen ifall interaktionseffekten visat sig vara icke-signifikant.</p>
+<p><strong>Typ III SS</strong> beräknar kvadratsummor betingat på alla andra variabler som inkluderas i modellen oavsett ordningen vi lägger in dem.</p>
+<ul>
+<li>Faktor A: <span class="math inline">\(SS(A | B, AB)\)</span></li>
+<li>Faktor B: <span class="math inline">\(SS(B | A, AB)\)</span></li>
+<li>Interaktion: <span class="math inline">\(SS(AB | A, B)\)</span></li>
+</ul>
+<p>Jämfört med typ II SS beräknas de betingade kvadratsummorna för huvudeffekterna med interaktionen i åtanke vilket innebär att dessa kvadratsummor för huvudeffekterna kommer vara korrekt ifall interaktionen är signifikant.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>För typ III SS när interaktionen är inkluderad <strong>måste</strong> vi koda våra faktorer enligt effektkodning. Orsaken bakom detta är att för flervägs-ANOVA med interaktioner kräver att summan av kodningen för varje variabel är 0, annars undersöks fel hypoteser.</p>
+</div>
+</div>
+<p>Typ II och typ III SS har inte samma additiva egenskap som typ I SS vilket innebär att den totala förklarade variationen inte kan beräknas genom deras summa, utan vi behöver då beräkna <span class="math inline">\(SSR = SSY - SSE\)</span>.</p>
+<p>En <strong>balanserad</strong> ANOVA-modell ger dock ett specialfall av dessa kvadratsummor, nämligen att de alla är lika varandra. Vad detta betyder för vår inferens är att vi kan undersöka den enskilda faktorns effekt direkt från ANOVA-tabellen oavsett vilken sorts kvadratsumma som används.</p>
+<!-- TODO SHOW MATH FOR WHY THIS IS THE CASE -->
+</section>
+<section id="tvåvägs-anova" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="tvåvägs-anova"><span class="header-section-number">16.2</span> Tvåvägs-ANOVA</h2>
+<p>Anta att vi genomför ett experiment för att mäta effekten av C-vitamin på tillväxten av tänder hos marsvin. De två faktorerna som undersöks är doseringen av vitamin (faktor A) och intagningsmetoden (faktor B).</p>
+<p>Tre specifika doser undersöks:</p>
+<ul>
+<li>0.5 mg/dag</li>
+<li>1 mg/dag</li>
+<li>2 mg/dag</li>
+</ul>
+<p>Två olika sätt att ge C-vitamin till marsvinen undersöks:</p>
+<ul>
+<li>Apelsinjuice (kodad <code>OJ</code>)</li>
+<li>Askorbinsyra (kodad <code>VC</code>)</li>
+</ul>
+<p>Modellen måste nu ta hänsyn till att vi har två index för faktorerna (<span class="math inline">\(i\)</span> och <span class="math inline">\(j\)</span>) och ett index för observationerna (<span class="math inline">\(k\)</span>).</p>
+<p><span id="eq-twoway-anova-fix"><span class="math display">\[
+\begin{aligned}
+  Y_{ijk} = \mu + \underbrace{\beta_1 \cdot X_{1jk} + \beta_2 \cdot X_{2jk}}_{\text{Faktor A}} + \underbrace{\beta_3 \cdot X_{i1k}}_{\text{Faktor B}} + \underbrace{\beta_4 \cdot X_{1jk} \cdot X_{i1k} + \beta_5 \cdot X_{2jk} \cdot X_{i1k}}_{\text{Interaktion}}+ E_{ijk}
+\end{aligned}
+\tag{16.1}\]</span></span></p>
+<p>När vi lägger till ytterligare en faktor och interaktionen mellan de två innebär det att vi undersöker tre olika potentiella effekter; interaktionseffekter, och två huvudsakliga faktoreffekter, en för respektive faktor. Däremot kommer interaktionseffektens förekomst eller avsaknad påverka hur vi undersöker de huvudsakliga effekterna.</p>
+<p>Vi kan visualisera en tvåvägs-ANOVA likt vi gjort tidigare, genom grupperade diagram, men vi måste också ta hänsyn till att interaktionen mellan de två faktorerna kan vara av intresse. Därför behöver vi gruppera diagrammet på båda faktorerna.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="ot">&lt;-</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  ToothGrowth  <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">dose =</span> <span class="fu">factor</span>(dose)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(ToothGrowth<span class="sc">$</span>dose) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">3</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(ToothGrowth<span class="sc">$</span>supp) <span class="ot">&lt;-</span> <span class="fu">contr.sum</span>(<span class="dv">2</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ToothGrowth) <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> dose, <span class="at">y =</span> len, <span class="at">fill =</span> supp) <span class="sc">+</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Metod"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"#d9230f"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Dosering"</span>, <span class="at">y =</span> <span class="st">"Längd"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-twoway-anova_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Fördelning av längder för respektive kombination av dos och intagningssätt.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Med detta fioldiagram kan vi se skillnader i faktormedelvärden, fördelningen för respektive färg, men för att tydligt kunna utläsa interaktioner behöver vi göra ett <em>interaktionsdiagram</em>. Ett interaktionsdiagram är ett linjediagram över cellmedelvärdena, alltså medelvärden för varje kombination av nivåer från respektive faktor.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar cellmedelvärden</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  ToothGrowth <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(supp, dose) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(len)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Visar respektive cellmedelvärde</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ToothGrowth) <span class="sc">+</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> dose, <span class="at">y =</span> len, <span class="at">group =</span> supp, <span class="at">color =</span> supp) <span class="sc">+</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="st">"Metod"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"#d9230f"</span>)) <span class="sc">+</span> </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> means,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> mean), </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">1.2</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Dosering"</span>, <span class="at">y =</span> <span class="st">"Längd"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-cellmeans" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cellmeans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03-twoway-anova_files/figure-html/fig-cellmeans-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cellmeans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;16.1: Interaktionsdiagram över cellmedelvärden.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Vi kan identifiera en antydan till en interaktion genom icke-parallella linjer som i praktiken betyder att effekten av en faktor påverkas av vilken nivå av den andra faktorn som också ges. I just detta fall ser linjerna ut att korsas vid dos 2 vilket ger en svag antydan till att en interaktion förekommer. Som alla former av visualiseringar beskriver detta endast det urval som har genomförts och för att dra slutsatser om populationen behöver vi genomföra inferens.</p>
+<section id="modellanpassning-i-r" class="level3" data-number="16.2.1">
+<h3 data-number="16.2.1" class="anchored" data-anchor-id="modellanpassning-i-r"><span class="header-section-number">16.2.1</span> Modellanpassning i R</h3>
+<p>Att skatta en tvåvägs-ANOVA i R är inte svårare än att skatta en regressionsmodell med flera variabler. För att få en interaktion mellan de två faktorerna behöver vi använda <code>*</code> istället för <code>+</code>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(len <span class="sc">~</span> supp<span class="sc">*</span>dose, <span class="at">data =</span> ToothGrowth)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellens ANOVA-tabell."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Modellens ANOVA-tabell.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">supp</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">205.350</td>
+<td style="text-align: right;">205.350</td>
+<td style="text-align: right;">15.572</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">dose</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2426.434</td>
+<td style="text-align: right;">1213.217</td>
+<td style="text-align: right;">92.000</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">supp:dose</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">108.319</td>
+<td style="text-align: right;">54.160</td>
+<td style="text-align: right;">4.107</td>
+<td style="text-align: right;">0.022</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">712.106</td>
+<td style="text-align: right;">13.187</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>För att visa att de sekventiella kvadratsummorna som R anger är lika de andra typerna av kvadratsumma kan vi ändra ordning på modellen och ändå få samma kvadratsummor för alla komponenter.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(len <span class="sc">~</span> dose<span class="sc">*</span>supp, <span class="at">data =</span> ToothGrowth)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellens ANOVA-tabell."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Modellens ANOVA-tabell.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">dose</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2426.434</td>
+<td style="text-align: right;">1213.217</td>
+<td style="text-align: right;">92.000</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">supp</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">205.350</td>
+<td style="text-align: right;">205.350</td>
+<td style="text-align: right;">15.572</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dose:supp</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">108.319</td>
+<td style="text-align: right;">54.160</td>
+<td style="text-align: right;">4.107</td>
+<td style="text-align: right;">0.022</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">712.106</td>
+<td style="text-align: right;">13.187</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="inferens" class="level3" data-number="16.2.2">
+<h3 data-number="16.2.2" class="anchored" data-anchor-id="inferens"><span class="header-section-number">16.2.2</span> Inferens</h3>
+<p>Utifrån tabellen kan vi dra slutsatser om respektive komponent i modellen men vi <strong>börjar alltid med interaktionseffekter</strong>.</p>
+<p>Hypoteserna som undersöks för respektive del kan grupperas i flera partiella F-test utifrån <a href="#eq-twoway-anova-fix" class="quarto-xref">Ekvation&nbsp;<span>16.1</span></a>. Interaktionen består i detta exempel av parametrarna <span class="math inline">\(\beta_4\)</span> och <span class="math inline">\(\beta_5\)</span> så den formella hypotesen för interaktionseffekten är: <span class="math display">\[
+\begin{aligned}
+  &amp;H_0: \beta_4 = \beta_5 = 0\\
+  &amp;H_a: \text{Minst en av } \beta \text{ i } H_0 \ne 0
+\end{aligned}
+\]</span></p>
+<p>Testvariabeln beräknas genom: <span class="math display">\[
+\begin{aligned}
+  F_{test} = \frac{MSAB}{MSE}
+\end{aligned}
+\]</span> där <span class="math inline">\(MSAB\)</span> är interaktionens medelkvadratsumma. Testvariabeln anses följa <span class="math inline">\(F_{(A-1)(B-1), A \cdot B(n-1), 1-\alpha}\)</span>.</p>
+<p>P-värdet för testet (0.0219) är mindre än fem procent vilket innebär att vi kan förkasta <span class="math inline">\(H_0\)</span> att det inte finns någon interaktion mellan faktorerna.</p>
+<p>Detta kommer påverka våra nästa steg i analysen eftersom en interaktion innebär att sambandet mellan en faktor och mätvariabeln förändras beroende på den andra faktorn. Den direkta konsekvensen är att de huvudsakliga faktoreffekterna inte längre är relevant att undersöka eftersom de kommer ge missvisande resultat. Vi kommer <strong>inte</strong> vilja undersöka skillnader mellan specifika faktornivåer utan fokuserar på cellmedelvärdena, alltså skillnader i medelvärden när vi tar hänsyn till <strong>båda</strong> faktorerna.</p>
+<p>Paketet <code>emmeans</code> kan skapa cellmedelvärden genom:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(model, <span class="at">specs =</span> <span class="sc">~</span>supp<span class="sc">*</span>dose)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>means <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Cellernas medelvärden"</span>, </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Metod"</span>, <span class="st">"Dosering"</span>, <span class="st">"Medelvärde"</span>, <span class="st">"Medelfel"</span>, <span class="st">"Frihetsgrader"</span>, <span class="st">"Nedre KI gräns"</span>, <span class="st">"Övre KI gräns"</span>))</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-cellmeans" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cellmeans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;16.1: Cellernas medelvärden
+</figcaption>
+<div aria-describedby="tbl-cellmeans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 11%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 17%">
+<col style="width: 19%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metod</th>
+<th style="text-align: left;">Dosering</th>
+<th style="text-align: right;">Medelvärde</th>
+<th style="text-align: right;">Medelfel</th>
+<th style="text-align: right;">Frihetsgrader</th>
+<th style="text-align: right;">Nedre KI gräns</th>
+<th style="text-align: right;">Övre KI gräns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">OJ</td>
+<td style="text-align: left;">0.5</td>
+<td style="text-align: right;">13.23</td>
+<td style="text-align: right;">1.148</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">10.928</td>
+<td style="text-align: right;">15.532</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">VC</td>
+<td style="text-align: left;">0.5</td>
+<td style="text-align: right;">7.98</td>
+<td style="text-align: right;">1.148</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">5.678</td>
+<td style="text-align: right;">10.282</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OJ</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">22.70</td>
+<td style="text-align: right;">1.148</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">20.398</td>
+<td style="text-align: right;">25.002</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">VC</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">16.77</td>
+<td style="text-align: right;">1.148</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">14.468</td>
+<td style="text-align: right;">19.072</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OJ</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">26.06</td>
+<td style="text-align: right;">1.148</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">23.758</td>
+<td style="text-align: right;">28.362</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">VC</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">26.14</td>
+<td style="text-align: right;">1.148</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">23.838</td>
+<td style="text-align: right;">28.442</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-cellmeans" class="quarto-xref">Tabell&nbsp;<span>16.1</span></a> visar de specifika värden som vi såg i <a href="#fig-cellmeans" class="quarto-xref">Figur&nbsp;<span>16.1</span></a>. Inferens över multipla jämförelser innebär nu att vi skapar par av cellmedelvärden och genomför hypotesprövningar eller intervallskattningar med någon form av familjekonfidens. Formellt undersöks par av medelvärden med båda index, t.ex. <span class="math inline">\(H_0: \mu_{11} - \mu_{12} = 0\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tukey <span class="ot">&lt;-</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(means, <span class="at">adjust =</span> <span class="st">"tukey"</span>) </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>tukey <span class="sc">%&gt;%</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">%&gt;%</span> <span class="fu">desc</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Parvisa jämförelser av cellmedelvärden med Tukey familjekonfidens"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>selectedMeans <span class="ot">&lt;-</span> means[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>),]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>bonferroni <span class="ot">&lt;-</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(selectedMeans, <span class="at">adjust =</span> <span class="st">"bonferroni"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>bonferroni <span class="sc">%&gt;%</span> </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">|&gt;</span> <span class="fu">desc</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Parvisa jämförelser av utvalda cellmedelvärden med Bonferroni familjekonfidens"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-twoway-anova-tukey" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-twoway-anova-tukey-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;16.2: Parvisa jämförelser av utvalda cellmedelvärden med Bonferroni familjekonfidens
+</figcaption>
+<div aria-describedby="tbl-twoway-anova-tukey-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">t.ratio</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">VC dose0.5 - VC dose2</td>
+<td style="text-align: right;">-18.16</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-11.182</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">VC dose0.5 - OJ dose2</td>
+<td style="text-align: right;">-18.08</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-11.133</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">VC dose0.5 - OJ dose1</td>
+<td style="text-align: right;">-14.72</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-9.064</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OJ dose0.5 - VC dose2</td>
+<td style="text-align: right;">-12.91</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-7.949</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OJ dose0.5 - OJ dose2</td>
+<td style="text-align: right;">-12.83</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-7.900</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OJ dose0.5 - OJ dose1</td>
+<td style="text-align: right;">-9.47</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-5.831</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">VC dose1 - VC dose2</td>
+<td style="text-align: right;">-9.37</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-5.770</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">VC dose1 - OJ dose2</td>
+<td style="text-align: right;">-9.29</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-5.720</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">VC dose0.5 - VC dose1</td>
+<td style="text-align: right;">-8.79</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-5.413</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OJ dose1 - VC dose1</td>
+<td style="text-align: right;">5.93</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">3.651</td>
+<td style="text-align: right;">0.007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OJ dose0.5 - VC dose0.5</td>
+<td style="text-align: right;">5.25</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">3.233</td>
+<td style="text-align: right;">0.024</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OJ dose0.5 - VC dose1</td>
+<td style="text-align: right;">-3.54</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-2.180</td>
+<td style="text-align: right;">0.264</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OJ dose1 - VC dose2</td>
+<td style="text-align: right;">-3.44</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-2.118</td>
+<td style="text-align: right;">0.294</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OJ dose1 - OJ dose2</td>
+<td style="text-align: right;">-3.36</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-2.069</td>
+<td style="text-align: right;">0.319</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OJ dose2 - VC dose2</td>
+<td style="text-align: right;">-0.08</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-0.049</td>
+<td style="text-align: right;">1.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">t.ratio</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">VC dose0.5 - OJ dose1</td>
+<td style="text-align: right;">-14.72</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-9.064</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OJ dose0.5 - OJ dose1</td>
+<td style="text-align: right;">-9.47</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-5.831</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">VC dose0.5 - VC dose1</td>
+<td style="text-align: right;">-8.79</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-5.413</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OJ dose1 - VC dose1</td>
+<td style="text-align: right;">5.93</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">3.651</td>
+<td style="text-align: right;">0.004</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OJ dose0.5 - VC dose0.5</td>
+<td style="text-align: right;">5.25</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">3.233</td>
+<td style="text-align: right;">0.013</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OJ dose0.5 - VC dose1</td>
+<td style="text-align: right;">-3.54</td>
+<td style="text-align: right;">1.624</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">-2.180</td>
+<td style="text-align: right;">0.202</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+</section>
+<section id="slumpmässiga-faktorer" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="slumpmässiga-faktorer"><span class="header-section-number">16.3</span> Slumpmässiga faktorer</h2>
+<p>Hittintills har vi bara ägnat oss åt modeller där vi endast har fixa effekter. I praktiken har vi många situationer där nivåerna på en faktor är dragna slumpmässigt från en population vilket innebär att inferensen som vi genomför tittar på hela population och inte bara de utvalda nivåerna. Detta är en modell med slumpmässiga effekter och i en flervägs-modell kan vi inkludera en blandning av fixa och slumpmässiga effekter (<em>mixed effects model</em>) eller enbart slumpmässiga (<em>random effects model</em>). I fallet med två slumpmässiga faktorer kan vi utveckla <a href="01-random-factors.html#eq-random-effect-anova" class="quarto-xref">Ekvation&nbsp;<span>14.1</span></a> till att ta hänsyn till flera slumpmässiga effekter: <span id="eq-twoway-anova-random"><span class="math display">\[
+\begin{aligned}
+  Y_{ijk} = \gamma_{000} + U_{0i0} + U_{00j} + U_{0ij} + E_{ijk}
+\end{aligned}
+\tag{16.2}\]</span></span> där</p>
+<ul>
+<li><span class="math inline">\(i\)</span> är de uppmätta nivåerna av faktor A,</li>
+<li><span class="math inline">\(j\)</span> är nivåer av faktor B,</li>
+<li><span class="math inline">\(\gamma_{000}\)</span> är det övergripande medelvärdet (motsvarande <span class="math inline">\(\mu\)</span> i <a href="00-oneway-anova.html#eq-fix-effect-anova" class="quarto-xref">Ekvation&nbsp;<span>13.1</span></a>),</li>
+<li><span class="math inline">\(U_{0i0} \sim N(0, \sigma_A^2)\)</span> är den avvikelse som nivå <span class="math inline">\(i\)</span> har på det övergripande medelvärdet,</li>
+<li><span class="math inline">\(U_{00j} \sim N(0, \sigma_B^2)\)</span> är den avvikelse nivå <span class="math inline">\(j\)</span> har på medelvärdet,</li>
+<li><span class="math inline">\(U_{0ij} \sim N(0, \sigma_{AB}^2)\)</span> är den avvikelse respektive kombination av nivåer från de två faktorerna har på medelvärdet,</li>
+<li>till sist <span class="math inline">\(E_{ijk} \sim N(0, \sigma^2)\)</span>.</li>
+</ul>
+<p>Modellen innehåller nu fyra olika varianser, <span class="math inline">\(\sigma^2_A\)</span>, <span class="math inline">\(\sigma^2_B\)</span>, <span class="math inline">\(\sigma^2_{AB}\)</span> och <span class="math inline">\(\sigma^2\)</span> som tillsammans bildar den totala variansen av <span class="math inline">\(Y\)</span>.</p>
+<section id="inferens-1" class="level3" data-number="16.3.1">
+<h3 data-number="16.3.1" class="anchored" data-anchor-id="inferens-1"><span class="header-section-number">16.3.1</span> Inferens</h3>
+<p>Vi beräknar kvadratsummor på samma sätt som i fallet med en tvåvägs-ANOVA med två fixa faktorer. Däremot ser väntevärdena för kvadratsummorna annorlunda ut och påverkar hur testvariabeln beräknas för respektive faktor.</p>
+<p>På samma sätt som i <a href="01-random-factors.html" class="quarto-xref"><span>Kapitel 14</span></a> kommer inferens inte längre fokusera på de enskilda lutningsparametrarna utan istället undersöka variansen av respektive komponent. Till exempel ett test för signifikanta interaktionseffekter undersöker <span class="math inline">\(H_0: \sigma^2_{AB} = 0\)</span> mot <span class="math inline">\(H_a: \sigma_{AB}^2 &gt; 0\)</span>.</p>
+<p>Testvariabeln utgår från följande väntevärden av medelkvadratsummor: <span class="math display">\[
+\begin{aligned}
+    E[MSE] &amp;= \sigma^2 \\
+    E[MSAB] &amp;= \sigma^2 + n_{ij} \sigma^2_{AB} \\
+    E[MSA] &amp;= \sigma^2 + n_{ij} \sigma^2_{AB} + B \cdot n_{ij} \sigma^2_A\\
+    E[MSB] &amp;= \sigma^2 + n_{ij} \sigma^2_{AB} + A \cdot n_{ij} \sigma^2_B
+\end{aligned}
+\]</span> där <span class="math inline">\(n_{ij}\)</span> är antalet i respektive cell vilket i en balanserad modell är samma värde för alla celler, <span class="math inline">\(n_{ij} = \frac{n}{A\cdot B}\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>För en obalanserad modell är dessa väntevärden mycket mer komplicerade eftersom varje cell ger en viktad effekt på variansen givet sin storlek.</p>
+</div>
+</div>
+<p>Testvariablerna kan nu skapas genom att ställa upp en kvot av två medelkvadratsummor som är lika om <span class="math inline">\(H_0\)</span> är sann och större än 1 om <span class="math inline">\(H_a\)</span> är sann. För interaktionen innebär det:</p>
+<p><span class="math display">\[
+\begin{aligned}
+    F_{test} = \frac{MSAB}{MSE} = \frac{\sigma^2 + n_{ij} \sigma^2_{AB}}{\sigma^2}
+\end{aligned}
+\]</span></p>
+<p>Testvariabeln följer F-fördelningen med täljarens och nämnarens frihetsgrader.</p>
+<p>Det som är speciellt med slumpmässiga faktorer är hur vi undersöker de huvudsakliga faktoreffekterna för faktor A och B. Hypoteser för dessa komponenter fokuserar enbart på <span class="math inline">\(\sigma^2_A\)</span> eller <span class="math inline">\(\sigma_B^2\)</span> respektive och då räcker det inte att jämföra MSA med MSE som vi gör i en fix modell.</p>
+<p><span class="math display">\[
+\begin{aligned}
+  F_{test} = \frac{MSA}{MSE} = \frac{\sigma^2 + n_{ij} \sigma^2_{AB} + B \cdot n_{ij} \sigma^2_A}{\sigma^2}
+\end{aligned}
+\]</span> Med den “vanliga” testvariabeln skulle vi inte kunna särskilja om variansen från faktor A eller interaktionen leder till att <span class="math inline">\(H_0\)</span> förkastas. Istället behöver vi jämföra med MSAB i nämnaren:</p>
+<p><span class="math display">\[
+\begin{aligned}
+  F_{test} = \frac{MSA}{MSAB} = \frac{\sigma^2 + n_{ij} \sigma^2_{AB} + B \cdot n_{ij} \sigma^2_A}{\sigma^2 + n_{ij} \sigma^2_{AB}}
+\end{aligned}
+\]</span></p>
+<p>När vi använder R för att anpassa modellen och skapa ANOVA-tabeller kan vi inte läsa av tabellens F-test direkt då R inte vet om att vi har slumpmässiga faktorer.</p>
+</section>
+<section id="exempel" class="level3" data-number="16.3.2">
+<h3 data-number="16.3.2" class="anchored" data-anchor-id="exempel"><span class="header-section-number">16.3.2</span> Exempel</h3>
+<p>En biolog vill undersöka om kackerlackor växer snabbare i varma och fuktiga miljöer. 27 identiska kackerlackor delas upp på nio olika kombinationer av temperatur och luftfuktighet. Det är inte just dessa temperaturer och luftfuktigheter som är av intresse, dessa olika kombinationer har blivit slumpmässigt valda av alla möjliga kombinatoner av luftfuktigheter och temperaturer. Kackerlackorna får vara i de olika förhållandena i två veckor, och efter dessa två veckor observeras deras längdökning i millimeter. Datamaterialet finns tillgängligt <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/roaches.csv">här</a>.</p>
+<p>Modellen anpassas på samma sätt som tidigare men vi behöver hålla koll på vad för värden som vi sedan tolkar.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Man kan i <code>lm</code> ange hur vi vill att kvalitativa variabler ska kodas istället för att spara kodningen i datamaterialet. Vi kan i argumentet <code>contrasts</code> ange en namngiven lista med faktorer och vilken form av <code>contr.X</code> som ska användas.</p>
+<p>För effektkodning anger vi <code>contr.sum</code>.</p>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  length_increase <span class="sc">~</span> humidity <span class="sc">*</span> temperature,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> roach,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Faktoreffektkodar faktorerna enbart för modellanpassningen</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">contrasts =</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">humidity =</span> <span class="st">"contr.sum"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">temperature =</span> <span class="st">"contr.sum"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellens felaktiga ANOVA-tabell."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Modellens felaktiga ANOVA-tabell.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">humidity</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1304.667</td>
+<td style="text-align: right;">652.333</td>
+<td style="text-align: right;">244.625</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">temperature</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">356.222</td>
+<td style="text-align: right;">178.111</td>
+<td style="text-align: right;">66.792</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">humidity:temperature</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">11.111</td>
+<td style="text-align: right;">2.778</td>
+<td style="text-align: right;">1.042</td>
+<td style="text-align: right;">0.413</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">48.000</td>
+<td style="text-align: right;">2.667</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Tabellen visar endast ett korrekt test, det för interaktionseffekten, och vi behöver själv beräkna det korrekta testet för de huvudsakliga faktorerna</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en korrigerad ANOVA-tabell utifrån en skattad tvåvägs-ANOVAmodell med två slumpmässiga faktorer</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mainEffectCorrection <span class="ot">&lt;-</span> <span class="cf">function</span>(model){</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  anovaTabell <span class="ot">&lt;-</span> <span class="fu">anova</span>(model)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Testvariabel för faktor A (MSA / MSAB)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  anovaTabell[<span class="dv">1</span>,<span class="dv">4</span>] <span class="ot">&lt;-</span> anovaTabell[<span class="dv">1</span>,<span class="dv">3</span>] <span class="sc">/</span> anovaTabell[<span class="dv">3</span>,<span class="dv">3</span>]</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Testvariabel för faktor B (MSB / MSAB)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  anovaTabell[<span class="dv">2</span>,<span class="dv">4</span>] <span class="ot">&lt;-</span> anovaTabell[<span class="dv">2</span>,<span class="dv">3</span>] <span class="sc">/</span> anovaTabell[<span class="dv">3</span>,<span class="dv">3</span>]</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Beräknar nya p-värden</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  anovaTabell[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,<span class="dv">5</span>] <span class="ot">&lt;-</span> </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pf</span>(</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">q =</span> anovaTabell[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">4</span>], </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">df1 =</span> anovaTabell[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,<span class="dv">1</span>], </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">df2 =</span> anovaTabell[<span class="dv">3</span>,<span class="dv">1</span>], </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">lower.tail =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(anovaTabell)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">mainEffectCorrection</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellens korrigerade ANOVA-tabell."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Modellens korrigerade ANOVA-tabell.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">humidity</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1304.667</td>
+<td style="text-align: right;">652.333</td>
+<td style="text-align: right;">234.840</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">temperature</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">356.222</td>
+<td style="text-align: right;">178.111</td>
+<td style="text-align: right;">64.120</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">humidity:temperature</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">11.111</td>
+<td style="text-align: right;">2.778</td>
+<td style="text-align: right;">1.042</td>
+<td style="text-align: right;">0.413</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">48.000</td>
+<td style="text-align: right;">2.667</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Den korrigerade tabellen visar att interaktionen inte har någon signifikant effekt (p-värde = 0.413) medan de två huvudsakliga faktorerna har båda en signifikant effekt på mätvariabeln (p-värde &lt; 0.001 och 0.001 respektive).</p>
+<p>Med slumpmässiga faktorer är vi inte intresserade av att undersöka faktornivåerna vidare med multipla jämförelser eftersom de endast är ett slumpmässigt urval av alla nivåer vi vill dra slutsatser om. Däremot kan det vara av intresse att undersöka respektive varians ytterligare.</p>
+</section>
+<section id="varianskomponenter" class="level3" data-number="16.3.3">
+<h3 data-number="16.3.3" class="anchored" data-anchor-id="varianskomponenter"><span class="header-section-number">16.3.3</span> Varianskomponenter</h3>
+<p>En tvåvägs-ANOVA med interaktion består av fyra stycken olika varianser där den totala variansen av Y, <span class="math inline">\(\sigma^2_Y\)</span> delas upp i dess mindre beståndsdelar. <span class="math display">\[
+\begin{aligned}
+  Y &amp;\sim N(\mu_{Y|\mathbf{X}}, \sigma^2_Y)\\
+  Y &amp;\sim N(\mu_{Y|\mathbf{X}}, \sigma^2_A + \sigma^2_B + \sigma^2_{AB} + \sigma^2)
+\end{aligned}
+\]</span> Vi nu intresserade av att skatta varianserna för respektive komponent, istället för multipla jämförelser, för att få en indikation på hur stor del av den totala variansen (och hur stora skillnader vi kan förvänta oss bland valda nivåer av en faktor). Återigen används väntevärden för medelkvadratsummorna som grund för våra omskrivningar till skattningarna av variansen.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sparar ner ANOVA-tabellen</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>anovaTabell <span class="ot">&lt;-</span> <span class="fu">anova</span>(model)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut MSx från tabellen</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>MSA <span class="ot">&lt;-</span> anovaTabell<span class="sc">$</span><span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">1</span>]</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>MSB <span class="ot">&lt;-</span> anovaTabell<span class="sc">$</span><span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">2</span>]</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>MSAB <span class="ot">&lt;-</span> anovaTabell<span class="sc">$</span><span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">3</span>]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>MSE <span class="ot">&lt;-</span> anovaTabell<span class="sc">$</span><span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">4</span>]</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sparar antalet nivåer för varje faktor</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> anovaTabell<span class="sc">$</span>Df[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> anovaTabell<span class="sc">$</span>Df[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Sparar antalet observationer per cell </span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> (<span class="fu">sum</span>(anovaTabell<span class="sc">$</span>Df) <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> (A <span class="sc">*</span> B)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar variansskattningarna</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>sigmaEst <span class="ot">&lt;-</span> MSE</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>sigmaAEst <span class="ot">&lt;-</span> (MSA <span class="sc">-</span> MSAB) <span class="sc">/</span> (B<span class="sc">*</span>n)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>sigmaBEst <span class="ot">&lt;-</span> (MSB <span class="sc">-</span> MSAB) <span class="sc">/</span> (A<span class="sc">*</span>n)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>sigmaABEst <span class="ot">&lt;-</span> (MSAB <span class="sc">-</span> MSE) <span class="sc">/</span> n</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Sammanställer skattningarna och presenterar som en tabell</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">Parameter =</span> </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2_A$"</span>,<span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2_B$"</span>,<span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2_{AB}$"</span>, <span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2$"</span>),</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">Skattning =</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(sigmaAEst,sigmaBEst,sigmaABEst, sigmaEst)</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: right;">Skattning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\sigma^2_A\)</span></td>
+<td style="text-align: right;">72.173</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\sigma^2_B\)</span></td>
+<td style="text-align: right;">19.481</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\sigma^2_{AB}\)</span></td>
+<td style="text-align: right;">0.037</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\sigma^2\)</span></td>
+<td style="text-align: right;">2.667</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Likt den korrigerade ANOVA-tabellen visar dessa varianser att interaktionen är den minsta effekten av alla modellens komponenter. De skattade varianserna visar på att <code>humidity</code> (Faktor A) verkar vara den största källan till variation jämfört med <code>temperature</code> men detta bör säkerställas med lämpliga intervallskattningar<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<!-- TODO ADD THEORY COMPENDIUM CALCULATIONS -->
+<section id="skatta-varianser-direkt-i-r" class="level4" data-number="16.3.3.1">
+<h4 data-number="16.3.3.1" class="anchored" data-anchor-id="skatta-varianser-direkt-i-r"><span class="header-section-number">16.3.3.1</span> Skatta varianser direkt i R</h4>
+<p>Att skatta varianserna för varje komponent som vi gjort tidigare är krångligt. Istället kan vi använda paketet <code>lme4</code>. Paketet är främst avsedd för mer komplicerade modeller men vi kan se våra ‘random effekt’-modeller som vi tittat på i denna övning som enkla tillämpningar.</p>
+<p>Funktionen <code>lmer</code> skattar en linjär mix-effekt modell, där vi kan styra vilka komponenter vi anser vara fixa och vilka vi anser vara slumpmässiga. I de tidigare modellerna från detta kapitel är alla komponenter slumpmässiga och det blir då en ren slumpmässig modell. För att kunna lägga till slumpmässiga effekter i modellen behöver vi omformulera modellens formel något. En slumpmässig effekt skapas via <code>(1 | faktor)</code> istället för bara <code>faktor</code>. Tvåvägs-ANOVAmodellen skrivs då som följer:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lmer</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    length_increase <span class="sc">~</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>      (<span class="dv">1</span> <span class="sc">|</span> humidity) <span class="sc">+</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>      (<span class="dv">1</span> <span class="sc">|</span> temperature) <span class="sc">+</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>      (<span class="dv">1</span> <span class="sc">|</span> humidity<span class="sc">:</span>temperature), </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> roach</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Detta modellobjekt har <strong>inte</strong> lika struktur som objekt från <code>lm</code> eller <code>aov</code> vilket innebär att vi behöver hantera resultatet på ett annorlunda sätt. Till exempel kommer <code>summary()</code> visa två olika grupper av utskrifter än vad vi är vana vid.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by REML ['lmerMod']
+Formula: 
+length_increase ~ (1 | humidity) + (1 | temperature) + (1 | humidity:temperature)
+   Data: roach
+
+REML criterion at convergence: 122.1
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.0519 -0.4454 -0.2116  0.4127  2.6173 
+
+Random effects:
+ Groups               Name        Variance Std.Dev.
+ humidity:temperature (Intercept)  0.03704 0.1925  
+ temperature          (Intercept) 19.48156 4.4138  
+ humidity             (Intercept) 72.17450 8.4956  
+ Residual                          2.66666 1.6330  
+Number of obs: 27, groups:  
+humidity:temperature, 9; temperature, 3; humidity, 3
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   14.667      5.537   2.649</code></pre>
+</div>
+</div>
+<p>Utskriften delas upp i <code>Random effects</code> och <code>Fixed effects</code> med olika tabellstrukturer. Vår modell som anpassas är fortfarande <a href="#eq-twoway-anova-random" class="quarto-xref">Ekvation&nbsp;<span>16.2</span></a> där vi anser <span class="math inline">\(\gamma_{000}\)</span> vara en fix effekt, ett fixt intercept, och de andra komponenterna vara slumpmässiga effekter. Eftersom vi inte är intresserade av exakta parameterskattningar för de slumpmässiga effekterna, de är ju bara ett slumpmässigt urval av nivåer från hela faktorn, visas inte dessa i utskriften till skillnad från det fixa interceptet (se <code>Estimate</code>). Istället fokuserar de slumpmässiga effekterna på variansen av varje komponent, det som vi också fokuserat på tidigare i kapitlet.</p>
+<p>Vi kan plocka ut dessa varianser i en separat tabell genom:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Tar ut varianskomponenterna</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  .<span class="sc">$</span>varcor <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Konverterar till en data.frame för kable</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Väljer ut relevanta delar av konverterade data.frame och byter namn</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    Källa <span class="ot">=</span> grp,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Varians =</span> vcov</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Skattade varianskomponenter"</span>, </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Skattade varianskomponenter</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Källa</th>
+<th style="text-align: right;">Varians</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">humidity:temperature</td>
+<td style="text-align: right;">0.037</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">temperature</td>
+<td style="text-align: right;">19.482</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">humidity</td>
+<td style="text-align: right;">72.175</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Residual</td>
+<td style="text-align: right;">2.667</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Vi kan se att denna tabell ser likadan ut som den tabell som skapades utifrån beräkningar från medelkvadratsummorna. Det är endast några få skillnader i tusendelen vilket orsakas av hur funktionen skattar dessa varianser. Istället för att använda medelkvadratsummorna, som endast går att använda när modellen använder sig av kategoriska variabler, använder sig <code>lmer</code> av en variant av maximum likelihood för att optimera parametrarna. Detta medför att funktionen kan anpassa betydligt mer komplexa modeller än en random effekt ANOVA.</p>
+</section>
+</section>
+</section>
+<section id="obalanserad-tvåvägs-anova" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="obalanserad-tvåvägs-anova"><span class="header-section-number">16.4</span> Obalanserad tvåvägs-ANOVA</h2>
+<p>Antagandet om att experimentet undersöker lika många observationer i varje kombination av behandlingar är kanske inte alltid så rimligt. ANOVA-modeller går att tillämpa även på observationsstudier där det i de allra flesta fallen inte går att kontrollera att undersökningen blir balanserad. Även i experimentella studier kan observationer som antas medverka försvinna av olika anledningar vilket resulterar i ett obalanserat experiment.</p>
+<p>Konsekvensen av att analysera en obalanserad studie är att vi måste vara tydliga med vilken typ av SS som används då de inte kommer visa samma värden. Vanligast är att vi vill använda typ II eller III SS för att kunna genomföra lämplig inferens för de olika faktorerna.</p>
+<p>Anta att vi i en studie gett samma koffeindos till 18 personer där två faktorer uppmättes, ifall kaffet blandades med mjölk och vilken form av socker (riktig, artificiellt, ingen) det innehöll, och hur mycket personen i fråga “babblade” efter att ha druckit kaffet. Enheten och vad denna mätvariabel faktiskt betyder är inte viktig men vi kan anta att högre värden kopplas till en mer pratglad person. Datamaterialet finns att laddas ner <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/coffee.csv">här</a> (<span class="citation" data-cites="navarro2018">Navarro (<a href="#ref-navarro2018" role="doc-biblioref">2018</a>)</span>).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar cellmedelvärden</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  coffee <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(milk, sugar) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(babble)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Visar respektive cellmedelvärde</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(coffee) <span class="sc">+</span> </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> sugar, <span class="at">y =</span> babble, <span class="at">group =</span> milk, <span class="at">color =</span> milk) <span class="sc">+</span> </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="st">"Mjölk"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"#d9230f"</span>)) <span class="sc">+</span> </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> means,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> mean), </span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">1.2</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Socker"</span>, <span class="at">y =</span> <span class="st">"Babblande"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-twoway-anova_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="480"></p>
+<figcaption>Interaktionsdiagram av babblande uppdelat på två faktorer</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>I interaktionsdiagrammet ser vi antydan till en interaktion, men vi ser också att antalet observationer för varje kombination av nivåer inte är lika, studien är obalanserad. Vi har inte kunnat kontrollera att lika många tar mjölk till kaffet och använder sig av samma sorts socker.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(babble <span class="sc">~</span> milk<span class="sc">*</span>sugar, <span class="at">data =</span> coffee)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellen ANOVA-tabell med typ I kvadratsummor."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Modellen ANOVA-tabell med typ I kvadratsummor.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">milk</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.444</td>
+<td style="text-align: right;">1.444</td>
+<td style="text-align: right;">5.479</td>
+<td style="text-align: right;">0.037</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sugar</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3.070</td>
+<td style="text-align: right;">1.535</td>
+<td style="text-align: right;">5.824</td>
+<td style="text-align: right;">0.017</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">milk:sugar</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5.944</td>
+<td style="text-align: right;">2.972</td>
+<td style="text-align: right;">11.277</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3.162</td>
+<td style="text-align: right;">0.264</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Modellen anpassas på samma sätt som innan men ordningen av variablerna kommer nu påverka vad vi ser för värden på kvadratsummorna.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(babble <span class="sc">~</span> sugar<span class="sc">*</span>milk, <span class="at">data =</span> coffee)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model2) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Annan ordning på modellens ANOVA-tabell med typ I kvadratsummor."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Annan ordning på modellens ANOVA-tabell med typ I kvadratsummor.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">sugar</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3.558</td>
+<td style="text-align: right;">1.779</td>
+<td style="text-align: right;">6.749</td>
+<td style="text-align: right;">0.011</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">milk</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.956</td>
+<td style="text-align: right;">0.956</td>
+<td style="text-align: right;">3.628</td>
+<td style="text-align: right;">0.081</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sugar:milk</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5.944</td>
+<td style="text-align: right;">2.972</td>
+<td style="text-align: right;">11.277</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3.162</td>
+<td style="text-align: right;">0.264</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Den enda av faktorernas kvadratsummor som blivit samma är interaktionen eftersom den beräknas på samma sätt med de två olika modellordningarna och denna typ av kvadratsumma. Detta blir lite rörigt att hålla koll på om vi ska undersöka både interaktionseffekter och huvudsakliga effekter så istället kan vi titta på typ III SS.</p>
+<p>I paketet <code>car</code> får vi tillgång till funktionen <code>Anova()</code> (stort A) som ger oss möjligheten att ange vilken typ av SS som vi vill visa i ANOVA-tabellen.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Anova</span>(model, <span class="at">type =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellen ANOVA-tabell med typ III kvadratsummor."</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Modellen ANOVA-tabell med typ III kvadratsummor.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">86.490</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">328.183</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">milk</td>
+<td style="text-align: right;">1.763</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.691</td>
+<td style="text-align: right;">0.024</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sugar</td>
+<td style="text-align: right;">3.133</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5.945</td>
+<td style="text-align: right;">0.016</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">milk:sugar</td>
+<td style="text-align: right;">5.944</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">11.277</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">3.162</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>ANOVA-tabellen ser något annorlunda ut jämfört med vad vi är vana vid. Vi får en ny första rad (Intercept) som vi inte alls ska läsa av eller ta hänsyn till i vår analys, och vi saknar helt medelkvadratsummor. Dessa kan vi enkelt beräkna enligt <span class="math inline">\(\frac{SS}{df}\)</span> men det som vi kanske främst är intresserade av är testvariabeln och det tillhörande p-värdet. Alla dessa tester undersöker hur mycket ytterligare variation faktorn eller interaktionen bidrar med givet de andra faktorerna och interaktion redan inkluderad i modellen.</p>
+<section id="multipla-jämförelser" class="level3" data-number="16.4.1">
+<h3 data-number="16.4.1" class="anchored" data-anchor-id="multipla-jämförelser"><span class="header-section-number">16.4.1</span> Multipla jämförelser</h3>
+<p>Även för obalanserade modeller vill vi undersöka jämförelser mellan faktor- eller cellmedelvärden för att specifikt veta var skillnader råder.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(model, <span class="at">specs =</span> <span class="sc">~</span>milk<span class="sc">*</span>sugar)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>tukey <span class="ot">&lt;-</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(means, <span class="at">adjust =</span> <span class="st">"tukey"</span>) </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>tukey <span class="sc">%&gt;%</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">%&gt;%</span> <span class="fu">desc</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Parvisa jämförelser av cellmedelvärden med Tukey familjekonfidens"</span>)</span></code><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Parvisa jämförelser av cellmedelvärden med Tukey familjekonfidens</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">t.ratio</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">yes none - no real</td>
+<td style="text-align: right;">-2.175</td>
+<td style="text-align: right;">0.392</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">-5.547</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">yes fake - yes none</td>
+<td style="text-align: right;">2.100</td>
+<td style="text-align: right;">0.469</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">4.481</td>
+<td style="text-align: right;">0.008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">no none - yes none</td>
+<td style="text-align: right;">1.850</td>
+<td style="text-align: right;">0.469</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3.948</td>
+<td style="text-align: right;">0.019</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">yes none - yes real</td>
+<td style="text-align: right;">-1.400</td>
+<td style="text-align: right;">0.419</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">-3.340</td>
+<td style="text-align: right;">0.052</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">no fake - no real</td>
+<td style="text-align: right;">-1.225</td>
+<td style="text-align: right;">0.363</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">-3.375</td>
+<td style="text-align: right;">0.049</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">no fake - yes fake</td>
+<td style="text-align: right;">-1.150</td>
+<td style="text-align: right;">0.445</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">-2.587</td>
+<td style="text-align: right;">0.174</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">no fake - yes none</td>
+<td style="text-align: right;">0.950</td>
+<td style="text-align: right;">0.392</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">2.423</td>
+<td style="text-align: right;">0.222</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">no fake - no none</td>
+<td style="text-align: right;">-0.900</td>
+<td style="text-align: right;">0.445</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">-2.024</td>
+<td style="text-align: right;">0.384</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">no real - yes real</td>
+<td style="text-align: right;">0.775</td>
+<td style="text-align: right;">0.392</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1.977</td>
+<td style="text-align: right;">0.407</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">yes fake - yes real</td>
+<td style="text-align: right;">0.700</td>
+<td style="text-align: right;">0.469</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1.494</td>
+<td style="text-align: right;">0.674</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">no fake - yes real</td>
+<td style="text-align: right;">-0.450</td>
+<td style="text-align: right;">0.392</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">-1.148</td>
+<td style="text-align: right;">0.852</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">no none - yes real</td>
+<td style="text-align: right;">0.450</td>
+<td style="text-align: right;">0.469</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.960</td>
+<td style="text-align: right;">0.922</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">no none - no real</td>
+<td style="text-align: right;">-0.325</td>
+<td style="text-align: right;">0.445</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">-0.731</td>
+<td style="text-align: right;">0.974</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">yes fake - no none</td>
+<td style="text-align: right;">0.250</td>
+<td style="text-align: right;">0.513</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.487</td>
+<td style="text-align: right;">0.996</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">yes fake - no real</td>
+<td style="text-align: right;">-0.075</td>
+<td style="text-align: right;">0.445</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">-0.169</td>
+<td style="text-align: right;">1.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Till skillnad från <a href="#tbl-twoway-anova-tukey" class="quarto-xref">Tabell&nbsp;<span>16.2</span></a> ser vi att varje medelfel är olika på grund av att vi har olika antal observationer i varje cell. Argumentet <code>adjust</code> kan ändras till <code>bonferroni</code> eller <code>scheffe</code> beroende på vilken familjekonfidens vi vill beräkna. Liknande funktioner för kontraster som vi tidigare använt är också användbara här.</p>
+</section>
+</section>
+<section id="övningsuppgifter" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">16.5</span> Övningsuppgifter</h2>
+<p>Anta en studie där forskare vill undersöka variationen i bränsleeffektivitet (mätt i <code>miles per gallon</code>) för olika bilar som körs av olika förare. De två faktorerna i denna studie är:</p>
+<ul>
+<li>Förare: Fyra slumpmässigt utvalda förare (Faktor A)</li>
+<li>Bilar: Fem slumpmässigt utvalda bilar av samma modell (Faktor B)</li>
+</ul>
+<p>Varje förare kör varje bil två gånger på samma testbana. Datamaterialet finns att hämta <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/fuelefficieny.csv">här</a></p>
+<ol type="a">
+<li><p>Skriv upp modellen som anpassas och beskriv alla komponenter.</p></li>
+<li><p>Testa om det finns interaktionseffekt med 5% siginifikans.</p></li>
+<li><p>Testa på 5 procents signifikans om förare och/eller bil har en effekt på bränsleförbrukningen.</p></li>
+<li><p>Skatta variansen för förare med ett 90% approximativt Satterthwaites konfidensintervall. Visa beräkningarna och tolka intervallet.</p></li>
+</ol>
+</section>
+<section id="referenser" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-navarro2018" class="csl-entry" role="listitem">
+Navarro, Danielle. 2018. <em><span>Learning Statistics with R: A tutorial for psychology students and other beginners</span></em>. Danielle Navarro. <a href="https://learningstatisticswithr.com/">https://learningstatisticswithr.com/</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Se teorikompendiets formler<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Kopierat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Kopierat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../02-variance/02-control-variables.html" class="pagination-link" aria-label="Kontrollvariabler">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
