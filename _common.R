@@ -10,6 +10,7 @@ suppressMessages({
   require(nnet)
   require(emmeans)
   require(car)
+  require(lme4)
 })
 
 utils::data(penguins)
