@@ -50,6 +50,10 @@ roach <- readr::read_csv2("resources/data/roaches.csv") %>%
   mutate(across(humidity:temperature, ~ as.factor(.x))) %>% 
   suppressMessages()
 
+fuel <- readr::read_csv2("resources/data/fuelefficiency.csv") %>% 
+  mutate(across(car:driver, ~ as.factor(.x))) %>% 
+  suppressMessages()
+
 residualPlots <- function(model) {
   
   residualData <- 

@@ -559,7 +559,20 @@ tukey %>%
 Till skillnad från @tbl-twoway-anova-tukey ser vi att varje medelfel är olika på grund av att vi har olika antal observationer i varje cell. Argumentet `adjust` kan ändras till `bonferroni` eller `scheffe` beroende på vilken familjekonfidens vi vill beräkna. Liknande funktioner för kontraster som vi tidigare använt är också användbara här.
 
 ## Övningsuppgifter
+Anta en studie där forskare vill undersöka variationen i bränsleeffektivitet (mätt i `miles per gallon`) för olika bilar som körs av olika förare. De två faktorerna i denna studie är:
 
+- Förare: Fyra slumpmässigt utvalda förare (Faktor A)
+- Bilar: Fem slumpmässigt utvalda bilar av samma modell (Faktor B)
+
+Varje förare kör varje bil två gånger på samma testbana. Datamaterialet finns att hämta [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/fuelefficieny.csv)
+
+a) Skriv upp modellen som anpassas och beskriv alla komponenter.
+
+b) Testa om det finns interaktionseffekt med 5% siginifikans. 
+
+c) Testa på 5 procents signifikans om förare och/eller bil har en effekt på bränsleförbrukningen.
+
+d) Skatta variansen för förare med ett 90% approximativt Satterthwaites konfidensintervall. Visa beräkningarna och tolka intervallet.
 
 ## Referenser {.unnumbered}
 
