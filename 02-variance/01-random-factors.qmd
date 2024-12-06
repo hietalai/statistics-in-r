@@ -161,22 +161,24 @@ $$
 där $n$ är antalet observationer inom en faktornivå. Kom ihåg att vi här behandlar en balanserad modell vilket betyder att $n_i = n$.
 
 ```{r}
+#| eval: false
+#| code-fold: false
 
-## Sparar ner ANOVA-tabellen som en data.frame
+# Sparar ner ANOVA-tabellen som en data.frame
 anovaTabell <- anova(model)
 
-## Plockar ut MSA och MSE från tabellen
+# Plockar ut MSA och MSE från tabellen
 MSA <- anovaTabell$`Mean Sq`[1]
 MSE <- anovaTabell$`Mean Sq`[2]
 
-## Plockar ut antalet observationer per cell 
+# Plockar ut antalet observationer per cell 
 n <- (sum(anovaTabell$Df) + 1) / (anovaTabell$Df[1] + 1)
 
-## Beräknar variansskattningarna
+# Beräknar variansskattningarna
 sigmaEst <- MSE
 sigmaAEst <- (MSA - MSE) / n
 
-## Sammanställer skattningarna och presenterar som en tabell
+# Sammanställer skattningarna och presenterar som en tabell
 tibble(
     Parameter = 
       c("$\\sigma^2$","$\\sigma^2_A$"),
