@@ -240,7 +240,7 @@ $$
 \begin{aligned}
   Y_{ijk} = \gamma_{000} + U_{0i0} + U_{00j} + U_{0ij} + E_{ijk}
 \end{aligned}
-$$
+$$ {#eq-twoway-anova-random}
 där
 
 - $i$ är de uppmätta nivåerna av faktor A, 
@@ -404,7 +404,7 @@ sigmaABEst <- (MSAB - MSE) / n
 # Sammanställer skattningarna och presenterar som en tabell
 tibble(
     Parameter = 
-      c("$\\sigma^2_A$","$\\sigma^2_B$","$\\sigma^2_{AB}$", "$\\sigma^2$",),
+      c("$\\sigma^2_A$","$\\sigma^2_B$","$\\sigma^2_{AB}$", "$\\sigma^2$"),
     Skattning =
       c(sigmaAEst,sigmaBEst,sigmaABEst, sigmaEst)
   ) %>% 
@@ -412,6 +412,60 @@ tibble(
 
 ```
 
+Likt den korrigerade ANOVA-tabellen visar dessa varianser att interaktionen är den minsta effekten av alla modellens komponenter. De skattade varianserna visar på att `humidity` (Faktor A) verkar vara den största källan till variation jämfört med `temperature` men detta bör säkerställas med lämpliga intervallskattningar^[Se teorikompendiets formler].
+
+<!-- TODO ADD THEORY COMPENDIUM CALCULATIONS -->
+
+#### Skatta varianser direkt i R
+Att skatta varianserna för varje komponent som vi gjort tidigare är krångligt. Istället kan vi använda paketet `lme4`. Paketet är främst avsedd för mer komplicerade modeller men vi kan se våra 'random effekt'-modeller som vi tittat på i denna övning som enkla tillämpningar. 
+
+Funktionen `lmer` skattar en linjär mix-effekt modell, där vi kan styra vilka komponenter vi anser vara fixa och vilka vi anser vara slumpmässiga. I de tidigare modellerna från detta kapitel är alla komponenter slumpmässiga och det blir då en ren slumpmässig modell. För att kunna lägga till slumpmässiga effekter i modellen behöver vi omformulera modellens formel något. En slumpmässig effekt skapas via `(1 | faktor)` istället för bara `faktor`. Tvåvägs-ANOVAmodellen skrivs då som följer:
+
+```{r}
+#| warning: false
+
+model <- 
+  lmer(
+    length_increase ~ 
+      (1 | humidity) + 
+      (1 | temperature) + 
+      (1 | humidity:temperature), 
+    data = roach
+  )
+
+```
+
+Detta modellobjekt har **inte** lika struktur som objekt från `lm` eller `aov` vilket innebär att vi behöver hantera resultatet på ett annorlunda sätt. Till exempel kommer `summary()` visa två olika grupper av utskrifter än vad vi är vana vid. 
+
+```{r}
+#| results: markup
+
+summary(model)
+
+```
+
+Utskriften delas upp i `Random effects` och `Fixed effects` med olika tabellstrukturer. Vår modell som anpassas är fortfarande @eq-twoway-anova-random där vi anser $\gamma_{000}$ vara en fix effekt, ett fixt intercept, och de andra komponenterna vara slumpmässiga effekter. Eftersom vi inte är intresserade av exakta parameterskattningar för de slumpmässiga effekterna, de är ju bara ett slumpmässigt urval av nivåer från hela faktorn, visas inte dessa i utskriften till skillnad från det fixa interceptet (se `Estimate`). Istället fokuserar de slumpmässiga effekterna på variansen av varje komponent, det som vi också fokuserat på tidigare i kapitlet.
+
+Vi kan plocka ut dessa varianser i en separat tabell genom:
+```{r}
+summary(model) %>% 
+  # Tar ut varianskomponenterna
+  .$varcor %>% 
+  # Konverterar till en data.frame för kable
+  as.data.frame() %>% 
+  # Väljer ut relevanta delar av konverterade data.frame och byter namn
+  select(
+    Källa = grp,
+    Varians = vcov
+  ) %>% 
+  kable(
+    caption = "Skattade varianskomponenter", 
+    digits = 3
+  ) 
+
+```
+
+Vi kan se att denna tabell ser likadan ut som den tabell som skapades utifrån beräkningar från medelkvadratsummorna. Det är endast några få skillnader i tusendelen vilket orsakas av hur funktionen skattar dessa varianser. Istället för att använda medelkvadratsummorna, som endast går att använda när modellen använder sig av kategoriska variabler, använder sig `lmer` av en variant av maximum likelihood för att optimera parametrarna. Detta medför att funktionen kan anpassa betydligt mer komplexa modeller än en random effekt ANOVA.
 
 
 ## Obalanserad tvåvägs-ANOVA
@@ -503,6 +557,8 @@ tukey %>%
 ```
 
 Till skillnad från @tbl-twoway-anova-tukey ser vi att varje medelfel är olika på grund av att vi har olika antal observationer i varje cell. Argumentet `adjust` kan ändras till `bonferroni` eller `scheffe` beroende på vilken familjekonfidens vi vill beräkna. Liknande funktioner för kontraster som vi tidigare använt är också användbara här.
+
+## Övningsuppgifter
 
 
 ## Referenser {.unnumbered}
