@@ -2,7 +2,6 @@
 title: "Modellanpassning"
 editor_options: 
   chunk_output_type: console
-
 ---
 <!-- New commands for matrices in regression -->
 \newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
@@ -34,10 +33,10 @@ $$
 \text{näbblängd} = \beta_0 + \beta_1 \cdot \text{kroppsvikt} + \beta_2 \cdot \text{fenlängd} + \beta_3 \cdot \text{näbbredd} + \cdots + E
 $$ {#eq-penguin-quant}
 
-Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i @sec-model-assumptions framförallt antagandet om linjäritet. Har vi upptäckt icke-linjära samband i de parvisa visualiseringarna räcker det oftast inte med att inkludera en term i modellen. Detta kommer vi återkomma till i @sec-komplex-modell.
+Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i @sec-model-assumptions framförallt antagandet om linjäritet. Har vi upptäckt icke-linjära samband i de parvisa visualiseringarna räcker det oftast inte med att inkludera en term i modellen. Detta kommer vi återkomma till i @sec-complex-models.
 
 ## Indikatorvariabler {#sec-indicator-variable}
-En regressionsmodell kan inte hantera kvalitativa variabler direkt, exempelvis $\beta_4 \cdot \text{art}$, då variabelns värden beskriver kategorier inte värden från en numerisk skala. Detta gäller även om den kvalitativa variabeln är kodad numerisk. En lutningsparameter beskriver den konstanta förändring i responsvariabeln när den tillhörande förklarande variabeln ökar med en enhet, men en kvalitativ variabel har oftast ingen enhet och inte heller konstanta förändringar mellan intilliggande värden. Istället måste vi transformera den kvalitativa variabeln numerisk genom *indikatorvariabler* (även kallad dummyvariabler). 
+En regressionsmodell kan inte hantera kvalitativa variabler direkt, exempelvis $\beta_4 \cdot \text{art}$, då variabelns värden beskriver kategorier inte värden från en numerisk skala. Detta gäller även om den kvalitativa variabeln är kodad numerisk. En lutningsparameter beskriver den konstanta förändring i responsvariabeln när den tillhörande förklarande variabeln ökar med en enhet, men en kvalitativ variabel har oftast ingen enhet (ex. nominalskala) och inte heller konstanta förändringar mellan intilliggande värden (ex. ordinalskala). Istället måste vi transformera den kvalitativa variabeln numerisk genom *indikatorvariabler* (även kallad dummyvariabler). 
 
 Som namnet antyder används indikatorvariabler för att indikera vilken kategori en observation har uppmätt på den kvalitativa variabeln. Vi behöver då skapa en begränsad mängd indikatorvariabler som på ett tydligt sätt visar exakt en kategori per observation. 
 

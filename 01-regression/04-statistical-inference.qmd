@@ -1,7 +1,6 @@
 ---
 editor_options: 
   chunk_output_type: console
-
 ---
 <!-- New commands for matrices in regression -->
 \newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}

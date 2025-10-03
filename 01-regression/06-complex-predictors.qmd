@@ -1,5 +1,4 @@
 ---
-title: "Komplexa samband"
 editor_options: 
   chunk_output_type: console
 ---
@@ -21,6 +20,7 @@ editor_options:
 \newcommand{\Sum}[1]{\sum_{i=1}^#1}
 
 <!-- CONTENT -->
+# Komplexa samband {#sec-complex-models}
 I det utforskande steget av en undersökning kan vi ibland identifiera mer komplexa typer av samband mellan en förklarande variabel och responsvariabeln. Exempelvis identifierade vi i @fig-width-length-annot grupper av punkter som visade ett positivt samband medan punktsvärmen överlag visade på ett negativt samband. Den linjära regressionsmodellen kan också med hjälp av vissa transformeringar modellera icke-linjära samband.
 
 ## Interaktioner {#sec-interaction}
@@ -193,7 +193,7 @@ Med detta enkla exempel med endast två variabler och deras interaktion kan vi v
 
 dåligModell <- lm(y ~ x1 + x2, data = data)
 
-residualPlots(dåligModell)
+diagnosticPlots(dåligModell)
 
 ```
 
@@ -206,7 +206,7 @@ Likt när vi tittar på en potentiell interaktion mellan en kvalitativ och kvant
 
 braModell <- lm(y ~ x1 * x2, data = data)
 
-residualPlots(braModell)
+diagnosticPlots(braModell)
 
 ```
 
@@ -296,7 +296,7 @@ Det går också att utläsa från residualanalysen ifall modellen inte plockar u
 Låt oss anpassa en felaktig modell utan interaktion och titta på residualerna:
 ```{r}
 
-residualPlots(model = lm(Energi_KWh ~ Dygnsmedel + Bergsvärme, data = power))
+diagnosticPlots(model = lm(Energi_KWh ~ Dygnsmedel + Bergsvärme, data = power))
 
 ```
 
@@ -330,7 +330,7 @@ Om vi sedan visualiserar residualerna uppdelat på de två förklarande variable
 
 
 ```{r}
-residualPlots(model = model) 
+diagnosticPlots(model = model) 
 ```
 
 När interaktionen lagts till ser residualerna mycket bättre ut, dock inte helt perfekta för just denna modell. 
@@ -407,7 +407,7 @@ Om vi testar att först anpassa en "vanlig" linjär regression och utvärderar r
 
 model <- lm(Y ~ X, data = data)
 
-residualPlots(model)
+diagnosticPlots(model)
 
 ```
 
@@ -445,7 +445,7 @@ summary(model) %>%
 #| fig-height: 3
 #| fig-width: 5 
 
-residualPlots(model)
+diagnosticPlots(model)
 
 ```
 
@@ -510,7 +510,7 @@ summary(modelCent) %>%
 #| fig-width: 5 
 
 
-residualPlots(modelCent)
+diagnosticPlots(modelCent)
 ```
 
 

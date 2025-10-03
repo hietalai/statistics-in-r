@@ -146,7 +146,7 @@ model4 <- lm(y4 ~ x, data = data)
 #| fig-height: 3
 #| fig-width: 5 
 
-residualPlots(model1)
+diagnosticPlots(model1)
 
 ```
 Vi har ett värde vid $\hat{y} \approx 20$ och $\hat{E} \approx 6$ som har ett något större residualvärde än de övriga, men det är inte ett jättetydligt extremvärde.
@@ -156,7 +156,7 @@ Vi har ett värde vid $\hat{y} \approx 20$ och $\hat{E} \approx 6$ som har ett n
 #| fig-height: 3
 #| fig-width: 5 
 
-residualPlots(model2)
+diagnosticPlots(model2)
 
 ```
 
@@ -167,7 +167,7 @@ I denna modell verkar vi återigen ha en observation vars residual avviker någo
 #| fig-height: 3
 #| fig-width: 5 
 
-residualPlots(model3)
+diagnosticPlots(model3)
 
 ```
 Modell 3 har en extremt tydlig avvikande observation som påverkar modellanpassningen negativt om vi jämför med modell 1.
@@ -177,7 +177,7 @@ Modell 3 har en extremt tydlig avvikande observation som påverkar modellanpassn
 #| fig-height: 3
 #| fig-width: 5 
 
-residualPlots(model4)
+diagnosticPlots(model4)
 
 ```
 
