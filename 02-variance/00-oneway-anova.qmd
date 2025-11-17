@@ -377,9 +377,12 @@ I följande interaktiva visualisering simuleras ett urval av en kontinuerlig res
 
 require(shiny)
 require(bslib)
-require(ggplot2)
-require(tidyverse)
 require(stringr)
+require(lubridate)
+require(dplyr)
+require(tidyr)
+require(ggplot2)
+require(munsell)
 
 # Define UI for app that draws a histogram ----
 ui <- page_sidebar(
@@ -414,7 +417,7 @@ server <- function(input, output, session) {
     data_samples <- data_input()
     sample_means <- aggregate(value ~ name, data_samples, mean)
 
-    ggplot(data = data_samples) + aes(x = value) + 
+    ggplot2::ggplot(data = data_samples) + aes(x = value) + 
     geom_histogram(binwidth = 0.25, color = "black", fill = "steelblue") +
     geom_vline(data = sample_means, aes(xintercept = value), linetype = 2, linewidth = 1.2) +
     geom_vline(aes(xintercept = mean(value)), color = "#d9230f", linewidth = 1) +
