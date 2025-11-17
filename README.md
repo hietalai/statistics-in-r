@@ -16,3 +16,28 @@ Within the project directory install the following extensions in the terminal
 `quarto add coatless/quarto-webr`
 
 `quarto add quarto-ext/shinylive`
+
+### Adding a Shinylive object
+
+
+### Adding a webr object
+
+```
+---
+title: webR in Quarto HTML Documents
+format: html
+engine: knitr
+filters:
+  - webr
+---
+
+This is a webR-enabled code cell in a Quarto HTML document.
+
+```{webr-r}
+fit = lm(mpg ~ am, data = mtcars)
+
+summary(fit)
+```
+```
+
+
