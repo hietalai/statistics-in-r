@@ -1,4 +1,4 @@
-# Förord {.unnumbered}
+# DEL III - Variansanalys
 
 Till denna del förutsätts att du har vissa förkunskaper för att ta till dig materialet på bästa sätt. Utöver förkunskaper från tidigare delar bör du nu också kunna:
 

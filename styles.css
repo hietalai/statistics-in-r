@@ -42,3 +42,11 @@
   border-radius: 5px; /* Optional border radius for rounded corners */
   box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Optional shadow for better visibility */
 }
+
+
+/* Bold the part titles in the menu */
+a.sidebar-item-text[data-original-href*="index.html"] span.menu-text {
+    font-weight: bold;
+}
+
+
