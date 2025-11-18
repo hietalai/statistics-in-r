@@ -54,6 +54,9 @@ fuel <- readr::read_csv2("resources/data/fuelefficiency.csv") |>
   mutate(across(car:driver, ~ as.factor(.x))) |> 
   suppressMessages()
 
+electricityPrice <- readr::read_csv("resources/data/electricityprices.csv") |> 
+  suppressMessages()
+
 diagnosticPlots <- 
   function(
     model, 

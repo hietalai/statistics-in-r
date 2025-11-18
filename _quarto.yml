@@ -2,7 +2,8 @@ project:
   type: book
   output-dir: _site
   resources:
-  - shinylive-sw.js
+    - shinylive-sw.js
+    - resources/data/*
   
 book:
   title: "Statistisk teori och tillämpningar i R"
@@ -16,6 +17,8 @@ book:
         text: "Regressionsanalys"
       - href: 02-variance/index.qmd
         text: "Varianssanalys"
+      - href: 04-time-series/index.qmd
+        text: "Tidsserieanalys"
   # sidebar:
   #   - title: "Regressionsanalys"
   #     style: "docked"
@@ -45,9 +48,8 @@ book:
         - 00-programming/00-basics-R.qmd
         - 00-programming/01-packages-and-functions.qmd
         - 00-programming/02-tidyverse.qmd
-    - part: "**DEL II - Regressionsanalys**"
+    - part: 01-regression/index.qmd
       chapters: 
-        - 01-regression/index.qmd
         - 01-regression/00-intro-regression.qmd
         - 01-regression/01-explorative-analysis.qmd
         - 01-regression/02-model-structure.qmd
@@ -60,13 +62,15 @@ book:
         - 01-regression/09-variable-selection.qmd
         - 01-regression/10-logistic-regression.qmd
         - 01-regression/11-other-link-functions.qmd
-    - part: "**DEL III - Variansanalys**"
+    - part: 02-variance/index.qmd
       chapters: 
-        - 02-variance/index.qmd
         - 02-variance/00-oneway-anova.qmd
         - 02-variance/01-random-factors.qmd
         - 02-variance/02-control-variables.qmd
         - 02-variance/03-twoway-anova.qmd
+    - part: 04-time-series/index.qmd
+      chapters: 
+        - 04-time-series/00-white-noise.qmd
   search: 
     location: sidebar
     show-item-context: false

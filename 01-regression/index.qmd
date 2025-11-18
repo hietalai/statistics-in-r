@@ -1,4 +1,4 @@
-# Förord {.unnumbered}
+# DEL II - Regressionsanalys
 
 Till denna del förutsätts att du har vissa förkunskaper för att ta till dig materialet på bästa sätt. Dessa är:
 
