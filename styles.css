@@ -49,4 +49,35 @@ a.sidebar-item-text[data-original-href*="index.html"] span.menu-text {
     font-weight: bold;
 }
 
+/* Move the webr status to the title */
+#title-block-header {
+  display: grid;
+  grid-template-areas:
+    "breadcrumbs breadcrumbs"
+    "title status";
+  grid-template-columns: 1fr auto; /* Title takes remaining space, status fits content */
+  row-gap: 8px; /* Space between rows */
+}
+
+.quarto-page-breadcrumbs {
+  grid-area: breadcrumbs;
+}
+
+.quarto-title {
+  grid-area: title;
+}
+
+.quarto-title-meta {
+  grid-area: status;
+}
+
+#qwebr-status-message-area {
+  grid-area: status;
+  align-self: center; /* Vertically align with title */
+}
+
+#qwebr-status-message-title {
+  margin-top: 0em !important;
+}
+
 
