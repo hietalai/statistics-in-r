@@ -69,7 +69,7 @@ book:
         - 02-variance/03-twoway-anova.qmd
     - part: 04-time-series/index.qmd
       chapters: 
-        - 02-variance/00-oneway-anova.qmd
+        - 04-time-series/00-white-noise.qmd
   search: 
     location: sidebar
     show-item-context: false
