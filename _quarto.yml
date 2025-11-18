@@ -2,7 +2,8 @@ project:
   type: book
   output-dir: _site
   resources:
-  - shinylive-sw.js
+    - shinylive-sw.js
+    - resources/data/*
   
 book:
   title: "Statistisk teori och tillämpningar i R"
