@@ -1,0 +1,40 @@
+---
+engine: knitr
+filters: 
+  - webr
+---
+<!-- CONTENT -->
+
+# Introduktion till tidsserier
+
+Data som samlats in återkommande med regelbundna mellanrum kallas för en *tidsserie* och har per definition ett beroende mellan intilliggande mätpunkter. Alltifrån sekundvisa mätningar av temperaturen i en fabriksugn till årliga mätningar av import och export för Sverige är exempel på tidsserier som innehåller många intressanta mönster och samband som kan utvinnas med hjälp utav statistiska modeller.
+
+Det månatliga priset för el för lägenheter mellan april 2013 och september 2025 (hämtad från SCB:s Statistikdatabas)
+
+Tidsseriens *periodicitet* beskriver hur ofta mätningar sker, minuter, timmar, dagar, veckor, månader, år etc., 
+
+
+```{webr-r}
+# TODO Tilldela objektet x ett värde
+x <- ___
+
+print(x)
+
+```
+
+
+```{webr-r}
+
+x <- 1
+
+```
+Test med text under
+
+## Referenser {.unnumbered}
+
+
+
+
+
+
+
