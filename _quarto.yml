@@ -77,6 +77,9 @@ book:
     
 bibliography: bibliography.bib 
 
+webr:
+  packages: ['tidyverse']
+
 format:
   html:
     theme: simplex #lux united pulse simplex
