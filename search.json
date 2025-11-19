@@ -1331,7 +1331,19 @@
     "href": "04-time-series/00-white-noise.html",
     "title": "17  Introduktion till tidsserier",
     "section": "",
-    "text": "Referenser\nData som samlats in återkommande med regelbundna mellanrum kallas för en tidsserie och har per definition ett beroende mellan intilliggande mätpunkter. Alltifrån sekundvisa mätningar av temperaturen i en fabriksugn till årliga mätningar av import och export för Sverige är exempel på tidsserier som innehåller många intressanta mönster och samband som kan utvinnas med hjälp utav statistiska modeller.\nDet månatliga priset för el för lägenheter mellan april 2013 och september 2025 (hämtad från SCB:s Statistikdatabas ) visar.\nTidsseriens periodicitet beskriver hur ofta mätningar sker, minuter, timmar, dagar, veckor, månader, år etc.,\nTest med text under",
+    "text": "Referenser\nData som samlats in återkommande med regelbundna mellanrum kallas för en tidsserie och har per definition ett beroende mellan intilliggande mätpunkter. Alltifrån sekundvisa mätningar av temperaturen i en fabriksugn till årliga mätningar av import och export för Sverige är exempel på tidsserier som innehåller många intressanta mönster och samband som kan utvinnas med hjälp utav statistiska modeller.\nTvå specifika exempel är det månatliga priset för el för villor utan eluppvärmning i elområde 1 mellan april 2013 och september 2025 (hämtad från SCB:s Statistikdatabas1) och minutvis förbrukning av el i en villa från Norrbotten (egen insamlad data).\nTest med text under",
+    "crumbs": [
+      "Programmering i R",
+      "DEL IV - Tidsserieanalys",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Introduktion till tidsserier</span>"
+    ]
+  },
+  {
+    "objectID": "04-time-series/00-white-noise.html#footnotes",
+    "href": "04-time-series/00-white-noise.html#footnotes",
+    "title": "17  Introduktion till tidsserier",
+    "section": "",
+    "text": "Elhandelspriser på elenergi (exkl. elskatt, moms och nätavgift) efter avtalstyp, elområde och kundkategori. Månad 2013M04 - 2025M09↩︎",
     "crumbs": [
       "Programmering i R",
       "DEL IV - Tidsserieanalys",

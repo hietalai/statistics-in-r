@@ -347,7 +347,7 @@ iframe.qwebr-output-code-browse {
 // Document level settings ----
 
 // Determine if we need to install R packages
-globalThis.qwebrInstallRPackagesList = [''];
+globalThis.qwebrInstallRPackagesList = ['tidyverse'];
 
 // Specify possible locations to search for the repository
 globalThis.qwebrPackageRepoURLS = ['https://repo.r-wasm.org/'];
@@ -369,7 +369,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"code":"require(tidyverse, quietly = TRUE)\n\nurl <- \"https://hietalai.github.io/statistics-in-r/resources/data/electricityprices.csv\"\ndownload.file(url, \"electricityprices.csv\")\n\nprices <- read_csv(\"electricityprices.csv\")\n\nggplot(prices) + aes(x = tid, y = SE1) + geom_line() + \n  theme_bw()","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# TODO Tilldela objektet x ett värde\nx <- ___\n\nprint(x)","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"x <- 1","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+globalThis.qwebrCellDetails = [{"code":"url <- \"https://hietalai.github.io/statistics-in-r/resources/data/electricityprice.csv\"\ndownload.file(url, \"electricityprice.csv\")\n\nprices <- read_csv(\"electricityprice.csv\", show_col_types = FALSE)\n\nurl <- \"https://hietalai.github.io/statistics-in-r/resources/data/electricityconsumption.csv\"\ndownload.file(url, \"electricityconsumption.csv\")\n\nconsumption <- read_csv2(\"electricityconsumption.csv\", show_col_types = FALSE)","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"setup","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"FALSE","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# TODO Tilldela objektet x ett värde\nx <- ___\n\nprint(x)","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"x <- 1","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 </script>
 <script type="module">
@@ -2188,7 +2188,37 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 
 <!-- CONTENT -->
 <p>Data som samlats in återkommande med regelbundna mellanrum kallas för en <em>tidsserie</em> och har per definition ett beroende mellan intilliggande mätpunkter. Alltifrån sekundvisa mätningar av temperaturen i en fabriksugn till årliga mätningar av import och export för Sverige är exempel på tidsserier som innehåller många intressanta mönster och samband som kan utvinnas med hjälp utav statistiska modeller.</p>
-<p>Det månatliga priset för el för lägenheter mellan april 2013 och september 2025 (hämtad från SCB:s Statistikdatabas ) visar.</p>
+<p>Två specifika exempel är det månatliga priset för el för villor utan eluppvärmning i elområde 1 mellan april 2013 och september 2025 (hämtad från SCB:s Statistikdatabas<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>) och minutvis förbrukning av el i en villa från Norrbotten (egen insamlad data).</p>
+<div id="qwebr-insertion-location-1"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-price" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-price-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00-white-noise_files/figure-html/fig-price-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-price-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;17.1: Månatligt elpris
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-consumption" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-consumption-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00-white-noise_files/figure-html/fig-consumption-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-consumption-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;17.2: Minutvis elförbrukning
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2202,11 +2232,7 @@ Viktigt
 <p>För att kunna använda exempeldata med hjälp av WEBR behöver vi först ladda ner materialet från bokens resursmapp innan den kan laddas in.</p>
 </div>
 </div>
-<div class="cell">
-<div id="qwebr-insertion-location-1"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</div>
-<p>Tidsseriens <em>periodicitet</em> beskriver hur ofta mätningar sker, minuter, timmar, dagar, veckor, månader, år etc.,</p>
+<!-- Tidsseriens *periodicitet* beskriver hur ofta mätningar sker, minuter, timmar, dagar, veckor, månader, år etc.,  -->
 <div id="qwebr-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <div id="qwebr-insertion-location-3"></div>
@@ -2216,6 +2242,12 @@ Viktigt
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Elhandelspriser på elenergi (exkl. elskatt, moms och nätavgift) efter avtalstyp, elområde och kundkategori. Månad 2013M04 - 2025M09<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
