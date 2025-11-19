@@ -24,8 +24,6 @@ Within the project directory install the following extensions in the terminal
 
 ```
 ---
-title: webR in Quarto HTML Documents
-format: html
 engine: knitr
 filters:
   - webr
@@ -37,7 +35,19 @@ This is a webR-enabled code cell in a Quarto HTML document.
 fit = lm(mpg ~ am, data = mtcars)
 
 summary(fit)
+\`\`\`
+
 ```
-```
+
+For cell-options
+https://quarto-webr.thecoatlessprofessor.com/qwebr-cell-options.html 
+
+## Updating the public version of the book
+
+`quarto publish`
+
+
+
+
 
 
