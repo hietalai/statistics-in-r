@@ -37,10 +37,10 @@ set.seed(20231005)
 ## Skapar grunddata
 data <- 
   tibble(
-    x = runif(n = 31, min = 0, max = 20) %>% round(3),
+    x = runif(n = 31, min = 0, max = 20) |> round(3),
     
     ## Skapar y från x utan brus (brus läggs till senare)
-    y = (5 + 5*x) %>% round(3),
+    y = (5 + 5*x) |> round(3),
     
     ## Litet brus (sd = 3)
     y1 = y + rnorm(n = 31, sd = 3),
@@ -51,18 +51,18 @@ data <-
 
 
 ## Visualisering av sambanden
-data %>% 
+data |> 
   ## "Roterar" datamaterialet för att förenkla visualiseringar
   pivot_longer(
     cols = -x,
     names_to = "Data",
     values_to = "y"
-  ) %>% 
+  ) |> 
   
   ## Filtrerar bort y utan brus
   dplyr::filter(
     Data != "y"
-  ) %>% 
+  ) |> 
   ggplot() + aes(x = x, y = y) + 
   geom_point(color = "steelblue", size = 2) + theme_bw()  + 
   facet_grid(rows = vars(Data))
@@ -82,7 +82,7 @@ Nästa steg i simuleringen är att lägga till extremvärden på två olika posi
 
 ## Ändrar värden på y för att skapa extremvärden
 data <-
-  data %>% 
+  data |> 
   mutate(
     # Skapar de nya variablerna där extremvärden läggs till
     y3 = y1,
@@ -97,18 +97,18 @@ data <-
 
 
 ## Visualisering av sambanden
-data %>% 
+data |> 
   ## "Roterar" datamaterialet för att förenkla visualiseringar
   pivot_longer(
     cols = -x,
     names_to = "Data",
     values_to = "y"
-  ) %>% 
+  ) |> 
   
   ## Filtrerar bort y utan brus
   dplyr::filter(
     Data %in% c("y3", "y4")
-  ) %>% 
+  ) |> 
   ggplot() + aes(x = x, y = y) + 
   geom_point(color = "steelblue", size = 2) + theme_bw() + 
   facet_wrap(~ Data, nrow = 2)
@@ -195,12 +195,12 @@ modelJämför <-
     `Stort brus` = c(model2$coefficients, summary(model2)$r.squared),
     `Avvikande nära mitt` = c(model3$coefficients, summary(model3)$r.squared),
     `Avvikande i ytterkant` = c(model4$coefficients, summary(model4)$r.squared)
-  ) %>% 
+  ) |> 
   as.data.frame()
 
 rownames(modelJämför) <- c("$\\hat{\\beta}_0$", "$\\hat{\\beta}_1$", "$R^2$")
 
-modelJämför %>% 
+modelJämför |> 
   kable(caption = "Skattade koefficienter för alla modeller.", digits = 3, escape = FALSE) 
 
 ```
@@ -211,7 +211,7 @@ modelJämför %>%
 #| fig-width: 7 
 
 p1 <- 
-  data %>% 
+  data |> 
   ggplot() + aes(x = x, y = y1) + 
   geom_point(size = 1,  color = "steelblue") + 
   geom_smooth(formula = y~x, method = "lm", se = FALSE, color = "steelblue", linewidth = 1) + 
@@ -219,7 +219,7 @@ p1 <-
   theme_bw()
 
 p2 <- 
-  data %>% 
+  data |> 
   ggplot() + aes(x = x, y = y2) + 
   geom_point(size = 1,  color = "steelblue") + 
   geom_smooth(formula = y~x, method = "lm", se = FALSE, color = "steelblue", linewidth = 1) + 
@@ -227,7 +227,7 @@ p2 <-
   theme_bw()
 
 p3 <- 
-  data %>% 
+  data |> 
   ggplot() + aes(x = x, y = y3) + 
   geom_point(size = 1,  color = "steelblue") + 
   geom_smooth(formula = y~x, method = "lm", se = FALSE, color = "steelblue", linewidth = 1) + 
@@ -235,7 +235,7 @@ p3 <-
   theme_bw()
 
 p4 <- 
-  data %>% 
+  data |> 
   ggplot() + aes(x = x, y = y4) + 
   geom_point(size = 1,  color = "steelblue") + 
   geom_smooth(formula = y~x, method = "lm", se = FALSE, color = "steelblue", linewidth = 1) + 
@@ -280,23 +280,23 @@ residualData <-
     `Stort brus` = standardResid(model2),
     `Avvikande nära mitt` = standardResid(model3),
     `Avvikande i ytterkant` = standardResid(model4)
-  ) %>% 
+  ) |> 
   mutate(
     index = 1:n()
-  ) %>% 
+  ) |> 
   as.data.frame()
   
-residualData %>% 
+residualData |> 
   ## "Roterar" datamaterialet för att förenkla visualiseringar
   pivot_longer(
     cols = -index,
     names_to = "Data",
     values_to = "resid"
-  ) %>% 
+  ) |> 
   mutate(
     ## Konverterar grupperingsvariabeln till en factor med en angiven ordning på nivåerna
     Data = factor(Data, levels = c("Lite brus", "Stort brus", "Avvikande nära mitt", "Avvikande i ytterkant"))
-  ) %>% 
+  ) |> 
   ggplot() + aes(x = index, y = resid) + 
   geom_point(size = 2, color = "steelblue") + theme_bw() + 
   facet_wrap(~Data, nrow = 2, ncol = 2) + 
@@ -338,7 +338,7 @@ I alla de fyra modellerna använder vi samma värden på den förklarande variab
 visData <- 
   tibble(
     leverage = leverage
-  ) %>% 
+  ) |> 
   mutate(
     index = 1:n()
   )
@@ -421,22 +421,22 @@ residualData <-
     `Stort brus` = jackknife(model2),
     `Avvikande nära mitt` = jackknife(model3),
     `Avvikande i ytterkant` = jackknife(model4)
-  ) %>% 
+  ) |> 
   mutate(
     index = 1:n()
-  ) %>% 
+  ) |> 
   as.data.frame()
   
-residualData %>% 
+residualData |> 
   ## "Roterar" datamaterialet för att förenkla visualiseringar
   pivot_longer(
     cols = -index,
     names_to = "Data",
     values_to = "resid"
-  ) %>% 
+  ) |> 
   mutate(
     Data = factor(Data, levels = c("Lite brus", "Stort brus", "Avvikande nära mitt", "Avvikande i ytterkant"))
-  ) %>% 
+  ) |> 
   ggplot() + aes(x = index, y = resid) + 
   geom_point(size = 2, color = "steelblue") + theme_bw() + 
   facet_wrap(~Data, nrow = 2, ncol = 2) + 
@@ -491,22 +491,22 @@ residualData <-
     `Stort brus` = dffits(model2),
     `Avvikande nära mitt` = dffits(model3),
     `Avvikande i ytterkant` = dffits(model4)
-  ) %>% 
+  ) |> 
   mutate(
     index = 1:n()
-  ) %>% 
+  ) |> 
   as.data.frame()
   
-residualData %>% 
+residualData |> 
   ## "Roterar" datamaterialet för att förenkla visualiseringar
   pivot_longer(
     cols = -index,
     names_to = "Data",
     values_to = "resid"
-  ) %>% 
+  ) |> 
   mutate(
     Data = factor(Data, levels = c("Lite brus", "Stort brus", "Avvikande nära mitt", "Avvikande i ytterkant"))
-  ) %>% 
+  ) |> 
   ggplot() + aes(x = index, y = abs(resid)) + 
   geom_point(size = 2, color = "steelblue") + theme_bw() + 
   facet_wrap(~Data, nrow = 2, ncol = 2, scale = "free_y") + 
@@ -589,22 +589,22 @@ residualData <-
     `Stort brus` = cooks(model2),
     `Avvikande nära mitt` = cooks(model3),
     `Avvikande i ytterkant` = cooks(model4)
-  ) %>% 
+  ) |> 
   mutate(
     index = 1:n()
-  ) %>% 
+  ) |> 
   as.data.frame()
   
-residualData %>% 
+residualData |> 
   ## "Roterar" datamaterialet för att förenkla visualiseringar
   pivot_longer(
     cols = -index,
     names_to = "Data",
     values_to = "resid"
-  ) %>% 
+  ) |> 
   mutate(
     Data = factor(Data, levels = c("Lite brus", "Stort brus", "Avvikande nära mitt", "Avvikande i ytterkant"))
-  ) %>% 
+  ) |> 
   ggplot() + aes(x = index, y = resid) + 
   geom_point(size = 2, color = "steelblue") + theme_bw() + 
   facet_wrap(~Data, nrow = 2, ncol = 2) + 

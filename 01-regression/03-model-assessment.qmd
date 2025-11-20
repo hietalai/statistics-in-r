@@ -93,14 +93,14 @@ ggplot(residualData) +
 
   # Markerar potentiella extremvärden
   geom_mark_ellipse(
-    aes(x = seq(0.5 / nrow(residualData), 1 - 0.5 / nrow(residualData), length = nrow(residualData)) %>% 
-          as_tibble() %>% 
-          slice_tail(n = 2) %>% 
-          mutate(value = qnorm(value)) %>% unlist() %>% rev(), 
+    aes(x = seq(0.5 / nrow(residualData), 1 - 0.5 / nrow(residualData), length = nrow(residualData)) |> 
+          as_tibble() |> 
+          slice_tail(n = 2) |> 
+          mutate(value = qnorm(value)) |> unlist() |> rev(), 
         y = scale(residuals, center = mean(residualData$residuals), scale = sd(residualData$residuals))
       ), 
-    data = residualData %>% 
-      arrange(residuals %>% desc()) %>% 
+    data = residualData |> 
+      arrange(residuals |> desc()) |> 
       slice_head(n = 2),
     color = "#d9230f",
     linewidth = 1, 
@@ -125,7 +125,7 @@ set.seed(1234)
 
 tibble(
   x = rnorm(30)
-) %>% 
+) |> 
  ggplot() + 
   aes(x = x, y = after_stat(density)) +
   geom_histogram(bins = 10, fill = "steelblue", color = "black") + 
@@ -144,7 +144,7 @@ set.seed(1234)
 
 tibble(
   x = runif(30)
-) %>% 
+) |> 
  ggplot() + 
   aes(x = x, y = after_stat(density)) +
   geom_histogram(bins = 10, fill = "steelblue", color = "black") + 
@@ -163,7 +163,7 @@ set.seed(1234)
 
 tibble(
   x = rchisq(30, df = 2)
-) %>% 
+) |> 
  ggplot() + 
   aes(x = x, y = after_stat(density)) +
   geom_histogram(bins = 10, fill = "steelblue", color = "black") + 

@@ -145,13 +145,13 @@ data <-
     
     # En linjär funktion med negativ lutning
     z5 = 0 - 1*x
-  ) %>% 
+  ) |> 
   # Roterar materialet för enklare visualisering
   pivot_longer(
     cols = -x,
     names_to = "Modell", 
     values_to = "z"
-  ) %>% 
+  ) |> 
   # Skapar sannolikheten utifrån den logistiska funktionen
   mutate(
     py = logisticFun(z)
@@ -239,16 +239,16 @@ Tänk på att en utskrift direkt från R för denna modell inte är lämpligt at
 
 ```{r}
 
-summary(model) %>% 
-  coef() %>% 
+summary(model) |> 
+  coef() |> 
   kable(digits = 3, caption = "Modellens skattade koefficienter.", col.names = c("Variabel", "Skattning", "Medelfel", "z-värde", "p-värde"))
 
 ```
 
 #### Lutningskoefficienter
-Koefficienttabellens lutningsparametrar tolkas **inte** som i en vanlig linjär regression eftersom länkfunktionen transformerar den linjära modellen till responsvariabelns skala, till exempel när antalet miles per gallon (`mpg`) ökar med ett ökar **inte** y med `r coef(model)[2] %>% round(3)`. Istället beskriver dessa parametrar, $\beta_j$, förändringen i logoddset för $Y = 1$ och kan efter en transformering, $e^{\beta_j}$, beskriva oddskvoten för $Y=1$ när den förklarande variabeln ökar med en enhet. 
+Koefficienttabellens lutningsparametrar tolkas **inte** som i en vanlig linjär regression eftersom länkfunktionen transformerar den linjära modellen till responsvariabelns skala, till exempel när antalet miles per gallon (`mpg`) ökar med ett ökar **inte** y med `r coef(model)[2] |> round(3)`. Istället beskriver dessa parametrar, $\beta_j$, förändringen i logoddset för $Y = 1$ och kan efter en transformering, $e^{\beta_j}$, beskriva oddskvoten för $Y=1$ när den förklarande variabeln ökar med en enhet. 
 
-För just denna modell kan vi transformera parameterskattningen för `mpg` enligt $e^{`r coef(model)[2] %>% round(3)`} = `r exp(coef(model)[2]) %>% round(3)`$ som att när `mpg` ökar med en enhet, så är oddset att motorn är manuellt växlad ($Y = 1$) ca 3 gånger högre.
+För just denna modell kan vi transformera parameterskattningen för `mpg` enligt $e^{`r coef(model)[2] |> round(3)`} = `r exp(coef(model)[2]) |> round(3)`$ som att när `mpg` ökar med en enhet, så är oddset att motorn är manuellt växlad ($Y = 1$) ca 3 gånger högre.
 
 Matematiskt kan vi skriva upp detta likt:
 $$
@@ -388,7 +388,7 @@ Med hjälp av den skapade funktionen kan vi utvärdera modellen som anpassats p�
 
 evaluation <- 
   classEvaluation(
-    newData = mtcars %>% 
+    newData = mtcars |> 
       select(
         mpg, cyl, hp
       ),
@@ -396,13 +396,13 @@ evaluation <-
     trueY = mtcars$am
   )
 
-evaluation$confusionMatrix %>% 
+evaluation$confusionMatrix |> 
   kable(caption = "Modellens förväxlingsmatris")
 
-evaluation$overall %>% 
+evaluation$overall |> 
   kable(caption = "Modellens övergripande mått", col.names = c("Träffsäkerhet", "Felkvot"), digits = 3)
 
-evaluation$classWise %>% 
+evaluation$classWise |> 
   kable(caption = "Modellens klasspecifika mått", digits = 3)
 
 ```
@@ -434,11 +434,11 @@ I R kan vi ta ut loglikelihooden från en anpassad modell med funktionen `logLik
 model2 <- glm(am ~ mpg, data = mtcars, family = "binomial")
 
 # Beräkning av teststatistikan, c() används för att endast plocka ut värdet av statistikan inte andra termer från logLik()
-LR <- (-2*logLik(model2) - (-2*logLik(model))) %>% c()
+LR <- (-2*logLik(model2) - (-2*logLik(model))) |> c()
 
 # Beräkning av p-värdet
 pValue <- pchisq(q = LR, df = 2, lower.tail = FALSE)
 
 ```
 
-P-värdet för testet är `r pValue %>% round(4)` vilket är mindre än en signifikansnivå på 5 procent och medför att vi kan förkasta $H_0$. De två variabler som undersöks har minst en som bidrar med en signifikant effekt på responsvariabeln.
+P-värdet för testet är `r pValue |> round(4)` vilket är mindre än en signifikansnivå på 5 procent och medför att vi kan förkasta $H_0$. De två variabler som undersöks har minst en som bidrar med en signifikant effekt på responsvariabeln.

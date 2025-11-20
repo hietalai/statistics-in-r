@@ -55,8 +55,8 @@ model <- multinom(species ~ bill_length_mm, data = penguins)
 
 ```{r}
 
-summary(model) %>% 
-  coef() %>% 
+summary(model) |> 
+  coef() |> 
   kable(digits = 3, caption = "Modellens skattade koefficienter.")
 
 ```
@@ -72,7 +72,7 @@ z <- summary(model)$coefficients/summary(model)$standard.errors
 # Beräknar dubbelsidiga p-värden
 p <- (1 - pnorm(abs(z), 0, 1)) * 2
 
-p %>% 
+p |> 
   kable(digits = 14, caption = "p-värden för respektive parameter i modellen.")
 
 ```
@@ -159,7 +159,7 @@ $$
 \end{aligned}
 $$
 
-Anta att de sanna populationsparametrarna är $\beta_0 = 1$ och $\beta_1 = 0.5$. Den sanna lutningsparametern tolkas därför som att när $X$ ökar med en enhet, ökar $Y$ med ungefär $e^{\beta_1} = e^{0.5} = `r exp(0.5) %>% round(2)`$ gånger (eller ca $`r (exp(0.5) %>% round(2) - 1) * 100`$ procent). Vi kan i R ange och skapa den sanna modellen via:
+Anta att de sanna populationsparametrarna är $\beta_0 = 1$ och $\beta_1 = 0.5$. Den sanna lutningsparametern tolkas därför som att när $X$ ökar med en enhet, ökar $Y$ med ungefär $e^{\beta_1} = e^{0.5} = `r exp(0.5) |> round(2)`$ gånger (eller ca $`r (exp(0.5) |> round(2) - 1) * 100`$ procent). Vi kan i R ange och skapa den sanna modellen via:
 ```{r}
 
 # Anger sanna värden för parametrarna i modellen
@@ -195,8 +195,8 @@ Vi kan anpassa en Poissonmodell och visa de anpassade parametrarna:
 # Anpassar Poissonmodellen
 model <- glm(y ~ x, family = "poisson")
 
-summary(model) %>% 
-  coef() %>% 
+summary(model) |> 
+  coef() |> 
   kable(digits = 3, caption = "Modellens skattade koefficienter.", col.names = c("Variabel", "Skattning", "Medelfel", "z-värde", "p-värde"))
 
 ```
@@ -205,7 +205,7 @@ summary(model) %>%
 Likt för logistisk regression kommer denna modell anpassas med hjälp av optimering och vi måste därför säkerställa att modellen konvergerat. R producerar varnings- eller felmeddelanden när detta inte sker, så var uppmärksam!
 :::
 
-Den anpassade lutningsparametern tolkas som att när X ökar med en enhet ökar Y med $e^{`r coef(model)[2] %>% round(3)`} = `r coef(model)[2] %>% exp() %>% round(3)`$ gånger, eller ungefär `r coef(model)[2] %>% exp() %>% round(4) * 100 - 100` procent.
+Den anpassade lutningsparametern tolkas som att när X ökar med en enhet ökar Y med $e^{`r coef(model)[2] |> round(3)`} = `r coef(model)[2] |> exp() |> round(3)`$ gånger, eller ungefär `r coef(model)[2] |> exp() |> round(4) * 100 - 100` procent.
 
 
 ### Inferens
@@ -225,18 +225,18 @@ $$
 $$
 
 ```{r include = FALSE}
-model$coefficients <- model$coefficients %>% round(5)
+model$coefficients <- model$coefficients |> round(5)
 ```
 
 För den anpassade modellen får vi följande intervall:
 $$
 \begin{aligned}
-e^{`r coef(model)[2]` - 1.96 \cdot `r summary(model) %>% coef() %>% .[2,2] %>% round(5)`} \le &e^{\beta_1} \le e^{`r coef(model)[2]` + 1.96 \cdot `r summary(model) %>% coef() %>% .[2,2] %>% round(5)`}\\
-  e^{`r coef(model)[2] - 1.96 * (summary(model) %>% coef() %>% .[2,2])`} \le &e^{\beta_1} \le e^{`r coef(model)[2] + 1.96 * (summary(model) %>% coef() %>% .[2,2] )`}\\
-  `r exp(coef(model)[2] - 1.96 * (summary(model) %>% coef() %>% .[2,2])) %>% round(3)` \le &e^{\beta_1} \le `r exp(coef(model)[2] + 1.96 * (summary(model) %>% coef() %>% .[2,2])) %>% round(3)`
+e^{`r coef(model)[2]` - 1.96 \cdot `r summary(model) |> coef() |> .[2,2] |> round(5)`} \le &e^{\beta_1} \le e^{`r coef(model)[2]` + 1.96 \cdot `r summary(model) |> coef() |> .[2,2] |> round(5)`}\\
+  e^{`r coef(model)[2] - 1.96 * (summary(model) |> coef() |> .[2,2])`} \le &e^{\beta_1} \le e^{`r coef(model)[2] + 1.96 * (summary(model) |> coef() |> .[2,2] )`}\\
+  `r exp(coef(model)[2] - 1.96 * (summary(model) |> coef() |> .[2,2])) |> round(3)` \le &e^{\beta_1} \le `r exp(coef(model)[2] + 1.96 * (summary(model) |> coef() |> .[2,2])) |> round(3)`
 \end{aligned}
 $$
-Med 95 procents säkerhet täcker intervallet `r exp(coef(model)[2] - 1.96 * (summary(model) %>% coef() %>% .[2,2])) %>% round(2)` till `r exp(coef(model)[2] + 1.96 * (summary(model) %>% coef() %>% .[2,2])) %>% round(2)` den sanna procentuella förändringen på Y när X ökar med en enhet.
+Med 95 procents säkerhet täcker intervallet `r exp(coef(model)[2] - 1.96 * (summary(model) |> coef() |> .[2,2])) |> round(2)` till `r exp(coef(model)[2] + 1.96 * (summary(model) |> coef() |> .[2,2])) |> round(2)` den sanna procentuella förändringen på Y när X ökar med en enhet.
 
 ### Prediktioner
 Anta att de `r nobs` observationer som vi simulerade tidigare i detta kapitel innehåller information om sambandet mellan produktionstiden ($X$) i timmar för 1000 leksaker och antalet defekta leksaker ($Y$) som identifierats efter produktionen slutförts. Varje observation beskriver en produktion av 1000 leksaker där sannolikheten att producera en defekt leksak är väldigt låg och antalet leksaker som produceras är många. Detta är per definition en Poissonfördelad variabel. Vi vill nu kunna använda den anpassade modellen för att prediktera hur många defekta leksaker som vi kan förvänta oss givet en viss produktionstid.^[Kanske att modellen beskriver ett fenomen där en längre produktionstid innebär att någonting gått fel i processen som riskerar att skapa defekta leksaker.] 
@@ -252,13 +252,13 @@ där $X^*$ är antalet timmar produktionen har tagit och vi vill prediktera. `pr
 ```{r}
 
 # Generar log(lambda)
-predict(model, type = "link") %>% 
-  head() %>% 
+predict(model, type = "link") |> 
+  head() |> 
   kable(digits = 3, caption = "Modellens anpassade log(lambda).")
 
 # Generar lambda
-predict(model, type = "response") %>% 
-  head() %>% 
+predict(model, type = "response") |> 
+  head() |> 
   kable(digits = 3, caption = "Modellens anpassade väntevärde.")
 
 ```
@@ -275,7 +275,7 @@ pred <- predict(model, newdata = newData, type = "response")
 
 ```
 
-Med hjälp av den anpassade modellen, och argumentet `type = "response"`, kan vi säga att vi förväntar oss att om det tar 4 timmar att tillverka 1000 leksaker så kommer ca `r pred %>% round(0)` stycken vara defekta. 
+Med hjälp av den anpassade modellen, och argumentet `type = "response"`, kan vi säga att vi förväntar oss att om det tar 4 timmar att tillverka 1000 leksaker så kommer ca `r pred |> round(0)` stycken vara defekta. 
 
 ## Referenser
 

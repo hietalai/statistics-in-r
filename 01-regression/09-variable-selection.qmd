@@ -82,13 +82,13 @@ Vi kan också med hjälp av `dplyr` funktioner dela upp materialet:
 ```{r}
 
 listaMedMängder <- 
-  penguins %>% 
+  penguins |> 
   # Skapar en variabel med 1/0 som indikerar på träningsmängden med 2/3
   mutate(
     split = rbinom(n = n(), size = 1, prob = 2/3)
-  ) %>% 
+  ) |> 
   # Grupperar och delar upp materialet utefter denna nya variabel
-  group_by(split) %>% 
+  group_by(split) |> 
   group_split()
 
 # Plockar ut de olika listorna till separata objekt
@@ -121,7 +121,7 @@ tibble(
   MSE = c(summary(model1)$sigma^2,
           summary(model2)$sigma^2,
           summary(model3)$sigma^2)
-) %>% 
+) |> 
   kable(digits = 3, escape = FALSE)
 
 ```
@@ -148,7 +148,7 @@ predict3 <- predict(object = model3, newdata = dataValid)
 
 # Beräkna ex. MSPR där y - yhat används
 MSPR <- function(y, yhat){
-  (y - yhat)^2 %>% 
+  (y - yhat)^2 |> 
     mean()
 }
 
@@ -163,7 +163,7 @@ tibble(
   MSPR = c(MSPR(dataValid$bill_length_mm, predict1),
            MSPR(dataValid$bill_length_mm, predict2),
            MSPR(dataValid$bill_length_mm, predict3))  
-) %>% 
+) |> 
   kable(digits = 3, escape = FALSE)
 ```
 
@@ -216,7 +216,7 @@ tibble(
   MSPR = c(MSPR(dataValid$mpg, predict1),
            MSPR(dataValid$mpg, predict2),
            MSPR(dataValid$mpg, predict3))  
-) %>% 
+) |> 
   kable(digits = 3, escape = FALSE)
 
 ```
@@ -298,8 +298,8 @@ completeModel <- lm(bill_length_mm ~ ., data = penguins)
 # Ger en lista med ALLA modellerna av olika storlek och tillhörande utvärderingsmått
 result <- ols_step_all_possible(completeModel)
 
-result[[1]] %>% 
-  head(n = 5) %>% 
+result[[1]] |> 
+  head(n = 5) |> 
   kable(digits = 3)
 
 ```
@@ -312,8 +312,8 @@ Istället för alla modeller av olika storlekar kan vi plocka ut de bästa model
 # Ger en lista med de "bästa" modellerna av olika storlekar
 result <- ols_step_best_subset(completeModel)
 
-result[[1]] %>% 
-  head(n = 5) %>% 
+result[[1]] |> 
+  head(n = 5) |> 
   kable(digits = 3)
 ```
 
@@ -323,8 +323,8 @@ Om vi plockar ut de mått som vi har sett tidigare får vi en tabell som är bet
 ```{r}
 #| tbl-cap: De fem första raderna från algoritmen med utvalda utvärderingsmått
 #| 
-result[[1]] %>% 
-  select(n, predictors, rsquare, adjr, aic) %>% 
+result[[1]] |> 
+  select(n, predictors, rsquare, adjr, aic) |> 
   kable(digits = 3, 
         col.names = c("Storlek", "Variabler", "$R^2$", "$R^2_{adj}$", "AIC"), 
         escape = FALSE)
@@ -344,8 +344,8 @@ Med hjälp av `ols_step_backward_aic()` används AIC som utvärderingsmått. Uts
 # Lägg till argumentet details = TRUE för att få mer detaljer i utskriften
 bakåtModell <- ols_step_backward_aic(completeModel)
 
-bakåtModell$metrics %>% 
-  select(step, variable, r2, adj_r2, aic) %>% 
+bakåtModell$metrics |> 
+  select(step, variable, r2, adj_r2, aic) |> 
   kable(digits = 3, 
         col.names = c("Steg", "Variabel", "$R^2$", "$R^2_{adj}$", "AIC"),
         escape = FALSE)
@@ -355,15 +355,15 @@ bakåtModell$metrics %>%
 ```{r}
 #| tbl-cap: Den utvalda modellen från bakåtelimineringen
 
-bakåtModell$model %>% 
-  summary() %>% 
-  coef() %>% 
+bakåtModell$model |> 
+  summary() |> 
+  coef() |> 
   kable(digits = 3,
         col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde"))
 
 ```
 
-AIC för den största modellen är $AIC = `r AIC(completeModel) %>% round(3)`$ och kan tas fram med hjälp av funktionen `AIC(modellobjektet)`. Jämfört med det sista steget från algoritmen, $AIC = `r AIC(bakåtModell$model) %>% round(3)`$, ser vi att AIC blivit mindre vilket är önskvärt. Att algoritmen inte längre väljer att ta bort några ytterligare variabler innebär att AIC har blivit så liten som den kan bli med denna modellstruktur. 
+AIC för den största modellen är $AIC = `r AIC(completeModel) |> round(3)`$ och kan tas fram med hjälp av funktionen `AIC(modellobjektet)`. Jämfört med det sista steget från algoritmen, $AIC = `r AIC(bakåtModell$model) |> round(3)`$, ser vi att AIC blivit mindre vilket är önskvärt. Att algoritmen inte längre väljer att ta bort några ytterligare variabler innebär att AIC har blivit så liten som den kan bli med denna modellstruktur. 
 
 ### Framåtvalsmetoden
 I de fall där den största modellen är alldeles för stor för att ens anpassa starten av bakåtelimineringsalgoritmen kan vi istället börja med en tom modell och successivt lägga till variabler. Processen för varje steg är densamma, avseende hur algoritmen väljer att gå vidare till nästa steg, men vi tittar nu på kandidater med en fler variabel och väljer den modell som har minst AIC.
@@ -374,8 +374,8 @@ I de fall där den största modellen är alldeles för stor för att ens anpassa
 # Lägg till argumentet details = TRUE för att få mer detaljer i utskriften
 framåtModell <- ols_step_forward_aic(completeModel)
 
-framåtModell$metrics %>% 
-  select(step, variable, r2, adj_r2, aic) %>% 
+framåtModell$metrics |> 
+  select(step, variable, r2, adj_r2, aic) |> 
   kable(digits = 3, 
         col.names = c("Steg", "Variabel", "$R^2$", "$R^2_{adj}$", "AIC"),
         escape = FALSE)
@@ -385,9 +385,9 @@ framåtModell$metrics %>%
 ```{r}
 #| tbl-cap: Den utvalda modellen från framåtvalsmetoden
 
-framåtModell$model %>% 
-  summary() %>% 
-  coef() %>% 
+framåtModell$model |> 
+  summary() |> 
+  coef() |> 
   kable(digits = 3,
         col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde"))
 
@@ -405,8 +405,8 @@ Lösningen är att släppa på begränsningen och tillåta algoritmen att vid va
 # Lägg till argumentet details = TRUE för att få mer detaljer i utskriften
 stegModell <- ols_step_both_aic(completeModel)
 
-stegModell$metrics %>% 
-  select(step, variable, r2, adj_r2, aic) %>% 
+stegModell$metrics |> 
+  select(step, variable, r2, adj_r2, aic) |> 
   kable(digits = 3, 
         col.names = c("Steg", "Variabel", "$R^2$", "$R^2_{adj}$", "AIC"),
         escape = FALSE)
@@ -432,7 +432,7 @@ plot(bakåtModell)
 ## Övningsuppgifter
 Vi ska i dessa uppgifter använda samma SENIC material om sjukhusinfektioner från @sec-exercises-complex.
 
-Vi anser att den största modellen som ska förklara infektionsrisken innehåller alla förklarande variabler, ID exkluderas, och interaktioner av ordning 2. Denna modell kan anpassas med `lm(Infection_risk ~ (.)^2, data = senic %>% select(!ID))`.
+Vi anser att den största modellen som ska förklara infektionsrisken innehåller alla förklarande variabler, ID exkluderas, och interaktioner av ordning 2. Denna modell kan anpassas med `lm(Infection_risk ~ (.)^2, data = senic |> select(!ID))`.
 
 a) Dela upp datamaterialet i en träningsmängd (2/3 av data) och en valideringsmängd (1/3 av data). Tänk på att använda `set.seed()` för att randomiseringen av data ska vara samma varje gång ni kör koden.
 

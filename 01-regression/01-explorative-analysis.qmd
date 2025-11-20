@@ -35,7 +35,7 @@ require(palmerpenguins)
 
 # Filtrerar bort observationer med saknade värden
 penguins <- 
-  penguins %>% 
+  penguins |> 
   filter(!is.na(sex))
 
 ```
@@ -53,9 +53,9 @@ Vi kan titta närmare på ett urval av datamaterialet i @tbl-penguins-sample.
 #| label: tbl-penguins-sample
 
 # Generera en formaterad tabell med hjälp av kable() och formatera den med hjälp av kable_styling()
-penguins %>% 
-  slice_head(n = 5) %>% 
-  kable() %>% 
+penguins |> 
+  slice_head(n = 5) |> 
+  kable() |> 
   kable_styling("striped")
 
 ```
@@ -145,10 +145,10 @@ ggplot(penguins) + aes(x = body_mass_g, y = bill_length_mm) +
 Vi kan beräkna *Pearson's korrelationskoefficient* ($r$) för att inte behöva förlita oss på den subjektiva tolkningen av styrkan.^[Eller andra mått för att beräkna styrkan på samband, t.ex. Kendall [@kendall1955rank] eller Spearman [@spearman1904].] Denna koefficient mäter styrkan på det **linjära sambandet** mellan två kvantitativa variabler och är ett lämpligt mått i just detta fall. Ett värde nära 0 tyder på inget eller ett svagt samband medan värden nära -1 eller +1 tyder på ett starkt negativt respektive positivt samband.
 
 $$
-r = `r cor(penguins$bill_length_mm, penguins$body_mass_g) %>% round(3)`
+r = `r cor(penguins$bill_length_mm, penguins$body_mass_g) |> round(3)`
 $$
 
-Då korrelationskoefficienten är nära `r cor(penguins$bill_length_mm, penguins$body_mass_g) %>% round(1)` tyder det på att sambandet är måttligt starkt.
+Då korrelationskoefficienten är nära `r cor(penguins$bill_length_mm, penguins$body_mass_g) |> round(1)` tyder det på att sambandet är måttligt starkt.
 
 ::: {.callout-important}
 Om spridningsdiagrammet uppvisar ett icke-linjärt och icke-monotont (konstant) samband kommer koefficienten inte beskriva sambandets styrka på rätt sätt. Det är lätt hänt att korrelationskoefficienten används som den enda utforskande metoden då den är enkel att beräkna för flera olika par av variabler, men den kan ofta missa relevant information. Visualisering möjliggör identifieringen av komplexa samband som ofta medför att vi behöver hantera modellen på olika sätt.
@@ -196,7 +196,7 @@ ggplot(penguins) +
   labs(x = "Fenlängd (mm)", y = "Näbblängd (mm)")
 ```
 
-Båda variablerna ser ut att ha linjärt samband med responsvariabeln. @fig-width-length tyder på att sambandet mellan näbbredd och näbblängd är svagt negativt ($r = `r cor(penguins[,"bill_length_mm"], penguins[,"bill_depth_mm"]) %>% round(3)`$) då punkterna är mycket utspridda medan @fig-flipper-length tyder på ett lite starkare positivt samband ($r = `r cor(penguins[,"bill_length_mm"], penguins[,"flipper_length_mm"]) %>% round(3)`$) i linje med @fig-weight-length.
+Båda variablerna ser ut att ha linjärt samband med responsvariabeln. @fig-width-length tyder på att sambandet mellan näbbredd och näbblängd är svagt negativt ($r = `r cor(penguins[,"bill_length_mm"], penguins[,"bill_depth_mm"]) |> round(3)`$) då punkterna är mycket utspridda medan @fig-flipper-length tyder på ett lite starkare positivt samband ($r = `r cor(penguins[,"bill_length_mm"], penguins[,"flipper_length_mm"]) |> round(3)`$) i linje med @fig-weight-length.
 
 Ett nytt fenomen som vi kan se i @fig-width-length är att vi verkar ha flera punktsvärmar som var och en har ett positivt samband trots att vi tolkade det övergripande sambandet som svagt negativt. Om vi endast hade beräknat korrelationskoefficienten hade detta fenomen undgått vår analys. @fig-width-length-annot är ett exempel på *Simpson's Paradox* som vi kommer undersöka närmare senare i detta underlag.
 

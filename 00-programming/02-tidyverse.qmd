@@ -1,7 +1,6 @@
 ---
 editor_options: 
   chunk_output_type: console
-  
 ---
 # tidyverse {#sec-tidyverse .unnumbered} 
 
@@ -87,10 +86,8 @@ Om vi har en matris eller något annat objekt som ser ut som en tibble men inte 
 
 ```{r}
 
-# Tar objektet a (en vektor) och gör om den till en tibble med en kolumn
-vectorToTibble <- 
-  a %>% 
-    as_tibble()
+# Tar objektet a (en vektor) och gör om den till formatet tibble innehållande en kolumn
+vectorToTibble <- as_tibble(a)
 
 print(vectorToTibble)
 
@@ -130,17 +127,17 @@ D <- funktion4(C, argument4 = Y)
 
 ```
 
-Inom `tidyverse` används istället en annan process som kallas för programmeringspipes som kan skapa sekvenser av funktioner som är sammanlänkade i varandra.^[Även basversionen av R/RStudio har anammat denna process och det finns nu två varianter av en pipe. Detta underlag kommer använda `tidyverse` varianten.] Från paketet `dplyr` används operatorn `%>%` som kan skapas med kortkommandot Ctrl + Shift + M (CMD + Shift + M). Denna operator tar resultatet från funktionen innan `%>%` och skickar vidare det som det första argumentet i funktionen efter `%>%`.
+Inom modern R-programmering används istället en annan process som kallas för **programmeringspipes** som kan skapa sekvenser av funktioner som är sammanlänkade i varandra. Från baspaketet används operatorn `|>` som kan skapas med kortkommandot Ctrl + Shift + M (CMD + Shift + M). Denna operator tar resultatet från funktionen innan `|>` och skickar vidare det som det första argumentet i funktionen efter `|>`.
 
 ```{r}
 #| eval: false
 #| code-fold: false
 
 # Samma operation av fyra funktioner men med piping
-objekt %>% 
-  funktion1() %>% 
-  funktion2(argument2 = X) %>% 
-  funktion3() %>% 
+objekt |> 
+  funktion1() |> 
+  funktion2(argument2 = X) |> 
+  funktion3() |> 
   funktion4(argument4 = Y)
 
 ```
@@ -148,7 +145,19 @@ objekt %>%
 Funktioner som inte behöver fler än ett argument skrivs bara ut som funktionen med tomma parenteser då resultatet används automatiskt som värdet på det argumentet. Funktioner som har ytterligare argument behöver bara ange de argument som inte använder sig av det tidigare resultatet. 
 
 :::{.callout-important}
-Det kan finnas funktioner som vill använda det tidigare resultatet i ett argument som inte är det första i funktionen. Som tur är kan vi lösa detta genom att använda `.` som symbolen för det tidigare resultatet och ange det vid argumentet som är aktuellt.
+Det kan finnas funktioner som vill använda det tidigare resultatet i ett argument som inte är det första i funktionen. Som tur är kan vi lösa detta genom att använda `_` som symbolen för det tidigare resultatet och ange det vid argumentet som är aktuellt.
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+# Objektet (_) läggs här in som värde för det andra argumentet i funktionen
+objekt |> 
+  funktion5(argument1 = X, argument2 = _)
+
+```
+
+`|>` är något begränsat med detta men som tur är finns dess "kusin" från paketet `dplyr` `%>%` som fungerar på mestadels samma sätt men tillåter mer flexibilitet var objektet från tidigare i pipen placeras i den nuvarande funktionen. Det vi måste tänka på är att vi här byter symbol till `.` istället för `_` för att beskriva objektet.
 
 ```{r}
 #| eval: false
@@ -162,7 +171,7 @@ objekt %>%
 :::
 
 ## Databearbetning med `dplyr`
-Med hjälp av de tidigare kapitlen och det "nya" sättet att skriva sekvenser av funktioner med pipes kan vi nu börja titta närmare på databearbetning av objekt till en `tibble`. Det är vanligt att vi i databearbetning behöver göra flera steg för att skapa det objekt vi sen vill analysera och då kommer `%>%` mycket väl till pass. 
+Med hjälp av de tidigare kapitlen och det "nya" sättet att skriva sekvenser av funktioner med pipes kan vi nu börja titta närmare på databearbetning av objekt till en `tibble`. Det är vanligt att vi i databearbetning behöver göra flera steg för att skapa det objekt vi sen vill analysera och då kommer `|>` mycket väl till pass. 
 
 `dplyr` innehåller ett flertal olika "verb" som på ett sätt eller annat bearbetar data. Det första argumentet i alla dessa funktioner är ett dataobjekt men om vi använder pipes kommer det ske per automatik och vi behöver endast fokusera på de andra argumentet som beskriver hur "verbet" används.
 
@@ -175,14 +184,14 @@ Vi kan döpa om variabler med hjälp av `rename()` där vi anger det nya namnet 
 #| code-fold: false
 
 # Döper om variabler till svenska namn utifrån det gamla namnet
-penguins %>% 
+penguins |> 
   rename(
     art = species,
     näbblängd = bill_length_mm
   )
 
 # Döper om variabler till svenska namn utifrån dess kolumnindex
-penguins %>% 
+penguins |> 
   rename(
     art = 1,
     näbblängd = 3
@@ -206,7 +215,7 @@ require(dplyr)
 #| code-fold: false
 # Filtrerar bort observationer som saknar information ur variabeln "sex"
 penguinsNonMissing <- 
-  penguins %>% 
+  penguins |> 
     filter(!is.na(sex))
 
 print(penguinsNonMissing)
@@ -218,7 +227,7 @@ Vi kan också plocka ut rader som uppfyller ett visst kriterie, till exempel plo
 ```{r}
 #| code-fold: false
 
-penguins %>% 
+penguins |> 
   filter(species == "Adelie")
 
 ```
@@ -230,11 +239,11 @@ Anta att vi bara är intresserade av vissa kolumner från ett stort datamaterial
 #| code-fold: false
 
 # Select med variabelnamn
-penguins %>% 
+penguins |> 
   select(species, flipper_length_mm)
 
 # Select med kolumnindex
-penguins %>% 
+penguins |> 
   select(1, 5)
   
 ```
@@ -246,7 +255,7 @@ Om vi har flera variabler som följer efter varandra behöver vi inte skriva upp
 ```{r}
 #| code-fold: false
 
-penguins %>% 
+penguins |> 
   select(species, bill_length_mm:body_mass_g)
 ```
 
@@ -259,11 +268,11 @@ Funktionen använder sig av tre argument, vilka variabler som ska flyttas och va
 #| code-fold: false
 
 # Placerar fenlängd som första kolumnen
-penguins %>% 
+penguins |> 
   relocate(flipper_length_mm)
 
 # Placerar art efter näbbreddens variabel
-penguins %>% 
+penguins |> 
   relocate(species, .after = bill_depth_mm)
 
 ```

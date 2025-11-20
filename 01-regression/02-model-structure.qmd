@@ -198,7 +198,7 @@ Vi måste också se till att alla variabler i datamaterialet har rätt variabelt
 
 # Tar endast med de variabler som vi ansåg ha ett samband med responsvariabeln
 modelData <- 
-  penguins %>% 
+  penguins |> 
   select(
     bill_length_mm,
     body_mass_g,
@@ -230,20 +230,20 @@ Inte särskilt snygg utskrift
 #| tbl-cap-location: top
 #| label: tbl-reg-summary-good
 
-summary(simpleModel) %>% 
-  coef() %>% 
-  as_tibble(rownames = NA) %>% 
-  rownames_to_column() %>% 
+summary(simpleModel) |> 
+  coef() |> 
+  as_tibble(rownames = NA) |> 
+  rownames_to_column() |> 
   rename(
     ` ` = rowname,
     Skattning = Estimate,
     Medelfel = `Std. Error`,
     `t-värde` = `t value`,
     `p-värde` = `Pr(>|t|)`
-  ) %>% 
+  ) |> 
   kable(
     digits = 4
-  ) %>% 
+  ) |> 
   kable_styling("striped")
 
 ```
@@ -319,7 +319,7 @@ X <-
 X[1:5,]
 
 Y <- 
-  modelData$bill_length_mm %>% 
+  modelData$bill_length_mm |> 
   as.matrix()
 
 # Visar de första fem raderna i vektorn
@@ -344,9 +344,9 @@ betaHat <- solve(t(X) %*% X) %*% t(X) %*% Y
 #| tbl-cap-location: top
 #| label: tbl-coef-matrix
 
-betaHat %>% 
-  round(4) %>% 
-  kable(col.names = c("", "Koefficient")) %>% 
+betaHat |> 
+  round(4) |> 
+  kable(col.names = c("", "Koefficient")) |> 
   kable_styling("striped", full_width = FALSE)
 
 ```
@@ -396,11 +396,11 @@ s2Beta <- solve(t(X) %*% X) * as.numeric(MSE)
 #| tbl-cap-location: top
 #| label: tbl-se-matrix
 
-s2Beta %>% 
-  diag() %>% 
-  sqrt() %>% 
-  round(4) %>% 
-  kable(col.names = c("", "Medelfel")) %>% 
+s2Beta |> 
+  diag() |> 
+  sqrt() |> 
+  round(4) |> 
+  kable(col.names = c("", "Medelfel")) |> 
   kable_styling("striped", full_width = FALSE)
 
 ```

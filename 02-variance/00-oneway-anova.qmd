@@ -138,7 +138,7 @@ Vi kan läsa in datamaterialet till R och döpa om variablerna till enklare namn
 #| eval: false
 #| code-fold: false
 
-weeds <- read.csv2("DIN SÖKVÄG/weeds.csv") %>% 
+weeds <- read.csv2("DIN SÖKVÄG/weeds.csv") |> 
   rename(
     metod = 1,
     skörd = 2
@@ -156,7 +156,7 @@ För att få en bild av materialet och responsvariabeln uppdelat på de olika fa
 #| fig-height: 3
 #| fig-width: 5 
   
-weeds %>% 
+weeds |> 
   ggplot() + aes(x = metod, y = skörd) + geom_boxplot(fill = "steelblue") +
   theme_bw()
 
@@ -254,14 +254,14 @@ Eftersom envägs-ANOVA endast är ett specialfall av en regression används `lm(
 
 model <- lm(skörd ~ metod, data = weeds)
 
-model %>% 
-  summary() %>% 
-  coef() %>% 
+model |> 
+  summary() |> 
+  coef() |> 
   kable(digits = 3, caption = "Modellens koefficienter")
 
 ```
 
-Vi kan presentera modellens koefficienter i en tabell men eftersom kodningen har ändrats gentemot tidigare modeller, behöver vi också justera tolkningen. Till exempel får vi att den genomsnittliga skörden oavsett metod är ca `r coef(model)[1] %>% round(3)` kg/hektar och metod 1 får i genomsnitt `r coef(model)[2] %>% round(3) %>% abs()` kg/hektar mindre skörd än genomsnittet. Metod 7s effekt kan beräknas genom den negativa summan av alla lutningskoefficienter till `r -sum(coef(model)[-1]) %>% round(3)` kg/hektar.
+Vi kan presentera modellens koefficienter i en tabell men eftersom kodningen har ändrats gentemot tidigare modeller, behöver vi också justera tolkningen. Till exempel får vi att den genomsnittliga skörden oavsett metod är ca `r coef(model)[1] |> round(3)` kg/hektar och metod 1 får i genomsnitt `r coef(model)[2] |> round(3) |> abs()` kg/hektar mindre skörd än genomsnittet. Metod 7s effekt kan beräknas genom den negativa summan av alla lutningskoefficienter till `r -sum(coef(model)[-1]) |> round(3)` kg/hektar.
 
 ::: {.callout-note}
 Det finns ett alternativt sätt att anpassa just en ANOVA-modell, genom att använda funktionen `aov()`. `aov()` är egentligen bara en kombination av `lm()` och `anova()` där objektet fokuserar på att presentera ANOVA-tabellen istället för koefficienterna. Andra paket och funktioner än vad som tas upp i detta kapitel inom variansanalys kan ibland förutsätta att vi skapat ett `aov`-objekt istället för ett `lm`-objekt.
@@ -287,7 +287,7 @@ require(emmeans)
 # Anger vilka faktorer som medelvärden ska beräknas på
 means <- emmeans(model, specs = ~metod) 
 
-means %>% 
+means |> 
   kable(digits = 3, caption = "Faktornivåernas medelvärden", 
         col.names = c("Metod", "Faktormedelvärde", "Medelfel", "Frihetsgrader", "Nedre KI gräns", "Övre KI gräns"))
 
@@ -405,9 +405,9 @@ server <- function(input, output, session) {
     set.seed(seed = seed)
     samples <- sapply(means, FUN = function(x) {
         rnorm(n = input$sample_size, mean = x, sd = 1)
-    }) %>% 
+    }) |> 
       as.data.frame()
-    data_samples <- pivot_longer(samples, cols = everything()) %>% 
+    data_samples <- pivot_longer(samples, cols = everything()) |> 
       mutate(
         name = str_replace(name, "V", "Grupp ")
       )
@@ -454,7 +454,7 @@ server <- function(input, output, session) {
             "SSR = ", round(SSR, 3), "\\\\",
             "SSE = ", round(SSE, 3), "\\\\",
             "F_{test} = ", round(MSR / MSE, 3), "\\\\",
-            "\\text{p-värde} = ", pvalue %>% round(3), "$$")
+            "\\text{p-värde} = ", pvalue |> round(3), "$$")
     )
   })
 }
@@ -511,9 +511,9 @@ Beräkningen av dessa parvisa jämförelser är ofta tidskrävande men med hjäl
 tukey <- 
   pairs(means, adjust = "tukey") 
 
-tukey %>% 
-  as_tibble() %>% 
-  arrange(abs(estimate) %>% desc()) %>% 
+tukey |> 
+  as_tibble() |> 
+  arrange(abs(estimate) |> desc()) |> 
   kable(digits = 3, caption = "Parvisa jämförelser av faktormedelvärden med Tukey familjekonfidens")
 
 ```
@@ -531,9 +531,9 @@ selectedMeans <- means[c(1, 2, 4),]
 bonferroni <- 
   pairs(selectedMeans, adjust = "bonferroni")
 
-bonferroni %>% 
-  as_tibble() %>% 
-  arrange(abs(estimate) |> desc()) %>% 
+bonferroni |> 
+  as_tibble() |> 
+  arrange(abs(estimate) |> desc()) |> 
   kable(digits = 3, caption = "Parvisa jämförelser av utvalda faktormedelvärden med Bonferroni familjekonfidens")
 ```
 
@@ -569,15 +569,15 @@ där $c_1 = c_2 = \frac{1}{2} = 0.5$ och $c_3 = -1$.
 Från de skattade medelvärdena kan kontrasten skattas till:
 $$
 \begin{aligned}
-    \hat{L} &= 0.5 \cdot `r as_tibble(means)[1,2] %>% round(3)` + 0.5 \cdot `r as_tibble(means)[2,2] %>% round(3)` - `r as_tibble(means)[3,2] %>% round(3)`\\
-&= `r (sum(0.5*as_tibble(means)[1:2,2])-as_tibble(means)[3,2]) %>% round(3)`
+    \hat{L} &= 0.5 \cdot `r as_tibble(means)[1,2] |> round(3)` + 0.5 \cdot `r as_tibble(means)[2,2] |> round(3)` - `r as_tibble(means)[3,2] |> round(3)`\\
+&= `r (sum(0.5*as_tibble(means)[1:2,2])-as_tibble(means)[3,2]) |> round(3)`
 \end{aligned}
 $$
 där värden tas från tabellen som `emmeans()` producerat. Medelfelet för denna jämförelse beräknas enligt:
 $$
 \begin{aligned}
-SE_{\hat{L}} &= \sqrt{`r anova(model)[2,3] %>% round(3)` \cdot \left( \frac{0.5^2}{4} + \frac{0.5^2}{4} + \frac{(-1)^2}{4}\right)} \\
-&= `r sqrt(anova(model)[2,3] * sum(c(0.5^2/4, 0.5^2/4, 1/4))) %>% round(3)`
+SE_{\hat{L}} &= \sqrt{`r anova(model)[2,3] |> round(3)` \cdot \left( \frac{0.5^2}{4} + \frac{0.5^2}{4} + \frac{(-1)^2}{4}\right)} \\
+&= `r sqrt(anova(model)[2,3] * sum(c(0.5^2/4, 0.5^2/4, 1/4))) |> round(3)`
 \end{aligned}
 $$
 där $MSE = `r anova(model)[2,3]`$ är tagen från ANOVA-tabellen för den anpassade modellen.
@@ -603,8 +603,8 @@ contr <-
   ) 
 
 # Vi behöver säga till R att vi har A-1 "rang"
-contr %>% 
-  summary(scheffe.rank = 6) %>% 
+contr |> 
+  summary(scheffe.rank = 6) |> 
   kable(digits = 3, caption = "Beräknad kontrast med tillhörande p-värde.")
 
 ```

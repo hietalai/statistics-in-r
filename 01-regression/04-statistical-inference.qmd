@@ -71,16 +71,16 @@ Vi kan också visualisera denna relation i ett stackat stapeldiagram. Den totala
 #| fig-width: 5 
 #| echo: false
 
-anovaTable <- anova(simpleModel) %>% 
-  rownames_to_column(var = "Source") %>% 
-  mutate(Source = factor(Source, levels = Source)) %>% 
+anovaTable <- anova(simpleModel) |> 
+  rownames_to_column(var = "Source") |> 
+  mutate(Source = factor(Source, levels = Source)) |> 
   mutate(
     Source = if_else(Source != "Residuals", "Förklarad", "Oförklarad")
-  ) %>% 
-  group_by(Source) %>% 
+  ) |> 
+  group_by(Source) |> 
   summarize(
     `Sum Sq` = sum(`Sum Sq`)
-  ) %>% 
+  ) |> 
   ungroup()
 
 ggplot(anovaTable, aes(x = "Total Variation", y = `Sum Sq`, fill = Source)) +
@@ -97,7 +97,7 @@ ggplot(anovaTable, aes(x = "Total Variation", y = `Sum Sq`, fill = Source)) +
 ```
 
 ### ANOVA-tabellen {#sec-regression-anova-table}
-En ANOVA-tabell är ett sätt att effektivt få en översikt av dessa olika komponenter samt visa ytterligare information, såsom *frihetsgraderna* ($df$) för respektive komponent och *medelkvadratsummor*. 
+En ANOVA-tabell är ett sätt att effektivt få en översikt av dessa olika komponenter samt visa ytterligare information, såsom **frihetsgraderna** ($df$) för respektive komponent och **medelkvadratsummor**. 
 
 Frihetsgrader beskriver hur många lutningsparametrar som skattas för respektive del^[Frihetsgrader beskriver egentligen hur många bitar oberoende information som finns för en beräkning. Tänk tillbaka på beräkningen av en stickprovsstandardavvikelse vars frihetsgrader är $n - 1$, antalet observationer - 1, för att vi skattar medelvärdet när vi beräknar standardavvikelsen.] och medelkvadratsummor visar den genomsnittliga variationen per frihetsgrad, $\frac{SS}{df}$.
 
@@ -122,7 +122,7 @@ kable(anova_table, format = "markdown", booktabs = TRUE, escape = FALSE, col.nam
 
 ```
 
-En enkel ANOVA-tabell som @tbl-anova-example visar endast de tre huvudsakliga komponenterna, men olika programvaror kan ibland visa andra uppdelningar som standard. I en multipel linjär regressionsmodell är det vanligt att dela upp den förklarade variationen ytterligare, exempelvis i *sekventiella kvadratsummor*.
+En enkel ANOVA-tabell som @tbl-anova-example visar endast de tre huvudsakliga komponenterna, men olika programvaror kan ibland visa andra uppdelningar som standard. I en multipel linjär regressionsmodell är det vanligt att dela upp den förklarade variationen ytterligare, exempelvis i **sekventiella kvadratsummor**.
 
 ### Sekventiella kvadratsummor
 Beräkningarna för en ANOVA-tabell sker automatiskt i R när vi använder `lm()` och vi kan plocka ut tabellen från modellobjektet med hjälp av `anova()`, (se @tip-lm-objects).
@@ -132,16 +132,16 @@ Beräkningarna för en ANOVA-tabell sker automatiskt i R när vi använder `lm()
 #| tbl-cap-location: top
 #| label: tbl-anova-example-R
 
-anova(simpleModel) %>% 
-  round(4) %>% 
-  kable() %>% 
+anova(simpleModel) |> 
+  round(4) |> 
+  kable() |> 
   kable_styling("striped")
 
 ```
 
 Som standard, delar R upp modellens kvadratsumma (SSR) i de enskilda förklarande variablerna med hjälp av sekventiella (även kallad betingade) kvadratsummor. En sekventiell kvadratsumma beskriver hur mycket variation en förklarande variabel bidrar med givet att modellen redan innehåller andra förklarande variabler. 
 
-Ordningen som presenteras i @tbl-anova-example-R är ordningen som variablerna läggs till i modellen, till exempel visar andra raden $SS(\text{bill\_depth\_mm} | \text{species})$, att näbbredden bidrar med `r anova(simpleModel)[2,2] %>% round(4)` ytterligare unik förklarad variation av responsvariabeln som art inte redan har förklarat. Den tredje raden visar $SS(\text{flipper\_length\_mm} | \text{species}, \text{bill\_depth\_mm})$, det vill säga hur mycket ytterligare unik variation som fenlängden förklarar i en modell som inkluderar näbbredd och art.
+Ordningen som presenteras i @tbl-anova-example-R är ordningen som variablerna läggs till i modellen, till exempel visar andra raden $SS(\text{bill\_depth\_mm} | \text{species})$, att näbbredden bidrar med `r anova(simpleModel)[2,2] |> round(4)` ytterligare unik förklarad variation av responsvariabeln som art inte redan har förklarat. Den tredje raden visar $SS(\text{flipper\_length\_mm} | \text{species}, \text{bill\_depth\_mm})$, det vill säga hur mycket ytterligare unik variation som fenlängden förklarar i en modell som inkluderar näbbredd och art.
 
 Rent matematiskt beräknas den sekventiella kvadratsumman som en summa av antingen SSE eller SSR mellan två olika modeller, en utan den tillagda variabeln och en med variabeln inkluderad. Anta att vi vill lägga till variabel $X^*$ till en modell som har $k$ andra variabler, då ser beräkningen ut som följer:
 
@@ -163,14 +163,14 @@ Sekventiella kvadratsummor påverkas av ordningen variablerna läggs till i mode
 
 model <- lm(formula = bill_length_mm ~ sex + ., data = modelData)
 
-anova(model) %>% 
-  round(4) %>% 
-  kable() %>% 
+anova(model) |> 
+  round(4) |> 
+  kable() |> 
   kable_styling("striped")
 
 ```
 
-I @tbl-anova-example-sex ser vi att $SS(\text{sex}) = `r anova(model)[1,2] %>% round(4)`$ vilket är betydligt högre än $SS(\text{sex}|\text{species}, \text{bill\_depth\_mm}, \text{flipper\_length\_mm}, \text{body\_mass\_g}) = `r anova(simpleModel)[5,2] %>% round(4)`$ från @tbl-anova-example-R. Variabeln kön bidrar med mycket variation när den är ensam i en modell, men när den läggs till i en modell som redan har andra variabler bidrar den inte med lika mycket unik information. Detta betyder att den förklarade variationen som variabeln bidrar med verkar finnas i övriga variabler också. Denna iakttagelse kommer vi komma tillbaka till i ett senare kapitel. 
+I @tbl-anova-example-sex ser vi att $SS(\text{sex}) = `r anova(model)[1,2] |> round(4)`$ vilket är betydligt högre än $SS(\text{sex}|\text{species}, \text{bill\_depth\_mm}, \text{flipper\_length\_mm}, \text{body\_mass\_g}) = `r anova(simpleModel)[5,2] |> round(4)`$ från @tbl-anova-example-R. Variabeln kön bidrar med mycket variation när den är ensam i en modell, men när den läggs till i en modell som redan har andra variabler bidrar den inte med lika mycket unik information. Detta betyder att den förklarade variationen som variabeln bidrar med verkar finnas i övriga variabler också. Denna iakttagelse kommer vi komma tillbaka till i ett senare kapitel. 
 
 Någonting som är lika i de två tabellerna är SSE. Vi har i båda modellerna inkluderad samma variabler vilket innebör att SST, SSR, och SSE överlag är densamma. Summan av alla sekventiella kvadratsummor ska fortfarande bli SSR oavsett ordningen på variablerna och på grund av den additiva egenskapen hos variationen har SST och SSE inte heller förändrats.
 
@@ -209,8 +209,8 @@ generateFdistribution <- function(df1, df2, n = 1000) {
 dfs <- list(c(5, 30), c(10, 100), c(20, 50), c(30, 300))
 
 # Genererar data
-Fdistributions <- dfs %>%
-  purrr::map_df(~generateFdistribution(.x[1], .x[2]), .id = "Distribution") %>%
+Fdistributions <- dfs |>
+  purrr::map_df(~generateFdistribution(.x[1], .x[2]), .id = "Distribution") |>
   mutate(Distribution = paste0("df1 = ", df1, ", df2 = ", df2))
 
 # Plot the F-distributions using ggplot2
@@ -244,15 +244,15 @@ För att få fram SSR från en ANOVA-tabell i R behöver vi summera de sekventie
 anovaTable <- anova(simpleModel)
 
 # Beräknar raden för SSR utifrån alla rader förutom SSE
-SSR <- anovaTable[-nrow(anovaTable),] %>% 
-  summarize(across(Df:`Sum Sq`, ~sum(.x))) %>% 
+SSR <- anovaTable[-nrow(anovaTable),] |> 
+  summarize(across(Df:`Sum Sq`, ~sum(.x))) |> 
   mutate(`Mean Sq` = `Sum Sq` / Df,
          `F value` = NA,
          `Pr(>F)` = NA)
 
 # Kombinerar SSR med SSE från ursprungliga tabellen
-simpleAnova <- SSR %>% 
-  add_row(anovaTable[nrow(anovaTable),]) %>% 
+simpleAnova <- SSR |> 
+  add_row(anovaTable[nrow(anovaTable),]) |> 
   mutate(
     `F value` = 
       ifelse(row_number() == 1,
@@ -266,7 +266,7 @@ simpleAnova <- SSR %>%
 
 rownames(simpleAnova) <- c("Model", "Residuals")
 
-kable(simpleAnova, digits = 4) %>% 
+kable(simpleAnova, digits = 4) |> 
   kable_styling("striped")
 
 ```
@@ -320,14 +320,14 @@ I de ANOVA-tabeller som presenterats tidigare kan vi få fram denna kvadratsumma
 
 model <- lm(bill_length_mm ~ bill_depth_mm + flipper_length_mm + body_mass_g + sex + species, data = modelData)
 
-anova(model) %>% 
-  round(4) %>% 
-  kable() %>% 
+anova(model) |> 
+  round(4) |> 
+  kable() |> 
   kable_styling("striped")
 
 ```
 
-En ANOVA-tabell med sekventiella kvadratsummor beräknar ett partiellt F-test för respektive variabel (och dess parameter/parametrar) som undersöker huruvida variabeln bidrar med en signifikant ökning av den förklarade variationen till en modell som redan inkluderar variablerna ovanför. @tbl-anova-example-species beräknar nu det partiella F-test för art ($F_{test} = `r anova(model)[5, 4] %>% round(4)`$) som vi var intresserade av och vi kan direkt tolka p-värdet för testet ($p-värde < 0.001$) som att minst en av lutningsparametrarna är signifikant skild från 0. 
+En ANOVA-tabell med sekventiella kvadratsummor beräknar ett partiellt F-test för respektive variabel (och dess parameter/parametrar) som undersöker huruvida variabeln bidrar med en signifikant ökning av den förklarade variationen till en modell som redan inkluderar variablerna ovanför. @tbl-anova-example-species beräknar nu det partiella F-test för art ($F_{test} = `r anova(model)[5, 4] |> round(4)`$) som vi var intresserade av och vi kan direkt tolka p-värdet för testet ($p-värde < 0.001$) som att minst en av lutningsparametrarna är signifikant skild från 0. 
 
 Om vi genomför ett partiellt F-test för **flera variabler** kan vi inte använda p-värden som anges i tabellen då hypoteserna omfattar fler lutningsparametrar/variabler än vad de sekventiella kvadratsummorna visar. Anta att vi vill undersöka om art och kön tillsammans bidrar något till modellen. Hypotesprövningen skulle då omfatta:
 
@@ -394,12 +394,12 @@ I R används t-test i koefficienttabellen som vi kan plocka ut ur `summary()`-ob
 #| tbl-cap-location: top
 #| label: tbl-coef-example
 
-summary(simpleModel) %>% 
-  coef() %>% 
-  round(4) %>% 
+summary(simpleModel) |> 
+  coef() |> 
+  round(4) |> 
   kable(format = "markdown",
         col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde"), 
-        parse = TRUE) %>% 
+        parse = TRUE) |> 
   kable_styling("striped")
 ```
 

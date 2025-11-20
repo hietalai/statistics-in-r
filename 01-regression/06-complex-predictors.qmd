@@ -29,9 +29,9 @@ Ibland kan en kombination av flera variabler förändra effekten som variablerna
 ```{r}
 #| include: false
 
-power <- read.csv2(file = "../resources/data/electricityconsumption.csv", dec = ".") %>% 
-  mutate(Bergsvärme = Bergsvärme %>% as_factor()) %>% 
-  dplyr::filter(!(Bergsvärme %>% is.na() | Dygnsmedel %>% is.na()))
+power <- read.csv2(file = "../resources/data/electricityconsumption.csv", dec = ".") |> 
+  mutate(Bergsvärme = Bergsvärme |> as_factor()) |> 
+  dplyr::filter(!(Bergsvärme |> is.na() | Dygnsmedel |> is.na()))
 
 ```
 
@@ -40,9 +40,9 @@ Läs in materialet och filtera bort saknade värden med:
 #| eval: false
 #| code-fold: false
 
-power <- read.csv2(file = "electricityconsumption.csv", dec = ".") %>% 
-  dplyr::mutate(Bergsvärme = Bergsvärme %>% as_factor()) %>% 
-  dplyr::filter(!(Bergsvärme %>% is.na() | Dygnsmedel %>% is.na()))
+power <- read.csv2(file = "electricityconsumption.csv", dec = ".") |> 
+  dplyr::mutate(Bergsvärme = Bergsvärme |> as_factor()) |> 
+  dplyr::filter(!(Bergsvärme |> is.na() | Dygnsmedel |> is.na()))
 
 ```
 
@@ -63,7 +63,7 @@ ggplot(power) +
 
 ```
 
-@fig-interaction-electricity visar två olika samband mellan temperatur och elkonsumtion beroende på om observationen (tidpunkten) mätte sambandet när bergsvärme var installerad i bostaden eller ej. När bergsvärme finns verkar påverkan av temperatur vara mindre ($\beta = `r lm(Energi_KWh ~ Dygnsmedel, data = power %>% dplyr::filter(Bergsvärme == 1)) %>% coef(.) %>% .[2] %>% round(3)`$) än när bergsvärme saknas ($\beta = `r lm(Energi_KWh ~ Dygnsmedel, data = power %>% dplyr::filter(Bergsvärme == 0)) %>% coef(.) %>% .[2] %>% round(3)`$), förändringen i elkonsumtion för varje ökad grad av temperatur har förändrats. 
+@fig-interaction-electricity visar två olika samband mellan temperatur och elkonsumtion beroende på om observationen (tidpunkten) mätte sambandet när bergsvärme var installerad i bostaden eller ej. När bergsvärme finns verkar påverkan av temperatur vara mindre ($\beta = `r lm(Energi_KWh ~ Dygnsmedel, data = power |> dplyr::filter(Bergsvärme == 1)) |> coef(.) |> .[2] |> round(3)`$) än när bergsvärme saknas ($\beta = `r lm(Energi_KWh ~ Dygnsmedel, data = power |> dplyr::filter(Bergsvärme == 0)) |> coef(.) |> .[2] |> round(3)`$), förändringen i elkonsumtion för varje ökad grad av temperatur har förändrats. 
 
 För att modellen ska plocka upp variablernas synergi med varandra skapas en *interaktion* som en produkt av, i det enklaste fallet, de två variablerna och läggs till i modellen med en ytterligare tillhörande lutningsparameter. 
 
@@ -99,10 +99,10 @@ För att skapa en interaktion i modellen med hjälp av R kan symbolen `*` använ
 
 model <- lm(Energi_KWh ~ Dygnsmedel * Bergsvärme, data = power)
 
-summary(model) %>% 
-  coef() %>% 
-  round(3) %>% 
-  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+summary(model) |> 
+  coef() |> 
+  round(3) |> 
+  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) |> 
   kable_styling("striped")
 
 ```
@@ -113,9 +113,9 @@ Vi kan tolka dessa skattningar som att om bostaden har bergsvärme installerad, 
 
 $$
 \begin{aligned}
-  \hat{Y}_{i|\text{bergsvärme} = 1} &= ( `r coef(model)[1] %>% round(3)` + `r coef(model)[3] %>% round(3)` ) + (`r coef(model)[2] %>% round(3)` + `r coef(model)[4] %>% round(3)`) \cdot \text{temperatur}_i \\
+  \hat{Y}_{i|\text{bergsvärme} = 1} &= ( `r coef(model)[1] |> round(3)` + `r coef(model)[3] |> round(3)` ) + (`r coef(model)[2] |> round(3)` + `r coef(model)[4] |> round(3)`) \cdot \text{temperatur}_i \\
   \\
-  \hat{Y}_{i|\text{bergsvärme} = 0} &= `r coef(model)[1] %>% round(3)` + `r coef(model)[2] %>% round(3)` \cdot \text{temperatur}_i
+  \hat{Y}_{i|\text{bergsvärme} = 0} &= `r coef(model)[1] |> round(3)` + `r coef(model)[2] |> round(3)` \cdot \text{temperatur}_i
 \end{aligned}
 $$
 som vi kan visualisera i det tidigare diagrammet med:
@@ -232,10 +232,10 @@ Det vi kan göra för att tolka en variabels effekt på responsvariabeln är att
 #| tbl-cap-location: top
 #| label: tbl-interaction
 
-summary(braModell) %>% 
-  coef() %>% 
-  round(3) %>% 
-  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+summary(braModell) |> 
+  coef() |> 
+  round(3) |> 
+  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) |> 
   kable_styling("striped")
 
 ```
@@ -258,7 +258,7 @@ intData <-
     y1 = b[1] + (b[2] + b[4]*(meanX2 - sdX2))*x1 + b[3] * (meanX2 - sdX2),
     y2 = b[1] + (b[2] + b[4]*(meanX2))*x1 + b[3] * (meanX2),
     y3 = b[1] + (b[2] + b[4]*(meanX2 + sdX2))*x1 + b[3] * (meanX2 + sdX2)
-  ) %>% 
+  ) |> 
   pivot_longer(
     !x1
   )
@@ -423,7 +423,7 @@ Vi kan anpassa polynom på olika sätt. Ett enkelt sätt att göra är att inklu
 
 # Sparar över det gamla materialet
 data <- 
-  data %>% 
+  data |> 
   # Skapar en ny variabel som kvadraten av x
   mutate(
     X2 = x^2
@@ -432,10 +432,10 @@ data <-
 # Anpassa en ny modell
 model <- lm(Y ~ ., data = data)
 
-summary(model) %>% 
-  coef() %>% 
-  round(3) %>% 
-  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+summary(model) |> 
+  coef() |> 
+  round(3) |> 
+  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) |> 
   kable_styling("striped")
 ```
 
@@ -458,11 +458,11 @@ När polynom används är det önskvärt att centrera eller standardisera grundv
 
 # Skapa centrerad data
 dataCent <- 
-  data %>% 
+  data |> 
   mutate(
     # Centrera variabeln x med hjälp av scale()
     # Standardisering kan göras genom argument scale = TRUE 
-    XCent = X %>% scale(center = TRUE, scale = FALSE),
+    XCent = X |> scale(center = TRUE, scale = FALSE),
     X2Cent = XCent^2
   )
 
@@ -475,9 +475,9 @@ Vi kan med hjälp av `colMeans()` se medelvärden för de icke-centrerade och ce
 #| tbl-cap: Variablernas medelvärden
 
 
-colMeans(dataCent) %>% 
-  round(3) %>% 
-  kable(col.names = "Medelvärde") %>% 
+colMeans(dataCent) |> 
+  round(3) |> 
+  kable(col.names = "Medelvärde") |> 
   kable_styling(full_width = FALSE)
 
 ```
@@ -496,10 +496,10 @@ modelCent <- lm(Y ~ XCent + X2Cent, data = dataCent)
 # Alternativt 
 modelCent <- lm(Y ~ XCent + I(XCent^2), data = dataCent)
 
-summary(modelCent) %>% 
-  coef() %>% 
-  round(3) %>% 
-  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) %>% 
+summary(modelCent) |> 
+  coef() |> 
+  round(3) |> 
+  kable(col.names = c("Variabel", "Skattning", "Medelfel", "t-värde", "p-värde")) |> 
   kable_styling("striped")
 
 ```

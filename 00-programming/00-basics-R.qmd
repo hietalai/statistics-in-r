@@ -1,6 +1,7 @@
 ---
-editor_options: 
-  chunk_output_type: console
+format: 
+  html:
+    code-fold: false
 ---
 
 # Grunderna i R {.unnumbered}
@@ -8,7 +9,7 @@ editor_options:
 R är ett så kallat open-source programmeringsspråk. Open-source betyder att programmet är gratis att ladda ner och använda, samt att vem som helst har möjlighet att skapa egna, skräddarsydda metoder eller analyser som enkelt kan delas med omvärlden. R har använts av statistiker och analytiker i mer än 20 års tid och många bidrag har byggt upp ett starkt och flexibelt verktyg som kan anpassas för många ändamål.
 
 ## Introduktion
-R kännetecknas av sina *paket* med *funktioner* som vi kan använda för att genomföra olika *operationer*. Vi kan se på funktionerna som olika verktyg ämnade att lösa specifika problem, till exempel om vi vill slå in en spik i en bräda kan vi använda en hammare, och paketen som olika verktygslådor fokuserade på att genomföra en viss form utav arbete. När vi installerar R för första gången får vi tillgång till en stor mängd olika paket, men vi har möjligheten att utöka dessa väldigt enkelt. Vem som helst skapa funktioner och paket för allmänheten och ibland finns det ett behov av att ladda ner nya paket (motsv. köpa in nya verktygslådor) för att genomföra en viss sorts analys. 
+R kännetecknas av sina **paket** med **funktioner** som vi kan använda för att genomföra olika **operationer**. Vi kan se på funktionerna som olika verktyg ämnade att lösa specifika problem, till exempel om vi vill slå in en spik i en bräda kan vi använda en hammare, och paketen som olika verktygslådor fokuserade på att genomföra en viss form utav arbete. När vi installerar R för första gången får vi tillgång till en stor mängd olika paket, men vi har möjligheten att utöka dessa väldigt enkelt. Vem som helst skapa funktioner och paket för allmänheten och ibland finns det ett behov av att ladda ner nya paket (motsv. köpa in nya verktygslådor) för att genomföra en viss sorts analys. 
 
 Det finns flertalet gränssnitt som hjälper till att programmera med R, men vi rekommenderar att använda RStudio. Detta visuella gränssnitt medför att vi inte behöver programmera med en kommandotolk. För att installera R och RStudio kan du följa instruktionerna [här](https://posit.co/download/rstudio-desktop/). Detta underlag är skapad med `r R.version.string`. 
 
@@ -17,16 +18,16 @@ När vi programmerar i R, sparas objekt som vi skapar i datorns arbetsminne (RAM
 :::
 
 ### Starta RStudio
-När vi startar RStudio för första gången, delas programmet in i tre olika fönster. Det är starkt rekommenderat att alltid börja med att öppna eller skapa ett dokument där kod sparas (även kallad ett `R Script` eller *skript*) genom **File** -> **New file** -> **R Script** (eller kortkommandot *Ctrl* el. *Command* + *Shift* + *N*). När detta skript öppnas delas RStudio in i fyra olika fönster. Ett skript har ändelsen `.R` men är i grunden en textfil och kan öppnas i alla enkla texthanterare, t.ex. Notepad, om vi vill redigera koden utanför R eller RStudio. 
+När vi startar RStudio för första gången, delas programmet in i tre olika fönster. Det är starkt rekommenderat att alltid börja med att öppna eller skapa ett dokument där kod sparas (även kallad ett `R Script` eller **skript**) genom *File* -> *New file* -> *R Script* (eller kortkommandot *Ctrl* el. *Command* + *Shift* + *N*). När detta skript öppnas delas RStudio in i fyra olika fönster. Ett skript har ändelsen `.R` men är i grunden en textfil och kan öppnas i alla enkla texthanterare, t.ex. Notepad, om vi vill redigera koden utanför R eller RStudio. 
 
 #### Kort genomgång av RStudio
 När ett skript skapats innehåller nu det övre vänstra fönstret denna fil. Här kan vi skriva kod som kan sparas ned och användas igen nästa gång vi öppnar programmet. Skriptet kan också skickas mellan datorer och är ett bra sätt att kunna dela med sig utav vad det är man jobbar med. Det rekommenderas starkt att alltid skriva kod i ett skript för att ha möjligheten att återanvända och redigera koden på ett lätt sätt.
 
-Det nedre vänstra fönstret innehåller en *konsol*. Här visas all kod som vi kör och tillhörande utskrifter och vi kan också skriva kod direkt i konsollen. Det som skiljer användandet av konsollen med ett skript är att all kod som vi skriver i konsollen inte sparas någonstans och kommer försvinna nästa gång vi startar upp programmet. Det är också svårt att redigera kod, till exempel om man gjort något stavfel eller måste revidera kod som man skrivit för länge sedan.
+Det nedre vänstra fönstret innehåller en **konsol**. Här visas all kod som vi kör och tillhörande utskrifter och vi kan också skriva kod direkt i konsollen. Det som skiljer användandet av konsollen med ett skript är att all kod som vi skriver i konsollen inte sparas någonstans och kommer försvinna nästa gång vi startar upp programmet. Det är också svårt att redigera kod, till exempel om man gjort något stavfel eller måste revidera kod som man skrivit för länge sedan.
 
 I det nedre högra fönstret kan vi se olika flikar som visar filer från datorn, skapade visualiseringar, en översikt av de paket som vi har tillgängliga, samt få hjälp om olika funktioner i hjälpdokumentationen. Paket i R har inbyggda hjälpfiler som kan underlätta förståelsen av vad en funktion gör, hur den arbetar, vad den behöver för att köras med mera. Det rekommenderas att alltid börja med att titta i dokumentationen för en funktion om man är osäker på vad det är den gör.
 
-Det övre högra fönstret innehåller en översikt av alla objekt som vi skapar under en session och som R lagrar i korttidsminnet. Objekten som vi ser i RStudios *Environment*-flik kan vi klicka på för att antingen få mer detaljer om objektet, exempelvis hur stort ett visst objekt är eller om den innehåller fler delobjekt.
+Det övre högra fönstret innehåller en översikt av alla objekt som vi skapar under en session och som R lagrar i korttidsminnet. Objekten som vi ser i RStudios **Environment**-flik kan vi klicka på för att antingen få mer detaljer om objektet, exempelvis hur stort ett visst objekt är eller om den innehåller fler delobjekt.
 
 Vi kommer återkomma till dessa olika fönster senare i underlaget. 
 
@@ -91,7 +92,7 @@ Dels kan vi i anslutning till specifika bitar kod själva beskriva vad koden gö
 ### Objekt och dess typer {#sec-objectTypes}
 I tidigare exempel kommer svaret på beräkningarna endast skrivas ut i konsollen, men om vi hade varit intresserade av att spara ner informationen och använda den senare behöver vi specifikt säga till R att göra det. 
 
-Vi kan spara resultat av en operation till ett *objekt* med hjälp av `<-`. När vi vill ge ett objekt ett värde är det praxis att använda `<-` och vi kan skriva detta som en kombination av symbolerna, `<` och `-`. Vi kan läsa det som ''*ett värde ges till objektet i pilens riktning*''.
+Vi kan spara resultat av en operation till ett **objekt** med hjälp av `<-`. När vi vill ge ett objekt ett värde är det praxis att använda `<-` och vi kan skriva detta som en kombination av symbolerna, `<` och `-`. Vi kan läsa det som ''*ett värde ges till objektet i pilens riktning*''.
 
 Objekt kan heta nästintill vadsomhelst men vi måste förhålla oss till ett par begränsningar:
 
@@ -123,31 +124,32 @@ a / 5
 ```
 
 #### Typer
-R kan utföra olika operationer beroende på vilken typ av objekt som vi har sparat. En fördel jämfört med andra programmeringsspråk är att vi, i majoriteten av fallen, inte behöver säga till R vilken typ ett objekt är, R kan läsa av kontexten relativt bra. Till exempel kommer objektet `a` vara numeriskt (mer specifikt typen *numeric*) och vi kan kontrollera detta genom funktionen `class()`.
+R kan utföra olika operationer beroende på vilken typ av objekt som vi har sparat. En fördel jämfört med andra programmeringsspråk är att vi, i majoriteten av fallen, inte behöver säga till R vilken typ ett objekt är, R kan läsa av kontexten relativt bra. Till exempel kommer objektet `a` vara numeriskt (mer specifikt typen **numeric**) och vi kan kontrollera detta genom funktionen `class()`.
 ```{r}
 class(a)
 ```
 
 Utöver numeriska typer finns även:
 
-- textsträng (*character*): ex. `"hej"`, `"Anna"`,
-- logisk (*logical*): ex. `TRUE` eller `FALSE`,
+- textsträng (**character**): ex. `"hej"`, `"Anna"`,
+- logisk (**logical**): ex. `TRUE` eller `FALSE`,
 
 samt två specialfall av siffror:
 
-- heltal (*integer*), ett specialfall av numeriskt när det bara förekommer heltal: `2L` där `L` anger till R att objektet ska vara av typen `integer`,
-- komplex (*complex*) innehållande komplexa tal
+- heltal (**integer**), ett specialfall av numeriskt när det bara förekommer heltal: `2L` där `L` anger till R att objektet ska vara av typen `integer`,
+- komplex (**complex**) innehållande komplexa tal
 
-Vanligtvis räcker det med att använda `numeric`, `character` och `logical`-typer. I praktiken använder sig R utav ytterligare ett specialfall för textsträngar, *Factor*. Ett `Factor`-objekt är en blandning av en siffra och text där R lagrar en siffra men har ett lexikon där varje siffra egentligen representerar en textsträng. 
+Vanligtvis räcker det med att använda `numeric`, `character` och `logical`-typer. I praktiken använder sig R utav ytterligare ett specialfall för textsträngar, **Factor**. Ett `Factor`-objekt är en blandning av en siffra och text där R lagrar en siffra men har ett lexikon där varje siffra egentligen representerar en textsträng. 
 
 ```{r}
-## Siffror anges bara som de är
+## Siffror anges som vanliga siffror
 valfrittNummer <- 3
 
-## För att man ska ange text måste de omges av " " (citattecken) för att R ska läsa de som text
+## För att man ska ange text måste de omges 
+## av " " (citattecken) för att R ska läsa de som text
 valfriText <- "Hello world!"
 
-## Om något är sant 
+## Om något är sant eller falskt används TRUE / FALSE
 test <- TRUE
 
 ```
@@ -174,17 +176,17 @@ valfrittNummer - valfriText
 
 ```
 
-Vi får nu inte ut något värde i konsollen utan får istället ett *felmeddelande*. Felmeddelanden och felsökning är en stor del av programmering och kommer vara mycket frustrerande till en början. R ger oss dock (ofta) en indikation på vad som har gått fel och efter ett tag kommer du börja känna igen vanligt förekommande fel och hur man ska lösa dem. 
+Vi får nu inte ut något värde i konsollen utan får istället ett **felmeddelande**. Felmeddelanden och felsökning är en stor del av programmering och kommer vara mycket frustrerande till en början. R ger oss dock (ofta) en indikation på vad som har gått fel och efter ett tag kommer du börja känna igen vanligt förekommande fel och hur man ska lösa dem. 
 
 I detta fall säger R att vi har en ''*non-numeric argument to binary operator*'' vilket kanske inte är jättetydligt vad det egentligen betyder, men den första delen av meddelandet är viktigt. Vi har ett icke-numeriskt objekt i en operation som kräver numeriska värden. Detta vet vi ju eftersom `valfriText` är en textsträng och vi kan då lätt lösa felet genom att ange ett annat numeriskt objekt istället.
 
 ### Datastrukturer
-I de tidigare exemplen har ett objekt endast haft ett värde, men vi kan tillåta att ett objekt har en samling med värden istället. Detta kallar vi för *datastrukturer* då vi på olika sätt strukturerar data. Vanligen kräver en datastruktur att värdena är av samma typ, men vissa strukturer tillåter en blandning av typer.
+I de tidigare exemplen har ett objekt endast haft ett värde, men vi kan tillåta att ett objekt har en samling med värden istället. Detta kallar vi för **datastrukturer** då vi på olika sätt strukturerar data. Vanligen kräver en datastruktur att värdena är av samma typ, men vissa strukturer tillåter en blandning av typer.
 
 #### Vektorer
-Låt oss säga att vi har en massa kläder som ligger kaotiskt utspritt i ett rum. För att strukturera dessa kan vi exempelvis ta alla sockar och lägga dem i en låda. Lådan innehåller därmed en grupp av liknande objekt, som i R motsvarar en *vektor*. 
+Låt oss säga att vi har en massa kläder som ligger kaotiskt utspritt i ett rum. För att strukturera dessa kan vi exempelvis ta alla sockar och lägga dem i en låda. Lådan innehåller därmed en grupp av liknande objekt, som i R motsvarar en **vektor**. 
 
-En vektor måste innehålla värden av samma typ, siffror, text, eller logiska värden. För att skapa en vektor använder vi funktionen `c()`, där varje delobjekt kallas för *element*. Vi separarar elementen i funktionen med ett kommatecken.
+En vektor måste innehålla värden av samma typ, siffror, text, eller logiska värden. För att skapa en vektor använder vi funktionen `c()`, där varje delobjekt kallas för **element**. Vi separarar elementen i funktionen med ett kommatecken.
 
 ```{r}
 ## En vektor med numeriska värden
@@ -201,7 +203,7 @@ B
 ord
 ```
 
-Vektor `A` och `B` har fyra element och vektor `ord` har tre element, alla av samma typ. Om vi vill titta på ett element kan vi *indexera* vektorn. Indexering innebär att vi säger till R att plocka ut angivna element ur objektets *dimensionser*. En vektor har bara en dimension vilket innebär att indexfunktionen `[]` endast behöver ett värde. 
+Vektor `A` och `B` har fyra element och vektor `ord` har tre element, alla av samma typ. Om vi vill titta på ett element kan vi **indexera** vektorn. Indexering innebär att vi säger till R att plocka ut angivna element ur objektets **dimensionser**. En vektor har bara en dimension vilket innebär att indexfunktionen `[]` endast behöver ett värde. 
 
 :::{.callout-important}
 R börjar räkna från 1 när det kommer till index. Detta skiljer sig från andra programmeringsspråk som oftast börjar på 0.
@@ -226,7 +228,7 @@ B[c(2, 4)]
 
 
 #### Matriser
-Låt oss anta att vi har två vektorer med lika många element. Vi kan slå ihop dessa till en *matris* genom funktionen `matrix()`. En matris måste, likt vektorer, innehålla värden av samma typ, vi kan alltså inte kombinera en numerisk vektor och en textvektor oavsett om de har lika många element.
+Låt oss anta att vi har två vektorer med lika många element. Vi kan slå ihop dessa till en **matris** genom funktionen `matrix()`. En matris måste, likt vektorer, innehålla värden av samma typ, vi kan alltså inte kombinera en numerisk vektor och en textvektor oavsett om de har lika många element.
 
 ```{r}
 ## En matris med värdena från vektor A och B där vi anger att vi har 2 kolumner
@@ -250,7 +252,7 @@ matris[1,2]
 ```
 
 #### Listor och data frames {#sec-data-frame}
-Det är ibland begränsande att kräva samma typ av objekt i en vektor eller matris, men som tur är finns det en datastruktur som faktiskt tillåter oss att kombinera objekt av olika typ. Denna struktur kallas för en *lista* och vi kan se en lista lite som en byrålåda. I en byrålåda kan vi samla ihop lådor av olika storlek och form och detsamma kan vi göra i en lista. Vi kan kombinera vektorer av olika typer med matriser eller enskilda värden i en och samma lista, vi kan till och med lägga in en lista inuti en annan lista. 
+Det är ibland begränsande att kräva samma typ av objekt i en vektor eller matris, men som tur är finns det en datastruktur som faktiskt tillåter oss att kombinera objekt av olika typ. Denna struktur kallas för en **lista** och vi kan se en lista lite som en byrålåda. I en byrålåda kan vi samla ihop lådor av olika storlek och form och detsamma kan vi göra i en lista. Vi kan kombinera vektorer av olika typer med matriser eller enskilda värden i en och samma lista, vi kan till och med lägga in en lista inuti en annan lista. 
 
 Följande exempel är en lista med fyra olika objekt. 
 
@@ -275,7 +277,7 @@ lista[[4]][2,1]
 
 ```
 
-Flexibiliteten i en lista gör det däremot väldigt svårt att arbeta med den, mer specifikt att en lista kan innehålla objekt av olika storlekar. En mer strukturerad datastruktur som tillåter olika typer av objekt är en *data frame*. Likt en matris innehåller en data frame vektorer av samma längd och likt en lista tillåter en data frame att vektorerna är av olika typ, vi kombinerar alltså strukturen från en matris med flexibiliteten från en lista. Ytterligare en fördel med en data frame är att kolumnerna (vektorerna) kan ha namn för att lättare urskilja vad objektet innehåller. 
+Flexibiliteten i en lista gör det däremot väldigt svårt att arbeta med den, mer specifikt att en lista kan innehålla objekt av olika storlekar. En mer strukturerad datastruktur som tillåter olika typer av objekt är en **data frame**. Likt en matris innehåller en data frame vektorer av samma längd och likt en lista tillåter en data frame att vektorerna är av olika typ, vi kombinerar alltså strukturen från en matris med flexibiliteten från en lista. Ytterligare en fördel med en data frame är att kolumnerna (vektorerna) kan ha namn för att lättare urskilja vad objektet innehåller. 
 
 <!-- BILDER PÅ EN STRUKTURERAD BYRÅLÅDA (DATA FRAME) OCH EN FLEXIBEL BYRÅLÅDA (LIST) -->
 
@@ -284,7 +286,7 @@ Flexibiliteten i en lista gör det däremot väldigt svårt att arbeta med den, 
 data.frame(Var1 = A, Var2 = B)
 ```
 
-När vi samlar in data inom statistik brukar vi ställa upp informationen med samma struktur som en data frame, där varje rad är en observerad enhet och varje kolumn är en variabel som vi gör mätningar på. Varje enskilda cell blir då enhetens uppmätta värde på den angivna variabeln, till exempel halten kväveoxid i Vänern. Detta kallar vi ofta för *rådata*-format.
+När vi samlar in data inom statistik brukar vi ställa upp informationen med samma struktur som en data frame, där varje rad är en observerad enhet och varje kolumn är en variabel som vi gör mätningar på. Varje enskilda cell blir då enhetens uppmätta värde på den angivna variabeln, till exempel halten kväveoxid i Vänern. Detta kallar vi ofta för **rådata**-format.
 
 ```{r}
 ## Skapar data

@@ -98,7 +98,7 @@ Vi kan visualisera en tvåvägs-ANOVA likt vi gjort tidigare, genom grupperade d
 #| fig-width: 5 
 
 ToothGrowth <- 
-  ToothGrowth  %>% 
+  ToothGrowth  |> 
   mutate(
     dose = factor(dose)
   )
@@ -127,8 +127,8 @@ Med detta fioldiagram kan vi se skillnader i faktormedelvärden, fördelningen f
 
 # Beräknar cellmedelvärden
 means <- 
-  ToothGrowth %>% 
-  group_by(supp, dose) %>% 
+  ToothGrowth |> 
+  group_by(supp, dose) |> 
   summarize(
     mean = mean(len)
   )
@@ -156,7 +156,7 @@ Att skatta en tvåvägs-ANOVA i R är inte svårare än att skatta en regression
 
 model <- lm(len ~ supp*dose, data = ToothGrowth)
 
-anova(model) %>% 
+anova(model) |> 
   kable(digits = 3, caption = "Modellens ANOVA-tabell.")
 
 ```
@@ -167,7 +167,7 @@ För att visa att de sekventiella kvadratsummorna som R anger är lika de andra 
 
 model <- lm(len ~ dose*supp, data = ToothGrowth)
 
-anova(model) %>% 
+anova(model) |> 
   kable(digits = 3, caption = "Modellens ANOVA-tabell.")
 
 ```
@@ -192,7 +192,7 @@ $$
 $$
 där $MSAB$ är interaktionens medelkvadratsumma. Testvariabeln anses följa $F_{(A-1)(B-1), A \cdot B(n-1), 1-\alpha}$.
 
-P-värdet för testet (`r anova(model)[3,5] %>% round(4)`) är mindre än fem procent vilket innebär att vi kan förkasta $H_0$ att det inte finns någon interaktion mellan faktorerna. 
+P-värdet för testet (`r anova(model)[3,5] |> round(4)`) är mindre än fem procent vilket innebär att vi kan förkasta $H_0$ att det inte finns någon interaktion mellan faktorerna. 
 
 Detta kommer påverka våra nästa steg i analysen eftersom en interaktion innebär att sambandet mellan en faktor och mätvariabeln förändras beroende på den andra faktorn. Den direkta konsekvensen är att de huvudsakliga faktoreffekterna inte längre är relevant att undersöka eftersom de kommer ge missvisande resultat. Vi kommer **inte** vilja undersöka skillnader mellan specifika faktornivåer utan fokuserar på cellmedelvärdena, alltså skillnader i medelvärden när vi tar hänsyn till **båda** faktorerna.
 
@@ -202,7 +202,7 @@ Paketet `emmeans` kan skapa cellmedelvärden genom:
 
 means <- emmeans(model, specs = ~supp*dose)
 
-means %>% 
+means |> 
   kable(digits = 3, caption = "Cellernas medelvärden", 
         col.names = c("Metod", "Dosering", "Medelvärde", "Medelfel", "Frihetsgrader", "Nedre KI gräns", "Övre KI gräns"))
 
@@ -216,9 +216,9 @@ means %>%
 tukey <- 
   pairs(means, adjust = "tukey") 
 
-tukey %>% 
-  as_tibble() %>% 
-  arrange(abs(estimate) %>% desc()) %>% 
+tukey |> 
+  as_tibble() |> 
+  arrange(abs(estimate) |> desc()) |> 
   kable(digits = 3, caption = "Parvisa jämförelser av cellmedelvärden med Tukey familjekonfidens")
 
 selectedMeans <- means[c(1:4),]
@@ -226,9 +226,9 @@ selectedMeans <- means[c(1:4),]
 bonferroni <- 
   pairs(selectedMeans, adjust = "bonferroni")
 
-bonferroni %>% 
-  as_tibble() %>% 
-  arrange(abs(estimate) |> desc()) %>% 
+bonferroni |> 
+  as_tibble() |> 
+  arrange(abs(estimate) |> desc()) |> 
   kable(digits = 3, caption = "Parvisa jämförelser av utvalda cellmedelvärden med Bonferroni familjekonfidens")
 
 ```
@@ -325,7 +325,7 @@ model <- lm(
       )
   )
 
-anova(model) %>% 
+anova(model) |> 
   kable(digits = 3, caption = "Modellens felaktiga ANOVA-tabell.")
 
 ```
@@ -357,7 +357,7 @@ mainEffectCorrection <- function(model){
   return(anovaTabell)
 }
 
-mainEffectCorrection(model) %>% 
+mainEffectCorrection(model) |> 
   kable(digits = 3, caption = "Modellens korrigerade ANOVA-tabell.")
 
 ```
@@ -407,7 +407,7 @@ tibble(
       c("$\\sigma^2_A$","$\\sigma^2_B$","$\\sigma^2_{AB}$", "$\\sigma^2$"),
     Skattning =
       c(sigmaAEst,sigmaBEst,sigmaABEst, sigmaEst)
-  ) %>% 
+  ) |> 
   kable(digits = 3)
 
 ```
@@ -448,16 +448,16 @@ Utskriften delas upp i `Random effects` och `Fixed effects` med olika tabellstru
 
 Vi kan plocka ut dessa varianser i en separat tabell genom:
 ```{r}
-summary(model) %>% 
+summary(model) |> 
   # Tar ut varianskomponenterna
-  .$varcor %>% 
+  .$varcor |> 
   # Konverterar till en data.frame för kable
-  as.data.frame() %>% 
+  as.data.frame() |> 
   # Väljer ut relevanta delar av konverterade data.frame och byter namn
   select(
     Källa = grp,
     Varians = vcov
-  ) %>% 
+  ) |> 
   kable(
     caption = "Skattade varianskomponenter", 
     digits = 3
@@ -484,8 +484,8 @@ Anta att vi i en studie gett samma koffeindos till 18 personer där två faktore
 
 # Beräknar cellmedelvärden
 means <- 
-  coffee %>% 
-  group_by(milk, sugar) %>% 
+  coffee |> 
+  group_by(milk, sugar) |> 
   summarize(
     mean = mean(babble)
   )
@@ -510,7 +510,7 @@ I interaktionsdiagrammet ser vi antydan till en interaktion, men vi ser också a
 
 model <- lm(babble ~ milk*sugar, data = coffee)
 
-anova(model) %>% 
+anova(model) |> 
   kable(digits = 3, caption = "Modellen ANOVA-tabell med typ I kvadratsummor.")
 
 ```
@@ -521,7 +521,7 @@ Modellen anpassas på samma sätt som innan men ordningen av variablerna kommer 
 
 model2 <- lm(babble ~ sugar*milk, data = coffee)
 
-anova(model2) %>% 
+anova(model2) |> 
   kable(digits = 3, caption = "Annan ordning på modellens ANOVA-tabell med typ I kvadratsummor.")
 
 ```
@@ -532,7 +532,7 @@ I paketet `car` får vi tillgång till funktionen `Anova()` (stort A) som ger os
 
 ```{r}
 
-Anova(model, type = 3) %>% 
+Anova(model, type = 3) |> 
   kable(digits = 3, caption = "Modellen ANOVA-tabell med typ III kvadratsummor.")
 
 ```
@@ -549,9 +549,9 @@ means <- emmeans(model, specs = ~milk*sugar)
 tukey <- 
   pairs(means, adjust = "tukey") 
 
-tukey %>% 
-  as_tibble() %>% 
-  arrange(abs(estimate) %>% desc()) %>% 
+tukey |> 
+  as_tibble() |> 
+  arrange(abs(estimate) |> desc()) |> 
   kable(digits = 3, caption = "Parvisa jämförelser av cellmedelvärden med Tukey familjekonfidens")
 
 ```

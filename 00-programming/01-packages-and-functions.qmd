@@ -1,15 +1,16 @@
 ---
-editor_options: 
-  chunk_output_type: console
+format: 
+  html: 
+    code-fold: FALSE
 ---
 
 # Paket och funktioner {.unnumbered}
 Det kommer bli väldigt jobbigt om vi alltid måste skapa data för hand eller beräkna summor som `a + b + c + ...`. Användandet av en programvara ska underlätta de statistiska beräkningarna och i den andan följer här några kapitel om hur R eller RStudio kan hjälpa till.
 
 ## Paket och funktioner
-Inom programmering är det vanligt att man genomför samma komplexa operation flera gånger och ett enkelt sätt att underlätta kodningen är att skapa en *funktion* som förkortar flera rader kod till en. Flera liknande funktioner samlas i olika *paket* som antingen redan är installerade på datorn eller måste installeras en gång. 
+Inom programmering är det vanligt att man genomför samma komplexa operation flera gånger och ett enkelt sätt att underlätta kodningen är att skapa en **funktion** som förkortar flera rader kod till en. Flera liknande funktioner samlas i olika **paket** som antingen redan är installerade på datorn eller måste installeras en gång. 
 
-Installerade paket måste också *laddas* till arbetsminnet för att R ska kunna använda sig utav dem. Vi kan visualisera detta som att även fast vi har köpt in en verktygslåda, måste vi ställa upp den på arbetsbänken för att kunna använda verktygen däri. Om du inte har verktygslådan bredvid dig kommer det bli svårt att använda något av verktygen. Vi kan ladda upp ett paket till arbetsminnet med hjälp av `library()` eller `require()`, där namnet på paketet anges inuti parenteserna. 
+Installerade paket måste också **laddas** till arbetsminnet för att R ska kunna använda sig utav dem. Vi kan visualisera detta som att även fast vi har köpt in en verktygslåda, måste vi ställa upp den på arbetsbänken för att kunna använda verktygen däri. Om du inte har verktygslådan bredvid dig kommer det bli svårt att använda något av verktygen. Vi kan ladda upp ett paket till arbetsminnet med hjälp av `library()` eller `require()`, där namnet på paketet anges inuti parenteserna. 
 
 ```{r}
 #| eval: false
@@ -19,7 +20,7 @@ require(dplyr)
 
 ```
 
-Om du har en ny installation av R på datorn måste du ibland *installera* paket, det vill säga ladda ner paketets information från internet. Som tur är finns det en funktion för detta också, nämligen `install.packages()`. Skillnaden här är att namnet på paketet måste anges inom citationstecken, ex. `"PAKET"`, istället för bara namnet som vi gjorde i `require()`. Om du en gång redan installerat paketet till din version av R behöver du **inte installera paketetet för varje ny session** utan kan direkt ladda det genom `library()` eller `require()`.
+Om du har en ny installation av R på datorn måste du ibland **installera** paket, det vill säga ladda ner paketets information från internet. Som tur är finns det en funktion för detta också, nämligen `install.packages()`. Skillnaden här är att namnet på paketet måste anges inom citationstecken, ex. `"PAKET"`, istället för bara namnet som vi gjorde i `require()`. Om du en gång redan installerat paketet till din version av R behöver du **inte installera paketetet för varje ny session** utan kan direkt ladda det genom `library()` eller `require()`.
 
 ```{r}
 #| eval: false
@@ -35,7 +36,7 @@ require(RColorBrewer)
 
 ```
 
-Termen funktion har använts frekvent tidigare och kan behöva förtydligas. En funktion är en större operation, oftast flera rader kod, som sammanfattas med en rad. Vi kan använda redan inbyggda funktioner från olika paket (som vi gjort i tidigare kapitel) eller skapa en egen funktion, men vi kommer i detta underlag fokusera på att använda redan skapade funktioner. För att använda en funktion behöver vi veta namnet på funktionen och eventuella *argument* som funktionen behöver. Argument motsvarar inställningar eller information som behövs i operationerna som funktionen genomför. För att tilldela ett argument ett värde eller information används `=` till skillnad från `<-` i "vanlig" kodning.
+Termen funktion har använts frekvent tidigare och kan behöva förtydligas. En funktion är en större operation, oftast flera rader kod, som sammanfattas med en rad. Vi kan använda redan inbyggda funktioner från olika paket (som vi gjort i tidigare kapitel) eller skapa en egen funktion, men vi kommer i detta underlag fokusera på att använda redan skapade funktioner. För att använda en funktion behöver vi veta namnet på funktionen och eventuella **argument** som funktionen behöver. Argument motsvarar inställningar eller information som behövs i operationerna som funktionen genomför. För att tilldela ett argument ett värde eller information används `=` till skillnad från `<-` i "vanlig" kodning.
 
 ```{r eval = FALSE}
 
@@ -102,7 +103,7 @@ ekar <-
 ```
 
 ## Arbetsmappar
-Att importera datamaterial är endast ett sätt där vi interagerar med datorns hårddisk. Vi kan ibland vilja spara ner objekt eller visualiseringar mer permanent och då kommer vi återigen behöva ange en *sökväg* till någonstans på datorn. För att underlätta denna process kan vi använda oss utav *arbetsmappar* (eng. working directory).
+Att importera datamaterial är endast ett sätt där vi interagerar med datorns hårddisk. Vi kan ibland vilja spara ner objekt eller visualiseringar mer permanent och då kommer vi återigen behöva ange en **sökväg** till någonstans på datorn. För att underlätta denna process kan vi använda oss utav **arbetsmappar** (eng. working directory).
 
 En arbetsmapp är ett sätt för oss att snabbt och enkelt ge information till R att den ska leta i en specifik del av datorns hårddisk. Om vi arbetar med ett projekt, till exempel datorlaborationer i en specifik kurs, kan det vara lämpligt att skapa en mapp på datorn där all information som hör till kursen sparas ner. Då är det också lämpligt att i R säga att denna mapp är den arbetsmapp som vi ska importera från och exportera till under en session. Vi behöver dock först veta vilken sökväg som leder oss in till mappen.
 
@@ -148,7 +149,7 @@ knitr::include_graphics("../images/chatgpt.png")
 Exempel på en fråga och svar med ChatGPT
 :::
 
-I exemplet ovan producerar ChatGPT några rader kod som ser ut att fungera, vi måste ange sökvägen till filen i `file_path` och sedan används funktionen `read.csv()` för att läsa in datamaterialet till objektet `data`. ChatGPT är dock **inte bra på att kontrollera sin kod** och inte heller att följa viss praxis vid kodning, vilket innebär att vi aldrig får ta koden som produceras som hel sanning. Istället kan vi använda AI-program som ett sätt att inspireras eller på annat sätt läsa oss olika programmeringskoncept som vi sedan tillämpar på egen hand. 
+I exemplet ovan producerar ChatGPT några rader kod som ser ut att fungera, vi måste ange sökvägen till filen i `file_path` och sedan används funktionen `read.csv()` för att läsa in datamaterialet till objektet `data`. ChatGPT är dock **inte bra på att kontrollera sin kod** och inte heller att följa viss praxis vid kodning, vilket innebär att vi aldrig får ta koden som produceras som hel sanning. Istället kan vi använda AI-program som ett sätt att inspireras eller på annat sätt lära oss olika programmeringskoncept som vi sedan tillämpar på egen hand. 
 
 
 

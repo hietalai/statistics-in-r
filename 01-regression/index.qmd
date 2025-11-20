@@ -7,7 +7,7 @@ Till denna del förutsätts att du har vissa förkunskaper för att ta till dig 
 - kan installera och ladda paket i R
 - kan läsa in data i R i olika filformat, t.ex. `.csv`, `.txt` eller `.xslx`
 - kan databearbetning i R, t.ex. med hjälp av `dplyr`-paketet
-- kan använda "pipes", ` %>% ` eller ` |> `^[Detta material använder sig av ` %>% ` men `|>` bör kunna användas istället i de allra flesta exemplen.]
+- kan använda "pipes", ` |> ` eller ` |> `^[Detta material använder sig av ` |> ` men `|>` bör kunna användas istället i de allra flesta exemplen.]
 - kan skapa visualiseringar i R med hjälp av `ggplot2`-paketet
 
 **Statistik**

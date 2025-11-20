@@ -184,7 +184,7 @@ tibble(
       c("$\\sigma^2$","$\\sigma^2_A$"),
     Skattning =
       c(sigmaEst,sigmaAEst)
-  ) %>% 
+  ) |> 
   kable(
     caption = "Skattade varianser.", 
     digits = 3
