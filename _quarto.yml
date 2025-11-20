@@ -19,28 +19,6 @@ book:
         text: "Varianssanalys"
       - href: 04-time-series/index.qmd
         text: "Tidsserieanalys"
-  # sidebar:
-  #   - title: "Regressionsanalys"
-  #     style: "docked"
-  #     # search: true
-  #     contents:
-  #       - 01-regression/preface.qmd
-  #       - 01-regression/00-intro-regression.qmd
-  #       - 01-regression/01-explorative-analysis.qmd
-  #       - 01-regression/02-model-structure.qmd
-  #       - 01-regression/03-model-assessment.qmd
-  #       - 01-regression/04-statistical-inference.qmd
-  #       - 01-regression/05-simultaneous-inference.qmd
-  #       - 01-regression/06-complex-predictors.qmd
-  #       - 01-regression/07-multicollinearity.qmd
-  #       - 01-regression/08-detailed-residuals.qmd
-  #   - title: "Programmering i R"
-  #     style: "docked"
-  #     # search: true
-  #     contents:
-  #       - 00-programming/00-R-basics.qmd
-  #       - 00-programming/01-packages-and-functions.qmd
-  #       - 00-programming/02-tidyverse.qmd
   chapters: 
     - index.qmd
     - part: "**DEL I - Programmering i R**"
@@ -93,5 +71,3 @@ format:
     # grid: 
     #   sidebar-width: 320px
 
-
-# quarto publish gh-pages
