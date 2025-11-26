@@ -1,11 +1,16 @@
 # DEL IV - Tidsserieanalys
 
-Till denna del förutsätts att du har vissa förkunskaper för att ta till dig materialet på bästa sätt. 
+Till denna del förutsätts att du har vissa rekommenderade förkunskaper för att ta till dig materialet på bästa sätt. 
 
 **Statistik**
+
 - anpassa en multipel linjär regressionsmodell
 - tolka parameterskattningar från en modellanpassning
 - utvärdera lämpligheten av en regressionsmodell utifrån modellens antaganden med hjälp av residualanalys
 
-Känner du att du saknar vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.
+**Programmering**
+
+- grundläggande kunskaper i programmering
+
+En grundläggande genomgång i R visas i @sec-basic-r. Känner du att du saknar vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.
 
