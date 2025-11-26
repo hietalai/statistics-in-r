@@ -1,8 +1,4 @@
----
-editor_options: 
-  chunk_output_type: console
----
-# tidyverse {#sec-tidyverse .unnumbered} 
+# tidyverse {#sec-tidyverse} 
 
 En stor del utav statistisk analys omfattar bearbetning av datamaterial som samlats in till ett format som lämpar sig för olika statistiska analysmetoder. Ett datamaterial som man själv samlar in (*primärdata*) eller datamaterial som hämtas från någon annan källa (*sekundärdata*) är inte alltid strukturerat på det sätt som vi, eller metoderna, önskar. `tidyverse` är en samling paket i R som har en gemensam grund att programmera, både i dess syntax och grammatik. 
 

@@ -4,7 +4,7 @@ format:
     code-fold: false
 ---
 
-# Grunderna i R {.unnumbered}
+# Grunderna i R {#sec-basic-r}
 
 R är ett så kallat open-source programmeringsspråk. Open-source betyder att programmet är gratis att ladda ner och använda, samt att vem som helst har möjlighet att skapa egna, skräddarsydda metoder eller analyser som enkelt kan delas med omvärlden. R har använts av statistiker och analytiker i mer än 20 års tid och många bidrag har byggt upp ett starkt och flexibelt verktyg som kan anpassas för många ändamål.
 

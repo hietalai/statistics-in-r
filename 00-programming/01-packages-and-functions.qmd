@@ -4,7 +4,7 @@ format:
     code-fold: FALSE
 ---
 
-# Paket och funktioner {.unnumbered}
+# Paket och funktioner {#sec-packages}
 Det kommer bli väldigt jobbigt om vi alltid måste skapa data för hand eller beräkna summor som `a + b + c + ...`. Användandet av en programvara ska underlätta de statistiska beräkningarna och i den andan följer här några kapitel om hur R eller RStudio kan hjälpa till.
 
 ## Paket och funktioner
