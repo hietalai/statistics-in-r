@@ -24,7 +24,7 @@ editor_options:
 I @sec-control tog vi upp konceptet om kontrollvariabler, variabler som kan användas för att justera effekten av faktorn av intresse så att vi får parameterskattningar som ligger närmare sanningen. Inom experimentella studier används dessa frekvent för detta ändamål men vi gör skillnad på hur kvalitativa och kvantativa kontrollvariabler påverkar studien.
 
 ## Kovariansanalys {#sec-ancova}
-*Kovariansanalys*^[Även kallad ANACOVA eller ANCOVA för ANalysis of COVAriance.] omfattar en modell där vi har kvantitativa kontrollvariabler, här kallad för *kovariater*, som vi vet på något sätt påverkar responsvariabeln och kanske också den kvalitativa faktorn som studien fokuserar på. 
+**Kovariansanalys**^[Även kallad ANACOVA eller ANCOVA för ANalysis of COVAriance.] omfattar en modell där vi har kvantitativa kontrollvariabler, här kallad för **kovariater**, som vi vet på något sätt påverkar responsvariabeln och kanske också den kvalitativa faktorn som studien fokuserar på. 
 
 Anta att vi vill jämföra olika skottkärror av fyra olika modeller, och bedöma vilken utav modellerna som är lättast att använda och vi mäter tiden det tar att flytta en mängd grus mellan två punkter. Vi kan visualisera relationen mellan de två variablerna i en graf:
 
@@ -167,9 +167,9 @@ anova(model) |>
 Inferens för kovariaten är inte relevant eftersom detta samband inte är intressant för undersökningens syfte utan inkluderas endast för att faktorns samband ska justeras.
 
 ## Randomiserade blockförsök
-I fall där mätenheterna är heterogena men kan delas upp i mindre homogena grupper, är det lämpligt att genomföra ett *randomiserat blockförsök*. Detta motsvarar en kvalitativ kontrollvariabel.
+I fall där mätenheterna är heterogena men kan delas upp i mindre homogena grupper, är det lämpligt att genomföra ett **randomiserat blockförsök**. Detta motsvarar en kvalitativ kontrollvariabel.
 
-Dessa homogena grupperna kallas för *block* och rent praktiskt tilldelas behandlingarna slumpmässigt **inom** varje block. För att relatera detta till urvalsundersökningar kan vi säga att komplett randomisering motsvarar ett OSU och randomiserade blockförsök motsvarar ett stratifierat urval. En modell kan innehålla ett block vars nivåer är en kombination av flera kontrollvariabler **eller** flera kontrollvariabler som separata block.
+Dessa homogena grupperna kallas för **block** och rent praktiskt tilldelas behandlingarna slumpmässigt **inom** varje block. För att relatera detta till urvalsundersökningar kan vi säga att komplett randomisering motsvarar ett OSU och randomiserade blockförsök motsvarar ett stratifierat urval. En modell kan innehålla ett block vars nivåer är en kombination av flera kontrollvariabler **eller** flera kontrollvariabler som separata block.
 
 Modellen som anpassas försöker nu beskriva $Y_{ijk}$ där $i \in {1, \dots, A}$, $j \in {1, \dots, B}$, och $k \in {1, \dots, n_{ij}}$ för A nivåer av faktorn och B olika block. 
 

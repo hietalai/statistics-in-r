@@ -28,12 +28,12 @@ editor_options:
 
 När vi anser oss ha hittat en lämplig modell kan vi fokusera på att tolka modellens resultat avseende populationen. Inom regressionsmodellering kan vi genomföra flera olika typer av statistisk inferens; på hela modellen, på grupper av parametrar, eller på enskilda parametrar. 
 
-Vi kan börja med ett *F-test* för hela modellen för att se ifall minst en parameter är signifikant, att modellen är värd att undersöka vidare, för att sedan genomföra enskilda *t-test* för respektive parameter och bedöma vilka förklarande variabler har en signifikant påverkan på responsvariabeln. Då kvalitativa variabler ofta består utav flera parametrar behöver dessa slås samman för att undersöka variabelns samband vilket vi kan göra med ett *partiellt F-test*.
+Vi kan börja med ett **F-test** för hela modellen för att se ifall minst en parameter är signifikant, att modellen är värd att undersöka vidare, för att sedan genomföra enskilda **t-test** för respektive parameter och bedöma vilka förklarande variabler har en signifikant påverkan på responsvariabeln. Då kvalitativa variabler ofta består utav flera parametrar behöver dessa slås samman för att undersöka variabelns samband vilket vi kan göra med ett **partiellt F-test**.
 
-Innan vi går in på de olika testerna behöver vi presentera *ANOVA*-tabellen som används för att dela upp responsvariabelns variation i modellens olika komponenter; modellens förklarande variabler och feltermen.
+Innan vi går in på de olika testerna behöver vi presentera **ANOVA**-tabellen som används för att dela upp responsvariabelns variation i modellens olika komponenter; modellens förklarande variabler och feltermen.
 
 ## ANOVA {#sec-regression-anova}
-**An**alysis **o**f **Va**riance är en samling metoder som beräknar variationen av olika modellkomponenter. Målet med en modell är att förklara den *totala variationen* i responsvariabeln på bästa sätt. Allting som de förklarande variablerna hjälper till att beskriva kallas för den *förklarade variationen* och det som modellen inte lyckas förklara (felet) är den *oförklarade variationen*.
+**An**alysis **o**f **Va**riance är en samling metoder som beräknar variationen av olika modellkomponenter. Målet med en modell är att förklara den **totala variationen** i responsvariabeln på bästa sätt. Allting som de förklarande variablerna hjälper till att beskriva kallas för den **förklarade variationen** och det som modellen inte lyckas förklara (felet) är den **oförklarade variationen**.
 
 $$
 \underbrace{\mathbf{Y}}_\text{total variation} = \underbrace{\mathbf{X} \boldsymbol{\beta}}_\text{förklarad variation} + \underbrace{\mathbf{E}}_\text{oförklarad variation}
@@ -191,7 +191,7 @@ $$
 F_{test} = \frac{SSR / k}{SSE / (n - (k+1))} = \frac{MSR}{MSE} 
 $$
 
-Testvariabeln följer en *F-fördelning* som styrs av två frihetsgrader; $df1$ från täljaren och $df2$ från nämnaren i beräkningen, det vill säga modellens och felets frihetsgrader. Om $H_0$ är sann kommer testvariabeln bli 0, medan om $H_a$ är sann kommer testvariabeln bli ett stort positivt tal. Eftersom båda medelkvadratsummorna är positiva tal innebär det att kvoten alltid kommer vara positiv och vi kan förkasta $H_0$ om testvariabeln befinner sig nog långt från 0.
+Testvariabeln följer en **F-fördelning** som styrs av två frihetsgrader; $df1$ från täljaren och $df2$ från nämnaren i beräkningen, det vill säga modellens och felets frihetsgrader. Om $H_0$ är sann kommer testvariabeln bli 0, medan om $H_a$ är sann kommer testvariabeln bli ett stort positivt tal. Eftersom båda medelkvadratsummorna är positiva tal innebär det att kvoten alltid kommer vara positiv och vi kan förkasta $H_0$ om testvariabeln befinner sig nog långt från 0.
 
 ```{r}
 #| fig-cap: Olika F-fördelningar och deras frihetsgrader
@@ -421,7 +421,7 @@ $$
 ## Enkla utvärderingsmått {#sec-r-square}
 Bara för att en modell är lämplig, uppfyller modellantaganden och innehåller signifikanta parametrar, betyder det inte att modellen är den bästa som kan skapas eller överhuvudtaget bra. Med hjälp av olika utvärderingsmått kan vi få en överblick på hur bra modellen är.
 
-*Förklaringsgraden* ($R^2$) beskriver hur stor andel av den totala variationen som förklaras av modellens förklarande variabler. Med denna beskrivning kan vi beräkna $R^2$ som:
+**Förklaringsgraden** ($R^2$) beskriver hur stor andel av den totala variationen som förklaras av modellens förklarande variabler. Med denna beskrivning kan vi beräkna $R^2$ som:
 $$
 \begin{aligned}
   R^2 = \frac{SSR}{SST} = 1 - \frac{SSE}{SST}
@@ -438,7 +438,7 @@ $$
 ## Prediktioner {#sec-predictions}
 Prediktioner innebär att vi skattar värdet på Y givet observerade värden på X med hjälp av den anpassade regressionslinjen. Dessa prediktioner kommer falla längsmed linjen vilket ytterligare motiverar att modellen behöver vara lämplig och bra. Vi vill inte att en prediktion i ett område är mer träffsäker än en prediktion i en annan eller att regressionslinjen generellt är en dålig representation av responsvariabeln. 
 
-Modellen utgår från en specifik *definitionsmängd*, de observerade värdena på $\mathbf{X}$, och det är även inom denna mängd som prediktioner bör göras. Det finns vissa tillfällen, till exempel inom tidsserieanalys, där prediktioner görs utanför definitionsmängden men där finns ett beroende i tiden som möjliggör dessa *extrapoleringar*. Inom "vanlig" regression bör vi undvika att extrapolera regressionslinjen utanför definitionsmängden.
+Modellen utgår från en specifik **definitionsmängd**, de observerade värdena på $\mathbf{X}$, och det är även inom denna mängd som prediktioner bör göras. Det finns vissa tillfällen, till exempel inom tidsserieanalys, där prediktioner görs utanför definitionsmängden men där finns ett beroende i tiden som möjliggör dessa **extrapoleringar**. Inom "vanlig" regression bör vi undvika att extrapolera regressionslinjen utanför definitionsmängden.
 
 ### Medelvärdet av Y för givna $\mathbf{X}$
 Om vi är intresserad av det genomsnittliga värdet på responsvariabeln för alla nya observationer med givna värden på $\mathbf{X}$ kan vi skatta $\mu_{Y|{\mathbf{X}_0}}$ där $\mathbf{X}_0$ innehåller värden för den nya observationen.

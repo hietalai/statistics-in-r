@@ -36,7 +36,7 @@ $$ {#eq-penguin-quant}
 Oavsett om modellen innehåller en eller flera förklarande variabler behöver vi alltid ha i åtanke de fem antaganden som presenterades i @sec-model-assumptions framförallt antagandet om linjäritet. Har vi upptäckt icke-linjära samband i de parvisa visualiseringarna räcker det oftast inte med att inkludera en term i modellen. Detta kommer vi återkomma till i @sec-complex-models.
 
 ## Indikatorvariabler {#sec-indicator-variable}
-En regressionsmodell kan inte hantera kvalitativa variabler direkt, exempelvis $\beta_4 \cdot \text{art}$, då variabelns värden beskriver kategorier inte värden från en numerisk skala. Detta gäller även om den kvalitativa variabeln är kodad numerisk. En lutningsparameter beskriver den konstanta förändring i responsvariabeln när den tillhörande förklarande variabeln ökar med en enhet, men en kvalitativ variabel har oftast ingen enhet (ex. nominalskala) och inte heller konstanta förändringar mellan intilliggande värden (ex. ordinalskala). Istället måste vi transformera den kvalitativa variabeln numerisk genom *indikatorvariabler* (även kallad dummyvariabler). 
+En regressionsmodell kan inte hantera kvalitativa variabler direkt, exempelvis $\beta_4 \cdot \text{art}$, då variabelns värden beskriver kategorier inte värden från en numerisk skala. Detta gäller även om den kvalitativa variabeln är kodad numerisk. En lutningsparameter beskriver den konstanta förändring i responsvariabeln när den tillhörande förklarande variabeln ökar med en enhet, men en kvalitativ variabel har oftast ingen enhet (ex. nominalskala) och inte heller konstanta förändringar mellan intilliggande värden (ex. ordinalskala). Istället måste vi transformera den kvalitativa variabeln numerisk genom **indikatorvariabler** (även kallad dummyvariabler). 
 
 Som namnet antyder används indikatorvariabler för att indikera vilken kategori en observation har uppmätt på den kvalitativa variabeln. Vi behöver då skapa en begränsad mängd indikatorvariabler som på ett tydligt sätt visar exakt en kategori per observation. 
 
@@ -56,7 +56,7 @@ $$
 $$
 Nu skulle det vara lätt att fortsätta, att skapa en indikatorvariabel även för den sista kategorin, men det behövs inte. Om båda indikatorvariablerna är 0 har vi lyckats identifiera att observationen uppmätt kategori C och ytterligare en variabel är bara onödig information. 
 
-Den sista kategorin blir också vår *referenskategori*, den kategori som de andra indikatorvariablernas effekter tolkas gentemot. När vi tolkar lutningsparametrar för indikatorvariabler, till exempel indikatorvariabeln för A, mäts förändringen i $Y$ när $X = A$ jämfört med när $X = C$.
+Den sista kategorin blir också vår **referenskategori**, den kategori som de andra indikatorvariablernas effekter tolkas gentemot. När vi tolkar lutningsparametrar för indikatorvariabler, till exempel indikatorvariabeln för A, mäts förändringen i $Y$ när $X = A$ jämfört med när $X = C$.
 
 ::: {.callout-important}
 Rent matematiskt kommer tre indikatorvariabler modellera ett perfekt samband och skapa problem med singularitet i beräkningarna.
@@ -114,9 +114,9 @@ där
 Viss litteratur använder $\hat{\beta}$ som beteckning för skattade parametrar.
 :::
 
-Modellen anpassas med hjälp av *minsta kvadratskattningen* (eng. **O**rdinary **L**east **S**quares, OLS), där syftet är att minimera modellens totala fel. Vi kan notera att @eq-penguin-est-simple saknar feltermen $E$ som inkluderas tidigare, vilket kommer från att den anpassade modellen endast består av regressionslinjen. Kom ihåg att en regressionsmodell ämnar att ge en förenkling av verkligheten. Men $E$ beskrev ju felet i modellen och om vi ska minimera det totala felet behöver vi på något sätt ta hänsyn till denna term i modellanpassningen.
+Modellen anpassas med hjälp av **minsta kvadratskattningen** (eng. **O**rdinary **L**east **S**quares, OLS), där syftet är att minimera modellens totala fel. Vi kan notera att @eq-penguin-est-simple saknar feltermen $E$ som inkluderas tidigare, vilket kommer från att den anpassade modellen endast består av regressionslinjen. Kom ihåg att en regressionsmodell ämnar att ge en förenkling av verkligheten. Men $E$ beskrev ju felet i modellen och om vi ska minimera det totala felet behöver vi på något sätt ta hänsyn till denna term i modellanpassningen.
 
-Anta att vi anpassar en modell enbart på kroppsvikt och näbblängd. Om vi skulle projicera den anpassade enkla linjära modellen i ett spridningsdiagram över de två variablerna (@fig-reg-errors) skulle linjen inte lyckas träffa alla punkter exakt, varje enskilda observation kommer ligga ett visst avstånd från regressionslinjen. Detta avstånd är observationens *residual* som betecknas med $e_i$.
+Anta att vi anpassar en modell enbart på kroppsvikt och näbblängd. Om vi skulle projicera den anpassade enkla linjära modellen i ett spridningsdiagram över de två variablerna (@fig-reg-errors) skulle linjen inte lyckas träffa alla punkter exakt, varje enskilda observation kommer ligga ett visst avstånd från regressionslinjen. Detta avstånd är observationens **residual** som betecknas med $e_i$.
 
 ```{r}
 #| fig-cap: Visualisering av regressionsmodellens residualer
@@ -181,7 +181,7 @@ $$
 $$
 :::
 
-Vi kan också använda den anpassade modellen för att *prediktera* nya värden på responsvariabeln för nya observationer. Från den anpassade regressionslinjen byter vi ut respektive variabel med observationens faktiska värde och får till slut en enkel summa som beskriver responsvariabelns värde på linjen. Mer om hur prediktioner används i relation till populationen tas upp i @sec-predictions.
+Vi kan också använda den anpassade modellen för att **prediktera** nya värden på responsvariabeln för nya observationer. Från den anpassade regressionslinjen byter vi ut respektive variabel med observationens faktiska värde och får till slut en enkel summa som beskriver responsvariabelns värde på linjen. Mer om hur prediktioner används i relation till populationen tas upp i @sec-predictions.
 
 ### Modellanpassning i R {#sec-model-fit-example}
 För att anpassa en linjär regressionsmodell i R används funktionen `lm()` med följande argument: 
@@ -213,7 +213,7 @@ simpleModel <- lm(formula = bill_length_mm ~ ., data = modelData)
 
 ```
 
-Med `summary()` får vi en detaljerad utskrift för modellen som inkluderar de anpassade *regressionskoefficienterna*. Vid presentation av en sådan utskrift kan vi använda `kable()` eller `xtable()` för att få en snyggare utskrift.
+Med `summary()` får vi en detaljerad utskrift för modellen som inkluderar de anpassade **regressionskoefficienterna**. Vid presentation av en sådan utskrift kan vi använda `kable()` eller `xtable()` för att få en snyggare utskrift.
 
 ::: {#fig-reg-summary-bad}
 ```{r}
@@ -272,7 +272,7 @@ Det är också användbart att använda `str()` på lm-objekt. Kolla i `?lm()` u
 
 Indikatorvariablerna tolkas inom sin grupp jämfört med referenskategorin, till exempel har Gentoo-pingviner i genomsnitt en 6.4 mm större näbblängd än referenskategorin Adelie-pingviner givet att alla andra variabler hålls konstanta.
 
-Interceptet är endast relevant att tolka om *värdemängden* är alla 0, det vill säga att data täcker det område där alla förklarande variabler antar värdet 0. I just detta exempel finns det inte data över dessa områden vilket medför att värdet på interceptet inte har någon rimlig tolkning. 
+Interceptet är endast relevant att tolka om **värdemängden** är alla 0, det vill säga att data täcker det område där alla förklarande variabler antar värdet 0. I just detta exempel finns det inte data över dessa områden vilket medför att värdet på interceptet inte har någon rimlig tolkning. 
 
 ::: {.callout-important}
 Även om tolkningen av interceptet inte blir rimlig **måste** interceptet inkluderas i modellanpassningen för att minsta kvadratskattningen ska minimera SSE. Om interceptet hade plockats bort motsvarar det en linje som tvingas att korsa y-axeln vid $y = 0$ vilket resulterar i att modellen inte beskriver de fenomen som vi vill att den ska beskriva.
@@ -289,7 +289,7 @@ där,
 $$
     \mathbf{Y} = \underset{n \times 1}{\Ymatrix} \quad \mathbf{X} = \underset{n \times p}{\Xmatrix} \quad \boldsymbol{\beta} = \underset{p \times 1}{\betamatrix} \quad \mathbf{E} = \underset{n \times 1} {\Ematrix}
 $$
-$\mathbf{X}$ kallas för *designmatrisen* och innehåller alla $k$ förklarande variabler, en kolumn för varje, samt en första kolumn med 1:or som motsvarar interceptet. Indikatorvariabler adderar till antalet förklarande variabler trots att de utgår ifrån samma kvalitativa variabel, se @eq-penguin-full-simple där vi totalt har 6 förklarande variabler. $p$ beskriver antalet parametrar, motsvarande $k + 1$ antalet lutningsparametrar + interceptet, och $n$ är antalet observationer.
+$\mathbf{X}$ kallas för **designmatrisen** och innehåller alla $k$ förklarande variabler, en kolumn för varje, samt en första kolumn med 1:or som motsvarar interceptet. Indikatorvariabler adderar till antalet förklarande variabler trots att de utgår ifrån samma kvalitativa variabel, se @eq-penguin-full-simple där vi totalt har 6 förklarande variabler. $p$ beskriver antalet parametrar, motsvarande $k + 1$ antalet lutningsparametrar + interceptet, och $n$ är antalet observationer.
 
 Skattningen av $\hat{\boldsymbol{\beta}}$ minimerar fortfarande SSE där:
 $$

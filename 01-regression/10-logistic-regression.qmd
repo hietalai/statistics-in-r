@@ -22,14 +22,14 @@ editor_options:
 <!-- CONTENT -->
 # Logistisk regression
 
-De tidigare kapitlen har fokuserat på modeller där responsvariabeln antas vara kvantitativ och kontinuerlig. Dessa modeller är begränsade till just detta fall men det går med enkla transformeringar att utöka modellerna att också anpassa modeller där responsvariabeln är en annan variabeltyp eller följer en annan skala. En utav dessa utökningar kallas för *logistisk regression* som modellerar en binär (två kategorier) kvalitativ responsvariabel. 
+De tidigare kapitlen har fokuserat på modeller där responsvariabeln antas vara kvantitativ och kontinuerlig. Dessa modeller är begränsade till just detta fall men det går med enkla transformeringar att utöka modellerna att också anpassa modeller där responsvariabeln är en annan variabeltyp eller följer en annan skala. En utav dessa utökningar kallas för **logistisk regression** som modellerar en binär (två kategorier) kvalitativ responsvariabel. 
 
-Utöver att modellen anpassar en annan form av responsvariabel behöver vi också justera hur vi kommer fram till modellens anpassade värden. Inom linjär regression är minsta kvadratmetoden den absolut enklaste anpassningsmetoden med simpla formler för att skatta modellens parametrar, men även *maximum likelihoodmetoden* (ML) kan användas med hjälp av en *iterativ optimeringsalgoritm* för att finna de parameterskattningar som motsvarar minsta kvadratmetoden. Fördelen med att använda ML-metoder i modellanpassningen är att metoden kan användas för mer komplexa modeller, däribland logistisk regression.
+Utöver att modellen anpassar en annan form av responsvariabel behöver vi också justera hur vi kommer fram till modellens anpassade värden. Inom linjär regression är minsta kvadratmetoden den absolut enklaste anpassningsmetoden med simpla formler för att skatta modellens parametrar, men även **maximum likelihoodmetoden** (ML) kan användas med hjälp av en **iterativ optimeringsalgoritm** för att finna de parameterskattningar som motsvarar minsta kvadratmetoden. Fördelen med att använda ML-metoder i modellanpassningen är att metoden kan användas för mer komplexa modeller, däribland logistisk regression.
 
 ## Binär responsvariabel
-Med en binär responsvariabel är det vanligast att vi kodar variabeln med 0 och 1, exempel: Om patienten tillfrisknade inom studieperioden så anger vi $Y_i = 1$ annars $Y_i = 0$. Inom statistik och maskininlärning kallar vi problem där vi har en kvalitativ reponsvariabel för *klassificering* där målet är att skapa en modell som kan ge så många korrekta klassificeringar (predikterade klasser) som möjligt utan att *misklassificera* observationer till fel klasser.
+Med en binär responsvariabel är det vanligast att vi kodar variabeln med 0 och 1, exempel: Om patienten tillfrisknade inom studieperioden så anger vi $Y_i = 1$ annars $Y_i = 0$. Inom statistik och maskininlärning kallar vi problem där vi har en kvalitativ reponsvariabel för **klassificering** där målet är att skapa en modell som kan ge så många korrekta klassificeringar (predikterade klasser) som möjligt utan att **misklassificera** observationer till fel klasser.
 
-Istället för att anta att $Y|X \sim N(...)$, antar vi istället att $Y|X \sim Bernoulli(...)$. Väntevärdet som modeller anpassar kommer inte längre direkt vara ett värde på responsvariabelns skala utan vi anser oss modellera *sannolikheten* att observationen antar värdet 1: 
+Istället för att anta att $Y|X \sim N(...)$, antar vi istället att $Y|X \sim Bernoulli(...)$. Väntevärdet som modeller anpassar kommer inte längre direkt vara ett värde på responsvariabelns skala utan vi anser oss modellera **sannolikheten** att observationen antar värdet 1: 
 
 $$
 \begin{aligned}
@@ -60,7 +60,7 @@ $$
 $$
 där värden på $Y_i$ täcker hela den reella tallinjen ($Y \in \mathbb{R}$). $\mathbf{X}_i'$ är den i:te raden från designmatrisen angiven som en kolumnvektor, därav behovet av att transponera till en radvektor.
 
-En sannolikhet antar bara värden mellan 0 och 1, dvs. $\pi \in [0,1]$, så vårt mål är att tvinga in den linjära regressionsmodellen från hela tallinjen till utfallsrummet $[0,1]$. Detta kan lösas med hjälp utav den *logistiska funktionen* som kan uttryckas på två olika sätt:
+En sannolikhet antar bara värden mellan 0 och 1, dvs. $\pi \in [0,1]$, så vårt mål är att tvinga in den linjära regressionsmodellen från hela tallinjen till utfallsrummet $[0,1]$. Detta kan lösas med hjälp utav den **logistiska funktionen** som kan uttryckas på två olika sätt:
 
 $$
 \begin{aligned}
@@ -106,9 +106,6 @@ $$
 $$
 
 För en enkel logistisk regression innehållande en kontinuerlig förklarande variabel kan vi se följande effekter på den logistiska funktionens form givet olika parametervärden.
-
-
-
 
 I den enkla logistiska regressionsmodellen (med en förklarande variabel) kan vi se hur olika parameterskattningar påverkar denna form. I följande kod skapar vi fem olika linjära modeller med olika värden på interceptet och lutningen.
 
@@ -165,16 +162,16 @@ ggplot(data) + aes(x = x, y = py) + geom_line(linewidth = 1, color = "steelblue"
 
 Beroende på parametervärdena får denna så kallade sigmoidkurva (kurvan ser ut som ett S) olika former. 
 
-- z1: Med ett intercept på 0 hamnar punkten där kurvans sannolikhet är 0.5 vid värdet $Z_i = 0$. 
-- z2: När vi ändrar på $\beta_0$ flyttas också interceptet i den logistiska funktionen, ett positivt intercept innebär att kurvans sannolikhet är större än 0.5 vid värdet $Z_i = 0$. 
-- z3: När $\beta_1$ blir brantare blir också den logistiska funktionen brantare och vi hamnar snabbare ute i extremerna, 0 och 1. 
-- z4: När $\beta_1$ är svag eller ligger nära 0 blir den logistiska funktionen mindre brant och vid 0 visas ingen förändring av sannolikheten. Vi kan jämföra detta med att i ett binärt fall vi har chansen att gissa rätt på 1 eller 0 hälften av tiden av ren slump. Om en variabel som vi lägger till i modellen inte bidrar med någon information, kvarstår denna rena gissning.
-- z5: En negativ $\beta_1$ innebär att sannolikheten blir mindre ju större värden på $Z_i$ vi har, vi vänder alltså på sigmoidkurvan. 
+- `z1`: Med ett intercept på 0 hamnar punkten där kurvans sannolikhet är 0.5 vid värdet $Z_i = 0$. 
+- `z2`: När vi ändrar på $\beta_0$ flyttas också interceptet i den logistiska funktionen, ett positivt intercept innebär att kurvans sannolikhet är större än 0.5 vid värdet $Z_i = 0$. 
+- `z3`: När $\beta_1$ blir brantare blir också den logistiska funktionen brantare och vi hamnar snabbare ute i extremerna, 0 och 1. 
+- `z4`: När $\beta_1$ är svag eller ligger nära 0 blir den logistiska funktionen mindre brant och vid 0 visas ingen förändring av sannolikheten. Vi kan jämföra detta med att i ett binärt fall vi har chansen att gissa rätt på 1 eller 0 hälften av tiden av ren slump. Om en variabel som vi lägger till i modellen inte bidrar med någon information, kvarstår denna rena gissning.
+- `z5`: En negativ $\beta_1$ innebär att sannolikheten blir mindre ju större värden på $Z_i$ vi har, vi vänder alltså på sigmoidkurvan. 
 
 ### Logitlänken
-Med hjälp av *länkfunktioner* kan vi plocka fram den linjära modellen från den logistiska funktionen och andra varianter av funktioner som bygger vidare på den linjära modellen. Generellt kan vi säga att en länkfunktion är den transformering som sker från den linjära modellen till den modell som beskriver den icke-kontinuerliga responsvariabeln.
+Med hjälp av **länkfunktioner** kan vi plocka fram den linjära modellen från den logistiska funktionen och andra varianter av funktioner som bygger vidare på den linjära modellen. Generellt kan vi säga att en länkfunktion är den transformering som sker från den linjära modellen till den modell som beskriver den icke-kontinuerliga responsvariabeln.
 
-För logistisk regression används *logitlänken*:
+För logistisk regression används **logitlänken**:
 $$
 \begin{aligned}
   log\left( \frac{\pi_i}{1 - \pi_i}\right) = Z_i = \mathbf{X}_i'\boldsymbol{\beta} 
@@ -183,7 +180,7 @@ $$
 
 I denna litteratur betecknar $log()$ alltid den naturliga logaritmen^[Detta gäller också för litteratur om regression och statistik i allmänhet. I de mer ovanliga fall när logaritmer med andra baser används brukar det anges explicit, ex. $log_2(x)$.]. Vi kan uttrycka det som att den logistiska regresionssmodellen är linjär i sin logitlänk för sannolikheten $\pi$. 
 
-Denna länk visar också hur vi bör tolka parametrar från den linjära modellen. Uttrycket inuti logaritmen beskriver ett *odds*, sannolikheten att något inträffar dividerat med sannolikheten att något inte inträffar, specifikt oddset att $Y_i = 1$. Den linjära modellen beskriver då *logodds* och en lutningsparameter beskriver en förändring i logodds, även kallad en *oddskvot*, som vi kommer återkomma till senare.
+Denna länk visar också hur vi bör tolka parametrar från den linjära modellen. Uttrycket inuti logaritmen beskriver ett **odds**, sannolikheten att något inträffar dividerat med sannolikheten att något inte inträffar, specifikt oddset att $Y_i = 1$. Den linjära modellen beskriver då **logodds** och en lutningsparameter beskriver en förändring i logodds, även kallad en **oddskvot**, som vi kommer återkomma till senare.
 
 ## Logistisk regression
 Till skillnad från vanlig linjär regression kan vi inte längre använda minsta kvadratmetoden för att skatta modellens parametrar då vi inte längre har en linjär relation mellan de förklarande och responsvariabeln. Istället behöver vi använda responsvariabelns (log)likelihoodfunktion och iterativt optimera för att hitta de parametervärden som genererar det högsta värdet på funktionen.
@@ -207,7 +204,7 @@ $$
 Denna funktion optimeras numeriskt, vanligtvis med Fisher Scoring Algorithm^[En algoritm som använder andraderivator för att succestivt hitta bättre värden för $\boldsymbol{\beta}$. För mer detaljer, se \url{https://en.wikipedia.org/wiki/Scoring_algorithm}.]. Det är denna algoritm som R använder sig utav när vi en logistisk regressionsmodell anpassas.
 
 ### `glm()`
-`glm()` används för att anpassa *generaliserade* linjära modeller, en mer flexibel typ av linjära modeller. Med hjälp av argumentet `family` kan vi ange vilken fördelning och länkfunktion som vi anser responsvariabeln behöver för att transformera den linjära modellen till den aktuella modellen för responsvariabeln. 
+`glm()` används för att anpassa **generaliserade** linjära modeller, en mer flexibel typ av linjära modeller. Med hjälp av argumentet `family` kan vi ange vilken fördelning och länkfunktion som vi anser responsvariabeln behöver för att transformera den linjära modellen till den aktuella modellen för responsvariabeln. 
 
 Objektet som `glm()` returnerna har många liknande delobjekt som `lm()`. Det går även att använda liknande funktioner såsom `summary()`, `coef()`, och `residuals()` för att plocka ut enskilda objekt som vi är vana vid att göra. Däremot kommer dessa objekt inte tolkas på samma sätt som vi har gjort i tidigare kapitel då vi måste ta hänsyn till den förändrade modellstrukturen.
 
@@ -229,7 +226,7 @@ summary(model)
 
 ```
 
-I summary-utskriften får vi nu annan information än vad vi är vana vid. Koefficienttabellen finns fortfarande kvar med lite andra rubriker, men sedan saknas en modellutvärdering som vi är van att se. Istället presenteras modellens *devians*, ett tillhörande AIC-värde och ett resultat från optimeringsalgoritmen. I och med att vi nu genomför optimering måste vi kontrollera att optimeringen faktiskt har *konvergerat*, det vill säga nått sitt maximum, vilket innebär att vi behöver vara uppmärksamma på fel- eller varningsmeddelanden som R ger oss relaterat till konvergensen. I detta fall funkade allting utan problem och optimeringen har konvergerat efter 7 iterationer.
+I summary-utskriften får vi nu annan information än vad vi är vana vid. Koefficienttabellen finns fortfarande kvar med lite andra rubriker, men sedan saknas en modellutvärdering som vi är van att se. Istället presenteras modellens **devians**, ett tillhörande AIC-värde och ett resultat från optimeringsalgoritmen. I och med att vi nu genomför optimering måste vi kontrollera att optimeringen faktiskt har **konvergerat**, det vill säga nått sitt maximum, vilket innebär att vi behöver vara uppmärksamma på fel- eller varningsmeddelanden som R ger oss relaterat till konvergensen. I detta fall funkade allting utan problem och optimeringen har konvergerat efter 7 iterationer.
 
 :::{.callout-important}
 Om en modell inte konvergerar kan vi öka antalet iterationer vi tillåter optimeringsalgoritmen att gå innan den stannar. Vi behöver då lägga till `glm(..., control = list(maxit = 50))` eller något annat större värde. Standardargumentet är att algoritmen genomför 25 iterationer.
@@ -263,12 +260,12 @@ $$
 $$
 
 #### Inferens
-Givet att en lämplig likelihoodfunktion används och 'nog stort data' anses testvariabeln $\left(Z = \frac{\hat{\beta}_j - \beta_j}{SE_{\hat{\beta}_j}}\right)$ följa en standardiserad normalfördelning. Detta kallas för ett *Wald-test* och är de tester som vi ser i koefficienttabellen.^[Vi kan också använda att $Z^2 \approx \chi^2_{df = 1}$ om $n$ är stor.] Medelfelen för respektive parametrar tas från kovariansmatrisen för $\hat{\boldsymbol{\beta}}$ som beräknas genom att använda andraderivator från likelihoodfunktionen vilket medför att vi kan skapa tester och intervallskattningar för $\boldsymbol{\beta}$.
+Givet att en lämplig likelihoodfunktion används och 'nog stort data' anses testvariabeln $\left(Z = \frac{\hat{\beta}_j - \beta_j}{SE_{\hat{\beta}_j}}\right)$ följa en standardiserad normalfördelning. Detta kallas för ett **Wald-test** och är de tester som vi ser i koefficienttabellen.^[Vi kan också använda att $Z^2 \approx \chi^2_{df = 1}$ om $n$ är stor.] Medelfelen för respektive parametrar tas från kovariansmatrisen för $\hat{\boldsymbol{\beta}}$ som beräknas genom att använda andraderivator från likelihoodfunktionen vilket medför att vi kan skapa tester och intervallskattningar för $\boldsymbol{\beta}$.
 
 ## Utvärdering av logistisk regression
 I vanlig regression kan vi utvärdera modellens lämplighet genom residualanalys där vi jämför $Y_i - \hat{Y}_i$ och undersöker om residualerna uppfyller modellantaganden. I logistisk regression kommer den observerade responsvariabeln bara anta två värden, 1 och 0, och modellens anpassade värden anta värden mellan 0 och 1 vilket innebär att vanliga residualer inte längre jämför samma sorts variabel. 
 
-I ett klassificeringsproblem kan vi istället jämföra de observerade klasserna för $Y$ med predikterade klasser $\hat{Y}$ i en korstabell, även kallad *förväxlingsmatris*. Eftersom modellen egentligen predikterar en sannolikhet för $Y = 1$ och inte den faktiska klassen behöver vi gå ett steg längre för att faktiskt kunna skapa förväxlingsmatrisen. Vi kan tänka att sannolikheter större än 0.5 innebär att $Y = 1$ är mer sannolikt att inträffa än $Y = 0$ vilket leder oss till att också prediktera den klassen för dessa observationer, $\hat{Y} = 1$. 
+I ett klassificeringsproblem kan vi istället jämföra de observerade klasserna för $Y$ med predikterade klasser $\hat{Y}$ i en korstabell, även kallad **förväxlingsmatris**. Eftersom modellen egentligen predikterar en sannolikhet för $Y = 1$ och inte den faktiska klassen behöver vi gå ett steg längre för att faktiskt kunna skapa förväxlingsmatrisen. Vi kan tänka att sannolikheter större än 0.5 innebär att $Y = 1$ är mer sannolikt att inträffa än $Y = 0$ vilket leder oss till att också prediktera den klassen för dessa observationer, $\hat{Y} = 1$. 
 
 När vi skapar förväxlingsmatrisen räknar räknar frekvenserna av antalet $Y = 1$ som blivit predikterade till de olika klasserna $\hat{Y} = 1$ ($f_{11}$) och $\hat{Y} = 0$ ($f_{10}$) och antalet $Y = 0$ som blivit predikterade till respektive klass ($f_{01}$ och $f_{00}$).
 
@@ -302,7 +299,7 @@ När vi skapar förväxlingsmatrisen räknar räknar frekvenserna av antalet $Y 
 
 I R kan en sådan tabell enkelt fås fram genom `table(y, yHat)` där `y` innehåller de sanna värdena och `yHat` innehåller prediktionerna. Notera att dessa vektorer måste ha samma observationsordning för att korstabellen ska blir korrekt. Utifrån förväxlingsmatrisen kan ett antal utvärderingsmått beräknas som fokuserar på olika aspekter av modellens prestanda.
 
-De två enklaste måtten är andelen korrekta prediktioner och andelen felaktiga prediktioner. Vi kallar andelen korrekta prediktioner för modellens *träffsäkerhet* (eng. Accuracy) och andelen felaktiga prediktioner för modellens *felkvot* (eng. Misclassification rate).
+De två enklaste måtten är andelen korrekta prediktioner och andelen felaktiga prediktioner. Vi kallar andelen korrekta prediktioner för modellens **träffsäkerhet** (eng. Accuracy) och andelen felaktiga prediktioner för modellens **felkvot** (eng. Misclassification rate).
 
 $$
 \begin{aligned}
@@ -310,11 +307,11 @@ $$
   \text{Felkvot} &= \frac{f_{10} + f_{01}}{n} = \frac{f_{10} + f_{01}}{f_{11} + f_{10} + f_{01} + f_{00}} = 1 - \text{Träffsäkerhet} \\
 \end{aligned}
 $$
-När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas. Problemet med att bara använda dessa mått som en indikation på modellens prestanda är att de lätt kan missa att modellen fokuserar sin anpassning på att prediktera en av klasserna bra. När vi arbetar med klassificering så spelar andelen av vår data som tillhör vardera klass roll, detta kallas för *klassbalanser*. När vi ska modellera en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda. 
+När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas. Problemet med att bara använda dessa mått som en indikation på modellens prestanda är att de lätt kan missa att modellen fokuserar sin anpassning på att prediktera en av klasserna bra. När vi arbetar med klassificering så spelar andelen av vår data som tillhör vardera klass roll, detta kallas för **klassbalanser**. När vi ska modellera en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda. 
 
 Om andelarna är balanserade, det vill säga nära 50% för de båda andelarna, kommer modellen ha lika mycket information om de båda klasserna och kan förmodligen anpassa en modell som tar hänsyn till att vi vill prediktera båda klasserna rätt. Om andelarna däremot är olika stora kommer problemet att modellera $P(Y = 1)$ bli svårare, och svårighetsgraden avgörs av hur stor skillnad det är mellan andelarna. Om det är stor skillnad på andelarna säger vi att vi har *obalanserade klasser* vilket leder till svårigheter att hitta en bra och meningsfull modell. Exempelvis om vi har 95% 0:or och 5% 1:or kanske modellen tycker att den bästa prediktionen vi kan göra är att säga att alla observationer är 0, för då blir träffsäkerheten 95%.
 
-Vi behöver därför titta på flera mått för att avgöra om modellen är överlag bra eller kanske bara fokuserar på att modellera den ena av klasserna. Med fokus på $Y = 1$ beskriver *sensitiviteten* (eng. True Positive Rate, sensitivity, recall) hur stor andel av de observerade 1:orna som faktiskt också predikterades som 1:or. Motsatsen är *specificiteten* (eng. True Negative Rate, specificity) som beskriver hur stor andel obsrverade icke-1:or som också predikterades som icke-1:or.
+Vi behöver därför titta på flera mått för att avgöra om modellen är överlag bra eller kanske bara fokuserar på att modellera den ena av klasserna. Med fokus på $Y = 1$ beskriver **sensitiviteten** (eng. True Positive Rate, sensitivity, recall) hur stor andel av de observerade 1:orna som faktiskt också predikterades som 1:or. Motsatsen är **specificiteten** (eng. True Negative Rate, specificity) som beskriver hur stor andel observerade icke-1:or som också predikterades som icke-1:or.
 
 $$
 \begin{aligned}
@@ -417,7 +414,7 @@ Om våra utvärderingsmått är allmänt dåliga så är det inte relevant att g
 ## Likelihoodkvottest
 Ytterligare en metod vi kan använda att utvärdera modeller, utöver förväxlingsmatrisen och dess mått eller AIC, är modellens likelihood. Likt när vi jämför den förklarande variationen mellan modeller i linjär regression kan vi anse en skillnad i likelihood beskriva hur mycket en eller flera variabler tillför till modellen, och likt ett partiellt F-test kan vi genomföra inferens på denna skillnad i likelihood.
 
-Hypoteserna som undersöks formuleras på samma sätt som i ett partiellt F-test, i $H_0$ anges de alla lika med 0 och mothypotesen är att minst en av parametrarna är signifikant skild från 0. Vi kan därefter definiera en komplett och reducerad modell som båda har ett tillhörande likelihood-värde, alltså hur troligt modellens parametrar har genererat det observerade data. Om vi sedan jämför dessa två likelihood får vi en bedömning av hur stor skillnaden är i relation till den kompletta modellens värde, därav namnet *likelihoodkvottest* (eng. Likelihood ratio test).
+Hypoteserna som undersöks formuleras på samma sätt som i ett partiellt F-test, i $H_0$ anges de alla lika med 0 och mothypotesen är att minst en av parametrarna är signifikant skild från 0. Vi kan därefter definiera en komplett och reducerad modell som båda har ett tillhörande likelihood-värde, alltså hur troligt modellens parametrar har genererat det observerade data. Om vi sedan jämför dessa två likelihood får vi en bedömning av hur stor skillnaden är i relation till den kompletta modellens värde, därav namnet **likelihoodkvottest** (eng. Likelihood ratio test).
 
 $$
 \begin{aligned}

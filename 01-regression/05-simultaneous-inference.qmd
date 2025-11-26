@@ -21,7 +21,7 @@ editor_options:
 
 <!-- CONTENT -->
 # Simultan inferens {#sec-family-confidence}
-När en modell har undersökts med hjälp av residualanalys och statistisk inferens och vi kommit fram till att den är en lämplig och bra förenkling av verkligheten, kan vi börja använda den för att dra lärdomar om sambandet och prediktera nya observationer. Vi har i @sec-stat-inference redan fått några lärdomar om hur sambandet mellan vissa variabler ser ut men om vi vill tolka flera parametrar från modellen samtidigt bör vi tillämpa någon form av *simultan inferens*. En utav regressionsmodellers huvudsakliga användningsområden är att *prediktera* nya observationer. Till exempel kan responsvariabeln vara väldigt kostsam att mäta jämfört med de förklarande variablerna. Då kan en lämplig och bra regressionsmodellen minska kostnaderna genom att intervallskatta värdet på responsvariabeln utifrån givna värden på de förklarande variablerna. Prediktioner kan också användas för beslutsunderlag, till exempel kan en regressionsmodell ge information om förväntade inkomster givet en viss reklambudget.
+När en modell har undersökts med hjälp av residualanalys och statistisk inferens och vi kommit fram till att den är en lämplig och bra förenkling av verkligheten, kan vi börja använda den för att dra lärdomar om sambandet och prediktera nya observationer. Vi har i @sec-stat-inference redan fått några lärdomar om hur sambandet mellan vissa variabler ser ut men om vi vill tolka flera parametrar från modellen samtidigt bör vi tillämpa någon form av **simultan inferens**. En utav regressionsmodellers huvudsakliga användningsområden är att **prediktera** nya observationer. Till exempel kan responsvariabeln vara väldigt kostsam att mäta jämfört med de förklarande variablerna. Då kan en lämplig och bra regressionsmodellen minska kostnaderna genom att intervallskatta värdet på responsvariabeln utifrån givna värden på de förklarande variablerna. Prediktioner kan också användas för beslutsunderlag, till exempel kan en regressionsmodell ge information om förväntade inkomster givet en viss reklambudget.
 
 ## Simultan inferens
 När en modell innehåller flera förklarande variabler, alla med minst en tillhörande lutningsparameter, kommer vi genomföra flera inferensberäkningar om vi vill dra slutsatser om flera parametrar eller intervallskatta prediktioner för flera nya observationer. Varje hypotesprövning eller intervallskattning som beräknas utgår från att vi alltid har en risk att fatta fel beslut, vilket innebär att denna risk inflateras ju fler parametrar eller värden som undersöks med enskilda beräkningar. Typ I felet (signifikansnivån) beskriver risken att förkasta en sann $H_0$.
@@ -191,7 +191,7 @@ $t_{n-(k+1); 1 - \alpha/(2\cdot g)}$ brukar också anges som $B$. När $g$ är s
 Om vi är intresserade av att prediktera flera nya observationer kommer vi behöva använda simultan inferens för att samtidigt dra slutsatser om de alla.
 
 ### Skattning av flera konfidensintervall
-Om vi vill beräkna konfidensband för hela regressionslinjen, i.e. $\mu_Y$ för alla punkter av $\mathbf{X}$, kan *Working-Hotelling*:s metod skapa denna region. Strukturen från formel @eq-interval-base ger då följande formel:
+Om vi vill beräkna konfidensband för hela regressionslinjen, i.e. $\mu_Y$ för alla punkter av $\mathbf{X}$, kan **Working-Hotelling**:s metod skapa denna region. Strukturen från formel @eq-interval-base ger då följande formel:
 
 $$
 \begin{aligned}
@@ -212,7 +212,7 @@ där $B = t_{n-(k+1); 1 - \alpha/(2\cdot g)}$
 @eq-interval-working-hotelling ger generellt smalare intervall än @eq-interval-bonf-y då $W$ är samma värde oavsett hur många intervall som skattas medan $B$ ökar med antalet $g$. 
 
 ### Skattning av flera prediktionsintervall
-För enstaka nya observationer beräknas istället prediktionsintervall vilket innebär att skattningens medelfel förändras. Metoder för att beräkna $g$ prediktionsintervall är *Scheffé* och *Bonferronis* metoder.
+För enstaka nya observationer beräknas istället prediktionsintervall vilket innebär att skattningens medelfel förändras. Metoder för att beräkna $g$ prediktionsintervall är **Scheffé** och **Bonferronis** metoder.
 
 Scheffés metod:
 \begin{align}

@@ -32,7 +32,7 @@ Efter att vi har anpassat en modell baserat på iakttagelser från visualisering
 - vi kan inte anse att dessa tolkningar beskriver det sanna sambandet då vi ännu inte vet om modellen är lämplig,
 - dessa tolkningar beskriver endast urvalet som samlats in, inte den population som vi vill dra slutsatser om.
 
-För att kunna bedöma lämpligheten av modellen måste vi undersöka huruvida modellen uppfyller de antaganden som presenterades i @sec-model-assumptions genom *residualanalys* och slutsatser om populationen kan göras med hjälp av statistisk inferens. Vi börjar alltid med att undersöka modellens lämplighet eftersom inferensmetodernas beräkningar också förutsätter att dessa antaganden är uppfyllda. 
+För att kunna bedöma lämpligheten av modellen måste vi undersöka huruvida modellen uppfyller de antaganden som presenterades i @sec-model-assumptions genom **residualanalys** och slutsatser om populationen kan göras med hjälp av statistisk inferens. Vi börjar alltid med att undersöka modellens lämplighet eftersom inferensmetodernas beräkningar också förutsätter att dessa antaganden är uppfyllda. 
 
 ## Residualanalys {#sec-residual-simple}
 Residualanalys innebär att beräkna och visuellt utforska residualerna från en modell gentemot modellantaganden $E\overset{iid}{\sim}N(0, \sigma^2)$, det vill säga att residualerna är oberoende, normalfördelade med väntevärde 0 och lika varians. Residualerna kan också användas för att undersöka ifall den linjära modell som anpassats är lämplig. Vi kommer titta närmare på mer detaljerad residualanalys i ett senare kapitel.
@@ -112,7 +112,7 @@ ggplot(residualData) +
 
 I histogrammet vill vi se normalfördelningens symmetriska och klockliknande form centrerad kring 0 vilket ibland kan vara svårt att utläsa speciellt om datamaterialet är litet. QQ-diagrammet visar de observerade och de teoretiska kvantilerna där vi vill att punkterna ska följa den inritade linjen för en "perfekt" normalfördelning. 
 
-För denna modell ser vi inga tydliga avvikelser från det mönster vi vill se, men vi kan utläsa ett fåtal avvikande observationer som skulle kunna betraktas som extremvärden. Två stora positiva residualer kan identifieras i  diagrammen men det finns även enstaka negativa som ligger långt från de övriga.
+För denna modell ser vi inga tydliga avvikelser från det mönster vi vill se, men vi kan utläsa ett fåtal avvikande observationer som skulle kunna betraktas som extremvärden. Två stora positiva residualer kan identifieras i diagrammen men det finns även enstaka negativa som ligger långt från de övriga.
 
 ::: {.callout-important}
 Vi kan betrakta antagandet om normalfördelning som inte uppfyllt om dessa diagram visar på starka avvikelser från det vi vill se. Även när vi vet att ett urval är draget från en normalfördelning är det inte alltid som histogrammet visar den form som vi söker.

@@ -25,10 +25,10 @@ filters:
 # Introduktion till variansanalys {#sec-one-way-anova}
 I @sec-regression studerade vi förhållandet mellan en responsvariabel och en eller flera förklarande variabler. Om en förklarande variabel är kvalitativ transformerade vi variabeln till indikatorvariabler för att kunna matematiskt hantera variabeln på ett korrekt sätt. 
 
-Om en regressionsmodell endast skulle bestå utav kvalitativa variabler är regressionsmodellen ekvivalent med att jämföra medelvärden för varje värde av den kvalitativa variabeln. Att undersöka flera medelvärden med varandra kan också kallas för *variansanalys* och används ofta inom experimentella studier. I variansanalys kallas de förklarande variablerna för *faktorer* och dess kategorier för *faktornivåer*. 
+Om en regressionsmodell endast skulle bestå utav kvalitativa variabler är regressionsmodellen ekvivalent med att jämföra medelvärden för varje värde av den kvalitativa variabeln. Att undersöka flera medelvärden med varandra kan också kallas för **variansanalys** och används ofta inom experimentella studier. I variansanalys kallas de förklarande variablerna för **faktorer** och dess kategorier för **faktornivåer**. 
 
 ## Envägs-ANOVA
-En regressionsmodell med en kontinuerligt kvantitativ responsvariabel och en kvalitativ faktor (förklarande variabel) kallas för en *envägs-ANOVA*. Eftersom detta är i grunden en regressionsmodell kan vi formulera modellen som vi gjort i del II:
+En regressionsmodell med en kontinuerligt kvantitativ responsvariabel och en kvalitativ faktor (förklarande variabel) kallas för en **envägs-ANOVA**. Eftersom detta är i grunden en regressionsmodell kan vi formulera modellen som vi gjort i del II:
 
 $$
 \begin{aligned}
@@ -60,7 +60,7 @@ Y_{i = A} &= \mu_A = \beta_0
 $$
 
 :::{.callout-note}
-Inom variansanalys kan denna sorts modell direkt modelleras utefter respektive nivås medelvärden istället för regressionsmodellen. Detta kallas för en *cellmedelvärdesmodell* som beräknar medelvärdet för varje cell av data, i envägs-ANOVA innebär detta för varje faktornivå.
+Inom variansanalys kan denna sorts modell direkt modelleras utefter respektive nivås medelvärden istället för regressionsmodellen. Detta kallas för en **cellmedelvärdesmodell** som beräknar medelvärdet för varje cell av data, i envägs-ANOVA innebär detta för varje faktornivå.
 
 $$
 \begin{aligned}
@@ -73,7 +73,7 @@ där $j$ är observationsindex och $\mu_i$ är cellmedelvärdet för nivå $i$ a
 I och med att en ANOVA-modell endast är ett specialfall av linjär regression gäller fortfarande att $E_{ij} \sim N(0, \sigma^2)$ och att modellen bör utvärderas med hjälp av residualanalys från @sec-residual-analysis innan vi går vidare till inferensmetoder.
 
 ### Faktoreffektkodning av kvalitativa variabler
-Ett alternativt sätt att koda en kvalitativ variabel är att använda *faktoreffektkodning*. Istället för att parametern vid indikatorkodning mäter varje nivås effekt jämfört med en referenskategori, som i många fall väljs godtyckligt och påverkar varje parametervärde därefter, mäter parametern vid faktoreffektkodning **effekten jämfört med det övergripande medelvärdet**. 
+Ett alternativt sätt att koda en kvalitativ variabel är att använda **faktoreffektkodning**. Istället för att parametern vid indikatorkodning mäter varje nivås effekt jämfört med en referenskategori, som i många fall väljs godtyckligt och påverkar varje parametervärde därefter, mäter parametern vid faktoreffektkodning **effekten jämfört med det övergripande medelvärdet**. 
 
 $$
 \begin{aligned}
@@ -121,14 +121,14 @@ Viss litteratur börjar vid dessa modeller att byta beteckningar på parametrarn
 ## Analys av metoder för ogräsbekämpning
 Anta att experiment genomförst som undersöker hur olika ogräsbekämpningar i Etiopien påverkar skörden av durra (i kg per hektar). Mer specifikt är de olika bekämpningsmetoderna:
 
-- *1* - Hacka, 1 ggr (hacka för hand en gång, fyra veckor efter att första grödan grott)
-- *2* - Hacka, 2 ggr (hacka för hand två gånger, fyra och åtta veckor efter att första grödan grott)
-- *3* - Samodling med kikärter (kikärter agerar som en täckningsgröda som motverkar tillväxten av ogräs)
-- *4* - Samodling med kikärter, hacka 1 ggr
+- `1` - Hacka, 1 ggr (hacka för hand en gång, fyra veckor efter att första grödan grott)
+- `2` - Hacka, 2 ggr (hacka för hand två gånger, fyra och åtta veckor efter att första grödan grott)
+- `3` - Samodling med kikärter (kikärter agerar som en täckningsgröda som motverkar tillväxten av ogräs)
+- `4` - Samodling med kikärter, hacka 1 ggr
 (kombination av samodling och hacka för hand en gång, fyra veckor efter att första grödan grott)
-- *5* - Ogräsfri kontroll (konstant bekämpning av ogräs med hacka)
-- *6* - Ingen bekämpning
-- *7* - Herbicid (ogräsmedlet 2,4-D appliceras sex veckor efter att första grödan grott)
+- `5` - Ogräsfri kontroll (konstant bekämpning av ogräs med hacka)
+- `6` - Ingen bekämpning
+- `7` - Herbicid (ogräsmedlet 2,4-D appliceras sex veckor efter att första grödan grott)
 
 Datamaterialet kan laddas ner [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/weeds.csv). Mer information om detta material finns att läsa via [denna länk](http://www.bioone.org/doi/abs/10.1614/WT-03-033R).
 
@@ -541,7 +541,7 @@ bonferroni |>
 
 <!-- TODO DESCRIBE SCHEFFÉ MORE -->
 
-Vi behöver inte begränsa våra jämförelser till att endast titta på par av nivåer. $\hat{D}_{ii'}$ är ett specialfall av en *kontrast* där endast två nivåer jämförs men vi kan formulera en generell kontrast som:
+Vi behöver inte begränsa våra jämförelser till att endast titta på par av nivåer. $\hat{D}_{ii'}$ är ett specialfall av en **kontrast** där endast två nivåer jämförs men vi kan formulera en generell kontrast som:
 $$
 \begin{aligned}
   L = \sum_{i = 1}^A{c_i \cdot \mu_i}
@@ -556,7 +556,7 @@ $$
     &= \mu_1 -  \mu_2
 \end{aligned}
 $$
-där $c_1 = 1$, $c_2 = -1$ och resterande $c_i = 0$. Detta uppfyller begränsningen på *konstanterna* i kontrasten.
+där $c_1 = 1$, $c_2 = -1$ och resterande $c_i = 0$. Detta uppfyller begränsningen på **konstanterna** i kontrasten.
 
 Vi kan skapa egna kontraster av många olika former, med begränsningen att konstanterna ska summera till 0, genom `contrast()`. Till exempel skulle det kanske vara intressant att undersöka följande jämförelse mellan de två nivåerna som innehöll hackning och nivån beskrivande endast samodling.
 $$

@@ -115,7 +115,7 @@ ggplot(ToothGrowth) + aes(x = dose, y = len, fill = supp) +
 
 ```
 
-Med detta fioldiagram kan vi se skillnader i faktormedelvärden, fördelningen för respektive färg, men för att tydligt kunna utläsa interaktioner behöver vi göra ett *interaktionsdiagram*. Ett interaktionsdiagram är ett linjediagram över cellmedelvärdena, alltså medelvärden för varje kombination av nivåer från respektive faktor.
+Med detta fioldiagram kan vi se skillnader i faktormedelvärden, fördelningen för respektive färg, men för att tydligt kunna utläsa interaktioner behöver vi göra ett **interaktionsdiagram**. Ett interaktionsdiagram är ett linjediagram över cellmedelvärdena, alltså medelvärden för varje kombination av nivåer från respektive faktor.
 
 ```{r}
 #| fig-cap: Interaktionsdiagram över cellmedelvärden.
@@ -174,7 +174,7 @@ anova(model) |>
 :::
 
 ### Inferens
-Utifrån tabellen kan vi dra slutsatser om respektive komponent i modellen men vi **börjar alltid med interaktionseffekter**. 
+Utifrån tabellen kan vi dra slutsatser om respektive komponent i modellen men vi börjar **alltid** med interaktionseffekter. 
 
 Hypoteserna som undersöks för respektive del kan grupperas i flera partiella F-test utifrån @eq-twoway-anova-fix. Interaktionen består i detta exempel av parametrarna $\beta_4$ och $\beta_5$ så den formella hypotesen för interaktionseffekten är:
 $$
@@ -235,7 +235,7 @@ bonferroni |>
 
 
 ## Slumpmässiga faktorer
-Hittintills har vi bara ägnat oss åt modeller där vi endast har fixa effekter. I praktiken har vi många situationer där nivåerna på en faktor är dragna slumpmässigt från en population vilket innebär att inferensen som vi genomför tittar på hela population och inte bara de utvalda nivåerna. Detta är en modell med slumpmässiga effekter och i en flervägs-modell kan vi inkludera en blandning av fixa och slumpmässiga effekter (*mixed effects model*) eller enbart slumpmässiga (*random effects model*). I fallet med två slumpmässiga faktorer kan vi utveckla @eq-random-effect-anova till att ta hänsyn till flera slumpmässiga effekter:
+Hittintills har vi bara ägnat oss åt modeller där vi endast har fixa effekter. I praktiken har vi många situationer där nivåerna på en faktor är dragna slumpmässigt från en population vilket innebär att inferensen som vi genomför tittar på hela population och inte bara de utvalda nivåerna. Detta är en modell med slumpmässiga effekter och i en flervägs-modell kan vi inkludera en blandning av fixa och slumpmässiga effekter (**mixed effects model**) eller enbart slumpmässiga (**random effects model**). I fallet med två slumpmässiga faktorer kan vi utveckla @eq-random-effect-anova till att ta hänsyn till flera slumpmässiga effekter:
 $$
 \begin{aligned}
   Y_{ijk} = \gamma_{000} + U_{0i0} + U_{00j} + U_{0ij} + E_{ijk}
@@ -448,9 +448,8 @@ Utskriften delas upp i `Random effects` och `Fixed effects` med olika tabellstru
 
 Vi kan plocka ut dessa varianser i en separat tabell genom:
 ```{r}
-summary(model) |> 
-  # Tar ut varianskomponenterna
-  .$varcor |> 
+# Tar ut varianskomponenterna
+summary(model)$varcor |> 
   # Konverterar till en data.frame för kable
   as.data.frame() |> 
   # Väljer ut relevanta delar av konverterade data.frame och byter namn

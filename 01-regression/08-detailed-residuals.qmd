@@ -1,5 +1,4 @@
 ---
-title: "Detaljerad residualanalys"
 editor_options: 
   chunk_output_type: console
 ---
@@ -21,6 +20,7 @@ editor_options:
 \newcommand{\Sum}[1]{\sum_{i=1}^#1}
 
 <!-- CONTENT -->
+# Detaljerad residualanalys
 I @sec-residual-simple presenterades sätt att med hjälp av residualer bedöma om en modell uppfyller antaganden för linjär regression genom olika enkla visualiseringar. Residualer kan också användas för att identifiera observationer som vi anser påverka modellanpassningen mer än övriga samt att identifiera avvikande observationer som bör undersökas vidare. 
 
 I detta kapitel kommer vi behandla simulerade datamaterial. Vi simulerar först ett datamaterial med olika former av brus.
@@ -124,7 +124,7 @@ Sammanfattningsvis har vi fyra olika responsvariabler:
 
 Enkla residualer visar det absoluta avståndet mellan varje observation och dess punkt på den anpassade regressionslinjen, $\hat{E}_i = Y_i - \hat{Y}_i$. Stora värden på residualerna kan indikera på att observationen ligger långt ifrån de övriga och med visualiseringar kan vi se om det endast är några enstaka observationer som har stora residualer eller om alla residualer generellt har stora värden. Det är främst i det första fallet som vi bör undersöka specifika observationer vidare då om alla residualer har stora värden är det främst en indikation på en sämre modell.
 
-*Avvikande observationer* kan direkt påverka modellanpassningen till den grad att sambandet som anpassas inte speglar det övergripande samband som modellen ämnar att beskriva. Men bara för att en residual har ett stort absolutvärde betyder det inte alltid att residualen är en indikation på en avvikande observation. Ett lättare sätt att bedöma detta är att beräkna *standardiserade residualer* som också tar hänsyn till residualernas totala spridning istället för det absoluta avståndet från linjen. 
+**Avvikande observationer** kan direkt påverka modellanpassningen till den grad att sambandet som anpassas inte speglar det övergripande samband som modellen ämnar att beskriva. Men bara för att en residual har ett stort absolutvärde betyder det inte alltid att residualen är en indikation på en avvikande observation. Ett lättare sätt att bedöma detta är att beräkna **standardiserade residualer** som också tar hänsyn till residualernas totala spridning istället för det absoluta avståndet från linjen. 
 
 
 ## Avvikande observationer
@@ -307,9 +307,9 @@ residualData |>
 I figuren visas de standardiserade residualerna för respektive modell och här syns det tydligt vilka residualer som faktiskt är en avvikande observation och vilka som ändå ligger inom residualernas generella spridning. Det är främst i modellerna med extremvärden som de standardiserade residualerna uppvisar tydliga indikationer att dessa observationer är avvikande. 
 
 ### Avvikande observationer i X
-I @tbl-outlier-comparison såg vi att avvikande observationer i utkanten av X:s värdemängd verkar ha en större påverkan på modellanpassningen än avvikande observationer närmare mittpunkten av värdemängden. I en multipel linjär regressionsmodell kan denna jämförelse bli svår att genomföra med visualiseringar eller jämförelser mellan flera skattade lutningsparametrar. Istället kan *leverage* beräknas som visar hur långt bort den enskilda observationen (residualen) är från genomsnittet av alla förklarande variabler.
+I @tbl-outlier-comparison såg vi att avvikande observationer i utkanten av X:s värdemängd verkar ha en större påverkan på modellanpassningen än avvikande observationer närmare mittpunkten av värdemängden. I en multipel linjär regressionsmodell kan denna jämförelse bli svår att genomföra med visualiseringar eller jämförelser mellan flera skattade lutningsparametrar. Istället kan **leverage** beräknas som visar hur långt bort den enskilda observationen (residualen) är från genomsnittet av alla förklarande variabler.
 
-Leverage beräknas utifrån *hattmatrisen*, $\mathbf{H} = \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'$, specifikt diagonalelementen av matrisen. $h_i$ är det i:te diagonalelementet från matrisen vars värden kan falla mellan 0 och 1, där 1 indikerar på stort avstånd från genomsnittet. Vi kan beräkna hattmatrisen i R med hjälp av matrisalgebra eller med hjälp av funktionen `lm.influence()` där objektet `hat` innehåller diagonalen av hattmatrisen. 
+Leverage beräknas utifrån **hattmatrisen**, $\mathbf{H} = \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'$, specifikt diagonalelementen av matrisen. $h_i$ är det i:te diagonalelementet från matrisen vars värden kan falla mellan 0 och 1, där 1 indikerar på stort avstånd från genomsnittet. Vi kan beräkna hattmatrisen i R med hjälp av matrisalgebra eller med hjälp av funktionen `lm.influence()` där objektet `hat` innehåller diagonalen av hattmatrisen. 
 ```{r}
 
 ## Skapar designmatrisen
@@ -371,7 +371,7 @@ $$
 Det finns två observationer, $i = 11$ och $i = 24$, som har leverage-värden som anses vara högre än tumregeln. Dessa två observationer är de som har minst värden på x, alltså de som ligger längst till vänster i @fig-outlier-data. Eftersom dessa punkter verkar följa det linjära samband som resten av punktsvärmen visar, finns det ingenting som tyder på att de är några observationer vi behöver oroa oss för.  
 
 ### Jackknife-residualer
-Ett ytterligare sätt att använda leverage för att identifiera avvikande observationer är att beräkna *Jackknife*-residualer. Denna typ av residual beräknas genom att anpassa en modell utan observation $i$ som sedan används för att skatta prediktera värdet på responsvariabeln och beräkna residualen. Eftersom en avvikande observation kan påverka modellanpassningen riskerar en vanlig eller standardiserad residual att underskatta avvikelsen då modellen dras mot den avvikande observationen. När en modell anpassas som inte inkluderar den specifika observationen kommer residualen ge en mer verklig bild av observationens faktiska avvikelse från det generella sambandet. 
+Ett ytterligare sätt att använda leverage för att identifiera avvikande observationer är att beräkna **Jackknife**-residualer. Denna typ av residual beräknas genom att anpassa en modell utan observation $i$ som sedan används för att skatta prediktera värdet på responsvariabeln och beräkna residualen. Eftersom en avvikande observation kan påverka modellanpassningen riskerar en vanlig eller standardiserad residual att underskatta avvikelsen då modellen dras mot den avvikande observationen. När en modell anpassas som inte inkluderar den specifika observationen kommer residualen ge en mer verklig bild av observationens faktiska avvikelse från det generella sambandet. 
 
 Istället för att behöva anpassa n olika modeller där varje respektive observation plockas bort kan vi använda leverage och modellens SSE enligt:
 
@@ -447,7 +447,7 @@ residualData |>
 Med hjälp av Jackknife-residualerna ser vi att de observationer med höga leverage-värden inte påverkar modellanpassningen då värdena är i linje med alla andra observationers värden. Däremot syns ett värde var i de två nedersta diagrammen som tydligt indikerar på de extremvärden som vi placerat in avviker från det generella sambandet, vilket vi också förväntar oss.
 
 ## Inflytelserika observationer
-Till viss del beskriver Jackknife-residualer huruvida en observation har ett inflytande på modellanpassningen genom att beräkna en mer rättvis avvikelse för varje observation från det generella sambandet. Däremot såg vi i @fig-jackknife att extremvärdet nära mittpunkten av X också fått ett relativt högt värde trots att vi i @tbl-outlier-comparison inte såg att den observationen hade en påverkan på modellanpassningen. Dessa residualer är alltså inte alltid så bra att identifiera observationens effekt på modellanpassningen, mer än att de identifierar avvikande observationer. Istället kan vi använda andra mått såsom *DFFITS* och *Cook's Distance* för att avgöra om en observation påverkar modellanpassningen och anses vara en *inflytelserik observation*.
+Till viss del beskriver Jackknife-residualer huruvida en observation har ett inflytande på modellanpassningen genom att beräkna en mer rättvis avvikelse för varje observation från det generella sambandet. Däremot såg vi i @fig-jackknife att extremvärdet nära mittpunkten av X också fått ett relativt högt värde trots att vi i @tbl-outlier-comparison inte såg att den observationen hade en påverkan på modellanpassningen. Dessa residualer är alltså inte alltid så bra att identifiera observationens effekt på modellanpassningen, mer än att de identifierar avvikande observationer. Istället kan vi använda andra mått såsom **DFFITS** och **Cook's Distance** för att avgöra om en observation påverkar modellanpassningen och anses vara en **inflytelserik observation**.
 
 ### DFFITS
 Vi kan mäta en observations inflytande på två olika sätt, antingen på sitt egna anpassade värde eller på alla anpassade värden. DFFITS undersöker om en observation har ett inflytande på sitt egna anpassat värde och använder sig utav Jackknife-residualerna som vi beräknade tidigare. 
@@ -531,7 +531,7 @@ Vårt simulerade data kan anses vara litet ($n = 31$) och vi kan därför använ
 ### Cook's Distance
 Det är nästan självklart att en avvikande observation kommer påverka sitt egna anpassade värde. Det som vi oftast är intresserad av att undersöka är ifall en avvikande observation ger oss en felaktig modellanpassning för det generella sambandet, alltså om andra observationers anpassning påverkas. Måttet Cook's Distance visar hur mycket inflytande en observation har på alla anpassade värden.
 
-Beroende på vilka sorters residualer vi har tillhanda kan vi beräkna Cook's Distance på två olika sätt. *Studentiserade residualer* kan delas upp i *interna* studentiserade och *externa* studentiserade. Den internt studentiserade residualen (angivet som $r_i$ i @kleinbaum2013) är en form av standardisering där vi också tar hänsyn till observationens leverage-värde inte bara residualspridningen. 
+Beroende på vilka sorters residualer vi har tillhanda kan vi beräkna Cook's Distance på två olika sätt. **Studentiserade residualer** kan delas upp i **interna** studentiserade och **externa** studentiserade. Den internt studentiserade residualen (angivet som $r_i$ i @kleinbaum2013) är en form av standardisering där vi också tar hänsyn till observationens leverage-värde inte bara residualspridningen. 
 
 $$
 \begin{aligned}

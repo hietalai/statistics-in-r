@@ -41,7 +41,7 @@ penguins <-
 ```
 
 ::: {.callout-note}
-Som en del av utforskningen kan vi identifiera saknade värden på vissa variabler och väljer att filtrera bort dessa variabler i just detta exempel. Hantering av saknade värden är ett stort fält inom statistiken och det finns flertalet metoder som kan *imputera* (skatta det saknade värdet) värden så att vi inte behöver ta bort hela observationer från undersökningen. 
+Som en del av utforskningen kan vi identifiera saknade värden på vissa variabler och väljer att filtrera bort dessa variabler i just detta exempel. Hantering av saknade värden är ett stort fält inom statistiken och det finns flertalet metoder som kan **imputera** (skatta det saknade värdet) värden så att vi inte behöver ta bort hela observationer från undersökningen. 
 
 En enkel imputeringsmetod är medelvärdesimputering där vi byter ut det saknade värdet med medelvärdet av de övriga mätvärdena eller typvärdet ifall en kvalitativ variabel ska imputeras. I praktiken används mer avancerade metoder som kan tillämpas i många olika fall där vi också tar hänsyn till annan information om observationerna. 
 :::
@@ -142,7 +142,7 @@ ggplot(penguins) + aes(x = body_mass_g, y = bill_length_mm) +
 
 ```
 
-Vi kan beräkna *Pearson's korrelationskoefficient* ($r$) för att inte behöva förlita oss på den subjektiva tolkningen av styrkan.^[Eller andra mått för att beräkna styrkan på samband, t.ex. Kendall [@kendall1955rank] eller Spearman [@spearman1904].] Denna koefficient mäter styrkan på det **linjära sambandet** mellan två kvantitativa variabler och är ett lämpligt mått i just detta fall. Ett värde nära 0 tyder på inget eller ett svagt samband medan värden nära -1 eller +1 tyder på ett starkt negativt respektive positivt samband.
+Vi kan beräkna **Pearson's korrelationskoefficient** ($r$) för att inte behöva förlita oss på den subjektiva tolkningen av styrkan.^[Eller andra mått för att beräkna styrkan på samband, t.ex. Kendall [@kendall1955rank] eller Spearman [@spearman1904].] Denna koefficient mäter styrkan på det **linjära sambandet** mellan två kvantitativa variabler och är ett lämpligt mått i just detta fall. Ett värde nära 0 tyder på inget eller ett svagt samband medan värden nära -1 eller +1 tyder på ett starkt negativt respektive positivt samband.
 
 $$
 r = `r cor(penguins$bill_length_mm, penguins$body_mass_g) |> round(3)`
@@ -198,7 +198,7 @@ ggplot(penguins) +
 
 Båda variablerna ser ut att ha linjärt samband med responsvariabeln. @fig-width-length tyder på att sambandet mellan näbbredd och näbblängd är svagt negativt ($r = `r cor(penguins[,"bill_length_mm"], penguins[,"bill_depth_mm"]) |> round(3)`$) då punkterna är mycket utspridda medan @fig-flipper-length tyder på ett lite starkare positivt samband ($r = `r cor(penguins[,"bill_length_mm"], penguins[,"flipper_length_mm"]) |> round(3)`$) i linje med @fig-weight-length.
 
-Ett nytt fenomen som vi kan se i @fig-width-length är att vi verkar ha flera punktsvärmar som var och en har ett positivt samband trots att vi tolkade det övergripande sambandet som svagt negativt. Om vi endast hade beräknat korrelationskoefficienten hade detta fenomen undgått vår analys. @fig-width-length-annot är ett exempel på *Simpson's Paradox* som vi kommer undersöka närmare senare i detta underlag.
+Ett nytt fenomen som vi kan se i @fig-width-length är att vi verkar ha flera punktsvärmar som var och en har ett positivt samband trots att vi tolkade det övergripande sambandet som svagt negativt. Om vi endast hade beräknat korrelationskoefficienten hade detta fenomen undgått vår analys. @fig-width-length-annot är ett exempel på **Simpson's Paradox** som vi kommer undersöka närmare senare i detta underlag.
 
 ```{r}
 #| fig-cap: Grupperingar av observationer
@@ -219,7 +219,7 @@ ggplot(penguins) +
 ```
 
 ### Kvalitativa förklarande variabler
-Vi kan inte använda spridningsdiagram för att visualisera sambandet mellan kvalitativa förklarande variabler och en kontinuerlig responsvariabel. Vi behöver istället använda visualiseringar som tar hänsyn till den kvalitativa skalan, vanligtvis ordinal eller nominalskala. Det finns flera olika sätt att visualisera fördelningen av responsvariabeln för de olika nivåerna av den förklarande, till exempel grupperade histogram eller lådagram, men en typ av visualisering som visar detaljerna i fördelningen är ett *fioldiagram*. Ett fioldiagram består utav en spegling av ett densitetsdiagram, där områden med många observationer har en större yta under kurvan.
+Vi kan inte använda spridningsdiagram för att visualisera sambandet mellan kvalitativa förklarande variabler och en kontinuerlig responsvariabel. Vi behöver istället använda visualiseringar som tar hänsyn till den kvalitativa skalan, vanligtvis ordinal eller nominalskala. Det finns flera olika sätt att visualisera fördelningen av responsvariabeln för de olika nivåerna av den förklarande, till exempel grupperade histogram eller lådagram, men en typ av visualisering som visar detaljerna i fördelningen är ett **fioldiagram**. Ett fioldiagram består utav en spegling av ett densitetsdiagram, där områden med många observationer har en större yta under kurvan.
 
 Via `ggplot2` kan vi skapa ett sådant diagram genom `geom_violin()`:
 

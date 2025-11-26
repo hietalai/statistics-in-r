@@ -25,7 +25,7 @@ På samma sätt som logitlänken kan användas för att transformera den linjär
 
 
 ## Multinomial logistisk regression
-Om responsvariabeln är kategorisk men innehåller fler än två klasser kan vi utöka den logistiska regressionsmodellen till att hantera flera kategorier. *Multinomial* eller *polytom* logistisk regression används om responsvariabeln följer nominalskala, alltså kategorier som inte går att rangordna. 
+Om responsvariabeln är kategorisk men innehåller fler än två klasser kan vi utöka den logistiska regressionsmodellen till att hantera flera kategorier. **Multinomial** eller **polytom** logistisk regression används om responsvariabeln följer nominalskala, alltså kategorier som inte går att rangordna. 
 
 Binär logistisk regression modellerar $\pi = P(Y = 1)$ vilket också innebär att vi på ett enkelt sätt får $P(Y = 0)$ med hjälp av komplementregeln, $1 - \pi$. Nu när vi har $J$ kategorier av responsvariabeln kan måste vi modellera flera sannolikheter för att täcka alla möjliga utfall. Summan av dessa sannolikheter måste bli 1 då de beskriver sannolikhetsfördelningen av Y. 
 
@@ -84,7 +84,7 @@ En mer detaljerad genomgång av denna sorts modell kan hittas [här](https://sta
 ## Ordinal logistisk regression
 Ifall responsvariabeln har en ordning på sina kategorier kan vi, om lämpligt, använda *ordinal* logistisk regression istället där ordningen bibehålls även i modellen. 
 
-Vi kan anta att oddskvoterna är *proportionella* oavsett vilka kategorier av responsvariabeln som vi jämför, att oddset förändras lika mycket mellan kategori 1 och 0 som kategori 2 och 1.
+Vi kan anta att oddskvoterna är **proportionella** oavsett vilka kategorier av responsvariabeln som vi jämför, att oddset förändras lika mycket mellan kategori 1 och 0 som kategori 2 och 1.
 $$
 \begin{aligned}
 Odds_g &= \frac{P(D \ge g|\mathbf{X})}{1 - P(D \ge g|\mathbf{X})}
@@ -98,7 +98,7 @@ Alla lutningsparametrar $\beta_j$ är samma för alla kategorier, men intercepte
 En mer detaljerad genomgång hur denna sorts modell anpassas i R ges [här](https://stats.oarc.ucla.edu/r/dae/ordinal-logistic-regression/).
 
 ## Poissonregression
-Även om responsvariabeln är kvantitativ behöver inte alltid den linjära regressionsmodellen vara lämplig att använda, till exempel om responsvariabeln beskriver ett diskret antal kommer den linjära modellen längre anpassa rätt fördelning. Fördelen med de generaliserade linjära modellerna är att vi nu har tillgång till flexibla metoder som kan anpassa andra fördelningar av Y|X som är mer lämpliga att beskriva responsvariabelns form. Givet att responsvariabeln beskriver ett antal med en majoritet låga värden kan *Poissonfördelningen* vara en lämplig fördelning för modellanpassningen.
+Även om responsvariabeln är kvantitativ behöver inte alltid den linjära regressionsmodellen vara lämplig att använda, till exempel om responsvariabeln beskriver ett diskret antal kommer den linjära modellen längre anpassa rätt fördelning. Fördelen med de generaliserade linjära modellerna är att vi nu har tillgång till flexibla metoder som kan anpassa andra fördelningar av Y|X som är mer lämpliga att beskriva responsvariabelns form. Givet att responsvariabeln beskriver ett antal med en majoritet låga värden kan **Poissonfördelningen** vara en lämplig fördelning för modellanpassningen.
 
 :::{.callout-tip}
 Poissonfördelningen beskriver en diskret variabel, eller närmare bestämt en variabel som beskriver ett antal. Fördelningens form styrs utav dess väntevärde ($\lambda$) som också är dess varians. Vi kan skapa ett slumpmässigt urval från en Poissonfördelning i R med hjälp av `rpois()`.
@@ -150,7 +150,7 @@ ggplot(visData) + aes(x = y, y = Freq) +
 Vi kan ändra värden på både `lambda` och `nobs` för att se hur det slumpmässiga urvalet förhåller sig till den sanna fördelningen.
 :::
 
-På samma sätt som tidigare modeller vill vi anpassa $E[Y|X]$ alltså väntevärdet av responsvariabelns fördelning, vilket i detta fall är $\lambda$. Vi vill fortfarande använda den linjära modellen på något sätt och vi kan därför använda *loglänken* för att transformera den linjära modellen till Poissonfördelningens väntevärde.
+På samma sätt som tidigare modeller vill vi anpassa $E[Y|X]$ alltså väntevärdet av responsvariabelns fördelning, vilket i detta fall är $\lambda$. Vi vill fortfarande använda den linjära modellen på något sätt och vi kan därför använda **loglänken** för att transformera den linjära modellen till Poissonfördelningens väntevärde.
 
 Låt oss anta att vi vet en sann Poissonmodell med en förklarande variabel som använder sig av länkfunktionen.
 $$
@@ -231,12 +231,12 @@ model$coefficients <- model$coefficients |> round(5)
 För den anpassade modellen får vi följande intervall:
 $$
 \begin{aligned}
-e^{`r coef(model)[2]` - 1.96 \cdot `r summary(model) |> coef() |> .[2,2] |> round(5)`} \le &e^{\beta_1} \le e^{`r coef(model)[2]` + 1.96 \cdot `r summary(model) |> coef() |> .[2,2] |> round(5)`}\\
-  e^{`r coef(model)[2] - 1.96 * (summary(model) |> coef() |> .[2,2])`} \le &e^{\beta_1} \le e^{`r coef(model)[2] + 1.96 * (summary(model) |> coef() |> .[2,2] )`}\\
-  `r exp(coef(model)[2] - 1.96 * (summary(model) |> coef() |> .[2,2])) |> round(3)` \le &e^{\beta_1} \le `r exp(coef(model)[2] + 1.96 * (summary(model) |> coef() |> .[2,2])) |> round(3)`
+e^{`r coef(model)[2]` - 1.96 \cdot `r (summary(model) |> coef() |>  round(5))[2,2]`} \le &e^{\beta_1} \le e^{`r coef(model)[2]` + 1.96 \cdot `r (summary(model) |> coef() |> round(5))[2,2]`}\\
+  e^{`r coef(model)[2] - 1.96 * ((summary(model) |> coef())[2,2])`} \le &e^{\beta_1} \le e^{`r coef(model)[2] + 1.96 * ((summary(model) |> coef())[2,2] )`}\\
+  `r exp(coef(model)[2] - 1.96 * ((summary(model) |> coef())[2,2])) |> round(3)` \le &e^{\beta_1} \le `r exp(coef(model)[2] + 1.96 * ((summary(model) |> coef())[2,2])) |> round(3)`
 \end{aligned}
 $$
-Med 95 procents säkerhet täcker intervallet `r exp(coef(model)[2] - 1.96 * (summary(model) |> coef() |> .[2,2])) |> round(2)` till `r exp(coef(model)[2] + 1.96 * (summary(model) |> coef() |> .[2,2])) |> round(2)` den sanna procentuella förändringen på Y när X ökar med en enhet.
+Med 95 procents säkerhet täcker intervallet `r exp(coef(model)[2] - 1.96 * ((summary(model) |> coef())[2,2])) |> round(2)` till `r exp(coef(model)[2] + 1.96 * ((summary(model) |> coef())[2,2])) |> round(2)` den sanna procentuella förändringen på Y när X ökar med en enhet.
 
 ### Prediktioner
 Anta att de `r nobs` observationer som vi simulerade tidigare i detta kapitel innehåller information om sambandet mellan produktionstiden ($X$) i timmar för 1000 leksaker och antalet defekta leksaker ($Y$) som identifierats efter produktionen slutförts. Varje observation beskriver en produktion av 1000 leksaker där sannolikheten att producera en defekt leksak är väldigt låg och antalet leksaker som produceras är många. Detta är per definition en Poissonfördelad variabel. Vi vill nu kunna använda den anpassade modellen för att prediktera hur många defekta leksaker som vi kan förvänta oss givet en viss produktionstid.^[Kanske att modellen beskriver ett fenomen där en längre produktionstid innebär att någonting gått fel i processen som riskerar att skapa defekta leksaker.] 

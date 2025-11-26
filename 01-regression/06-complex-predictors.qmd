@@ -63,9 +63,9 @@ ggplot(power) +
 
 ```
 
-@fig-interaction-electricity visar två olika samband mellan temperatur och elkonsumtion beroende på om observationen (tidpunkten) mätte sambandet när bergsvärme var installerad i bostaden eller ej. När bergsvärme finns verkar påverkan av temperatur vara mindre ($\beta = `r lm(Energi_KWh ~ Dygnsmedel, data = power |> dplyr::filter(Bergsvärme == 1)) |> coef(.) |> .[2] |> round(3)`$) än när bergsvärme saknas ($\beta = `r lm(Energi_KWh ~ Dygnsmedel, data = power |> dplyr::filter(Bergsvärme == 0)) |> coef(.) |> .[2] |> round(3)`$), förändringen i elkonsumtion för varje ökad grad av temperatur har förändrats. 
+@fig-interaction-electricity visar två olika samband mellan temperatur och elkonsumtion beroende på om observationen (tidpunkten) mätte sambandet när bergsvärme var installerad i bostaden eller ej. När bergsvärme finns verkar påverkan av temperatur vara mindre ($\beta = `r (lm(Energi_KWh ~ Dygnsmedel, data = power |> dplyr::filter(Bergsvärme == 1)) |> coef() |> round(3))[2]`$) än när bergsvärme saknas ($\beta = `r (lm(Energi_KWh ~ Dygnsmedel, data = power |> dplyr::filter(Bergsvärme == 0)) |> coef() |> round(3))[2]`$), förändringen i elkonsumtion för varje ökad grad av temperatur har förändrats. 
 
-För att modellen ska plocka upp variablernas synergi med varandra skapas en *interaktion* som en produkt av, i det enklaste fallet, de två variablerna och läggs till i modellen med en ytterligare tillhörande lutningsparameter. 
+För att modellen ska plocka upp variablernas synergi med varandra skapas en **interaktion** som en produkt av, i det enklaste fallet, de två variablerna och läggs till i modellen med en ytterligare tillhörande lutningsparameter. 
 
 ### Interaktion mellan en kvalitativ och en kvantitativ variabel {#sec-interaction-qual-quant}
 En utav de enklare formerna av en interaktion är mellan en kvalitativ och en kvantitativ variabel, som vi såg ett exempel på i @fig-interaction-electricity. Om vi ser ett sådant fenomen i ett spridningsdiagram tyder det på att de två variablerna interagerar med varandra för att skapa olika lutningsparametrar.
