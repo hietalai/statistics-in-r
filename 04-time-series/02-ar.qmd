@@ -5,21 +5,27 @@ filters:
 ---
 <!-- CONTENT -->
 
-# Autoregressiva modeller
+# AR och MA modeller
 
-Hur kan en tidsserie utan en tydlig trend eller säsongsmönster modelleras? Vi kan på olika sätt ta tillvara på tidsberoendet i serien genom **autoregressiva** (AR) processer som omfattar regression "på sig själv" och/eller genom **glidande medelvärde** (MA) processer som omfattar regression på tidigare feltermer.
+Hur kan en tidsserie utan en tydlig trend eller säsongsmönster modelleras? Vi kan på olika sätt ta tillvara på tidsberoendet i serien genom **autoregressiva** (AR) processer som innebär regression "på sig själv" och genom **glidande medelvärde** (MA) processer som innebär regression på tidigare feltermer.
 
-Generellt kan vi beskriva en AR(p)-process som:
+I detta kapitel kommer dessa två processer att presenteras separat för att i nästa kapitel visa hur de kan sammanfogas till en gemensam modell. Vi kommer titta på hur processerna ser ut i teorin och vilka egenskaper de uppvisar för att lättare kunna identifiera när specifika processer är lämpliga modellval för en observerad serie.
+
+## Autoregressiva processer
+ 
+En autoregressiv process använder beroendet mellan olika tidpunkter som hjälpvariabler i en modell som väldigt mycket liknar en linjär regressionsmodell. Generellt kan vi beskriva en AR(p)-process som:
 $$
   \begin{aligned}
   Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots + \phi_p Y_{t-p} + e_t
   \end{aligned}
 $$ {#eq-arp}
-det vill säga en linjärkombination av $p$ tidigare värden. Vardera $\phi$ (phi^[Uttalas fi.]) beskriver relationen mellan det specifika lagget och den nuvarande tidpunkten.
+det vill säga att $Y_t$ förklaras av en linjärkombination av $p$ tidigare värden. Vardera $\phi$ (grekiska bokstaven phi^[Uttalas fi.]) beskriver relationen mellan det specifika lagget och den nuvarande tidpunkten. Alla $Y_t$ är oberoende från $e_t$. 
+
+När vi visar denna process antas att $E[Y_t] = 0$ men vi kan enkelt utöka modellen till att ha $\mu$ som medelvärde genom att formulera $Y_t - \mu$ i vänsterledet.
 
 <!-- TODO WHERE TO PUT 4.1/4.2? MAYBE SOMETHING IN RELATION TO THE MA PROCESS LAST IN THIS CHAPTER -->
 
-## AR(1)
+### AR(1)
 
 Den enklaste formen av en autoregressiv modell är en AR(1):
 $$
@@ -27,6 +33,10 @@ $$
   Y_t = \phi Y_{t-1} + e_t
   \end{aligned}
 $$ {#eq-ar1}
+
+Denna modell antar att $Y_t$ endast beror på den föregående tidpunkten och ett slumpfel. Detta slumpfel kan beskrivas som den nya informationen som nuvarande tidpunkt introducerar till serien.
+
+Vi kan simulera hur en AR(1) ser ut för olika värden på $\phi$.
 
 ```{webr-r}
 #| fig-width: 5
@@ -63,13 +73,14 @@ tibble(
   theme_bw()
 ```
 
-Vi skulle kunna beskriva denna modell som en linjärkombination av den viktade andelen från föregeånde tidpunkt och en slumpterm som tar upp den nya informationen som tillkommer denna tidpunkt. När vi tittar tillbaka på @eq-random-walk ser vi att dessa är lika om $\phi = 1$, men vi bedömde tidigare att en Random Walk inte var en stationär serie. För en generell AR-process antar vi stationäritet så vad behöver vi begränsa $\phi$ till för att detta ska uppfyllas för en AR(1)?
+En av serierna vi tittade på i föregående kapitel, Random Walk i @eq-random-walk, är ett specialfall av en AR(1) process när $\phi = 1$. Vi bedömde tidigare att en Random Walk inte var en stationär serie så hur kan vi säkerställa att en AR-process uppfyller stationäritet? Hur behöver vi begränsa $\phi$ för att detta ska uppfyllas för en AR(1)?
 
 Vi kan börja med att beräkna variansen av @eq-ar1:
 
 $$
   \begin{aligned}
-  Var(Y_t) &= Var(\phi Y_{t-1} + e_t) \\
+  Var(Y_t) = \gamma_0 &= Var(\phi Y_{t-1} + e_t) \\
+  \gamma_0 &= \phi^2Var(Y_{t-1}) + Var(e_t) && \text{(pga oberoende)}\\
   \gamma_0 &= \phi^2 \gamma_0 + \sigma^2_e \\
   \gamma_0 &= \frac{\sigma^2_e}{1 - \phi^2}
   \end{aligned}
@@ -79,9 +90,9 @@ $$
 Kom ihåg att $\gamma_0 = cov(Y_t, Y_t) = Var(Y_t)$ gäller för alla $Y_{t-k}$ där $k \ge 0$.
 :::
 
-Redan vid detta uttryck ser vi några begränsningar som måste göras på $\phi$, nämligen $|\phi| < 1$ för att variansen ska vara definierbar och strikt positiv. Vi kallar detta för seriens **villkor för stationäritet**.
+Redan vid detta uttryck ser vi några begränsningar som måste göras, nämligen $|\phi| < 1$, för att variansen ska vara definierbar och strikt positiv. Vi kallar detta för seriens **villkor för stationäritet**.
 
-För autokovariansen $k$ steg emellan gäller då:
+Autokovariansen för lagg $k$ blir då:
 
 $$
   \begin{aligned}
@@ -117,14 +128,15 @@ $$
 $$
 det vill säga en exponentiellt minskande korrelation då $|\phi| < 1$. 
 
-Med hjälp av visualiseringar kan vi se hur $\rho_k$ ser ut för olika värden på $\phi$. Detta kommer hjälpa oss att identifiera fall där en AR(1) modell kan användas som en representation av en tidsserie.
+Med hjälp av dessa härledningar kan vi visualisera hur $\rho_k$ ser ut för olika värden på $\phi$. Detta kommer hjälpa oss att identifiera fall där en AR(1) modell kan användas som en representation av en tidsserie.
 
 ```{webr-r}
 #| fig-width: 5
 #| fig-height: 3
-#| fig-cap: Autokorrelationen för en AR(1) med olika $\phi$
+#| fig-cap: Autokorrelationen för en AR(1) med olika phi
 #| out-width: "90%"
 
+# Ange ett värde på phi i processen
 phi <- 0.9
 
 tibble(
@@ -138,12 +150,11 @@ tibble(
   labs(y = expression(rho[k])) + 
   theme_bw()
 
-
 ```
 
-Testa att ändra `phi` till olika lämpliga värden och se vad som händer med visualiseringen.
+Testa att ändra `phi` till olika lämpliga värden, $|\phi| < 1$, och se vad som händer med visualiseringen. Testa även negativa tal och se hur det förändrar $\rho_k$.
 
-<!-- En utav slutsatserna som vi kan dra är att vi aldrig ser det mönster som uppvisades i SAC för Random Walk, det vill säga ...  -->
+Figuren visar ett snabbt avtagande mönster till skillnad från det långsamt avtagande, nästan cycliska mönster som Random Walk uppvisade. Detta visar att när vi begränsar $\phi$ enligt dess stationäritetsvilkor blir serien stationär.
 
 
 ## AR(2)
