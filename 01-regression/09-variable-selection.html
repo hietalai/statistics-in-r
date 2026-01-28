@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>10&nbsp; Modellvalidering och variabelselektion – Statistisk teori och tillämpningar i R</title>
+<title>13&nbsp; Modellvalidering och variabelselektion – Statistisk teori och tillämpningar i R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -137,6 +137,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../webex.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -184,7 +185,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/09-variable-selection.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/09-variable-selection.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
@@ -226,19 +227,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Grunderna i R</span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunderna i R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Paket och funktioner</span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">tidyverse</span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span></a>
   </div>
 </li>
       </ul>
@@ -255,73 +256,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/09-variable-selection.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/10-logistic-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/11-other-link-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
   </div>
 </li>
       </ul>
@@ -338,25 +339,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/02-control-variables.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/03-twoway-anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
   </div>
 </li>
       </ul>
@@ -372,8 +373,32 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/00-white-noise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Introduktion till tidsserier</span></span></a>
+  <a href="../04-time-series/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/01-properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Tidsserier</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/04-arimax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span></a>
   </div>
 </li>
       </ul>
@@ -388,31 +413,31 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#modellvalidering" id="toc-modellvalidering" class="nav-link active" data-scroll-target="#modellvalidering"><span class="header-section-number">10.1</span> Modellvalidering</a>
+  <li><a href="#modellvalidering" id="toc-modellvalidering" class="nav-link active" data-scroll-target="#modellvalidering"><span class="header-section-number">13.1</span> Modellvalidering</a>
   <ul class="collapse">
-  <li><a href="#generaliserbarhet" id="toc-generaliserbarhet" class="nav-link" data-scroll-target="#generaliserbarhet"><span class="header-section-number">10.1.1</span> Generaliserbarhet</a></li>
-  <li><a href="#korsvalidering" id="toc-korsvalidering" class="nav-link" data-scroll-target="#korsvalidering"><span class="header-section-number">10.1.2</span> Korsvalidering</a></li>
+  <li><a href="#generaliserbarhet" id="toc-generaliserbarhet" class="nav-link" data-scroll-target="#generaliserbarhet"><span class="header-section-number">13.1.1</span> Generaliserbarhet</a></li>
+  <li><a href="#korsvalidering" id="toc-korsvalidering" class="nav-link" data-scroll-target="#korsvalidering"><span class="header-section-number">13.1.2</span> Korsvalidering</a></li>
   </ul></li>
-  <li><a href="#automatisk-variabelselektion" id="toc-automatisk-variabelselektion" class="nav-link" data-scroll-target="#automatisk-variabelselektion"><span class="header-section-number">10.2</span> “Automatisk” variabelselektion</a>
+  <li><a href="#automatisk-variabelselektion" id="toc-automatisk-variabelselektion" class="nav-link" data-scroll-target="#automatisk-variabelselektion"><span class="header-section-number">13.2</span> “Automatisk” variabelselektion</a>
   <ul class="collapse">
-  <li><a href="#sec-aic" id="toc-sec-aic" class="nav-link" data-scroll-target="#sec-aic"><span class="header-section-number">10.2.1</span> Avancerade utvärderingsmått</a></li>
-  <li><a href="#implementation-i-r" id="toc-implementation-i-r" class="nav-link" data-scroll-target="#implementation-i-r"><span class="header-section-number">10.2.2</span> Implementation i R</a></li>
-  <li><a href="#best-subsets" id="toc-best-subsets" class="nav-link" data-scroll-target="#best-subsets"><span class="header-section-number">10.2.3</span> Best subsets</a></li>
-  <li><a href="#bakåteliminering" id="toc-bakåteliminering" class="nav-link" data-scroll-target="#bakåteliminering"><span class="header-section-number">10.2.4</span> Bakåteliminering</a></li>
-  <li><a href="#framåtvalsmetoden" id="toc-framåtvalsmetoden" class="nav-link" data-scroll-target="#framåtvalsmetoden"><span class="header-section-number">10.2.5</span> Framåtvalsmetoden</a></li>
-  <li><a href="#stegvis-regression" id="toc-stegvis-regression" class="nav-link" data-scroll-target="#stegvis-regression"><span class="header-section-number">10.2.6</span> Stegvis regression</a></li>
-  <li><a href="#visuell-jämförelse-av-modellerna" id="toc-visuell-jämförelse-av-modellerna" class="nav-link" data-scroll-target="#visuell-jämförelse-av-modellerna"><span class="header-section-number">10.2.7</span> Visuell jämförelse av modellerna</a></li>
+  <li><a href="#sec-aic" id="toc-sec-aic" class="nav-link" data-scroll-target="#sec-aic"><span class="header-section-number">13.2.1</span> Avancerade utvärderingsmått</a></li>
+  <li><a href="#implementation-i-r" id="toc-implementation-i-r" class="nav-link" data-scroll-target="#implementation-i-r"><span class="header-section-number">13.2.2</span> Implementation i R</a></li>
+  <li><a href="#best-subsets" id="toc-best-subsets" class="nav-link" data-scroll-target="#best-subsets"><span class="header-section-number">13.2.3</span> Best subsets</a></li>
+  <li><a href="#bakåteliminering" id="toc-bakåteliminering" class="nav-link" data-scroll-target="#bakåteliminering"><span class="header-section-number">13.2.4</span> Bakåteliminering</a></li>
+  <li><a href="#framåtvalsmetoden" id="toc-framåtvalsmetoden" class="nav-link" data-scroll-target="#framåtvalsmetoden"><span class="header-section-number">13.2.5</span> Framåtvalsmetoden</a></li>
+  <li><a href="#stegvis-regression" id="toc-stegvis-regression" class="nav-link" data-scroll-target="#stegvis-regression"><span class="header-section-number">13.2.6</span> Stegvis regression</a></li>
+  <li><a href="#visuell-jämförelse-av-modellerna" id="toc-visuell-jämförelse-av-modellerna" class="nav-link" data-scroll-target="#visuell-jämförelse-av-modellerna"><span class="header-section-number">13.2.7</span> Visuell jämförelse av modellerna</a></li>
   </ul></li>
-  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">10.3</span> Övningsuppgifter</a></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">13.3</span> Övningsuppgifter</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/09-variable-selection.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/09-variable-selection.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></h1>
+<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></h1>
 </div>
 
 
@@ -434,18 +459,18 @@ window.Quarto = {
 <!-- CONTENT -->
 <p>Om ett datamaterial innehåller ett stort antal variabler finns det mängder med potentiella modeller av olika storlek som skulle kunna anpassas. Vi har i tidigare kapitel enbart fokuserat på enstaka modeller som baserat sin struktur utifrån ledtrådar som identifierats i det utforskande steget, men detta blir snabbt tidskrävande vid 10, 20, eller 50 förklarande variabler.</p>
 <p>För att effektivisera processen med att hitta en lämplig modell behöver vi dels tydliga instruktioner för hur vi ska gå till väga för att utveckla/förbättra modellerna och olika sätt att kunna utvärdera modellerna i olika aspekter. Vi kommer i detta kapitel presentera olika variabelselektionsalgoritmer och introducera ytterligare mått som vi kan använda för att utvärdera en modell.</p>
-<section id="modellvalidering" class="level2" data-number="10.1">
-<h2 data-number="10.1" class="anchored" data-anchor-id="modellvalidering"><span class="header-section-number">10.1</span> Modellvalidering</h2>
+<section id="modellvalidering" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="modellvalidering"><span class="header-section-number">13.1</span> Modellvalidering</h2>
 <p>En bra regressionsmodell beskriver inte bara det stickprov som vi använt för att anpassa modellen utan kan också anpassa ny liknande data så bra som möjligt. “Så bra som möjligt” betyder i praktiken att vi vill ha säkra prediktioner för ny data, i fall där vi endast har de förklarande variablernas värden att utgå från. Till exempel skulle vi kunna ha anpassat en modell där responsvariabeln är dyr eller svår att mäta (identifiera elakartade tumörer) men de förklarande variablerna är enklare att samla in (andra medicinska mätningar såsom blodvärden etc.).</p>
-<p>Eftersom vi inte har tillgång till all potentiell ny och okänd data behöver vi metoder för att utvärdera vår nuvarande modell givet den data vi har. Detta kallas för <em>validering</em> och kan delas upp i två olika sätt att validera modellens <em>generaliserbarhet</em>, det vill säga hur bra modellen är på att beskriva ny liknande data.</p>
-<p><em>Intern</em> validering är mått som beskriver modellen på det data som används för modellanpassningen. Ofta baseras valideringen på något enkelt anpassningsmått, till exempel SSE, eller något mått som också straffar modellen för dess komplexitet, till exempel den justerade förklaringsgraden. Eftersom vi tittar på modeller av olika storlek är det vanligtvis lämpligare att använda mått som tar hänsyn till modellens komplexitet för att jämförelsen ska bli rättvis. I linjära modeller mäts komplexiteten av antalet förklarande variabler, ju fler variabler desto mer komplex är modellen, och valideringen blir då en avvägning mellan en bra modellanpassning och en lagom komplex modell.</p>
-<p>Intern validering beskriver endast modellens anpassning på det insamlade datamaterialet och undersöker inte hur modellen skulle prestera på ny information. Fördelen med intern validering är att den är enkel att använda, vi har faktiskt redan gjort detta i tidigare kapitel, men endast vissa av dessa mått kan användas för att dra slutsatser om hur bra modellen är på att generalisera sambandet, däribland AIC som beskrivs i <a href="#sec-aic" class="quarto-xref"><span>Avsnitt 10.2.1</span></a>.</p>
-<p>I <em>extern</em> validering utvärderar vi den anpassade modellen på ny okänd data som vi själva skapar genom att exempelvis slumpmässigt ta bort en del av observationerna i det insamlade materialet. Denna uppdelning av data medför att vi betecknar data som vi anpassar (tränar) modellen på för <em>träningsmängd</em> och data som vi utvärderar modellen på för <em>validerings</em>- eller <em>testmängd</em> beroende på vad syftet med utvärderingen är.</p>
+<p>Eftersom vi inte har tillgång till all potentiell ny och okänd data behöver vi metoder för att utvärdera vår nuvarande modell givet den data vi har. Detta kallas för <strong>validering</strong> och kan delas upp i två olika sätt att validera modellens <strong>generaliserbarhet</strong>, det vill säga hur bra modellen är på att beskriva ny liknande data.</p>
+<p><strong>Intern</strong> validering är mått som beskriver modellen på det data som används för modellanpassningen. Ofta baseras valideringen på något enkelt anpassningsmått, till exempel SSE, eller något mått som också straffar modellen för dess komplexitet, till exempel den justerade förklaringsgraden. Eftersom vi tittar på modeller av olika storlek är det vanligtvis lämpligare att använda mått som tar hänsyn till modellens komplexitet för att jämförelsen ska bli rättvis. I linjära modeller mäts komplexiteten av antalet förklarande variabler, ju fler variabler desto mer komplex är modellen, och valideringen blir då en avvägning mellan en bra modellanpassning och en lagom komplex modell.</p>
+<p>Intern validering beskriver endast modellens anpassning på det insamlade datamaterialet och undersöker inte hur modellen skulle prestera på ny information. Fördelen med intern validering är att den är enkel att använda, vi har faktiskt redan gjort detta i tidigare kapitel, men endast vissa av dessa mått kan användas för att dra slutsatser om hur bra modellen är på att generalisera sambandet, däribland AIC som beskrivs i <a href="#sec-aic" class="quarto-xref"><span>Avsnitt 13.2.1</span></a>.</p>
+<p>I <strong>extern</strong> validering utvärderar vi den anpassade modellen på ny okänd data som vi själva skapar genom att exempelvis slumpmässigt ta bort en del av observationerna i det insamlade materialet. Denna uppdelning av data medför att vi betecknar data som vi anpassar (tränar) modellen på för <strong>träningsmängd</strong> och data som vi utvärderar modellen på för <strong>validerings</strong>- eller <strong>testmängd</strong> beroende på vad syftet med utvärderingen är.</p>
 <p>En valideringsmängd används för att jämföra modeller med varandra och undersöka vilken som är bäst på att generalisera sambandet medan en testmängd används för att få en väntevärdesriktig skattning på något mått i den slutgiltigt valda modellen.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Fördelen med extern validering är att vi kan få mer information om modellens generaliserbarhet men det kräver att vi också har ny och okänd data att undersöka modellen på. Om vi har tillgång till tillräckligt många observationer i vårt stickprov och kan dela upp materialet i lagom stora mängder eller om vi under modellanpassningen också samlat in ny data, har vi tillfällen där extern validering kan användas.</p>
-<section id="generaliserbarhet" class="level3" data-number="10.1.1">
-<h3 data-number="10.1.1" class="anchored" data-anchor-id="generaliserbarhet"><span class="header-section-number">10.1.1</span> Generaliserbarhet</h3>
-<p>En modell som anses lämplig och innehåller variabler som alla verkar ha en signifikant påverkan på responsvariabeln, och på alla sätt och vis kan anses en bra modell för det urval vi har samlat in, behöver inte nödvändigtvis vara en modell som kan prestera lika bra på ny liknande data. Vi kan råka ut för både <em>underanpassning</em> (underfitting) eller <em>överanpassning</em> (overfitting), där den senare av de två är mest vanligt förekommande.</p>
+<section id="generaliserbarhet" class="level3" data-number="13.1.1">
+<h3 data-number="13.1.1" class="anchored" data-anchor-id="generaliserbarhet"><span class="header-section-number">13.1.1</span> Generaliserbarhet</h3>
+<p>En modell som anses lämplig och innehåller variabler som alla verkar ha en signifikant påverkan på responsvariabeln, och på alla sätt och vis kan anses en bra modell för det urval vi har samlat in, behöver inte nödvändigtvis vara en modell som kan prestera lika bra på ny liknande data. Vi kan råka ut för både <strong>underanpassning</strong> (eng. underfitting) eller <strong>överanpassning</strong> (eng. overfitting), där den senare av de två är mest vanligt förekommande.</p>
 <ul>
 <li>Underanpassning betyder att modellen är för enkel och inte fångar upp relevanta samband mellan responsvariablen och de förklarande variablerna, exempelvis att vi modellerar ett tredjegradspolynom med en linjär funktion.</li>
 <li>Överanpassning betyder att modellen är för komplex eller avancerad och då börjar modellen att beskriva bruset som finns i data, vilket gör att generaliserbarheten minskar, exempelvis att vi modellerar ett tredjegradspolynom med ett sjättegradspolynom.</li>
@@ -478,13 +503,13 @@ window.Quarto = {
 <details class="code-fold">
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>listaMedMängder <span class="ot">&lt;-</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  penguins <span class="sc">|&gt;</span> </span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Skapar en variabel med 1/0 som indikerar på träningsmängden med 2/3</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">split =</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Grupperar och delar upp materialet utefter denna nya variabel</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(split) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(split) <span class="sc">|&gt;</span> </span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_split</span>()</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut de olika listorna till separata objekt</span></span>
@@ -514,13 +539,13 @@ window.Quarto = {
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">MSE =</span> <span class="fu">c</span>(<span class="fu">summary</span>(model1)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>,</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summary</span>(model2)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>,</span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summary</span>(model3)<span class="sc">$</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-training-comparison" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-training-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;10.1: Enkla utvärderingsmått för jämförelse av de tre anpassade modellerna på träningsdata
+Tabell&nbsp;13.1: Enkla utvärderingsmått för jämförelse av de tre anpassade modellerna på träningsdata
 </figcaption>
 <div aria-describedby="tbl-training-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -555,7 +580,7 @@ Tabell&nbsp;10.1: Enkla utvärderingsmått för jämförelse av de tre anpassade
 </figure>
 </div>
 </div>
-<p><a href="#tbl-training-comparison" class="quarto-xref">Tabell&nbsp;<span>10.1</span></a> visar att den första modellen har störst justerad förklaringsgrad och lägst MSE vilket motiverar att den modellen preseterar bäst på träningsmängden. När vi sedan ska utvärdera modellen på valideringsmängden kan vi till viss del använda samma enkla mått men vi behöver ta hänsyn till att modellen som anpassats inte har sett den nya datan. MSE:s motsvarighet för ny data är MSPR (Mean Squared Prediction Error) som beskriver det genomsnittliga felet som modellen gör på ny data.</p>
+<p><a href="#tbl-training-comparison" class="quarto-xref">Tabell&nbsp;<span>13.1</span></a> visar att den första modellen har störst justerad förklaringsgrad och lägst MSE vilket motiverar att den modellen preseterar bäst på träningsmängden. När vi sedan ska utvärdera modellen på valideringsmängden kan vi till viss del använda samma enkla mått men vi behöver ta hänsyn till att modellen som anpassats inte har sett den nya datan. MSE:s motsvarighet för ny data är MSPR (Mean Squared Prediction Error) som beskriver det genomsnittliga felet som modellen gör på ny data.</p>
 <p><span class="math display">\[
 \begin{aligned}
   MSPR = \frac{\sum_{i^*}{(Y_{i^*} - \hat{Y}_{i^*})^2}}{n^*}
@@ -573,7 +598,7 @@ Tabell&nbsp;10.1: Enkla utvärderingsmått för jämförelse av de tre anpassade
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräkna ex. MSPR där y - yhat används</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>MSPR <span class="ot">&lt;-</span> <span class="cf">function</span>(y, yhat){</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  (y <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span> <span class="sc">%&gt;%</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  (y <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> </span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>()</span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
@@ -588,13 +613,13 @@ Tabell&nbsp;10.1: Enkla utvärderingsmått för jämförelse av de tre anpassade
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">MSPR =</span> <span class="fu">c</span>(<span class="fu">MSPR</span>(dataValid<span class="sc">$</span>bill_length_mm, predict1),</span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>           <span class="fu">MSPR</span>(dataValid<span class="sc">$</span>bill_length_mm, predict2),</span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>           <span class="fu">MSPR</span>(dataValid<span class="sc">$</span>bill_length_mm, predict3))  </span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-validation-comparison" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-validation-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;10.2: Enkla utvärderingsmått för jämförelse av de tre anpassade modellerna på valideringsdata
+Tabell&nbsp;13.2: Enkla utvärderingsmått för jämförelse av de tre anpassade modellerna på valideringsdata
 </figcaption>
 <div aria-describedby="tbl-validation-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -633,7 +658,7 @@ Tabell&nbsp;10.2: Enkla utvärderingsmått för jämförelse av de tre anpassade
 </figure>
 </div>
 </div>
-<p><a href="#tbl-validation-comparison" class="quarto-xref">Tabell&nbsp;<span>10.2</span></a> visar på samma relation mellan de tre modellerna, att den första är bäst, men vi ser generellt att felet har blivit större i valideringsmängden. Detta fenomen orsakas av att modellen inte längre har anpassats på det data som och att modellen då till viss del har överanpassats till data i träningsmängden. Om MSE och MSPR är nära varandra ger det en indikation på att modellen har lyckats generalisera sambandet bra och stora avvikelser betyder att vi har en mycket överanpassad modell. I just detta fall är skillnaderna inte jättestora så vi kan nog dra slutsatsen att modellen är någorlunda bra.</p>
+<p><a href="#tbl-validation-comparison" class="quarto-xref">Tabell&nbsp;<span>13.2</span></a> visar på samma relation mellan de tre modellerna, att den första är bäst, men vi ser generellt att felet har blivit större i valideringsmängden. Detta fenomen orsakas av att modellen inte längre har anpassats på det data som och att modellen då till viss del har överanpassats till data i träningsmängden. Om MSE och MSPR är nära varandra ger det en indikation på att modellen har lyckats generalisera sambandet bra och stora avvikelser betyder att vi har en mycket överanpassad modell. I just detta fall är skillnaderna inte jättestora så vi kan nog dra slutsatsen att modellen är någorlunda bra.</p>
 <p>Att modellerna följer samma ordning för både tränings- och valideringsmängden är inte självklart. Vi kan se olika resultat beroende på hur under- eller överanpassad modellerna har blivit givet dess struktur och komplexitet, men fokus bör vara att jämföra valideringsmängdens mått.</p>
 <div class="cell" data-tbl-cap="Ytterligare exempel på datamaterialet `mtcars`">
 <details class="code-fold">
@@ -680,7 +705,7 @@ Tabell&nbsp;10.2: Enkla utvärderingsmått för jämförelse av de tre anpassade
 <span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">MSPR =</span> <span class="fu">c</span>(<span class="fu">MSPR</span>(dataValid<span class="sc">$</span>mpg, predict1),</span>
 <span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>           <span class="fu">MSPR</span>(dataValid<span class="sc">$</span>mpg, predict2),</span>
 <span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>           <span class="fu">MSPR</span>(dataValid<span class="sc">$</span>mpg, predict3))  </span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
 <span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -718,24 +743,24 @@ Tabell&nbsp;10.2: Enkla utvärderingsmått för jämförelse av de tre anpassade
 </div>
 </div>
 </section>
-<section id="korsvalidering" class="level3" data-number="10.1.2">
-<h3 data-number="10.1.2" class="anchored" data-anchor-id="korsvalidering"><span class="header-section-number">10.1.2</span> Korsvalidering</h3>
+<section id="korsvalidering" class="level3" data-number="13.1.2">
+<h3 data-number="13.1.2" class="anchored" data-anchor-id="korsvalidering"><span class="header-section-number">13.1.2</span> Korsvalidering</h3>
 <p>Istället för att dela upp datamaterialet en gång i tränings- och valideringsmängd kan vi dela upp materialet i m lika stora grupper och successivt utvärdera en tränad modell på respektive grupp. Den tränade modellen använder då alla andra grupper som dess träningsmängd vilket innebär att vi får m stycken olika modeller och m stycken utvärderingar.</p>
 </section>
 </section>
-<section id="automatisk-variabelselektion" class="level2" data-number="10.2">
-<h2 data-number="10.2" class="anchored" data-anchor-id="automatisk-variabelselektion"><span class="header-section-number">10.2</span> “Automatisk” variabelselektion</h2>
+<section id="automatisk-variabelselektion" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="automatisk-variabelselektion"><span class="header-section-number">13.2</span> “Automatisk” variabelselektion</h2>
 <p>Arbetet med att hitta potentiella kandidatmodeller att jämföra med en valideringsmängd kan ta väldigt lång tid. Antalet potentiella modeller av olika storlekar ökar exponentiellt enligt <span class="math inline">\(2^k -1\)</span>. <span class="math display">\[
 \begin{aligned}
   2^5 -1 = 31 \qquad 2^{10} -1 = 1023\qquad 2^{20} -1 = 1048575
 \end{aligned}
-\]</span> Om vi skulle genomföra alla dessa modellanpassningar för hand skulle det lätt gå överstyr och vi skulle säkerligen missa att anpassa några av de möjliga kandidaterna. Istället kan vi ta hjälp av <em>algoritmer</em> som systematiskt beskriver en process för hur vi kan anpassa möjliga modeller.</p>
-<p>En utav de mest omfattande är <em>best subset</em>-algoritmen som undersöker alla modeller av olika storlekar, från 1 till <span class="math inline">\(k\)</span>, och redovisar ett urval av de bästa modellerna för respektive storlek givet ett valt utvärderingsmått. Denna algoritm kan vara lämplig när vill inte vill missa en potentiell bra modell då den faktiskt utforskar alla möjliga modeller som kan anpassas, men den kräver att vi inte har allt för många förklarande variabler att välja från. Olika utvärderingsmått, till exempel residualspridningen (S) eller den justerade förklaringsgraden (<span class="math inline">\(R^2_{adj}\)</span>), kan också visa på olika modeller som “bäst” presterande inom de olika storlekarna vilket innebär att vi behöver väga samman olika utvärderingsmått eller genomföra ytterligare analyser, till exempel residualanalys, för att bedöma vilken modell som är bäst.</p>
+\]</span> Om vi skulle genomföra alla dessa modellanpassningar för hand skulle det lätt gå överstyr och vi skulle säkerligen missa att anpassa några av de möjliga kandidaterna. Istället kan vi ta hjälp av <strong>algoritmer</strong> som systematiskt beskriver en process för hur vi kan anpassa möjliga modeller.</p>
+<p>En utav de mest omfattande är <strong>best subset</strong>-algoritmen som undersöker alla modeller av olika storlekar, från 1 till <span class="math inline">\(k\)</span>, och redovisar ett urval av de bästa modellerna för respektive storlek givet ett valt utvärderingsmått. Denna algoritm kan vara lämplig när vill inte vill missa en potentiell bra modell då den faktiskt utforskar alla möjliga modeller som kan anpassas, men den kräver att vi inte har allt för många förklarande variabler att välja från. Olika utvärderingsmått, till exempel residualspridningen (S) eller den justerade förklaringsgraden (<span class="math inline">\(R^2_{adj}\)</span>), kan också visa på olika modeller som “bäst” presterande inom de olika storlekarna vilket innebär att vi behöver väga samman olika utvärderingsmått eller genomföra ytterligare analyser, till exempel residualanalys, för att bedöma vilken modell som är bäst.</p>
 <p>Utöver den uttömmande algoritmen finns andra algoritmer som inte anpassar alla möjliga modeller utan utgår från en stegvis förbättring av modellen. Dessa delas upp i tre olika varianter;</p>
 <ul>
-<li><em>bakåteliminering</em>: en algoritm som bara tar bort variabler,</li>
-<li><em>framåtvalsmetoden</em>: en algoritm som bara lägger till variabler,</li>
-<li><em>stegvis regression</em>: en algoritm som kan göra båda.</li>
+<li><strong>bakåteliminering</strong>: en algoritm som bara tar bort variabler,</li>
+<li><strong>framåtvalsmetoden</strong>: en algoritm som bara lägger till variabler,</li>
+<li><strong>stegvis regression</strong>: en algoritm som kan göra båda.</li>
 </ul>
 <p>Algoritmerna väljer hur den ska gå vidare i modellanpassningen utifrån ett valt utvärderingsmått och anser sig “färdig” när utvärderingsmåttet inte förbättras. En stor nackdel med alla tre algoritmer är att de anses giriga eftersom de vill förbättra modellen bara “här och nu” och kan inte se flera steg framåt i processen. Det skulle mycket väl inträffa att en sämre förbättring just nu genererar en betydligt bättre slutgiltig modell än den “bästa” förbättringen just nu.</p>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -755,8 +780,8 @@ Viktigt
 <p>Alla dessa algoritmer har en stor nackdel; <strong>Att hitta det bästa värdet på ett valt utvärderingsmått betyder inte nödvändigtvis att modellen är lämplig!</strong></p>
 <p>Implementationen av dessa algoritmer i programvaror kräver att den som använder metoderna inte tar resultaten som givna utan utvärderar modellerna i detalj sedan. Vi kan låta algoritmerna dra det tunga lasset att beräkna fram några förslag på modeller som är rimliga givet en större mängd förklarande variabler men vi måste själva genomföra det sista steget av utvärderingen, med bland annat residualanalys, ytterligare hypotesprövningar eller modellvalidering, för att komma fram till en modell som vi sedan vill använda.</p>
 <p>Detta är än mer viktigt om vi inkluderar polynom eller interaktioner i modellen då algoritmerna hanterar dessa som separata variabler och kan anse en modell med en variabel av högre ordning utan att inkludera grundvariablerna som “den bästa”. En sådan modell skulle inte kunna användas för att beskriva sambandet.</p>
-<section id="sec-aic" class="level3" data-number="10.2.1">
-<h3 data-number="10.2.1" class="anchored" data-anchor-id="sec-aic"><span class="header-section-number">10.2.1</span> Avancerade utvärderingsmått</h3>
+<section id="sec-aic" class="level3" data-number="13.2.1">
+<h3 data-number="13.2.1" class="anchored" data-anchor-id="sec-aic"><span class="header-section-number">13.2.1</span> Avancerade utvärderingsmått</h3>
 <p>Alla dessa metoder utgår från att vi steg för steg undersöker kandidatmodeller av mindre/större storlek och väljer att ta bort/lägga till den variabel som ger den bästa förbättringen av ett valt utvärderingsmått. Vi har tidigare tittat på enkla mått som kan användas men i dessa algoritmer används mer avancerade mått som på ett bättre sätt tar hänsyn till både modellens prestanda och komplexitet.</p>
 <p>Akaike’s Information Criterion, <span class="math inline">\(AIC_p\)</span>, är ett mått som straffar modeller utefter deras komplexitet.</p>
 <p><span class="math display">\[
@@ -767,8 +792,8 @@ Viktigt
 <p>Vi vill uppnå så små värden på AIC som möjligt.</p>
 <!-- TODO Korrigerad AIC för små mängder -->
 </section>
-<section id="implementation-i-r" class="level3" data-number="10.2.2">
-<h3 data-number="10.2.2" class="anchored" data-anchor-id="implementation-i-r"><span class="header-section-number">10.2.2</span> Implementation i R</h3>
+<section id="implementation-i-r" class="level3" data-number="13.2.2">
+<h3 data-number="13.2.2" class="anchored" data-anchor-id="implementation-i-r"><span class="header-section-number">13.2.2</span> Implementation i R</h3>
 <p>Olika paket och funktioner i R kan hjälpa till att använda dessa algoritmer. Vi kommer titta närmare på funktionerna i paketet <code>olsrr</code> men det finns andra paket med liknande funktioner, bland andra:</p>
 <ul>
 <li><code>leaps</code>, se <a href="https://rstudio-pubs-static.s3.amazonaws.com/2897_9220b21cfc0c43a396ff9abf122bb351.html">här</a>,</li>
@@ -780,8 +805,8 @@ Viktigt
 <p>Det som kännetecknar funktionerna från <code>olsrr</code> är att vi alltid börjar med att ange den modell som vi anser vara den största möjliga modellen som kan anpassas. I det enkla fallet skulle det vara en modell med alla <span class="math inline">\(k\)</span> variabler men om vi vill inkludera möjligheten för polynom och interaktioner i algoritmernas process behöver dessa inkluderas i den största modellen.</p>
 <p>Alla funktioner från <code>olsrr</code> hanterar kvalitativa variabler med fler än två kategorier som en grupp av variabler såvida variabeln är angiven som en <code>factor</code> i R. Detta är viktigt för att algoritmen inte ska inkludera enskilda indikatorvariabler i en modell som då får en otydlig referenskategori.</p>
 </section>
-<section id="best-subsets" class="level3" data-number="10.2.3">
-<h3 data-number="10.2.3" class="anchored" data-anchor-id="best-subsets"><span class="header-section-number">10.2.3</span> Best subsets</h3>
+<section id="best-subsets" class="level3" data-number="13.2.3">
+<h3 data-number="13.2.3" class="anchored" data-anchor-id="best-subsets"><span class="header-section-number">13.2.3</span> Best subsets</h3>
 <p>Funktionen <code>ols_step_all_possible()</code> och <code>ols_step_best_possible()</code> från paketet <code>olsrr</code> kan anpassa alla möjliga modeller av olika storlekar och presenterar resultatet i (en stor) tabell med många olika utvärderingsmått. Dessa funktioner kommer kräva mycket av programmet, speciellt om vi har många förklarande variabler. Vi måste som sagt börja med att ange den största möjliga modellen som vi tänker är en kandidat till analysen för att sedan låta algoritmen arbeta fram de olika modellerna som ska jämföras.</p>
 <div class="cell" data-tbl-cap="De första fem raderna från ett `ols_step_all_possible()` objekt">
 <details class="code-fold">
@@ -794,8 +819,8 @@ Viktigt
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ger en lista med ALLA modellerna av olika storlek och tillhörande utvärderingsmått</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">ols_step_all_possible</span>(completeModel)</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>result[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>result[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -941,8 +966,8 @@ Viktigt
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ger en lista med de "bästa" modellerna av olika storlekar</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">ols_step_best_subset</span>(completeModel)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>result[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>result[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -1072,8 +1097,8 @@ Viktigt
 <div class="cell" data-tbl-cap="De fem första raderna från algoritmen med utvalda utvärderingsmått">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>result[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(n, predictors, rsquare, adjr, aic) <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>result[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(n, predictors, rsquare, adjr, aic) <span class="sc">|&gt;</span> </span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, </span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Storlek"</span>, <span class="st">"Variabler"</span>, <span class="st">"$R^2$"</span>, <span class="st">"$R^2_{adj}$"</span>, <span class="st">"AIC"</span>), </span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1151,10 +1176,10 @@ Viktigt
 </table>
 </div>
 </div>
-<p>För både den justerade förklaringsgraden (högst) och AIC (lägst) är modellen med 5 förklarande variabler som den bästa och vi kan nu gå vidare med att utvärdera den med metoder från <a href="03-model-assessment.html#sec-residual-simple" class="quarto-xref"><span>Avsnitt 4.1</span></a>.</p>
+<p>För både den justerade förklaringsgraden (högst) och AIC (lägst) är modellen med 5 förklarande variabler som den bästa och vi kan nu gå vidare med att utvärdera den med metoder från <a href="03-model-assessment.html#sec-residual-simple" class="quarto-xref"><span>Avsnitt 7.1</span></a>.</p>
 </section>
-<section id="bakåteliminering" class="level3" data-number="10.2.4">
-<h3 data-number="10.2.4" class="anchored" data-anchor-id="bakåteliminering"><span class="header-section-number">10.2.4</span> Bakåteliminering</h3>
+<section id="bakåteliminering" class="level3" data-number="13.2.4">
+<h3 data-number="13.2.4" class="anchored" data-anchor-id="bakåteliminering"><span class="header-section-number">13.2.4</span> Bakåteliminering</h3>
 <p>Den första utav de stegvisa algoritmerna innebär att vi börjar med den absolut största modellen vi kan tänka oss och successivt tar bort variabler tills den reducerade modellen inte längre anses vara en bättre modell. Algoritmen väljer vilken variabel som ska plockas bort vid varje steg genom att anpassa alla modeller med en färre variabel och välja den modell vars utvärderingsmått är “bäst”. Om den största modellen är lagomt stor kommer denna algoritm fungera bra, men om den största modellen är alldeles för komplex kommer algoritmen få jobba mycket att anpassa alla modeller av storlek <span class="math inline">\(k-1\)</span>, <span class="math inline">\(k-2\)</span> osv.</p>
 <p>Med hjälp av <code>ols_step_backward_aic()</code> används AIC som utvärderingsmått. Utskriften från denna funktion är väldigt omfattande, speciellt om vi använder argumentet <code>details = TRUE</code>, och bör <strong>inte</strong> presenteras utan används för internt bruk att förstå processen som algoritmen har tagit. Om vi sparar resultatet i ett separat R-objekt kan vi plocka ut förenklade tabeller med mått som vi förstår och kan tolka.</p>
 <div class="cell" data-tbl-cap="Resultat av bakåtelimineringens steg att plocka bort variabler">
@@ -1163,8 +1188,8 @@ Viktigt
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lägg till argumentet details = TRUE för att få mer detaljer i utskriften</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bakåtModell <span class="ot">&lt;-</span> <span class="fu">ols_step_backward_aic</span>(completeModel)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>bakåtModell<span class="sc">$</span>metrics <span class="sc">%&gt;%</span> </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(step, variable, r2, adj_r2, aic) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>bakåtModell<span class="sc">$</span>metrics <span class="sc">|&gt;</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(step, variable, r2, adj_r2, aic) <span class="sc">|&gt;</span> </span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, </span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Steg"</span>, <span class="st">"Variabel"</span>, <span class="st">"$R^2$"</span>, <span class="st">"$R^2_{adj}$"</span>, <span class="st">"AIC"</span>),</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1203,9 +1228,9 @@ Viktigt
 <div class="cell" data-tbl-cap="Den utvalda modellen från bakåtelimineringen">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>bakåtModell<span class="sc">$</span>model <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>bakåtModell<span class="sc">$</span>model <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>,</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variabel"</span>, <span class="st">"Skattning"</span>, <span class="st">"Medelfel"</span>, <span class="st">"t-värde"</span>, <span class="st">"p-värde"</span>))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
@@ -1277,8 +1302,8 @@ Viktigt
 </div>
 <p>AIC för den största modellen är <span class="math inline">\(AIC = 1487.227\)</span> och kan tas fram med hjälp av funktionen <code>AIC(modellobjektet)</code>. Jämfört med det sista steget från algoritmen, <span class="math inline">\(AIC = 1484.255\)</span>, ser vi att AIC blivit mindre vilket är önskvärt. Att algoritmen inte längre väljer att ta bort några ytterligare variabler innebär att AIC har blivit så liten som den kan bli med denna modellstruktur.</p>
 </section>
-<section id="framåtvalsmetoden" class="level3" data-number="10.2.5">
-<h3 data-number="10.2.5" class="anchored" data-anchor-id="framåtvalsmetoden"><span class="header-section-number">10.2.5</span> Framåtvalsmetoden</h3>
+<section id="framåtvalsmetoden" class="level3" data-number="13.2.5">
+<h3 data-number="13.2.5" class="anchored" data-anchor-id="framåtvalsmetoden"><span class="header-section-number">13.2.5</span> Framåtvalsmetoden</h3>
 <p>I de fall där den största modellen är alldeles för stor för att ens anpassa starten av bakåtelimineringsalgoritmen kan vi istället börja med en tom modell och successivt lägga till variabler. Processen för varje steg är densamma, avseende hur algoritmen väljer att gå vidare till nästa steg, men vi tittar nu på kandidater med en fler variabel och väljer den modell som har minst AIC.</p>
 <div class="cell" data-tbl-cap="Resultat av framåtvalsmetodens steg att lägga till variabler">
 <details class="code-fold">
@@ -1286,8 +1311,8 @@ Viktigt
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lägg till argumentet details = TRUE för att få mer detaljer i utskriften</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>framåtModell <span class="ot">&lt;-</span> <span class="fu">ols_step_forward_aic</span>(completeModel)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>framåtModell<span class="sc">$</span>metrics <span class="sc">%&gt;%</span> </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(step, variable, r2, adj_r2, aic) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>framåtModell<span class="sc">$</span>metrics <span class="sc">|&gt;</span> </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(step, variable, r2, adj_r2, aic) <span class="sc">|&gt;</span> </span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, </span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Steg"</span>, <span class="st">"Variabel"</span>, <span class="st">"$R^2$"</span>, <span class="st">"$R^2_{adj}$"</span>, <span class="st">"AIC"</span>),</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1347,9 +1372,9 @@ Viktigt
 <div class="cell" data-tbl-cap="Den utvalda modellen från framåtvalsmetoden">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>framåtModell<span class="sc">$</span>model <span class="sc">%&gt;%</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>framåtModell<span class="sc">$</span>model <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>,</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variabel"</span>, <span class="st">"Skattning"</span>, <span class="st">"Medelfel"</span>, <span class="st">"t-värde"</span>, <span class="st">"p-värde"</span>))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
@@ -1421,8 +1446,8 @@ Viktigt
 </div>
 <p>I just detta fall får vi samma modell som bakåtelimineringen men det är inte garanterat att inträffa. Ordningen av variablerna som läggs till behöver inte vara samma variabler som bakåtelimineringen utgår från när den ska ta bort en variabel.</p>
 </section>
-<section id="stegvis-regression" class="level3" data-number="10.2.6">
-<h3 data-number="10.2.6" class="anchored" data-anchor-id="stegvis-regression"><span class="header-section-number">10.2.6</span> Stegvis regression</h3>
+<section id="stegvis-regression" class="level3" data-number="13.2.6">
+<h3 data-number="13.2.6" class="anchored" data-anchor-id="stegvis-regression"><span class="header-section-number">13.2.6</span> Stegvis regression</h3>
 <p>Nackdelen med de enkelriktade algoritmerna (bakåteliminering och framåtval) är att när en variabel lagts till eller tagits bort, är detta beslut permanent. Algoritmens girighet kan för hindra att vi hittar den bästa modellen efter några steg. Det kan mycket väl vara så att en variabel bidrar med multikollinearitet som resulterar i att en viktig variabel plockas bort eller att en interaktion mellan vissa variabler bidrar med information till modellen men som aldrig läggs till.</p>
 <p>Lösningen är att släppa på begränsningen och tillåta algoritmen att vid varje steg både lägga till och ta bort variabler. Detta kan vi genomföra med hjälp av <code>ols_step_both_aic()</code>.</p>
 <div class="cell" data-tbl-cap="Resultat av stegvis regression">
@@ -1431,8 +1456,8 @@ Viktigt
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lägg till argumentet details = TRUE för att få mer detaljer i utskriften</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>stegModell <span class="ot">&lt;-</span> <span class="fu">ols_step_both_aic</span>(completeModel)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>stegModell<span class="sc">$</span>metrics <span class="sc">%&gt;%</span> </span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(step, variable, r2, adj_r2, aic) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>stegModell<span class="sc">$</span>metrics <span class="sc">|&gt;</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(step, variable, r2, adj_r2, aic) <span class="sc">|&gt;</span> </span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, </span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Steg"</span>, <span class="st">"Variabel"</span>, <span class="st">"$R^2$"</span>, <span class="st">"$R^2_{adj}$"</span>, <span class="st">"AIC"</span>),</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1491,8 +1516,8 @@ Viktigt
 </div>
 <p>Algoritmen börjar från en tom modell och först lägger till variabler. I denna utskrift ser vi att algoritmen kommer fram till samma modell som framåtvalsmetoden, men det behöver inte alltid vara fallet.</p>
 </section>
-<section id="visuell-jämförelse-av-modellerna" class="level3" data-number="10.2.7">
-<h3 data-number="10.2.7" class="anchored" data-anchor-id="visuell-jämförelse-av-modellerna"><span class="header-section-number">10.2.7</span> Visuell jämförelse av modellerna</h3>
+<section id="visuell-jämförelse-av-modellerna" class="level3" data-number="13.2.7">
+<h3 data-number="13.2.7" class="anchored" data-anchor-id="visuell-jämförelse-av-modellerna"><span class="header-section-number">13.2.7</span> Visuell jämförelse av modellerna</h3>
 <p>Resultatet från algoritmen kan visualiseras i figurer istället för i en tabell. Funktionen <code>plot()</code> tar resultatet av modellvalsalgoritmen och visualiserar utvecklingen av utvärderingsmåtten för respektive modellstorlek. Beroende på vilken algoritm som har använts kommer resultatet visa olika diagram och för de stegvisa processerna visas utvecklingen av AIC för varje steg.</p>
 <div class="cell">
 <details class="code-fold">
@@ -1510,10 +1535,10 @@ Viktigt
 </div>
 </section>
 </section>
-<section id="övningsuppgifter" class="level2" data-number="10.3">
-<h2 data-number="10.3" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">10.3</span> Övningsuppgifter</h2>
-<p>Vi ska i dessa uppgifter använda samma SENIC material om sjukhusinfektioner från <a href="06-complex-predictors.html#sec-exercises-complex" class="quarto-xref"><span>Avsnitt 7.3</span></a>.</p>
-<p>Vi anser att den största modellen som ska förklara infektionsrisken innehåller alla förklarande variabler, ID exkluderas, och interaktioner av ordning 2. Denna modell kan anpassas med <code>lm(Infection_risk ~ (.)^2, data = senic %&gt;% select(!ID))</code>.</p>
+<section id="övningsuppgifter" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">13.3</span> Övningsuppgifter</h2>
+<p>Vi ska i dessa uppgifter använda samma SENIC material om sjukhusinfektioner från <a href="06-complex-predictors.html#sec-exercises-complex" class="quarto-xref"><span>Avsnitt 10.3</span></a>.</p>
+<p>Vi anser att den största modellen som ska förklara infektionsrisken innehåller alla förklarande variabler, ID exkluderas, och interaktioner av ordning 2. Denna modell kan anpassas med <code>lm(Infection_risk ~ (.)^2, data = senic |&gt; select(!ID))</code>.</p>
 <ol type="a">
 <li><p>Dela upp datamaterialet i en träningsmängd (2/3 av data) och en valideringsmängd (1/3 av data). Tänk på att använda <code>set.seed()</code> för att randomiseringen av data ska vara samma varje gång ni kör koden.</p></li>
 <li><p>Anpassa den största modellen på träningsmängden och beräkna modellens AIC.</p></li>
@@ -1941,16 +1966,1221 @@ Viktigt
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../01-regression/08-detailed-residuals.html" class="pagination-link" aria-label="Detaljerad residualanalys">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../01-regression/10-logistic-regression.html" class="pagination-link" aria-label="Logistisk regression">
-        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+
+// Script to highlight the current section in the navbar depending on which page you are on
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const currentPath = window.location.pathname;
+
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+
+
+    navLinks.forEach(link => {
+
+        const linkPath = new URL(link.href).pathname;
+
+
+
+        // Highlight parent section if current path starts with link path
+
+        if (currentPath.startsWith(linkPath)) {
+
+            link.classList.add("active");
+
+        } else {
+
+            link.classList.remove("active");
+
+        }
+
+    });
+
+});
+
+</script>
+
+<script>
+
+
+
+/* definition of content for the buttons */
+
+const webex_buttons = {check_hidden:          "<b>&check;</b>",
+
+                       check_hidden_alt:      "Check answer",
+
+                       check_shown:           "<b>&lsh;</b>",
+
+                       check_shown_alt:       "Hide check",
+
+                       check_of_total:        "/",
+
+                       solution:              "<b>&quest;</b>",
+
+                       solution_alt:          "Correct solution",
+
+                       question_next:         "<b>&#8634;</b>",
+
+                       question_next_alt:     "Next question",
+
+                       question_previous:     "",
+
+                       question_previous_alt: ""}
+
+
+
+
+
+/* update total correct if #webex-total_correct exists */
+
+update_total_correct = function() {
+
+  console.log("webex: update total_correct");
+
+
+
+  document.querySelectorAll(".webex-total_correct").forEach(total => {
+
+    p = total.closest(".webex-box");
+
+    var correct = p.getElementsByClassName("webex-correct").length;
+
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    /* no specific class on input node, thus searching via query selector */
+
+    var checkboxgroups = p.querySelectorAll("div[class=webex-checkboxgroup] input[type=checkbox]").length
+
+
+
+    /* show number of correct / total number of answers */
+
+    total.innerHTML = correct + "&nbsp;" + webex_buttons.check_of_total + "&nbsp;" + (solvemes + radiogroups + checkboxgroups + selects);
+
+  });
+
+}
+
+
+
+/* check answers */
+
+check_func = function() {
+
+  console.log("webex: check answer");
+
+
+
+  //var cl = elem.parentElement.classList;
+
+  var cl = this.closest(".webex-box").classList;
+
+  if (cl.contains("unchecked")) {
+
+    cl.remove("unchecked");
+
+    this.innerHTML = webex_buttons.check_shown; //"Hide check";
+
+    if (webex_buttons.check_shown_alt.length > 0) this.setAttribute("title", webex_buttons.check_shown_alt);
+
+  } else {
+
+    cl.add("unchecked");
+
+    this.innerHTML = webex_buttons.check_hidden; //"Check answer";
+
+    if (webex_buttons.check_hidden_alt.length > 0) this.setAttribute("title", webex_buttons.check_hidden_alt);
+
+  }
+
+}
+
+
+
+/* helper functions for checking the webex ID */
+
+const id_checker = {"fmt": new RegExp("[g-zG-Z]"),
+
+                    "load": function(e) { return e.getAttribute("id").match("(?<=(-)).*$")[0]; },
+
+                    "eval": new TextEncoder(),
+
+                    "dval": new TextDecoder()}
+
+
+
+/* Show/hide correct solution */
+
+solution_func = function() {
+
+  console.log("webex: show/hide solution");
+
+
+
+  var div = this.closest(".webex-question").querySelector(".webex-solution");
+
+  var cl = div.classList;
+
+
+
+  if (cl.contains("visible")) {
+
+    cl.remove("visible");
+
+  } else {
+
+    cl.add("visible");
+
+  }
+
+}
+
+
+
+/* function to check if the real answer is numeric */
+
+convert_to_numeric = function(x) {
+
+  if (typeof x == "string") {
+
+    /* do nothing */
+
+  } else if (x.length == 1) {
+
+    /* take first element */
+
+    x = x[0]
+
+  } else {
+
+    return NaN;
+
+  }
+
+
+
+  /* remove spaces for easier parsing */
+
+  x = x.replace(/\s/g, "");
+
+
+
+  /* Define patterns for different formats, note that spaces have been removed above */
+
+  const patterns = [
+
+    {regex: /^[+-]?\d+(\.\d{3})*,\d+$/, decimal: ",", thousand: "." },  // Format: "1.100.100.100,3"
+
+    {regex: /^[+-]?\d+(,\d{3})*\.\d+$/, decimal: ".", thousand: "," },  // Format: "1,100,100,100.3"
+
+    {regex: /^[+-]?\d+(\.|\.\d+)?$/, decimal: "." },                    // Format: "1100100100.5" or "1100100100."
+
+    {regex: /^[+-]?\d+(,|,\d+)$/, decimal: "," }                        // Format: "1100100100,5" or "1100100100,"
+
+  ];
+
+
+
+
+
+  /* testing all regular expressions, convert to float if possible */
+
+  for (const { regex, decimal, thousand } of patterns) {
+
+    if (regex.test(x)) {
+
+      let numeric = x;
+
+      if (thousand) numeric = numeric.replace(new RegExp(`\\${thousand}`, "g"), "");
+
+      numeric = numeric.replace(decimal, ".");
+
+      return parseFloat(numeric);
+
+    }
+
+  }
+
+
+
+  /* input of length 1 but none of the known formats, return NaN */
+
+  return NaN;
+
+}
+
+
+
+/* Checking webex ID, returns formalsol */
+
+check_id = function(e) {
+
+  /* loading webex ID */
+
+  var id = id_checker["load"](e);
+
+
+
+  /* extracting answer */
+
+  let answer = e.dataset.answer;
+
+
+
+  /* checking unique id, prepare and return array */
+
+  if (!id_checker["fmt"].test(id)) {
+
+    const a = id_checker["eval"].encode(atob(answer));
+
+    const b = id_checker["eval"].encode(id);
+
+    const res = a.map((byte, index) => byte^b[index % b.length]);
+
+    answer = id_checker["dval"].decode(res);
+
+    /* Replacing &amp; with ' before parsing */
+
+    answer = answer.replaceAll("&apos;", "'");
+
+  }
+
+
+
+  return JSON.parse(answer);
+
+}
+
+
+
+/* function for checking solveme answers */
+
+solveme_func = function(e) {
+
+  /* avoid that keyup and keychange twice execute this function within nms = 10
+
+   * ms, clearing inputTimer and add timeout */
+
+  console.log("webex: check solveme");
+
+
+
+  /* float, precision for checking numeric answers */
+
+  const eps = 0.00000000000001;
+
+
+
+  /* get last checked user answer */
+
+  const question = this.closest(".webex-question")
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+  var my_answer = this.value;
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+
+
+  /* empty answer? Job done */
+
+  if (my_answer == "") {
+
+    cl.remove("webex-correct");
+
+    cl.remove("webex-incorrect");
+
+    return false;
+
+  }
+
+
+
+  /* Find closest (parent) webex-question */
+
+  let formalsols = check_id(this)
+
+
+
+  /* by default we assume the users' answer is incorrect */
+
+  var user_answer_correct = false;
+
+
+
+  /* check if the correct answer is numeric, i.e. if 
+
+   * formalsols is of length 1 containing one single numeric
+
+   * value in a known format, else, NaN is returned */
+
+  const num_formalsol = convert_to_numeric(formalsols);
+
+  const num_my_answer = convert_to_numeric(my_answer);
+
+
+
+  /* if the correct answer is numeric (float), the user's answer
+
+   * must also be numeric. If not, it is wrong. Else we can
+
+   * compare floating point numbers */
+
+  if (!isNaN(num_formalsol) && !isNaN(num_my_answer)) {
+
+    /* check if the real answer and the user input are numerically the same;
+
+     * adding 'delta' to avoid precision issues */
+
+    var diff = Math.abs(num_formalsol - num_my_answer);
+
+    if (diff < parseFloat(this.dataset.tol) + eps) { user_answer_correct = true; }
+
+
+
+  /* if the question contains regex, a regular expression is used
+
+   * to evaluate the users answer. Allows for multiple regular expressions */
+
+  } else if (cl.contains("regex")) {
+
+    for (let i = 0; i < formalsols.length; i++) {
+
+        let regex = new RegExp(formalsols[i], cl.contains("ignorecase") ? "i" : "");
+
+        if (regex.test(my_answer)) { user_answer_correct = true; break; }
+
+    }
+
+
+
+  /* else we evaluate on 'string level', considering the creators preferences
+
+   * regarding set options */
+
+  } else {
+
+    /* modify/prepare answer */
+
+    if (cl.contains("ignorecase")) { my_answer = my_answer.toLowerCase(); }
+
+    if (cl.contains("nospaces"))   { my_answer = my_answer.replace(/ /g, ""); }
+
+
+
+    /* if the real answer includes user input - correct */
+
+    if (formalsols.includes(my_answer)) {
+
+      user_answer_correct = true;
+
+  
+
+      // added regex bit
+
+      if (cl.contains("regex")) {
+
+        answer_regex = RegExp(formalsols.join("|"))
+
+        if (answer_regex.test(my_answer)) {
+
+          cl.add("webex-correct");
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+
+  if (user_answer_correct) {
+
+      cl.add("webex-correct");
+
+      cl.remove("webex-incorrect");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+      cl.remove("webex-correct");
+
+  }
+
+
+
+  update_total_correct();
+
+
+
+}
+
+
+
+/* function for checking select answers */
+
+select_func = function(e) {
+
+  console.log("webex: check select");
+
+
+
+  var options   = [];
+
+  Array.from(this.querySelectorAll("option")).forEach((option, index) => {
+
+    if (!option.hasAttribute("value") || !option.getAttribute("value") === "blank") {
+
+      options.push(option);
+
+    }
+
+  });
+
+
+
+  /* get selected option */
+
+  function get_selected(options) { return options.findIndex(option => option.selected); }
+
+  var option_index = get_selected(options)
+
+
+
+  /* loading webex ID */
+
+  var formalsol = check_id(this)
+
+
+
+  /* add class for current selection */
+
+  this.classList.remove("webex-incorrect");
+
+  this.classList.remove("webex-correct");
+
+  if (option_index >= 0) {
+
+    this.classList.add(formalsol[option_index] === 1 ? "webex-correct" : "webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* function for checking radiogroups answers */
+
+radiogroups_func = function(e) {
+
+  console.log("webex: check radiogroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var id = e.target.getAttribute("name");
+
+  var group = document.querySelector(".webex-radiogroup[id='webex-" + id + "']");
+
+  var formalsol = check_id(group)
+
+
+
+  /* check which radiobuttion is selected (user answer) */
+
+  function get_checked(radios) {
+
+    return radios.findIndex(radios => radios.checked);
+
+  }
+
+  var radios = Array.from(group.querySelectorAll("input[type='radio']"))
+
+  var radio_index = get_checked(radios);
+
+
+
+  /* remove existing classes */
+
+  radios.forEach(radio => {
+
+    let cl = radio.closest("label").classList
+
+    cl.remove("webex-incorrect");
+
+    cl.remove("webex-correct");
+
+  });
+
+
+
+  /* add class for current selection */
+
+  let cl = radios[radio_index].closest("label").classList
+
+  if (formalsol[radio_index] === 1) {
+
+      cl.add("webex-correct");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+
+
+/* function for checking checkboxgroups answers */
+
+checkboxgroups_func = function(e) {
+
+  console.log("webex: check checkboxgroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var group = document.querySelector(".webex-checkboxgroup[id='" + this.id + "']");
+
+  var formalsol = check_id(group);
+
+
+
+  /* check which checkbox is checked (user answer) */
+
+  function get_checked(group) {
+
+      const checkboxes = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+      return checkboxes.reduce((indices, checkbox, index) => {
+
+          if (checkbox.checked) indices.push(index);
+
+          return indices;
+
+      }, []);
+
+  }
+
+  var checks = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+  var check_index = get_checked(group);
+
+
+
+  checks.forEach((e, index) => {
+
+    var label = e.parentNode;
+
+    var ans = formalsol[index];
+
+    if ((e.checked && ans === 1) || (!e.checked && ans === 0)) {
+
+        label.setAttribute("class", "webex-correct")
+
+    } else {
+
+        label.setAttribute("class", "webex-incorrect")
+
+    }
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* shuffling array (thanks to stack overflow)
+
+ * If argument x is an integer we create an integer sequence
+
+ * from 0, 1, ..., (x - 1) and return a shuffled version. If
+
+ * the input is an array, we simply shuffle it */
+
+shuffle_array = function(x) {
+
+   if (Number.isInteger(x) && !isNaN(x)) {
+
+     x = Array.from({length: x}, (v, i) => i);
+
+   }
+
+   let shuffled = x.map(value => ({ value, sort: Math.random() }))
+
+        .sort((a, b) => a.sort - b.sort).map(({ value }) => value)
+
+   return shuffled;
+
+}
+
+
+
+/* ---------------------------------------------------------
+
+ * ---------------------------------------------------------
+
+ * --------------------------------------------------------- */
+
+window.onload = function() {
+
+  //console.log("webex: onload");
+
+
+
+  /* setting up buttons and actions to show/hide answers */
+
+  document.querySelectorAll(".webex-check").forEach(section => {
+
+    section.classList.add("unchecked");
+
+
+
+    /* ul to take up the list items with buttons */
+
+    let button_ul = document.createElement("ul");
+
+    button_ul.setAttribute("class", "webex-button-list");
+
+    section.appendChild(button_ul);
+
+
+
+    /* button to _check_ if answers given are correct */
+
+    let li_check = document.createElement("li");
+
+    button_ul.appendChild(li_check); /* add list item to ul */
+
+    let btn_check = document.createElement("button");
+
+    btn_check.innerHTML = webex_buttons.check_hidden;  // "Check answer";
+
+    btn_check.setAttribute("class", "webex-button webex-button-check");
+
+    if (webex_buttons.check_hidden_alt.length > 0) btn_check.setAttribute("title", webex_buttons.check_hidden_alt);
+
+    btn_check.onclick = check_func;
+
+    li_check.appendChild(btn_check);
+
+
+
+    /* span to show current number of points (when _check_ active) */
+
+    let spn = document.createElement("span");
+
+    spn.classList.add("webex-total_correct");
+
+    li_check.appendChild(spn);
+
+
+
+    /* button to show the _solution_ if there is one */
+
+    var has_solution = section.parentNode.querySelectorAll(".webex-solution").length > 0;
+
+    if (has_solution) {
+
+      let li_solution = document.createElement("li");
+
+      button_ul.appendChild(li_solution); /* add list item to ul */
+
+      let btn_solution = document.createElement("button");
+
+      btn_solution.innerHTML = webex_buttons.solution; // "Correct answer";
+
+      btn_solution.setAttribute("class", "webex-button webex-button-solution");
+
+      if (webex_buttons.solution_alt.length > 0) btn_solution.setAttribute("title", webex_buttons.solution_alt);
+
+      btn_solution.onclick = solution_func;
+
+      li_solution.appendChild(btn_solution);
+
+    }
+
+
+
+  });
+
+
+
+  /* set up webex-solveme inputs */
+
+  document.querySelectorAll(".webex-solveme").forEach(solveme => {
+
+    solveme.setAttribute("autocomplete","off");
+
+    solveme.setAttribute("autocorrect", "off");
+
+    solveme.setAttribute("autocapitalize", "off");
+
+    solveme.setAttribute("spellcheck", "false");
+
+    solveme.value = "";
+
+
+
+    /* adjust answer for 'no spaces' (ignore spaces) */
+
+    if (solveme.classList.contains("nospaces")) {
+
+      solveme.dataset.answer = solveme.dataset.answer.replace(/ /g, "");
+
+    }
+
+
+
+    /* attach checking function, triggered on key up, change, and when
+
+     * elemnt is out of focus. Only evaluated once by tracking changes
+
+     * via variable solveme_last_user_answer */
+
+    solveme.addEventListener("keyup",  solveme_func);
+
+    solveme.addEventListener("change", solveme_func);
+
+    solveme.addEventListener("blur",   solveme_func);
+
+
+
+    /* adding span to show correct/incorrect icon */
+
+    solveme.insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+
+  });
+
+
+
+  /* set up radiogroups (single choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+    radiogroup.onchange = radiogroups_func;
+
+  });
+
+
+
+  /* set up checkboxgroups (multiple choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-checkboxgroup").forEach(checkboxgroup => {
+
+    checkboxgroup.onchange = checkboxgroups_func;
+
+  });
+
+
+
+  /* set up selects (dropdown menus) */
+
+  document.querySelectorAll(".webex-select").forEach(select => {
+
+    select.onchange = select_func;
+
+    /* append webex-icon for correct/incorrect icons */
+
+    var elem = document.createElement("span")
+
+    elem.classList.add("webex-icon")
+
+    select.parentNode.appendChild(elem)
+
+  });
+
+
+
+  /* change to next/previous question if multiple are available */
+
+  function handleQuestionClick(group, questions, step) {
+
+    return async function() {
+
+      /* get question order as integer vector */
+
+      let questionOrder = group.dataset.questionOrder.split(",").map(str => parseInt(str));
+
+
+
+      /* current question/position */
+
+      let currentPosition = parseInt(group.dataset.currentPosition);
+
+
+
+      /* Hide the current question */
+
+      questions.forEach(question => { question.classList.remove("active"); });
+
+
+
+      /* Move to the next question index */
+
+      currentPosition = (currentPosition + step) % questionOrder.length;
+
+      if (currentPosition < 0) currentPosition = currentPosition + questionOrder.length
+
+
+
+      /* Display the new question */
+
+      questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+      // Update the currentPosition data attribute on the group div
+
+      group.dataset.currentPosition = currentPosition;
+
+    };
+
+  }
+
+
+
+  document.querySelectorAll(".webex-group").forEach(group => {
+
+    const questions = Array.from(group.querySelectorAll(".webex-question"));
+
+
+
+    /* Create vector with question order. If the webex-group does
+
+     * not have class '.noshuffle' we will randomly shuffle the order */
+
+    let questionOrder = Array.from({length: questions.length}, (v, i) => i);
+
+    if (!group.classList.contains("noshuffle")) {
+
+      questionOrder = shuffle_array(questionOrder);
+
+    }
+
+
+
+    /* take start position (if set) or start at 0 */
+
+    const currentPosition = parseInt(group.getAttribute("data-start-position")) || 0;
+
+
+
+    /* show the default question for each group */
+
+    questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+    /* store random order of questions as well as current position */
+
+    group.dataset.questionOrder   = questionOrder;
+
+    group.dataset.currentPosition = currentPosition;
+
+
+
+    /* find all webex-questions, search for .webex-button-list and
+
+     * populate the list with necessary <li><button>...</button></li> elements */
+
+    questions.forEach(question => {
+
+        let button_ul = question.querySelector("ul.webex-button-list");
+
+
+
+        let li_next = document.createElement("li");
+
+        let nextButton = document.createElement("button");
+
+        nextButton.setAttribute("class", "webex-button webex-button-next");
+
+        if (webex_buttons.question_next_alt.length > 0) nextButton.setAttribute("title", webex_buttons.question_next_alt);
+
+        nextButton.innerHTML = webex_buttons.question_next; // "Next question";
+
+        nextButton.addEventListener("click", handleQuestionClick(group, questions, 1));
+
+        li_next.appendChild(nextButton);
+
+
+
+        let li_previous = document.createElement("li");
+
+        let previousButton = document.createElement("button");
+
+        previousButton.setAttribute("class", "webex-button webex-button-previous");
+
+        if (webex_buttons.question_previous_alt.length > 0) previousButton.setAttribute("title", webex_buttons.question_previous_alt);
+
+        previousButton.innerHTML = webex_buttons.question_previous; // "Previous question";
+
+        previousButton.addEventListener("click", handleQuestionClick(group, questions, -1));
+
+        li_previous.appendChild(previousButton);
+
+
+
+        if (webex_buttons.question_previous.length > 0) button_ul.appendChild(li_previous);
+
+        if (webex_buttons.question_next.length > 0) button_ul.appendChild(li_next);
+
+    });
+
+  });
+
+
+
+  /* Development options */
+
+  document.querySelectorAll(".webex-question.check").forEach(question => {
+
+      question.querySelector(".webex-button-check").click()
+
+  });
+
+  document.querySelectorAll(".webex-question.solution").forEach(question => {
+
+      let btn = question.querySelector(".webex-button-solution");
+
+      if (btn !== null) { btn.click(); }
+
+  });
+
+
+
+  /* Pre-filling <input> fields */
+
+  document.querySelectorAll(".webex-question.prefill").forEach(question => {
+
+      question.querySelectorAll("input.webex-solveme").forEach(solveme => {
+
+          let x = JSON.parse(solveme.dataset.answer);
+
+          solveme.value = x[0];
+
+          /* Trigger the on change event */
+
+          solveme.dispatchEvent(new Event("change"));
+
+      });
+
+
+
+      /* Pre-filling radiogroups, that is for schoice questions */
+
+      question.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let idx = x.indexOf(1);
+
+          let radios = radiogroup.querySelectorAll('input[type="radio"]');
+
+          radios[idx].checked = true;
+
+          /* Trigger the on change event */
+
+          radios[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for schoice questions w/ dropdown menus */
+
+      question.querySelectorAll(".webex-select").forEach(dropdown => {
+
+          let x = JSON.parse(dropdown.dataset.answer);
+
+          let idx = x.indexOf(1) + 1; /* +1 to skip the first blank option */
+
+          let options = dropdown.querySelectorAll("option");
+
+          options[idx].selected = true;
+
+          /* Trigger the on change event */
+
+          options[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for mchoice questions */
+
+      question.querySelectorAll(".webex-checkboxgroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let checkboxes = radiogroup.querySelectorAll('input[type="checkbox"]');
+
+          for (let i = 0; i < checkboxes.length; i++) {
+
+              checkboxes[i].checked = x[i];
+
+          }
+
+          /* Trigger the on change event */
+
+          checkboxes[0].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+  });
+
+
+
+  /* Show set tolerance (devel option) */
+
+  function calc_width(x, txt, offset = 20) {
+
+      /* We do the following:
+
+       * Create a new span, insert the value we need in the .tolerance
+
+       * input node, and calculate its offsetWidth. Then remove it
+
+       * again; this is just used to calculate the required width. */
+
+      var cwtmp = document.createElement("span");
+
+      x.appendChild(cwtmp);
+
+      cwtmp.innerHTML = txt || "";
+
+      var w = parseInt(cwtmp.getBoundingClientRect().width) + offset;
+
+      cwtmp.remove();
+
+      return w;
+
+  }
+
+
+
+  /* If tolerance should be shown (devel option) we calculate:
+
+   * - the width required to properly display the solution
+
+   * - the width required to properly display the tolerance
+
+   * - add a new element to display the tolerance
+
+   * - reduce the width of the solution input box. */
+
+  document.querySelectorAll(".webex-question.tolerance").forEach(question => {
+
+      question.querySelectorAll("input[data-tol]").forEach(elem => {
+
+          var w = null;
+
+
+
+          /* Add new element showing the tolerance */
+
+          let tol = document.createElement("input");
+
+          tol.type = "text"; // <inpyt type="text">
+
+          tol.disabled = true; // Disable input element
+
+          tol.classList.add("tolerance"); // Appending class
+
+          tol.value = "Â± " + elem.getAttribute("data-tol");
+
+
+
+          /* Add new node */
+
+          elem.parentNode.insertBefore(tol, elem)
+
+
+
+          var body     = document.querySelector("body");
+
+          //tol.value = "Â± " + "0.0000007";
+
+          //tol.value = "Â± " + "0.07";
+
+          w    = calc_width(body, tol.value);
+
+          wold = parseInt(elem.getBoundingClientRect().width);
+
+          wmin = calc_width(body, elem.value);
+
+
+
+          /* Calculate required width of the 'tolerance' node, and the
+
+           * reduction of the original 'input' node */
+
+          let wnew = Math.max(wmin, wold - w);
+
+          tol.style.width  = w + "px";
+
+          elem.style.width = wnew + "px";
+
+      });
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+</script>
 
 
 

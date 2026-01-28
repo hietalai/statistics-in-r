@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>9&nbsp; Detaljerad residualanalys – Statistisk teori och tillämpningar i R</title>
+<title>12&nbsp; Detaljerad residualanalys – Statistisk teori och tillämpningar i R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -157,6 +157,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../webex.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -204,7 +205,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/08-detailed-residuals.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/08-detailed-residuals.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
@@ -246,19 +247,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Grunderna i R</span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunderna i R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Paket och funktioner</span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">tidyverse</span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span></a>
   </div>
 </li>
       </ul>
@@ -275,73 +276,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/09-variable-selection.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/10-logistic-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/11-other-link-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
   </div>
 </li>
       </ul>
@@ -358,25 +359,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/02-control-variables.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/03-twoway-anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
   </div>
 </li>
       </ul>
@@ -392,8 +393,32 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/00-white-noise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Introduktion till tidsserier</span></span></a>
+  <a href="../04-time-series/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/01-properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Tidsserier</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/04-arimax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span></a>
   </div>
 </li>
       </ul>
@@ -408,18 +433,18 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#avvikande-observationer" id="toc-avvikande-observationer" class="nav-link active" data-scroll-target="#avvikande-observationer"><span class="header-section-number">9.1</span> Avvikande observationer</a>
+  <li><a href="#avvikande-observationer" id="toc-avvikande-observationer" class="nav-link active" data-scroll-target="#avvikande-observationer"><span class="header-section-number">12.1</span> Avvikande observationer</a>
   <ul class="collapse">
-  <li><a href="#standardiserade-residualer" id="toc-standardiserade-residualer" class="nav-link" data-scroll-target="#standardiserade-residualer"><span class="header-section-number">9.1.1</span> Standardiserade residualer</a></li>
-  <li><a href="#avvikande-observationer-i-x" id="toc-avvikande-observationer-i-x" class="nav-link" data-scroll-target="#avvikande-observationer-i-x"><span class="header-section-number">9.1.2</span> Avvikande observationer i X</a></li>
-  <li><a href="#jackknife-residualer" id="toc-jackknife-residualer" class="nav-link" data-scroll-target="#jackknife-residualer"><span class="header-section-number">9.1.3</span> Jackknife-residualer</a></li>
+  <li><a href="#standardiserade-residualer" id="toc-standardiserade-residualer" class="nav-link" data-scroll-target="#standardiserade-residualer"><span class="header-section-number">12.1.1</span> Standardiserade residualer</a></li>
+  <li><a href="#avvikande-observationer-i-x" id="toc-avvikande-observationer-i-x" class="nav-link" data-scroll-target="#avvikande-observationer-i-x"><span class="header-section-number">12.1.2</span> Avvikande observationer i X</a></li>
+  <li><a href="#jackknife-residualer" id="toc-jackknife-residualer" class="nav-link" data-scroll-target="#jackknife-residualer"><span class="header-section-number">12.1.3</span> Jackknife-residualer</a></li>
   </ul></li>
-  <li><a href="#inflytelserika-observationer" id="toc-inflytelserika-observationer" class="nav-link" data-scroll-target="#inflytelserika-observationer"><span class="header-section-number">9.2</span> Inflytelserika observationer</a>
+  <li><a href="#inflytelserika-observationer" id="toc-inflytelserika-observationer" class="nav-link" data-scroll-target="#inflytelserika-observationer"><span class="header-section-number">12.2</span> Inflytelserika observationer</a>
   <ul class="collapse">
-  <li><a href="#dffits" id="toc-dffits" class="nav-link" data-scroll-target="#dffits"><span class="header-section-number">9.2.1</span> DFFITS</a></li>
-  <li><a href="#cooks-distance" id="toc-cooks-distance" class="nav-link" data-scroll-target="#cooks-distance"><span class="header-section-number">9.2.2</span> Cook’s Distance</a></li>
+  <li><a href="#dffits" id="toc-dffits" class="nav-link" data-scroll-target="#dffits"><span class="header-section-number">12.2.1</span> DFFITS</a></li>
+  <li><a href="#cooks-distance" id="toc-cooks-distance" class="nav-link" data-scroll-target="#cooks-distance"><span class="header-section-number">12.2.2</span> Cook’s Distance</a></li>
   </ul></li>
-  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">9.3</span> Övningsuppgifter</a></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">12.3</span> Övningsuppgifter</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -427,9 +452,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/08-detailed-residuals.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/08-detailed-residuals.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></h1>
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></h1>
 </div>
 
 
@@ -449,7 +474,7 @@ window.Quarto = {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
-<p>I <a href="03-model-assessment.html#sec-residual-simple" class="quarto-xref"><span>Avsnitt 4.1</span></a> presenterades sätt att med hjälp av residualer bedöma om en modell uppfyller antaganden för linjär regression genom olika enkla visualiseringar. Residualer kan också användas för att identifiera observationer som vi anser påverka modellanpassningen mer än övriga samt att identifiera avvikande observationer som bör undersökas vidare.</p>
+<p>I <a href="03-model-assessment.html#sec-residual-simple" class="quarto-xref"><span>Avsnitt 7.1</span></a> presenterades sätt att med hjälp av residualer bedöma om en modell uppfyller antaganden för linjär regression genom olika enkla visualiseringar. Residualer kan också användas för att identifiera observationer som vi anser påverka modellanpassningen mer än övriga samt att identifiera avvikande observationer som bör undersökas vidare.</p>
 <p>I detta kapitel kommer vi behandla simulerade datamaterial. Vi simulerar först ett datamaterial med olika former av brus.</p>
 <div class="cell">
 <details class="code-fold">
@@ -459,10 +484,10 @@ window.Quarto = {
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Skapar grunddata</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> </span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">31</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">20</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">31</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">20</span>) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>),</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Skapar y från x utan brus (brus läggs till senare)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> (<span class="dv">5</span> <span class="sc">+</span> <span class="dv">5</span><span class="sc">*</span>x) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> (<span class="dv">5</span> <span class="sc">+</span> <span class="dv">5</span><span class="sc">*</span>x) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>),</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Litet brus (sd = 3)</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y1 =</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">31</span>, <span class="at">sd =</span> <span class="dv">3</span>),</span>
@@ -473,18 +498,18 @@ window.Quarto = {
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualisering av sambanden</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="do">## "Roterar" datamaterialet för att förenkla visualiseringar</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>x,</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Data"</span>,</span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"y"</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Filtrerar bort y utan brus</span></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(</span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    Data <span class="sc">!=</span> <span class="st">"y"</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y) <span class="sc">+</span> </span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()  <span class="sc">+</span> </span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">rows =</span> <span class="fu">vars</span>(Data))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -496,7 +521,7 @@ window.Quarto = {
 <img src="08-detailed-residuals_files/figure-html/fig-outlier-data-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-outlier-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;9.1: Spridningsdiagram för de olika datamaterialen.
+Figur&nbsp;12.1: Spridningsdiagram för de olika datamaterialen.
 </figcaption>
 </figure>
 </div>
@@ -509,7 +534,7 @@ Figur&nbsp;9.1: Spridningsdiagram för de olika datamaterialen.
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Ändrar värden på y för att skapa extremvärden</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Skapar de nya variablerna där extremvärden läggs till</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y3 =</span> y1,</span>
@@ -524,18 +549,18 @@ Figur&nbsp;9.1: Spridningsdiagram för de olika datamaterialen.
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualisering av sambanden</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="do">## "Roterar" datamaterialet för att förenkla visualiseringar</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>x,</span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Data"</span>,</span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"y"</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Filtrerar bort y utan brus</span></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(</span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    Data <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"y3"</span>, <span class="st">"y4"</span>)</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y) <span class="sc">+</span> </span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Data, <span class="at">nrow =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -557,9 +582,9 @@ Figur&nbsp;9.1: Spridningsdiagram för de olika datamaterialen.
 <li><code>y4</code> med litet brus och ett extremvärde i ytterkanten av x.</li>
 </ul>
 <p>Enkla residualer visar det absoluta avståndet mellan varje observation och dess punkt på den anpassade regressionslinjen, <span class="math inline">\(\hat{E}_i = Y_i - \hat{Y}_i\)</span>. Stora värden på residualerna kan indikera på att observationen ligger långt ifrån de övriga och med visualiseringar kan vi se om det endast är några enstaka observationer som har stora residualer eller om alla residualer generellt har stora värden. Det är främst i det första fallet som vi bör undersöka specifika observationer vidare då om alla residualer har stora värden är det främst en indikation på en sämre modell.</p>
-<p><em>Avvikande observationer</em> kan direkt påverka modellanpassningen till den grad att sambandet som anpassas inte speglar det övergripande samband som modellen ämnar att beskriva. Men bara för att en residual har ett stort absolutvärde betyder det inte alltid att residualen är en indikation på en avvikande observation. Ett lättare sätt att bedöma detta är att beräkna <em>standardiserade residualer</em> som också tar hänsyn till residualernas totala spridning istället för det absoluta avståndet från linjen.</p>
-<section id="avvikande-observationer" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="avvikande-observationer"><span class="header-section-number">9.1</span> Avvikande observationer</h2>
+<p><strong>Avvikande observationer</strong> kan direkt påverka modellanpassningen till den grad att sambandet som anpassas inte speglar det övergripande samband som modellen ämnar att beskriva. Men bara för att en residual har ett stort absolutvärde betyder det inte alltid att residualen är en indikation på en avvikande observation. Ett lättare sätt att bedöma detta är att beräkna <strong>standardiserade residualer</strong> som också tar hänsyn till residualernas totala spridning istället för det absoluta avståndet från linjen.</p>
+<section id="avvikande-observationer" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="avvikande-observationer"><span class="header-section-number">12.1</span> Avvikande observationer</h2>
 <p>Låt oss anpassa fyra olika modeller, en för vardera simulerade responsvariabel <code>y1</code>-<code>y4</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Anpassar modellen som ska undersökas</span></span>
@@ -639,18 +664,18 @@ Figur&nbsp;9.1: Spridningsdiagram för de olika datamaterialen.
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Stort brus</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(model2<span class="sc">$</span>coefficients, <span class="fu">summary</span>(model2)<span class="sc">$</span>r.squared),</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande nära mitt</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(model3<span class="sc">$</span>coefficients, <span class="fu">summary</span>(model3)<span class="sc">$</span>r.squared),</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande i ytterkant</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(model4<span class="sc">$</span>coefficients, <span class="fu">summary</span>(model4)<span class="sc">$</span>r.squared)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(modelJämför) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">hat{</span><span class="sc">\\</span><span class="st">beta}_0$"</span>, <span class="st">"$</span><span class="sc">\\</span><span class="st">hat{</span><span class="sc">\\</span><span class="st">beta}_1$"</span>, <span class="st">"$R^2$"</span>)</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>modelJämför <span class="sc">%&gt;%</span> </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>modelJämför <span class="sc">|&gt;</span> </span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Skattade koefficienter för alla modeller."</span>, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>) </span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-outlier-comparison" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-outlier-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
+Tabell&nbsp;12.1: Skattade koefficienter för alla modeller.
 </figcaption>
 <div aria-describedby="tbl-outlier-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -709,7 +734,7 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 <details class="code-fold">
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y1) <span class="sc">+</span> </span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>,  <span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">formula =</span> y<span class="sc">~</span>x, <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
@@ -717,7 +742,7 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> </span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> </span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y2) <span class="sc">+</span> </span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>,  <span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">formula =</span> y<span class="sc">~</span>x, <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
@@ -725,7 +750,7 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> </span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> </span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> </span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y3) <span class="sc">+</span> </span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>,  <span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">formula =</span> y<span class="sc">~</span>x, <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
@@ -733,7 +758,7 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 <span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
 <span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> </span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> </span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> </span>
 <span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y4) <span class="sc">+</span> </span>
 <span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>,  <span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> </span>
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">formula =</span> y<span class="sc">~</span>x, <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
@@ -753,8 +778,8 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 </div>
 <p>Vi ser att modell 1 med litet brus (<code>y1</code>) faller ganska nära det sanna modellen, <span class="math inline">\(y = 5 + 5 \cdot x\)</span>, och detsamma gäller modellen med den avvikande observationen nära mittpunkten av den förklarande variabeln (<code>y3</code>). Däremot verkar modellerna där det finns ett stort brus överlag (<code>y2</code>) och en avvikande observation i ytterkanten av den förklarande variabeln (<code>y4</code>) hamna längre ifrån den sanna modellen och ha en större grad av osäkerhet eftersom förklaringsgraden är närmare 70 procent jämfört med 95-99 procent.</p>
 <p>Vad detta resultat visar oss är att en avvikande observation behöver inte alltid generera en påverkan på modellanpassningen i stort men modellen kommer inte lyckas anpassa just den observationen bra. Vi behöver titta närmare på residualerna för att korrekt identifiera ifall en avvikande observation faktiskt påverkar modellen.</p>
-<section id="standardiserade-residualer" class="level3" data-number="9.1.1">
-<h3 data-number="9.1.1" class="anchored" data-anchor-id="standardiserade-residualer"><span class="header-section-number">9.1.1</span> Standardiserade residualer</h3>
+<section id="standardiserade-residualer" class="level3" data-number="12.1.1">
+<h3 data-number="12.1.1" class="anchored" data-anchor-id="standardiserade-residualer"><span class="header-section-number">12.1.1</span> Standardiserade residualer</h3>
 <p>Standardiserade residualer sätter residualernas absoluta värden i relation till den generella residualspridningen. En residual med stort absolutvärde i en modell med stor generell residualspridning är mindre avvikande än en residual med stort absolutvärde i en modell med liten generell residualspridning.</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -781,23 +806,23 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Stort brus</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">standardResid</span>(model2),</span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande nära mitt</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">standardResid</span>(model3),</span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande i ytterkant</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">standardResid</span>(model4)</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>residualData <span class="sc">%&gt;%</span> </span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>residualData <span class="sc">|&gt;</span> </span>
 <span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="do">## "Roterar" datamaterialet för att förenkla visualiseringar</span></span>
 <span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
 <span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>index,</span>
 <span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Data"</span>,</span>
 <span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"resid"</span></span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Konverterar grupperingsvariabeln till en factor med en angiven ordning på nivåerna</span></span>
 <span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">Data =</span> <span class="fu">factor</span>(Data, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Lite brus"</span>, <span class="st">"Stort brus"</span>, <span class="st">"Avvikande nära mitt"</span>, <span class="st">"Avvikande i ytterkant"</span>))</span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> resid) <span class="sc">+</span> </span>
 <span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
 <span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Data, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
@@ -814,10 +839,10 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 </div>
 <p>I figuren visas de standardiserade residualerna för respektive modell och här syns det tydligt vilka residualer som faktiskt är en avvikande observation och vilka som ändå ligger inom residualernas generella spridning. Det är främst i modellerna med extremvärden som de standardiserade residualerna uppvisar tydliga indikationer att dessa observationer är avvikande.</p>
 </section>
-<section id="avvikande-observationer-i-x" class="level3" data-number="9.1.2">
-<h3 data-number="9.1.2" class="anchored" data-anchor-id="avvikande-observationer-i-x"><span class="header-section-number">9.1.2</span> Avvikande observationer i X</h3>
-<p>I <a href="#tbl-outlier-comparison" class="quarto-xref">Tabell&nbsp;<span>9.1</span></a> såg vi att avvikande observationer i utkanten av X:s värdemängd verkar ha en större påverkan på modellanpassningen än avvikande observationer närmare mittpunkten av värdemängden. I en multipel linjär regressionsmodell kan denna jämförelse bli svår att genomföra med visualiseringar eller jämförelser mellan flera skattade lutningsparametrar. Istället kan <em>leverage</em> beräknas som visar hur långt bort den enskilda observationen (residualen) är från genomsnittet av alla förklarande variabler.</p>
-<p>Leverage beräknas utifrån <em>hattmatrisen</em>, <span class="math inline">\(\mathbf{H} = \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\)</span>, specifikt diagonalelementen av matrisen. <span class="math inline">\(h_i\)</span> är det i:te diagonalelementet från matrisen vars värden kan falla mellan 0 och 1, där 1 indikerar på stort avstånd från genomsnittet. Vi kan beräkna hattmatrisen i R med hjälp av matrisalgebra eller med hjälp av funktionen <code>lm.influence()</code> där objektet <code>hat</code> innehåller diagonalen av hattmatrisen.</p>
+<section id="avvikande-observationer-i-x" class="level3" data-number="12.1.2">
+<h3 data-number="12.1.2" class="anchored" data-anchor-id="avvikande-observationer-i-x"><span class="header-section-number">12.1.2</span> Avvikande observationer i X</h3>
+<p>I <a href="#tbl-outlier-comparison" class="quarto-xref">Tabell&nbsp;<span>12.1</span></a> såg vi att avvikande observationer i utkanten av X:s värdemängd verkar ha en större påverkan på modellanpassningen än avvikande observationer närmare mittpunkten av värdemängden. I en multipel linjär regressionsmodell kan denna jämförelse bli svår att genomföra med visualiseringar eller jämförelser mellan flera skattade lutningsparametrar. Istället kan <strong>leverage</strong> beräknas som visar hur långt bort den enskilda observationen (residualen) är från genomsnittet av alla förklarande variabler.</p>
+<p>Leverage beräknas utifrån <strong>hattmatrisen</strong>, <span class="math inline">\(\mathbf{H} = \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\)</span>, specifikt diagonalelementen av matrisen. <span class="math inline">\(h_i\)</span> är det i:te diagonalelementet från matrisen vars värden kan falla mellan 0 och 1, där 1 indikerar på stort avstånd från genomsnittet. Vi kan beräkna hattmatrisen i R med hjälp av matrisalgebra eller med hjälp av funktionen <code>lm.influence()</code> där objektet <code>hat</code> innehåller diagonalen av hattmatrisen.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
@@ -843,7 +868,7 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>visData <span class="ot">&lt;-</span> </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">leverage =</span> leverage</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()</span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  )</span>
@@ -878,11 +903,11 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 \begin{aligned}
   \frac{2\cdot (k+1)}{n} = \frac{2 \cdot p}{n}
 \end{aligned}
-\]</span> Det finns två observationer, <span class="math inline">\(i = 11\)</span> och <span class="math inline">\(i = 24\)</span>, som har leverage-värden som anses vara högre än tumregeln. Dessa två observationer är de som har minst värden på x, alltså de som ligger längst till vänster i <a href="#fig-outlier-data" class="quarto-xref">Figur&nbsp;<span>9.1</span></a>. Eftersom dessa punkter verkar följa det linjära samband som resten av punktsvärmen visar, finns det ingenting som tyder på att de är några observationer vi behöver oroa oss för.</p>
+\]</span> Det finns två observationer, <span class="math inline">\(i = 11\)</span> och <span class="math inline">\(i = 24\)</span>, som har leverage-värden som anses vara högre än tumregeln. Dessa två observationer är de som har minst värden på x, alltså de som ligger längst till vänster i <a href="#fig-outlier-data" class="quarto-xref">Figur&nbsp;<span>12.1</span></a>. Eftersom dessa punkter verkar följa det linjära samband som resten av punktsvärmen visar, finns det ingenting som tyder på att de är några observationer vi behöver oroa oss för.</p>
 </section>
-<section id="jackknife-residualer" class="level3" data-number="9.1.3">
-<h3 data-number="9.1.3" class="anchored" data-anchor-id="jackknife-residualer"><span class="header-section-number">9.1.3</span> Jackknife-residualer</h3>
-<p>Ett ytterligare sätt att använda leverage för att identifiera avvikande observationer är att beräkna <em>Jackknife</em>-residualer. Denna typ av residual beräknas genom att anpassa en modell utan observation <span class="math inline">\(i\)</span> som sedan används för att skatta prediktera värdet på responsvariabeln och beräkna residualen. Eftersom en avvikande observation kan påverka modellanpassningen riskerar en vanlig eller standardiserad residual att underskatta avvikelsen då modellen dras mot den avvikande observationen. När en modell anpassas som inte inkluderar den specifika observationen kommer residualen ge en mer verklig bild av observationens faktiska avvikelse från det generella sambandet.</p>
+<section id="jackknife-residualer" class="level3" data-number="12.1.3">
+<h3 data-number="12.1.3" class="anchored" data-anchor-id="jackknife-residualer"><span class="header-section-number">12.1.3</span> Jackknife-residualer</h3>
+<p>Ett ytterligare sätt att använda leverage för att identifiera avvikande observationer är att beräkna <strong>Jackknife</strong>-residualer. Denna typ av residual beräknas genom att anpassa en modell utan observation <span class="math inline">\(i\)</span> som sedan används för att skatta prediktera värdet på responsvariabeln och beräkna residualen. Eftersom en avvikande observation kan påverka modellanpassningen riskerar en vanlig eller standardiserad residual att underskatta avvikelsen då modellen dras mot den avvikande observationen. När en modell anpassas som inte inkluderar den specifika observationen kommer residualen ge en mer verklig bild av observationens faktiska avvikelse från det generella sambandet.</p>
 <p>Istället för att behöva anpassa n olika modeller där varje respektive observation plockas bort kan vi använda leverage och modellens SSE enligt:</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -925,22 +950,22 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Stort brus</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">jackknife</span>(model2),</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande nära mitt</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">jackknife</span>(model3),</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande i ytterkant</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">jackknife</span>(model4)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>residualData <span class="sc">%&gt;%</span> </span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>residualData <span class="sc">|&gt;</span> </span>
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="do">## "Roterar" datamaterialet för att förenkla visualiseringar</span></span>
 <span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
 <span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>index,</span>
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Data"</span>,</span>
 <span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"resid"</span></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Data =</span> <span class="fu">factor</span>(Data, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Lite brus"</span>, <span class="st">"Stort brus"</span>, <span class="st">"Avvikande nära mitt"</span>, <span class="st">"Avvikande i ytterkant"</span>))</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> resid) <span class="sc">+</span> </span>
 <span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
 <span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Data, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
@@ -953,7 +978,7 @@ Tabell&nbsp;9.1: Skattade koefficienter för alla modeller.
 <img src="08-detailed-residuals_files/figure-html/fig-jackknife-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-jackknife-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;9.2: Jackknife residualer för de olika modellerna.
+Figur&nbsp;12.2: Jackknife residualer för de olika modellerna.
 </figcaption>
 </figure>
 </div>
@@ -962,11 +987,11 @@ Figur&nbsp;9.2: Jackknife residualer för de olika modellerna.
 <p>Med hjälp av Jackknife-residualerna ser vi att de observationer med höga leverage-värden inte påverkar modellanpassningen då värdena är i linje med alla andra observationers värden. Däremot syns ett värde var i de två nedersta diagrammen som tydligt indikerar på de extremvärden som vi placerat in avviker från det generella sambandet, vilket vi också förväntar oss.</p>
 </section>
 </section>
-<section id="inflytelserika-observationer" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="inflytelserika-observationer"><span class="header-section-number">9.2</span> Inflytelserika observationer</h2>
-<p>Till viss del beskriver Jackknife-residualer huruvida en observation har ett inflytande på modellanpassningen genom att beräkna en mer rättvis avvikelse för varje observation från det generella sambandet. Däremot såg vi i <a href="#fig-jackknife" class="quarto-xref">Figur&nbsp;<span>9.2</span></a> att extremvärdet nära mittpunkten av X också fått ett relativt högt värde trots att vi i <a href="#tbl-outlier-comparison" class="quarto-xref">Tabell&nbsp;<span>9.1</span></a> inte såg att den observationen hade en påverkan på modellanpassningen. Dessa residualer är alltså inte alltid så bra att identifiera observationens effekt på modellanpassningen, mer än att de identifierar avvikande observationer. Istället kan vi använda andra mått såsom <em>DFFITS</em> och <em>Cook’s Distance</em> för att avgöra om en observation påverkar modellanpassningen och anses vara en <em>inflytelserik observation</em>.</p>
-<section id="dffits" class="level3" data-number="9.2.1">
-<h3 data-number="9.2.1" class="anchored" data-anchor-id="dffits"><span class="header-section-number">9.2.1</span> DFFITS</h3>
+<section id="inflytelserika-observationer" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="inflytelserika-observationer"><span class="header-section-number">12.2</span> Inflytelserika observationer</h2>
+<p>Till viss del beskriver Jackknife-residualer huruvida en observation har ett inflytande på modellanpassningen genom att beräkna en mer rättvis avvikelse för varje observation från det generella sambandet. Däremot såg vi i <a href="#fig-jackknife" class="quarto-xref">Figur&nbsp;<span>12.2</span></a> att extremvärdet nära mittpunkten av X också fått ett relativt högt värde trots att vi i <a href="#tbl-outlier-comparison" class="quarto-xref">Tabell&nbsp;<span>12.1</span></a> inte såg att den observationen hade en påverkan på modellanpassningen. Dessa residualer är alltså inte alltid så bra att identifiera observationens effekt på modellanpassningen, mer än att de identifierar avvikande observationer. Istället kan vi använda andra mått såsom <strong>DFFITS</strong> och <strong>Cook’s Distance</strong> för att avgöra om en observation påverkar modellanpassningen och anses vara en <strong>inflytelserik observation</strong>.</p>
+<section id="dffits" class="level3" data-number="12.2.1">
+<h3 data-number="12.2.1" class="anchored" data-anchor-id="dffits"><span class="header-section-number">12.2.1</span> DFFITS</h3>
 <p>Vi kan mäta en observations inflytande på två olika sätt, antingen på sitt egna anpassade värde eller på alla anpassade värden. DFFITS undersöker om en observation har ett inflytande på sitt egna anpassat värde och använder sig utav Jackknife-residualerna som vi beräknade tidigare.</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -1003,22 +1028,22 @@ Figur&nbsp;9.2: Jackknife residualer för de olika modellerna.
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Stort brus</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">dffits</span>(model2),</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande nära mitt</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">dffits</span>(model3),</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande i ytterkant</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">dffits</span>(model4)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>residualData <span class="sc">%&gt;%</span> </span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>residualData <span class="sc">|&gt;</span> </span>
 <span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="do">## "Roterar" datamaterialet för att förenkla visualiseringar</span></span>
 <span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
 <span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>index,</span>
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Data"</span>,</span>
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"resid"</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Data =</span> <span class="fu">factor</span>(Data, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Lite brus"</span>, <span class="st">"Stort brus"</span>, <span class="st">"Avvikande nära mitt"</span>, <span class="st">"Avvikande i ytterkant"</span>))</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> <span class="fu">abs</span>(resid)) <span class="sc">+</span> </span>
 <span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
 <span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Data, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="st">"free_y"</span>) <span class="sc">+</span> </span>
@@ -1047,10 +1072,10 @@ Figur&nbsp;9.2: Jackknife residualer för de olika modellerna.
 </div>
 <p>Vårt simulerade data kan anses vara litet (<span class="math inline">\(n = 31\)</span>) och vi kan därför använda värdet 1 som gräns. Vi ser att observation 11 anses inflytelserik i modellerna utan extremvärden men att den inte anses det när vi lagt till en tydligt avvikande observation som istället tagit över allt inflytande.</p>
 </section>
-<section id="cooks-distance" class="level3" data-number="9.2.2">
-<h3 data-number="9.2.2" class="anchored" data-anchor-id="cooks-distance"><span class="header-section-number">9.2.2</span> Cook’s Distance</h3>
+<section id="cooks-distance" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="cooks-distance"><span class="header-section-number">12.2.2</span> Cook’s Distance</h3>
 <p>Det är nästan självklart att en avvikande observation kommer påverka sitt egna anpassade värde. Det som vi oftast är intresserad av att undersöka är ifall en avvikande observation ger oss en felaktig modellanpassning för det generella sambandet, alltså om andra observationers anpassning påverkas. Måttet Cook’s Distance visar hur mycket inflytande en observation har på alla anpassade värden.</p>
-<p>Beroende på vilka sorters residualer vi har tillhanda kan vi beräkna Cook’s Distance på två olika sätt. <em>Studentiserade residualer</em> kan delas upp i <em>interna</em> studentiserade och <em>externa</em> studentiserade. Den internt studentiserade residualen (angivet som <span class="math inline">\(r_i\)</span> i <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span>) är en form av standardisering där vi också tar hänsyn till observationens leverage-värde inte bara residualspridningen.</p>
+<p>Beroende på vilka sorters residualer vi har tillhanda kan vi beräkna Cook’s Distance på två olika sätt. <strong>Studentiserade residualer</strong> kan delas upp i <strong>interna</strong> studentiserade och <strong>externa</strong> studentiserade. Den internt studentiserade residualen (angivet som <span class="math inline">\(r_i\)</span> i <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span>) är en form av standardisering där vi också tar hänsyn till observationens leverage-värde inte bara residualspridningen.</p>
 <p><span class="math display">\[
 \begin{aligned}
     r_i = \frac{e_i}{\sqrt{MSE \cdot (1 - h_i)}} = \frac{e_i}{s_{e_i} \cdot \sqrt{(1 - h_i)}}
@@ -1100,22 +1125,22 @@ Figur&nbsp;9.2: Jackknife residualer för de olika modellerna.
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Stort brus</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">cooks</span>(model2),</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande nära mitt</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">cooks</span>(model3),</span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avvikande i ytterkant</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">cooks</span>(model4)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>residualData <span class="sc">%&gt;%</span> </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>residualData <span class="sc">|&gt;</span> </span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="do">## "Roterar" datamaterialet för att förenkla visualiseringar</span></span>
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>index,</span>
 <span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Data"</span>,</span>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"resid"</span></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Data =</span> <span class="fu">factor</span>(Data, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Lite brus"</span>, <span class="st">"Stort brus"</span>, <span class="st">"Avvikande nära mitt"</span>, <span class="st">"Avvikande i ytterkant"</span>))</span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> resid) <span class="sc">+</span> </span>
 <span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
 <span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Data, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
@@ -1147,9 +1172,9 @@ Figur&nbsp;9.2: Jackknife residualer för de olika modellerna.
 <p>Om vi använder gränsvärdet 1, är det bara den tydligt avvikande observationen i ytterkanten på x:s värdemängd som anses vara inflytelserik. Om vi istället använder den mer robusta gränsen pekar det på att de små värden i det brusiga data utan tillagda extremvärden anses vara inflytelserika. Sedan tidigare har vi identifierat att observation 11 är en utav de observationer med minst värde på x vilket innebär att den också ligger i ytterkanten av värdemängden. Vad detta resultat då antyder är att en observation med högt leverage, avvikande långt bort från mittpunkten av X, eller en observation med en väldigt stor avvikelse i Y, kommer påverka modellanpassningen utöver sitt egna värde.</p>
 </section>
 </section>
-<section id="övningsuppgifter" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">9.3</span> Övningsuppgifter</h2>
-<p>Använd SENIC data som presenterades första gången i <a href="06-complex-predictors.html#sec-exercises-complex" class="quarto-xref"><span>Avsnitt 7.3</span></a>.</p>
+<section id="övningsuppgifter" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">12.3</span> Övningsuppgifter</h2>
+<p>Använd SENIC data som presenterades första gången i <a href="06-complex-predictors.html#sec-exercises-complex" class="quarto-xref"><span>Avsnitt 10.3</span></a>.</p>
 <ol type="a">
 <li><p>Anpassa en modell som beskriver infektionsrisken med alla variabler förutom ID. Utvärdera den och kontrollera modellens antaganden på ett lämpligt sätt.</p></li>
 <li><p>Beräkna leverage och visualisera måtten i observationsordning. Beräkna och visa gränsvärdet i visualiseringen. Är det någon observation som identifieras som avvikande?</p></li>
@@ -1581,16 +1606,1221 @@ Muller, Keith, och Mario Mok. 1997. <span>”The distribution of Cook’s D stat
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../01-regression/07-multicollinearity.html" class="pagination-link" aria-label="Multikollinearitet">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../01-regression/09-variable-selection.html" class="pagination-link" aria-label="Modellvalidering och variabelselektion">
-        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+
+// Script to highlight the current section in the navbar depending on which page you are on
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const currentPath = window.location.pathname;
+
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+
+
+    navLinks.forEach(link => {
+
+        const linkPath = new URL(link.href).pathname;
+
+
+
+        // Highlight parent section if current path starts with link path
+
+        if (currentPath.startsWith(linkPath)) {
+
+            link.classList.add("active");
+
+        } else {
+
+            link.classList.remove("active");
+
+        }
+
+    });
+
+});
+
+</script>
+
+<script>
+
+
+
+/* definition of content for the buttons */
+
+const webex_buttons = {check_hidden:          "<b>&check;</b>",
+
+                       check_hidden_alt:      "Check answer",
+
+                       check_shown:           "<b>&lsh;</b>",
+
+                       check_shown_alt:       "Hide check",
+
+                       check_of_total:        "/",
+
+                       solution:              "<b>&quest;</b>",
+
+                       solution_alt:          "Correct solution",
+
+                       question_next:         "<b>&#8634;</b>",
+
+                       question_next_alt:     "Next question",
+
+                       question_previous:     "",
+
+                       question_previous_alt: ""}
+
+
+
+
+
+/* update total correct if #webex-total_correct exists */
+
+update_total_correct = function() {
+
+  console.log("webex: update total_correct");
+
+
+
+  document.querySelectorAll(".webex-total_correct").forEach(total => {
+
+    p = total.closest(".webex-box");
+
+    var correct = p.getElementsByClassName("webex-correct").length;
+
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    /* no specific class on input node, thus searching via query selector */
+
+    var checkboxgroups = p.querySelectorAll("div[class=webex-checkboxgroup] input[type=checkbox]").length
+
+
+
+    /* show number of correct / total number of answers */
+
+    total.innerHTML = correct + "&nbsp;" + webex_buttons.check_of_total + "&nbsp;" + (solvemes + radiogroups + checkboxgroups + selects);
+
+  });
+
+}
+
+
+
+/* check answers */
+
+check_func = function() {
+
+  console.log("webex: check answer");
+
+
+
+  //var cl = elem.parentElement.classList;
+
+  var cl = this.closest(".webex-box").classList;
+
+  if (cl.contains("unchecked")) {
+
+    cl.remove("unchecked");
+
+    this.innerHTML = webex_buttons.check_shown; //"Hide check";
+
+    if (webex_buttons.check_shown_alt.length > 0) this.setAttribute("title", webex_buttons.check_shown_alt);
+
+  } else {
+
+    cl.add("unchecked");
+
+    this.innerHTML = webex_buttons.check_hidden; //"Check answer";
+
+    if (webex_buttons.check_hidden_alt.length > 0) this.setAttribute("title", webex_buttons.check_hidden_alt);
+
+  }
+
+}
+
+
+
+/* helper functions for checking the webex ID */
+
+const id_checker = {"fmt": new RegExp("[g-zG-Z]"),
+
+                    "load": function(e) { return e.getAttribute("id").match("(?<=(-)).*$")[0]; },
+
+                    "eval": new TextEncoder(),
+
+                    "dval": new TextDecoder()}
+
+
+
+/* Show/hide correct solution */
+
+solution_func = function() {
+
+  console.log("webex: show/hide solution");
+
+
+
+  var div = this.closest(".webex-question").querySelector(".webex-solution");
+
+  var cl = div.classList;
+
+
+
+  if (cl.contains("visible")) {
+
+    cl.remove("visible");
+
+  } else {
+
+    cl.add("visible");
+
+  }
+
+}
+
+
+
+/* function to check if the real answer is numeric */
+
+convert_to_numeric = function(x) {
+
+  if (typeof x == "string") {
+
+    /* do nothing */
+
+  } else if (x.length == 1) {
+
+    /* take first element */
+
+    x = x[0]
+
+  } else {
+
+    return NaN;
+
+  }
+
+
+
+  /* remove spaces for easier parsing */
+
+  x = x.replace(/\s/g, "");
+
+
+
+  /* Define patterns for different formats, note that spaces have been removed above */
+
+  const patterns = [
+
+    {regex: /^[+-]?\d+(\.\d{3})*,\d+$/, decimal: ",", thousand: "." },  // Format: "1.100.100.100,3"
+
+    {regex: /^[+-]?\d+(,\d{3})*\.\d+$/, decimal: ".", thousand: "," },  // Format: "1,100,100,100.3"
+
+    {regex: /^[+-]?\d+(\.|\.\d+)?$/, decimal: "." },                    // Format: "1100100100.5" or "1100100100."
+
+    {regex: /^[+-]?\d+(,|,\d+)$/, decimal: "," }                        // Format: "1100100100,5" or "1100100100,"
+
+  ];
+
+
+
+
+
+  /* testing all regular expressions, convert to float if possible */
+
+  for (const { regex, decimal, thousand } of patterns) {
+
+    if (regex.test(x)) {
+
+      let numeric = x;
+
+      if (thousand) numeric = numeric.replace(new RegExp(`\\${thousand}`, "g"), "");
+
+      numeric = numeric.replace(decimal, ".");
+
+      return parseFloat(numeric);
+
+    }
+
+  }
+
+
+
+  /* input of length 1 but none of the known formats, return NaN */
+
+  return NaN;
+
+}
+
+
+
+/* Checking webex ID, returns formalsol */
+
+check_id = function(e) {
+
+  /* loading webex ID */
+
+  var id = id_checker["load"](e);
+
+
+
+  /* extracting answer */
+
+  let answer = e.dataset.answer;
+
+
+
+  /* checking unique id, prepare and return array */
+
+  if (!id_checker["fmt"].test(id)) {
+
+    const a = id_checker["eval"].encode(atob(answer));
+
+    const b = id_checker["eval"].encode(id);
+
+    const res = a.map((byte, index) => byte^b[index % b.length]);
+
+    answer = id_checker["dval"].decode(res);
+
+    /* Replacing &amp; with ' before parsing */
+
+    answer = answer.replaceAll("&apos;", "'");
+
+  }
+
+
+
+  return JSON.parse(answer);
+
+}
+
+
+
+/* function for checking solveme answers */
+
+solveme_func = function(e) {
+
+  /* avoid that keyup and keychange twice execute this function within nms = 10
+
+   * ms, clearing inputTimer and add timeout */
+
+  console.log("webex: check solveme");
+
+
+
+  /* float, precision for checking numeric answers */
+
+  const eps = 0.00000000000001;
+
+
+
+  /* get last checked user answer */
+
+  const question = this.closest(".webex-question")
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+  var my_answer = this.value;
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+
+
+  /* empty answer? Job done */
+
+  if (my_answer == "") {
+
+    cl.remove("webex-correct");
+
+    cl.remove("webex-incorrect");
+
+    return false;
+
+  }
+
+
+
+  /* Find closest (parent) webex-question */
+
+  let formalsols = check_id(this)
+
+
+
+  /* by default we assume the users' answer is incorrect */
+
+  var user_answer_correct = false;
+
+
+
+  /* check if the correct answer is numeric, i.e. if 
+
+   * formalsols is of length 1 containing one single numeric
+
+   * value in a known format, else, NaN is returned */
+
+  const num_formalsol = convert_to_numeric(formalsols);
+
+  const num_my_answer = convert_to_numeric(my_answer);
+
+
+
+  /* if the correct answer is numeric (float), the user's answer
+
+   * must also be numeric. If not, it is wrong. Else we can
+
+   * compare floating point numbers */
+
+  if (!isNaN(num_formalsol) && !isNaN(num_my_answer)) {
+
+    /* check if the real answer and the user input are numerically the same;
+
+     * adding 'delta' to avoid precision issues */
+
+    var diff = Math.abs(num_formalsol - num_my_answer);
+
+    if (diff < parseFloat(this.dataset.tol) + eps) { user_answer_correct = true; }
+
+
+
+  /* if the question contains regex, a regular expression is used
+
+   * to evaluate the users answer. Allows for multiple regular expressions */
+
+  } else if (cl.contains("regex")) {
+
+    for (let i = 0; i < formalsols.length; i++) {
+
+        let regex = new RegExp(formalsols[i], cl.contains("ignorecase") ? "i" : "");
+
+        if (regex.test(my_answer)) { user_answer_correct = true; break; }
+
+    }
+
+
+
+  /* else we evaluate on 'string level', considering the creators preferences
+
+   * regarding set options */
+
+  } else {
+
+    /* modify/prepare answer */
+
+    if (cl.contains("ignorecase")) { my_answer = my_answer.toLowerCase(); }
+
+    if (cl.contains("nospaces"))   { my_answer = my_answer.replace(/ /g, ""); }
+
+
+
+    /* if the real answer includes user input - correct */
+
+    if (formalsols.includes(my_answer)) {
+
+      user_answer_correct = true;
+
+  
+
+      // added regex bit
+
+      if (cl.contains("regex")) {
+
+        answer_regex = RegExp(formalsols.join("|"))
+
+        if (answer_regex.test(my_answer)) {
+
+          cl.add("webex-correct");
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+
+  if (user_answer_correct) {
+
+      cl.add("webex-correct");
+
+      cl.remove("webex-incorrect");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+      cl.remove("webex-correct");
+
+  }
+
+
+
+  update_total_correct();
+
+
+
+}
+
+
+
+/* function for checking select answers */
+
+select_func = function(e) {
+
+  console.log("webex: check select");
+
+
+
+  var options   = [];
+
+  Array.from(this.querySelectorAll("option")).forEach((option, index) => {
+
+    if (!option.hasAttribute("value") || !option.getAttribute("value") === "blank") {
+
+      options.push(option);
+
+    }
+
+  });
+
+
+
+  /* get selected option */
+
+  function get_selected(options) { return options.findIndex(option => option.selected); }
+
+  var option_index = get_selected(options)
+
+
+
+  /* loading webex ID */
+
+  var formalsol = check_id(this)
+
+
+
+  /* add class for current selection */
+
+  this.classList.remove("webex-incorrect");
+
+  this.classList.remove("webex-correct");
+
+  if (option_index >= 0) {
+
+    this.classList.add(formalsol[option_index] === 1 ? "webex-correct" : "webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* function for checking radiogroups answers */
+
+radiogroups_func = function(e) {
+
+  console.log("webex: check radiogroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var id = e.target.getAttribute("name");
+
+  var group = document.querySelector(".webex-radiogroup[id='webex-" + id + "']");
+
+  var formalsol = check_id(group)
+
+
+
+  /* check which radiobuttion is selected (user answer) */
+
+  function get_checked(radios) {
+
+    return radios.findIndex(radios => radios.checked);
+
+  }
+
+  var radios = Array.from(group.querySelectorAll("input[type='radio']"))
+
+  var radio_index = get_checked(radios);
+
+
+
+  /* remove existing classes */
+
+  radios.forEach(radio => {
+
+    let cl = radio.closest("label").classList
+
+    cl.remove("webex-incorrect");
+
+    cl.remove("webex-correct");
+
+  });
+
+
+
+  /* add class for current selection */
+
+  let cl = radios[radio_index].closest("label").classList
+
+  if (formalsol[radio_index] === 1) {
+
+      cl.add("webex-correct");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+
+
+/* function for checking checkboxgroups answers */
+
+checkboxgroups_func = function(e) {
+
+  console.log("webex: check checkboxgroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var group = document.querySelector(".webex-checkboxgroup[id='" + this.id + "']");
+
+  var formalsol = check_id(group);
+
+
+
+  /* check which checkbox is checked (user answer) */
+
+  function get_checked(group) {
+
+      const checkboxes = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+      return checkboxes.reduce((indices, checkbox, index) => {
+
+          if (checkbox.checked) indices.push(index);
+
+          return indices;
+
+      }, []);
+
+  }
+
+  var checks = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+  var check_index = get_checked(group);
+
+
+
+  checks.forEach((e, index) => {
+
+    var label = e.parentNode;
+
+    var ans = formalsol[index];
+
+    if ((e.checked && ans === 1) || (!e.checked && ans === 0)) {
+
+        label.setAttribute("class", "webex-correct")
+
+    } else {
+
+        label.setAttribute("class", "webex-incorrect")
+
+    }
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* shuffling array (thanks to stack overflow)
+
+ * If argument x is an integer we create an integer sequence
+
+ * from 0, 1, ..., (x - 1) and return a shuffled version. If
+
+ * the input is an array, we simply shuffle it */
+
+shuffle_array = function(x) {
+
+   if (Number.isInteger(x) && !isNaN(x)) {
+
+     x = Array.from({length: x}, (v, i) => i);
+
+   }
+
+   let shuffled = x.map(value => ({ value, sort: Math.random() }))
+
+        .sort((a, b) => a.sort - b.sort).map(({ value }) => value)
+
+   return shuffled;
+
+}
+
+
+
+/* ---------------------------------------------------------
+
+ * ---------------------------------------------------------
+
+ * --------------------------------------------------------- */
+
+window.onload = function() {
+
+  //console.log("webex: onload");
+
+
+
+  /* setting up buttons and actions to show/hide answers */
+
+  document.querySelectorAll(".webex-check").forEach(section => {
+
+    section.classList.add("unchecked");
+
+
+
+    /* ul to take up the list items with buttons */
+
+    let button_ul = document.createElement("ul");
+
+    button_ul.setAttribute("class", "webex-button-list");
+
+    section.appendChild(button_ul);
+
+
+
+    /* button to _check_ if answers given are correct */
+
+    let li_check = document.createElement("li");
+
+    button_ul.appendChild(li_check); /* add list item to ul */
+
+    let btn_check = document.createElement("button");
+
+    btn_check.innerHTML = webex_buttons.check_hidden;  // "Check answer";
+
+    btn_check.setAttribute("class", "webex-button webex-button-check");
+
+    if (webex_buttons.check_hidden_alt.length > 0) btn_check.setAttribute("title", webex_buttons.check_hidden_alt);
+
+    btn_check.onclick = check_func;
+
+    li_check.appendChild(btn_check);
+
+
+
+    /* span to show current number of points (when _check_ active) */
+
+    let spn = document.createElement("span");
+
+    spn.classList.add("webex-total_correct");
+
+    li_check.appendChild(spn);
+
+
+
+    /* button to show the _solution_ if there is one */
+
+    var has_solution = section.parentNode.querySelectorAll(".webex-solution").length > 0;
+
+    if (has_solution) {
+
+      let li_solution = document.createElement("li");
+
+      button_ul.appendChild(li_solution); /* add list item to ul */
+
+      let btn_solution = document.createElement("button");
+
+      btn_solution.innerHTML = webex_buttons.solution; // "Correct answer";
+
+      btn_solution.setAttribute("class", "webex-button webex-button-solution");
+
+      if (webex_buttons.solution_alt.length > 0) btn_solution.setAttribute("title", webex_buttons.solution_alt);
+
+      btn_solution.onclick = solution_func;
+
+      li_solution.appendChild(btn_solution);
+
+    }
+
+
+
+  });
+
+
+
+  /* set up webex-solveme inputs */
+
+  document.querySelectorAll(".webex-solveme").forEach(solveme => {
+
+    solveme.setAttribute("autocomplete","off");
+
+    solveme.setAttribute("autocorrect", "off");
+
+    solveme.setAttribute("autocapitalize", "off");
+
+    solveme.setAttribute("spellcheck", "false");
+
+    solveme.value = "";
+
+
+
+    /* adjust answer for 'no spaces' (ignore spaces) */
+
+    if (solveme.classList.contains("nospaces")) {
+
+      solveme.dataset.answer = solveme.dataset.answer.replace(/ /g, "");
+
+    }
+
+
+
+    /* attach checking function, triggered on key up, change, and when
+
+     * elemnt is out of focus. Only evaluated once by tracking changes
+
+     * via variable solveme_last_user_answer */
+
+    solveme.addEventListener("keyup",  solveme_func);
+
+    solveme.addEventListener("change", solveme_func);
+
+    solveme.addEventListener("blur",   solveme_func);
+
+
+
+    /* adding span to show correct/incorrect icon */
+
+    solveme.insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+
+  });
+
+
+
+  /* set up radiogroups (single choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+    radiogroup.onchange = radiogroups_func;
+
+  });
+
+
+
+  /* set up checkboxgroups (multiple choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-checkboxgroup").forEach(checkboxgroup => {
+
+    checkboxgroup.onchange = checkboxgroups_func;
+
+  });
+
+
+
+  /* set up selects (dropdown menus) */
+
+  document.querySelectorAll(".webex-select").forEach(select => {
+
+    select.onchange = select_func;
+
+    /* append webex-icon for correct/incorrect icons */
+
+    var elem = document.createElement("span")
+
+    elem.classList.add("webex-icon")
+
+    select.parentNode.appendChild(elem)
+
+  });
+
+
+
+  /* change to next/previous question if multiple are available */
+
+  function handleQuestionClick(group, questions, step) {
+
+    return async function() {
+
+      /* get question order as integer vector */
+
+      let questionOrder = group.dataset.questionOrder.split(",").map(str => parseInt(str));
+
+
+
+      /* current question/position */
+
+      let currentPosition = parseInt(group.dataset.currentPosition);
+
+
+
+      /* Hide the current question */
+
+      questions.forEach(question => { question.classList.remove("active"); });
+
+
+
+      /* Move to the next question index */
+
+      currentPosition = (currentPosition + step) % questionOrder.length;
+
+      if (currentPosition < 0) currentPosition = currentPosition + questionOrder.length
+
+
+
+      /* Display the new question */
+
+      questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+      // Update the currentPosition data attribute on the group div
+
+      group.dataset.currentPosition = currentPosition;
+
+    };
+
+  }
+
+
+
+  document.querySelectorAll(".webex-group").forEach(group => {
+
+    const questions = Array.from(group.querySelectorAll(".webex-question"));
+
+
+
+    /* Create vector with question order. If the webex-group does
+
+     * not have class '.noshuffle' we will randomly shuffle the order */
+
+    let questionOrder = Array.from({length: questions.length}, (v, i) => i);
+
+    if (!group.classList.contains("noshuffle")) {
+
+      questionOrder = shuffle_array(questionOrder);
+
+    }
+
+
+
+    /* take start position (if set) or start at 0 */
+
+    const currentPosition = parseInt(group.getAttribute("data-start-position")) || 0;
+
+
+
+    /* show the default question for each group */
+
+    questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+    /* store random order of questions as well as current position */
+
+    group.dataset.questionOrder   = questionOrder;
+
+    group.dataset.currentPosition = currentPosition;
+
+
+
+    /* find all webex-questions, search for .webex-button-list and
+
+     * populate the list with necessary <li><button>...</button></li> elements */
+
+    questions.forEach(question => {
+
+        let button_ul = question.querySelector("ul.webex-button-list");
+
+
+
+        let li_next = document.createElement("li");
+
+        let nextButton = document.createElement("button");
+
+        nextButton.setAttribute("class", "webex-button webex-button-next");
+
+        if (webex_buttons.question_next_alt.length > 0) nextButton.setAttribute("title", webex_buttons.question_next_alt);
+
+        nextButton.innerHTML = webex_buttons.question_next; // "Next question";
+
+        nextButton.addEventListener("click", handleQuestionClick(group, questions, 1));
+
+        li_next.appendChild(nextButton);
+
+
+
+        let li_previous = document.createElement("li");
+
+        let previousButton = document.createElement("button");
+
+        previousButton.setAttribute("class", "webex-button webex-button-previous");
+
+        if (webex_buttons.question_previous_alt.length > 0) previousButton.setAttribute("title", webex_buttons.question_previous_alt);
+
+        previousButton.innerHTML = webex_buttons.question_previous; // "Previous question";
+
+        previousButton.addEventListener("click", handleQuestionClick(group, questions, -1));
+
+        li_previous.appendChild(previousButton);
+
+
+
+        if (webex_buttons.question_previous.length > 0) button_ul.appendChild(li_previous);
+
+        if (webex_buttons.question_next.length > 0) button_ul.appendChild(li_next);
+
+    });
+
+  });
+
+
+
+  /* Development options */
+
+  document.querySelectorAll(".webex-question.check").forEach(question => {
+
+      question.querySelector(".webex-button-check").click()
+
+  });
+
+  document.querySelectorAll(".webex-question.solution").forEach(question => {
+
+      let btn = question.querySelector(".webex-button-solution");
+
+      if (btn !== null) { btn.click(); }
+
+  });
+
+
+
+  /* Pre-filling <input> fields */
+
+  document.querySelectorAll(".webex-question.prefill").forEach(question => {
+
+      question.querySelectorAll("input.webex-solveme").forEach(solveme => {
+
+          let x = JSON.parse(solveme.dataset.answer);
+
+          solveme.value = x[0];
+
+          /* Trigger the on change event */
+
+          solveme.dispatchEvent(new Event("change"));
+
+      });
+
+
+
+      /* Pre-filling radiogroups, that is for schoice questions */
+
+      question.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let idx = x.indexOf(1);
+
+          let radios = radiogroup.querySelectorAll('input[type="radio"]');
+
+          radios[idx].checked = true;
+
+          /* Trigger the on change event */
+
+          radios[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for schoice questions w/ dropdown menus */
+
+      question.querySelectorAll(".webex-select").forEach(dropdown => {
+
+          let x = JSON.parse(dropdown.dataset.answer);
+
+          let idx = x.indexOf(1) + 1; /* +1 to skip the first blank option */
+
+          let options = dropdown.querySelectorAll("option");
+
+          options[idx].selected = true;
+
+          /* Trigger the on change event */
+
+          options[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for mchoice questions */
+
+      question.querySelectorAll(".webex-checkboxgroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let checkboxes = radiogroup.querySelectorAll('input[type="checkbox"]');
+
+          for (let i = 0; i < checkboxes.length; i++) {
+
+              checkboxes[i].checked = x[i];
+
+          }
+
+          /* Trigger the on change event */
+
+          checkboxes[0].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+  });
+
+
+
+  /* Show set tolerance (devel option) */
+
+  function calc_width(x, txt, offset = 20) {
+
+      /* We do the following:
+
+       * Create a new span, insert the value we need in the .tolerance
+
+       * input node, and calculate its offsetWidth. Then remove it
+
+       * again; this is just used to calculate the required width. */
+
+      var cwtmp = document.createElement("span");
+
+      x.appendChild(cwtmp);
+
+      cwtmp.innerHTML = txt || "";
+
+      var w = parseInt(cwtmp.getBoundingClientRect().width) + offset;
+
+      cwtmp.remove();
+
+      return w;
+
+  }
+
+
+
+  /* If tolerance should be shown (devel option) we calculate:
+
+   * - the width required to properly display the solution
+
+   * - the width required to properly display the tolerance
+
+   * - add a new element to display the tolerance
+
+   * - reduce the width of the solution input box. */
+
+  document.querySelectorAll(".webex-question.tolerance").forEach(question => {
+
+      question.querySelectorAll("input[data-tol]").forEach(elem => {
+
+          var w = null;
+
+
+
+          /* Add new element showing the tolerance */
+
+          let tol = document.createElement("input");
+
+          tol.type = "text"; // <inpyt type="text">
+
+          tol.disabled = true; // Disable input element
+
+          tol.classList.add("tolerance"); // Appending class
+
+          tol.value = "Â± " + elem.getAttribute("data-tol");
+
+
+
+          /* Add new node */
+
+          elem.parentNode.insertBefore(tol, elem)
+
+
+
+          var body     = document.querySelector("body");
+
+          //tol.value = "Â± " + "0.0000007";
+
+          //tol.value = "Â± " + "0.07";
+
+          w    = calc_width(body, tol.value);
+
+          wold = parseInt(elem.getBoundingClientRect().width);
+
+          wmin = calc_width(body, elem.value);
+
+
+
+          /* Calculate required width of the 'tolerance' node, and the
+
+           * reduction of the original 'input' node */
+
+          let wnew = Math.max(wmin, wold - w);
+
+          tol.style.width  = w + "px";
+
+          elem.style.width = wnew + "px";
+
+      });
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+</script>
 
 
 

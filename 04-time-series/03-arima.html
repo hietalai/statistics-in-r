@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>DEL II - Regressionsanalys – Statistisk teori och tillämpningar i R</title>
+<title>23&nbsp; ARIMA – Statistisk teori och tillämpningar i R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../01-regression/00-intro-regression.html" rel="next">
-<link href="../00-programming/02-tidyverse.html" rel="prev">
+<link href="../04-time-series/04-arimax.html" rel="next">
+<link href="../04-time-series/02-ar.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -121,7 +121,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-time-series/index.html">DEL IV - Tidsserieanalys</a></li><li class="breadcrumb-item"><a href="../04-time-series/03-arima.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
@@ -182,7 +182,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link active">
+            <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL II - Regressionsanalys</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -327,7 +327,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
   </div>
 </li>
@@ -350,9 +350,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-time-series/index.html">DEL IV - Tidsserieanalys</a></li><li class="breadcrumb-item"><a href="../04-time-series/03-arima.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">DEL II - Regressionsanalys</h1>
+<h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></h1>
 </div>
 
 
@@ -369,40 +369,10 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Till denna del förutsätts att du har vissa förkunskaper för att ta till dig materialet på bästa sätt. Dessa är:</p>
-<p><strong>Programmering</strong></p>
-<ul>
-<li>kan installera och ladda paket i R</li>
-<li>kan läsa in data i R i olika filformat, t.ex. <code>.csv</code>, <code>.txt</code> eller <code>.xslx</code></li>
-<li>kan databearbetning i R, t.ex. med hjälp av <code>dplyr</code>-paketet</li>
-<li>kan använda “pipes”, <code>|&gt;</code> eller <code>|&gt;</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
-<li>kan skapa visualiseringar i R med hjälp av <code>ggplot2</code>-paketet</li>
-</ul>
-<p><strong>Statistik</strong></p>
-<ul>
-<li>kan identifiera variabeltyper och variabelskalor</li>
-<li>kan sammanfatta datamaterial med beskrivande mått och lämpliga fördelningar</li>
-<li>kan genomföra fullständiga hypotesprövningar med hjälp av t-fördelningen</li>
-<li>kan tolka p-värden</li>
-<li>kan beräkna intervallskattningar med hjälp av t-fördelningen</li>
-<li>kan tolka intervallskattningar</li>
-</ul>
-<p><strong>Matematik</strong> <em>endast för statistiker</em></p>
-<ul>
-<li>kan skapa matriser</li>
-<li>kan förstå matrisformuleringar</li>
-<li>kan förstå enkla matrisberäkningar, såsom multiplikation, transponat, och invers</li>
-</ul>
-<p>Känner du att du saknar vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.</p>
-<p>För alla dessa kapitel förutsätts att du har laddat paketet <code>tidyverse</code> som innehåller flera paket såsom <code>readr</code>, <code>dplyr</code>, <code>ggplot2</code> med flera. Andra paket kan behövas installeras och laddas för olika kapitel men detta bör anges specifikt.</p>
+<!-- CONTENT -->
+<p>ARIMA</p>
 
 
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>Detta material använder sig av <code>|&gt;</code> men <code>|&gt;</code> bör kunna användas istället i de allra flesta exemplen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -807,13 +777,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../00-programming/02-tidyverse.html" class="pagination-link" aria-label="tidyverse">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span>
+      <a href="../04-time-series/02-ar.html" class="pagination-link" aria-label="Autoregressiva modeller">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../01-regression/00-intro-regression.html" class="pagination-link" aria-label="Introduktion till regression">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../04-time-series/04-arimax.html" class="pagination-link" aria-label="ARIMAx">
+        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

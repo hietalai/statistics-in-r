@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>16&nbsp; Tvåvägs-ANOVA – Statistisk teori och tillämpningar i R</title>
+<title>19&nbsp; Tvåvägs-ANOVA – Statistisk teori och tillämpningar i R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -157,6 +157,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../webex.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -204,7 +205,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html">DEL III - Variansanalys</a></li><li class="breadcrumb-item"><a href="../02-variance/03-twoway-anova.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html">DEL III - Variansanalys</a></li><li class="breadcrumb-item"><a href="../02-variance/03-twoway-anova.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
@@ -246,19 +247,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Grunderna i R</span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunderna i R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Paket och funktioner</span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">tidyverse</span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span></a>
   </div>
 </li>
       </ul>
@@ -275,73 +276,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/09-variable-selection.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/10-logistic-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/11-other-link-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
   </div>
 </li>
       </ul>
@@ -358,25 +359,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/02-control-variables.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/03-twoway-anova.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
   </div>
 </li>
       </ul>
@@ -392,8 +393,32 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/00-white-noise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Introduktion till tidsserier</span></span></a>
+  <a href="../04-time-series/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/01-properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Tidsserier</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/04-arimax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span></a>
   </div>
 </li>
       </ul>
@@ -408,23 +433,23 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#typer-av-kvadratsummor" id="toc-typer-av-kvadratsummor" class="nav-link active" data-scroll-target="#typer-av-kvadratsummor"><span class="header-section-number">16.1</span> Typer av kvadratsummor</a></li>
-  <li><a href="#tvåvägs-anova" id="toc-tvåvägs-anova" class="nav-link" data-scroll-target="#tvåvägs-anova"><span class="header-section-number">16.2</span> Tvåvägs-ANOVA</a>
+  <li><a href="#typer-av-kvadratsummor" id="toc-typer-av-kvadratsummor" class="nav-link active" data-scroll-target="#typer-av-kvadratsummor"><span class="header-section-number">19.1</span> Typer av kvadratsummor</a></li>
+  <li><a href="#tvåvägs-anova" id="toc-tvåvägs-anova" class="nav-link" data-scroll-target="#tvåvägs-anova"><span class="header-section-number">19.2</span> Tvåvägs-ANOVA</a>
   <ul class="collapse">
-  <li><a href="#modellanpassning-i-r" id="toc-modellanpassning-i-r" class="nav-link" data-scroll-target="#modellanpassning-i-r"><span class="header-section-number">16.2.1</span> Modellanpassning i R</a></li>
-  <li><a href="#inferens" id="toc-inferens" class="nav-link" data-scroll-target="#inferens"><span class="header-section-number">16.2.2</span> Inferens</a></li>
+  <li><a href="#modellanpassning-i-r" id="toc-modellanpassning-i-r" class="nav-link" data-scroll-target="#modellanpassning-i-r"><span class="header-section-number">19.2.1</span> Modellanpassning i R</a></li>
+  <li><a href="#inferens" id="toc-inferens" class="nav-link" data-scroll-target="#inferens"><span class="header-section-number">19.2.2</span> Inferens</a></li>
   </ul></li>
-  <li><a href="#slumpmässiga-faktorer" id="toc-slumpmässiga-faktorer" class="nav-link" data-scroll-target="#slumpmässiga-faktorer"><span class="header-section-number">16.3</span> Slumpmässiga faktorer</a>
+  <li><a href="#slumpmässiga-faktorer" id="toc-slumpmässiga-faktorer" class="nav-link" data-scroll-target="#slumpmässiga-faktorer"><span class="header-section-number">19.3</span> Slumpmässiga faktorer</a>
   <ul class="collapse">
-  <li><a href="#inferens-1" id="toc-inferens-1" class="nav-link" data-scroll-target="#inferens-1"><span class="header-section-number">16.3.1</span> Inferens</a></li>
-  <li><a href="#exempel" id="toc-exempel" class="nav-link" data-scroll-target="#exempel"><span class="header-section-number">16.3.2</span> Exempel</a></li>
-  <li><a href="#varianskomponenter" id="toc-varianskomponenter" class="nav-link" data-scroll-target="#varianskomponenter"><span class="header-section-number">16.3.3</span> Varianskomponenter</a></li>
+  <li><a href="#inferens-1" id="toc-inferens-1" class="nav-link" data-scroll-target="#inferens-1"><span class="header-section-number">19.3.1</span> Inferens</a></li>
+  <li><a href="#exempel" id="toc-exempel" class="nav-link" data-scroll-target="#exempel"><span class="header-section-number">19.3.2</span> Exempel</a></li>
+  <li><a href="#varianskomponenter" id="toc-varianskomponenter" class="nav-link" data-scroll-target="#varianskomponenter"><span class="header-section-number">19.3.3</span> Varianskomponenter</a></li>
   </ul></li>
-  <li><a href="#obalanserad-tvåvägs-anova" id="toc-obalanserad-tvåvägs-anova" class="nav-link" data-scroll-target="#obalanserad-tvåvägs-anova"><span class="header-section-number">16.4</span> Obalanserad tvåvägs-ANOVA</a>
+  <li><a href="#obalanserad-tvåvägs-anova" id="toc-obalanserad-tvåvägs-anova" class="nav-link" data-scroll-target="#obalanserad-tvåvägs-anova"><span class="header-section-number">19.4</span> Obalanserad tvåvägs-ANOVA</a>
   <ul class="collapse">
-  <li><a href="#multipla-jämförelser" id="toc-multipla-jämförelser" class="nav-link" data-scroll-target="#multipla-jämförelser"><span class="header-section-number">16.4.1</span> Multipla jämförelser</a></li>
+  <li><a href="#multipla-jämförelser" id="toc-multipla-jämförelser" class="nav-link" data-scroll-target="#multipla-jämförelser"><span class="header-section-number">19.4.1</span> Multipla jämförelser</a></li>
   </ul></li>
-  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">16.5</span> Övningsuppgifter</a></li>
+  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">19.5</span> Övningsuppgifter</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -432,9 +457,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html">DEL III - Variansanalys</a></li><li class="breadcrumb-item"><a href="../02-variance/03-twoway-anova.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html">DEL III - Variansanalys</a></li><li class="breadcrumb-item"><a href="../02-variance/03-twoway-anova.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></h1>
+<h1 class="title"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></h1>
 </div>
 
 
@@ -454,13 +479,13 @@ window.Quarto = {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
-<p>I <a href="00-oneway-anova.html" class="quarto-xref"><span>Kapitel 13</span></a> studerade vi förhållandet mellan en responsvariabel och en förklarande faktor (med flera faktornivåer) och <a href="02-control-variables.html" class="quarto-xref"><span>Kapitel 15</span></a> utökade vi modellen till att också inkludera kontrollvariabler för att justera effekten av faktorn och ta hänsyn till confounding effekter.</p>
+<p>I <a href="00-oneway-anova.html" class="quarto-xref"><span>Kapitel 16</span></a> studerade vi förhållandet mellan en responsvariabel och en förklarande faktor (med flera faktornivåer) och <a href="02-control-variables.html" class="quarto-xref"><span>Kapitel 18</span></a> utökade vi modellen till att också inkludera kontrollvariabler för att justera effekten av faktorn och ta hänsyn till confounding effekter.</p>
 <p>Ett experiment behöver inte begränsa sig till endast en faktor av intresse utan kan utökas till flera förklarande faktorer. I detta kapitel utvidgar vi modellen till två förklarande faktorer och vi vill studera förhållandet mellan varje faktor och en kombination av dessa gentemot responsvariabeln.</p>
 <p>När vi undersöker flera faktorer kan vi kombinera fixa och slumpmässiga faktorer i olika konstellationer och skillnaden mellan dessa modeller påverkar både den teoretiska grunden och hur vi genomför inferens på dess olika delar.</p>
-<section id="typer-av-kvadratsummor" class="level2" data-number="16.1">
-<h2 data-number="16.1" class="anchored" data-anchor-id="typer-av-kvadratsummor"><span class="header-section-number">16.1</span> Typer av kvadratsummor</h2>
+<section id="typer-av-kvadratsummor" class="level2" data-number="19.1">
+<h2 data-number="19.1" class="anchored" data-anchor-id="typer-av-kvadratsummor"><span class="header-section-number">19.1</span> Typer av kvadratsummor</h2>
 <p>I envägs-ANOVA kan vi undersöka faktorns effekt med ett F-test där kvadratsumman för faktorn är den enda komponenten i den förklarade variationen. Med en modell som nu inkluderar flera faktorer kommer den förklarade variationen bestå av flera komponenter, en för vardera faktor och en för interaktionen mellan dem, på samma sätt som i en multipel linjär regressionsmodell.</p>
-<p>I <a href="../01-regression/04-statistical-inference.html#sec-regression-anova-table" class="quarto-xref"><span>Avsnitt 5.1.1</span></a> beskrev vi sekventiella kvadratsummor (SS) som ett sätt att dela upp den förklarade variationen i dess mindre beståndsdelar. Sekventiella kvadratsummor är endast en variant av kvadratsumma som vi kan använda för att presentera den förklarade variationen.</p>
+<p>I <a href="../01-regression/04-statistical-inference.html#sec-regression-anova-table" class="quarto-xref"><span>Avsnitt 8.1.1</span></a> beskrev vi sekventiella kvadratsummor (SS) som ett sätt att dela upp den förklarade variationen i dess mindre beståndsdelar. Sekventiella kvadratsummor är endast en variant av kvadratsumma som vi kan använda för att presentera den förklarade variationen.</p>
 <p><strong>Typ I SS</strong> kallas oftast för sekventiella eller betingade kvadratsummor eftersom de beräknas enligt den ordning som variablerna läggs till i modellen. I en tvåvägs-ANOVA med interaktioner har modellen tre källor av variation. Notera att kategoriska variabler grupperas till en och samma källa oavsett hur många kodade variabler eller tillhörande parameterskattningar som den innehåller. Givet att vi skattar modellen <code>lm(Y ~ A * B)</code> där <span class="math inline">\(A\)</span> och <span class="math inline">\(B\)</span> är två faktorer beräknas SS av typ I som följer:</p>
 <ul>
 <li>Faktor A: <span class="math inline">\(SS(A)\)</span></li>
@@ -499,8 +524,8 @@ Viktigt
 <p>En <strong>balanserad</strong> ANOVA-modell ger dock ett specialfall av dessa kvadratsummor, nämligen att de alla är lika varandra. Vad detta betyder för vår inferens är att vi kan undersöka den enskilda faktorns effekt direkt från ANOVA-tabellen oavsett vilken sorts kvadratsumma som används.</p>
 <!-- TODO SHOW MATH FOR WHY THIS IS THE CASE -->
 </section>
-<section id="tvåvägs-anova" class="level2" data-number="16.2">
-<h2 data-number="16.2" class="anchored" data-anchor-id="tvåvägs-anova"><span class="header-section-number">16.2</span> Tvåvägs-ANOVA</h2>
+<section id="tvåvägs-anova" class="level2" data-number="19.2">
+<h2 data-number="19.2" class="anchored" data-anchor-id="tvåvägs-anova"><span class="header-section-number">19.2</span> Tvåvägs-ANOVA</h2>
 <p>Anta att vi genomför ett experiment för att mäta effekten av C-vitamin på tillväxten av tänder hos marsvin. De två faktorerna som undersöks är doseringen av vitamin (faktor A) och intagningsmetoden (faktor B).</p>
 <p>Tre specifika doser undersöks:</p>
 <ul>
@@ -518,14 +543,14 @@ Viktigt
 \begin{aligned}
   Y_{ijk} = \mu + \underbrace{\beta_1 \cdot X_{1jk} + \beta_2 \cdot X_{2jk}}_{\text{Faktor A}} + \underbrace{\beta_3 \cdot X_{i1k}}_{\text{Faktor B}} + \underbrace{\beta_4 \cdot X_{1jk} \cdot X_{i1k} + \beta_5 \cdot X_{2jk} \cdot X_{i1k}}_{\text{Interaktion}}+ E_{ijk}
 \end{aligned}
-\tag{16.1}\]</span></span></p>
+\tag{19.1}\]</span></span></p>
 <p>När vi lägger till ytterligare en faktor och interaktionen mellan de två innebär det att vi undersöker tre olika potentiella effekter; interaktionseffekter, och två huvudsakliga faktoreffekter, en för respektive faktor. Däremot kommer interaktionseffektens förekomst eller avsaknad påverka hur vi undersöker de huvudsakliga effekterna.</p>
 <p>Vi kan visualisera en tvåvägs-ANOVA likt vi gjort tidigare, genom grupperade diagram, men vi måste också ta hänsyn till att interaktionen mellan de två faktorerna kan vara av intresse. Därför behöver vi gruppera diagrammet på båda faktorerna.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="ot">&lt;-</span> </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  ToothGrowth  <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  ToothGrowth  <span class="sc">|&gt;</span> </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">dose =</span> <span class="fu">factor</span>(dose)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  )</span>
@@ -549,14 +574,14 @@ Viktigt
 </div>
 </div>
 </div>
-<p>Med detta fioldiagram kan vi se skillnader i faktormedelvärden, fördelningen för respektive färg, men för att tydligt kunna utläsa interaktioner behöver vi göra ett <em>interaktionsdiagram</em>. Ett interaktionsdiagram är ett linjediagram över cellmedelvärdena, alltså medelvärden för varje kombination av nivåer från respektive faktor.</p>
+<p>Med detta fioldiagram kan vi se skillnader i faktormedelvärden, fördelningen för respektive färg, men för att tydligt kunna utläsa interaktioner behöver vi göra ett <strong>interaktionsdiagram</strong>. Ett interaktionsdiagram är ett linjediagram över cellmedelvärdena, alltså medelvärden för varje kombination av nivåer från respektive faktor.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar cellmedelvärden</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  ToothGrowth <span class="sc">%&gt;%</span> </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(supp, dose) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  ToothGrowth <span class="sc">|&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(supp, dose) <span class="sc">|&gt;</span> </span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(len)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  )</span>
@@ -580,22 +605,22 @@ Viktigt
 <img src="03-twoway-anova_files/figure-html/fig-cellmeans-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cellmeans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;16.1: Interaktionsdiagram över cellmedelvärden.
+Figur&nbsp;19.1: Interaktionsdiagram över cellmedelvärden.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>Vi kan identifiera en antydan till en interaktion genom icke-parallella linjer som i praktiken betyder att effekten av en faktor påverkas av vilken nivå av den andra faktorn som också ges. I just detta fall ser linjerna ut att korsas vid dos 2 vilket ger en svag antydan till att en interaktion förekommer. Som alla former av visualiseringar beskriver detta endast det urval som har genomförts och för att dra slutsatser om populationen behöver vi genomföra inferens.</p>
-<section id="modellanpassning-i-r" class="level3" data-number="16.2.1">
-<h3 data-number="16.2.1" class="anchored" data-anchor-id="modellanpassning-i-r"><span class="header-section-number">16.2.1</span> Modellanpassning i R</h3>
+<section id="modellanpassning-i-r" class="level3" data-number="19.2.1">
+<h3 data-number="19.2.1" class="anchored" data-anchor-id="modellanpassning-i-r"><span class="header-section-number">19.2.1</span> Modellanpassning i R</h3>
 <p>Att skatta en tvåvägs-ANOVA i R är inte svårare än att skatta en regressionsmodell med flera variabler. För att få en interaktion mellan de två faktorerna behöver vi använda <code>*</code> istället för <code>+</code>.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(len <span class="sc">~</span> supp<span class="sc">*</span>dose, <span class="at">data =</span> ToothGrowth)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">|&gt;</span> </span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellens ANOVA-tabell."</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -664,7 +689,7 @@ Tips
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(len <span class="sc">~</span> dose<span class="sc">*</span>supp, <span class="at">data =</span> ToothGrowth)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">|&gt;</span> </span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellens ANOVA-tabell."</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -720,10 +745,10 @@ Tips
 </div>
 </div>
 </section>
-<section id="inferens" class="level3" data-number="16.2.2">
-<h3 data-number="16.2.2" class="anchored" data-anchor-id="inferens"><span class="header-section-number">16.2.2</span> Inferens</h3>
-<p>Utifrån tabellen kan vi dra slutsatser om respektive komponent i modellen men vi <strong>börjar alltid med interaktionseffekter</strong>.</p>
-<p>Hypoteserna som undersöks för respektive del kan grupperas i flera partiella F-test utifrån <a href="#eq-twoway-anova-fix" class="quarto-xref">Ekvation&nbsp;<span>16.1</span></a>. Interaktionen består i detta exempel av parametrarna <span class="math inline">\(\beta_4\)</span> och <span class="math inline">\(\beta_5\)</span> så den formella hypotesen för interaktionseffekten är: <span class="math display">\[
+<section id="inferens" class="level3" data-number="19.2.2">
+<h3 data-number="19.2.2" class="anchored" data-anchor-id="inferens"><span class="header-section-number">19.2.2</span> Inferens</h3>
+<p>Utifrån tabellen kan vi dra slutsatser om respektive komponent i modellen men vi börjar <strong>alltid</strong> med interaktionseffekter.</p>
+<p>Hypoteserna som undersöks för respektive del kan grupperas i flera partiella F-test utifrån <a href="#eq-twoway-anova-fix" class="quarto-xref">Ekvation&nbsp;<span>19.1</span></a>. Interaktionen består i detta exempel av parametrarna <span class="math inline">\(\beta_4\)</span> och <span class="math inline">\(\beta_5\)</span> så den formella hypotesen för interaktionseffekten är: <span class="math display">\[
 \begin{aligned}
   &amp;H_0: \beta_4 = \beta_5 = 0\\
   &amp;H_a: \text{Minst en av } \beta \text{ i } H_0 \ne 0
@@ -742,14 +767,14 @@ Tips
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(model, <span class="at">specs =</span> <span class="sc">~</span>supp<span class="sc">*</span>dose)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>means <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>means <span class="sc">|&gt;</span> </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Cellernas medelvärden"</span>, </span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Metod"</span>, <span class="st">"Dosering"</span>, <span class="st">"Medelvärde"</span>, <span class="st">"Medelfel"</span>, <span class="st">"Frihetsgrader"</span>, <span class="st">"Nedre KI gräns"</span>, <span class="st">"Övre KI gräns"</span>))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-cellmeans" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cellmeans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;16.1: Cellernas medelvärden
+Tabell&nbsp;19.1: Cellernas medelvärden
 </figcaption>
 <div aria-describedby="tbl-cellmeans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -836,31 +861,31 @@ Tabell&nbsp;16.1: Cellernas medelvärden
 </figure>
 </div>
 </div>
-<p><a href="#tbl-cellmeans" class="quarto-xref">Tabell&nbsp;<span>16.1</span></a> visar de specifika värden som vi såg i <a href="#fig-cellmeans" class="quarto-xref">Figur&nbsp;<span>16.1</span></a>. Inferens över multipla jämförelser innebär nu att vi skapar par av cellmedelvärden och genomför hypotesprövningar eller intervallskattningar med någon form av familjekonfidens. Formellt undersöks par av medelvärden med båda index, t.ex. <span class="math inline">\(H_0: \mu_{11} - \mu_{12} = 0\)</span>.</p>
+<p><a href="#tbl-cellmeans" class="quarto-xref">Tabell&nbsp;<span>19.1</span></a> visar de specifika värden som vi såg i <a href="#fig-cellmeans" class="quarto-xref">Figur&nbsp;<span>19.1</span></a>. Inferens över multipla jämförelser innebär nu att vi skapar par av cellmedelvärden och genomför hypotesprövningar eller intervallskattningar med någon form av familjekonfidens. Formellt undersöks par av medelvärden med båda index, t.ex. <span class="math inline">\(H_0: \mu_{11} - \mu_{12} = 0\)</span>.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tukey <span class="ot">&lt;-</span> </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(means, <span class="at">adjust =</span> <span class="st">"tukey"</span>) </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>tukey <span class="sc">%&gt;%</span> </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">%&gt;%</span> <span class="fu">desc</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>tukey <span class="sc">|&gt;</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">|&gt;</span> <span class="fu">desc</span>()) <span class="sc">|&gt;</span> </span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Parvisa jämförelser av cellmedelvärden med Tukey familjekonfidens"</span>)</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>selectedMeans <span class="ot">&lt;-</span> means[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>),]</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>bonferroni <span class="ot">&lt;-</span> </span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(selectedMeans, <span class="at">adjust =</span> <span class="st">"bonferroni"</span>)</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>bonferroni <span class="sc">%&gt;%</span> </span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">|&gt;</span> <span class="fu">desc</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>bonferroni <span class="sc">|&gt;</span> </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">|&gt;</span> <span class="fu">desc</span>()) <span class="sc">|&gt;</span> </span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Parvisa jämförelser av utvalda cellmedelvärden med Bonferroni familjekonfidens"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-twoway-anova-tukey" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-twoway-anova-tukey-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;16.2: Parvisa jämförelser av utvalda cellmedelvärden med Bonferroni familjekonfidens
+Tabell&nbsp;19.2: Parvisa jämförelser av utvalda cellmedelvärden med Bonferroni familjekonfidens
 </figcaption>
 <div aria-describedby="tbl-twoway-anova-tukey-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1069,27 +1094,27 @@ Tabell&nbsp;16.2: Parvisa jämförelser av utvalda cellmedelvärden med Bonferro
 </div>
 </section>
 </section>
-<section id="slumpmässiga-faktorer" class="level2" data-number="16.3">
-<h2 data-number="16.3" class="anchored" data-anchor-id="slumpmässiga-faktorer"><span class="header-section-number">16.3</span> Slumpmässiga faktorer</h2>
-<p>Hittintills har vi bara ägnat oss åt modeller där vi endast har fixa effekter. I praktiken har vi många situationer där nivåerna på en faktor är dragna slumpmässigt från en population vilket innebär att inferensen som vi genomför tittar på hela population och inte bara de utvalda nivåerna. Detta är en modell med slumpmässiga effekter och i en flervägs-modell kan vi inkludera en blandning av fixa och slumpmässiga effekter (<em>mixed effects model</em>) eller enbart slumpmässiga (<em>random effects model</em>). I fallet med två slumpmässiga faktorer kan vi utveckla <a href="01-random-factors.html#eq-random-effect-anova" class="quarto-xref">Ekvation&nbsp;<span>14.1</span></a> till att ta hänsyn till flera slumpmässiga effekter: <span id="eq-twoway-anova-random"><span class="math display">\[
+<section id="slumpmässiga-faktorer" class="level2" data-number="19.3">
+<h2 data-number="19.3" class="anchored" data-anchor-id="slumpmässiga-faktorer"><span class="header-section-number">19.3</span> Slumpmässiga faktorer</h2>
+<p>Hittintills har vi bara ägnat oss åt modeller där vi endast har fixa effekter. I praktiken har vi många situationer där nivåerna på en faktor är dragna slumpmässigt från en population vilket innebär att inferensen som vi genomför tittar på hela population och inte bara de utvalda nivåerna. Detta är en modell med slumpmässiga effekter och i en flervägs-modell kan vi inkludera en blandning av fixa och slumpmässiga effekter (<strong>mixed effects model</strong>) eller enbart slumpmässiga (<strong>random effects model</strong>). I fallet med två slumpmässiga faktorer kan vi utveckla <a href="01-random-factors.html#eq-random-effect-anova" class="quarto-xref">Ekvation&nbsp;<span>17.1</span></a> till att ta hänsyn till flera slumpmässiga effekter: <span id="eq-twoway-anova-random"><span class="math display">\[
 \begin{aligned}
   Y_{ijk} = \gamma_{000} + U_{0i0} + U_{00j} + U_{0ij} + E_{ijk}
 \end{aligned}
-\tag{16.2}\]</span></span> där</p>
+\tag{19.2}\]</span></span> där</p>
 <ul>
 <li><span class="math inline">\(i\)</span> är de uppmätta nivåerna av faktor A,</li>
 <li><span class="math inline">\(j\)</span> är nivåer av faktor B,</li>
-<li><span class="math inline">\(\gamma_{000}\)</span> är det övergripande medelvärdet (motsvarande <span class="math inline">\(\mu\)</span> i <a href="00-oneway-anova.html#eq-fix-effect-anova" class="quarto-xref">Ekvation&nbsp;<span>13.1</span></a>),</li>
+<li><span class="math inline">\(\gamma_{000}\)</span> är det övergripande medelvärdet (motsvarande <span class="math inline">\(\mu\)</span> i <a href="00-oneway-anova.html#eq-fix-effect-anova" class="quarto-xref">Ekvation&nbsp;<span>16.1</span></a>),</li>
 <li><span class="math inline">\(U_{0i0} \sim N(0, \sigma_A^2)\)</span> är den avvikelse som nivå <span class="math inline">\(i\)</span> har på det övergripande medelvärdet,</li>
 <li><span class="math inline">\(U_{00j} \sim N(0, \sigma_B^2)\)</span> är den avvikelse nivå <span class="math inline">\(j\)</span> har på medelvärdet,</li>
 <li><span class="math inline">\(U_{0ij} \sim N(0, \sigma_{AB}^2)\)</span> är den avvikelse respektive kombination av nivåer från de två faktorerna har på medelvärdet,</li>
 <li>till sist <span class="math inline">\(E_{ijk} \sim N(0, \sigma^2)\)</span>.</li>
 </ul>
 <p>Modellen innehåller nu fyra olika varianser, <span class="math inline">\(\sigma^2_A\)</span>, <span class="math inline">\(\sigma^2_B\)</span>, <span class="math inline">\(\sigma^2_{AB}\)</span> och <span class="math inline">\(\sigma^2\)</span> som tillsammans bildar den totala variansen av <span class="math inline">\(Y\)</span>.</p>
-<section id="inferens-1" class="level3" data-number="16.3.1">
-<h3 data-number="16.3.1" class="anchored" data-anchor-id="inferens-1"><span class="header-section-number">16.3.1</span> Inferens</h3>
+<section id="inferens-1" class="level3" data-number="19.3.1">
+<h3 data-number="19.3.1" class="anchored" data-anchor-id="inferens-1"><span class="header-section-number">19.3.1</span> Inferens</h3>
 <p>Vi beräknar kvadratsummor på samma sätt som i fallet med en tvåvägs-ANOVA med två fixa faktorer. Däremot ser väntevärdena för kvadratsummorna annorlunda ut och påverkar hur testvariabeln beräknas för respektive faktor.</p>
-<p>På samma sätt som i <a href="01-random-factors.html" class="quarto-xref"><span>Kapitel 14</span></a> kommer inferens inte längre fokusera på de enskilda lutningsparametrarna utan istället undersöka variansen av respektive komponent. Till exempel ett test för signifikanta interaktionseffekter undersöker <span class="math inline">\(H_0: \sigma^2_{AB} = 0\)</span> mot <span class="math inline">\(H_a: \sigma_{AB}^2 &gt; 0\)</span>.</p>
+<p>På samma sätt som i <a href="01-random-factors.html" class="quarto-xref"><span>Kapitel 17</span></a> kommer inferens inte längre fokusera på de enskilda lutningsparametrarna utan istället undersöka variansen av respektive komponent. Till exempel ett test för signifikanta interaktionseffekter undersöker <span class="math inline">\(H_0: \sigma^2_{AB} = 0\)</span> mot <span class="math inline">\(H_a: \sigma_{AB}^2 &gt; 0\)</span>.</p>
 <p>Testvariabeln utgår från följande väntevärden av medelkvadratsummor: <span class="math display">\[
 \begin{aligned}
     E[MSE] &amp;= \sigma^2 \\
@@ -1131,8 +1156,8 @@ Viktigt
 \]</span></p>
 <p>När vi använder R för att anpassa modellen och skapa ANOVA-tabeller kan vi inte läsa av tabellens F-test direkt då R inte vet om att vi har slumpmässiga faktorer.</p>
 </section>
-<section id="exempel" class="level3" data-number="16.3.2">
-<h3 data-number="16.3.2" class="anchored" data-anchor-id="exempel"><span class="header-section-number">16.3.2</span> Exempel</h3>
+<section id="exempel" class="level3" data-number="19.3.2">
+<h3 data-number="19.3.2" class="anchored" data-anchor-id="exempel"><span class="header-section-number">19.3.2</span> Exempel</h3>
 <p>En biolog vill undersöka om kackerlackor växer snabbare i varma och fuktiga miljöer. 27 identiska kackerlackor delas upp på nio olika kombinationer av temperatur och luftfuktighet. Det är inte just dessa temperaturer och luftfuktigheter som är av intresse, dessa olika kombinationer har blivit slumpmässigt valda av alla möjliga kombinatoner av luftfuktigheter och temperaturer. Kackerlackorna får vara i de olika förhållandena i två veckor, och efter dessa två veckor observeras deras längdökning i millimeter. Datamaterialet finns tillgängligt <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/roaches.csv">här</a>.</p>
 <p>Modellen anpassas på samma sätt som tidigare men vi behöver hålla koll på vad för värden som vi sedan tolkar.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -1163,7 +1188,7 @@ Tips
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>      )</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">|&gt;</span> </span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellens felaktiga ANOVA-tabell."</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -1240,7 +1265,7 @@ Tips
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(anovaTabell)</span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">mainEffectCorrection</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">mainEffectCorrection</span>(model) <span class="sc">|&gt;</span> </span>
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellens korrigerade ANOVA-tabell."</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -1295,8 +1320,8 @@ Tips
 <p>Den korrigerade tabellen visar att interaktionen inte har någon signifikant effekt (p-värde = 0.413) medan de två huvudsakliga faktorerna har båda en signifikant effekt på mätvariabeln (p-värde &lt; 0.001 och 0.001 respektive).</p>
 <p>Med slumpmässiga faktorer är vi inte intresserade av att undersöka faktornivåerna vidare med multipla jämförelser eftersom de endast är ett slumpmässigt urval av alla nivåer vi vill dra slutsatser om. Däremot kan det vara av intresse att undersöka respektive varians ytterligare.</p>
 </section>
-<section id="varianskomponenter" class="level3" data-number="16.3.3">
-<h3 data-number="16.3.3" class="anchored" data-anchor-id="varianskomponenter"><span class="header-section-number">16.3.3</span> Varianskomponenter</h3>
+<section id="varianskomponenter" class="level3" data-number="19.3.3">
+<h3 data-number="19.3.3" class="anchored" data-anchor-id="varianskomponenter"><span class="header-section-number">19.3.3</span> Varianskomponenter</h3>
 <p>En tvåvägs-ANOVA med interaktion består av fyra stycken olika varianser där den totala variansen av Y, <span class="math inline">\(\sigma^2_Y\)</span> delas upp i dess mindre beståndsdelar. <span class="math display">\[
 \begin{aligned}
   Y &amp;\sim N(\mu_{Y|\mathbf{X}}, \sigma^2_Y)\\
@@ -1335,7 +1360,7 @@ Tips
 <span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2_A$"</span>,<span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2_B$"</span>,<span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2_{AB}$"</span>, <span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2$"</span>),</span>
 <span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">Skattning =</span></span>
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(sigmaAEst,sigmaBEst,sigmaABEst, sigmaEst)</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -1369,8 +1394,8 @@ Tips
 </div>
 <p>Likt den korrigerade ANOVA-tabellen visar dessa varianser att interaktionen är den minsta effekten av alla modellens komponenter. De skattade varianserna visar på att <code>humidity</code> (Faktor A) verkar vara den största källan till variation jämfört med <code>temperature</code> men detta bör säkerställas med lämpliga intervallskattningar<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <!-- TODO ADD THEORY COMPENDIUM CALCULATIONS -->
-<section id="skatta-varianser-direkt-i-r" class="level4" data-number="16.3.3.1">
-<h4 data-number="16.3.3.1" class="anchored" data-anchor-id="skatta-varianser-direkt-i-r"><span class="header-section-number">16.3.3.1</span> Skatta varianser direkt i R</h4>
+<section id="skatta-varianser-direkt-i-r" class="level4" data-number="19.3.3.1">
+<h4 data-number="19.3.3.1" class="anchored" data-anchor-id="skatta-varianser-direkt-i-r"><span class="header-section-number">19.3.3.1</span> Skatta varianser direkt i R</h4>
 <p>Att skatta varianserna för varje komponent som vi gjort tidigare är krångligt. Istället kan vi använda paketet <code>lme4</code>. Paketet är främst avsedd för mer komplicerade modeller men vi kan se våra ‘random effekt’-modeller som vi tittat på i denna övning som enkla tillämpningar.</p>
 <p>Funktionen <code>lmer</code> skattar en linjär mix-effekt modell, där vi kan styra vilka komponenter vi anser vara fixa och vilka vi anser vara slumpmässiga. I de tidigare modellerna från detta kapitel är alla komponenter slumpmässiga och det blir då en ren slumpmässig modell. För att kunna lägga till slumpmässiga effekter i modellen behöver vi omformulera modellens formel något. En slumpmässig effekt skapas via <code>(1 | faktor)</code> istället för bara <code>faktor</code>. Tvåvägs-ANOVAmodellen skrivs då som följer:</p>
 <div class="cell">
@@ -1418,25 +1443,24 @@ Fixed effects:
 (Intercept)   14.667      5.537   2.649</code></pre>
 </div>
 </div>
-<p>Utskriften delas upp i <code>Random effects</code> och <code>Fixed effects</code> med olika tabellstrukturer. Vår modell som anpassas är fortfarande <a href="#eq-twoway-anova-random" class="quarto-xref">Ekvation&nbsp;<span>16.2</span></a> där vi anser <span class="math inline">\(\gamma_{000}\)</span> vara en fix effekt, ett fixt intercept, och de andra komponenterna vara slumpmässiga effekter. Eftersom vi inte är intresserade av exakta parameterskattningar för de slumpmässiga effekterna, de är ju bara ett slumpmässigt urval av nivåer från hela faktorn, visas inte dessa i utskriften till skillnad från det fixa interceptet (se <code>Estimate</code>). Istället fokuserar de slumpmässiga effekterna på variansen av varje komponent, det som vi också fokuserat på tidigare i kapitlet.</p>
+<p>Utskriften delas upp i <code>Random effects</code> och <code>Fixed effects</code> med olika tabellstrukturer. Vår modell som anpassas är fortfarande <a href="#eq-twoway-anova-random" class="quarto-xref">Ekvation&nbsp;<span>19.2</span></a> där vi anser <span class="math inline">\(\gamma_{000}\)</span> vara en fix effekt, ett fixt intercept, och de andra komponenterna vara slumpmässiga effekter. Eftersom vi inte är intresserade av exakta parameterskattningar för de slumpmässiga effekterna, de är ju bara ett slumpmässigt urval av nivåer från hela faktorn, visas inte dessa i utskriften till skillnad från det fixa interceptet (se <code>Estimate</code>). Istället fokuserar de slumpmässiga effekterna på variansen av varje komponent, det som vi också fokuserat på tidigare i kapitlet.</p>
 <p>Vi kan plocka ut dessa varianser i en separat tabell genom:</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Tar ut varianskomponenterna</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  .<span class="sc">$</span>varcor <span class="sc">%&gt;%</span> </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Konverterar till en data.frame för kable</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Väljer ut relevanta delar av konverterade data.frame och byter namn</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    Källa <span class="ot">=</span> grp,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Varians =</span> vcov</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Skattade varianskomponenter"</span>, </span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar ut varianskomponenterna</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)<span class="sc">$</span>varcor <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Konverterar till en data.frame för kable</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Väljer ut relevanta delar av konverterade data.frame och byter namn</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    Källa <span class="ot">=</span> grp,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Varians =</span> vcov</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Skattade varianskomponenter"</span>, </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -1472,8 +1496,8 @@ Fixed effects:
 </section>
 </section>
 </section>
-<section id="obalanserad-tvåvägs-anova" class="level2" data-number="16.4">
-<h2 data-number="16.4" class="anchored" data-anchor-id="obalanserad-tvåvägs-anova"><span class="header-section-number">16.4</span> Obalanserad tvåvägs-ANOVA</h2>
+<section id="obalanserad-tvåvägs-anova" class="level2" data-number="19.4">
+<h2 data-number="19.4" class="anchored" data-anchor-id="obalanserad-tvåvägs-anova"><span class="header-section-number">19.4</span> Obalanserad tvåvägs-ANOVA</h2>
 <p>Antagandet om att experimentet undersöker lika många observationer i varje kombination av behandlingar är kanske inte alltid så rimligt. ANOVA-modeller går att tillämpa även på observationsstudier där det i de allra flesta fallen inte går att kontrollera att undersökningen blir balanserad. Även i experimentella studier kan observationer som antas medverka försvinna av olika anledningar vilket resulterar i ett obalanserat experiment.</p>
 <p>Konsekvensen av att analysera en obalanserad studie är att vi måste vara tydliga med vilken typ av SS som används då de inte kommer visa samma värden. Vanligast är att vi vill använda typ II eller III SS för att kunna genomföra lämplig inferens för de olika faktorerna.</p>
 <p>Anta att vi i en studie gett samma koffeindos till 18 personer där två faktorer uppmättes, ifall kaffet blandades med mjölk och vilken form av socker (riktig, artificiellt, ingen) det innehöll, och hur mycket personen i fråga “babblade” efter att ha druckit kaffet. Enheten och vad denna mätvariabel faktiskt betyder är inte viktig men vi kan anta att högre värden kopplas till en mer pratglad person. Datamaterialet finns att laddas ner <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/coffee.csv">här</a> (<span class="citation" data-cites="navarro2018">Navarro (<a href="#ref-navarro2018" role="doc-biblioref">2018</a>)</span>).</p>
@@ -1482,8 +1506,8 @@ Fixed effects:
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar cellmedelvärden</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  coffee <span class="sc">%&gt;%</span> </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(milk, sugar) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  coffee <span class="sc">|&gt;</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(milk, sugar) <span class="sc">|&gt;</span> </span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(babble)</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  )</span>
@@ -1515,7 +1539,7 @@ Fixed effects:
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(babble <span class="sc">~</span> milk<span class="sc">*</span>sugar, <span class="at">data =</span> coffee)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model) <span class="sc">|&gt;</span> </span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellen ANOVA-tabell med typ I kvadratsummor."</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -1574,7 +1598,7 @@ Fixed effects:
 <summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(babble <span class="sc">~</span> sugar<span class="sc">*</span>milk, <span class="at">data =</span> coffee)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model2) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model2) <span class="sc">|&gt;</span> </span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Annan ordning på modellens ANOVA-tabell med typ I kvadratsummor."</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -1632,7 +1656,7 @@ Fixed effects:
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Anova</span>(model, <span class="at">type =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Anova</span>(model, <span class="at">type =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Modellen ANOVA-tabell med typ III kvadratsummor."</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -1688,8 +1712,8 @@ Fixed effects:
 </div>
 </div>
 <p>ANOVA-tabellen ser något annorlunda ut jämfört med vad vi är vana vid. Vi får en ny första rad (Intercept) som vi inte alls ska läsa av eller ta hänsyn till i vår analys, och vi saknar helt medelkvadratsummor. Dessa kan vi enkelt beräkna enligt <span class="math inline">\(\frac{SS}{df}\)</span> men det som vi kanske främst är intresserade av är testvariabeln och det tillhörande p-värdet. Alla dessa tester undersöker hur mycket ytterligare variation faktorn eller interaktionen bidrar med givet de andra faktorerna och interaktion redan inkluderad i modellen.</p>
-<section id="multipla-jämförelser" class="level3" data-number="16.4.1">
-<h3 data-number="16.4.1" class="anchored" data-anchor-id="multipla-jämförelser"><span class="header-section-number">16.4.1</span> Multipla jämförelser</h3>
+<section id="multipla-jämförelser" class="level3" data-number="19.4.1">
+<h3 data-number="19.4.1" class="anchored" data-anchor-id="multipla-jämförelser"><span class="header-section-number">19.4.1</span> Multipla jämförelser</h3>
 <p>Även för obalanserade modeller vill vi undersöka jämförelser mellan faktor- eller cellmedelvärden för att specifikt veta var skillnader råder.</p>
 <div class="cell">
 <details class="code-fold">
@@ -1699,9 +1723,9 @@ Fixed effects:
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>tukey <span class="ot">&lt;-</span> </span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(means, <span class="at">adjust =</span> <span class="st">"tukey"</span>) </span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>tukey <span class="sc">%&gt;%</span> </span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">%&gt;%</span> <span class="fu">desc</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>tukey <span class="sc">|&gt;</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">abs</span>(estimate) <span class="sc">|&gt;</span> <span class="fu">desc</span>()) <span class="sc">|&gt;</span> </span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Parvisa jämförelser av cellmedelvärden med Tukey familjekonfidens"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -1842,11 +1866,11 @@ Fixed effects:
 </table>
 </div>
 </div>
-<p>Till skillnad från <a href="#tbl-twoway-anova-tukey" class="quarto-xref">Tabell&nbsp;<span>16.2</span></a> ser vi att varje medelfel är olika på grund av att vi har olika antal observationer i varje cell. Argumentet <code>adjust</code> kan ändras till <code>bonferroni</code> eller <code>scheffe</code> beroende på vilken familjekonfidens vi vill beräkna. Liknande funktioner för kontraster som vi tidigare använt är också användbara här.</p>
+<p>Till skillnad från <a href="#tbl-twoway-anova-tukey" class="quarto-xref">Tabell&nbsp;<span>19.2</span></a> ser vi att varje medelfel är olika på grund av att vi har olika antal observationer i varje cell. Argumentet <code>adjust</code> kan ändras till <code>bonferroni</code> eller <code>scheffe</code> beroende på vilken familjekonfidens vi vill beräkna. Liknande funktioner för kontraster som vi tidigare använt är också användbara här.</p>
 </section>
 </section>
-<section id="övningsuppgifter" class="level2" data-number="16.5">
-<h2 data-number="16.5" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">16.5</span> Övningsuppgifter</h2>
+<section id="övningsuppgifter" class="level2" data-number="19.5">
+<h2 data-number="19.5" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">19.5</span> Övningsuppgifter</h2>
 <p>Anta en studie där forskare vill undersöka variationen i bränsleeffektivitet (mätt i <code>miles per gallon</code>) för olika bilar som körs av olika förare. De två faktorerna i denna studie är:</p>
 <ul>
 <li>Förare: Fyra slumpmässigt utvalda förare (Faktor A)</li>
@@ -2281,7 +2305,7 @@ Navarro, Danielle. 2018. <em><span>Learning Statistics with R: A tutorial for ps
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../02-variance/02-control-variables.html" class="pagination-link" aria-label="Kontrollvariabler">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -2291,6 +2315,1211 @@ Navarro, Danielle. 2018. <em><span>Learning Statistics with R: A tutorial for ps
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+
+// Script to highlight the current section in the navbar depending on which page you are on
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const currentPath = window.location.pathname;
+
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+
+
+    navLinks.forEach(link => {
+
+        const linkPath = new URL(link.href).pathname;
+
+
+
+        // Highlight parent section if current path starts with link path
+
+        if (currentPath.startsWith(linkPath)) {
+
+            link.classList.add("active");
+
+        } else {
+
+            link.classList.remove("active");
+
+        }
+
+    });
+
+});
+
+</script>
+
+<script>
+
+
+
+/* definition of content for the buttons */
+
+const webex_buttons = {check_hidden:          "<b>&check;</b>",
+
+                       check_hidden_alt:      "Check answer",
+
+                       check_shown:           "<b>&lsh;</b>",
+
+                       check_shown_alt:       "Hide check",
+
+                       check_of_total:        "/",
+
+                       solution:              "<b>&quest;</b>",
+
+                       solution_alt:          "Correct solution",
+
+                       question_next:         "<b>&#8634;</b>",
+
+                       question_next_alt:     "Next question",
+
+                       question_previous:     "",
+
+                       question_previous_alt: ""}
+
+
+
+
+
+/* update total correct if #webex-total_correct exists */
+
+update_total_correct = function() {
+
+  console.log("webex: update total_correct");
+
+
+
+  document.querySelectorAll(".webex-total_correct").forEach(total => {
+
+    p = total.closest(".webex-box");
+
+    var correct = p.getElementsByClassName("webex-correct").length;
+
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    /* no specific class on input node, thus searching via query selector */
+
+    var checkboxgroups = p.querySelectorAll("div[class=webex-checkboxgroup] input[type=checkbox]").length
+
+
+
+    /* show number of correct / total number of answers */
+
+    total.innerHTML = correct + "&nbsp;" + webex_buttons.check_of_total + "&nbsp;" + (solvemes + radiogroups + checkboxgroups + selects);
+
+  });
+
+}
+
+
+
+/* check answers */
+
+check_func = function() {
+
+  console.log("webex: check answer");
+
+
+
+  //var cl = elem.parentElement.classList;
+
+  var cl = this.closest(".webex-box").classList;
+
+  if (cl.contains("unchecked")) {
+
+    cl.remove("unchecked");
+
+    this.innerHTML = webex_buttons.check_shown; //"Hide check";
+
+    if (webex_buttons.check_shown_alt.length > 0) this.setAttribute("title", webex_buttons.check_shown_alt);
+
+  } else {
+
+    cl.add("unchecked");
+
+    this.innerHTML = webex_buttons.check_hidden; //"Check answer";
+
+    if (webex_buttons.check_hidden_alt.length > 0) this.setAttribute("title", webex_buttons.check_hidden_alt);
+
+  }
+
+}
+
+
+
+/* helper functions for checking the webex ID */
+
+const id_checker = {"fmt": new RegExp("[g-zG-Z]"),
+
+                    "load": function(e) { return e.getAttribute("id").match("(?<=(-)).*$")[0]; },
+
+                    "eval": new TextEncoder(),
+
+                    "dval": new TextDecoder()}
+
+
+
+/* Show/hide correct solution */
+
+solution_func = function() {
+
+  console.log("webex: show/hide solution");
+
+
+
+  var div = this.closest(".webex-question").querySelector(".webex-solution");
+
+  var cl = div.classList;
+
+
+
+  if (cl.contains("visible")) {
+
+    cl.remove("visible");
+
+  } else {
+
+    cl.add("visible");
+
+  }
+
+}
+
+
+
+/* function to check if the real answer is numeric */
+
+convert_to_numeric = function(x) {
+
+  if (typeof x == "string") {
+
+    /* do nothing */
+
+  } else if (x.length == 1) {
+
+    /* take first element */
+
+    x = x[0]
+
+  } else {
+
+    return NaN;
+
+  }
+
+
+
+  /* remove spaces for easier parsing */
+
+  x = x.replace(/\s/g, "");
+
+
+
+  /* Define patterns for different formats, note that spaces have been removed above */
+
+  const patterns = [
+
+    {regex: /^[+-]?\d+(\.\d{3})*,\d+$/, decimal: ",", thousand: "." },  // Format: "1.100.100.100,3"
+
+    {regex: /^[+-]?\d+(,\d{3})*\.\d+$/, decimal: ".", thousand: "," },  // Format: "1,100,100,100.3"
+
+    {regex: /^[+-]?\d+(\.|\.\d+)?$/, decimal: "." },                    // Format: "1100100100.5" or "1100100100."
+
+    {regex: /^[+-]?\d+(,|,\d+)$/, decimal: "," }                        // Format: "1100100100,5" or "1100100100,"
+
+  ];
+
+
+
+
+
+  /* testing all regular expressions, convert to float if possible */
+
+  for (const { regex, decimal, thousand } of patterns) {
+
+    if (regex.test(x)) {
+
+      let numeric = x;
+
+      if (thousand) numeric = numeric.replace(new RegExp(`\\${thousand}`, "g"), "");
+
+      numeric = numeric.replace(decimal, ".");
+
+      return parseFloat(numeric);
+
+    }
+
+  }
+
+
+
+  /* input of length 1 but none of the known formats, return NaN */
+
+  return NaN;
+
+}
+
+
+
+/* Checking webex ID, returns formalsol */
+
+check_id = function(e) {
+
+  /* loading webex ID */
+
+  var id = id_checker["load"](e);
+
+
+
+  /* extracting answer */
+
+  let answer = e.dataset.answer;
+
+
+
+  /* checking unique id, prepare and return array */
+
+  if (!id_checker["fmt"].test(id)) {
+
+    const a = id_checker["eval"].encode(atob(answer));
+
+    const b = id_checker["eval"].encode(id);
+
+    const res = a.map((byte, index) => byte^b[index % b.length]);
+
+    answer = id_checker["dval"].decode(res);
+
+    /* Replacing &amp; with ' before parsing */
+
+    answer = answer.replaceAll("&apos;", "'");
+
+  }
+
+
+
+  return JSON.parse(answer);
+
+}
+
+
+
+/* function for checking solveme answers */
+
+solveme_func = function(e) {
+
+  /* avoid that keyup and keychange twice execute this function within nms = 10
+
+   * ms, clearing inputTimer and add timeout */
+
+  console.log("webex: check solveme");
+
+
+
+  /* float, precision for checking numeric answers */
+
+  const eps = 0.00000000000001;
+
+
+
+  /* get last checked user answer */
+
+  const question = this.closest(".webex-question")
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+  var my_answer = this.value;
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+
+
+  /* empty answer? Job done */
+
+  if (my_answer == "") {
+
+    cl.remove("webex-correct");
+
+    cl.remove("webex-incorrect");
+
+    return false;
+
+  }
+
+
+
+  /* Find closest (parent) webex-question */
+
+  let formalsols = check_id(this)
+
+
+
+  /* by default we assume the users' answer is incorrect */
+
+  var user_answer_correct = false;
+
+
+
+  /* check if the correct answer is numeric, i.e. if 
+
+   * formalsols is of length 1 containing one single numeric
+
+   * value in a known format, else, NaN is returned */
+
+  const num_formalsol = convert_to_numeric(formalsols);
+
+  const num_my_answer = convert_to_numeric(my_answer);
+
+
+
+  /* if the correct answer is numeric (float), the user's answer
+
+   * must also be numeric. If not, it is wrong. Else we can
+
+   * compare floating point numbers */
+
+  if (!isNaN(num_formalsol) && !isNaN(num_my_answer)) {
+
+    /* check if the real answer and the user input are numerically the same;
+
+     * adding 'delta' to avoid precision issues */
+
+    var diff = Math.abs(num_formalsol - num_my_answer);
+
+    if (diff < parseFloat(this.dataset.tol) + eps) { user_answer_correct = true; }
+
+
+
+  /* if the question contains regex, a regular expression is used
+
+   * to evaluate the users answer. Allows for multiple regular expressions */
+
+  } else if (cl.contains("regex")) {
+
+    for (let i = 0; i < formalsols.length; i++) {
+
+        let regex = new RegExp(formalsols[i], cl.contains("ignorecase") ? "i" : "");
+
+        if (regex.test(my_answer)) { user_answer_correct = true; break; }
+
+    }
+
+
+
+  /* else we evaluate on 'string level', considering the creators preferences
+
+   * regarding set options */
+
+  } else {
+
+    /* modify/prepare answer */
+
+    if (cl.contains("ignorecase")) { my_answer = my_answer.toLowerCase(); }
+
+    if (cl.contains("nospaces"))   { my_answer = my_answer.replace(/ /g, ""); }
+
+
+
+    /* if the real answer includes user input - correct */
+
+    if (formalsols.includes(my_answer)) {
+
+      user_answer_correct = true;
+
+  
+
+      // added regex bit
+
+      if (cl.contains("regex")) {
+
+        answer_regex = RegExp(formalsols.join("|"))
+
+        if (answer_regex.test(my_answer)) {
+
+          cl.add("webex-correct");
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+
+  if (user_answer_correct) {
+
+      cl.add("webex-correct");
+
+      cl.remove("webex-incorrect");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+      cl.remove("webex-correct");
+
+  }
+
+
+
+  update_total_correct();
+
+
+
+}
+
+
+
+/* function for checking select answers */
+
+select_func = function(e) {
+
+  console.log("webex: check select");
+
+
+
+  var options   = [];
+
+  Array.from(this.querySelectorAll("option")).forEach((option, index) => {
+
+    if (!option.hasAttribute("value") || !option.getAttribute("value") === "blank") {
+
+      options.push(option);
+
+    }
+
+  });
+
+
+
+  /* get selected option */
+
+  function get_selected(options) { return options.findIndex(option => option.selected); }
+
+  var option_index = get_selected(options)
+
+
+
+  /* loading webex ID */
+
+  var formalsol = check_id(this)
+
+
+
+  /* add class for current selection */
+
+  this.classList.remove("webex-incorrect");
+
+  this.classList.remove("webex-correct");
+
+  if (option_index >= 0) {
+
+    this.classList.add(formalsol[option_index] === 1 ? "webex-correct" : "webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* function for checking radiogroups answers */
+
+radiogroups_func = function(e) {
+
+  console.log("webex: check radiogroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var id = e.target.getAttribute("name");
+
+  var group = document.querySelector(".webex-radiogroup[id='webex-" + id + "']");
+
+  var formalsol = check_id(group)
+
+
+
+  /* check which radiobuttion is selected (user answer) */
+
+  function get_checked(radios) {
+
+    return radios.findIndex(radios => radios.checked);
+
+  }
+
+  var radios = Array.from(group.querySelectorAll("input[type='radio']"))
+
+  var radio_index = get_checked(radios);
+
+
+
+  /* remove existing classes */
+
+  radios.forEach(radio => {
+
+    let cl = radio.closest("label").classList
+
+    cl.remove("webex-incorrect");
+
+    cl.remove("webex-correct");
+
+  });
+
+
+
+  /* add class for current selection */
+
+  let cl = radios[radio_index].closest("label").classList
+
+  if (formalsol[radio_index] === 1) {
+
+      cl.add("webex-correct");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+
+
+/* function for checking checkboxgroups answers */
+
+checkboxgroups_func = function(e) {
+
+  console.log("webex: check checkboxgroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var group = document.querySelector(".webex-checkboxgroup[id='" + this.id + "']");
+
+  var formalsol = check_id(group);
+
+
+
+  /* check which checkbox is checked (user answer) */
+
+  function get_checked(group) {
+
+      const checkboxes = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+      return checkboxes.reduce((indices, checkbox, index) => {
+
+          if (checkbox.checked) indices.push(index);
+
+          return indices;
+
+      }, []);
+
+  }
+
+  var checks = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+  var check_index = get_checked(group);
+
+
+
+  checks.forEach((e, index) => {
+
+    var label = e.parentNode;
+
+    var ans = formalsol[index];
+
+    if ((e.checked && ans === 1) || (!e.checked && ans === 0)) {
+
+        label.setAttribute("class", "webex-correct")
+
+    } else {
+
+        label.setAttribute("class", "webex-incorrect")
+
+    }
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* shuffling array (thanks to stack overflow)
+
+ * If argument x is an integer we create an integer sequence
+
+ * from 0, 1, ..., (x - 1) and return a shuffled version. If
+
+ * the input is an array, we simply shuffle it */
+
+shuffle_array = function(x) {
+
+   if (Number.isInteger(x) && !isNaN(x)) {
+
+     x = Array.from({length: x}, (v, i) => i);
+
+   }
+
+   let shuffled = x.map(value => ({ value, sort: Math.random() }))
+
+        .sort((a, b) => a.sort - b.sort).map(({ value }) => value)
+
+   return shuffled;
+
+}
+
+
+
+/* ---------------------------------------------------------
+
+ * ---------------------------------------------------------
+
+ * --------------------------------------------------------- */
+
+window.onload = function() {
+
+  //console.log("webex: onload");
+
+
+
+  /* setting up buttons and actions to show/hide answers */
+
+  document.querySelectorAll(".webex-check").forEach(section => {
+
+    section.classList.add("unchecked");
+
+
+
+    /* ul to take up the list items with buttons */
+
+    let button_ul = document.createElement("ul");
+
+    button_ul.setAttribute("class", "webex-button-list");
+
+    section.appendChild(button_ul);
+
+
+
+    /* button to _check_ if answers given are correct */
+
+    let li_check = document.createElement("li");
+
+    button_ul.appendChild(li_check); /* add list item to ul */
+
+    let btn_check = document.createElement("button");
+
+    btn_check.innerHTML = webex_buttons.check_hidden;  // "Check answer";
+
+    btn_check.setAttribute("class", "webex-button webex-button-check");
+
+    if (webex_buttons.check_hidden_alt.length > 0) btn_check.setAttribute("title", webex_buttons.check_hidden_alt);
+
+    btn_check.onclick = check_func;
+
+    li_check.appendChild(btn_check);
+
+
+
+    /* span to show current number of points (when _check_ active) */
+
+    let spn = document.createElement("span");
+
+    spn.classList.add("webex-total_correct");
+
+    li_check.appendChild(spn);
+
+
+
+    /* button to show the _solution_ if there is one */
+
+    var has_solution = section.parentNode.querySelectorAll(".webex-solution").length > 0;
+
+    if (has_solution) {
+
+      let li_solution = document.createElement("li");
+
+      button_ul.appendChild(li_solution); /* add list item to ul */
+
+      let btn_solution = document.createElement("button");
+
+      btn_solution.innerHTML = webex_buttons.solution; // "Correct answer";
+
+      btn_solution.setAttribute("class", "webex-button webex-button-solution");
+
+      if (webex_buttons.solution_alt.length > 0) btn_solution.setAttribute("title", webex_buttons.solution_alt);
+
+      btn_solution.onclick = solution_func;
+
+      li_solution.appendChild(btn_solution);
+
+    }
+
+
+
+  });
+
+
+
+  /* set up webex-solveme inputs */
+
+  document.querySelectorAll(".webex-solveme").forEach(solveme => {
+
+    solveme.setAttribute("autocomplete","off");
+
+    solveme.setAttribute("autocorrect", "off");
+
+    solveme.setAttribute("autocapitalize", "off");
+
+    solveme.setAttribute("spellcheck", "false");
+
+    solveme.value = "";
+
+
+
+    /* adjust answer for 'no spaces' (ignore spaces) */
+
+    if (solveme.classList.contains("nospaces")) {
+
+      solveme.dataset.answer = solveme.dataset.answer.replace(/ /g, "");
+
+    }
+
+
+
+    /* attach checking function, triggered on key up, change, and when
+
+     * elemnt is out of focus. Only evaluated once by tracking changes
+
+     * via variable solveme_last_user_answer */
+
+    solveme.addEventListener("keyup",  solveme_func);
+
+    solveme.addEventListener("change", solveme_func);
+
+    solveme.addEventListener("blur",   solveme_func);
+
+
+
+    /* adding span to show correct/incorrect icon */
+
+    solveme.insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+
+  });
+
+
+
+  /* set up radiogroups (single choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+    radiogroup.onchange = radiogroups_func;
+
+  });
+
+
+
+  /* set up checkboxgroups (multiple choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-checkboxgroup").forEach(checkboxgroup => {
+
+    checkboxgroup.onchange = checkboxgroups_func;
+
+  });
+
+
+
+  /* set up selects (dropdown menus) */
+
+  document.querySelectorAll(".webex-select").forEach(select => {
+
+    select.onchange = select_func;
+
+    /* append webex-icon for correct/incorrect icons */
+
+    var elem = document.createElement("span")
+
+    elem.classList.add("webex-icon")
+
+    select.parentNode.appendChild(elem)
+
+  });
+
+
+
+  /* change to next/previous question if multiple are available */
+
+  function handleQuestionClick(group, questions, step) {
+
+    return async function() {
+
+      /* get question order as integer vector */
+
+      let questionOrder = group.dataset.questionOrder.split(",").map(str => parseInt(str));
+
+
+
+      /* current question/position */
+
+      let currentPosition = parseInt(group.dataset.currentPosition);
+
+
+
+      /* Hide the current question */
+
+      questions.forEach(question => { question.classList.remove("active"); });
+
+
+
+      /* Move to the next question index */
+
+      currentPosition = (currentPosition + step) % questionOrder.length;
+
+      if (currentPosition < 0) currentPosition = currentPosition + questionOrder.length
+
+
+
+      /* Display the new question */
+
+      questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+      // Update the currentPosition data attribute on the group div
+
+      group.dataset.currentPosition = currentPosition;
+
+    };
+
+  }
+
+
+
+  document.querySelectorAll(".webex-group").forEach(group => {
+
+    const questions = Array.from(group.querySelectorAll(".webex-question"));
+
+
+
+    /* Create vector with question order. If the webex-group does
+
+     * not have class '.noshuffle' we will randomly shuffle the order */
+
+    let questionOrder = Array.from({length: questions.length}, (v, i) => i);
+
+    if (!group.classList.contains("noshuffle")) {
+
+      questionOrder = shuffle_array(questionOrder);
+
+    }
+
+
+
+    /* take start position (if set) or start at 0 */
+
+    const currentPosition = parseInt(group.getAttribute("data-start-position")) || 0;
+
+
+
+    /* show the default question for each group */
+
+    questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+    /* store random order of questions as well as current position */
+
+    group.dataset.questionOrder   = questionOrder;
+
+    group.dataset.currentPosition = currentPosition;
+
+
+
+    /* find all webex-questions, search for .webex-button-list and
+
+     * populate the list with necessary <li><button>...</button></li> elements */
+
+    questions.forEach(question => {
+
+        let button_ul = question.querySelector("ul.webex-button-list");
+
+
+
+        let li_next = document.createElement("li");
+
+        let nextButton = document.createElement("button");
+
+        nextButton.setAttribute("class", "webex-button webex-button-next");
+
+        if (webex_buttons.question_next_alt.length > 0) nextButton.setAttribute("title", webex_buttons.question_next_alt);
+
+        nextButton.innerHTML = webex_buttons.question_next; // "Next question";
+
+        nextButton.addEventListener("click", handleQuestionClick(group, questions, 1));
+
+        li_next.appendChild(nextButton);
+
+
+
+        let li_previous = document.createElement("li");
+
+        let previousButton = document.createElement("button");
+
+        previousButton.setAttribute("class", "webex-button webex-button-previous");
+
+        if (webex_buttons.question_previous_alt.length > 0) previousButton.setAttribute("title", webex_buttons.question_previous_alt);
+
+        previousButton.innerHTML = webex_buttons.question_previous; // "Previous question";
+
+        previousButton.addEventListener("click", handleQuestionClick(group, questions, -1));
+
+        li_previous.appendChild(previousButton);
+
+
+
+        if (webex_buttons.question_previous.length > 0) button_ul.appendChild(li_previous);
+
+        if (webex_buttons.question_next.length > 0) button_ul.appendChild(li_next);
+
+    });
+
+  });
+
+
+
+  /* Development options */
+
+  document.querySelectorAll(".webex-question.check").forEach(question => {
+
+      question.querySelector(".webex-button-check").click()
+
+  });
+
+  document.querySelectorAll(".webex-question.solution").forEach(question => {
+
+      let btn = question.querySelector(".webex-button-solution");
+
+      if (btn !== null) { btn.click(); }
+
+  });
+
+
+
+  /* Pre-filling <input> fields */
+
+  document.querySelectorAll(".webex-question.prefill").forEach(question => {
+
+      question.querySelectorAll("input.webex-solveme").forEach(solveme => {
+
+          let x = JSON.parse(solveme.dataset.answer);
+
+          solveme.value = x[0];
+
+          /* Trigger the on change event */
+
+          solveme.dispatchEvent(new Event("change"));
+
+      });
+
+
+
+      /* Pre-filling radiogroups, that is for schoice questions */
+
+      question.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let idx = x.indexOf(1);
+
+          let radios = radiogroup.querySelectorAll('input[type="radio"]');
+
+          radios[idx].checked = true;
+
+          /* Trigger the on change event */
+
+          radios[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for schoice questions w/ dropdown menus */
+
+      question.querySelectorAll(".webex-select").forEach(dropdown => {
+
+          let x = JSON.parse(dropdown.dataset.answer);
+
+          let idx = x.indexOf(1) + 1; /* +1 to skip the first blank option */
+
+          let options = dropdown.querySelectorAll("option");
+
+          options[idx].selected = true;
+
+          /* Trigger the on change event */
+
+          options[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for mchoice questions */
+
+      question.querySelectorAll(".webex-checkboxgroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let checkboxes = radiogroup.querySelectorAll('input[type="checkbox"]');
+
+          for (let i = 0; i < checkboxes.length; i++) {
+
+              checkboxes[i].checked = x[i];
+
+          }
+
+          /* Trigger the on change event */
+
+          checkboxes[0].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+  });
+
+
+
+  /* Show set tolerance (devel option) */
+
+  function calc_width(x, txt, offset = 20) {
+
+      /* We do the following:
+
+       * Create a new span, insert the value we need in the .tolerance
+
+       * input node, and calculate its offsetWidth. Then remove it
+
+       * again; this is just used to calculate the required width. */
+
+      var cwtmp = document.createElement("span");
+
+      x.appendChild(cwtmp);
+
+      cwtmp.innerHTML = txt || "";
+
+      var w = parseInt(cwtmp.getBoundingClientRect().width) + offset;
+
+      cwtmp.remove();
+
+      return w;
+
+  }
+
+
+
+  /* If tolerance should be shown (devel option) we calculate:
+
+   * - the width required to properly display the solution
+
+   * - the width required to properly display the tolerance
+
+   * - add a new element to display the tolerance
+
+   * - reduce the width of the solution input box. */
+
+  document.querySelectorAll(".webex-question.tolerance").forEach(question => {
+
+      question.querySelectorAll("input[data-tol]").forEach(elem => {
+
+          var w = null;
+
+
+
+          /* Add new element showing the tolerance */
+
+          let tol = document.createElement("input");
+
+          tol.type = "text"; // <inpyt type="text">
+
+          tol.disabled = true; // Disable input element
+
+          tol.classList.add("tolerance"); // Appending class
+
+          tol.value = "Â± " + elem.getAttribute("data-tol");
+
+
+
+          /* Add new node */
+
+          elem.parentNode.insertBefore(tol, elem)
+
+
+
+          var body     = document.querySelector("body");
+
+          //tol.value = "Â± " + "0.0000007";
+
+          //tol.value = "Â± " + "0.07";
+
+          w    = calc_width(body, tol.value);
+
+          wold = parseInt(elem.getBoundingClientRect().width);
+
+          wmin = calc_width(body, elem.value);
+
+
+
+          /* Calculate required width of the 'tolerance' node, and the
+
+           * reduction of the original 'input' node */
+
+          let wnew = Math.max(wmin, wold - w);
+
+          tol.style.width  = w + "px";
+
+          elem.style.width = wnew + "px";
+
+      });
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+</script>
 
 
 

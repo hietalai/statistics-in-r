@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Simultan inferens – Statistisk teori och tillämpningar i R</title>
+<title>9&nbsp; Simultan inferens – Statistisk teori och tillämpningar i R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -141,6 +141,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../webex.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -188,7 +189,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/05-simultaneous-inference.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/05-simultaneous-inference.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simultan inferens</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
@@ -230,19 +231,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Grunderna i R</span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunderna i R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Paket och funktioner</span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">tidyverse</span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span></a>
   </div>
 </li>
       </ul>
@@ -259,73 +260,73 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/09-variable-selection.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/10-logistic-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/11-other-link-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
   </div>
 </li>
       </ul>
@@ -342,25 +343,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/02-control-variables.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/03-twoway-anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
   </div>
 </li>
       </ul>
@@ -376,8 +377,32 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/00-white-noise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Introduktion till tidsserier</span></span></a>
+  <a href="../04-time-series/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/01-properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Tidsserier</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/04-arimax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span></a>
   </div>
 </li>
       </ul>
@@ -392,16 +417,16 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#simultan-inferens" id="toc-simultan-inferens" class="nav-link active" data-scroll-target="#simultan-inferens"><span class="header-section-number">6.1</span> Simultan inferens</a>
+  <li><a href="#simultan-inferens" id="toc-simultan-inferens" class="nav-link active" data-scroll-target="#simultan-inferens"><span class="header-section-number">9.1</span> Simultan inferens</a>
   <ul class="collapse">
-  <li><a href="#simulering" id="toc-simulering" class="nav-link" data-scroll-target="#simulering"><span class="header-section-number">6.1.1</span> Simulering</a></li>
-  <li><a href="#familjekonfidens" id="toc-familjekonfidens" class="nav-link" data-scroll-target="#familjekonfidens"><span class="header-section-number">6.1.2</span> Familjekonfidens</a></li>
-  <li><a href="#familjekonfidens-för-lutningsparametrar" id="toc-familjekonfidens-för-lutningsparametrar" class="nav-link" data-scroll-target="#familjekonfidens-för-lutningsparametrar"><span class="header-section-number">6.1.3</span> Familjekonfidens för lutningsparametrar</a></li>
+  <li><a href="#simulering" id="toc-simulering" class="nav-link" data-scroll-target="#simulering"><span class="header-section-number">9.1.1</span> Simulering</a></li>
+  <li><a href="#familjekonfidens" id="toc-familjekonfidens" class="nav-link" data-scroll-target="#familjekonfidens"><span class="header-section-number">9.1.2</span> Familjekonfidens</a></li>
+  <li><a href="#familjekonfidens-för-lutningsparametrar" id="toc-familjekonfidens-för-lutningsparametrar" class="nav-link" data-scroll-target="#familjekonfidens-för-lutningsparametrar"><span class="header-section-number">9.1.3</span> Familjekonfidens för lutningsparametrar</a></li>
   </ul></li>
-  <li><a href="#intervallskattning-av-flera-prediktioner" id="toc-intervallskattning-av-flera-prediktioner" class="nav-link" data-scroll-target="#intervallskattning-av-flera-prediktioner"><span class="header-section-number">6.2</span> Intervallskattning av flera prediktioner</a>
+  <li><a href="#intervallskattning-av-flera-prediktioner" id="toc-intervallskattning-av-flera-prediktioner" class="nav-link" data-scroll-target="#intervallskattning-av-flera-prediktioner"><span class="header-section-number">9.2</span> Intervallskattning av flera prediktioner</a>
   <ul class="collapse">
-  <li><a href="#skattning-av-flera-konfidensintervall" id="toc-skattning-av-flera-konfidensintervall" class="nav-link" data-scroll-target="#skattning-av-flera-konfidensintervall"><span class="header-section-number">6.2.1</span> Skattning av flera konfidensintervall</a></li>
-  <li><a href="#skattning-av-flera-prediktionsintervall" id="toc-skattning-av-flera-prediktionsintervall" class="nav-link" data-scroll-target="#skattning-av-flera-prediktionsintervall"><span class="header-section-number">6.2.2</span> Skattning av flera prediktionsintervall</a></li>
+  <li><a href="#skattning-av-flera-konfidensintervall" id="toc-skattning-av-flera-konfidensintervall" class="nav-link" data-scroll-target="#skattning-av-flera-konfidensintervall"><span class="header-section-number">9.2.1</span> Skattning av flera konfidensintervall</a></li>
+  <li><a href="#skattning-av-flera-prediktionsintervall" id="toc-skattning-av-flera-prediktionsintervall" class="nav-link" data-scroll-target="#skattning-av-flera-prediktionsintervall"><span class="header-section-number">9.2.2</span> Skattning av flera prediktionsintervall</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -409,9 +434,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/05-simultaneous-inference.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/05-simultaneous-inference.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simultan inferens</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-family-confidence" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></h1>
+<h1 class="title"><span id="sec-family-confidence" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></h1>
 </div>
 
 
@@ -431,9 +456,9 @@ window.Quarto = {
 <!-- New commands for matrices in regression -->
 <!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
-<p>När en modell har undersökts med hjälp av residualanalys och statistisk inferens och vi kommit fram till att den är en lämplig och bra förenkling av verkligheten, kan vi börja använda den för att dra lärdomar om sambandet och prediktera nya observationer. Vi har i <a href="04-statistical-inference.html#sec-stat-inference" class="quarto-xref"><span>Avsnitt 5.2</span></a> redan fått några lärdomar om hur sambandet mellan vissa variabler ser ut men om vi vill tolka flera parametrar från modellen samtidigt bör vi tillämpa någon form av <em>simultan inferens</em>. En utav regressionsmodellers huvudsakliga användningsområden är att <em>prediktera</em> nya observationer. Till exempel kan responsvariabeln vara väldigt kostsam att mäta jämfört med de förklarande variablerna. Då kan en lämplig och bra regressionsmodellen minska kostnaderna genom att intervallskatta värdet på responsvariabeln utifrån givna värden på de förklarande variablerna. Prediktioner kan också användas för beslutsunderlag, till exempel kan en regressionsmodell ge information om förväntade inkomster givet en viss reklambudget.</p>
-<section id="simultan-inferens" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="simultan-inferens"><span class="header-section-number">6.1</span> Simultan inferens</h2>
+<p>När en modell har undersökts med hjälp av residualanalys och statistisk inferens och vi kommit fram till att den är en lämplig och bra förenkling av verkligheten, kan vi börja använda den för att dra lärdomar om sambandet och prediktera nya observationer. Vi har i <a href="04-statistical-inference.html#sec-stat-inference" class="quarto-xref"><span>Avsnitt 8.2</span></a> redan fått några lärdomar om hur sambandet mellan vissa variabler ser ut men om vi vill tolka flera parametrar från modellen samtidigt bör vi tillämpa någon form av <strong>simultan inferens</strong>. En utav regressionsmodellers huvudsakliga användningsområden är att <strong>prediktera</strong> nya observationer. Till exempel kan responsvariabeln vara väldigt kostsam att mäta jämfört med de förklarande variablerna. Då kan en lämplig och bra regressionsmodellen minska kostnaderna genom att intervallskatta värdet på responsvariabeln utifrån givna värden på de förklarande variablerna. Prediktioner kan också användas för beslutsunderlag, till exempel kan en regressionsmodell ge information om förväntade inkomster givet en viss reklambudget.</p>
+<section id="simultan-inferens" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="simultan-inferens"><span class="header-section-number">9.1</span> Simultan inferens</h2>
 <p>När en modell innehåller flera förklarande variabler, alla med minst en tillhörande lutningsparameter, kommer vi genomföra flera inferensberäkningar om vi vill dra slutsatser om flera parametrar eller intervallskatta prediktioner för flera nya observationer. Varje hypotesprövning eller intervallskattning som beräknas utgår från att vi alltid har en risk att fatta fel beslut, vilket innebär att denna risk inflateras ju fler parametrar eller värden som undersöks med enskilda beräkningar. Typ I felet (signifikansnivån) beskriver risken att förkasta en sann <span class="math inline">\(H_0\)</span>.</p>
 <p>Den satiriska vetenskapliga serietecknaren <a href="https://xkcd.com">xkcd</a> har publicerat en serie som berör signifikansen av hypotesprövningar.</p>
 <div id="fig-jelly-bean" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -450,14 +475,14 @@ window.Quarto = {
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-jelly-bean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;6.1: <a href="https://xkcd.com/882">xkcd</a>, <a href="https://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC 2.5</a>
+Figur&nbsp;9.1: <a href="https://xkcd.com/882">xkcd</a>, <a href="https://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC 2.5</a>
 </figcaption>
 </figure>
 </div>
 <p>En grupp forskare, som hellre vill spela Minecraft, har fått i uppdrag att undersöka effekten av Jelly Beans på förekomsten av acne. Forskarna undersöker 20 olika färger av Jelly Beans med en signifikansnivå på fem procent. En utav färgerna visade sig ha en signifikant påverkan på förekomsten av acne och som vi ser i nyhetsartikeln allra sist i serien blir denna upptäckt innehållet på första sidan.</p>
 <p>Vad är det som faktiskt har hänt här och är det korrekt att annonsera ut detta för världen? Vi kan skapa ett liknande simulerat exempel genom att genomföra 20 stycken urval från en population där vi vet det sanna medelvärdet.</p>
-<section id="simulering" class="level3" data-number="6.1.1">
-<h3 data-number="6.1.1" class="anchored" data-anchor-id="simulering"><span class="header-section-number">6.1.1</span> Simulering</h3>
+<section id="simulering" class="level3" data-number="9.1.1">
+<h3 data-number="9.1.1" class="anchored" data-anchor-id="simulering"><span class="header-section-number">9.1.1</span> Simulering</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Visa kod</summary>
@@ -536,7 +561,7 @@ sample estimates:
 <div id="tbl-family-confidence" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-family-confidence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;6.1: p-värden för t-testet i respektive urval
+Tabell&nbsp;9.1: p-värden för t-testet i respektive urval
 </figcaption>
 <div aria-describedby="tbl-family-confidence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -614,7 +639,7 @@ Tabell&nbsp;6.1: p-värden för t-testet i respektive urval
 </figure>
 </div>
 </div>
-<p>I <a href="#tbl-family-confidence" class="quarto-xref">Tabell&nbsp;<span>6.1</span></a> är det endast ett test vars tillhörande p-värde är mindre än <span class="math inline">\(\alpha = 0.05\)</span> (urval 3), motsvarande den gröna Jelly Bean. Eftersom vi skapat dessa urval från en sann fördelning, vet vi att populationen har medelvärde 0 vilket innebär att vi gör ett fel av typ I, förkastar en sann <span class="math inline">\(H_0\)</span>. Med en signifikansnivå på 5 procent räknar vi att i 1 av 20 fall (5%) så fattar vi fel beslut utav ren slump. Desto fler tester som genomförs desto större risk att minst en av dessa tester kommer generera ett typ I-fel och att tolka ett enskilt test med 5 procents signifikans är missvisande.</p>
+<p>I <a href="#tbl-family-confidence" class="quarto-xref">Tabell&nbsp;<span>9.1</span></a> är det endast ett test vars tillhörande p-värde är mindre än <span class="math inline">\(\alpha = 0.05\)</span> (urval 3), motsvarande den gröna Jelly Bean. Eftersom vi skapat dessa urval från en sann fördelning, vet vi att populationen har medelvärde 0 vilket innebär att vi gör ett fel av typ I, förkastar en sann <span class="math inline">\(H_0\)</span>. Med en signifikansnivå på 5 procent räknar vi att i 1 av 20 fall (5%) så fattar vi fel beslut utav ren slump. Desto fler tester som genomförs desto större risk att minst en av dessa tester kommer generera ett typ I-fel och att tolka ett enskilt test med 5 procents signifikans är missvisande.</p>
 <p>Under antagandet att de olika urvalen är oberoende av varandra kan vi räkna ut den slutgiltiga risken för typ-I fel i minst en av testerna med hjälp av multiplikationssatsen för oberoende händelser:</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -624,8 +649,8 @@ Tabell&nbsp;6.1: p-värden för t-testet i respektive urval
 \end{aligned}
 \]</span> Risken att minst en utav 20 tester har förkastat en sann <span class="math inline">\(H_0\)</span> är istället ca 64% istället för 5%.</p>
 </section>
-<section id="familjekonfidens" class="level3" data-number="6.1.2">
-<h3 data-number="6.1.2" class="anchored" data-anchor-id="familjekonfidens"><span class="header-section-number">6.1.2</span> Familjekonfidens</h3>
+<section id="familjekonfidens" class="level3" data-number="9.1.2">
+<h3 data-number="9.1.2" class="anchored" data-anchor-id="familjekonfidens"><span class="header-section-number">9.1.2</span> Familjekonfidens</h3>
 <p>När vi genomför flera tester kan vi istället justera konfidensgraden för varje individuella test så att vi får en sammanfattande konfidensnivå som vi också använder i tolkningen. Den enklaste varianten är att beräkna Bonferronis familjekonfidens där konfidensgraden beräknas enligt: <span class="math display">\[
 \begin{aligned}
   1 - \alpha/2 \Rightarrow 1 - \alpha/(2 \cdot g)
@@ -644,14 +669,14 @@ Tabell&nbsp;6.1: p-värden för t-testet i respektive urval
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="st">`</span><span class="at">Testvariabel</span><span class="st">`</span> <span class="ot">=</span> statistic) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="st">`</span><span class="at">Testvariabel</span><span class="st">`</span> <span class="ot">=</span> statistic) <span class="sc">|&gt;</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">"striped"</span>, <span class="at">full_width =</span> <span class="cn">FALSE</span>) </span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-family-statistic" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-family-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;6.2: Beräknad testvariabel för respektive urval
+Tabell&nbsp;9.2: Beräknad testvariabel för respektive urval
 </figcaption>
 <div aria-describedby="tbl-family-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -729,13 +754,13 @@ Tabell&nbsp;6.2: Beräknad testvariabel för respektive urval
 </figure>
 </div>
 </div>
-<p>Det justerade kritiska tabellvärdet är <span class="math inline">\(\pm t_{30 - 1, 1 - 0.05 / (2 \cdot 20)} = \pm\)</span> 3.31 istället för <span class="math inline">\(\pm t_{30 - 1, 1 - 0.05 / (2)} = \pm\)</span> 2.045 vilket innebär att ingen testvariabel i <a href="#tbl-family-statistic" class="quarto-xref">Tabell&nbsp;<span>6.2</span></a> ligger extremare än det justerade. Med en simultan signifikansnivå på fem procent förkastas ingen av testernas nollhypoteser.</p>
+<p>Det justerade kritiska tabellvärdet är <span class="math inline">\(\pm t_{30 - 1, 1 - 0.05 / (2 \cdot 20)} = \pm\)</span> 3.31 istället för <span class="math inline">\(\pm t_{30 - 1, 1 - 0.05 / (2)} = \pm\)</span> 2.045 vilket innebär att ingen testvariabel i <a href="#tbl-family-statistic" class="quarto-xref">Tabell&nbsp;<span>9.2</span></a> ligger extremare än det justerade. Med en simultan signifikansnivå på fem procent förkastas ingen av testernas nollhypoteser.</p>
 </section>
-<section id="familjekonfidens-för-lutningsparametrar" class="level3" data-number="6.1.3">
-<h3 data-number="6.1.3" class="anchored" data-anchor-id="familjekonfidens-för-lutningsparametrar"><span class="header-section-number">6.1.3</span> Familjekonfidens för lutningsparametrar</h3>
+<section id="familjekonfidens-för-lutningsparametrar" class="level3" data-number="9.1.3">
+<h3 data-number="9.1.3" class="anchored" data-anchor-id="familjekonfidens-för-lutningsparametrar"><span class="header-section-number">9.1.3</span> Familjekonfidens för lutningsparametrar</h3>
 <p>Med hjälp av Bonferroni:s familjekonfidens kan vi justera formlerna för intervallskattning av lutningsparametrarna. En generell formel för en intervallskattning kan skrivas såsom: <span id="eq-interval-base"><span class="math display">\[
 \text{punktskattning} \pm \text{tabellvärde} \cdot \text{medelfel}
-\tag{6.1}\]</span></span></p>
+\tag{9.1}\]</span></span></p>
 <p>I fallet för <span class="math inline">\(\beta_1\)</span> blir formeln: <span class="math display">\[
     b_1 \pm t_{n - (k+1); 1- \alpha/2} \cdot s_{b_1}
 \]</span> Bonferroni:s familjekonfidens leder till att formeln justeras enligt: <span class="math display">\[
@@ -744,27 +769,27 @@ Tabell&nbsp;6.2: Beräknad testvariabel för respektive urval
 <p><span class="math inline">\(t_{n-(k+1); 1 - \alpha/(2\cdot g)}\)</span> brukar också anges som <span class="math inline">\(B\)</span>. När <span class="math inline">\(g\)</span> är stort, kommer värden från <span class="math inline">\(t\)</span>-fördelningen också vara stora vilket i slutändan kan leda till intervall som inte ger någon vettig information. Därför följer att Bonferronis metod är lämpligast att användas när antalet intervall eller tester är få.</p>
 </section>
 </section>
-<section id="intervallskattning-av-flera-prediktioner" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="intervallskattning-av-flera-prediktioner"><span class="header-section-number">6.2</span> Intervallskattning av flera prediktioner</h2>
+<section id="intervallskattning-av-flera-prediktioner" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="intervallskattning-av-flera-prediktioner"><span class="header-section-number">9.2</span> Intervallskattning av flera prediktioner</h2>
 <p>Om vi är intresserade av att prediktera flera nya observationer kommer vi behöva använda simultan inferens för att samtidigt dra slutsatser om de alla.</p>
-<section id="skattning-av-flera-konfidensintervall" class="level3" data-number="6.2.1">
-<h3 data-number="6.2.1" class="anchored" data-anchor-id="skattning-av-flera-konfidensintervall"><span class="header-section-number">6.2.1</span> Skattning av flera konfidensintervall</h3>
-<p>Om vi vill beräkna konfidensband för hela regressionslinjen, i.e.&nbsp;<span class="math inline">\(\mu_Y\)</span> för alla punkter av <span class="math inline">\(\mathbf{X}\)</span>, kan <em>Working-Hotelling</em>:s metod skapa denna region. Strukturen från formel <a href="#eq-interval-base" class="quarto-xref">Ekvation&nbsp;<span>6.1</span></a> ger då följande formel:</p>
+<section id="skattning-av-flera-konfidensintervall" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="skattning-av-flera-konfidensintervall"><span class="header-section-number">9.2.1</span> Skattning av flera konfidensintervall</h3>
+<p>Om vi vill beräkna konfidensband för hela regressionslinjen, i.e.&nbsp;<span class="math inline">\(\mu_Y\)</span> för alla punkter av <span class="math inline">\(\mathbf{X}\)</span>, kan <strong>Working-Hotelling</strong>:s metod skapa denna region. Strukturen från formel <a href="#eq-interval-base" class="quarto-xref">Ekvation&nbsp;<span>9.1</span></a> ger då följande formel:</p>
 <p><span id="eq-interval-working-hotelling"><span class="math display">\[
 \begin{aligned}
   \hat{Y}_{\mathbf{X}_0} \pm W \cdot s_{\hat{Y}_{\mathbf{X}_0}}
 \end{aligned}
-\tag{6.2}\]</span></span></p>
+\tag{9.2}\]</span></span></p>
 <p>där <span class="math inline">\(W^2 = 2\cdot F_{k+1; n-(k+1); 1-\alpha}\)</span>.</p>
 <p>Denna beräkning tar redan hänsyn till alla möjliga punkter av <span class="math inline">\(\mathbf{X}\)</span> som regressionslinjen täcker, vilket innebär att samma formler kan användas för enstaka nya observationer, <span class="math inline">\(\mathbf{X}_{\mathbf{X}_0}\)</span>.</p>
 <p>Även för prediktioner av responsvariabeln kan Bonferroni användas enligt: <span id="eq-interval-bonf-y"><span class="math display">\[
   \hat{Y}_{\mathbf{X}_0} \pm B \cdot s_{\hat{Y}_{\mathbf{X}_0}}
-\tag{6.3}\]</span></span> där <span class="math inline">\(B = t_{n-(k+1); 1 - \alpha/(2\cdot g)}\)</span></p>
-<p><a href="#eq-interval-working-hotelling" class="quarto-xref">Ekvation&nbsp;<span>6.2</span></a> ger generellt smalare intervall än <a href="#eq-interval-bonf-y" class="quarto-xref">Ekvation&nbsp;<span>6.3</span></a> då <span class="math inline">\(W\)</span> är samma värde oavsett hur många intervall som skattas medan <span class="math inline">\(B\)</span> ökar med antalet <span class="math inline">\(g\)</span>.</p>
+\tag{9.3}\]</span></span> där <span class="math inline">\(B = t_{n-(k+1); 1 - \alpha/(2\cdot g)}\)</span></p>
+<p><a href="#eq-interval-working-hotelling" class="quarto-xref">Ekvation&nbsp;<span>9.2</span></a> ger generellt smalare intervall än <a href="#eq-interval-bonf-y" class="quarto-xref">Ekvation&nbsp;<span>9.3</span></a> då <span class="math inline">\(W\)</span> är samma värde oavsett hur många intervall som skattas medan <span class="math inline">\(B\)</span> ökar med antalet <span class="math inline">\(g\)</span>.</p>
 </section>
-<section id="skattning-av-flera-prediktionsintervall" class="level3" data-number="6.2.2">
-<h3 data-number="6.2.2" class="anchored" data-anchor-id="skattning-av-flera-prediktionsintervall"><span class="header-section-number">6.2.2</span> Skattning av flera prediktionsintervall</h3>
-<p>För enstaka nya observationer beräknas istället prediktionsintervall vilket innebär att skattningens medelfel förändras. Metoder för att beräkna <span class="math inline">\(g\)</span> prediktionsintervall är <em>Scheffé</em> och <em>Bonferronis</em> metoder.</p>
+<section id="skattning-av-flera-prediktionsintervall" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="skattning-av-flera-prediktionsintervall"><span class="header-section-number">9.2.2</span> Skattning av flera prediktionsintervall</h3>
+<p>För enstaka nya observationer beräknas istället prediktionsintervall vilket innebär att skattningens medelfel förändras. Metoder för att beräkna <span class="math inline">\(g\)</span> prediktionsintervall är <strong>Scheffé</strong> och <strong>Bonferronis</strong> metoder.</p>
 <p>Scheffés metod: <span class="math display">\[\begin{align}
    \hat{Y}_{\mathbf{X}_0} \pm S \cdot s_{pred}
 \end{align}\]</span> där <span class="math display">\[\begin{align*}
@@ -776,7 +801,7 @@ Tabell&nbsp;6.2: Beräknad testvariabel för respektive urval
 \end{align}\]</span> där <span class="math display">\[\begin{align*}
     B = t_{n-k+1; 1 - \alpha/(2\cdot g)}
 \end{align*}\]</span></p>
-<p>Båda dessa metoder kommer skapa bredare intervall i relation till antalet intervall som skattas eftersom <span class="math inline">\(g\)</span> inkluderas i båda beräkningarna. Detta skiljer sig från <a href="#eq-interval-working-hotelling" class="quarto-xref">Ekvation&nbsp;<span>6.2</span></a> där <span class="math inline">\(W\)</span> inte blir större desto fler intervall.</p>
+<p>Båda dessa metoder kommer skapa bredare intervall i relation till antalet intervall som skattas eftersom <span class="math inline">\(g\)</span> inkluderas i båda beräkningarna. Detta skiljer sig från <a href="#eq-interval-working-hotelling" class="quarto-xref">Ekvation&nbsp;<span>9.2</span></a> där <span class="math inline">\(W\)</span> inte blir större desto fler intervall.</p>
 
 
 </section>
@@ -1186,16 +1211,1221 @@ Tabell&nbsp;6.2: Beräknad testvariabel för respektive urval
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../01-regression/04-statistical-inference.html" class="pagination-link" aria-label="Statistisk inferens">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../01-regression/06-complex-predictors.html" class="pagination-link" aria-label="Komplexa samband">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+
+// Script to highlight the current section in the navbar depending on which page you are on
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const currentPath = window.location.pathname;
+
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+
+
+    navLinks.forEach(link => {
+
+        const linkPath = new URL(link.href).pathname;
+
+
+
+        // Highlight parent section if current path starts with link path
+
+        if (currentPath.startsWith(linkPath)) {
+
+            link.classList.add("active");
+
+        } else {
+
+            link.classList.remove("active");
+
+        }
+
+    });
+
+});
+
+</script>
+
+<script>
+
+
+
+/* definition of content for the buttons */
+
+const webex_buttons = {check_hidden:          "<b>&check;</b>",
+
+                       check_hidden_alt:      "Check answer",
+
+                       check_shown:           "<b>&lsh;</b>",
+
+                       check_shown_alt:       "Hide check",
+
+                       check_of_total:        "/",
+
+                       solution:              "<b>&quest;</b>",
+
+                       solution_alt:          "Correct solution",
+
+                       question_next:         "<b>&#8634;</b>",
+
+                       question_next_alt:     "Next question",
+
+                       question_previous:     "",
+
+                       question_previous_alt: ""}
+
+
+
+
+
+/* update total correct if #webex-total_correct exists */
+
+update_total_correct = function() {
+
+  console.log("webex: update total_correct");
+
+
+
+  document.querySelectorAll(".webex-total_correct").forEach(total => {
+
+    p = total.closest(".webex-box");
+
+    var correct = p.getElementsByClassName("webex-correct").length;
+
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    /* no specific class on input node, thus searching via query selector */
+
+    var checkboxgroups = p.querySelectorAll("div[class=webex-checkboxgroup] input[type=checkbox]").length
+
+
+
+    /* show number of correct / total number of answers */
+
+    total.innerHTML = correct + "&nbsp;" + webex_buttons.check_of_total + "&nbsp;" + (solvemes + radiogroups + checkboxgroups + selects);
+
+  });
+
+}
+
+
+
+/* check answers */
+
+check_func = function() {
+
+  console.log("webex: check answer");
+
+
+
+  //var cl = elem.parentElement.classList;
+
+  var cl = this.closest(".webex-box").classList;
+
+  if (cl.contains("unchecked")) {
+
+    cl.remove("unchecked");
+
+    this.innerHTML = webex_buttons.check_shown; //"Hide check";
+
+    if (webex_buttons.check_shown_alt.length > 0) this.setAttribute("title", webex_buttons.check_shown_alt);
+
+  } else {
+
+    cl.add("unchecked");
+
+    this.innerHTML = webex_buttons.check_hidden; //"Check answer";
+
+    if (webex_buttons.check_hidden_alt.length > 0) this.setAttribute("title", webex_buttons.check_hidden_alt);
+
+  }
+
+}
+
+
+
+/* helper functions for checking the webex ID */
+
+const id_checker = {"fmt": new RegExp("[g-zG-Z]"),
+
+                    "load": function(e) { return e.getAttribute("id").match("(?<=(-)).*$")[0]; },
+
+                    "eval": new TextEncoder(),
+
+                    "dval": new TextDecoder()}
+
+
+
+/* Show/hide correct solution */
+
+solution_func = function() {
+
+  console.log("webex: show/hide solution");
+
+
+
+  var div = this.closest(".webex-question").querySelector(".webex-solution");
+
+  var cl = div.classList;
+
+
+
+  if (cl.contains("visible")) {
+
+    cl.remove("visible");
+
+  } else {
+
+    cl.add("visible");
+
+  }
+
+}
+
+
+
+/* function to check if the real answer is numeric */
+
+convert_to_numeric = function(x) {
+
+  if (typeof x == "string") {
+
+    /* do nothing */
+
+  } else if (x.length == 1) {
+
+    /* take first element */
+
+    x = x[0]
+
+  } else {
+
+    return NaN;
+
+  }
+
+
+
+  /* remove spaces for easier parsing */
+
+  x = x.replace(/\s/g, "");
+
+
+
+  /* Define patterns for different formats, note that spaces have been removed above */
+
+  const patterns = [
+
+    {regex: /^[+-]?\d+(\.\d{3})*,\d+$/, decimal: ",", thousand: "." },  // Format: "1.100.100.100,3"
+
+    {regex: /^[+-]?\d+(,\d{3})*\.\d+$/, decimal: ".", thousand: "," },  // Format: "1,100,100,100.3"
+
+    {regex: /^[+-]?\d+(\.|\.\d+)?$/, decimal: "." },                    // Format: "1100100100.5" or "1100100100."
+
+    {regex: /^[+-]?\d+(,|,\d+)$/, decimal: "," }                        // Format: "1100100100,5" or "1100100100,"
+
+  ];
+
+
+
+
+
+  /* testing all regular expressions, convert to float if possible */
+
+  for (const { regex, decimal, thousand } of patterns) {
+
+    if (regex.test(x)) {
+
+      let numeric = x;
+
+      if (thousand) numeric = numeric.replace(new RegExp(`\\${thousand}`, "g"), "");
+
+      numeric = numeric.replace(decimal, ".");
+
+      return parseFloat(numeric);
+
+    }
+
+  }
+
+
+
+  /* input of length 1 but none of the known formats, return NaN */
+
+  return NaN;
+
+}
+
+
+
+/* Checking webex ID, returns formalsol */
+
+check_id = function(e) {
+
+  /* loading webex ID */
+
+  var id = id_checker["load"](e);
+
+
+
+  /* extracting answer */
+
+  let answer = e.dataset.answer;
+
+
+
+  /* checking unique id, prepare and return array */
+
+  if (!id_checker["fmt"].test(id)) {
+
+    const a = id_checker["eval"].encode(atob(answer));
+
+    const b = id_checker["eval"].encode(id);
+
+    const res = a.map((byte, index) => byte^b[index % b.length]);
+
+    answer = id_checker["dval"].decode(res);
+
+    /* Replacing &amp; with ' before parsing */
+
+    answer = answer.replaceAll("&apos;", "'");
+
+  }
+
+
+
+  return JSON.parse(answer);
+
+}
+
+
+
+/* function for checking solveme answers */
+
+solveme_func = function(e) {
+
+  /* avoid that keyup and keychange twice execute this function within nms = 10
+
+   * ms, clearing inputTimer and add timeout */
+
+  console.log("webex: check solveme");
+
+
+
+  /* float, precision for checking numeric answers */
+
+  const eps = 0.00000000000001;
+
+
+
+  /* get last checked user answer */
+
+  const question = this.closest(".webex-question")
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+  var my_answer = this.value;
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+
+
+  /* empty answer? Job done */
+
+  if (my_answer == "") {
+
+    cl.remove("webex-correct");
+
+    cl.remove("webex-incorrect");
+
+    return false;
+
+  }
+
+
+
+  /* Find closest (parent) webex-question */
+
+  let formalsols = check_id(this)
+
+
+
+  /* by default we assume the users' answer is incorrect */
+
+  var user_answer_correct = false;
+
+
+
+  /* check if the correct answer is numeric, i.e. if 
+
+   * formalsols is of length 1 containing one single numeric
+
+   * value in a known format, else, NaN is returned */
+
+  const num_formalsol = convert_to_numeric(formalsols);
+
+  const num_my_answer = convert_to_numeric(my_answer);
+
+
+
+  /* if the correct answer is numeric (float), the user's answer
+
+   * must also be numeric. If not, it is wrong. Else we can
+
+   * compare floating point numbers */
+
+  if (!isNaN(num_formalsol) && !isNaN(num_my_answer)) {
+
+    /* check if the real answer and the user input are numerically the same;
+
+     * adding 'delta' to avoid precision issues */
+
+    var diff = Math.abs(num_formalsol - num_my_answer);
+
+    if (diff < parseFloat(this.dataset.tol) + eps) { user_answer_correct = true; }
+
+
+
+  /* if the question contains regex, a regular expression is used
+
+   * to evaluate the users answer. Allows for multiple regular expressions */
+
+  } else if (cl.contains("regex")) {
+
+    for (let i = 0; i < formalsols.length; i++) {
+
+        let regex = new RegExp(formalsols[i], cl.contains("ignorecase") ? "i" : "");
+
+        if (regex.test(my_answer)) { user_answer_correct = true; break; }
+
+    }
+
+
+
+  /* else we evaluate on 'string level', considering the creators preferences
+
+   * regarding set options */
+
+  } else {
+
+    /* modify/prepare answer */
+
+    if (cl.contains("ignorecase")) { my_answer = my_answer.toLowerCase(); }
+
+    if (cl.contains("nospaces"))   { my_answer = my_answer.replace(/ /g, ""); }
+
+
+
+    /* if the real answer includes user input - correct */
+
+    if (formalsols.includes(my_answer)) {
+
+      user_answer_correct = true;
+
+  
+
+      // added regex bit
+
+      if (cl.contains("regex")) {
+
+        answer_regex = RegExp(formalsols.join("|"))
+
+        if (answer_regex.test(my_answer)) {
+
+          cl.add("webex-correct");
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+
+  if (user_answer_correct) {
+
+      cl.add("webex-correct");
+
+      cl.remove("webex-incorrect");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+      cl.remove("webex-correct");
+
+  }
+
+
+
+  update_total_correct();
+
+
+
+}
+
+
+
+/* function for checking select answers */
+
+select_func = function(e) {
+
+  console.log("webex: check select");
+
+
+
+  var options   = [];
+
+  Array.from(this.querySelectorAll("option")).forEach((option, index) => {
+
+    if (!option.hasAttribute("value") || !option.getAttribute("value") === "blank") {
+
+      options.push(option);
+
+    }
+
+  });
+
+
+
+  /* get selected option */
+
+  function get_selected(options) { return options.findIndex(option => option.selected); }
+
+  var option_index = get_selected(options)
+
+
+
+  /* loading webex ID */
+
+  var formalsol = check_id(this)
+
+
+
+  /* add class for current selection */
+
+  this.classList.remove("webex-incorrect");
+
+  this.classList.remove("webex-correct");
+
+  if (option_index >= 0) {
+
+    this.classList.add(formalsol[option_index] === 1 ? "webex-correct" : "webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* function for checking radiogroups answers */
+
+radiogroups_func = function(e) {
+
+  console.log("webex: check radiogroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var id = e.target.getAttribute("name");
+
+  var group = document.querySelector(".webex-radiogroup[id='webex-" + id + "']");
+
+  var formalsol = check_id(group)
+
+
+
+  /* check which radiobuttion is selected (user answer) */
+
+  function get_checked(radios) {
+
+    return radios.findIndex(radios => radios.checked);
+
+  }
+
+  var radios = Array.from(group.querySelectorAll("input[type='radio']"))
+
+  var radio_index = get_checked(radios);
+
+
+
+  /* remove existing classes */
+
+  radios.forEach(radio => {
+
+    let cl = radio.closest("label").classList
+
+    cl.remove("webex-incorrect");
+
+    cl.remove("webex-correct");
+
+  });
+
+
+
+  /* add class for current selection */
+
+  let cl = radios[radio_index].closest("label").classList
+
+  if (formalsol[radio_index] === 1) {
+
+      cl.add("webex-correct");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+
+
+/* function for checking checkboxgroups answers */
+
+checkboxgroups_func = function(e) {
+
+  console.log("webex: check checkboxgroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var group = document.querySelector(".webex-checkboxgroup[id='" + this.id + "']");
+
+  var formalsol = check_id(group);
+
+
+
+  /* check which checkbox is checked (user answer) */
+
+  function get_checked(group) {
+
+      const checkboxes = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+      return checkboxes.reduce((indices, checkbox, index) => {
+
+          if (checkbox.checked) indices.push(index);
+
+          return indices;
+
+      }, []);
+
+  }
+
+  var checks = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+  var check_index = get_checked(group);
+
+
+
+  checks.forEach((e, index) => {
+
+    var label = e.parentNode;
+
+    var ans = formalsol[index];
+
+    if ((e.checked && ans === 1) || (!e.checked && ans === 0)) {
+
+        label.setAttribute("class", "webex-correct")
+
+    } else {
+
+        label.setAttribute("class", "webex-incorrect")
+
+    }
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* shuffling array (thanks to stack overflow)
+
+ * If argument x is an integer we create an integer sequence
+
+ * from 0, 1, ..., (x - 1) and return a shuffled version. If
+
+ * the input is an array, we simply shuffle it */
+
+shuffle_array = function(x) {
+
+   if (Number.isInteger(x) && !isNaN(x)) {
+
+     x = Array.from({length: x}, (v, i) => i);
+
+   }
+
+   let shuffled = x.map(value => ({ value, sort: Math.random() }))
+
+        .sort((a, b) => a.sort - b.sort).map(({ value }) => value)
+
+   return shuffled;
+
+}
+
+
+
+/* ---------------------------------------------------------
+
+ * ---------------------------------------------------------
+
+ * --------------------------------------------------------- */
+
+window.onload = function() {
+
+  //console.log("webex: onload");
+
+
+
+  /* setting up buttons and actions to show/hide answers */
+
+  document.querySelectorAll(".webex-check").forEach(section => {
+
+    section.classList.add("unchecked");
+
+
+
+    /* ul to take up the list items with buttons */
+
+    let button_ul = document.createElement("ul");
+
+    button_ul.setAttribute("class", "webex-button-list");
+
+    section.appendChild(button_ul);
+
+
+
+    /* button to _check_ if answers given are correct */
+
+    let li_check = document.createElement("li");
+
+    button_ul.appendChild(li_check); /* add list item to ul */
+
+    let btn_check = document.createElement("button");
+
+    btn_check.innerHTML = webex_buttons.check_hidden;  // "Check answer";
+
+    btn_check.setAttribute("class", "webex-button webex-button-check");
+
+    if (webex_buttons.check_hidden_alt.length > 0) btn_check.setAttribute("title", webex_buttons.check_hidden_alt);
+
+    btn_check.onclick = check_func;
+
+    li_check.appendChild(btn_check);
+
+
+
+    /* span to show current number of points (when _check_ active) */
+
+    let spn = document.createElement("span");
+
+    spn.classList.add("webex-total_correct");
+
+    li_check.appendChild(spn);
+
+
+
+    /* button to show the _solution_ if there is one */
+
+    var has_solution = section.parentNode.querySelectorAll(".webex-solution").length > 0;
+
+    if (has_solution) {
+
+      let li_solution = document.createElement("li");
+
+      button_ul.appendChild(li_solution); /* add list item to ul */
+
+      let btn_solution = document.createElement("button");
+
+      btn_solution.innerHTML = webex_buttons.solution; // "Correct answer";
+
+      btn_solution.setAttribute("class", "webex-button webex-button-solution");
+
+      if (webex_buttons.solution_alt.length > 0) btn_solution.setAttribute("title", webex_buttons.solution_alt);
+
+      btn_solution.onclick = solution_func;
+
+      li_solution.appendChild(btn_solution);
+
+    }
+
+
+
+  });
+
+
+
+  /* set up webex-solveme inputs */
+
+  document.querySelectorAll(".webex-solveme").forEach(solveme => {
+
+    solveme.setAttribute("autocomplete","off");
+
+    solveme.setAttribute("autocorrect", "off");
+
+    solveme.setAttribute("autocapitalize", "off");
+
+    solveme.setAttribute("spellcheck", "false");
+
+    solveme.value = "";
+
+
+
+    /* adjust answer for 'no spaces' (ignore spaces) */
+
+    if (solveme.classList.contains("nospaces")) {
+
+      solveme.dataset.answer = solveme.dataset.answer.replace(/ /g, "");
+
+    }
+
+
+
+    /* attach checking function, triggered on key up, change, and when
+
+     * elemnt is out of focus. Only evaluated once by tracking changes
+
+     * via variable solveme_last_user_answer */
+
+    solveme.addEventListener("keyup",  solveme_func);
+
+    solveme.addEventListener("change", solveme_func);
+
+    solveme.addEventListener("blur",   solveme_func);
+
+
+
+    /* adding span to show correct/incorrect icon */
+
+    solveme.insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+
+  });
+
+
+
+  /* set up radiogroups (single choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+    radiogroup.onchange = radiogroups_func;
+
+  });
+
+
+
+  /* set up checkboxgroups (multiple choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-checkboxgroup").forEach(checkboxgroup => {
+
+    checkboxgroup.onchange = checkboxgroups_func;
+
+  });
+
+
+
+  /* set up selects (dropdown menus) */
+
+  document.querySelectorAll(".webex-select").forEach(select => {
+
+    select.onchange = select_func;
+
+    /* append webex-icon for correct/incorrect icons */
+
+    var elem = document.createElement("span")
+
+    elem.classList.add("webex-icon")
+
+    select.parentNode.appendChild(elem)
+
+  });
+
+
+
+  /* change to next/previous question if multiple are available */
+
+  function handleQuestionClick(group, questions, step) {
+
+    return async function() {
+
+      /* get question order as integer vector */
+
+      let questionOrder = group.dataset.questionOrder.split(",").map(str => parseInt(str));
+
+
+
+      /* current question/position */
+
+      let currentPosition = parseInt(group.dataset.currentPosition);
+
+
+
+      /* Hide the current question */
+
+      questions.forEach(question => { question.classList.remove("active"); });
+
+
+
+      /* Move to the next question index */
+
+      currentPosition = (currentPosition + step) % questionOrder.length;
+
+      if (currentPosition < 0) currentPosition = currentPosition + questionOrder.length
+
+
+
+      /* Display the new question */
+
+      questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+      // Update the currentPosition data attribute on the group div
+
+      group.dataset.currentPosition = currentPosition;
+
+    };
+
+  }
+
+
+
+  document.querySelectorAll(".webex-group").forEach(group => {
+
+    const questions = Array.from(group.querySelectorAll(".webex-question"));
+
+
+
+    /* Create vector with question order. If the webex-group does
+
+     * not have class '.noshuffle' we will randomly shuffle the order */
+
+    let questionOrder = Array.from({length: questions.length}, (v, i) => i);
+
+    if (!group.classList.contains("noshuffle")) {
+
+      questionOrder = shuffle_array(questionOrder);
+
+    }
+
+
+
+    /* take start position (if set) or start at 0 */
+
+    const currentPosition = parseInt(group.getAttribute("data-start-position")) || 0;
+
+
+
+    /* show the default question for each group */
+
+    questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+    /* store random order of questions as well as current position */
+
+    group.dataset.questionOrder   = questionOrder;
+
+    group.dataset.currentPosition = currentPosition;
+
+
+
+    /* find all webex-questions, search for .webex-button-list and
+
+     * populate the list with necessary <li><button>...</button></li> elements */
+
+    questions.forEach(question => {
+
+        let button_ul = question.querySelector("ul.webex-button-list");
+
+
+
+        let li_next = document.createElement("li");
+
+        let nextButton = document.createElement("button");
+
+        nextButton.setAttribute("class", "webex-button webex-button-next");
+
+        if (webex_buttons.question_next_alt.length > 0) nextButton.setAttribute("title", webex_buttons.question_next_alt);
+
+        nextButton.innerHTML = webex_buttons.question_next; // "Next question";
+
+        nextButton.addEventListener("click", handleQuestionClick(group, questions, 1));
+
+        li_next.appendChild(nextButton);
+
+
+
+        let li_previous = document.createElement("li");
+
+        let previousButton = document.createElement("button");
+
+        previousButton.setAttribute("class", "webex-button webex-button-previous");
+
+        if (webex_buttons.question_previous_alt.length > 0) previousButton.setAttribute("title", webex_buttons.question_previous_alt);
+
+        previousButton.innerHTML = webex_buttons.question_previous; // "Previous question";
+
+        previousButton.addEventListener("click", handleQuestionClick(group, questions, -1));
+
+        li_previous.appendChild(previousButton);
+
+
+
+        if (webex_buttons.question_previous.length > 0) button_ul.appendChild(li_previous);
+
+        if (webex_buttons.question_next.length > 0) button_ul.appendChild(li_next);
+
+    });
+
+  });
+
+
+
+  /* Development options */
+
+  document.querySelectorAll(".webex-question.check").forEach(question => {
+
+      question.querySelector(".webex-button-check").click()
+
+  });
+
+  document.querySelectorAll(".webex-question.solution").forEach(question => {
+
+      let btn = question.querySelector(".webex-button-solution");
+
+      if (btn !== null) { btn.click(); }
+
+  });
+
+
+
+  /* Pre-filling <input> fields */
+
+  document.querySelectorAll(".webex-question.prefill").forEach(question => {
+
+      question.querySelectorAll("input.webex-solveme").forEach(solveme => {
+
+          let x = JSON.parse(solveme.dataset.answer);
+
+          solveme.value = x[0];
+
+          /* Trigger the on change event */
+
+          solveme.dispatchEvent(new Event("change"));
+
+      });
+
+
+
+      /* Pre-filling radiogroups, that is for schoice questions */
+
+      question.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let idx = x.indexOf(1);
+
+          let radios = radiogroup.querySelectorAll('input[type="radio"]');
+
+          radios[idx].checked = true;
+
+          /* Trigger the on change event */
+
+          radios[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for schoice questions w/ dropdown menus */
+
+      question.querySelectorAll(".webex-select").forEach(dropdown => {
+
+          let x = JSON.parse(dropdown.dataset.answer);
+
+          let idx = x.indexOf(1) + 1; /* +1 to skip the first blank option */
+
+          let options = dropdown.querySelectorAll("option");
+
+          options[idx].selected = true;
+
+          /* Trigger the on change event */
+
+          options[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for mchoice questions */
+
+      question.querySelectorAll(".webex-checkboxgroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let checkboxes = radiogroup.querySelectorAll('input[type="checkbox"]');
+
+          for (let i = 0; i < checkboxes.length; i++) {
+
+              checkboxes[i].checked = x[i];
+
+          }
+
+          /* Trigger the on change event */
+
+          checkboxes[0].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+  });
+
+
+
+  /* Show set tolerance (devel option) */
+
+  function calc_width(x, txt, offset = 20) {
+
+      /* We do the following:
+
+       * Create a new span, insert the value we need in the .tolerance
+
+       * input node, and calculate its offsetWidth. Then remove it
+
+       * again; this is just used to calculate the required width. */
+
+      var cwtmp = document.createElement("span");
+
+      x.appendChild(cwtmp);
+
+      cwtmp.innerHTML = txt || "";
+
+      var w = parseInt(cwtmp.getBoundingClientRect().width) + offset;
+
+      cwtmp.remove();
+
+      return w;
+
+  }
+
+
+
+  /* If tolerance should be shown (devel option) we calculate:
+
+   * - the width required to properly display the solution
+
+   * - the width required to properly display the tolerance
+
+   * - add a new element to display the tolerance
+
+   * - reduce the width of the solution input box. */
+
+  document.querySelectorAll(".webex-question.tolerance").forEach(question => {
+
+      question.querySelectorAll("input[data-tol]").forEach(elem => {
+
+          var w = null;
+
+
+
+          /* Add new element showing the tolerance */
+
+          let tol = document.createElement("input");
+
+          tol.type = "text"; // <inpyt type="text">
+
+          tol.disabled = true; // Disable input element
+
+          tol.classList.add("tolerance"); // Appending class
+
+          tol.value = "Â± " + elem.getAttribute("data-tol");
+
+
+
+          /* Add new node */
+
+          elem.parentNode.insertBefore(tol, elem)
+
+
+
+          var body     = document.querySelector("body");
+
+          //tol.value = "Â± " + "0.0000007";
+
+          //tol.value = "Â± " + "0.07";
+
+          w    = calc_width(body, tol.value);
+
+          wold = parseInt(elem.getBoundingClientRect().width);
+
+          wmin = calc_width(body, elem.value);
+
+
+
+          /* Calculate required width of the 'tolerance' node, and the
+
+           * reduction of the original 'input' node */
+
+          let wnew = Math.max(wmin, wold - w);
+
+          tol.style.width  = w + "px";
+
+          elem.style.width = wnew + "px";
+
+      });
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+</script>
 
 
 
