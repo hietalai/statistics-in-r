@@ -617,6 +617,7 @@ På grund av att dessa två sätt att visa kod i detta material inte delar objek
 #| fig-height: 3
 #| fig-cap: SAC för vita brus serien med egenskapad kod
 #| out-width: "90%"
+#| autorun: true
 
 customAcf <- function(series, plot = FALSE) {
   # Använder acf() från paketet stats
@@ -667,7 +668,32 @@ För den icke-stationära serien Random Walk ser SAC väldigt annorlunda ut. Vi 
 
 ## Differentiering
 
-Trots att en tidsserie inte anses stationär kan vi ibland med en enkel bearbetning göra serien stationär. I exemplet med Random Walk vet vi att differensen mellan två olika tidssteg endast beror på en slumpmässig dragning från en normalfördelning vilket är oberoende från all annan information. Metoden att skapa denna nya stationära serie kallas för **differentiering** där den enklaste formen består av att beräkna $\nabla Y_t = Y_t - Y_{t-1}$. 
+Om en tidsserie inte anses stationär i sin ursprungliga form kan vi undersöka ifall enkla bearbetningar av serien istället uppfyller stationäritet. I exemplet med Random Walk vet vi att differensen mellan två olika tidssteg endast beror på en slumpmässig dragning från en normalfördelning, oberoende från all annan information i serien. 
+
+Vi kan då med hjälp av **differentiering** skapa en ny, stationär serie. Differentiering går ut på att vi skapar differensen mellan olika lagg av tidpunkter, den enklaste formen är att beräkna differensen mellan tidpunkt $t$ och $t-1$, lagg 1. 
+
+En mer generell beskrivning är att man anger hur många differenser ($d$) och vilket lagg ($k$) differenserna beräknas från enligt:
+
+$$
+  \begin{aligned}
+  \nabla^dY_t = \nabla^{d-1}(Y_t - Y_{t-k})
+  \end{aligned}
+$$ {#eq-differentiation}
+
+Till exempel skulle den första differensen av lagg 1 beräknas som:
+
+$$
+  \begin{aligned}
+  \nabla Y_t = Y_t - Y_{t-1}
+  \end{aligned}
+$$
+och den andra differensen av lagg 1 beräknas som: 
+
+$$
+  \begin{aligned}
+  \nabla^2 Y_t = \nabla(Y_t - Y_{t-1}) = \underbrace{(Y_t - Y_{t-1})}_{\nabla Y_t} - \underbrace{(Y_{t-1} - Y_{t-2})}_{\nabla Y_{t-1}}
+  \end{aligned}
+$$
 
 Funktionen `diff()` visar en serie som differentierats `differences` gånger baserat på `lag` lagg bakåt i serien.
 
@@ -677,12 +703,17 @@ Funktionen `diff()` visar en serie som differentierats `differences` gånger bas
 #| fig-cap: SAC för den differentierade Random Walk-serien
 #| label: fig-sac-diff-rw
 #| out-width: "90%"
+#| autorun: true
 
+# Differentiera en icke-stationär serie
 diffY <- diff(randomWalk, lag = 1, differences = 1)
 
+# Beräkna SAC för den differentierade serien
 customAcf(diffY, plot = TRUE)
 
 ```
+
+Figuren visar att den differentierade seriens autokorrelation vid givna lag alla fellen inom (eller så gott som) konfidensbanden och vi kan bedöma den differentierade serien som stationär.
 
 <!-- TODO: Kanske något kort om regressionsmodeller och residualanalys? Kapitel 3 i Cryer? -->
 
