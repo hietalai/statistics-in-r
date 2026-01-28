@@ -1,0 +1,26 @@
+Question
+========
+Markera de serier som anses uppfylla kravet om svag stationäritet.
+
+Answerlist
+----------
+* Vitt brus
+* Random Walk
+* Glidande medelvärde
+
+Solution
+========
+
+Answerlist
+----------
+* Sant. 
+* Falskt.
+* Sant.
+
+
+Meta-information
+================
+exname: stationarity
+extype: mchoice
+exsolution: 101
+exshuffle: 3
