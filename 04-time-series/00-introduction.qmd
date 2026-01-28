@@ -1,0 +1,182 @@
+---
+engine: knitr
+filters: 
+  - webr
+---
+<!-- CONTENT -->
+
+# Introduktion
+
+Data som samlats in återkommande med regelbundna mellanrum kallas för en **tidsserie** och har per definition ett beroende mellan intilliggande mätpunkter. Alltifrån sekundvisa mätningar av temperaturen i en fabriksugn till årliga mätningar av import och export för Sverige är exempel på tidsserier som innehåller många intressanta mönster och samband som kan utvinnas med hjälp utav statistiska modeller.
+
+Två specifika exempel är det månatliga elpriset för villor utan eluppvärmning i elområde 1 mellan april 2013 och september 2025^[Hämtad från SCB:s Statistikdatabas: Elhandelspriser på elenergi (exkl. elskatt, moms och nätavgift) efter avtalstyp, elområde och kundkategori. Månad 2013M04 - 2025M09] och dygnsvis förbrukning av el i en villa från Norrbotten mellan mars 2011 till februari 2021^[Egen insamlad data]. 
+
+```{webr-r}
+#| context: setup
+#| message: FALSE
+
+url <- "https://hietalai.github.io/statistics-in-r/resources/data/electricityprice.csv"
+download.file(url, "electricityprice.csv")
+
+prices <- read_csv("electricityprice.csv", show_col_types = FALSE)
+
+url <- "https://hietalai.github.io/statistics-in-r/resources/data/electricityconsumption.csv"
+download.file(url, "electricityconsumption.csv")
+
+consumption <- read_csv2("electricityconsumption.csv", show_col_types = FALSE)
+
+```
+
+```{r}
+#| echo: FALSE
+#| fig-cap: "Månatligt elpris för villor utan eluppvärmning i elområde 1"
+#| label: fig-price
+#| fig-width: 5
+#| fig-height: 3
+
+prices |> 
+  mutate(time = år + ((månad |> as.numeric())-1)/12) |> 
+  ggplot() + 
+  aes(x = time, y = pris) + 
+  geom_line() + 
+  theme_bw() + 
+  scale_x_continuous(breaks = seq(2013, 2025, 2)) +
+  labs(x = "Tid", y = "Pris i elområde 1 (öre/KWh)", caption = "Källa: SCB")
+```
+
+```{r}
+#| echo: FALSE
+#| fig-cap: "Dygnsvis elförbrukning i en villa i Norrbotten"
+#| label: fig-consumption
+#| fig-width: 5
+#| fig-height: 3
+
+consumption |> 
+  mutate(time = as_date(Starttid)) |> 
+  ggplot() + 
+  aes(x = time, y = Energi_KWh) + 
+  geom_line() + 
+  theme_bw() + 
+  labs(x = "Tid", y = "Elförbrukning (KWh)")
+
+```
+
+<!-- TODO FORTSÄTT EXEMPLET OCH KOPPLA DET TILL ETT PRAKTISKT TILLFÄLLE DÄR VI VILL ANVÄNDA TIDSSERIEMODELLER SOM KAN ANVÄNDAS FÖR ATT PREDIKTERA PRIS OCH SEDAN KONSUMTION. -->
+
+
+
+## Visuell analys
+
+I båda figurerna visualiseras utvecklingen av mätvariabeln över tid vilket innebär att vi kan utläsa trender och återkommande mönster. 
+
+- En **trend** definieras som den övergripande utvecklingen från från första till sista mätpunkten. Till exempel visar @fig-price en negativ trend från början av mätperioden till dess slut, dock med perioder av variation. 
+
+- **Säsongsmönster** definieras som trender som återkommer vid samma specifika perioder, till exempel @fig-consumption visar en förhöjd förbrukning under vintermånaderna och en lägre förbrukning under sommarmånaderna. Båda dessa komponenter kommer vara viktiga i målen att både beskriva den observerade serien och prediktera nya värden för framtida tidpunkter. 
+
+Seriens **periodicitet** beskriver tidsperioden mellan dessa återkommande mönster men samma serie kan uppvisa flera mönster över olika tidssperioder (timmar, dagar, veckor) beroende på hur ofta mätvariabeln mäts.
+
+Utöver tidsberoende mönster kan en tiddserie också uppvisa andra, till synes slumpmässiga och icke-periodiska, mönster. Till exempel har @fig-price en prisnedgång mellan 2013-2015, en uppgång mellan 2017-2019, och en extrem topp som inträffar kring årsskiftet 2022-2023, som inte direkt kan förklaras av tid och inte heller återkommer under specifika perioder. Dessa fenomen innebär ofta en mer komplex modellanpassning som tar hjälp av både sin egna och/eller andra tidsserier. 
+
+Vi kommer fokusera på tre huvudsakliga steg i analysprocessen:
+
+1. Visualisering och identifiering av mönster
+2. Modellanpassning
+3. Modellutvärdering och prediktioner
+
+Den första punkten är väldigt viktig för att bilda en uppfattning om vilka fenomen som tidsserien visar upp och vad modellen ska kunna identifiera samt att kunna motivera valet av modell som anpassas i efteföljande steg. För andra punkten kommer vi titta lite närmare på olika former av modeller och hur de anpassas för att till slut lära oss om metoder för hur modellerna kan utvärderas och användas i praktiken. 
+
+## Interaktiv programmering i webbläsaren
+Denna del av boken använder sig av [WEBR](https://github.com/coatless/quarto-webr/) som ger möjlighet att interagera med programmeringsspråket R direkt i webbläsaren dock finns vissa begränsningar i tillgängliga paket och versionen av R är inte den senaste. Återkommande under delen förekommer kodblock, likt de exempel som visas nedan, som innehåller relevant kod för att implementera och testa den teori som kapitlet introducerar.  
+
+### Kodblock
+Vissa kodblock omfattar mindre uppgifter som ger en praktisk tillämpning av teorin där din uppgift är att lösa den fråga som ställs med hjälp av kod som tidigare presenterats. Denna del förutsätter ingen tidigare kunskap av programmering men det förväntas att du ska kunna klippa/klistra relevant kod och byta ut aktuella argumentvärden eller objekt för att lösa specifika problem. 
+
+Ett kodblock består utav en interaktiv del, där kod kan skrivas, och en utskriftdel, där resultatet av koden visas. I följande exempel har ett kodblock skapats där objektet `a` tilldelas värdet 5. Klickar du på *Run Code* kommer R spara värdet till objektet och det kan nu anropas genom att bara skriva `a` i detsamma eller ett senare kodblock i samma kapitel.
+
+```{webr-r}
+
+# Tilldelar objektet a värdet 5
+a <- 5
+
+```
+
+Kodblock i samma kapitel delar objekt mellan sig, vilket vi med fördel kan använda för att dela upp vissa exempel i mindre bitar.
+
+```{webr-r}
+
+# Skriver ut objektets värde som tilldelats i ett tidigare kodblock
+print(a)
+
+```
+
+Dock måste kodblocken "aktiveras" eller "köras" i rätt ordning vilket vi kan göra genom att klicka på **Run Code** i övre vänstra hörnet av blocket. Om vi först kör kodblocket där värdet `5` tilldelas objektet `a` och sedan kodblocket som skriver ut objektet, kommer värdet `5` visas som en utskrift från det andra blocket.
+
+### Övningsuppgifters struktur
+I följande kodblock visas ett objekt som har en platshållare `___` som indikerar att du ska lösa uppgiften som efterfrågas. Kommentaren i `# TODO` ger en lättare instruktion vad objektet ska innehålla som sedan kontrolleras med hjälp av funktionen `checkSolution()`.
+
+```{webr-r}
+#| context: setup
+
+checkSolution <- function(object){
+  answer <- c(1, 3, 4, 7) |> mean()
+  
+  if (all.equal(object, answer, tolerance = 1E-3) |> isTRUE()) {
+    print("Korrekt!")
+  } else {
+    print("Svaret är fel!")
+  }
+}
+
+```
+
+> Vad är medelvärdet av $\{1, 3, 4, 7\}$?
+
+```{webr-r}
+# TODO Tilldela objektet x medelvärdet
+x <- ___
+
+checkSolution(x)
+
+```
+
+Återkoppling på uppgiften presenteras sedan i utskrift-fönstret.
+
+En lösning skulle då kunna vara att använda den inbyggda funktionen `mean()` för att beräkna medelvärdet av vektorn innehållande de fyra värdena.
+```{webr-r}
+#| autorun: true
+
+# TODO Tilldela objektet x medelvärdet
+x <- mean(c(1, 3, 4, 7))
+
+checkSolution(x)
+
+```
+
+Testa att hitta ett annat sätt att lösa uppgiften, till exempel att på egen hand beräkna medelvärdet och skriva in värdet direkt till objektet.
+
+### Läsa in data i WEBR
+För att kunna använda exempeldata i våra analyser med hjälp av WEBR behöver vi först ladda ner materialet från bokens resursmapp innan den kan laddas in i den interaktiva sessionen. Nedan kodblock visar ett exempel på hur vi i tre steg laddar ner och läser in ett sådant data. Denna kod kommer återkomma i efterföljande kapitel när ny exempeldata ska analyseras.
+
+```{webr-r}
+
+## Läser in exempeldata i tre steg
+#  URL för källan
+url <- "https://hietalai.github.io/statistics-in-r/resources/data/electricityprice.csv"
+
+#  Laddar ner data från URL
+download.file(url, "electricityprice.csv", quiet = TRUE)
+
+#  Läser in data till R
+prices <- read_csv("electricityprice.csv", show_col_types = FALSE)
+
+```
+
+
+## Referenser {.unnumbered}
+
+
+
+
+
+
+

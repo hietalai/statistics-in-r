@@ -1,0 +1,175 @@
+---
+engine: knitr
+filters: 
+  - webr
+---
+<!-- CONTENT -->
+
+# Autoregressiva modeller
+
+Hur kan en tidsserie utan en tydlig trend eller säsongsmönster modelleras? Vi kan på olika sätt ta tillvara på tidsberoendet i serien genom **autoregressiva** (AR) processer som omfattar regression "på sig själv" och/eller genom **glidande medelvärde** (MA) processer som omfattar regression på tidigare feltermer.
+
+Generellt kan vi beskriva en AR(p)-process som:
+$$
+  \begin{aligned}
+  Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots + \phi_p Y_{t-p} + e_t
+  \end{aligned}
+$$ {#eq-arp}
+det vill säga en linjärkombination av $p$ tidigare värden. Vardera $\phi$ (phi^[Uttalas fi.]) beskriver relationen mellan det specifika lagget och den nuvarande tidpunkten.
+
+<!-- TODO WHERE TO PUT 4.1/4.2? MAYBE SOMETHING IN RELATION TO THE MA PROCESS LAST IN THIS CHAPTER -->
+
+## AR(1)
+
+Den enklaste formen av en autoregressiv modell är en AR(1):
+$$
+  \begin{aligned}
+  Y_t = \phi Y_{t-1} + e_t
+  \end{aligned}
+$$ {#eq-ar1}
+
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Simulerad AR(1) serie från angivet $\phi$
+#| out-width: "90%"
+#| autorun: true
+
+# Skapar en funktion för att simulera en AR(1) process
+ar1 <- function(phi, n) {
+  yt <- numeric()
+  
+  for (i in seq_len(n)) {
+    if (i == 1) {
+      yt[i] <- rnorm(n = 1)
+    } else {
+      yt[i] <- phi * yt[i-1] + rnorm(n = 1)
+    }
+  }
+  
+  yt
+}
+
+# Egenskaper för simuleringen
+n <- 100
+phi <- 0.9
+
+# Visualisera serien i ett linjediagram
+tibble(
+  t = seq_len(n),
+  yt = ar1(phi = phi, n = n)
+) |> 
+  ggplot() + aes(x = t, y = yt) + geom_line() + 
+  theme_bw()
+```
+
+Vi skulle kunna beskriva denna modell som en linjärkombination av den viktade andelen från föregeånde tidpunkt och en slumpterm som tar upp den nya informationen som tillkommer denna tidpunkt. När vi tittar tillbaka på @eq-random-walk ser vi att dessa är lika om $\phi = 1$, men vi bedömde tidigare att en Random Walk inte var en stationär serie. För en generell AR-process antar vi stationäritet så vad behöver vi begränsa $\phi$ till för att detta ska uppfyllas för en AR(1)?
+
+Vi kan börja med att beräkna variansen av @eq-ar1:
+
+$$
+  \begin{aligned}
+  Var(Y_t) &= Var(\phi Y_{t-1} + e_t) \\
+  \gamma_0 &= \phi^2 \gamma_0 + \sigma^2_e \\
+  \gamma_0 &= \frac{\sigma^2_e}{1 - \phi^2}
+  \end{aligned}
+$$
+
+:::{.callout-note}
+Kom ihåg att $\gamma_0 = cov(Y_t, Y_t) = Var(Y_t)$ gäller för alla $Y_{t-k}$ där $k \ge 0$.
+:::
+
+Redan vid detta uttryck ser vi några begränsningar som måste göras på $\phi$, nämligen $|\phi| < 1$ för att variansen ska vara definierbar och strikt positiv. Vi kallar detta för seriens **villkor för stationäritet**.
+
+För autokovariansen $k$ steg emellan gäller då:
+
+$$
+  \begin{aligned}
+  \gamma_k = \phi \gamma_{k-1} + E\left[e_t Y_{t-k}\right]
+  \end{aligned}
+$$
+som pga oberoendet mellan $e_t$ och $Y_t$ ger:
+$$
+  \begin{aligned}
+  \gamma_k = \phi \gamma_{k-1}
+  \end{aligned}
+$$ {#eq-rho-ar1}
+för alla $k > 0$.
+
+Vi kan utveckla denna ekvation för att hitta ett annat sätt att formulera autokovariansen.
+$$
+  \begin{aligned}
+    \gamma_1 &= \phi \gamma_0 &&= \phi \frac{\sigma^2_e}{1 - \phi^2}\\
+    \gamma_2 &= \phi \gamma_1 &&= \phi \phi \frac{\sigma^2_e}{1 - \phi^2}\\
+    &&&= \phi^2 \frac{\sigma^2_e}{1 - \phi^2} \\
+    \gamma_3 &= \phi \gamma_2 &&= \phi^3 \frac{\sigma^2_e}{1 - \phi^2}\\
+    &&\vdots\\
+    \gamma_k & &&= \phi^k \frac{\sigma^2_e}{1 - \phi^2}
+  \end{aligned}
+$$
+
+Med hjälp av denna formulering kan vi reducera autokorrelationen till:
+
+$$
+  \begin{aligned}
+  \rho_k = \frac{\gamma_k}{\sqrt{\gamma_0 \cdot \gamma_0}} = \frac{\gamma_k}{\gamma_0} = \frac{\phi^k \frac{\sigma^2_e}{1 - \phi^2}}{\frac{\sigma^2_e}{1 - \phi^2}} = \phi^k
+  \end{aligned}
+$$
+det vill säga en exponentiellt minskande korrelation då $|\phi| < 1$. 
+
+Med hjälp av visualiseringar kan vi se hur $\rho_k$ ser ut för olika värden på $\phi$. Detta kommer hjälpa oss att identifiera fall där en AR(1) modell kan användas som en representation av en tidsserie.
+
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Autokorrelationen för en AR(1) med olika $\phi$
+#| out-width: "90%"
+
+phi <- 0.9
+
+tibble(
+  k = seq_len(20), 
+  rho = phi^k
+) |> 
+  ggplot() + aes(x = k, y = rho) + 
+  geom_bar(width = 0.3, stat = "identity") +
+  scale_y_continuous(limits = c(-1, 1)) + 
+  geom_hline(yintercept = 0, linewidth = 1) +
+  labs(y = expression(rho[k])) + 
+  theme_bw()
+
+
+```
+
+Testa att ändra `phi` till olika lämpliga värden och se vad som händer med visualiseringen.
+
+<!-- En utav slutsatserna som vi kan dra är att vi aldrig ser det mönster som uppvisades i SAC för Random Walk, det vill säga ...  -->
+
+
+## AR(2)
+
+Om vi utökar modellen med ytterligare ett lagg fås:
+$$
+  \begin{aligned}
+  Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + e_t
+  \end{aligned}
+$$
+
+Att visa villkoren för stationäritet blir mer och mer komplicerat för större $p$ men vi har för en AR(2) följande tre villkor:^[Se @cryer2008 sid 84]
+
+$$
+  \begin{aligned}
+  \phi_1 + \phi_2 < 1 \qquad \phi_2 - \phi_1 < 1 \qquad |\phi_2| < 1
+  \end{aligned}
+$$
+
+
+
+<!-- TODO: Matcha par av stationäritetsvillkor för olika serier -->
+
+
+
+Något kort om MA
+
+
+

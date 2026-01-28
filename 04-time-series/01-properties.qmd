@@ -1,0 +1,701 @@
+---
+engine: knitr
+filters: 
+  - webr
+---
+<!-- CONTENT -->
+
+```{webr-r}
+#| context: setup
+
+checkSolution <- function(object, ex) {
+  
+  if (ex == 1) {
+    assert_that(object |> is.data.frame(), msg = "Objektet måste vara en data.frame eller tibble")
+    assert_that("t" %in% colnames(object), msg = "Variabeln t måste finnas i objektet.")
+    assert_that(all(seq_len(nrow(prices)) %in% object$t), msg = "Alla tidssindex måste finnas i objektet.")
+  
+  } else if (ex == 2) {
+    
+    assert_that(object |> is.numeric(), msg = "Objektet måste vara ett numeriskt värde.")
+    answer <- prices$pris[10]
+    
+    assert_that(all.equal(object, answer, tolerance = 1E-3) |> isTRUE(),
+                msg = "Svaret är fel.")
+    
+  } else if (ex == 4) {
+    
+    assert_that(object |> class() == "acf", msg = "Objektet måste vara ett objekt från acf().")
+    
+    answer <- customAcf(randomWalk, plot = FALSE)
+    
+    
+    assert_that(all.equal(answer$acf, object$acf, tolerance = 1E-3) |> isTRUE(),
+                msg = "Svaret är fel.")
+  }
+  
+  print("Korrekt!")
+  
+}
+```
+
+# Tidsserier
+
+Tidsserierna som visualiserades i föregående kapitel sparas som data med två kolumner; tid och mätvariabeln. Varje rad motsvarar mätvariabelns värde vid tidpunkt $t$, betecknad som $Y_t$. Det är ofta i detta format som vi kommer vilja strukturera data för analys men vi kan ibland få tillgång till data med en annan struktur eller att vi av andra orsaker behöver bearbeta data på olika sätt. 
+
+## Databearbetning
+Vi kan titta närmare på det exempeldata om elpriser som visualiserades i @fig-price.
+
+```{webr-r}
+#| autorun: true
+
+## Läser in exempeldata i tre steg
+#  URL för källan
+url <- "https://hietalai.github.io/statistics-in-r/resources/data/electricityprice.csv"
+
+#  Laddar ner data från URL
+download.file(url, "electricityprice.csv", quiet = TRUE)
+
+#  Läser in data till R
+prices <- read_csv("electricityprice.csv", show_col_types = FALSE)
+
+#  Visar de första observationerna i serien
+head(prices)
+
+```
+
+I utskriften visas de sex första observationerna, med variabler som beskriver tidpunkten för mätningen och mätvariabeln elpris ($Y_t$). Notera att tidsvariabeln `tid` i detta fall inte är numerisk utan en textsträng som innehåller både år och månad. För att analysera och visualisera detta data krävs en bearbetning till ett **tidsindex**, $t$. 
+
+Det enklaste sättet att göra detta är att lägga till en ny variabel i datamaterialet som helt enkelt räknar från 1 till den sista observationen i serien. Med hjälp av funktionerna `seq_len()` och `nrow()` kan vi skapa en sekvens av antalet raders längd.
+
+```{webr-r}
+
+# Sparar den bearbetade tibblen i samma objekt: prices
+prices <- 
+  prices |> 
+  # mutate() förändrar eller skapar variabler i objektet
+  mutate(
+    t = seq_len(nrow(prices))
+  )
+
+head(prices)
+
+```
+
+:::{.callout-important}
+Kom ihåg att vi måste spara resultatet av databearbetningen i ett objekt för att den ska kunna användas vid ett senare tillfälle.
+:::
+
+:::{.callout-caution}
+## Övning 1
+Utifrån datamaterialet `prices`, skapa ett nytt objekt, `dataWithT`, där variabeln $t$ innehåller ett tidsindex.
+
+```{webr-r}
+dataWithT <- ______
+
+checkSolution(dataWithT, ex = 1)
+```
+
+:::
+
+Ibland kan det vara av intresse att plocka ut vissa tidpunkter, till exempel om någon specifik tidpunkt är fokus av undersökningen eller om vissa observationer kan anses missvisande och behöver undersökas i detalj. Det finns tre huvudsakliga sätt att **indexera** data i R; med hjälp av olika funktioner från `dplyr`-paketet eller två olika sätt att använda `[]`.
+
+```{webr-r}
+#  Plockar ut tidpunkt 5
+prices |> 
+  slice(5) |> 
+  pull(pris)
+
+# Alternativt plockar ut rad 5 och variabeln pris från en data.frame
+prices[5, "pris"]
+
+# Alternativt plockar ut element 5 från vektorn (variabeln) pris
+prices$pris[5]
+```
+
+I utskriften visas nu samma $Y_5$ tre gånger, med något olika format. Vi behöver inte tänka så mycket på formatet av det resulterande objektet just nu, men det är värt att återkomma till när vi senare vill fortsätta analyserna då vissa metoder/funktioner kräver vissa specifika format.
+
+Verbet `slice()` plockar ut specifika rader och `pull()` plockar ut en specifik kolumn till en vektor. Det andra alternativet är att använda `[radindex, kolumnindex]` på ett objekt innehållande både rader och kolumner där kolumnindex kan anropas med antingen namnet på kolumnen om det är lättare att identifiera eller siffror. Om vi först väljer ut kolumnen `pris` från datamaterialet med hjälp av `$` har objektet endast en dimension och då används bara ett `[index]`. 
+
+:::{.callout-important}
+Det är viktigt att komma ihåg att R indexerar med bas 1, alltså första elementet i en dimension är numrerad som 1.
+:::
+
+:::{.callout-caution}
+## Övning 2
+Vilket värde har den tionde observationen i serien, $Y_{10}$?
+
+```{webr-r}
+# TODO Tilldela värdet från den tionde observationen i serien
+y10 <- ________
+
+checkSolution(y10, ex = 2)
+```
+:::
+
+
+## Beskrivande mått
+Vi kan anse vardera $Y_t$ vara en slumpvariabel vilket innebär att hela serien är en sekvens av slumpmässiga utfall. På grund av tidsberoendet mellan intilliggande observationer kan vi definiera detta som en **stokastisk process**^["Stokastisk" är ett annat ord för slumpmässig.]. Ordet "process" antyder att vi tillåter en riktad påverkan mellan mätvärden till skillnad från ett datamaterial med stokastiska variabler där observationerna är oberoende. 
+
+Likt en regressionsmodell kan vi sammanfatta serien med dess väntevärde och varians^[Se @sec-model-assumptions] men tidsberoendet kräver att vi lägger till ytterligare en aspekt av beskrivningen, relationen mellan olika tidssteg. 
+
+Vi kan börja med att definiera väntevärdet av den stokastiska processen enligt:
+
+$$
+  \begin{aligned}
+  \mu_t = E[Y_t]
+  \end{aligned}
+$$ {#eq-t-mean}
+där $\mu_t$ kan variera för olika värden på $t$. Variansen definieras på liknande sätt:
+$$
+  \begin{aligned}
+  Var(Y_t) &= E\left[(Y_t - \mu_t)^2\right]\\
+  &= E\left[Y_t^2\right] - \mu_t^2
+  \end{aligned}
+$$ {#eq-t-var}
+där även variansen kan variera för olika värden på $t$.
+
+<!-- På samma sätt som i linjär regression kommer en bra tidsseriemodell kunna identifiera TODO KANSKE UTÖKA DENNA MENING -->
+
+Tidsberoendet i serien kan modelleras med hjälp av **autokovarians** och **autokorrelation**, där den senare är mer använd på grund av dess enklare tolkning. Tillägget av ordet "auto" på mått som vanligtvis används för att beskriva relationen *mellan* två olika variabler, betyder att vi nu fokuserar på relationen mellan två tidssteg *inom* samma variabel.
+
+Autokovariansen mellan tid $t$ och $s$ definieras med hjälp av den grekiska bokstaven gamma som:
+$$
+  \begin{aligned}
+  \gamma_{t,s} &= cov(Y_t, Y_s) \\
+  &= E[(Y_t - \mu_t)(Y_s - \mu_s)]\\
+  &= E[Y_t Y_s] - \mu_t \mu_s
+  \end{aligned}
+$$ {#eq-autocov}
+
+Autokorrelationen definieras med hjälp av den grekiska bokstaven rho^[Uttalas rå] som:
+$$
+  \begin{aligned}
+  \rho_{t,s} &= corr(Y_t, Y_s) \\
+  &= \frac{\gamma_{t,s}}{\sqrt{\gamma_{t,t}\gamma_{s,s}}}
+  \end{aligned}
+$${#eq-autocor}
+
+Autokovariansen mäter det linjära sambandet mellan de två tidsstegen där större värden indikerar på ett starkare samband. Dock är detta mått beroende av skalan på mätvariabeln vilket medför att autokorrelationen med dess skala från -1 till 1 är generellt lättare att tolka. Om $\rho_{t, s} \approx \pm 1$ indikeras ett starkt linjärt beroende medan värden nära 0 indikerar ett svagt linjärt beroende. När $\rho_{t,s} = 0$ anser vi att tidpunkterna är okorrelerade. 
+
+Detta mått kan till exempel användas i en linjär regressionsmodell där ett av antagandena att feltermerna och därmed modellens residualer är okorrelerade. Under antagande att residualerna i observationsordning är en form av stokastisk process skulle autokorrelationen mellan intilliggande observationer kunna användas för att kontrollera ifall antagandet är uppfylld.^[I tidigare kapitel har vi endast använt en visuell analys av residualer mot observationsindex i ett linjediagram för att kontrollera detta.]
+
+Sammanfattningsvis kan vi beskriva egenskaper hos autokovarians och autokorrelation enligt: 
+
+$$
+  \begin{aligned}
+  \gamma_{t,t} &= Var(Y_t) &\qquad \rho_{t,t} &= 1\\
+  \gamma_{t,s} &= \gamma_{s,t} &\qquad \rho_{t,s} &= \rho_{s,t}\\
+  |\gamma_{t,s}| &\le \sqrt{\gamma_{t,t} \gamma_{s,s}} &\qquad |\rho_{t,s}| &\le 1
+  \end{aligned}
+$$ {#eq-properties}
+
+I ord betyder dessa egenskaper att:
+
+- autokovariansen mellan samma tidpunkt är detsamma som variansen för tidpunkten, 
+- autokovariansen mellan $s$ och $t$ är densamma som mellan $t$ och $s$ då antalet tidssteg är lika, 
+- beloppet av autokovariansen mellan två tidssteg är alltid högst roten ur produkten av de två tidsstegens varianser,
+- autokorrelationen mellan samma tidpunkt är 1,
+- autokorrelationen mellan $s$ och $t$ är densamma som mellan $t$ och $s$ då antalet tidssteg är lika,
+- autokorrelationen begränsas mellan -1 och 1.
+
+## Enkla tidsserier
+
+Vi kan tillämpa dessa beskrivande mått på ett par enkla exempelserier för att få en bild av hur dem påverkas av olika beroenden. 
+
+### Vitt brus
+En serie som endast består av identiska och oberoende dragningar från $N(0, \sigma^2_e)$ brukar kallas för **vitt brus**. Vi definierar serien som:
+$$
+  \begin{aligned}
+  Y_t = e_t
+  \end{aligned}
+$$
+Vi kan i R generera en serie med vitt brus genom dragningar från `rnorm()` med väntevärde 0 och en godytcklig varians.
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: En serie med vitt brus
+#| label: 'fig-white-noise'
+#| out-width: "90%"
+#| autorun: true
+
+# Dra 100 observationer från normalfördelningen
+n <- 100
+
+whiteNoise <- rnorm(n = n, mean = 0, sd = 1)
+
+# Visualisera serien i ett linjediagram
+tibble(
+  t = seq_len(n),
+  yt = whiteNoise
+) |> 
+  ggplot() + aes(x = t, y = yt) + geom_line() + 
+  theme_bw()
+
+```
+
+Diagrammet visar en serie där i princip ingen trend eller mönster kan utläsas. Serien ser ut att vara centrerad kring $y = 0$ med en viss slumpmässig variation. Testa att ändra värdet på `sd` i funktionen `rnorm()` till något annat tal, kanske ett större. Diagrammet ser minst lika slumpmässigt ut men vi ser en större variation kring $y = 0$. 
+
+På grund av att vi drar oberoende dragningar antas intilliggande observationer inte ha någon påverkan på varandra och vi kan sammanfatta seriens egenskaper med följande beskrivande mått: 
+$$
+  \begin{aligned}
+  \mu_t = E[e_t] &= 0 \quad \text{för alla } t\\
+  \gamma_{t, s} &= \begin{cases}
+                      Var(e_t) &\text{om } s = t\\
+                      0        &\text{om } s \ne t
+                   \end{cases}\\
+  \rho_{t, s} &= \begin{cases}
+                    1 &\text{om } s = t\\
+                    0 &\text{om } s \ne t
+                 \end{cases}
+  \end{aligned}
+$$
+Det vill säga väntevärdet för varje tidpunkt är konstant (0), autokovariansen och autokorrelationen mellan intilliggande punkter är 0 på grund av att de anses oberoende. Om tidpunkterna är densamma används egenskaperna från @eq-properties.
+
+### Random Walk
+En annan tidsserie som också består av slumpmässiga dragningar från en normalfördelning är **Random Walk**. Till skillnad från vitt brus bygger en Random Walk vidare på tidigare observationer enligt:
+$$
+  \begin{aligned}
+  Y_t = \begin{cases}
+    e_t &\text{om } t = 1\\
+    Y_{t-1} + e_t &\text{annars}
+  \end{cases}
+  \end{aligned}
+$$ {#eq-random-walk}
+
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: En serie som visar en Random Walk
+#| label: fig-random-walk
+#| out-width: "90%" 
+#| autorun: true  
+
+# Ange längden av serien som ska genereras
+n <- 100
+
+# Initialisera ett tomt objekt
+randomWalk <- numeric()
+
+# Generera en Random Walk serie
+for (i in seq_len(n)) {
+  if (i == 1) {
+    randomWalk[i] <- rnorm(n = 1, mean = 0, sd = 1)
+  } else {
+    randomWalk[i] <- randomWalk[i-1] + rnorm(n = 1, mean = 0, sd = 1)
+  }
+}
+
+# Visualisera serien i ett linjediagram
+tibble(
+  t = seq_len(n),
+  yt = randomWalk
+) |> 
+  ggplot() + aes(x = t, y = yt) + geom_line() + 
+  theme_bw()
+
+```
+
+Namnet Random Walk (sv. slumpmässig promenad) kommer från representationen att man tar ett slumpmässigt steg vid varje tidpunkt och hela promenadens läge påverkas av var man har gått tidigare. Trots att serien endast består av slumpmässiga tilläggssteg ser det fortfarande ut som att serien har någon form av mönster, åtminstone en trend. Dock kan väntevärdet av serien beräknas till 0 för varje $t$ enligt:
+$$
+  \begin{aligned}
+  \mu_t = E[Y_t] &= E[e_1 + e_2 + \dots + e_t] \\
+  &= E[e_1] + E[e_2] + \dots + E[e_t] \\
+  &= 0 + 0 + \dots + 0 \\
+  &= 0
+  \end{aligned}
+$$
+
+Däremot ser vi att variansen av serien ökar med varje steg:
+$$
+  \begin{aligned}
+  Var(Y_t) &= Var(e_1 + e_2 + \dots + e_t) \\
+  &= Var(e_1) + Var(e_2) + \dots + Var(e_t)\\
+  &= \sigma^2_e + \sigma^2_e + \dots + \sigma^2_e\\
+  &= t\sigma^2_e
+  \end{aligned}
+$$
+
+En Random Walk kan vara en lämplig modell för att något förenklat beskriva aktiekurser där det till synes sker slumpmässiga förändringar vid varje tidpunkt (dag) men dagens kurs börjar där gårdagens kurs slutade.
+
+För att beräkna autokovariansen och autokorrelationen för dessa, och andra mer komplicerade serier, kommer vi använda följande räkneregel:
+
+$$
+  \begin{aligned}
+  cov\left[\sum_{i = 1}^m c_i Y_{t_i}, \sum_{j = 1}^n d_j Y_{s_j}\right] = \sum_{i = 1}^m \sum_{j = 1}^n c_i d_j \cdot cov(Y_{t_i}, Y_{s_j}) 
+  \end{aligned}
+$$ {#eq-covar-sum}
+där $c_i$ och $d_j$ är konstanter samt $t_i$ och $s_j$ är tidpunkter. Vad denna räkneregel innebär är att kovariansen mellan två summor av utfall kan förenklas till en summa av utfallens kovarianser.
+
+Kovariansen mellan tidpunkter i en Random Walk kan beräknas enligt följande givet att $1 \le t \le s$ när vi använder @eq-covar-sum:
+
+$$
+  \begin{aligned}
+  \gamma_{t, s} &= cov(e_1 + e_2 + \dots e_t, \quad e_1 + e_2 + \dots + e_t + e_{t+1} + \dots + e_s)\\
+  &= \sum_{i = 1}^m \sum_{j = 1}^n cov(e_i, e_j)
+  \end{aligned}
+$$
+det vill säga kovariansen av en summa utfall $e_1 + e_2 + \dots + e_t$ och $e_1 + e_2 + \dots + e_t + e_{t+1} + \dots + e_s$.
+
+Eftersom varje $e_t$ är oberoende av varandra är kovariansen definierad enligt:
+$$
+  \begin{aligned}
+  cov(e_i, e_j) = 
+    \begin{cases}
+      \sigma^2_e &\text{om } i = j\\
+      0 &\text{annars}
+    \end{cases}
+  \end{aligned}
+$$
+
+De två serierna har endast $t$ tidssteg som är lika vilket innebär att summan av alla kovarianser är:
+$$
+  \begin{aligned}
+  \gamma_{t, s} = t\sigma^2_e
+  \end{aligned}
+$$
+eller mer generellt $\gamma_{t, s} = min(t,s)\cdot \sigma^2_e$.
+
+För att lättare tolka relationen mellan tidssteg kan vi beräkna autokorrelationen enligt:
+$$
+  \begin{aligned}
+  \rho_{t, s} &= \frac{\gamma_{t,s}}{\sqrt{\gamma_{t,t}\gamma_{s,s}}} \\
+  &= \frac{t\sigma^2_e}{\sqrt{t\sigma^2_e s\sigma^2_e}} \\
+  &= \frac{t\sigma^2_e}{\sqrt{t\sigma^2_e}} \cdot \frac{1}{\sqrt{s\sigma^2_e}}\\
+  &= \frac{(t\sigma^2_e)^{1-0.5}}{1}\cdot \frac{1}{\sqrt{s\sigma^2_e}}\\
+  &= \sqrt{ \frac{t\sigma^2_e}{s\sigma^2_e}}\\
+  &= \sqrt{ \frac{t}{s}}
+  \end{aligned}
+$$
+för alla $1 \le t \le s$. En visualisering av olika värden på $\rho$ för olika tidssteg visas nedan.
+
+```{r}
+#| fig-width: 4
+#| fig-height: 3
+#| fig-cap: Autokorrelationen för olika avstånd av tidssteg t och s i en Random Walk serie
+#| label: 'fig-rho'
+#| out-width: "90%"
+#| echo: false
+
+t <- seq_len(40)
+s <- seq_len(40)
+
+expand.grid(t = t, s = s) |> 
+  tibble() |> 
+  mutate(
+    rho = ifelse(t > s, NA, sqrt(t / s))
+  ) |> 
+  ggplot() + aes(x = s, y = t, fill = rho) + 
+  geom_tile() + 
+  scale_fill_viridis_c(
+    name = expression(rho),
+    na.value = "white"
+  ) +
+  theme_bw()
+
+```
+
+Figuren visar att ett kortare avstånd mellan $t$ och $s$, ett kortare antal steg, visar en starkare autokorrelation än längre avstånd. Vi ser också ett fenomen där längre serier, stora $s$, generellt har en långsammare nedgång av autokorrelationen när avståndet ökar vilket beror på att de delar en större del av serien. 
+
+Till exempel har följande kombinationer mellan $t$ och $s$ samma avstånd men olika styrka:
+
+$$
+  \begin{aligned}
+  \rho_{1, 2} = \sqrt{0.5} = `r round(sqrt(0.5), 3)` \qquad \rho_{19, 20} = \sqrt{ \frac{19}{20}} = `r round(sqrt(19/20), 3)`
+  \end{aligned}
+$$
+
+### Glidande medelvärde
+
+Det sista exemplet på en enkel tidsserie är ett **glidande medelvärde**. Som namnet antyder är det ett medelvärde beräknat utifrån ett glidande fönster av observationer, i det enklaste fallet medelvärdet av två $e$: 
+
+$$
+  \begin{aligned}
+  Y_t = \frac{e_{t} + e_{t-1}}{2}
+  \end{aligned}
+$$
+
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Exempelserie för ett glidande medelvärde
+#| label: 'fig-moving-average'
+#| out-width: "90%" 
+#| autorun: true 
+#| warning: false
+
+n <- 100
+
+# Använd samma vita brus serie som en samling av dragningar från N(0,1)
+et <- whiteNoise
+movingAverage <- numeric()
+
+for (i in seq_len(n)) {
+  if (i == 1) {
+    movingAverage[i] <- NA
+  } else {
+    movingAverage[i] <- mean(et[i] + et[i - 1])
+  }
+}
+
+# Visualisera serien i ett linjediagram
+tibble(
+  t = seq_len(n),
+  yt = movingAverage
+) |> 
+  ggplot() + aes(x = t, y = yt) + geom_line() + 
+  theme_bw()
+```
+
+Ett glidande medelvärde är mindre **volatil** (mindre instabil med långsammare förändringar) än den ursprungliga serien vilket vi kan se genom att jämföra detta diagram med diagrammet över det vita bruset. Detta uppstår eftersom vi beräknar ett medelvärde mellan intilliggande punkter som successivt jämnar ut seriens värden över tid.
+
+Väntevärdet och variansen av serien kan beräknas till:
+
+$$
+  \begin{aligned}
+  \mu_t &= E[Y_t] = \frac{E[e_t] + E[e_{t-1}]}{2} \\
+  &= 0
+  \end{aligned}
+$$
+$$
+  \begin{aligned}
+  Var(Y_t) &= \frac{Var(e_t) + Var(e_{t-1})}{4} \\
+  &= 0.5 \sigma^2_e
+  \end{aligned}
+$$
+
+Eftersom intilliggande $Y$ endast delar en $e_t$ och på grund av oberoendet mellan olika dragningar av $e_t$ blir kovariansen:
+$$
+  \begin{aligned}
+  cov(Y_t, Y_{t-1}) = 0.25\sigma^2_e
+  \end{aligned}
+$$
+
+Med detta blir autokovariansen och autokorrelationen för serien:
+
+$$
+  \begin{aligned}
+  \gamma_{t,s} = \begin{cases}
+  0.5\sigma^2_e &\text{om } |t - s| = 0\\
+  0.25\sigma^2_e &\text{om } |t - s| = 1\\
+  0 &\text{annars} 
+  \end{cases} \qquad \rho_{t,s} = \begin{cases}
+  1 &\text{om } |t - s| = 0\\
+  0.5 &\text{om } |t - s| = 1\\
+  0 &\text{annars} 
+  \end{cases}
+  \end{aligned}
+$$
+
+Detta betyder att autokorrelationen ett tidssteg från varandra alltid kommer vara 0.5 oavsett var i serien vi befinner oss, till skillnad från den ökande trend vi såg i Random Walk. Alla tidssteg två avstånd från varandra har ingen autokorrelation, $\rho = 0$, oavsett var i serien vi befinner oss. Detta leder till att vi mer generellt kan skriva dessa mått som: 
+$$
+  \begin{aligned}
+  \rho_{t, t - k} = \begin{cases}
+  1 &\text{om } k = 0\\
+  0.5 &\text{om } k = 1\\
+  0 &\text{om } k > 1 
+  \end{cases}
+  \end{aligned}
+$$
+där $k$ beskriver antalet steg mellan de två observationerna. 
+
+:::{.callout-note}
+Vi har tidigare visat autokorrelationen som $\rho_{t, s}$ där $t < s$ men vi ser nu $\rho_{t, t-k}$ vilket inte följer samma relation $t < t-k$ om $k>0$. Eftersom det gäller att $\gamma_{t, s} = \gamma_{s, t}$ påverkas egentligen inte beräkningen av vilken relation som finns mellan tidsindex. 
+
+När $k$ introduceras som en beteckning av antalet steg, väljer vi härefter att beskriva måtten utefter ett antagande att nuvarande tidpunkt påverkas av äldre tidpunkter. Detta blir naturligt då framtida tidpunkter i praktiken ännu inte observerats när vi står vid tid $t$.
+:::
+
+## Stationäritet
+
+Det sista exemplet beskriver en önskvärd egenskap hos tidsserier, **stationäritet**, vilket betyder att tidsseriens egenskaper hålls konstant genomgående över hela serien. Denna egenskap möjliggör att trovärdiga slutsatser kan dras från inferensmetoder.
+<!-- TODO: meh -->
+
+Inom detta underlag kommer vi fokusera på en svag variant av stationäritet (vi kommer enbart kalla det stationäritet) som uppfylls genom två krav:
+$$
+  \begin{aligned}
+  \mu_t &= \mu \\
+  \gamma_{t, t-k} &= \gamma_{0,k}
+  \end{aligned}
+$$
+för alla $k\ge 0$. Vad dessa krav betyder i praktiken är att väntevärdet är konstant över serien samt att autokovariansen/autokorrelationen är lika för alla avstånd av värde $k$ oavsett var i serien måttet beräknas.
+
+Om serien är stationär kan vi förenkla våra beteckningar av autokovariansen och autokorrelationen till att bara ta hänsyn till avståndet mellan tidpunkterna:
+
+$$
+  \begin{aligned}
+  \gamma_k &= cov(Y_t, Y_{t-k})\\
+  \rho_k &= cor(Y_t, Y_{t-k})
+  \end{aligned}
+$$
+där $k$ beskriver antalet **lagg** mellan två tidpunkter, alltså dess avstånd. @eq-properties kan då förenklas till:
+
+$$
+  \begin{aligned}
+  \gamma_{0} &= Var(Y_t) &\qquad \rho_{0} &= 1\\
+  \gamma_{k} &= \gamma_{-k} &\qquad \rho_{k} &= \rho_{-k}\\
+  |\gamma_{k}| &\le \gamma_{0} &\qquad |\rho_{k}| &\le 1
+  \end{aligned} 
+$$ {#eq-properties-k}
+
+Utan att använda $k$ kan vi sammanfatta de tre exempelseriernas egenskaper som följande:
+
+$$
+  \begin{aligned}
+    &\text{Vitt brus}  &\quad &\text{Random Walk}  &\quad &\text{Glidande medelvärde}\\
+    \mu_t &= 0         &\quad \mu_t &= 0           &\quad \mu_t &= 0\\
+    \gamma_{t, s} &= \begin{cases}
+                      \sigma_e^2 &\text{om } |t - s| = 0\\
+                      0        &\text{annars }
+                   \end{cases}  &\quad \gamma_{t, s} &= t\sigma^2_e  &\quad \gamma_{t,s} &= \begin{cases}
+                                                                      0.5\sigma^2_e &\text{om } |t - s| = 0\\
+                                                                      0.25\sigma^2_e &\text{om } |t - s| = 1\\
+                                                                      0 &\text{annars} 
+                                                                      \end{cases}
+  \end{aligned}
+$$
+
+:::{.callout-caution}
+## Övning 3
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/P3ex1.rmd")
+
+```
+:::
+
+
+## SAC och SPAC
+
+Dessa tre exempelserier har vi själva skapat vilket ger oss möjligheten att beräkna de sanna beskrivande måtten utifrån den teoretiska modellen. I verkligheten behöver vi identifiera en modell (en representation) som bäst beskriver den observerade serien där observationerna anses vara slumpmässiga dragningar från en *okänd* teoretisk modell. 
+
+Att lyckas identifiera en modell kan vara rätt så komplicerat men ett första steg är att beräkna den observerade autokorrelationen (**Sample Autocorrelation**, SAC^[Ibland betecknat som ACF från auto-correlation function]) under antagandet att serien är stationär. Resultatet ger oss ett bra verktyg att dels identifiera en lämplig modell men också att bedöma om stationäritetsantagandet är uppfyllt.
+
+Givet att vi antar stationäritet kan vi beräkna SAC, $r_k$, enligt:
+$$
+  \begin{aligned}
+  r_k = \frac{\sum_{t = k+1}^n \left(Y_t - \bar{Y}\right)\left(Y_{t-k} - \bar{Y}\right)}{\sum_{t = 1}^n \left(Y_t - \bar{Y}\right)^2}
+  \end{aligned}
+$$ {#eq-sac}
+
+för $k > 0$. 
+
+Eftersom $r_k$ är en skattning av den sanna $\rho_k$ följer dessa en samplingfördelning från vilken vi kan dra approximativa gränser för ett 95% konfidensintervall vid $r_k \pm \frac{2}{\sqrt{n}}$.^[Exakta egenskaper hos samplingfördelningen anges i @cryer2008.] För en stationär serie förväntas $r_k$ ligga inom felmarginalen från 0 för alla lagg.
+
+Från @cryer2008 `TSA` paket hittar vi funktionen `acf()` som gör denna beräkning åt oss på en angiven tidsserie. 
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: SAC för vita brus serien
+#| label: fig-sac-white-noise
+#| out-width: "90%"
+#| autorun: true
+
+
+require(TSA)
+
+# Dra 100 observationer från normalfördelningen
+n <- 100
+
+whiteNoise <- rnorm(n = n, mean = 0, sd = 1)
+
+# Beräknar SAC för vita brus-serien
+acf(whiteNoise)
+
+```
+
+:::{#imp-webr-tsa .callout-important collapse="true"}
+## Expandera för att visa en variant av `TSA` i WEBR
+Tyvärr finns inte `TSA` tillgängligt via WEBR men vi kan återskapa paketets funktioner vid behov. I detta och efterföljande kapitel där funktioner från `TSA`-paketet används kommer vi först visa ett icke-interaktivt kodblock med TSA funktionen och tillhörande utskrift och sedan ett interaktivt WEBR-kodblock med motsvarande egenskapade funktion som speglar TSAs variant. 
+
+På grund av att dessa två sätt att visa kod i detta material inte delar objektmiljöer med varandra kommer vi behöva återskapa objekten i koden, till exempel hur `whiteNoise` återskapades innan vi anropade `acf()` för @fig-sac-white-noise trots att tidigare WEBR kodblock har använt sig av `whiteNoise`.
+
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: SAC för vita brus serien med egenskapad kod
+#| out-width: "90%"
+
+customAcf <- function(series, plot = FALSE) {
+  # Använder acf() från paketet stats
+  SAC <- acf(series, plot = FALSE)
+  
+  SAC$series <- deparse(substitute(series))
+  
+  # Tar bort lag 0 eftersom det alltid kommer vara SAC = 1
+  SAC$acf <- SAC$acf[-1,,, drop = FALSE]
+  SAC$lag <- SAC$lag[-1,,, drop = FALSE]
+  
+  if (plot) {
+    plot(SAC)  
+  }
+  
+  return(SAC)
+}
+
+SAC <- customAcf(whiteNoise, plot = TRUE)
+
+```
+
+På grund av att vi behövt skapa en ny serie med vitt brus kommer dessa diagram inte se exakt lika ut, men vi ser att samma beräkningar och visualisering har gjorts. 
+::: 
+
+@fig-sac-white-noise visar att alla $r_k$ ligger inom felmarginalen från 0 vilket tyder på att de i praktiken kan tolkas som att det inte råder någon autokorrelation i serien. Detta blir då en indikation att serien är stationär.
+
+:::{.callout-caution}
+## Övning 4
+Beräkna (och visualisera) SAC för objeket `randomWalk`. 
+
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: SAC för en Random Walk serie
+#| out-width: "90%"
+
+# TODO Skapa ett acf-objekt för randomWalk
+SAC <- ________
+
+checkSolution(SAC, ex = 4)
+```
+
+*Glöm inte att köra kodblocket inuti @imp-webr-tsa för att använda den egenskapade `TSA`-liknande funktionen.*
+:::
+
+För den icke-stationära serien Random Walk ser SAC väldigt annorlunda ut. Vi har flera lagg vars värden passerar felmarginalens gränser samt att det ser ut som att autokorrelationen har ett kubiskt mönster mellan intilliggande lagg. Detta ger oss en indikation på att serien inte är stationär.
+
+## Differentiering
+
+Trots att en tidsserie inte anses stationär kan vi ibland med en enkel bearbetning göra serien stationär. I exemplet med Random Walk vet vi att differensen mellan två olika tidssteg endast beror på en slumpmässig dragning från en normalfördelning vilket är oberoende från all annan information. Metoden att skapa denna nya stationära serie kallas för **differentiering** där den enklaste formen består av att beräkna $\nabla Y_t = Y_t - Y_{t-1}$. 
+
+Funktionen `diff()` visar en serie som differentierats `differences` gånger baserat på `lag` lagg bakåt i serien.
+
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: SAC för den differentierade Random Walk-serien
+#| label: fig-sac-diff-rw
+#| out-width: "90%"
+
+diffY <- diff(randomWalk, lag = 1, differences = 1)
+
+customAcf(diffY, plot = TRUE)
+
+```
+
+<!-- TODO: Kanske något kort om regressionsmodeller och residualanalys? Kapitel 3 i Cryer? -->
+
+## Referenser {.unnumbered}
+
+
+
+
+
+
+
+
+
+
+
+

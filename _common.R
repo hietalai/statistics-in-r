@@ -11,6 +11,9 @@ suppressMessages({
   require(emmeans)
   require(car)
   require(lme4)
+  require(TSA)
+  require(assertthat)
+  require(exams2forms)
 })
 
 utils::data(penguins)

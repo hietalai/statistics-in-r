@@ -1,0 +1,13 @@
+---
+engine: knitr
+filters: 
+  - webr
+---
+<!-- CONTENT -->
+
+# ARIMAx
+
+ARIMAx
+Transfer functions
+
+

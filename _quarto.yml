@@ -48,7 +48,11 @@ book:
         - 02-variance/03-twoway-anova.qmd
     - part: 04-time-series/index.qmd
       chapters: 
-        - 04-time-series/00-white-noise.qmd
+        - 04-time-series/00-introduction.qmd
+        - 04-time-series/01-properties.qmd
+        - 04-time-series/02-ar.qmd
+        - 04-time-series/03-arima.qmd
+        - 04-time-series/04-arimax.qmd
   search: 
     location: sidebar
     show-item-context: false
@@ -56,18 +60,24 @@ book:
 bibliography: bibliography.bib 
 
 webr:
-  packages: ['tidyverse']
+  packages: ['tidyverse', 'assertthat']
 
 format:
   html:
     theme: simplex #lux united pulse simplex
-    css: styles.css
+    css: 
+      - styles.css
+      - webex.css
     toc: true
     lang: sv-SE
     language: custom.yml
     tbl-cap-location: top
     code-fold: true
     code-summary: "Visa kod"
+    code-block-bg: true
+    include-after-body: 
+      - file: "custom.js"
+      - file: "webex.js"
     # grid: 
     #   sidebar-width: 320px
 

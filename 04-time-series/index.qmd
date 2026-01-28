@@ -14,3 +14,6 @@ Till denna del förutsätts att du har vissa rekommenderade förkunskaper för a
 
 En grundläggande genomgång i R visas i @sec-basic-r. Känner du att du saknar vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.
 
+Denna del baseras på @cryer2008 om inget annat anges.
+
+## Referenser
