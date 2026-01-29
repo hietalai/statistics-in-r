@@ -135,9 +135,10 @@ Med hjälp av dessa härledningar kan vi visualisera hur $\rho_k$ ser ut för ol
 #| fig-height: 3
 #| fig-cap: Autokorrelationen för en AR(1) med olika phi
 #| out-width: "90%"
+#| autorun: true
 
 # Ange ett värde på phi i processen
-phi <- 0.9
+phi <- 0.5
 
 tibble(
   k = seq_len(20), 
@@ -156,17 +157,16 @@ Testa att ändra `phi` till olika lämpliga värden, $|\phi| < 1$, och se vad so
 
 Figuren visar ett snabbt avtagande mönster till skillnad från det långsamt avtagande, nästan cycliska mönster som Random Walk uppvisade. Detta visar att när vi begränsar $\phi$ enligt dess stationäritetsvilkor blir serien stationär.
 
+### AR(2)
 
-## AR(2)
-
-Om vi utökar modellen med ytterligare ett lagg fås:
+Om vi utökar modellen till att också ta hänsyn till ytterligare en tidigare tidpunkt fås:
 $$
   \begin{aligned}
   Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + e_t
   \end{aligned}
 $$
 
-Att visa villkoren för stationäritet blir mer och mer komplicerat för större $p$ men vi har för en AR(2) följande tre villkor:^[Se @cryer2008 sid 84]
+Vi kan gå igenom liknande härledningar för de olika beskrivande måtten för en AR(2)-process som vi gjorde för AR(1) men det blir snabbt mycket komplicerat. Istället väljer vi i detta läge att visa stationäritetsvillkoren och kan läsa mer om denna härledning i @cryer2008^[sida 72-73 och 84]. 
 
 $$
   \begin{aligned}
@@ -174,13 +174,154 @@ $$
   \end{aligned}
 $$
 
+Att visualisera autokorrelationen för olika värden på $\phi$ blir också mer komplicerat eftersom vi har två variabler att visualisera. Med följande kod kan vi justera värden på $\phi_1$ och $\phi_2$ för att beräkna $\rho_k$.
+
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Autokorrelationen för en AR(2) med olika värden på phi
+#| out-width: "90%"
+#| autorun: true
+
+rhoAr2 <- function(phi1, phi2) {
+  
+  # Kontrollerar att stationäritetsvillkoren är uppfyllda
+  assert_that(phi1 + phi2 < 1, msg = "phi1 + phi2 är inte < 1")
+  assert_that(phi2 - phi1 < 1, msg = "phi2 - phi1 är inte < 1")
+  assert_that(abs(phi2) < 1,   msg = "|phi2| är inte < 1")
+  
+  n <- 20
+
+  # Skapa en tom vektor
+  rho <- numeric()
+  
+  for (i in seq_len(n)) {
+    if (i == 1) {
+      rho[i] <- phi1 / (1 - phi2)
+    } else if (i == 2) {
+      rho[i] <- (phi2 * (1 - phi2) + phi1^2) / (1 - phi2)
+    } else {
+      rho[i] <- phi1 * rho[i-1] + phi2 * rho[i-2]
+    }
+  }
+  
+  graph <- 
+    tibble(
+      k = seq_len(20), 
+      rho = rho
+    ) |> 
+      ggplot() + aes(x = k, y = rho) + 
+      geom_bar(width = 0.3, stat = "identity") +
+      scale_y_continuous(limits = c(-1, 1)) + 
+      geom_hline(yintercept = 0, linewidth = 1) +
+      labs(y = expression(rho[k])) + 
+      theme_bw()
+    
+  print(graph)
+  
+  return(rho)
+}
+
+rho <- rhoAr2(phi1 = 0.5, phi2 = 0.25)
+
+```
+
+Testa olika kombinationer av parametrarna, notera att funktionen kommer generera ett felmeddelande om stationäritetsantaganden inte uppfylls, och se om du kan få några insikter om modellerna.
+
+<!-- TODO: Matcha par av stationäritetsvillkor för olika serier ?? Vad menar jag med detta??-->
+
+### AR(p)
+
+## Glidande medelvärdesprocesser
+
+Istället för att använda det observerade värdet från en föregående tidpunkt kan vi skapa en modell som baseras på den slumpmässiga feltermen från den nuvarande och $q$ tidigare tidpunkter. 
+
+Generellt kan vi beskriva en MA(q) process som:
+$$
+  \begin{aligned}
+  Y_t = e_t + \theta_1 e_{t-1} + \theta_2 e_{t-2} + \dots + \theta_q e_{t-q}
+  \end{aligned}
+$$ {#eq-maq}
+där de olika $\theta$ (grekiska theta^[Uttalas teta eller täta.])
+
+### MA(1)
+
+Med endast en term blir modellen: 
+$$
+  \begin{aligned}
+  Y_t = e_t + \theta e_{t-1}
+  \end{aligned}
+$$ {#eq-ma1}
+med följande egenskaper:
+
+$$
+  \begin{aligned}
+  E[Y_t] &= 0\\
+  \\
+  Var(Y_t) = \gamma_0 &= Var(e_t + \theta e_{t-1}) \\
+  \gamma_0 &= Var(e_t) + \theta^2 Var(e_{t-1}) && \text{(pga oberoende)}\\
+  \gamma_0 &= \sigma^2_e + \theta^2 \sigma_e^2 \\
+  \gamma_0 &= \sigma^2_e (1 + \theta^2) 
+  \end{aligned}
+$$
+
+Vi kan också, likt de beskrivande måtten för @sec-moving-average-series, enkelt beräkna fram autokovariansen genom att titta på hur många gemensamma termer som olika lagg har då $e_t$ och $e_s$ antas oberoende när $t \ne s$. För $k = 1$:
+
+$$
+  \begin{aligned}
+  \gamma_1 &= cov(e_t + \theta e_{t-1}, e_{t-1} + \theta e_{t-2}) \\
+  &= cov(\theta e_{t-1}, e_{t-1}) = \theta \sigma^2_e
+  \end{aligned}
+$$
+och $k = 2$:
+
+$$
+  \begin{aligned}
+  \gamma_2 &= cov(e_t + \theta e_{t-1}, e_{t-2} + \theta e_{t-3}) \\
+  &= 0
+  \end{aligned}
+$$
+
+Detta betyder att för alla lagg $k \ge 2$ är autokovariansen, och sedermera autokorrelationen, 0: 
+
+$$
+  \begin{aligned}
+  \rho_k = \begin{cases}
+    \frac{\theta}{1 + \theta^2} &\text{om } k = 1\\
+    0 &\text{om } k \ge 2
+  \end{cases}
+  \end{aligned}
+$$
+
+<!-- TODO Visualization of the rho for MA1 -->
+<!-- TODO What are restrictions on the theta to make it stationary? None from the looks of it? -->
+
+### MA(2)
+
+En MA(2) process benäms som:
+$$
+  \begin{aligned}
+  Y_t = e_t + \theta_1 e_{t-1} + \theta_2 e_{t-2}
+  \end{aligned}
+$$
+där
+
+$$
+  \begin{aligned}
+  \gamma_0 = \left(1 + \theta^2_1 + \theta^2_2\right)\sigma^2_e
+  \end{aligned}
+$$
 
 
-<!-- TODO: Matcha par av stationäritetsvillkor för olika serier -->
 
 
+### MA(q)
 
-Något kort om MA
+<!-- TODO Invertibility as theta = 1/theta for the same rho -->
 
+## SPAC (6.2)
+
+
+## Referenser {.unnumbered}
 
 
