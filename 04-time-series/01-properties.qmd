@@ -405,7 +405,7 @@ $$
   \end{aligned}
 $$
 
-### Glidande medelvärde
+### Glidande medelvärde {#sec-moving-average-series}
 
 Det sista exemplet på en enkel tidsserie är ett **glidande medelvärde**. Som namnet antyder är det ett medelvärde beräknat utifrån ett glidande fönster av observationer, i det enklaste fallet medelvärdet av två $e$: 
 
