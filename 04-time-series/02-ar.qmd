@@ -232,6 +232,8 @@ Testa olika kombinationer av parametrarna, notera att funktionen kommer generera
 
 ### AR(p)
 
+<!-- TODO: What do here? -->
+
 ## Glidande medelvärdesprocesser
 
 Istället för att använda det observerade värdet från en föregående tidpunkt kan vi skapa en modell som baseras på den slumpmässiga feltermen från den nuvarande och $q$ tidigare tidpunkter. 
@@ -312,14 +314,92 @@ $$
   \end{aligned}
 $$
 
-
-
-
 ### MA(q)
 
 <!-- TODO Invertibility as theta = 1/theta for the same rho -->
 
-## SPAC (6.2)
+## Partiell autokorrelation
+
+Vi har i detta kapitel kunnat visa hur autokorrelationen beter sig för olika modeller, men i praktiken räcker det inte att undersöka den skattade autokorrelationen (SAC) för att enkelt identifiera en lämplig modell. Vi såg till exempel hur $\rho_k$ för AR(1) och AR(2) uppvisade samma långsamt avtagande mönster. Vi behöver därför introducera ett annat mått som kan hjälpa att välja en lämplig ordning på en AR-process, på samma sätt som autokorrelationen tydligt indikerar på en ordning av en MA-process.
+
+Vi kan definiera den **partiella autokorrelationen** (eng. partial autocorrelation, PAC) som korrelationen mellan $Y_t$ och $Y_{t-k}$ när alla observationer emellan justerats bort. Vi definierar den enligt:
+
+$$
+  \begin{aligned}
+  \phi_{kk} = cor(Y_t , Y_{t-k} | Y_{t-1}, Y_{t-2}, \dots, Y_{t-k+1})
+  \end{aligned}
+$$
+givet att $Y_t$ kan anses normalfördelad. 
+
+Detta är egentligen första gången ett sådant krav explicit uppkommer när vi har att göra med tidsserier så ett alternativt sätt att formulera PAC utan detta krav är:
+$$
+  \begin{aligned}
+  \phi_{kk} = cor(&Y_t - \beta_1 Y_{t-1} - \beta_2 Y_{t-2} - \dots - \beta_{k-1} Y_{t-k+1}, \\
+  &Y_{t-k} - \beta_1 Y_{t-k+1} - \beta_2 Y_{t-k+2} - \dots - \beta_{k-1} Y_{t-1})
+  \end{aligned}
+$$ {#eq-pacf}
+där $\beta_1$ till $\beta_{k-1}$ är parametrar i en linjär prediktor som anpassats för att minimera MSPR till $Y_t$ och $Y_{t-k}$ respektive. PAC blir då med denna formulering korrelationen mellan prediktionsfelet från de två tidpunkterna.
+
+Vi anser $\phi_{11} = 1$ och kan visa att $\phi_{22}$ beräknas enligt:
+$$
+  \begin{aligned}
+  \phi_{22} = \frac{\rho_2 - \rho_1^2}{1 - \rho_1^2}
+  \end{aligned}
+$$ {#eq-pacf22}
+
+När vi använder @eq-pacf22 för en AR(1) modell fås:
+$$
+  \begin{aligned}
+  \phi_{22} = \frac{\phi^2 - \phi^2}{1 - \phi^2} = 0
+  \end{aligned}
+$$
+eftersom $\rho_k = \phi^k$. 
+
+För en AR(2) fås:
+$$
+  \begin{aligned}
+  \phi_{22} &= \frac{ \left(\frac{\phi_1^2}{1 - \phi_2} + \phi_2\right)  - \left(\frac{\phi_1}{1 - \phi_2}\right)^2}{1 - \left(\frac{\phi_1}{1 - \phi_2}\right)^2}\\
+  &= \frac{\frac{\phi_1^2}{1 - \phi_2} + \phi_2 - \frac{\phi_1^2}{(1 - \phi_2)^2}}{1 - \frac{\phi_1^2}{(1 - \phi_2)^2}} \\
+  &= \frac{\frac{\phi_1^2}{(1-\phi_2)^2}(1 - \phi_2 - 1) + \phi_2}{1 - \frac{\phi_1^2}{(1 - \phi_2)^2}}\\
+  &= \frac{\frac{\phi_1^2}{(1-\phi_2)^2}(- \phi_2) + \phi_2}{1 - \frac{\phi_1^2}{(1 - \phi_2)^2}}\\
+  &= \frac{\phi_2 \left( 1 - \frac{\phi_1^2}{(1-\phi_2)^2}\right)}{1 - \frac{\phi_1^2}{(1 - \phi_2)^2}}\\
+  &= \phi_2
+  \end{aligned}
+$$
+det vill säga ytterligare ett lagg $\ne 0$. 
+
+En generell regel för AR(p) är att för större lagg gäller $\phi_{kk} = 0$ när $k > p$. Detta innebär att vi får samma funktionalitet i den partiella autokorrelationen för en AR-process som vi har i autokorrelationen för en MA-process; antalet nollskilda lagg motsvarar ordningen för processen.
+
+Den partiella autokorrelationen kan också visas för en MA-process. För MA(1) gäller enligt @eq-pacf22:
+
+$$
+  \begin{aligned}
+  \phi_{22} = \frac{-\theta^2}{1 + \theta^2 + \theta^4}
+  \end{aligned}
+$$
+och $\phi_{kk} = \frac{\theta^k(1 - \theta^2)}{1 - \theta^{2(k+1)}}$ för alla $k \ge 1$.
+
+Dessa formler indikerar att den partiella autokorrelationen för en MA(1), och även generellt för en MA(q), avtar långsamt med större $k$ vilket är samma fenomen som en AR(p) modell uppvisar för autokorrelationen. Vi har alltså två spegelvända beteenden för AR och MA för autokorrelationen och den partiella autokorrelationen. Vi kan sammanfatta dessa i följande tabell:
+
+```{r}
+#| echo: false
+#| label: tbl-behavior-ac-pac
+
+tibble(
+  ` ` = c("Autokorrelation", "Partiell Autokorrelation"),
+  `AR(p)` = c("Långsamt avtagande", "0 efter lag p"),
+  `MA(q)` = c("0 efter lag q", "Långsamt avtagande")
+) |>
+  kable(
+    caption = "Visuella beteenden hos autokorrelationer",
+    align = "c"
+  )
+
+
+
+```
+
+
 
 
 ## Referenser {.unnumbered}
