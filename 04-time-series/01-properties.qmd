@@ -666,7 +666,7 @@ checkSolution(SAC, ex = 4)
 
 För den icke-stationära serien Random Walk ser SAC väldigt annorlunda ut. Vi har flera lagg vars värden passerar felmarginalens gränser samt att det ser ut som att autokorrelationen har ett kubiskt mönster mellan intilliggande lagg. Detta ger oss en indikation på att serien inte är stationär.
 
-## Differentiering
+## Differentiering {#sec-differentiation}
 
 Om en tidsserie inte anses stationär i sin ursprungliga form kan vi undersöka ifall enkla bearbetningar av serien istället uppfyller stationäritet. I exemplet med Random Walk vet vi att differensen mellan två olika tidssteg endast beror på en slumpmässig dragning från en normalfördelning, oberoende från all annan information i serien. 
 
