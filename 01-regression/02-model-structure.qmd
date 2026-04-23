@@ -95,7 +95,7 @@ $$ {#eq-penguin-full-simple}
 
 där Adelie och honor agerar referenskategori för respektive kvalitativ variabel. 
 
-## Modellanpassning
+## Modellanpassning {#sec-least-squares}
 @eq-penguin-full-simple visar den sanna modell som utgår ifrån populationens alla observerade värden, men nästintill alla undersökningar utgår från någon form av urval. Även en totalundersökning under en viss period kan anses vara ett urval i tiden om modellen avses att användas efter undersökningsperioden är slutförd.
 
 Vi kan beteckna den anpassade modellen med dess skattade parametrar enligt:
