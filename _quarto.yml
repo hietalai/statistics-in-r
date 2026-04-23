@@ -52,7 +52,8 @@ book:
         - 04-time-series/01-properties.qmd
         - 04-time-series/02-ar.qmd
         - 04-time-series/03-arima.qmd
-        - 04-time-series/04-arimax.qmd
+        - 04-time-series/04-evaluation.qmd
+        - 04-time-series/05-arimax.qmd
   search: 
     location: sidebar
     show-item-context: false
@@ -78,6 +79,8 @@ format:
     include-after-body: 
       - file: "custom.js"
       - file: "webex.js"
+    mermaid: 
+      theme: default
     # grid: 
     #   sidebar-width: 320px
 
