@@ -8,7 +8,6 @@ project:
 book:
   title: "Statistisk teori och tillämpningar i R"
   page-navigation: true
-  # ## REMOVED DUE TO FORMATTING AS BOOK
   navbar:
     left:
       - href: 00-programming/00-basics-R.qmd
@@ -19,6 +18,8 @@ book:
         text: "Varianssanalys"
       - href: 04-time-series/index.qmd
         text: "Tidsserieanalys"
+      - href: 05-stat-to-ml/index.qmd
+        text: "Statistik till ML"
   chapters: 
     - index.qmd
     - part: "**DEL I - Programmering i R**"
@@ -53,11 +54,21 @@ book:
         - 04-time-series/02-ar.qmd
         - 04-time-series/03-arima.qmd
         - 04-time-series/04-evaluation.qmd
-        - 04-time-series/05-arimax.qmd
+        # - 04-time-series/05-arimax.qmd
+    - part: 05-stat-to-ml/index.qmd
+      chapters: 
+        - 05-stat-to-ml/00-introduction.qmd
+        # - 05-stat-to-ml/01-properties.qmd
+        # - 05-stat-to-ml/02-ar.qmd
+        # - 05-stat-to-ml/03-arima.qmd
+        # - 05-stat-to-ml/04-evaluation.qmd
   search: 
     location: sidebar
     show-item-context: false
+  sidebar: 
+    collapse-level: 1
     
+
 bibliography: bibliography.bib 
 
 webr:
@@ -76,6 +87,8 @@ format:
     code-fold: true
     code-summary: "Visa kod"
     code-block-bg: true
+    include-in-header:
+      - file: "mathjax-macros.js"
     include-after-body: 
       - file: "custom.js"
       - file: "webex.js"

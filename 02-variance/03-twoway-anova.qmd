@@ -2,22 +2,6 @@
 editor_options: 
   chunk_output_type: console
 ---
-<!-- New commands for matrices in regression -->
-\newcommand{\Xmatrix}{\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1k}\\1 & X_{21} & X_{22} & \cdots & X_{2k}\\\vdots & \vdots & \vdots & \ddots & \vdots\\1 & X_{n1} & X_{n2} & \cdots & X_{nk}\end{bmatrix}
-}
-
-\newcommand{\Xonematrix}{\begin{bmatrix}1 & X_{11}\\1 &X_{21}\\\vdots\\1 & X_{n1}\end{bmatrix}}
-
-\newcommand{\Ymatrix}{\begin{bmatrix}Y_1\\Y_2\\\vdots\\Y_n\end{bmatrix}}
-
-\newcommand{\betamatrix}{\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_k\end{bmatrix}}
-
-\newcommand{\betaonematrix}{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}
-
-\newcommand{\Ematrix}{\begin{bmatrix}E_1\\E_2\\\vdots\\E_n\end{bmatrix}}
-
- <!-- Creates a shortcommand for sums -->
-\newcommand{\Sum}[1]{\sum_{i=1}^#1}
 
 <!-- CONTENT -->
 # Tvåvägs-ANOVA
