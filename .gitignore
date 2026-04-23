@@ -7,3 +7,4 @@
 /_extensions/
 **/*.quarto_ipynb
 README.html
+.positai
