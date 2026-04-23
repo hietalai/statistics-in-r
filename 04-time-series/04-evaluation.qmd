@@ -104,27 +104,27 @@ $$
   AIC = -2\log(L)+2k
   \end{aligned}
 $$
-där $k = p + q + 1$ om en konstant inkluderas i modellen, $k = p + q$ annars. För att justera för eventuell skevhet som uppkommer om $k / n > 0.1$ kan vi beräkna en korrigerad AIC enligt:
+där $k = p + q + 1$ om en konstant inkluderas i modellen, $k = p + q$ annars. För att justera för eventuell skevhet som uppkommer om $k / n > 0.1$ kan vi beräkna en **korrigerad AIC** enligt:
 
 $$
   \begin{aligned}
   AIC_c = AIC + \frac{2(k+1)(k+2)}{n-k-2}
   \end{aligned}
-$$
+$$ {#eq-aicc}
 
-$AIC_c$ kommer vara lägre för en modell som är mer generaliserbar och inte inkluderar onödiga komponenter som riskerar att modellen är överanpassad. Ett ytterligare sätt att kontrollera överanpassning är att anpassa en mer komplex modell (för endast en av komponenterna) där den aktuella modellen är inkluderad, exempelvis anpassa en AR(2) för att kontrollera en AR(1) eller en ARMA(2, 1) för att kontrollera en ARMA(1, 1). Vi kan använda oss av residualanalysen för att välja riktning av den mer generella modellen, till exempel om SAC för residualerna från en MA(1) modell uppvisar signifikanta lagg vid $k = 2$, bör en MA(2) vara aktuell, inte en ARMA(1,1).
+$AIC_c$ kommer vara lägre för en modell som är mer generaliserbar och inte inkluderar onödiga komponenter vilket riskerar att modellen blir överanpassad till den observerade serien. Eftersom ARIMA-modeller är prediktiva i sin natur vill vi att modellen ska kunna prediktera nya tidpunkter.
 
-Om vi lyckats identifiera en bra specifik modell skulle den ytterligare komponenten som läggs till förväntas ha en icke-signifikant skattning nära 0 samt att de skattade parametrarna inte skiljer sig mycket mellan de två modellerna. 
+Ett ytterligare sätt att kontrollera för överanpassning är att anpassa en mer komplex modell för endast en av AR eller MA komponenterna där den aktuella modellen är inkluderad. Exempelvis kan vi anpassa en AR(2) för att kontrollera en AR(1) eller en ARMA(2, 1) för att kontrollera en ARMA(1, 1). Vilken komponent som vi väljer att utöka kan vägledas av SAC och SPAC för residualerna från den enkla modellen. Till exempel om SAC för residualerna från en MA(1) modell uppvisar signifikanta lagg vid $k = 2$, bör en MA(2) vara aktuell, inte en ARMA(1,1).
+
+Vi tittar sedan på parameterskattningen för den utökade komponenten. Om den visar sig vara icke-signifikant med en koefficient nära 0 samt att de skattade parametrarna för övriga komponenter inte skiljer sig mycket, kan vi anse att den mindre modellen är nog komplex.
 
 ## Prediktioner
 
-Syftet med ARIMA-modeller är att prediktera nya värden då det är svårt att tolka beskrivande samband utifrån de komplexa modellstrukturer som oftast anpassas. Vi vill därför att en modell producerar trovärdiga och rimliga prediktioner. Utifrån de utvärderingsmått som tagits upp i tidigare kapitel undersöks i huvudsak hur bra modellen anpassats till den observerade serien men vi saknar mått som beskriver hur bra modellen är på att prediktera nya tidpunkter. 
+Syftet med ARIMA-modeller är att prediktera nya värden då det är svårt att tolka beskrivande samband utifrån de komplexa modellstrukturer som oftast anpassas. Vi vill därför att en modell producerar trovärdiga och rimliga prediktioner. Utifrån de utvärderingsmått som tagits upp i tidigare i detta kapitel undersöks i huvudsak hur bra modellen anpassats till den observerade serien (med undantag för @eq-aicc) men vi kan också använda prediktioner på en del av serien som ett sätt att mäta hur bra modellen är på att prediktera nya tidpunkter. 
 
-Vi kan med hjälp av prediktioner, antingen på en avklippt del av den observerade tidsserien som inte använts till modellanpassningen eller på helt nya tidpunkter, också utvärdera modellens prestanda. Om vi utgår från helt nya tidpunkter där sanna observerade värden inte går att jämföra med, blir bedömningen mer subjektiv och visuell medan mått såsom MSPR (se @eq-mspr) kan användas för att jämföra predikterade och sanna värden från en avklippt del av serien.
+Prediktioner gjorda på tidpunkter som inte använts till modellanpassningen eller nya tidpunkter som samlats in under undersökningsperioden kan jämföras med de sanna observerade värdena med mått såsom MSPR (se @eq-mspr). Om vi däremot utgår från helt nya tidpunkter där sanna observerade värden inte ännu finns för jämförelse, blir bedömningen mer subjektiv och visuell. 
 
-Prediktioner görs alltid på den stationära versionen av serien (efter differentiering), och transformeras sedan tillbaka till den ursprungliga skalan.
-
-Vi kan anta att det predikterade värdet för tidpunkt $t + h$ ges av det betingade väntevärdet:
+Prediktioner görs alltid på den stationära versionen av serien (efter differentiering) och transformeras sedan tillbaka till den ursprungliga skalan. Vi kan anta att det predikterade värdet för tidpunkt $t + h$ ges av det betingade väntevärdet:
 $$
   \begin{aligned}
   \hat{Y}_{t+h | t} = E[Y_{t+h} | Y_{t}, Y_{t-1}, \dots]
@@ -154,13 +154,17 @@ $$
 $$
 [TODO: Prediktionsintervall]{style="color: red"}
 
-### Datauppdelning
+### Datauppdelning 
 
-För att få objektiva mått på hur bra modellens prediktioner är kan vi dela upp den observerade tidsserien i två delar, en **tränings**- och en **testdel**. Dessa termer lånas in från maskininlärningfältet där många metoder använder sig av datauppdelning för att motverka överanpassning. Träningsdata används för att anpassa modellen och ska bestå av majoriteten av data (helst >70%) medan testdata används för att kunna utvärdera prediktionerna. 
+Ett sätt att skapa nya tidpunkter som har observerade värden att jämföra med, kan vi dela upp den observerade tidsserien i två delar; en **tränings**- och en **testdel**. Dessa termer lånas in från maskininlärningfältet där många metoder använder sig av datauppdelning för att motverka överanpassning. 
 
-På grund av tidsberoendet görs denna uppdelning vid en viss tidpunkt, inte slumpmässiga dragningar som vanligtvis används inom maskininlärning, så att testdata är de senaste observationerna. Ytterligare en skillnad från maskininlärning är att det inte alltid finns många observationer i en tidsserie vilket innebär att testdata ibland endast består av ett fåtal observationer. Dock kan dessa fåtal punkter räcka för att vi ska få en realistisk bild av hur modellen beter sig på framtida prognoser.
+Träningsdata används för att anpassa modellen och ska bestå av majoriteten av data (helst >70%) medan testdata används för prediktioner där de observerade värdena kan användas för att utvärdera de gjorda prediktionerna. 
 
-I R görs detta enkelt genom att indexera tidsserien:
+På grund av tidsberoendet görs denna uppdelning vid en viss tidpunkt, inte slumpmässiga dragningar som vanligtvis används inom maskininlärning, så att testdata är de senaste observationerna i serien. Vi måste tänka på att testdata ska spegla de egenskaper som vi ser i träningsdata, en modell kommer aldrig kunna skapa lämpliga prediktioner på en serie som har helt andra egenskaper än serien som användes vid anpassningen. Har vi serier som uppvisar olika egenskaper under olika perioder kommer vi förmodligen stöta på problem med att använda datauppdelning.
+
+Ytterligare en skillnad från maskininlärning är att antalet observationer är betydligt färre när det kommer till tidsseriedata. Då träningsdata behöver bestå av en absolut majoritet av serien kan testdata ibland reduceras till endast ett fåtal observationer. Dessa punkter kan ibland räcka för att vi ändå ska få en realistisk bild av hur modellen beter sig på framtida prognoser.
+
+I R görs denna uppdelning enkelt genom att indexera tidsserien:
 
 ```{r}
 #| code-fold: false
@@ -185,11 +189,11 @@ test_size <- 12     # t.ex. ett år som "framtid"
 train <- y[1:(n - test_size)]
 test  <- y[(n - test_size + 1):n]
 
-train
-test
+length(train)
+length(test)
 ```
 
-Modellen anpassas endast på träningsdelen. Här används ett exempel med en ARIMA‑modell:
+När vi väl anpassar modellen gör vi det utifrån `train`. Till exempel kan vi försöka anpassa den simulerade ARIMA(1,1,1):
 
 ```{r}
 #| code-fold: false
@@ -199,7 +203,7 @@ summary(fit)
 
 ```
 
-När modellen är skattad gör vi prognoser lika långt som testdelen:
+När modellen är anpassad gör vi prognoser för lika många observationer framåt i serien som vi delat in i testdelen:
 
 ```{r}
 fc <- forecast(fit, h = length(test))
@@ -220,6 +224,10 @@ MAPE <- mean(abs(errors / test)) * 100
 
 c(MAD = MAD, MSD = MSD, MAPE = MAPE)
 ```
+
+### $\tau$-steg framåt
+
+Prediktionerna ovan beräknar nästkommande tidpunkt utifrån den nuvarande. Vi kan också vara intresserade av att prediktera $\tau$ steg framåt utifrån den nuvarande. Exempelvisualiseringar:
 
 ```{mermaid}
 
@@ -328,4 +336,4 @@ style prediktioner fill:#eee,stroke:#eee
 
 ```
 
-
+[TODO: Utöka detta kapitel]{style="color: red"}
