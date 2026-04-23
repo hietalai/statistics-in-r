@@ -1,0 +1,331 @@
+---
+engine: knitr
+filters: 
+  - webr
+---
+<!-- CONTENT -->
+
+# Modellutvärdering {#sec-tsa-model-evaluation}
+
+Trots att vi kan använda SAC och SPAC för att fatta ett informerat beslut om vilket typ av modell (AR, MA eller ARMA, med eller utan differentiering) är det inte alltid så lätt att definitivt välja enbart en modell. Istället kan vi anse dessa verktyg som en del av processen och utvärdering av anpassade modeller som ytterligare delar vilka bör vägas in innan en slutgiltig modell väljs. 
+
+Modellutvärdering kan fokusera på ett par olika aspekter, till exempel: 
+
+- hur bra är modellen anpassad på observerad data? 
+- hur bra är modellen på att generalisera till ny data?
+- hur komplex är modellen?
+- hur rimliga prediktioner kan modellen skapa?
+
+Vi kan återanvända några mått från regressionsteorin för att besvara vissa av dessa frågor (AIC) och varianter på residualspridning (MSE) anpassad för tidsserier. En visuell analys av prediktioner i relation till den observerade serien ger oss också möjligheten att se hur modellen skulle tillämpas för framtida tidpunkter.
+
+## Modellantaganden (vitt brus)
+
+I en regressionsmodell måste vissa antaganden uppfyllas (se @sec-residual-simple) för att modellen ska vara en lämplig och trovärdig anpassning av datamaterialet. För dessa modeller kan vi formulera om modellantaganden till residualantaganden och genomföra en residualanalys för att kontrollera dessa. 
+
+För ARIMA modeller finns det inga riktiga residualantaganden men vi vill att modellens AR och/eller MA komponenter plockar upp allt tidsberoende som går att modellera. Den resterande delen av modellen (residualerna, $\hat{e}_t$) är då ren slump, det som vi kallade vitt brus i @sec-white-noise. Vi kan undersöka $\hat{e}_t$ från den skattade modellen för att se om den följer de egenskaper som vi förväntar vitt brus att ha.
+
+Vi kan undersöka $\hat{e}_t$ på följande sätt:
+
+1. Visualisering
+
+Vi kan betrakta $\hat{e}_t$ som en ren tidsserie och skapa ett linjediagram för att visuellt bedöma om serien uppvisar några trender eller andra mönster. Vi vill att serien förhåller sig kring 0 och ser "slumpmässig" ut. Vad som anses vara slumpmässigt kan vara rätt så subjektivt och svårtydat men vi vill inte se perioder med tätt följda punkter (positiv autokorrelation) eller perioder där serien slår från positiva till negativa värden och vice versa (negativ autokorrelation). 
+
+2. Normalfördelningen
+
+Vi kan låna ett verktyg från @sec-residual-simple och skapa ett QQ-diagram över residualerna för att undersöka om de anses följa en normalfördelning då vitt brus antas vara slumpmässiga dragningar från den fördelningen.
+
+3. SAC och SPAC
+
+Det kan ibland vara svårt att visuellt bedöma om en serie ser slumpmässig ut vilket leder till användningen av mer objectiva mått såsom SAC och SPAC. Vi vill inte se några spikar i respektive diagram, likt det vi skapade i @fig-sac-white-noise. 
+
+4. Ljung-Box
+
+Även om SAC inte uppvisar några signifikanta spikar kan vi ändå få problem om flera lagg uppvisar stora autokorrelationer. Ett test som undersöker summan av $K$ lagg är ett Ljung-Box test som utgår från följande teststatistika:
+
+$$
+  \begin{aligned}
+  Q_* = n(n+2)\left( \frac{r^2_1}{n-1} +  \frac{r^2_2}{n-2} + \dots +  \frac{r^2_K}{n-K}\right)
+  \end{aligned}
+$$
+som vi kan anse följa $\chi^2(df = K - p - q)$. Om ett tidsberoende finns kvar i residualerna blir $Q_*$ stor vilket leder till att vi kan förkasta nollhypotesen, att det inte finns någon autokorrelation i residualerna, om den överstiger ett kritiskt värde från $\chi^2$-fördelningen.
+
+Dessa fyra sätt vägs sedan samman för en helhetsbedömning huruvida modellen har lyckats modellera allt tidsberoende så att residualerna bara är vitt brus. Om någon av dessa inte indikerar på vitt brus, behöver vi tänka om i vår modellanpassning och undersöka alternativa, oftast mer komplexa, ARIMA-modeller.
+
+<!-- TODO: VARFÖR HATT PÅ R I BOKEN? -->
+
+### Dickey-Fuller test
+
+[TODO: Gör vi detta på residualerna?]{style="color: red;"}
+
+## Utvärderingsmått
+
+För att utvärdera hur bra modellen anpassas till den observerade serien kan vi använda visualiseringar där vi visar både den observerade och anpassade serien i samma diagram. Denna tolkning är dock subjektiv och det kan vara svårt att faktiskt få en helhetsbild av anpassningen. Visualiseringen är bra för att identifiera vissa problemområden av modellanpassningen, ofta tidpunkter som avviker mycket från det generella sambandet, vilket en modell ofta har svårt att plocka upp.
+
+Utöver visualiseringar finns tre mått som ger en sammanfattande bild av modellens anpassning och kan då användas för att jämföra olika modeller:
+
+**Mean Square Deviation (MSD)** liknar MSE från regressionsmodelleringen där vi numera inte tar hänsyn till antalet parametrar. Måttet beräknas enligt:
+
+$$
+  \begin{aligned}
+  \frac{1}{n} \sum_{t = 1}^n \left(Y_t - \hat{Y}_t\right)^2
+  \end{aligned}
+$$ {#eq-msd}
+och beskriver det genomsnittliga kvadratliga residualen.
+    
+MSD kommer påverkas av extremvärden där stora avvikelser mellan observerade och anpassade värden (och dess kvadrat) kommer bidra till större fel i summan.
+
+**Mean Absolute Deviation (MAD)** tittar istället på absolutbeloppet av residualen där större avvikelser får en mindre inverkan på värdet. Vi får även ett mått som har samma skala som $Y_t$ vilket ger en fördel för tolkningar. Måttet beräknas enligt:
+
+$$
+  \begin{aligned}
+  \frac{1}{n} \sum_{t = 1}^n \left|Y_t - \hat{Y}_t\right|
+  \end{aligned}
+$$ {#eq-mad}
+
+**Mean Absolute Percentage Error (MAPE)** tittar även den på absoluta avvikelserna men sätter det i kontexten av värdet på $Y_t$. MAPE blir därför ett [relativt]{.underline} mått på avvikelser i serien och kan tolkas i procent.
+
+$$
+  \begin{aligned}
+\frac{1}{n} \sum_{t = 1}^n \left| \frac{Y_t - \hat{Y}_t}{Y_t}\right|
+  \end{aligned}
+$$ {#eq-mape}
+
+En bra modell har låga värden på dessa mått då det indikerar på mindre fel, men ibland kan måtten säga emot varandra. Detta gäller främst MSD och MAD/MAPE då förekomsten av extremvärden kan överskatta felet i MSD. Då behöver vi göra en sammanlagd avvägning där vi också tar hänsyn till andra utvärderingar för att bedöma vilken modell som är bättre anpassad.
+
+
+## Överanpassning och generaliserbarhet
+
+Med hjälp av enkla sammanfattande mått kan vi få en bild av hur bra modellen är på att beskriva den observerade serien. Det finns också ett mått som kan utvärdera hur bra en modell anpassas samt hur bra generaliserbar den är. 
+
+AIC (läs mer i @sec-aic) går att beräkna även för en generell ARIMA-modell enligt:
+
+$$
+  \begin{aligned}
+  AIC = -2\log(L)+2k
+  \end{aligned}
+$$
+där $k = p + q + 1$ om en konstant inkluderas i modellen, $k = p + q$ annars. För att justera för eventuell skevhet som uppkommer om $k / n > 0.1$ kan vi beräkna en korrigerad AIC enligt:
+
+$$
+  \begin{aligned}
+  AIC_c = AIC + \frac{2(k+1)(k+2)}{n-k-2}
+  \end{aligned}
+$$
+
+$AIC_c$ kommer vara lägre för en modell som är mer generaliserbar och inte inkluderar onödiga komponenter som riskerar att modellen är överanpassad. Ett ytterligare sätt att kontrollera överanpassning är att anpassa en mer komplex modell (för endast en av komponenterna) där den aktuella modellen är inkluderad, exempelvis anpassa en AR(2) för att kontrollera en AR(1) eller en ARMA(2, 1) för att kontrollera en ARMA(1, 1). Vi kan använda oss av residualanalysen för att välja riktning av den mer generella modellen, till exempel om SAC för residualerna från en MA(1) modell uppvisar signifikanta lagg vid $k = 2$, bör en MA(2) vara aktuell, inte en ARMA(1,1).
+
+Om vi lyckats identifiera en bra specifik modell skulle den ytterligare komponenten som läggs till förväntas ha en icke-signifikant skattning nära 0 samt att de skattade parametrarna inte skiljer sig mycket mellan de två modellerna. 
+
+## Prediktioner
+
+Syftet med ARIMA-modeller är att prediktera nya värden då det är svårt att tolka beskrivande samband utifrån de komplexa modellstrukturer som oftast anpassas. Vi vill därför att en modell producerar trovärdiga och rimliga prediktioner. Utifrån de utvärderingsmått som tagits upp i tidigare kapitel undersöks i huvudsak hur bra modellen anpassats till den observerade serien men vi saknar mått som beskriver hur bra modellen är på att prediktera nya tidpunkter. 
+
+Vi kan med hjälp av prediktioner, antingen på en avklippt del av den observerade tidsserien som inte använts till modellanpassningen eller på helt nya tidpunkter, också utvärdera modellens prestanda. Om vi utgår från helt nya tidpunkter där sanna observerade värden inte går att jämföra med, blir bedömningen mer subjektiv och visuell medan mått såsom MSPR (se @eq-mspr) kan användas för att jämföra predikterade och sanna värden från en avklippt del av serien.
+
+Prediktioner görs alltid på den stationära versionen av serien (efter differentiering), och transformeras sedan tillbaka till den ursprungliga skalan.
+
+Vi kan anta att det predikterade värdet för tidpunkt $t + h$ ges av det betingade väntevärdet:
+$$
+  \begin{aligned}
+  \hat{Y}_{t+h | t} = E[Y_{t+h} | Y_{t}, Y_{t-1}, \dots]
+  \end{aligned}
+$$
+För prediktioner flera tidssteg framåt används rekursion, där prediktioner används som utfyllnadsobservationer när de observerade värdena tar slut.
+
+För en ARIMA(p,d,q)-modell med $d > 0$ beräknas prognosen i två steg:
+
+1. Prognos för den *differentierade serien*.
+2. *Återtransformering* genom successiv summering.
+
+Till exempel om modellen använder sig av första differentiering, $d = 1$:
+
+$$
+\begin{aligned}
+\Delta Y_t = Y_t - Y_{t-1},
+\end{aligned}
+$$
+
+blir prognosen tillbaka på ursprungsskalan:
+
+$$
+\begin{aligned}
+\hat{Y}_{t+1|t} = Y_t + \widehat{\Delta Y}_{t+1|t}.
+\end{aligned}
+$$
+[TODO: Prediktionsintervall]{style="color: red"}
+
+### Datauppdelning
+
+För att få objektiva mått på hur bra modellens prediktioner är kan vi dela upp den observerade tidsserien i två delar, en **tränings**- och en **testdel**. Dessa termer lånas in från maskininlärningfältet där många metoder använder sig av datauppdelning för att motverka överanpassning. Träningsdata används för att anpassa modellen och ska bestå av majoriteten av data (helst >70%) medan testdata används för att kunna utvärdera prediktionerna. 
+
+På grund av tidsberoendet görs denna uppdelning vid en viss tidpunkt, inte slumpmässiga dragningar som vanligtvis används inom maskininlärning, så att testdata är de senaste observationerna. Ytterligare en skillnad från maskininlärning är att det inte alltid finns många observationer i en tidsserie vilket innebär att testdata ibland endast består av ett fåtal observationer. Dock kan dessa fåtal punkter räcka för att vi ska få en realistisk bild av hur modellen beter sig på framtida prognoser.
+
+I R görs detta enkelt genom att indexera tidsserien:
+
+```{r}
+#| code-fold: false
+
+# Exempeldata
+set.seed(1)
+y <- 
+  arima.sim(
+    n = 120, 
+    model = 
+      list(
+        order = c(1, 1, 1),
+        ar = 0.8,
+        ma = -0.5
+      )
+  ) |> 
+  ts(frequency = 12)
+
+# Dela upp data
+n <- length(y)
+test_size <- 12     # t.ex. ett år som "framtid"
+train <- y[1:(n - test_size)]
+test  <- y[(n - test_size + 1):n]
+
+train
+test
+```
+
+Modellen anpassas endast på träningsdelen. Här används ett exempel med en ARIMA‑modell:
+
+```{r}
+#| code-fold: false
+
+fit <- Arima(train, order = c(1,1,1))
+summary(fit)
+
+```
+
+När modellen är skattad gör vi prognoser lika långt som testdelen:
+
+```{r}
+fc <- forecast(fit, h = length(test))
+plot(fc)
+lines(c(rep(NA, times = length(train)), test), col = "red")
+```
+
+Skillnaden mellan testdata och prediktionerna kan beräknas med måtten som vi tidigare tittat på MAD, MSD, MAPE, men att de nu speglar prediktionsfelet.
+
+```{r}
+#| code-fold: false
+
+errors <- test - fc$mean
+
+MAD  <- mean(abs(errors))
+MSD  <- mean(errors^2)
+MAPE <- mean(abs(errors / test)) * 100
+
+c(MAD = MAD, MSD = MSD, MAPE = MAPE)
+```
+
+```{mermaid}
+
+flowchart LR
+  A@{ shape: circle, label: "t = 1"}
+  B@{ shape: circle, label: "t = 2"}
+  C@{ shape: circle, label: "t = 3"}
+  D@{ shape: circle, label: "t = 4"}
+  E@{ shape: circle, label: "t = 5"}
+  F@{ shape: circle, label: "t = 6"}
+  G@{ shape: circle, label: "t = 7"}
+  H@{ shape: circle, label: "t = 8"}
+  I@{ shape: circle, label: "t = 9"}
+  X@{ shape: rounded, label: "1 steg
+  framåt"}
+  Y@{ shape: rounded, label: "1 steg
+  framåt"}
+  Z@{ shape: rounded, label: "1 steg
+  framåt"}
+  
+  classDef predict fill:#d9544d,stroke:#000,color:#FFF
+
+subgraph observationer
+  A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict
+end
+subgraph prediktioner
+  X ~~~ Y ~~~ Z
+end
+D --- X --> E --- Y --> F --- Z --> G
+
+style observationer fill:#fcfcfc,stroke:#fcfcfc
+style prediktioner fill:#eee,stroke:#eee
+
+
+```
+
+```{mermaid}
+
+flowchart LR
+  A@{ shape: circle, label: "t = 1"}
+  B@{ shape: circle, label: "t = 2"}
+  C@{ shape: circle, label: "t = 3"}
+  D@{ shape: circle, label: "t = 4"}
+  E@{ shape: circle, label: "t = 5"}
+  F@{ shape: circle, label: "t = 6"}
+  G@{ shape: circle, label: "t = 7"}
+  H@{ shape: circle, label: "t = 8"}
+  I@{ shape: circle, label: "t = 9"}
+  X@{ shape: rounded, label: "2 steg
+  framåt"}
+  Y@{ shape: rounded, label: "2 steg
+  framåt"}
+  Z@{ shape: rounded, label: "2 steg
+  framåt"}
+  
+  classDef predict fill:#d9544d,stroke:#000,color:#FFF
+
+subgraph observationer
+  A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict
+end
+subgraph prediktioner
+  X ~~~ Y ~~~ Z
+end
+D --- X --> F 
+E --- Y --> G 
+F --- Z --> H
+
+style observationer fill:#fcfcfc,stroke:#fcfcfc
+style prediktioner fill:#eee,stroke:#eee
+
+```
+
+```{mermaid}
+
+flowchart LR
+  A@{ shape: circle, label: "t = 1"}
+  B@{ shape: circle, label: "t = 2"}
+  C@{ shape: circle, label: "t = 3"}
+  D@{ shape: circle, label: "t = 4"}
+  E@{ shape: circle, label: "t = 5"}
+  F@{ shape: circle, label: "t = 6"}
+  G@{ shape: circle, label: "t = 7"}
+  H@{ shape: circle, label: "t = 8"}
+  I@{ shape: circle, label: "t = 9"}
+  X@{ shape: rounded, label: "3 steg
+  framåt"}
+  Y@{ shape: rounded, label: "3 steg
+  framåt"}
+  Z@{ shape: rounded, label: "3 steg
+  framåt"}
+  
+  classDef predict fill:#d9544d,stroke:#000,color:#FFF
+
+subgraph observationer
+  A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict
+end
+D --- X --> G
+E --- Y --> H
+F --- Z --> I
+subgraph prediktioner
+  X ~~~ Y ~~~ Z
+end
+
+style observationer fill:#fcfcfc,stroke:#fcfcfc
+style prediktioner fill:#eee,stroke:#eee
+
+```
+
+
