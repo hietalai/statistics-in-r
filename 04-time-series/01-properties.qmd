@@ -203,7 +203,7 @@ I ord betyder dessa egenskaper att:
 
 Vi kan tillämpa dessa beskrivande mått på ett par enkla exempelserier för att få en bild av hur dem påverkas av olika beroenden. 
 
-### Vitt brus
+### Vitt brus {#sec-white-noise}
 En serie som endast består av identiska och oberoende dragningar från $N(0, \sigma^2_e)$ brukar kallas för **vitt brus**. Vi definierar serien som:
 $$
   \begin{aligned}
@@ -716,6 +716,8 @@ customAcf(diffY, plot = TRUE)
 Figuren visar att den differentierade seriens autokorrelation vid givna lag alla fellen inom (eller så gott som) konfidensbanden och vi kan bedöma den differentierade serien som stationär.
 
 <!-- TODO: Kanske något kort om regressionsmodeller och residualanalys? Kapitel 3 i Cryer? -->
+
+<!-- TODO: Andra transformationer för stationäritet, t.ex. Box-Cox -->
 
 ## Referenser {.unnumbered}
 
