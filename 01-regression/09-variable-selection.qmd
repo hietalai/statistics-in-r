@@ -132,7 +132,7 @@ $$
 \begin{aligned}
   MSPR = \frac{\sum_{i^*}{(Y_{i^*} - \hat{Y}_{i^*})^2}}{n^*}
 \end{aligned}
-$$
+$$ {#eq-mspr}
 där $i^*$ är observation $i$ i valideringsmängden och $n^*$ är antalet observationer totalt i valideringsmängden.
 
 ```{r}
