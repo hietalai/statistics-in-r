@@ -12,6 +12,7 @@ suppressMessages({
   require(car)
   require(lme4)
   require(TSA)
+  require(forecast)
   require(assertthat)
   require(exams2forms)
 })
