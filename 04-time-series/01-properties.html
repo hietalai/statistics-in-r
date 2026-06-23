@@ -125,6 +125,103 @@ div.csl-indent {
     "search-label": "Sök"
   }
 }</script>
+<script>
+
+  window.MathJax = {
+
+  tex: {
+
+    macros: {
+
+      Xmatrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} & X_{12} & \\cdots & X_{1k} \\\\" +
+
+        "1 & X_{21} & X_{22} & \\cdots & X_{2k} \\\\" +
+
+        "\\vdots & \\vdots & \\vdots & \\ddots & \\vdots \\\\" +
+
+        "1 & X_{n1} & X_{n2} & \\cdots & X_{nk}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Xonematrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} \\\\" +
+
+        "1 & X_{21} \\\\" +
+
+        "\\vdots \\\\" +
+
+        "1 & X_{n1}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Ymatrix:
+
+        "\\begin{bmatrix}Y_1 \\\\ Y_2 \\\\ \\vdots \\\\ Y_n\\end{bmatrix}",
+
+
+
+      betamatrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1 \\\\ \\vdots \\\\ \\beta_k\\end{bmatrix}",
+
+
+
+      betaonematrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1\\end{bmatrix}",
+
+
+
+      Ematrix:
+
+        "\\begin{bmatrix}E_1 \\\\ E_2 \\\\ \\vdots \\\\ E_n\\end{bmatrix}",
+
+        
+
+      epsilonMatrix:
+
+        "\\begin{bmatrix}\\varepsilon_1 \\\\ \\varepsilon_2 \\\\ \\vdots \\\\ \\varepsilon_n\\end{bmatrix}",
+
+
+
+      Sum: ["\\sum_{i=1}^{#1}", 1],
+
+      
+
+      olsMatrix:
+
+        "\\boldsymbol{\\hat{\\beta}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\mathbf{X}'\\mathbf{Y}",
+
+        
+
+      olsVarMatrix: 
+
+        "s^2_{\\boldsymbol{\\hat{\\beta}}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\frac{SSE}{n - (k + 1)}",
+
+      
+
+      sseMatrix:
+
+        "(\\mathbf{Y} - \\mathbf{X}\\boldsymbol{\\hat{\\beta}})'(\\mathbf{Y}-\\mathbf{X}\\boldsymbol{\\hat{\\beta}})"
+
+    }
+
+  }
+
+};
+
+</script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs/editor/editor.main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   
@@ -425,7 +522,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"code":"checkSolution <- function(object, ex) {\n  \n  if (ex == 1) {\n    assert_that(object |> is.data.frame(), msg = \"Objektet måste vara en data.frame eller tibble\")\n    assert_that(\"t\" %in% colnames(object), msg = \"Variabeln t måste finnas i objektet.\")\n    assert_that(all(seq_len(nrow(prices)) %in% object$t), msg = \"Alla tidssindex måste finnas i objektet.\")\n  \n  } else if (ex == 2) {\n    \n    assert_that(object |> is.numeric(), msg = \"Objektet måste vara ett numeriskt värde.\")\n    answer <- prices$pris[10]\n    \n    assert_that(all.equal(object, answer, tolerance = 1E-3) |> isTRUE(),\n                msg = \"Svaret är fel.\")\n    \n  } else if (ex == 4) {\n    \n    assert_that(object |> class() == \"acf\", msg = \"Objektet måste vara ett objekt från acf().\")\n    \n    answer <- customAcf(randomWalk, plot = FALSE)\n    \n    \n    assert_that(all.equal(answer$acf, object$acf, tolerance = 1E-3) |> isTRUE(),\n                msg = \"Svaret är fel.\")\n  }\n  \n  print(\"Korrekt!\")\n  \n}","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"setup","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"## Läser in exempeldata i tre steg\n#  URL för källan\nurl <- \"https://hietalai.github.io/statistics-in-r/resources/data/electricityprice.csv\"\n\n#  Laddar ner data från URL\ndownload.file(url, \"electricityprice.csv\", quiet = TRUE)\n\n#  Läser in data till R\nprices <- read_csv(\"electricityprice.csv\", show_col_types = FALSE)\n\n#  Visar de första observationerna i serien\nhead(prices)","id":2,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Sparar den bearbetade tibblen i samma objekt: prices\nprices <- \n  prices |> \n  # mutate() förändrar eller skapar variabler i objektet\n  mutate(\n    t = seq_len(nrow(prices))\n  )\n\nhead(prices)","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"dataWithT <- ______\n\ncheckSolution(dataWithT, ex = 1)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"#  Plockar ut tidpunkt 5\nprices |> \n  slice(5) |> \n  pull(pris)\n\n# Alternativt plockar ut rad 5 och variabeln pris från en data.frame\nprices[5, \"pris\"]\n\n# Alternativt plockar ut element 5 från vektorn (variabeln) pris\nprices$pris[5]","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# TODO Tilldela värdet från den tionde observationen i serien\ny10 <- ________\n\ncheckSolution(y10, ex = 2)","id":6,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Dra 100 observationer från normalfördelningen\nn <- 100\n\nwhiteNoise <- rnorm(n = n, mean = 0, sd = 1)\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = whiteNoise\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":7,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"En serie med vitt brus","fig-height":"3","fig-width":"5","label":"fig-white-noise","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Ange längden av serien som ska genereras\nn <- 100\n\n# Initialisera ett tomt objekt\nrandomWalk <- numeric()\n\n# Generera en Random Walk serie\nfor (i in seq_len(n)) {\n  if (i == 1) {\n    randomWalk[i] <- rnorm(n = 1, mean = 0, sd = 1)\n  } else {\n    randomWalk[i] <- randomWalk[i-1] + rnorm(n = 1, mean = 0, sd = 1)\n  }\n}\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = randomWalk\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":8,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"En serie som visar en Random Walk","fig-height":"3","fig-width":"5","label":"fig-random-walk","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"n <- 100\n\n# Använd samma vita brus serie som en samling av dragningar från N(0,1)\net <- whiteNoise\nmovingAverage <- numeric()\n\nfor (i in seq_len(n)) {\n  if (i == 1) {\n    movingAverage[i] <- NA\n  } else {\n    movingAverage[i] <- mean(et[i] + et[i - 1])\n  }\n}\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = movingAverage\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":9,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"Exempelserie för ett glidande medelvärde","fig-height":"3","fig-width":"5","label":"fig-moving-average","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"false"}},{"code":"customAcf <- function(series, plot = FALSE) {\n  # Använder acf() från paketet stats\n  SAC <- acf(series, plot = FALSE)\n  \n  SAC$series <- deparse(substitute(series))\n  \n  # Tar bort lag 0 eftersom det alltid kommer vara SAC = 1\n  SAC$acf <- SAC$acf[-1,,, drop = FALSE]\n  SAC$lag <- SAC$lag[-1,,, drop = FALSE]\n  \n  if (plot) {\n    plot(SAC)  \n  }\n  \n  return(SAC)\n}\n\nSAC <- customAcf(whiteNoise, plot = TRUE)","id":10,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för vita brus serien med egenskapad kod","fig-height":"3","fig-width":"5","label":"unnamed-chunk-10","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# TODO Skapa ett acf-objekt för randomWalk\nSAC <- ________\n\ncheckSolution(SAC, ex = 4)","id":11,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för en Random Walk serie","fig-height":"3","fig-width":"5","label":"unnamed-chunk-11","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"diffY <- diff(randomWalk, lag = 1, differences = 1)\n\ncustomAcf(diffY, plot = TRUE)","id":12,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för den differentierade Random Walk-serien","fig-height":"3","fig-width":"5","label":"fig-sac-diff-rw","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+globalThis.qwebrCellDetails = [{"code":"checkSolution <- function(object, ex) {\n  \n  if (ex == 1) {\n    assert_that(object |> is.data.frame(), msg = \"Objektet måste vara en data.frame eller tibble\")\n    assert_that(\"t\" %in% colnames(object), msg = \"Variabeln t måste finnas i objektet.\")\n    assert_that(all(seq_len(nrow(prices)) %in% object$t), msg = \"Alla tidssindex måste finnas i objektet.\")\n  \n  } else if (ex == 2) {\n    \n    assert_that(object |> is.numeric(), msg = \"Objektet måste vara ett numeriskt värde.\")\n    answer <- prices$pris[10]\n    \n    assert_that(all.equal(object, answer, tolerance = 1E-3) |> isTRUE(),\n                msg = \"Svaret är fel.\")\n    \n  } else if (ex == 4) {\n    \n    assert_that(object |> class() == \"acf\", msg = \"Objektet måste vara ett objekt från acf().\")\n    \n    answer <- customAcf(randomWalk, plot = FALSE)\n    \n    \n    assert_that(all.equal(answer$acf, object$acf, tolerance = 1E-3) |> isTRUE(),\n                msg = \"Svaret är fel.\")\n  }\n  \n  print(\"Korrekt!\")\n  \n}","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"setup","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"## Läser in exempeldata i tre steg\n#  URL för källan\nurl <- \"https://hietalai.github.io/statistics-in-r/resources/data/electricityprice.csv\"\n\n#  Laddar ner data från URL\ndownload.file(url, \"electricityprice.csv\", quiet = TRUE)\n\n#  Läser in data till R\nprices <- read_csv(\"electricityprice.csv\", show_col_types = FALSE)\n\n#  Visar de första observationerna i serien\nhead(prices)","id":2,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Sparar den bearbetade tibblen i samma objekt: prices\nprices <- \n  prices |> \n  # mutate() förändrar eller skapar variabler i objektet\n  mutate(\n    t = seq_len(nrow(prices))\n  )\n\nhead(prices)","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"dataWithT <- ______\n\ncheckSolution(dataWithT, ex = 1)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"#  Plockar ut tidpunkt 5\nprices |> \n  slice(5) |> \n  pull(pris)\n\n# Alternativt plockar ut rad 5 och variabeln pris från en data.frame\nprices[5, \"pris\"]\n\n# Alternativt plockar ut element 5 från vektorn (variabeln) pris\nprices$pris[5]","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# TODO Tilldela värdet från den tionde observationen i serien\ny10 <- ________\n\ncheckSolution(y10, ex = 2)","id":6,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Dra 100 observationer från normalfördelningen\nn <- 100\n\nwhiteNoise <- rnorm(n = n, mean = 0, sd = 1)\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = whiteNoise\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":7,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"En serie med vitt brus","fig-height":"3","fig-width":"5","label":"fig-white-noise","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Ange längden av serien som ska genereras\nn <- 100\n\n# Initialisera ett tomt objekt\nrandomWalk <- numeric()\n\n# Generera en Random Walk serie\nfor (i in seq_len(n)) {\n  if (i == 1) {\n    randomWalk[i] <- rnorm(n = 1, mean = 0, sd = 1)\n  } else {\n    randomWalk[i] <- randomWalk[i-1] + rnorm(n = 1, mean = 0, sd = 1)\n  }\n}\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = randomWalk\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":8,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"En serie som visar en Random Walk","fig-height":"3","fig-width":"5","label":"fig-random-walk","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"n <- 100\n\n# Använd samma vita brus serie som en samling av dragningar från N(0,1)\net <- whiteNoise\nmovingAverage <- numeric()\n\nfor (i in seq_len(n)) {\n  if (i == 1) {\n    movingAverage[i] <- NA\n  } else {\n    movingAverage[i] <- mean(et[i] + et[i - 1])\n  }\n}\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = movingAverage\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":9,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"Exempelserie för ett glidande medelvärde","fig-height":"3","fig-width":"5","label":"fig-moving-average","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"false"}},{"code":"customAcf <- function(series, plot = FALSE) {\n  # Använder acf() från paketet stats\n  SAC <- acf(series, plot = FALSE)\n  \n  SAC$series <- deparse(substitute(series))\n  \n  # Tar bort lag 0 eftersom det alltid kommer vara SAC = 1\n  SAC$acf <- SAC$acf[-1,,, drop = FALSE]\n  SAC$lag <- SAC$lag[-1,,, drop = FALSE]\n  \n  if (plot) {\n    plot(SAC)  \n  }\n  \n  return(SAC)\n}\n\nSAC <- customAcf(whiteNoise, plot = TRUE)","id":10,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för vita brus serien med egenskapad kod","fig-height":"3","fig-width":"5","label":"unnamed-chunk-10","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# TODO Skapa ett acf-objekt för randomWalk\nSAC <- ________\n\ncheckSolution(SAC, ex = 4)","id":11,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för en Random Walk serie","fig-height":"3","fig-width":"5","label":"unnamed-chunk-11","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Differentiera en icke-stationär serie\ndiffY <- diff(randomWalk, lag = 1, differences = 1)\n\n# Beräkna SAC för den differentierade serien\ncustomAcf(diffY, plot = TRUE)","id":12,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för den differentierade Random Walk-serien","fig-height":"3","fig-width":"5","label":"fig-sac-diff-rw","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 </script>
 <script type="module">
@@ -1747,6 +1844,10 @@ window.Quarto = {
     <a class="nav-link" href="../04-time-series/index.html"> 
 <span class="menu-text">Tidsserieanalys</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../05-stat-to-ml/index.html"> 
+<span class="menu-text">Statistik till ML</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -1790,13 +1891,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
@@ -1821,11 +1922,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL II - Regressionsanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
@@ -1904,11 +2005,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL III - Variansanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
@@ -1959,19 +2060,66 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARMA och ARIMA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/04-arimax.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span></a>
+  <a href="../04-time-series/04-evaluation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-stat-to-ml/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DEL V - Från statistik till maskininlärning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/01-validation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/02-regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/03-tree-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Splines och trädmodeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/04-neural-networks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Neurala nätverk</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/05-ensembles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Ensemblemetoder</span></span></a>
   </div>
 </li>
       </ul>
@@ -1990,13 +2138,13 @@ window.Quarto = {
   <li><a href="#beskrivande-mått" id="toc-beskrivande-mått" class="nav-link" data-scroll-target="#beskrivande-mått"><span class="header-section-number">21.2</span> Beskrivande mått</a></li>
   <li><a href="#enkla-tidsserier" id="toc-enkla-tidsserier" class="nav-link" data-scroll-target="#enkla-tidsserier"><span class="header-section-number">21.3</span> Enkla tidsserier</a>
   <ul class="collapse">
-  <li><a href="#vitt-brus" id="toc-vitt-brus" class="nav-link" data-scroll-target="#vitt-brus"><span class="header-section-number">21.3.1</span> Vitt brus</a></li>
+  <li><a href="#sec-white-noise" id="toc-sec-white-noise" class="nav-link" data-scroll-target="#sec-white-noise"><span class="header-section-number">21.3.1</span> Vitt brus</a></li>
   <li><a href="#random-walk" id="toc-random-walk" class="nav-link" data-scroll-target="#random-walk"><span class="header-section-number">21.3.2</span> Random Walk</a></li>
-  <li><a href="#glidande-medelvärde" id="toc-glidande-medelvärde" class="nav-link" data-scroll-target="#glidande-medelvärde"><span class="header-section-number">21.3.3</span> Glidande medelvärde</a></li>
+  <li><a href="#sec-moving-average-series" id="toc-sec-moving-average-series" class="nav-link" data-scroll-target="#sec-moving-average-series"><span class="header-section-number">21.3.3</span> Glidande medelvärde</a></li>
   </ul></li>
   <li><a href="#stationäritet" id="toc-stationäritet" class="nav-link" data-scroll-target="#stationäritet"><span class="header-section-number">21.4</span> Stationäritet</a></li>
   <li><a href="#sac-och-spac" id="toc-sac-och-spac" class="nav-link" data-scroll-target="#sac-och-spac"><span class="header-section-number">21.5</span> SAC och SPAC</a></li>
-  <li><a href="#differentiering" id="toc-differentiering" class="nav-link" data-scroll-target="#differentiering"><span class="header-section-number">21.6</span> Differentiering</a></li>
+  <li><a href="#sec-differentiation" id="toc-sec-differentiation" class="nav-link" data-scroll-target="#sec-differentiation"><span class="header-section-number">21.6</span> Differentiering</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -2435,8 +2583,8 @@ Viktigt
 <section id="enkla-tidsserier" class="level2" data-number="21.3">
 <h2 data-number="21.3" class="anchored" data-anchor-id="enkla-tidsserier"><span class="header-section-number">21.3</span> Enkla tidsserier</h2>
 <p>Vi kan tillämpa dessa beskrivande mått på ett par enkla exempelserier för att få en bild av hur dem påverkas av olika beroenden.</p>
-<section id="vitt-brus" class="level3" data-number="21.3.1">
-<h3 data-number="21.3.1" class="anchored" data-anchor-id="vitt-brus"><span class="header-section-number">21.3.1</span> Vitt brus</h3>
+<section id="sec-white-noise" class="level3" data-number="21.3.1">
+<h3 data-number="21.3.1" class="anchored" data-anchor-id="sec-white-noise"><span class="header-section-number">21.3.1</span> Vitt brus</h3>
 <p>En serie som endast består av identiska och oberoende dragningar från <span class="math inline">\(N(0, \sigma^2_e)\)</span> brukar kallas för <strong>vitt brus</strong>. Vi definierar serien som: <span class="math display">\[
   \begin{aligned}
   Y_t = e_t
@@ -2547,8 +2695,8 @@ Figur&nbsp;21.1: Autokorrelationen för olika avstånd av tidssteg t och s i en 
   \end{aligned}
 \]</span></p>
 </section>
-<section id="glidande-medelvärde" class="level3" data-number="21.3.3">
-<h3 data-number="21.3.3" class="anchored" data-anchor-id="glidande-medelvärde"><span class="header-section-number">21.3.3</span> Glidande medelvärde</h3>
+<section id="sec-moving-average-series" class="level3" data-number="21.3.3">
+<h3 data-number="21.3.3" class="anchored" data-anchor-id="sec-moving-average-series"><span class="header-section-number">21.3.3</span> Glidande medelvärde</h3>
 <p>Det sista exemplet på en enkel tidsserie är ett <strong>glidande medelvärde</strong>. Som namnet antyder är det ett medelvärde beräknat utifrån ett glidande fönster av observationer, i det enklaste fallet medelvärdet av två <span class="math inline">\(e\)</span>:</p>
 <p><span class="math display">\[
   \begin{aligned}
@@ -2665,8 +2813,8 @@ Notera
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Markera de serier som anses uppfylla kravet om svag stationäritet.</p>
-<div id="webex-c0697000e648a430d960504edd6b85f5" class="webex-checkboxgroup" data-answer="OAEaCBsAbQ==">
-<label><input type="checkbox" autocomplete="off" name="c0697000e648a430d960504edd6b85f5"><span>Vitt brus</span></label><label><input type="checkbox" autocomplete="off" name="c0697000e648a430d960504edd6b85f5"><span>Glidande medelvärde</span></label><label><input type="checkbox" autocomplete="off" name="c0697000e648a430d960504edd6b85f5"><span>Random Walk</span></label>
+<div id="webex-9a9e21b479314f5481e8580744fb813e" class="webex-checkboxgroup" data-answer="YlAVVB4BPw==">
+<label><input type="checkbox" autocomplete="off" name="9a9e21b479314f5481e8580744fb813e"><span>Glidande medelvärde</span></label><label><input type="checkbox" autocomplete="off" name="9a9e21b479314f5481e8580744fb813e"><span>Vitt brus</span></label><label><input type="checkbox" autocomplete="off" name="9a9e21b479314f5481e8580744fb813e"><span>Random Walk</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -2757,14 +2905,14 @@ Viktigt&nbsp;21.1: Expandera för att visa en variant av <code>TSA</code> i WEBR
 </div>
 <p>För den icke-stationära serien Random Walk ser SAC väldigt annorlunda ut. Vi har flera lagg vars värden passerar felmarginalens gränser samt att det ser ut som att autokorrelationen har ett kubiskt mönster mellan intilliggande lagg. Detta ger oss en indikation på att serien inte är stationär.</p>
 </section>
-<section id="differentiering" class="level2" data-number="21.6">
-<h2 data-number="21.6" class="anchored" data-anchor-id="differentiering"><span class="header-section-number">21.6</span> Differentiering</h2>
+<section id="sec-differentiation" class="level2" data-number="21.6">
+<h2 data-number="21.6" class="anchored" data-anchor-id="sec-differentiation"><span class="header-section-number">21.6</span> Differentiering</h2>
 <p>Om en tidsserie inte anses stationär i sin ursprungliga form kan vi undersöka ifall enkla bearbetningar av serien istället uppfyller stationäritet. I exemplet med Random Walk vet vi att differensen mellan två olika tidssteg endast beror på en slumpmässig dragning från en normalfördelning, oberoende från all annan information i serien.</p>
 <p>Vi kan då med hjälp av <strong>differentiering</strong> skapa en ny, stationär serie. Differentiering går ut på att vi skapar differensen mellan olika lagg av tidpunkter, den enklaste formen är att beräkna differensen mellan tidpunkt <span class="math inline">\(t\)</span> och <span class="math inline">\(t-1\)</span>, lagg 1.</p>
 <p>En mer generell beskrivning är att man anger hur många differenser (<span class="math inline">\(d\)</span>) och vilket lagg (<span class="math inline">\(k\)</span>) differenserna beräknas från enligt:</p>
 <p><span id="eq-differentiation"><span class="math display">\[
   \begin{aligned}
-  \nabla^dY_t = \nabla(Y_t - Y_{t-k}
+  \nabla^dY_t = \nabla^{d-1}(Y_t - Y_{t-k})
   \end{aligned}
 \tag{21.10}\]</span></span></p>
 <p>Till exempel skulle den första differensen av lagg 1 beräknas som:</p>
@@ -2775,13 +2923,15 @@ Viktigt&nbsp;21.1: Expandera för att visa en variant av <code>TSA</code> i WEBR
 \]</span> och den andra differensen av lagg 1 beräknas som:</p>
 <p><span class="math display">\[
   \begin{aligned}
-  \nabla^2 Y_t = \nabla(\nabla Y_t - Y_{t-1}) \underbrace{(Y_t - Y_{t-1})}_{\nabla Y_t} - \underbrace{(Y_{t-1} - Y_{t-2})}_{\nabla Y_{t-1}}
+  \nabla^2 Y_t = \nabla(Y_t - Y_{t-1}) = \underbrace{(Y_t - Y_{t-1})}_{\nabla Y_t} - \underbrace{(Y_{t-1} - Y_{t-2})}_{\nabla Y_{t-1}}
   \end{aligned}
 \]</span></p>
 <p>Funktionen <code>diff()</code> visar en serie som differentierats <code>differences</code> gånger baserat på <code>lag</code> lagg bakåt i serien.</p>
 <div id="qwebr-insertion-location-12"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>Figuren visar att den differentierade seriens autokorrelation vid givna lag alla fellen inom (eller så gott som) konfidensbanden och vi kan bedöma den differentierade serien som stationär.</p>
 <!-- TODO: Kanske något kort om regressionsmodeller och residualanalys? Kapitel 3 i Cryer? -->
+<!-- TODO: Andra transformationer för stationäritet, t.ex. Box-Cox -->
 </section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
@@ -3213,8 +3363,8 @@ Cryer, J. D., och K. S. Chan. 2008. <em>Time Series Analysis: With Applications 
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../04-time-series/02-ar.html" class="pagination-link" aria-label="Autoregressiva modeller">
-        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../04-time-series/02-ar.html" class="pagination-link" aria-label="AR och MA modeller">
+        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

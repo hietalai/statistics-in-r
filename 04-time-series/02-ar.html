@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>22&nbsp; Autoregressiva modeller – Statistisk teori och tillämpningar i R</title>
+<title>22&nbsp; AR och MA modeller – Statistisk teori och tillämpningar i R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -90,6 +90,103 @@ div.csl-indent {
     "search-label": "Sök"
   }
 }</script>
+<script>
+
+  window.MathJax = {
+
+  tex: {
+
+    macros: {
+
+      Xmatrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} & X_{12} & \\cdots & X_{1k} \\\\" +
+
+        "1 & X_{21} & X_{22} & \\cdots & X_{2k} \\\\" +
+
+        "\\vdots & \\vdots & \\vdots & \\ddots & \\vdots \\\\" +
+
+        "1 & X_{n1} & X_{n2} & \\cdots & X_{nk}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Xonematrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} \\\\" +
+
+        "1 & X_{21} \\\\" +
+
+        "\\vdots \\\\" +
+
+        "1 & X_{n1}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Ymatrix:
+
+        "\\begin{bmatrix}Y_1 \\\\ Y_2 \\\\ \\vdots \\\\ Y_n\\end{bmatrix}",
+
+
+
+      betamatrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1 \\\\ \\vdots \\\\ \\beta_k\\end{bmatrix}",
+
+
+
+      betaonematrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1\\end{bmatrix}",
+
+
+
+      Ematrix:
+
+        "\\begin{bmatrix}E_1 \\\\ E_2 \\\\ \\vdots \\\\ E_n\\end{bmatrix}",
+
+        
+
+      epsilonMatrix:
+
+        "\\begin{bmatrix}\\varepsilon_1 \\\\ \\varepsilon_2 \\\\ \\vdots \\\\ \\varepsilon_n\\end{bmatrix}",
+
+
+
+      Sum: ["\\sum_{i=1}^{#1}", 1],
+
+      
+
+      olsMatrix:
+
+        "\\boldsymbol{\\hat{\\beta}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\mathbf{X}'\\mathbf{Y}",
+
+        
+
+      olsVarMatrix: 
+
+        "s^2_{\\boldsymbol{\\hat{\\beta}}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\frac{SSE}{n - (k + 1)}",
+
+      
+
+      sseMatrix:
+
+        "(\\mathbf{Y} - \\mathbf{X}\\boldsymbol{\\hat{\\beta}})'(\\mathbf{Y}-\\mathbf{X}\\boldsymbol{\\hat{\\beta}})"
+
+    }
+
+  }
+
+};
+
+</script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs/editor/editor.main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   
@@ -390,7 +487,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"code":"# Skapar en funktion för att simulera en AR(1) process\nar1 <- function(phi, n) {\n  yt <- numeric()\n  \n  for (i in seq_len(n)) {\n    if (i == 1) {\n      yt[i] <- rnorm(n = 1)\n    } else {\n      yt[i] <- phi * yt[i-1] + rnorm(n = 1)\n    }\n  }\n  \n  yt\n}\n\n# Egenskaper för simuleringen\nn <- 100\nphi <- 0.9\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = ar1(phi = phi, n = n)\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"Simulerad AR(1) serie från angivet $\\phi$","fig-height":"3","fig-width":"5","label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"phi <- 0.9\n\ntibble(\n  k = seq_len(20), \n  rho = phi^k\n) |> \n  ggplot() + aes(x = k, y = rho) + \n  geom_bar(width = 0.3, stat = \"identity\") +\n  scale_y_continuous(limits = c(-1, 1)) + \n  geom_hline(yintercept = 0, linewidth = 1) +\n  labs(y = expression(rho[k])) + \n  theme_bw()\n","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"Autokorrelationen för en AR(1) med olika $\\phi$","fig-height":"3","fig-width":"5","label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+globalThis.qwebrCellDetails = [{"code":"# Skapar en funktion för att simulera en AR(1) process\nar1 <- function(phi, n) {\n  y <- numeric()\n  \n  for (i in seq_len(n)) {\n    if (t == 1) {\n      y[t] <- rnorm(n = 1)\n    } else {\n      y[t] <- phi * y[t-1] + rnorm(n = 1)\n    }\n  }\n  \n  y\n}\n\n# Egenskaper för simuleringen\nn <- 100\nphi <- 0.9\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = ar1(phi = phi, n = n)\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"Simulerad AR(1) serie från angivet phi","fig-height":"3","fig-width":"5","label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Ange ett värde på phi i processen\nphi <- 0.5\n\ntibble(\n  k = seq_len(20), \n  rho = phi^k\n) |> \n  ggplot() + aes(x = k, y = rho) + \n  geom_bar(width = 0.3, stat = \"identity\") +\n  scale_y_continuous(limits = c(-1, 1)) + \n  geom_hline(yintercept = 0, linewidth = 1) +\n  labs(y = expression(rho[k])) + \n  theme_bw()","id":2,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"Autokorrelationen för en AR(1) med olika phi","fig-height":"3","fig-width":"5","label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"rhoAr2 <- function(phi1, phi2) {\n  \n  # Kontrollerar att stationäritetsvillkoren är uppfyllda\n  assert_that(phi1 + phi2 < 1, msg = \"phi1 + phi2 är inte < 1\")\n  assert_that(phi2 - phi1 < 1, msg = \"phi2 - phi1 är inte < 1\")\n  assert_that(abs(phi2) < 1,   msg = \"|phi2| är inte < 1\")\n  \n  n <- 20\n\n  # Skapa en tom vektor\n  rho <- numeric()\n  \n  # Beräkna rho med två specialfall för t = 1 och t = 2\n  for (t in seq_len(n)) {\n    if (t == 1) {\n      rho[t] <- phi1 / (1 - phi2)\n    } else if (t == 2) {\n      rho[t] <- (phi2 * (1 - phi2) + phi1^2) / (1 - phi2)\n    } else {\n      rho[t] <- phi1 * rho[t-1] + phi2 * rho[t-2]\n    }\n  }\n  \n  graph <- \n    tibble(\n      k = seq_len(20), \n      rho = rho\n    ) |> \n      ggplot() + aes(x = k, y = rho) + \n      geom_bar(width = 0.3, stat = \"identity\") +\n      scale_y_continuous(limits = c(-1, 1)) + \n      geom_hline(yintercept = 0, linewidth = 1) +\n      labs(y = expression(rho[k])) + \n      theme_bw()\n    \n  print(graph)\n  \n  return(rho)\n}\n\nrho <- rhoAr2(phi1 = 0.5, phi2 = 0.25)","id":3,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"Autokorrelationen för en AR(2) med olika värden på phi","fig-height":"3","fig-width":"5","label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 </script>
 <script type="module">
@@ -1712,6 +1809,10 @@ window.Quarto = {
     <a class="nav-link" href="../04-time-series/index.html"> 
 <span class="menu-text">Tidsserieanalys</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../05-stat-to-ml/index.html"> 
+<span class="menu-text">Statistik till ML</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -1723,7 +1824,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-time-series/index.html">DEL IV - Tidsserieanalys</a></li><li class="breadcrumb-item"><a href="../04-time-series/02-ar.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-time-series/index.html">DEL IV - Tidsserieanalys</a></li><li class="breadcrumb-item"><a href="../04-time-series/02-ar.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
@@ -1755,13 +1856,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
@@ -1786,11 +1887,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL II - Regressionsanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
@@ -1869,11 +1970,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL III - Variansanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
@@ -1924,19 +2025,66 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARMA och ARIMA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/04-arimax.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span></a>
+  <a href="../04-time-series/04-evaluation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-stat-to-ml/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DEL V - Från statistik till maskininlärning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/01-validation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/02-regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/03-tree-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Splines och trädmodeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/04-neural-networks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Neurala nätverk</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/05-ensembles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Ensemblemetoder</span></span></a>
   </div>
 </li>
       </ul>
@@ -1951,8 +2099,19 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#ar1" id="toc-ar1" class="nav-link active" data-scroll-target="#ar1"><span class="header-section-number">22.1</span> AR(1)</a></li>
-  <li><a href="#ar2" id="toc-ar2" class="nav-link" data-scroll-target="#ar2"><span class="header-section-number">22.2</span> AR(2)</a></li>
+  <li><a href="#autoregressiva-processer" id="toc-autoregressiva-processer" class="nav-link active" data-scroll-target="#autoregressiva-processer"><span class="header-section-number">22.1</span> Autoregressiva processer</a>
+  <ul class="collapse">
+  <li><a href="#ar1" id="toc-ar1" class="nav-link" data-scroll-target="#ar1"><span class="header-section-number">22.1.1</span> AR(1)</a></li>
+  <li><a href="#ar2" id="toc-ar2" class="nav-link" data-scroll-target="#ar2"><span class="header-section-number">22.1.2</span> AR(2)</a></li>
+  </ul></li>
+  <li><a href="#glidande-medelvärdesprocesser" id="toc-glidande-medelvärdesprocesser" class="nav-link" data-scroll-target="#glidande-medelvärdesprocesser"><span class="header-section-number">22.2</span> Glidande medelvärdesprocesser</a>
+  <ul class="collapse">
+  <li><a href="#ma1" id="toc-ma1" class="nav-link" data-scroll-target="#ma1"><span class="header-section-number">22.2.1</span> MA(1)</a></li>
+  <li><a href="#sec-invertibility" id="toc-sec-invertibility" class="nav-link" data-scroll-target="#sec-invertibility"><span class="header-section-number">22.2.2</span> Invertibilitet</a></li>
+  <li><a href="#ma2" id="toc-ma2" class="nav-link" data-scroll-target="#ma2"><span class="header-section-number">22.2.3</span> MA(2)</a></li>
+  </ul></li>
+  <li><a href="#partiell-autokorrelation" id="toc-partiell-autokorrelation" class="nav-link" data-scroll-target="#partiell-autokorrelation"><span class="header-section-number">22.3</span> Partiell autokorrelation</a></li>
+  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
     </div>
@@ -2243,9 +2402,9 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 }
 </script>
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-time-series/index.html">DEL IV - Tidsserieanalys</a></li><li class="breadcrumb-item"><a href="../04-time-series/02-ar.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-time-series/index.html">DEL IV - Tidsserieanalys</a></li><li class="breadcrumb-item"><a href="../04-time-series/02-ar.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></h1>
+<h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></h1>
 </div>
 
 
@@ -2263,27 +2422,35 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 
 
 <!-- CONTENT -->
-<p>Hur kan en tidsserie utan en tydlig trend eller säsongsmönster modelleras? Vi kan på olika sätt ta tillvara på tidsberoendet i serien genom <strong>autoregressiva</strong> (AR) processer som omfattar regression “på sig själv” och/eller genom <strong>glidande medelvärde</strong> (MA) processer som omfattar regression på tidigare feltermer.</p>
-<p>Generellt kan vi beskriva en AR(p)-process som: <span id="eq-arp"><span class="math display">\[
+<p>Hur kan en tidsserie utan en tydlig trend eller säsongsmönster modelleras? Vi kan på olika sätt ta tillvara på tidsberoendet i serien genom <strong>autoregressiva</strong> (AR) processer som innebär regression “på sig själv” och genom <strong>glidande medelvärde</strong> (MA) processer som innebär regression på tidigare feltermer.</p>
+<p>I detta kapitel kommer dessa två processer att presenteras separat för att i nästa kapitel visa hur de kan sammanfogas till en gemensam modell. Vi kommer titta på hur processerna ser ut i teorin och vilka egenskaper de uppvisar för att lättare kunna identifiera när specifika processer är lämpliga modellval för en observerad serie.</p>
+<section id="autoregressiva-processer" class="level2" data-number="22.1">
+<h2 data-number="22.1" class="anchored" data-anchor-id="autoregressiva-processer"><span class="header-section-number">22.1</span> Autoregressiva processer</h2>
+<p>En autoregressiv process använder beroendet mellan olika tidpunkter som hjälpvariabler i en modell som väldigt mycket liknar en linjär regressionsmodell. Generellt kan vi beskriva en AR(p)-process som: <span id="eq-arp"><span class="math display">\[
   \begin{aligned}
   Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots + \phi_p Y_{t-p} + e_t
   \end{aligned}
-\tag{22.1}\]</span></span> det vill säga en linjärkombination av <span class="math inline">\(p\)</span> tidigare värden. Vardera <span class="math inline">\(\phi\)</span> (phi<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>) beskriver relationen mellan det specifika lagget och den nuvarande tidpunkten.</p>
+\tag{22.1}\]</span></span> det vill säga att <span class="math inline">\(Y_t\)</span> förklaras av en linjärkombination av <span class="math inline">\(p\)</span> tidigare värden. Vardera <span class="math inline">\(\phi\)</span> (grekiska bokstaven phi<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>) beskriver relationen mellan det specifika lagget och den nuvarande tidpunkten. Ett antagande som görs är att alla <span class="math inline">\(Y_t\)</span> är oberoende från <span class="math inline">\(e_t\)</span> där <span class="math inline">\(e_t\)</span> betraktas som den information som de tidigare observerade tidpunkterna inte lyckas förklara. Detta fel antas <span class="math inline">\(N(0, \sigma^2_e)\)</span>.</p>
+<p>I <a href="#eq-arp" class="quarto-xref">Ekvation&nbsp;<span>22.1</span></a> antas att <span class="math inline">\(E[Y_t] = 0\)</span> men vi kan enkelt utöka modellen till att ha <span class="math inline">\(\mu\)</span> som medelvärde genom att formulera <span class="math inline">\(Y_t - \mu\)</span> i vänsterledet (och för alla andra förekomster av <span class="math inline">\(Y_{t-k}\)</span>. Genomgående i dessa kapitel kommer vi anta att väntevärdet är 0 men <span class="citation" data-cites="cryer2008">Cryer och Chan (<a href="#ref-cryer2008" role="doc-biblioref">2008</a>)</span> visar varianter när väntevärdet är nollskild.</p>
 <!-- TODO WHERE TO PUT 4.1/4.2? MAYBE SOMETHING IN RELATION TO THE MA PROCESS LAST IN THIS CHAPTER -->
-<section id="ar1" class="level2" data-number="22.1">
-<h2 data-number="22.1" class="anchored" data-anchor-id="ar1"><span class="header-section-number">22.1</span> AR(1)</h2>
+<section id="ar1" class="level3" data-number="22.1.1">
+<h3 data-number="22.1.1" class="anchored" data-anchor-id="ar1"><span class="header-section-number">22.1.1</span> AR(1)</h3>
 <p>Den enklaste formen av en autoregressiv modell är en AR(1): <span id="eq-ar1"><span class="math display">\[
   \begin{aligned}
   Y_t = \phi Y_{t-1} + e_t
   \end{aligned}
 \tag{22.2}\]</span></span></p>
+<p>Denna modell antar att <span class="math inline">\(Y_t\)</span> endast beror på den föregående tidpunkten och ett slumpfel. Detta slumpfel kan beskrivas som den nya informationen som nuvarande tidpunkt introducerar till serien.</p>
+<p>Vi kan simulera hur en AR(1) ser ut för olika värden på <span class="math inline">\(\phi\)</span>.</p>
+<!-- QUESTION: ÄR DETTA RELEVANT ELLER SKA VI ANVÄNDA INBYGGDA FUNKTIONER SÅSOM arima.sim() ISTÄLLET? -->
 <div id="qwebr-insertion-location-1"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Vi skulle kunna beskriva denna modell som en linjärkombination av den viktade andelen från föregeånde tidpunkt och en slumpterm som tar upp den nya informationen som tillkommer denna tidpunkt. När vi tittar tillbaka på <a href="01-properties.html#eq-random-walk" class="quarto-xref">Ekvation&nbsp;<span>21.6</span></a> ser vi att dessa är lika om <span class="math inline">\(\phi = 1\)</span>, men vi bedömde tidigare att en Random Walk inte var en stationär serie. För en generell AR-process antar vi stationäritet så vad behöver vi begränsa <span class="math inline">\(\phi\)</span> till för att detta ska uppfyllas för en AR(1)?</p>
+<p>En av serierna vi tittade på i föregående kapitel, Random Walk i <a href="01-properties.html#eq-random-walk" class="quarto-xref">Ekvation&nbsp;<span>21.6</span></a>, är ett specialfall av en AR(1) process när <span class="math inline">\(\phi = 1\)</span>. Vi bedömde dock tidigare att en Random Walk <em>inte</em> var en stationär serie så hur kan vi säkerställa att en AR-process uppfyller stationäritet? I just detta fall, hur behöver vi begränsa <span class="math inline">\(\phi\)</span> för att en AR(1) ska anses vara en stationär serie?</p>
 <p>Vi kan börja med att beräkna variansen av <a href="#eq-ar1" class="quarto-xref">Ekvation&nbsp;<span>22.2</span></a>:</p>
 <p><span class="math display">\[
   \begin{aligned}
-  Var(Y_t) &amp;= Var(\phi Y_{t-1} + e_t) \\
+  Var(Y_t) = \gamma_0 &amp;= Var(\phi Y_{t-1} + e_t) \\
+  \gamma_0 &amp;= \phi^2Var(Y_{t-1}) + Var(e_t) &amp;&amp; \text{(pga oberoende)}\\
   \gamma_0 &amp;= \phi^2 \gamma_0 + \sigma^2_e \\
   \gamma_0 &amp;= \frac{\sigma^2_e}{1 - \phi^2}
   \end{aligned}
@@ -2301,8 +2468,8 @@ Notera
 <p>Kom ihåg att <span class="math inline">\(\gamma_0 = cov(Y_t, Y_t) = Var(Y_t)\)</span> gäller för alla <span class="math inline">\(Y_{t-k}\)</span> där <span class="math inline">\(k \ge 0\)</span>.</p>
 </div>
 </div>
-<p>Redan vid detta uttryck ser vi några begränsningar som måste göras på <span class="math inline">\(\phi\)</span>, nämligen <span class="math inline">\(|\phi| &lt; 1\)</span> för att variansen ska vara definierbar och strikt positiv. Vi kallar detta för seriens <strong>villkor för stationäritet</strong>.</p>
-<p>För autokovariansen <span class="math inline">\(k\)</span> steg emellan gäller då:</p>
+<p>Redan vid detta uttryck ser vi några begränsningar som måste göras, nämligen <span class="math inline">\(|\phi| &lt; 1\)</span>, för att variansen ska vara definierbar och strikt positiv. Vi kallar detta för seriens <strong>stationäritetsvillkor</strong>.</p>
+<p>Autokovariansen för lagg <span class="math inline">\(k\)</span> blir då:</p>
 <p><span class="math display">\[
   \begin{aligned}
   \gamma_k = \phi \gamma_{k-1} + E\left[e_t Y_{t-k}\right]
@@ -2328,27 +2495,199 @@ Notera
   \rho_k = \frac{\gamma_k}{\sqrt{\gamma_0 \cdot \gamma_0}} = \frac{\gamma_k}{\gamma_0} = \frac{\phi^k \frac{\sigma^2_e}{1 - \phi^2}}{\frac{\sigma^2_e}{1 - \phi^2}} = \phi^k
   \end{aligned}
 \]</span> det vill säga en exponentiellt minskande korrelation då <span class="math inline">\(|\phi| &lt; 1\)</span>.</p>
-<p>Med hjälp av visualiseringar kan vi se hur <span class="math inline">\(\rho_k\)</span> ser ut för olika värden på <span class="math inline">\(\phi\)</span>. Detta kommer hjälpa oss att identifiera fall där en AR(1) modell kan användas som en representation av en tidsserie.</p>
+<p>Med hjälp av dessa härledningar kan vi visualisera hur <span class="math inline">\(\rho_k\)</span> ser ut för olika värden på <span class="math inline">\(\phi\)</span>. När vi senare vill identifiera en lämplig modell kommer vi med hjälp av SAC kunna se skattade autokorrelationer och matcha den observerade seriens beteende till beteendet från en teoretisk modell.</p>
 <div id="qwebr-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Testa att ändra <code>phi</code> till olika lämpliga värden och se vad som händer med visualiseringen.</p>
-<!-- En utav slutsatserna som vi kan dra är att vi aldrig ser det mönster som uppvisades i SAC för Random Walk, det vill säga ...  -->
+<p>Testa att ändra <code>phi</code> till olika lämpliga värden, givet <span class="math inline">\(|\phi| &lt; 1\)</span>, och se vad som händer med visualiseringen. Testa även negativa tal och se hur det förändrar <span class="math inline">\(\rho_k\)</span>.</p>
+<p>Figuren visar ett snabbt avtagande mönster till skillnad från det långsamt avtagande, nästan cycliska mönster som Random Walk uppvisade. Detta visar att när vi begränsar <span class="math inline">\(\phi\)</span> enligt dess stationäritetsvilkor blir serien stationär.</p>
 </section>
-<section id="ar2" class="level2" data-number="22.2">
-<h2 data-number="22.2" class="anchored" data-anchor-id="ar2"><span class="header-section-number">22.2</span> AR(2)</h2>
-<p>Om vi utökar modellen med ytterligare ett lagg fås: <span class="math display">\[
+<section id="ar2" class="level3" data-number="22.1.2">
+<h3 data-number="22.1.2" class="anchored" data-anchor-id="ar2"><span class="header-section-number">22.1.2</span> AR(2)</h3>
+<p>Om vi utökar modellen till att också ta hänsyn till ytterligare en tidigare tidpunkt fås: <span class="math display">\[
   \begin{aligned}
   Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + e_t
   \end{aligned}
 \]</span></p>
-<p>Att visa villkoren för stationäritet blir mer och mer komplicerat för större <span class="math inline">\(p\)</span> men vi har för en AR(2) följande tre villkor:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Vi kan gå igenom liknande härledningar för de olika beskrivande måtten för en AR(2)-process som vi gjorde för AR(1) men det blir snabbt mycket komplicerat. Istället väljer vi i detta läge att visa stationäritetsvillkoren och kan läsa mer om denna härledning i <span class="citation" data-cites="cryer2008">Cryer och Chan (<a href="#ref-cryer2008" role="doc-biblioref">2008</a>)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 <p><span class="math display">\[
   \begin{aligned}
   \phi_1 + \phi_2 &lt; 1 \qquad \phi_2 - \phi_1 &lt; 1 \qquad |\phi_2| &lt; 1
   \end{aligned}
 \]</span></p>
-<!-- TODO: Matcha par av stationäritetsvillkor för olika serier -->
-<p>Något kort om MA</p>
+<p>Att beräkna autokorrelationen för olika värden på <span class="math inline">\(\phi\)</span> blir också mer komplicerat eftersom vi numera har två variabler men vissa härledningar finns även för en AR(2) i <span class="citation" data-cites="cryer2008">Cryer och Chan (<a href="#ref-cryer2008" role="doc-biblioref">2008</a>)</span>. Med följande kod kan vi justera värden på <span class="math inline">\(\phi_1\)</span> och <span class="math inline">\(\phi_2\)</span> för att beräkna <span class="math inline">\(\rho_k\)</span> utifrån de härledda formlerna.</p>
+<div id="qwebr-insertion-location-3"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>Testa olika kombinationer av parametrarna och försök att identifiera några trender i modellernas autokorrelation. Notera att funktionen kommer generera ett felmeddelande om stationäritetsantaganden inte uppfylls och modellen inte är lämplig.</p>
+<!-- TODO: Matcha par av stationäritetsvillkor för olika serier Edit:?? Vad menar jag med detta??-->
+</section>
+</section>
+<section id="glidande-medelvärdesprocesser" class="level2" data-number="22.2">
+<h2 data-number="22.2" class="anchored" data-anchor-id="glidande-medelvärdesprocesser"><span class="header-section-number">22.2</span> Glidande medelvärdesprocesser</h2>
+<p>Istället för att använda det observerade värdet från en föregående tidpunkt kan vi skapa en modell som baseras på den slumpmässiga feltermen från den nuvarande och <span class="math inline">\(q\)</span> tidigare tidpunkter.</p>
+<p>Generellt kan vi beskriva en MA(q) process som: <span id="eq-maq"><span class="math display">\[
+  \begin{aligned}
+  Y_t = e_t + \theta_1 e_{t-1} + \theta_2 e_{t-2} + \dots + \theta_q e_{t-q}
+  \end{aligned}
+\tag{22.4}\]</span></span> där de olika <span class="math inline">\(\theta\)</span> (grekiska theta<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>) beskriver hur stor effekt respektive tidpunkts felterm har på det nuvarande. En MA-process har inte några stationäritetsvillkor för <span class="math inline">\(\theta\)</span>, däremot behöver vi titta närmare på <strong>invertibilitet</strong> i <a href="#sec-invertibility" class="quarto-xref"><span>Avsnitt 22.2.2</span></a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Notera att vi ändrar symbolen framför <span class="math inline">\(\theta\)</span> från <span class="math inline">\(-\)</span> till <span class="math inline">\(+\)</span> jämfört med <span class="citation" data-cites="cryer2008">Cryer och Chan (<a href="#ref-cryer2008" role="doc-biblioref">2008</a>)</span> på grund av att de funktioner vi använder i R använder denna formulering med positiva parametrar. Se dokumentationen för funktionen <code>stats::arima()</code> som <code>TSA</code>-paketet använder som grund.</p>
+</div>
+</div>
+<section id="ma1" class="level3" data-number="22.2.1">
+<h3 data-number="22.2.1" class="anchored" data-anchor-id="ma1"><span class="header-section-number">22.2.1</span> MA(1)</h3>
+<p>Med endast en term blir modellen: <span id="eq-ma1"><span class="math display">\[
+  \begin{aligned}
+  Y_t = e_t + \theta e_{t-1}
+  \end{aligned}
+\tag{22.5}\]</span></span> med följande egenskaper:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  E[Y_t] &amp;= 0\\
+  \\
+  Var(Y_t) = \gamma_0 &amp;= Var(e_t + \theta e_{t-1}) \\
+  \gamma_0 &amp;= Var(e_t) + \theta^2 Var(e_{t-1}) &amp;&amp; \text{(pga oberoende)}\\
+  \gamma_0 &amp;= \sigma^2_e + \theta^2 \sigma_e^2 \\
+  \gamma_0 &amp;= \sigma^2_e (1 + \theta^2)
+  \end{aligned}
+\]</span></p>
+<p>Vi kan också, likt de beskrivande måtten för <a href="01-properties.html#sec-moving-average-series" class="quarto-xref"><span>Avsnitt 21.3.3</span></a>, enkelt beräkna fram autokovariansen genom att titta på hur många gemensamma termer som olika lagg har då <span class="math inline">\(e_t\)</span> och <span class="math inline">\(e_s\)</span> antas oberoende när <span class="math inline">\(t \ne s\)</span>. För <span class="math inline">\(k = 1\)</span>:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \gamma_1 &amp;= cov(e_t + \theta e_{t-1}, e_{t-1} + \theta e_{t-2}) \\
+  &amp;= cov(\theta e_{t-1}, e_{t-1}) = \theta \sigma^2_e
+  \end{aligned}
+\]</span> och <span class="math inline">\(k = 2\)</span>:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \gamma_2 &amp;= cov(e_t + \theta e_{t-1}, e_{t-2} + \theta e_{t-3}) \\
+  &amp;= 0
+  \end{aligned}
+\]</span></p>
+<p>Detta betyder att för alla lagg <span class="math inline">\(k \ge 2\)</span> är autokovariansen, och sedermera autokorrelationen, 0:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \rho_k = \begin{cases}
+    \frac{\theta}{1 + \theta^2} &amp;\text{om } k = 1\\
+    0 &amp;\text{om } k \ge 2
+  \end{cases}
+  \end{aligned}
+\]</span></p>
+<!-- TODO Visualization of the rho for MA1 -->
+</section>
+<section id="sec-invertibility" class="level3" data-number="22.2.2">
+<h3 data-number="22.2.2" class="anchored" data-anchor-id="sec-invertibility"><span class="header-section-number">22.2.2</span> Invertibilitet</h3>
+<p>När vi beräknar autokorrelationen för en MA-process ser vi att både <span class="math inline">\(\theta\)</span> och <span class="math inline">\(1 / \theta\)</span> ger samma värde, vilket blir ett problem när vi ska anpassa modellen. Vi kan visa att en MA-process kan <strong>inverteras</strong> till en oändlig serie av tidigare tidpunkter, likt en AR-process, om och endast om <span class="math inline">\(|\theta| &lt; 1\)</span> för en MA(1) och för en generell MA(q) liknande krav på <span class="math inline">\(\theta\)</span> som för en generell AR(p).</p>
+<p>Vi kräver både stationäritet och invertibilitet för alla modeller som inkluderar en MA-komponent. <span style="color: red">TODO: SHOW AR as an infinite MA series in an earlier chapter to make this make sense</span></p>
+</section>
+<section id="ma2" class="level3" data-number="22.2.3">
+<h3 data-number="22.2.3" class="anchored" data-anchor-id="ma2"><span class="header-section-number">22.2.3</span> MA(2)</h3>
+<p>En MA(2) process definieras som: <span class="math display">\[
+  \begin{aligned}
+  Y_t = e_t + \theta_1 e_{t-1} + \theta_2 e_{t-2}
+  \end{aligned}
+\]</span></p>
+<p>Likt en AR(2) process går det att visa hur autovariansen och autokorrelationen beräknas men det blir snabbt komplext och vi väljer här att visa enbart de resulterande autokorrelationerna:</p>
+<p><span id="eq-ar2-rho"><span class="math display">\[
+  \begin{aligned}
+  \rho_1 &amp;= \frac{\theta_1 + \theta_1\theta_2}{1 + \theta_1^2 + \theta_2^2} \\
+  \rho_2 &amp;= \frac{\theta_2}{1 + \theta_1^2 + \theta_2^2}\\
+  \rho_k &amp;= 0 \qquad \text{för } k &gt; 2
+  \end{aligned}
+\tag{22.6}\]</span></span></p>
+<p>Vad detta betyder är att när <span class="math inline">\(q = 2\)</span> finner vi två nollskilda lagg och resterande är 0. Detta beteende går att utöka till den generella MA(q) processen där vi kan se nollskilda lagg när <span class="math inline">\(k \le q\)</span> och 0 för alla <span class="math inline">\(k &gt; q\)</span>.</p>
+</section>
+</section>
+<section id="partiell-autokorrelation" class="level2" data-number="22.3">
+<h2 data-number="22.3" class="anchored" data-anchor-id="partiell-autokorrelation"><span class="header-section-number">22.3</span> Partiell autokorrelation</h2>
+<p>Vi har tidigare i detta kapitel kunnat visa hur autokorrelationen beter sig för olika modeller, men i praktiken räcker det inte att undersöka den skattade autokorrelationen (SAC) för att enkelt identifiera en lämplig modell. Vi såg till exempel hur <span class="math inline">\(\rho_k\)</span> för AR(1) och AR(2) uppvisade samma långsamt avtagande mönster. Vi behöver därför introducera ett annat mått som kan hjälpa att välja en lämplig ordning på en AR-process, på samma sätt som autokorrelationen tydligt indikerar på en ordning av en MA-process.</p>
+<p>Vi kan definiera den <strong>partiella autokorrelationen</strong> (eng. partial autocorrelation, PAC) som korrelationen mellan <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-k}\)</span> när alla observationer emellan justerats bort. Vi definierar den enligt:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \phi_{kk} = cor(Y_t , Y_{t-k} | Y_{t-1}, Y_{t-2}, \dots, Y_{t-k+1})
+  \end{aligned}
+\]</span> givet att <span class="math inline">\(Y_t\)</span> kan anses normalfördelad.</p>
+<p>Detta är egentligen första gången ett sådant krav om normalfördelad <span class="math inline">\(Y_t\)</span> explicit uppkommer när vi har att göra med tidsserier så ett alternativt sätt att formulera PAC utan detta krav är: <span id="eq-pacf"><span class="math display">\[
+  \begin{aligned}
+  \phi_{kk} = cor(&amp;Y_t - \beta_1 Y_{t-1} - \beta_2 Y_{t-2} - \dots - \beta_{k-1} Y_{t-k+1}, \\
+  &amp;Y_{t-k} - \beta_1 Y_{t-k+1} - \beta_2 Y_{t-k+2} - \dots - \beta_{k-1} Y_{t-1})
+  \end{aligned}
+\tag{22.7}\]</span></span> där <span class="math inline">\(\beta_1\)</span> till <span class="math inline">\(\beta_{k-1}\)</span> är parametrar i en linjär prediktor som anpassats för att minimera MSPR till <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-k}\)</span> respektive. PAC kan med denna formulering beskrivas som korrelationen mellan prediktionsfelet från de två tidpunkterna.</p>
+<p>För enkelhetens skull anser vi <span class="math inline">\(\phi_{11} = 1\)</span> och kan visa att <span class="math inline">\(\phi_{22}\)</span> som: <span id="eq-pacf22"><span class="math display">\[
+  \begin{aligned}
+  \phi_{22} = \frac{\rho_2 - \rho_1^2}{1 - \rho_1^2}
+  \end{aligned}
+\tag{22.8}\]</span></span></p>
+<p>När vi använder <a href="#eq-pacf22" class="quarto-xref">Ekvation&nbsp;<span>22.8</span></a> för en AR(1) modell fås: <span class="math display">\[
+  \begin{aligned}
+  \phi_{22} = \frac{\phi^2 - \phi^2}{1 - \phi^2} = 0
+  \end{aligned}
+\]</span> eftersom <span class="math inline">\(\rho_k = \phi^k\)</span>.</p>
+<p>För en AR(2) fås via <a href="#eq-ar2-rho" class="quarto-xref">Ekvation&nbsp;<span>22.6</span></a>: <span class="math display">\[
+  \begin{aligned}
+  \phi_{22} &amp;= \frac{ \left(\frac{\phi_1^2}{1 - \phi_2} + \phi_2\right)  - \left(\frac{\phi_1}{1 - \phi_2}\right)^2}{1 - \left(\frac{\phi_1}{1 - \phi_2}\right)^2}\\
+  &amp;= \frac{\frac{\phi_1^2}{1 - \phi_2} + \phi_2 - \frac{\phi_1^2}{(1 - \phi_2)^2}}{1 - \frac{\phi_1^2}{(1 - \phi_2)^2}} \\
+  &amp;= \frac{\frac{\phi_1^2 (1-\phi_2)}{(1-\phi_2)^2} - \frac{\phi_1^2}{(1 - \phi_2)^2} + \phi_2}{1 - \frac{\phi_1^2}{(1 - \phi_2)^2}}\\
+  &amp;= \frac{\frac{\phi_1^2}{(1-\phi_2)^2}(1 - \phi_2 - 1) + \phi_2}{1 - \frac{\phi_1^2}{(1 - \phi_2)^2}}\\
+  &amp;= \frac{\frac{\phi_1^2}{(1-\phi_2)^2}(- \phi_2) + \phi_2}{1 - \frac{\phi_1^2}{(1 - \phi_2)^2}}\\
+  &amp;= \frac{\phi_2 \left( 1 - \frac{\phi_1^2}{(1-\phi_2)^2}\right)}{1 - \frac{\phi_1^2}{(1 - \phi_2)^2}}\\
+  &amp;= \phi_2
+  \end{aligned}
+\]</span> det vill säga ytterligare ett lagg där den partiella autokorrelationen är nollskild.</p>
+<p>En generell regel för AR(p) är att för större lagg gäller <span class="math inline">\(\phi_{kk} = 0\)</span> när <span class="math inline">\(k &gt; p\)</span>. Detta innebär att vi får samma beteende i den partiella autokorrelationen för en AR-process som vi har i autokorrelationen för en MA-process; antalet nollskilda lagg motsvarar ordningen för processen.</p>
+<p>Den partiella autokorrelationen kan också visas för en MA-process. För MA(1) gäller:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \phi_{22} = \frac{-\theta^2}{1 + \theta^2 + \theta^4}
+  \end{aligned}
+\]</span> och <span class="math inline">\(\phi_{kk} = \frac{\theta^k(1 - \theta^2)}{1 - \theta^{2(k+1)}}\)</span> för alla <span class="math inline">\(k \ge 1\)</span>.</p>
+<p>Den partiella autokorrelationen för en MA(1), och generellt för en MA(q), avtar långsamt med större <span class="math inline">\(k\)</span> vilket är samma fenomen som en AR(p)-process uppvisar för autokorrelationen. Vi har alltså två spegelvända beteenden för AR och MA för autokorrelationen och den partiella autokorrelationen. Vi kan sammanfatta dessa i följande tabell:</p>
+<div class="cell">
+<div id="tbl-behavior-ac-pac" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-behavior-ac-pac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;22.1: Visuella beteenden hos autokorrelationer
+</figcaption>
+<div aria-describedby="tbl-behavior-ac-pac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;">AR(p)</th>
+<th style="text-align: center;">MA(q)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Autokorrelation</td>
+<td style="text-align: center;">Långsamt avtagande</td>
+<td style="text-align: center;">0 efter lagg q</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Partiell Autokorrelation</td>
+<td style="text-align: center;">0 efter lagg p</td>
+<td style="text-align: center;">Långsamt avtagande</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>För enklare tidsserier kan denna tabell användas för att med hjälp av SAC och SPAC (eng. Sample Partial Autocorrelation) identifiera vilken typ av modell som är mest lämplig att använda. För mer komplicerade tidsserier kommer vi behöva ytterligare ett mått som introduceras i <a href="03-arima.html#sec-eacf" class="quarto-xref"><span>Avsnitt 23.2</span></a>.</p>
+</section>
+<section id="referenser" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
@@ -2361,7 +2700,8 @@ Cryer, J. D., och K. S. Chan. 2008. <em>Time Series Analysis: With Applications 
 <hr>
 <ol>
 <li id="fn1"><p>Uttalas fi.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Se <span class="citation" data-cites="cryer2008">Cryer och Chan (<a href="#ref-cryer2008" role="doc-biblioref">2008</a>)</span> sid 84<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>sida 72-73 och 84<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Uttalas teta eller täta.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -2773,8 +3113,8 @@ Cryer, J. D., och K. S. Chan. 2008. <em>Time Series Analysis: With Applications 
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../04-time-series/03-arima.html" class="pagination-link" aria-label="ARIMA">
-        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../04-time-series/03-arima.html" class="pagination-link" aria-label="ARMA och ARIMA modeller">
+        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARMA och ARIMA modeller</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

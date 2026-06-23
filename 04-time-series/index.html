@@ -90,6 +90,103 @@ div.csl-indent {
     "search-label": "Sök"
   }
 }</script>
+<script>
+
+  window.MathJax = {
+
+  tex: {
+
+    macros: {
+
+      Xmatrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} & X_{12} & \\cdots & X_{1k} \\\\" +
+
+        "1 & X_{21} & X_{22} & \\cdots & X_{2k} \\\\" +
+
+        "\\vdots & \\vdots & \\vdots & \\ddots & \\vdots \\\\" +
+
+        "1 & X_{n1} & X_{n2} & \\cdots & X_{nk}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Xonematrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} \\\\" +
+
+        "1 & X_{21} \\\\" +
+
+        "\\vdots \\\\" +
+
+        "1 & X_{n1}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Ymatrix:
+
+        "\\begin{bmatrix}Y_1 \\\\ Y_2 \\\\ \\vdots \\\\ Y_n\\end{bmatrix}",
+
+
+
+      betamatrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1 \\\\ \\vdots \\\\ \\beta_k\\end{bmatrix}",
+
+
+
+      betaonematrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1\\end{bmatrix}",
+
+
+
+      Ematrix:
+
+        "\\begin{bmatrix}E_1 \\\\ E_2 \\\\ \\vdots \\\\ E_n\\end{bmatrix}",
+
+        
+
+      epsilonMatrix:
+
+        "\\begin{bmatrix}\\varepsilon_1 \\\\ \\varepsilon_2 \\\\ \\vdots \\\\ \\varepsilon_n\\end{bmatrix}",
+
+
+
+      Sum: ["\\sum_{i=1}^{#1}", 1],
+
+      
+
+      olsMatrix:
+
+        "\\boldsymbol{\\hat{\\beta}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\mathbf{X}'\\mathbf{Y}",
+
+        
+
+      olsVarMatrix: 
+
+        "s^2_{\\boldsymbol{\\hat{\\beta}}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\frac{SSE}{n - (k + 1)}",
+
+      
+
+      sseMatrix:
+
+        "(\\mathbf{Y} - \\mathbf{X}\\boldsymbol{\\hat{\\beta}})'(\\mathbf{Y}-\\mathbf{X}\\boldsymbol{\\hat{\\beta}})"
+
+    }
+
+  }
+
+};
+
+</script>
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -129,6 +226,10 @@ div.csl-indent {
   <li class="nav-item">
     <a class="nav-link" href="../04-time-series/index.html"> 
 <span class="menu-text">Tidsserieanalys</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../05-stat-to-ml/index.html"> 
+<span class="menu-text">Statistik till ML</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -173,13 +274,13 @@ div.csl-indent {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
@@ -204,11 +305,11 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL II - Regressionsanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
@@ -287,11 +388,11 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL III - Variansanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
@@ -342,19 +443,66 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARMA och ARIMA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/04-arimax.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span></a>
+  <a href="../04-time-series/04-evaluation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-stat-to-ml/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DEL V - Från statistik till maskininlärning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/01-validation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/02-regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/03-tree-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Splines och trädmodeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/04-neural-networks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Neurala nätverk</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/05-ensembles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Ensemblemetoder</span></span></a>
   </div>
 </li>
       </ul>

@@ -105,6 +105,103 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Sök"
   }
 }</script>
+<script>
+
+  window.MathJax = {
+
+  tex: {
+
+    macros: {
+
+      Xmatrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} & X_{12} & \\cdots & X_{1k} \\\\" +
+
+        "1 & X_{21} & X_{22} & \\cdots & X_{2k} \\\\" +
+
+        "\\vdots & \\vdots & \\vdots & \\ddots & \\vdots \\\\" +
+
+        "1 & X_{n1} & X_{n2} & \\cdots & X_{nk}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Xonematrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} \\\\" +
+
+        "1 & X_{21} \\\\" +
+
+        "\\vdots \\\\" +
+
+        "1 & X_{n1}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Ymatrix:
+
+        "\\begin{bmatrix}Y_1 \\\\ Y_2 \\\\ \\vdots \\\\ Y_n\\end{bmatrix}",
+
+
+
+      betamatrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1 \\\\ \\vdots \\\\ \\beta_k\\end{bmatrix}",
+
+
+
+      betaonematrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1\\end{bmatrix}",
+
+
+
+      Ematrix:
+
+        "\\begin{bmatrix}E_1 \\\\ E_2 \\\\ \\vdots \\\\ E_n\\end{bmatrix}",
+
+        
+
+      epsilonMatrix:
+
+        "\\begin{bmatrix}\\varepsilon_1 \\\\ \\varepsilon_2 \\\\ \\vdots \\\\ \\varepsilon_n\\end{bmatrix}",
+
+
+
+      Sum: ["\\sum_{i=1}^{#1}", 1],
+
+      
+
+      olsMatrix:
+
+        "\\boldsymbol{\\hat{\\beta}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\mathbf{X}'\\mathbf{Y}",
+
+        
+
+      olsVarMatrix: 
+
+        "s^2_{\\boldsymbol{\\hat{\\beta}}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\frac{SSE}{n - (k + 1)}",
+
+      
+
+      sseMatrix:
+
+        "(\\mathbf{Y} - \\mathbf{X}\\boldsymbol{\\hat{\\beta}})'(\\mathbf{Y}-\\mathbf{X}\\boldsymbol{\\hat{\\beta}})"
+
+    }
+
+  }
+
+};
+
+</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -174,6 +271,10 @@ window.Quarto = {
     <a class="nav-link" href="../04-time-series/index.html"> 
 <span class="menu-text">Tidsserieanalys</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../05-stat-to-ml/index.html"> 
+<span class="menu-text">Statistik till ML</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -217,13 +318,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
@@ -331,11 +432,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL III - Variansanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
@@ -366,11 +467,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="../04-time-series/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL IV - Tidsserieanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/00-introduction.html" class="sidebar-item-text sidebar-link">
@@ -386,19 +487,66 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARMA och ARIMA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/04-arimax.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span></a>
+  <a href="../04-time-series/04-evaluation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-stat-to-ml/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DEL V - Från statistik till maskininlärning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/01-validation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/02-regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/03-tree-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Splines och trädmodeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/04-neural-networks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Neurala nätverk</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/05-ensembles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Ensemblemetoder</span></span></a>
   </div>
 </li>
       </ul>
@@ -433,7 +581,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-regression/index.html">DEL II - Regressionsanalys</a></li><li class="breadcrumb-item"><a href="../01-regression/10-logistic-regression.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logistisk regression</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logistisk regression</span></h1>
+<h1 class="title"><span id="sec-logistic" class="quarto-section-identifier"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></h1>
 </div>
 
 
@@ -450,8 +598,6 @@ window.Quarto = {
 </header>
 
 
-<!-- New commands for matrices in regression -->
-<!-- Creates a shortcommand for sums -->
 <!-- CONTENT -->
 <p>De tidigare kapitlen har fokuserat på modeller där responsvariabeln antas vara kvantitativ och kontinuerlig. Dessa modeller är begränsade till just detta fall men det går med enkla transformeringar att utöka modellerna att också anpassa modeller där responsvariabeln är en annan variabeltyp eller följer en annan skala. En utav dessa utökningar kallas för <strong>logistisk regression</strong> som modellerar en binär (två kategorier) kvalitativ responsvariabel.</p>
 <p>Utöver att modellen anpassar en annan form av responsvariabel behöver vi också justera hur vi kommer fram till modellens anpassade värden. Inom linjär regression är minsta kvadratmetoden den absolut enklaste anpassningsmetoden med simpla formler för att skatta modellens parametrar, men även <strong>maximum likelihoodmetoden</strong> (ML) kan användas med hjälp av en <strong>iterativ optimeringsalgoritm</strong> för att finna de parameterskattningar som motsvarar minsta kvadratmetoden. Fördelen med att använda ML-metoder i modellanpassningen är att metoden kan användas för mer komplexa modeller, däribland logistisk regression.</p>
@@ -764,7 +910,7 @@ Viktigt
 <h2 data-number="14.3" class="anchored" data-anchor-id="utvärdering-av-logistisk-regression"><span class="header-section-number">14.3</span> Utvärdering av logistisk regression</h2>
 <p>I vanlig regression kan vi utvärdera modellens lämplighet genom residualanalys där vi jämför <span class="math inline">\(Y_i - \hat{Y}_i\)</span> och undersöker om residualerna uppfyller modellantaganden. I logistisk regression kommer den observerade responsvariabeln bara anta två värden, 1 och 0, och modellens anpassade värden anta värden mellan 0 och 1 vilket innebär att vanliga residualer inte längre jämför samma sorts variabel.</p>
 <p>I ett klassificeringsproblem kan vi istället jämföra de observerade klasserna för <span class="math inline">\(Y\)</span> med predikterade klasser <span class="math inline">\(\hat{Y}\)</span> i en korstabell, även kallad <strong>förväxlingsmatris</strong>. Eftersom modellen egentligen predikterar en sannolikhet för <span class="math inline">\(Y = 1\)</span> och inte den faktiska klassen behöver vi gå ett steg längre för att faktiskt kunna skapa förväxlingsmatrisen. Vi kan tänka att sannolikheter större än 0.5 innebär att <span class="math inline">\(Y = 1\)</span> är mer sannolikt att inträffa än <span class="math inline">\(Y = 0\)</span> vilket leder oss till att också prediktera den klassen för dessa observationer, <span class="math inline">\(\hat{Y} = 1\)</span>.</p>
-<p>När vi skapar förväxlingsmatrisen räknar räknar frekvenserna av antalet <span class="math inline">\(Y = 1\)</span> som blivit predikterade till de olika klasserna <span class="math inline">\(\hat{Y} = 1\)</span> (<span class="math inline">\(f_{11}\)</span>) och <span class="math inline">\(\hat{Y} = 0\)</span> (<span class="math inline">\(f_{10}\)</span>) och antalet <span class="math inline">\(Y = 0\)</span> som blivit predikterade till respektive klass (<span class="math inline">\(f_{01}\)</span> och <span class="math inline">\(f_{00}\)</span>).</p>
+<p>När vi skapar förväxlingsmatrisen räknas frekvenserna av antalet <span class="math inline">\(Y = 1\)</span> som blivit predikterade till de olika klasserna <span class="math inline">\(\hat{Y} = 1\)</span> (<span class="math inline">\(f_{11}\)</span>) och <span class="math inline">\(\hat{Y} = 0\)</span> (<span class="math inline">\(f_{10}\)</span>) och antalet <span class="math inline">\(Y = 0\)</span> som blivit predikterade till respektive klass (<span class="math inline">\(f_{01}\)</span> och <span class="math inline">\(f_{00}\)</span>).</p>
 <table style="border-collapse: collapse; width: 50%;">
 <caption>
 Förväxlingsmatris med frekvenser av olika fall.

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>24&nbsp; ARIMAx – Statistisk teori och tillämpningar i R</title>
+<title>27&nbsp; Regularisering – Statistisk teori och tillämpningar i R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../04-time-series/03-arima.html" rel="prev">
+<link href="../05-stat-to-ml/03-tree-models.html" rel="next">
+<link href="../05-stat-to-ml/01-validation.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -69,7 +70,133 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Sök"
   }
 }</script>
+<script>
 
+  window.MathJax = {
+
+  tex: {
+
+    macros: {
+
+      Xmatrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} & X_{12} & \\cdots & X_{1k} \\\\" +
+
+        "1 & X_{21} & X_{22} & \\cdots & X_{2k} \\\\" +
+
+        "\\vdots & \\vdots & \\vdots & \\ddots & \\vdots \\\\" +
+
+        "1 & X_{n1} & X_{n2} & \\cdots & X_{nk}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Xonematrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} \\\\" +
+
+        "1 & X_{21} \\\\" +
+
+        "\\vdots \\\\" +
+
+        "1 & X_{n1}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Ymatrix:
+
+        "\\begin{bmatrix}Y_1 \\\\ Y_2 \\\\ \\vdots \\\\ Y_n\\end{bmatrix}",
+
+
+
+      betamatrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1 \\\\ \\vdots \\\\ \\beta_k\\end{bmatrix}",
+
+
+
+      betaonematrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1\\end{bmatrix}",
+
+
+
+      Ematrix:
+
+        "\\begin{bmatrix}E_1 \\\\ E_2 \\\\ \\vdots \\\\ E_n\\end{bmatrix}",
+
+        
+
+      epsilonMatrix:
+
+        "\\begin{bmatrix}\\varepsilon_1 \\\\ \\varepsilon_2 \\\\ \\vdots \\\\ \\varepsilon_n\\end{bmatrix}",
+
+
+
+      Sum: ["\\sum_{i=1}^{#1}", 1],
+
+      
+
+      olsMatrix:
+
+        "\\boldsymbol{\\hat{\\beta}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\mathbf{X}'\\mathbf{Y}",
+
+        
+
+      olsVarMatrix: 
+
+        "s^2_{\\boldsymbol{\\hat{\\beta}}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\frac{SSE}{n - (k + 1)}",
+
+      
+
+      sseMatrix:
+
+        "(\\mathbf{Y} - \\mathbf{X}\\boldsymbol{\\hat{\\beta}})'(\\mathbf{Y}-\\mathbf{X}\\boldsymbol{\\hat{\\beta}})"
+
+    }
+
+  }
+
+};
+
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../webex.css">
@@ -109,6 +236,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../04-time-series/index.html"> 
 <span class="menu-text">Tidsserieanalys</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../05-stat-to-ml/index.html"> 
+<span class="menu-text">Statistik till ML</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -120,7 +251,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-time-series/index.html">DEL IV - Tidsserieanalys</a></li><li class="breadcrumb-item"><a href="../04-time-series/04-arimax.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-stat-to-ml/index.html">DEL V - Från statistik till maskininlärning</a></li><li class="breadcrumb-item"><a href="../05-stat-to-ml/02-regularization.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
@@ -152,13 +283,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
@@ -183,11 +314,11 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL II - Regressionsanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
@@ -266,11 +397,11 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL III - Variansanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
@@ -301,11 +432,11 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="../04-time-series/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL IV - Tidsserieanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/00-introduction.html" class="sidebar-item-text sidebar-link">
@@ -321,19 +452,66 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Autoregressiva modeller</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARMA och ARIMA modeller</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-time-series/04-arimax.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></span></a>
+  <a href="../04-time-series/04-evaluation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-stat-to-ml/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DEL V - Från statistik till maskininlärning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/01-validation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/02-regularization.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/03-tree-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Splines och trädmodeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/04-neural-networks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Neurala nätverk</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/05-ensembles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Ensemblemetoder</span></span></a>
   </div>
 </li>
       </ul>
@@ -343,15 +521,25 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innehållsförteckning</h2>
+   
+  <ul>
+  <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link active" data-scroll-target="#ridge-regression"><span class="header-section-number">27.1</span> Ridge regression</a></li>
+  <li><a href="#lasso-regression" id="toc-lasso-regression" class="nav-link" data-scroll-target="#lasso-regression"><span class="header-section-number">27.2</span> LASSO regression</a></li>
+  <li><a href="#elastic-net" id="toc-elastic-net" class="nav-link" data-scroll-target="#elastic-net"><span class="header-section-number">27.3</span> Elastic Net</a></li>
+  <li><a href="#statistisk-inferens" id="toc-statistisk-inferens" class="nav-link" data-scroll-target="#statistisk-inferens"><span class="header-section-number">27.4</span> Statistisk inferens</a></li>
+  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-time-series/index.html">DEL IV - Tidsserieanalys</a></li><li class="breadcrumb-item"><a href="../04-time-series/04-arimax.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-stat-to-ml/index.html">DEL V - Från statistik till maskininlärning</a></li><li class="breadcrumb-item"><a href="../05-stat-to-ml/02-regularization.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">ARIMAx</span></h1>
+<h1 class="title"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></h1>
 </div>
 
 
@@ -369,9 +557,81 @@ ul.task-list li input[type="checkbox"] {
 
 
 <!-- CONTENT -->
-<p>ARIMAx Transfer functions</p>
+<p>En stor del av statistisk inlärning berör generalisering, att modellen som tränas också ska kunna användas effektivt på ny data. Vid stora datamaterial med många observationer och variabler krävs ofta en flexibel men komplex modell för att modellen ska prestera bra, men det ger också en överhängande risk för att modellen överanpassas. Komplexitet kan mätas på olika sätt beroende på modellen; i det linjära fallet är det antalet variabler, interaktioner eller transformationer som har den största påverkan. Ett sätt att minska några av dessa dimensioner är att använda algoritmer för <strong>variabelselektion</strong> som “automatisk” väljer variabler utifrån ett valt utvärderingsmått. Mer om detta går att läsa i <a href="../01-regression/09-variable-selection.html#sec-variable-selection-algorithms" class="quarto-xref"><span>Avsnitt 13.2</span></a>.</p>
+<p>En stor nackdel med dessa algoritmer är att de oftast är giriga eller mycket beräkningstunga. En girig algoritm betyder att den vid varje steg vill hitta den bästa förbättringen av modellen och riskerar att missa steg som ger en sämre förbättring just nu men den “bästa” förbättringen två steg framåt.</p>
+<p>Istället för giriga algoritmer finns ett annat sätt att motverka överanpassning som inte behöver välja variabler; <strong>regularisering</strong>. Idén bakom denna metod är att hindra modellen för att bli för komplex och ge ett (förhoppningsvis) bättre generaliseringsfel genom att begränsa parametrar för variabler som inte anses tillföra något till anpassningen. Regularisering tillsammans med en flexibel och komplex modell bör leda till en bra anpassning.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>För alla former av regularisering behöver vi standardisera de förklarande variablerna först. Detta krävs för att variablernas individuella skalor inte ska påverka regulariseringen.</p>
+<p><span style="color: red">HUR STANDARDISERAS ORDINALSKALA?</span></p>
+</div>
+</div>
+<section id="ridge-regression" class="level2" data-number="27.1">
+<h2 data-number="27.1" class="anchored" data-anchor-id="ridge-regression"><span class="header-section-number">27.1</span> Ridge regression</h2>
+<p>I vanlig linjär regression minimerar vi SSE:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  f(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2
+  \end{aligned}
+\]</span></p>
+<p>Inom <strong>Ridge regression</strong> lägger vi till en straffterm till denna kostnadsfunktion enligt:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  f_{Ridge}(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2 + \lambda \sum_{j = 1}^p \beta_j^2
+  \end{aligned}
+\]</span> där <span class="math inline">\(\lambda \ge 0\)</span>. Notera att ingen straffterm sätts på <span class="math inline">\(\beta_0\)</span> utan bara respektive lutningsparameter. <span class="math inline">\(\lambda\)</span> är en hyperparameter som måste bestämmas där ett värde av 0 indikerar på inget straff (bara vanlig SSE) och stora värden indikerar på stora straff där många parametrar sätts till väldigt små värden.</p>
+<p>Dessa två delar av funktionen samverkar när en variabel som inte anses ha något samband med responsvariabeln inte kommer påverka storleken av <span class="math inline">\(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij}\)</span> vilket i sin tur leder till att den tillhörande parametern kan reduceras till 0 för att storleken av <span class="math inline">\(\sum_{j = 1}^p \beta_j^2\)</span> ska bli så liten som möjligt.</p>
+<p><span style="color: red">RIDGE I R</span></p>
+</section>
+<section id="lasso-regression" class="level2" data-number="27.2">
+<h2 data-number="27.2" class="anchored" data-anchor-id="lasso-regression"><span class="header-section-number">27.2</span> LASSO regression</h2>
+<p>Ridge straffar parametrarna kraftigt med anledning av <span class="math inline">\(\beta_j^2\)</span>. Vi kan använda ett mindre straff genom <strong>LASSO regression</strong> om vi ändrar till beloppet enligt:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  f_{LASSO}(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2 + \lambda \sum_{j = 1}^p |\beta_j|
+  \end{aligned}
+\]</span> där <span class="math inline">\(\lambda \ge 0\)</span>.</p>
+<p><span style="color: red">LASSO i R</span></p>
+<p>På samma sätt som med Ridge väljs <span class="math inline">\(\lambda\)</span> som en hyperparameter men till skillnad från Ridge ger stora värden på <span class="math inline">\(\lambda\)</span> att flera parametrar sätts till exakt 0. En annan skillnad sker vid multikollinearitet där Ridge krymper alla parametrar vars variabler korrelerar med varandra lika mycket medan LASSO sätter enbart en till 0.</p>
+<p>Ridge passar bra när <span class="math inline">\(Y_i\)</span> beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten nära 0. Detta medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för.</p>
+<p><span style="color: red">VARFÖR RIDGE ENKLARE INFERENS? RELEVANS?</span></p>
+</section>
+<section id="elastic-net" class="level2" data-number="27.3">
+<h2 data-number="27.3" class="anchored" data-anchor-id="elastic-net"><span class="header-section-number">27.3</span> Elastic Net</h2>
+<p>Som en kombination av Ridge och LASSO finns <strong>Elastic Net</strong> som mixar de två strafftermerna med en ny hyperparameter <span class="math inline">\(\alpha\)</span>.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  f_{Elastic}(\boldsymbol{\beta}) = SSE + \lambda \left((1 - \alpha) \sum_{j = 1}^p \beta_j^2 + \alpha \sum_{j = 1}^p |\beta_j| \right)
+  \end{aligned}
+\]</span> där <span class="math inline">\(\lambda \ge 0\)</span> och <span class="math inline">\(0\le \alpha \le 1\)</span>.</p>
+<p><span class="math inline">\(\alpha\)</span> styr hur mycket vikt vi ger till Ridge respektive LASSO som ger en flexibel regularisering. Detta innebär att vi kan tvinga vissa <span class="math inline">\(\beta\)</span> till 0 men inte lika många som i vanlig LASSO och Elastic Net kan klara av korrelerade variabler bättre.</p>
+<p><span style="color: red">I R?</span></p>
+</section>
+<section id="statistisk-inferens" class="level2" data-number="27.4">
+<h2 data-number="27.4" class="anchored" data-anchor-id="statistisk-inferens"><span class="header-section-number">27.4</span> Statistisk inferens</h2>
+<p>De tidigare presenterade algoritmerna och regulariseringsmetoderna är “automatiska” metoder för att välja variabler som bidrar till att förklara responsvariabeln. Efter variabelselektion är det vanligt att analysera parametrarnas p-värden och intervallskattning, även kallad för <strong>post-selection inference</strong>. Problemet är att vanliga inferensmetoder antar att modellen är fixerad innan data analyseras men med variabelselektion används data för att välja modell och introducerar ett beroende mellan data och modellen. Detta påverkar fördelningen av skattningarna vilket i sin tur leder till för snäva konfidensintervall, för små p-värden och ökad risk för typ I fel. Vi bör därför undvika att använda vanliga metoder för inferens och istället använda inferensmetoder som tar hänsyn till variabelselektionen.</p>
+<p>Några vanliga metoder är:</p>
+<ul>
+<li><strong>Selective Inference</strong></li>
+<li><strong>Sample Splitting</strong></li>
+<li><strong>Bayesianska metoder</strong></li>
+</ul>
+<p><span style="color: red">INKLUDERA EN KORT BESKRIVNING AV DESSA METODER</span></p>
+<p>Ingen av dessa metoder är perfekt, valet beror på syftet med analysen (prediktion eller inferens) och tillgången till data.</p>
+</section>
+<section id="referenser" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -776,11 +1036,14 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../04-time-series/03-arima.html" class="pagination-link" aria-label="ARIMA">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARIMA</span></span>
+      <a href="../05-stat-to-ml/01-validation.html" class="pagination-link" aria-label="Modellval">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../05-stat-to-ml/03-tree-models.html" class="pagination-link" aria-label="Splines och trädmodeller">
+        <span class="nav-page-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Splines och trädmodeller</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

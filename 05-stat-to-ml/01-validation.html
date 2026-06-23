@@ -1,0 +1,2632 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>26&nbsp; Modellval – Statistisk teori och tillämpningar i R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../05-stat-to-ml/02-regularization.html" rel="next">
+<link href="../05-stat-to-ml/00-introduction.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-96e8a2c236aee144da7b9dc077376cca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Inget resultat",
+    "search-matching-documents-text": "matchande dokument",
+    "search-copy-link-title": "Kopiera länk för att söka",
+    "search-hide-matches-text": "Göm ytterligare resultat",
+    "search-more-match-text": "annat resultat i detta dokument",
+    "search-more-matches-text": "fler resultat i detta dokument",
+    "search-clear-button-title": "Rensa",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Verkställ",
+    "search-label": "Sök"
+  }
+}</script>
+<script>
+
+  window.MathJax = {
+
+  tex: {
+
+    macros: {
+
+      Xmatrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} & X_{12} & \\cdots & X_{1k} \\\\" +
+
+        "1 & X_{21} & X_{22} & \\cdots & X_{2k} \\\\" +
+
+        "\\vdots & \\vdots & \\vdots & \\ddots & \\vdots \\\\" +
+
+        "1 & X_{n1} & X_{n2} & \\cdots & X_{nk}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Xonematrix:
+
+        "\\begin{bmatrix}" +
+
+        "1 & X_{11} \\\\" +
+
+        "1 & X_{21} \\\\" +
+
+        "\\vdots \\\\" +
+
+        "1 & X_{n1}" +
+
+        "\\end{bmatrix}",
+
+
+
+      Ymatrix:
+
+        "\\begin{bmatrix}Y_1 \\\\ Y_2 \\\\ \\vdots \\\\ Y_n\\end{bmatrix}",
+
+
+
+      betamatrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1 \\\\ \\vdots \\\\ \\beta_k\\end{bmatrix}",
+
+
+
+      betaonematrix:
+
+        "\\begin{bmatrix}\\beta_0 \\\\ \\beta_1\\end{bmatrix}",
+
+
+
+      Ematrix:
+
+        "\\begin{bmatrix}E_1 \\\\ E_2 \\\\ \\vdots \\\\ E_n\\end{bmatrix}",
+
+        
+
+      epsilonMatrix:
+
+        "\\begin{bmatrix}\\varepsilon_1 \\\\ \\varepsilon_2 \\\\ \\vdots \\\\ \\varepsilon_n\\end{bmatrix}",
+
+
+
+      Sum: ["\\sum_{i=1}^{#1}", 1],
+
+      
+
+      olsMatrix:
+
+        "\\boldsymbol{\\hat{\\beta}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\mathbf{X}'\\mathbf{Y}",
+
+        
+
+      olsVarMatrix: 
+
+        "s^2_{\\boldsymbol{\\hat{\\beta}}} = (\\mathbf{X}'\\mathbf{X})^{-1}\\frac{SSE}{n - (k + 1)}",
+
+      
+
+      sseMatrix:
+
+        "(\\mathbf{Y} - \\mathbf{X}\\boldsymbol{\\hat{\\beta}})'(\\mathbf{Y}-\\mathbf{X}\\boldsymbol{\\hat{\\beta}})"
+
+    }
+
+  }
+
+};
+
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../webex.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Skifta navigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../00-programming/00-basics-R.html" aria-current="page"> 
+<span class="menu-text">Programmering i R</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../01-regression/index.html"> 
+<span class="menu-text">Regressionsanalys</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../02-variance/index.html"> 
+<span class="menu-text">Varianssanalys</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../04-time-series/index.html"> 
+<span class="menu-text">Tidsserieanalys</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../05-stat-to-ml/index.html"> 
+<span class="menu-text">Statistik till ML</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-stat-to-ml/index.html">DEL V - Från statistik till maskininlärning</a></li><li class="breadcrumb-item"><a href="../05-stat-to-ml/01-validation.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Sök"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inledning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text"><strong>DEL I - Programmering i R</strong></span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/00-basics-R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grunderna i R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-programming/02-tidyverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">tidyverse</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../01-regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DEL II - Regressionsanalys</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/00-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introduktion till regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/01-explorative-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Utforska samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/02-model-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modellanpassning</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/03-model-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/04-statistical-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistisk inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/05-simultaneous-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simultan inferens</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/06-complex-predictors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Komplexa samband</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/07-multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Multikollinearitet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/08-detailed-residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Detaljerad residualanalys</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/09-variable-selection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Modellvalidering och variabelselektion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/10-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logistisk regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-regression/11-other-link-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Andra länkfunktioner</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DEL III - Variansanalys</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/02-control-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-variance/03-twoway-anova.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Tvåvägs-ANOVA</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../04-time-series/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DEL IV - Tidsserieanalys</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/01-properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Tidsserier</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/02-ar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">AR och MA modeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/03-arima.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">ARMA och ARIMA modeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-time-series/04-evaluation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Modellutvärdering</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-stat-to-ml/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DEL V - Från statistik till maskininlärning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/00-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Introduktion</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/01-validation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/02-regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/03-tree-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Splines och trädmodeller</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/04-neural-networks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Neurala nätverk</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/05-ensembles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Ensemblemetoder</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innehållsförteckning</h2>
+   
+  <ul>
+  <li><a href="#sec-validation" id="toc-sec-validation" class="nav-link active" data-scroll-target="#sec-validation"><span class="header-section-number">26.1</span> Modellvalsprocess</a></li>
+  <li><a href="#korsvalidering" id="toc-korsvalidering" class="nav-link" data-scroll-target="#korsvalidering"><span class="header-section-number">26.2</span> Korsvalidering</a></li>
+  <li><a href="#optimering" id="toc-optimering" class="nav-link" data-scroll-target="#optimering"><span class="header-section-number">26.3</span> Optimering</a>
+  <ul class="collapse">
+  <li><a href="#kostnadsfunktion" id="toc-kostnadsfunktion" class="nav-link" data-scroll-target="#kostnadsfunktion"><span class="header-section-number">26.3.1</span> Kostnadsfunktion</a></li>
+  <li><a href="#gradient" id="toc-gradient" class="nav-link" data-scroll-target="#gradient"><span class="header-section-number">26.3.2</span> Gradient</a></li>
+  <li><a href="#konvergens-och-inlärningshastighet" id="toc-konvergens-och-inlärningshastighet" class="nav-link" data-scroll-target="#konvergens-och-inlärningshastighet"><span class="header-section-number">26.3.3</span> Konvergens och inlärningshastighet</a></li>
+  <li><a href="#coordinate-descent" id="toc-coordinate-descent" class="nav-link" data-scroll-target="#coordinate-descent"><span class="header-section-number">26.3.4</span> Coordinate descent</a></li>
+  <li><a href="#reparameterisering" id="toc-reparameterisering" class="nav-link" data-scroll-target="#reparameterisering"><span class="header-section-number">26.3.5</span> Reparameterisering</a></li>
+  </ul></li>
+  <li><a href="#klassificeringens-kostnadsfunktion" id="toc-klassificeringens-kostnadsfunktion" class="nav-link" data-scroll-target="#klassificeringens-kostnadsfunktion"><span class="header-section-number">26.4</span> Klassificeringens kostnadsfunktion</a>
+  <ul class="collapse">
+  <li><a href="#cross-entropy" id="toc-cross-entropy" class="nav-link" data-scroll-target="#cross-entropy"><span class="header-section-number">26.4.1</span> Cross Entropy</a></li>
+  </ul></li>
+  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-stat-to-ml/index.html">DEL V - Från statistik till maskininlärning</a></li><li class="breadcrumb-item"><a href="../05-stat-to-ml/01-validation.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Modellval</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- CONTENT -->
+<p>Med hjälp av felfunktioner (<a href="00-introduction.html#sec-error-function" class="quarto-xref"><span>Avsnitt 25.2.2</span></a>) och datauppdelning (<a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.2.3</span></a>) och kan vi nu skapa en process för att hitta den bästa modellen.</p>
+<section id="sec-validation" class="level2" data-number="26.1">
+<h2 data-number="26.1" class="anchored" data-anchor-id="sec-validation"><span class="header-section-number">26.1</span> Modellvalsprocess</h2>
+<p>Vi kan börja med att ta fram några kandidatfunktioner (modeller) som tränas på träningsmängden:</p>
+<div id="fig-training-step" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-training-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files\mediabag\7aedca1eca69204525e6baba880a942b359e7470.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-training-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.1: Träningssteget av processen
+</figcaption>
+</figure>
+</div>
+<p>De tränade modellerna utvärderas sedan på valideringsmängden genom att beräkna felfunktionens värde.</p>
+<div id="fig-validation-step" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-validation-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files\mediabag\e12ce7ddb8e2502e5d4f728cfe33e957b889f698.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-validation-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.2: Valideringssteget av processen
+</figcaption>
+</figure>
+</div>
+<p>Anta att <span class="math inline">\(M2\)</span> valts som den bästa modellen enligt valideringsfelet. Det är bara denna modell som till sist används för att beräkna det väntevärdesriktiga felet på testmängden.</p>
+<div id="fig-test-step" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-test-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files\mediabag\133d214f06659f3640ef0f91d15aef839a26f81a.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-test-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.3: Teststeget av processen
+</figcaption>
+</figure>
+</div>
+<p>Om vi också lägger till valideringsmängden till <a href="00-introduction.html#fig-underfit" class="quarto-xref">Figur&nbsp;<span>25.1</span></a>, kan vi se effekten av att under och överanpassa modellen till träningsmängden. I följande diagram är valideringsmängdens observaterioner markerade med <code>x</code> medan träningsmängden fortfarande är markerade med <code>o</code>.</p>
+<div class="columns">
+<div class="column" style="width:49%;">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-underfit-withValid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-underfit-withValid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files/figure-html/fig-underfit-withValid-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-underfit-withValid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.4: Enkel modell med få parametrar
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:49%;">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-overfit-withValid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-overfit-withValid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files/figure-html/fig-overfit-withValid-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-overfit-withValid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.5: Komplex modell med många parametrar
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-acceptablefit-withValid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-acceptablefit-withValid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files/figure-html/fig-acceptablefit-withValid-1.png" style="width:50.0%;height:50.0%" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-acceptablefit-withValid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.6: Lagom komplex modell
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Vi ser att <a href="#fig-underfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.4</span></a> får en dålig anpassning för båda mängderna vilket leder till höga värden på felfunktionen på respektive. <a href="#fig-overfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.5</span></a> visar att när modellen exakt följer träningsmångden får vi extremt låga värden på träningens felfunktion men stora värden på valideringsmängden. Den “lagomt” komplexa modellen får “lagomt” stora värden på båda tränings- och valideringsfelet.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Om en modell endast tränas på träningsmängden finns en stor risk att optimeringsalgoritmen avslutar träningen när modellen är överanpassad. Istället bör vi använda valideringsmängden i träningen iterativa process och optimera modellen</p>
+<p><span style="color: red">NÅGONTING OM HUR VI STOPPAR TRÄNINGEN BASERAT PÅ VALIDERINGSMÄNGDEN, INTE TRÄNINGSMÄNGDEN</span></p>
+<p>Vi kan också integrera tränings- och valideringsmängden direkt i träningsprocessen genom att iterativt optimera och utvärdera på valideringsmängden istället för enbart träningsmängden.</p>
+</div>
+</div>
+<p>Vi kan visualisera denna avvägning i följande diagram:</p>
+<div id="fig-bias-variance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bias-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files\mediabag\d3b1a73f307289f72686bdad7432a22a9397911f.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bias-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.7: Visualisering av avvägningen mellan bias och varians.
+</figcaption>
+</figure>
+</div>
+<p><span style="color: red">ÄR DETTA RELEVANT MED VALIDERINGsmängd ISTÄLLET FÖR TEST?</span></p>
+<p><span style="color: red">BEHÖVER FÖRKLARA BIAS VARIANS OCH BRUS FÖR ATT DENNA BILD SKA KUNNA TOLKAS MER (SLIDE 38 FL1)</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>För vissa extremt komplexa modeller förekommer ett fenomen benämnt <strong>double descent</strong> där valideringsfelet minskar och sedan ökar för att till sist minska igen. Ni kan läsa mer om detta fenomen via <a href="https://en.wikipedia.org/wiki/Double_descent">Wikipedia</a>, det är inget som vi kommer titta närmare på.</p>
+</div>
+</div>
+</section>
+<section id="korsvalidering" class="level2" data-number="26.2">
+<h2 data-number="26.2" class="anchored" data-anchor-id="korsvalidering"><span class="header-section-number">26.2</span> Korsvalidering</h2>
+<p>Nackdelen med att dela upp data enligt <a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.2.3</span></a> är att mycket av data behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är <strong>korsvalidering</strong> där vi delar upp data i en större träningsmängd och en testmängd. Träningsmängden delas sedan in i flera mindre delar, lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar.</p>
+<p>Vi får direkt flera kandidatmodeller av samma metod som vi kan jämföra valideringsfelet och välja den bästa modellen eller beräkna ett genomsnittligt fel för alla valideringsmängder om flera metoder ska jämföras.</p>
+<p><span style="color: red">KAN MAN JÄMFÖRA MODELLER INOM KORSVALIDERING ELLER ÄR DET BARA GENOMSNITTET?</span></p>
+<p>I det extrema fallet delar vi upp träningsmängden i <span class="math inline">\(n\)</span> lika stora delar vilket kallas för <strong>Leave-one-out</strong> korsvalidering. Som namnet antyder följer vi följande procedur:</p>
+<ol type="1">
+<li>ta bort en observation och träna modellen på återstående data.</li>
+<li>beräkna valideringsfelet på den borttagna observationen.</li>
+<li>upprepar steg 1. och 2. för alla datapunkter.</li>
+<li>beräkna den genomsnittliga felet för alla modeller/observationer.</li>
+</ol>
+<p>Att välja modell utifrån enbart en observation är inget att rekommendera utan vi använder därför denna korsvalideringsmetod om vi vill jämföra modeller av olika strukturer. En annan nackdel med detta sätt är att vi måste anpassa <span class="math inline">\(n\)</span> modeller vilket för mer komplexa modeller kan bli mycket beräkningstungt.</p>
+<p>För att förenkla beräkningsprocessen kan istället <strong>k-fold</strong> korsvalidering användas där träningsmängden delas upp i <span class="math inline">\(k\)</span> olika block.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Vi följer samma procedur som tidigare med några justeringar:</p>
+<ol type="1">
+<li>ta bort <em>ett block</em> och träna modellen på återstående data.</li>
+<li>beräkna valideringsfelet på <em>det borttagna blocket</em>.</li>
+<li>upprepar steg 1. och 2. för alla <em>block</em>.</li>
+<li>beräkna den genomsnittliga felet för alla olika <em>block</em>.</li>
+</ol>
+<p>Med denna procedur behöver vi endast träna <span class="math inline">\(k\)</span> modeller vilket kan underlätta den totala beräkningskostnaden om det är en komplex modell som ska tränas.</p>
+</section>
+<section id="optimering" class="level2" data-number="26.3">
+<h2 data-number="26.3" class="anchored" data-anchor-id="optimering"><span class="header-section-number">26.3</span> Optimering</h2>
+<p>När en modell tränas, vad som egentligen händer är att modellens parametrar iterativt <strong>optimeras</strong> genom att minimera felfunktionen eller maximera en sannolikhet. Till exempel minimeras SSE för linjär regression medan vi maximerar log-likelihood för logistisk regression.</p>
+<section id="kostnadsfunktion" class="level3" data-number="26.3.1">
+<h3 data-number="26.3.1" class="anchored" data-anchor-id="kostnadsfunktion"><span class="header-section-number">26.3.1</span> Kostnadsfunktion</h3>
+<p>Inom maskininlärning vill vi ofta minimera en <strong>kostnadsfunktion</strong> <span class="math inline">\(f(\boldsymbol{\theta})\)</span> där <span class="math inline">\(\boldsymbol{\theta}\)</span> är parametrarnas värden som styr värdet på funktionen. Optimeringens syfte är då att hitta de parametervärden som ger lägst (ibland högst) kostnad.</p>
+<p><span style="color: red">VAD ÄR DEN SPECIFIKA SKILLNADEN PÅ FEL- OCH KOSTNADSFUNKTION? BEHÖVS DESSA TVÅ TERMER?</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I vissa specialfall kan vi enkelt analytiskt lösa vilka parametervärden som ger det minsta/högsta värdet på funktionen. Vi kan exemplifiera detta genom en andragradsekvation.</p>
+<p>Vi undersöker funktionen: <span class="math display">\[
+  \begin{aligned}
+  f(x) = x^2 - 4x + 5
+  \end{aligned}
+\]</span> Derivatan av funktionen är: <span class="math display">\[
+  \begin{aligned}
+  f'(x) = 2x - 4
+  \end{aligned}
+\]</span> som är lika med <span class="math inline">\(0\)</span> när: <span class="math display">\[
+  \begin{aligned}
+  2x - 4 = 0 \Rightarrow x = 2
+  \end{aligned}
+\]</span> Genom andraderivatan får vi information om att det är ett minimum vid <span class="math inline">\(x = 2\)</span> då: <span class="math display">\[
+  \begin{aligned}
+  f''(x) = 2 &gt; 0
+  \end{aligned}
+\]</span> Värdet på funktionen när <span class="math inline">\(x = 2\)</span> kan beräknas enligt: <span class="math display">\[
+  \begin{aligned}
+  f(2) = 2^2 - 4\cdot2 + 5 = 4 - 8  + 5 = 1
+  \end{aligned}
+\]</span> så vi drar slutsatsen att funktionen har ett minimum vid <span class="math inline">\((x, f(x)) = (2, 1)\)</span>.</p>
+</div>
+</div>
+<p>När en enkel lösning inte är tillgänglig måste vi använda stegvis (iterativa) algoritmer såsom <strong>gradient descent/ascent</strong>. Denna metod justerar parametrarna iterativt för att successivt närma oss ett minimum eller maximum av funktionen:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-optimization" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-optimization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files/figure-html/fig-optimization-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-optimization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.8: Enkelt exempel på iterativ optimering
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>I denna illustration har en första “gissning” av parametrarnas värden gjorts vid den streckade röda linjen. Sedan har parametrarna justerats tills att de når fram till värdet som ger den största kostnaden, den svartstreckade linjen.</p>
+</section>
+<section id="gradient" class="level3" data-number="26.3.2">
+<h3 data-number="26.3.2" class="anchored" data-anchor-id="gradient"><span class="header-section-number">26.3.2</span> Gradient</h3>
+<p>Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens <strong>gradient</strong>, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger en riktning till var nästa justering av parameterns värde bör ske, i den riktning där funktionen ökar snabbast.</p>
+<p><span style="color: red">NÅGOT OM EUKLIDISK NORM? DET BLIR NOG LITE FÖR KOMPLEXT FÖR DENNA KURS.</span></p>
+<p>I dessa två föregående enkla exempel har vi ett globalt minimum/maximum (optimum) som identiferats, men för mer komplexa kostnadsfunktioner kan det finnas flera <strong>lokala optimum</strong> som algoritmen kan nå fram till.</p>
+<div class="columns">
+<div class="column" style="width:49%;">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-convex-function" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-convex-function-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files/figure-html/fig-convex-function-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-convex-function-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.9: En konvex funktion med endast ett minimum, det globala
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:49%;">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-nonconvex-function" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nonconvex-function-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files/figure-html/fig-nonconvex-function-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonconvex-function-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.10: En icke-konvex funktion med flera lokala minimum
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Konvexa kostnadsfunktioner gör det enklare att hitta ett optimum, och vi vet att det inte finns några fällor som algoritmen kan fastna i. För de icke-konvexa funktionerna kräver det att vi startar algoritmen på flera olika ställen för att utforska en större del av funktionen men trots detta finns det inga garantier att vi hittat det globala optimum.</p>
+</section>
+<section id="konvergens-och-inlärningshastighet" class="level3" data-number="26.3.3">
+<h3 data-number="26.3.3" class="anchored" data-anchor-id="konvergens-och-inlärningshastighet"><span class="header-section-number">26.3.3</span> Konvergens och inlärningshastighet</h3>
+<p>För att motverka att optimeringsalgoritmer genomför oändligt många iterationer med (till slut) ytterst små justeringar av parametervärdena, avslutas optimeringen när vi anser den <strong>konvergerat</strong>. Konvergens betyder att algoritmen nått ett tillstånd där ytterligare iterationer inte leder till någon meningsfull förbättring. Detta skulle kunna vara:</p>
+<ul>
+<li>Liten förändring i kostnadsfunktionen, <span class="math inline">\(|f(\boldsymbol{\theta}_i) - f(\boldsymbol{\theta}_{i-1})| &lt; \xi_1\)</span></li>
+<li>Liten förändring i parametrarna, <span class="math inline">\(||\boldsymbol{\theta}_i - \boldsymbol{\theta}_{i-1}|| &lt; \xi_2\)</span></li>
+<li>Maximalt antal iterationer har uppnåtts</li>
+</ul>
+<p><span class="math inline">\(\xi_1\)</span> och <span class="math inline">\(\xi_2\)</span> är oftast vald till väldigt små värden, till exempel <span class="math inline">\(\frac{1}{10 000}\)</span> eller liknande.</p>
+<p>Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet förändras samt den totala beräkningstiden.</p>
+<p>Ytterligare en aspekt av iterativa algoritmer är <strong>inlärningshastigheten</strong> vilket påverkar hur snabbt vi rör oss mot bättre parametervärden närmare kostnadsfunktionens optimum. I <a href="#fig-optimization" class="quarto-xref">Figur&nbsp;<span>26.8</span></a> är denna 0.0002 = 2E-04 men vi kan öka eller minska den för att (förhoppningsvis) effektivisera algoritmen.</p>
+<div class="columns">
+<div class="column" style="width:49%;">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-learning-rate-high" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-learning-rate-high-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files/figure-html/fig-learning-rate-high-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-learning-rate-high-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.11: Optimering med inlärningshastighet 6E-04
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:49%;">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-learning-rate-low" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-learning-rate-low-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files/figure-html/fig-learning-rate-low-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-learning-rate-low-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.12: Optimering med inlärningshastighet 5E-05
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Om vi jämför dessa två diagram med <a href="#fig-optimization" class="quarto-xref">Figur&nbsp;<span>26.8</span></a> ser vi att med en större inlärningshastighet (<a href="#fig-learning-rate-high" class="quarto-xref">Figur&nbsp;<span>26.11</span></a>) har den första justeringen nu blivit betydligt större och att vi faktiskt hoppade över optimum under de första iterationerna vilket medförde att vi behövde gå tillbaka. Med en mindre inlärningshastighet (<a href="#fig-learning-rate-low" class="quarto-xref">Figur&nbsp;<span>26.12</span></a>) genomför vi mindre justeringar som kräver betydligt fler iterationer innan vi når konvergens.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tips</span>En slumpmässig promenad
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Säg att du tar på dig en ögonbindel på toppen av en kulle och ska navigera till dess botten. Genom att känna lutningen vid dina fötter kan du räkna ut i vilken riktning som du ska ta ditt nästa steg för att komma närmare. Om du vill vara säker att du inte råkar ramla eller springa förbi väljer du att ta små små steg i den valda riktningen. Det kommer ta ett tag för dig att nå botten men du vet att du inte missar någon viktig information under promenaden.</p>
+<p>En av dina kompisar är lite mer våghalsig av sig och väljer att springa istället för att gå med långa steg varje gång. Det går fort, lite för fort kan man tycka, och det visar sig att kompisen springer förbi och upp på nästa kulle och behöver vända tillbaka.</p>
+<p>I detta exempel motsvarar lutningen vid dina fötter gradienten av kostnadsfunktionen och steglängden motsvarar inlärningshastigheten.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det finns många nackdelar med Gradient Descent/Ascent algoritmerna trots att den är enkel. Vanliga förbättringar av algoritmen finns i form av:</p>
+<ul>
+<li>Stochastic Gradient Descent (SGD)</li>
+<li>Momentum</li>
+<li>Adagrad</li>
+<li>RMSprop</li>
+<li>Adam och AdaDelta</li>
+<li>Steglängdscheman</li>
+</ul>
+</div>
+</div>
+<p><span style="color: red">SKA VI HA DETALJER OM DESSA OPTIMERINGSALGORITMER ELLER BARA ANVÄNDA DE I SENARE MODELLER?</span></p>
+<p>Inlärningshastigheten är ett exempel på en <strong>hyperparameter</strong>, alltså en parameter som hör till algoritmen/träningen, inte till modellen. Hyperparametrar kan också vara hur modellen ser ut, vilken optimeringsalgoritm som används, antalet iterationer eller konvergenskriterierna eller andra aspekter av hur träningen går till. Mängden hyperparametrar och de olika värdena som de kan anta blir snabbt överväldigande så vi behöver ofta anta en strukturerad process för att hitta dessa, till exempel Grid Search eller Random Search. Vi använder valideringsmängden för valet av hyperparametrar, det är inte bara olika modeller som vi kan validera enligt <a href="#sec-validation" class="quarto-xref"><span>Avsnitt 26.1</span></a> utan även olika inställningar för samma modell.</p>
+<p><span style="color: red">MER OM GRID/RANDOM SEARCH?</span></p>
+</section>
+<section id="coordinate-descent" class="level3" data-number="26.3.4">
+<h3 data-number="26.3.4" class="anchored" data-anchor-id="coordinate-descent"><span class="header-section-number">26.3.4</span> Coordinate descent</h3>
+<p>Vad är Coordinate Descent? En optimeringsmetod där man optimerar en variabel i taget. Alla andra variabler h˚alls fasta under varje steg. Itererar över variablerna tills konvergens uppn˚as. Nyckelidéer: Enkel att implementera, särskilt för stora problem. Effektiv när varje delproblem (en variabel) är lätt att lösa. Används ofta i t.ex. Lasso-regression (mer om det senare) och konvex optimering. Kräver inte beräkning av hela gradienten.</p>
+</section>
+<section id="reparameterisering" class="level3" data-number="26.3.5">
+<h3 data-number="26.3.5" class="anchored" data-anchor-id="reparameterisering"><span class="header-section-number">26.3.5</span> Reparameterisering</h3>
+<p>Ibland måste vissa parametrar uppfylla villkor, till exempel att vara strikt positiva. Istället för att optimera direkt på parametern kan vi omformulera problemet så att en transformation av parametern optimeras.</p>
+<p>Säg att vi vill optimera <span class="math inline">\(\theta &gt; 0\)</span>. Vi kan då välja att istället optimera över <span class="math inline">\(\phi\)</span> där <span class="math inline">\(\theta = exp(\phi)\)</span> vilket innebär att vi kan fortfarande använda gradientbaserade metoder utan att behöva begränsa algoritmen direkt för <span class="math inline">\(\theta\)</span>.</p>
+</section>
+</section>
+<section id="klassificeringens-kostnadsfunktion" class="level2" data-number="26.4">
+<h2 data-number="26.4" class="anchored" data-anchor-id="klassificeringens-kostnadsfunktion"><span class="header-section-number">26.4</span> Klassificeringens kostnadsfunktion</h2>
+<p>För regression får vi en kostnadsfunktion från fördelningen av det vi vill modellera. För en (ofta) kontinuerlig variabel kan vi ange olika kontinuerliga fördelningar på feltermen, till exempel normal, t, Gamma, log-normal där dess likelihood blir den naturliga kostnadsfunktionen att optimera. Vi kan även för diskreta variabler använda regression för till exempel Poisson eller Negativ binomial fördelningarna.</p>
+<p>För klassificering finns det inte alltid någon naturlig kostnadsfunktion. Däremot blir det betydligt enklare att räkna observerade och predikterade klasser från en modell eftersom antalet möjliga utfall är begränsade till skillnad från de oändliga utfallen för en kontinuerlig fördelning. Dessa kan sammanställas i en <strong>förväxlingsmatris</strong> (eng. confusion matrix):</p>
+<p>När vi skapar förväxlingsmatrisen räknas frekvenserna av antalet <span class="math inline">\(Y = 1\)</span> som blivit predikterade till de olika klasserna <span class="math inline">\(\hat{Y} = 1\)</span> (<span class="math inline">\(f_{11}\)</span>) och <span class="math inline">\(\hat{Y} = 0\)</span> (<span class="math inline">\(f_{10}\)</span>) och antalet <span class="math inline">\(Y = 0\)</span> som blivit predikterade till respektive klass (<span class="math inline">\(f_{01}\)</span> och <span class="math inline">\(f_{00}\)</span>).</p>
+<div id="tbl-confusion" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;26.1: Förväxlingsmatris med frekvenser av olika fall.
+</figcaption>
+<div aria-describedby="tbl-confusion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table style="border-collapse: collapse; width: 50%;">
+<thead>
+<tr>
+<th colspan="2">
+</th>
+<th colspan="2" style="text-align: center;">
+Predikterad klass
+</th>
+</tr>
+<tr>
+<th colspan="2">
+</th>
+<th style="border: 1px solid black; padding: 5px;">
+<span class="math inline">\(\hat{Y} = 1\)</span>
+</th>
+<th style="border: 1px solid black; padding: 5px;">
+<span class="math inline">\(\hat{Y} = 0\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="2" style="padding-right: 15px; font-weight: bold;">
+Sann klass
+</td>
+<td style="border: 1px solid black; padding: 5px;">
+<span class="math inline">\(Y = 1\)</span>
+</td>
+<td style="border: 1px solid black; padding: 5px; background-color: #D1FFBD;">
+<span class="math inline">\(f_{11}\)</span>
+</td>
+<td style="border: 1px solid black; padding: 5px;">
+<span class="math inline">\(f_{10}\)</span>
+</td>
+</tr>
+<tr>
+<td style="border: 1px solid black; padding: 5px;">
+<span class="math inline">\(Y = 0\)</span>
+</td>
+<td style="border: 1px solid black; padding: 5px;">
+<span class="math inline">\(f_{01}\)</span>
+</td>
+<td style="border: 1px solid black; padding: 5px; background-color: #D1FFBD;">
+<span class="math inline">\(f_{00}\)</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Utifrån förväxlingsmatrisen kan ett antal utvärderingsmått beräknas som fokuserar på olika aspekter av modellens prestanda.</p>
+<p>De två enklaste måtten är andelen korrekta prediktioner och andelen felaktiga prediktioner. Vi kallar andelen korrekta prediktioner för modellens <strong>träffsäkerhet</strong> (eng. Accuracy) och andelen felaktiga prediktioner för modellens <strong>felkvot</strong> (eng. Misclassification rate).</p>
+<p><span class="math display">\[
+\begin{aligned}
+  \text{Träffsäkerhet} &amp;= \frac{f_{11} + f_{00}}{n} = \frac{f_{11} + f_{00}}{f_{11} + f_{10} + f_{01} + f_{00}} \\
+  \text{Felkvot} &amp;= \frac{f_{10} + f_{01}}{n} = \frac{f_{10} + f_{01}}{f_{11} + f_{10} + f_{01} + f_{00}} = 1 - \text{Träffsäkerhet} \\
+\end{aligned}
+\]</span> När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas.</p>
+<p>Problemet med att använda någon av dessa mått som modellens kostnadsfunktion är att de kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering spelar andelen av data som tillhör vardera klass roll, detta kallas för <strong>klassbalanser</strong>. När vi ska modellera en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda.</p>
+<p>Om andelarna är <strong>balanserade</strong>, det vill säga nära 50% för de båda andelarna, kommer modellen ha lika mycket information om de båda klasserna och träffsäkerheten/felkvoten tar hänsyn lika mycket till båda klasserna. Om andelarna däremot är <strong>obalanserade</strong>, stora skillnader i andel mellan klasserna, kommer träffsäkerheten/felkvoten ha problem att optimera den mindre av klasserna. Om vi exempelvis har 95% 0:or och 5% 1:or kommer kanske optimeringen anse att optimum är att prediktera alla observationer till majoritetsklassen, för då blir träffsäkerheten 95%. Vi behöver därför titta på ytterligare mått som kan användas för att hantera klassobalans.</p>
+<p>Med fokus på <span class="math inline">\(Y = 1\)</span> beskriver <strong>sensitiviteten</strong> (eng. True Positive Rate, sensitivity, recall) hur stor andel av de observerade 1:orna som faktiskt också predikterades som 1:or. Motsatsen är <strong>specificiteten</strong> (eng. True Negative Rate, specificity) som beskriver hur stor andel observerade icke-1:or som också predikterades som icke-1:or.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{Sensitivitet}_{Y = 1} &amp;= \frac{f_{11}}{f_{11} + f_{10}}\\
+\text{Specificitet}_{Y = 1} &amp;= \frac{f_{00}}{f_{01} + f_{00}}
+\end{aligned}
+\]</span> Om det ena måttet är stort och det andra litet betyder det att modellen fokusera på endast någon av klasserna, medan om båda måtten är stora betyder det att modellen lyckats prediktera alla klasser lika bra.</p>
+<p><span style="color: red">Precision och F-Score</span></p>
+<section id="cross-entropy" class="level3" data-number="26.4.1">
+<h3 data-number="26.4.1" class="anchored" data-anchor-id="cross-entropy"><span class="header-section-number">26.4.1</span> Cross Entropy</h3>
+<p><span style="color: red">CROSS ENTROPY MÅSTE FÖRKLARAS</span></p>
+</section>
+</section>
+<section id="referenser" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Man kan uttrycka leave-one-out korsvalidering som ett specialfall av k-fold när <span class="math inline">\(k = n\)</span><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopierat!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopierat!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../05-stat-to-ml/00-introduction.html" class="pagination-link" aria-label="Introduktion">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Introduktion</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../05-stat-to-ml/02-regularization.html" class="pagination-link" aria-label="Regularisering">
+        <span class="nav-page-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script>
+
+// Script to highlight the current section in the navbar depending on which page you are on
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const currentPath = window.location.pathname;
+
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+
+
+    navLinks.forEach(link => {
+
+        const linkPath = new URL(link.href).pathname;
+
+
+
+        // Highlight parent section if current path starts with link path
+
+        if (currentPath.startsWith(linkPath)) {
+
+            link.classList.add("active");
+
+        } else {
+
+            link.classList.remove("active");
+
+        }
+
+    });
+
+});
+
+</script>
+
+<script>
+
+
+
+/* definition of content for the buttons */
+
+const webex_buttons = {check_hidden:          "<b>&check;</b>",
+
+                       check_hidden_alt:      "Check answer",
+
+                       check_shown:           "<b>&lsh;</b>",
+
+                       check_shown_alt:       "Hide check",
+
+                       check_of_total:        "/",
+
+                       solution:              "<b>&quest;</b>",
+
+                       solution_alt:          "Correct solution",
+
+                       question_next:         "<b>&#8634;</b>",
+
+                       question_next_alt:     "Next question",
+
+                       question_previous:     "",
+
+                       question_previous_alt: ""}
+
+
+
+
+
+/* update total correct if #webex-total_correct exists */
+
+update_total_correct = function() {
+
+  console.log("webex: update total_correct");
+
+
+
+  document.querySelectorAll(".webex-total_correct").forEach(total => {
+
+    p = total.closest(".webex-box");
+
+    var correct = p.getElementsByClassName("webex-correct").length;
+
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    /* no specific class on input node, thus searching via query selector */
+
+    var checkboxgroups = p.querySelectorAll("div[class=webex-checkboxgroup] input[type=checkbox]").length
+
+
+
+    /* show number of correct / total number of answers */
+
+    total.innerHTML = correct + "&nbsp;" + webex_buttons.check_of_total + "&nbsp;" + (solvemes + radiogroups + checkboxgroups + selects);
+
+  });
+
+}
+
+
+
+/* check answers */
+
+check_func = function() {
+
+  console.log("webex: check answer");
+
+
+
+  //var cl = elem.parentElement.classList;
+
+  var cl = this.closest(".webex-box").classList;
+
+  if (cl.contains("unchecked")) {
+
+    cl.remove("unchecked");
+
+    this.innerHTML = webex_buttons.check_shown; //"Hide check";
+
+    if (webex_buttons.check_shown_alt.length > 0) this.setAttribute("title", webex_buttons.check_shown_alt);
+
+  } else {
+
+    cl.add("unchecked");
+
+    this.innerHTML = webex_buttons.check_hidden; //"Check answer";
+
+    if (webex_buttons.check_hidden_alt.length > 0) this.setAttribute("title", webex_buttons.check_hidden_alt);
+
+  }
+
+}
+
+
+
+/* helper functions for checking the webex ID */
+
+const id_checker = {"fmt": new RegExp("[g-zG-Z]"),
+
+                    "load": function(e) { return e.getAttribute("id").match("(?<=(-)).*$")[0]; },
+
+                    "eval": new TextEncoder(),
+
+                    "dval": new TextDecoder()}
+
+
+
+/* Show/hide correct solution */
+
+solution_func = function() {
+
+  console.log("webex: show/hide solution");
+
+
+
+  var div = this.closest(".webex-question").querySelector(".webex-solution");
+
+  var cl = div.classList;
+
+
+
+  if (cl.contains("visible")) {
+
+    cl.remove("visible");
+
+  } else {
+
+    cl.add("visible");
+
+  }
+
+}
+
+
+
+/* function to check if the real answer is numeric */
+
+convert_to_numeric = function(x) {
+
+  if (typeof x == "string") {
+
+    /* do nothing */
+
+  } else if (x.length == 1) {
+
+    /* take first element */
+
+    x = x[0]
+
+  } else {
+
+    return NaN;
+
+  }
+
+
+
+  /* remove spaces for easier parsing */
+
+  x = x.replace(/\s/g, "");
+
+
+
+  /* Define patterns for different formats, note that spaces have been removed above */
+
+  const patterns = [
+
+    {regex: /^[+-]?\d+(\.\d{3})*,\d+$/, decimal: ",", thousand: "." },  // Format: "1.100.100.100,3"
+
+    {regex: /^[+-]?\d+(,\d{3})*\.\d+$/, decimal: ".", thousand: "," },  // Format: "1,100,100,100.3"
+
+    {regex: /^[+-]?\d+(\.|\.\d+)?$/, decimal: "." },                    // Format: "1100100100.5" or "1100100100."
+
+    {regex: /^[+-]?\d+(,|,\d+)$/, decimal: "," }                        // Format: "1100100100,5" or "1100100100,"
+
+  ];
+
+
+
+
+
+  /* testing all regular expressions, convert to float if possible */
+
+  for (const { regex, decimal, thousand } of patterns) {
+
+    if (regex.test(x)) {
+
+      let numeric = x;
+
+      if (thousand) numeric = numeric.replace(new RegExp(`\\${thousand}`, "g"), "");
+
+      numeric = numeric.replace(decimal, ".");
+
+      return parseFloat(numeric);
+
+    }
+
+  }
+
+
+
+  /* input of length 1 but none of the known formats, return NaN */
+
+  return NaN;
+
+}
+
+
+
+/* Checking webex ID, returns formalsol */
+
+check_id = function(e) {
+
+  /* loading webex ID */
+
+  var id = id_checker["load"](e);
+
+
+
+  /* extracting answer */
+
+  let answer = e.dataset.answer;
+
+
+
+  /* checking unique id, prepare and return array */
+
+  if (!id_checker["fmt"].test(id)) {
+
+    const a = id_checker["eval"].encode(atob(answer));
+
+    const b = id_checker["eval"].encode(id);
+
+    const res = a.map((byte, index) => byte^b[index % b.length]);
+
+    answer = id_checker["dval"].decode(res);
+
+    /* Replacing &amp; with ' before parsing */
+
+    answer = answer.replaceAll("&apos;", "'");
+
+  }
+
+
+
+  return JSON.parse(answer);
+
+}
+
+
+
+/* function for checking solveme answers */
+
+solveme_func = function(e) {
+
+  /* avoid that keyup and keychange twice execute this function within nms = 10
+
+   * ms, clearing inputTimer and add timeout */
+
+  console.log("webex: check solveme");
+
+
+
+  /* float, precision for checking numeric answers */
+
+  const eps = 0.00000000000001;
+
+
+
+  /* get last checked user answer */
+
+  const question = this.closest(".webex-question")
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+  var my_answer = this.value;
+
+
+
+  /* extracting classes */
+
+  var cl = this.classList;
+
+
+
+  /* empty answer? Job done */
+
+  if (my_answer == "") {
+
+    cl.remove("webex-correct");
+
+    cl.remove("webex-incorrect");
+
+    return false;
+
+  }
+
+
+
+  /* Find closest (parent) webex-question */
+
+  let formalsols = check_id(this)
+
+
+
+  /* by default we assume the users' answer is incorrect */
+
+  var user_answer_correct = false;
+
+
+
+  /* check if the correct answer is numeric, i.e. if 
+
+   * formalsols is of length 1 containing one single numeric
+
+   * value in a known format, else, NaN is returned */
+
+  const num_formalsol = convert_to_numeric(formalsols);
+
+  const num_my_answer = convert_to_numeric(my_answer);
+
+
+
+  /* if the correct answer is numeric (float), the user's answer
+
+   * must also be numeric. If not, it is wrong. Else we can
+
+   * compare floating point numbers */
+
+  if (!isNaN(num_formalsol) && !isNaN(num_my_answer)) {
+
+    /* check if the real answer and the user input are numerically the same;
+
+     * adding 'delta' to avoid precision issues */
+
+    var diff = Math.abs(num_formalsol - num_my_answer);
+
+    if (diff < parseFloat(this.dataset.tol) + eps) { user_answer_correct = true; }
+
+
+
+  /* if the question contains regex, a regular expression is used
+
+   * to evaluate the users answer. Allows for multiple regular expressions */
+
+  } else if (cl.contains("regex")) {
+
+    for (let i = 0; i < formalsols.length; i++) {
+
+        let regex = new RegExp(formalsols[i], cl.contains("ignorecase") ? "i" : "");
+
+        if (regex.test(my_answer)) { user_answer_correct = true; break; }
+
+    }
+
+
+
+  /* else we evaluate on 'string level', considering the creators preferences
+
+   * regarding set options */
+
+  } else {
+
+    /* modify/prepare answer */
+
+    if (cl.contains("ignorecase")) { my_answer = my_answer.toLowerCase(); }
+
+    if (cl.contains("nospaces"))   { my_answer = my_answer.replace(/ /g, ""); }
+
+
+
+    /* if the real answer includes user input - correct */
+
+    if (formalsols.includes(my_answer)) {
+
+      user_answer_correct = true;
+
+  
+
+      // added regex bit
+
+      if (cl.contains("regex")) {
+
+        answer_regex = RegExp(formalsols.join("|"))
+
+        if (answer_regex.test(my_answer)) {
+
+          cl.add("webex-correct");
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+
+  if (user_answer_correct) {
+
+      cl.add("webex-correct");
+
+      cl.remove("webex-incorrect");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+      cl.remove("webex-correct");
+
+  }
+
+
+
+  update_total_correct();
+
+
+
+}
+
+
+
+/* function for checking select answers */
+
+select_func = function(e) {
+
+  console.log("webex: check select");
+
+
+
+  var options   = [];
+
+  Array.from(this.querySelectorAll("option")).forEach((option, index) => {
+
+    if (!option.hasAttribute("value") || !option.getAttribute("value") === "blank") {
+
+      options.push(option);
+
+    }
+
+  });
+
+
+
+  /* get selected option */
+
+  function get_selected(options) { return options.findIndex(option => option.selected); }
+
+  var option_index = get_selected(options)
+
+
+
+  /* loading webex ID */
+
+  var formalsol = check_id(this)
+
+
+
+  /* add class for current selection */
+
+  this.classList.remove("webex-incorrect");
+
+  this.classList.remove("webex-correct");
+
+  if (option_index >= 0) {
+
+    this.classList.add(formalsol[option_index] === 1 ? "webex-correct" : "webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* function for checking radiogroups answers */
+
+radiogroups_func = function(e) {
+
+  console.log("webex: check radiogroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var id = e.target.getAttribute("name");
+
+  var group = document.querySelector(".webex-radiogroup[id='webex-" + id + "']");
+
+  var formalsol = check_id(group)
+
+
+
+  /* check which radiobuttion is selected (user answer) */
+
+  function get_checked(radios) {
+
+    return radios.findIndex(radios => radios.checked);
+
+  }
+
+  var radios = Array.from(group.querySelectorAll("input[type='radio']"))
+
+  var radio_index = get_checked(radios);
+
+
+
+  /* remove existing classes */
+
+  radios.forEach(radio => {
+
+    let cl = radio.closest("label").classList
+
+    cl.remove("webex-incorrect");
+
+    cl.remove("webex-correct");
+
+  });
+
+
+
+  /* add class for current selection */
+
+  let cl = radios[radio_index].closest("label").classList
+
+  if (formalsol[radio_index] === 1) {
+
+      cl.add("webex-correct");
+
+  } else {
+
+      cl.add("webex-incorrect");
+
+  }
+
+
+
+  update_total_correct();
+
+}
+
+
+
+
+
+/* function for checking checkboxgroups answers */
+
+checkboxgroups_func = function(e) {
+
+  console.log("webex: check checkboxgroups");
+
+
+
+  /* get real answer (binary integer array) */
+
+  var group = document.querySelector(".webex-checkboxgroup[id='" + this.id + "']");
+
+  var formalsol = check_id(group);
+
+
+
+  /* check which checkbox is checked (user answer) */
+
+  function get_checked(group) {
+
+      const checkboxes = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+      return checkboxes.reduce((indices, checkbox, index) => {
+
+          if (checkbox.checked) indices.push(index);
+
+          return indices;
+
+      }, []);
+
+  }
+
+  var checks = Array.from(group.querySelectorAll("input[type='checkbox']"));
+
+  var check_index = get_checked(group);
+
+
+
+  checks.forEach((e, index) => {
+
+    var label = e.parentNode;
+
+    var ans = formalsol[index];
+
+    if ((e.checked && ans === 1) || (!e.checked && ans === 0)) {
+
+        label.setAttribute("class", "webex-correct")
+
+    } else {
+
+        label.setAttribute("class", "webex-incorrect")
+
+    }
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+/* shuffling array (thanks to stack overflow)
+
+ * If argument x is an integer we create an integer sequence
+
+ * from 0, 1, ..., (x - 1) and return a shuffled version. If
+
+ * the input is an array, we simply shuffle it */
+
+shuffle_array = function(x) {
+
+   if (Number.isInteger(x) && !isNaN(x)) {
+
+     x = Array.from({length: x}, (v, i) => i);
+
+   }
+
+   let shuffled = x.map(value => ({ value, sort: Math.random() }))
+
+        .sort((a, b) => a.sort - b.sort).map(({ value }) => value)
+
+   return shuffled;
+
+}
+
+
+
+/* ---------------------------------------------------------
+
+ * ---------------------------------------------------------
+
+ * --------------------------------------------------------- */
+
+window.onload = function() {
+
+  //console.log("webex: onload");
+
+
+
+  /* setting up buttons and actions to show/hide answers */
+
+  document.querySelectorAll(".webex-check").forEach(section => {
+
+    section.classList.add("unchecked");
+
+
+
+    /* ul to take up the list items with buttons */
+
+    let button_ul = document.createElement("ul");
+
+    button_ul.setAttribute("class", "webex-button-list");
+
+    section.appendChild(button_ul);
+
+
+
+    /* button to _check_ if answers given are correct */
+
+    let li_check = document.createElement("li");
+
+    button_ul.appendChild(li_check); /* add list item to ul */
+
+    let btn_check = document.createElement("button");
+
+    btn_check.innerHTML = webex_buttons.check_hidden;  // "Check answer";
+
+    btn_check.setAttribute("class", "webex-button webex-button-check");
+
+    if (webex_buttons.check_hidden_alt.length > 0) btn_check.setAttribute("title", webex_buttons.check_hidden_alt);
+
+    btn_check.onclick = check_func;
+
+    li_check.appendChild(btn_check);
+
+
+
+    /* span to show current number of points (when _check_ active) */
+
+    let spn = document.createElement("span");
+
+    spn.classList.add("webex-total_correct");
+
+    li_check.appendChild(spn);
+
+
+
+    /* button to show the _solution_ if there is one */
+
+    var has_solution = section.parentNode.querySelectorAll(".webex-solution").length > 0;
+
+    if (has_solution) {
+
+      let li_solution = document.createElement("li");
+
+      button_ul.appendChild(li_solution); /* add list item to ul */
+
+      let btn_solution = document.createElement("button");
+
+      btn_solution.innerHTML = webex_buttons.solution; // "Correct answer";
+
+      btn_solution.setAttribute("class", "webex-button webex-button-solution");
+
+      if (webex_buttons.solution_alt.length > 0) btn_solution.setAttribute("title", webex_buttons.solution_alt);
+
+      btn_solution.onclick = solution_func;
+
+      li_solution.appendChild(btn_solution);
+
+    }
+
+
+
+  });
+
+
+
+  /* set up webex-solveme inputs */
+
+  document.querySelectorAll(".webex-solveme").forEach(solveme => {
+
+    solveme.setAttribute("autocomplete","off");
+
+    solveme.setAttribute("autocorrect", "off");
+
+    solveme.setAttribute("autocapitalize", "off");
+
+    solveme.setAttribute("spellcheck", "false");
+
+    solveme.value = "";
+
+
+
+    /* adjust answer for 'no spaces' (ignore spaces) */
+
+    if (solveme.classList.contains("nospaces")) {
+
+      solveme.dataset.answer = solveme.dataset.answer.replace(/ /g, "");
+
+    }
+
+
+
+    /* attach checking function, triggered on key up, change, and when
+
+     * elemnt is out of focus. Only evaluated once by tracking changes
+
+     * via variable solveme_last_user_answer */
+
+    solveme.addEventListener("keyup",  solveme_func);
+
+    solveme.addEventListener("change", solveme_func);
+
+    solveme.addEventListener("blur",   solveme_func);
+
+
+
+    /* adding span to show correct/incorrect icon */
+
+    solveme.insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+
+  });
+
+
+
+  /* set up radiogroups (single choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+    radiogroup.onchange = radiogroups_func;
+
+  });
+
+
+
+  /* set up checkboxgroups (multiple choice questions with display = "buttons") */
+
+  document.querySelectorAll(".webex-checkboxgroup").forEach(checkboxgroup => {
+
+    checkboxgroup.onchange = checkboxgroups_func;
+
+  });
+
+
+
+  /* set up selects (dropdown menus) */
+
+  document.querySelectorAll(".webex-select").forEach(select => {
+
+    select.onchange = select_func;
+
+    /* append webex-icon for correct/incorrect icons */
+
+    var elem = document.createElement("span")
+
+    elem.classList.add("webex-icon")
+
+    select.parentNode.appendChild(elem)
+
+  });
+
+
+
+  /* change to next/previous question if multiple are available */
+
+  function handleQuestionClick(group, questions, step) {
+
+    return async function() {
+
+      /* get question order as integer vector */
+
+      let questionOrder = group.dataset.questionOrder.split(",").map(str => parseInt(str));
+
+
+
+      /* current question/position */
+
+      let currentPosition = parseInt(group.dataset.currentPosition);
+
+
+
+      /* Hide the current question */
+
+      questions.forEach(question => { question.classList.remove("active"); });
+
+
+
+      /* Move to the next question index */
+
+      currentPosition = (currentPosition + step) % questionOrder.length;
+
+      if (currentPosition < 0) currentPosition = currentPosition + questionOrder.length
+
+
+
+      /* Display the new question */
+
+      questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+      // Update the currentPosition data attribute on the group div
+
+      group.dataset.currentPosition = currentPosition;
+
+    };
+
+  }
+
+
+
+  document.querySelectorAll(".webex-group").forEach(group => {
+
+    const questions = Array.from(group.querySelectorAll(".webex-question"));
+
+
+
+    /* Create vector with question order. If the webex-group does
+
+     * not have class '.noshuffle' we will randomly shuffle the order */
+
+    let questionOrder = Array.from({length: questions.length}, (v, i) => i);
+
+    if (!group.classList.contains("noshuffle")) {
+
+      questionOrder = shuffle_array(questionOrder);
+
+    }
+
+
+
+    /* take start position (if set) or start at 0 */
+
+    const currentPosition = parseInt(group.getAttribute("data-start-position")) || 0;
+
+
+
+    /* show the default question for each group */
+
+    questions[questionOrder[currentPosition]].classList.add("active");
+
+
+
+    /* store random order of questions as well as current position */
+
+    group.dataset.questionOrder   = questionOrder;
+
+    group.dataset.currentPosition = currentPosition;
+
+
+
+    /* find all webex-questions, search for .webex-button-list and
+
+     * populate the list with necessary <li><button>...</button></li> elements */
+
+    questions.forEach(question => {
+
+        let button_ul = question.querySelector("ul.webex-button-list");
+
+
+
+        let li_next = document.createElement("li");
+
+        let nextButton = document.createElement("button");
+
+        nextButton.setAttribute("class", "webex-button webex-button-next");
+
+        if (webex_buttons.question_next_alt.length > 0) nextButton.setAttribute("title", webex_buttons.question_next_alt);
+
+        nextButton.innerHTML = webex_buttons.question_next; // "Next question";
+
+        nextButton.addEventListener("click", handleQuestionClick(group, questions, 1));
+
+        li_next.appendChild(nextButton);
+
+
+
+        let li_previous = document.createElement("li");
+
+        let previousButton = document.createElement("button");
+
+        previousButton.setAttribute("class", "webex-button webex-button-previous");
+
+        if (webex_buttons.question_previous_alt.length > 0) previousButton.setAttribute("title", webex_buttons.question_previous_alt);
+
+        previousButton.innerHTML = webex_buttons.question_previous; // "Previous question";
+
+        previousButton.addEventListener("click", handleQuestionClick(group, questions, -1));
+
+        li_previous.appendChild(previousButton);
+
+
+
+        if (webex_buttons.question_previous.length > 0) button_ul.appendChild(li_previous);
+
+        if (webex_buttons.question_next.length > 0) button_ul.appendChild(li_next);
+
+    });
+
+  });
+
+
+
+  /* Development options */
+
+  document.querySelectorAll(".webex-question.check").forEach(question => {
+
+      question.querySelector(".webex-button-check").click()
+
+  });
+
+  document.querySelectorAll(".webex-question.solution").forEach(question => {
+
+      let btn = question.querySelector(".webex-button-solution");
+
+      if (btn !== null) { btn.click(); }
+
+  });
+
+
+
+  /* Pre-filling <input> fields */
+
+  document.querySelectorAll(".webex-question.prefill").forEach(question => {
+
+      question.querySelectorAll("input.webex-solveme").forEach(solveme => {
+
+          let x = JSON.parse(solveme.dataset.answer);
+
+          solveme.value = x[0];
+
+          /* Trigger the on change event */
+
+          solveme.dispatchEvent(new Event("change"));
+
+      });
+
+
+
+      /* Pre-filling radiogroups, that is for schoice questions */
+
+      question.querySelectorAll(".webex-radiogroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let idx = x.indexOf(1);
+
+          let radios = radiogroup.querySelectorAll('input[type="radio"]');
+
+          radios[idx].checked = true;
+
+          /* Trigger the on change event */
+
+          radios[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for schoice questions w/ dropdown menus */
+
+      question.querySelectorAll(".webex-select").forEach(dropdown => {
+
+          let x = JSON.parse(dropdown.dataset.answer);
+
+          let idx = x.indexOf(1) + 1; /* +1 to skip the first blank option */
+
+          let options = dropdown.querySelectorAll("option");
+
+          options[idx].selected = true;
+
+          /* Trigger the on change event */
+
+          options[idx].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+
+
+      /* Pre-filling checkboxgroups, that is for mchoice questions */
+
+      question.querySelectorAll(".webex-checkboxgroup").forEach(radiogroup => {
+
+          let x = JSON.parse(radiogroup.dataset.answer);
+
+          let checkboxes = radiogroup.querySelectorAll('input[type="checkbox"]');
+
+          for (let i = 0; i < checkboxes.length; i++) {
+
+              checkboxes[i].checked = x[i];
+
+          }
+
+          /* Trigger the on change event */
+
+          checkboxes[0].dispatchEvent(new Event("change", { bubbles: true }));
+
+      });
+
+  });
+
+
+
+  /* Show set tolerance (devel option) */
+
+  function calc_width(x, txt, offset = 20) {
+
+      /* We do the following:
+
+       * Create a new span, insert the value we need in the .tolerance
+
+       * input node, and calculate its offsetWidth. Then remove it
+
+       * again; this is just used to calculate the required width. */
+
+      var cwtmp = document.createElement("span");
+
+      x.appendChild(cwtmp);
+
+      cwtmp.innerHTML = txt || "";
+
+      var w = parseInt(cwtmp.getBoundingClientRect().width) + offset;
+
+      cwtmp.remove();
+
+      return w;
+
+  }
+
+
+
+  /* If tolerance should be shown (devel option) we calculate:
+
+   * - the width required to properly display the solution
+
+   * - the width required to properly display the tolerance
+
+   * - add a new element to display the tolerance
+
+   * - reduce the width of the solution input box. */
+
+  document.querySelectorAll(".webex-question.tolerance").forEach(question => {
+
+      question.querySelectorAll("input[data-tol]").forEach(elem => {
+
+          var w = null;
+
+
+
+          /* Add new element showing the tolerance */
+
+          let tol = document.createElement("input");
+
+          tol.type = "text"; // <inpyt type="text">
+
+          tol.disabled = true; // Disable input element
+
+          tol.classList.add("tolerance"); // Appending class
+
+          tol.value = "Â± " + elem.getAttribute("data-tol");
+
+
+
+          /* Add new node */
+
+          elem.parentNode.insertBefore(tol, elem)
+
+
+
+          var body     = document.querySelector("body");
+
+          //tol.value = "Â± " + "0.0000007";
+
+          //tol.value = "Â± " + "0.07";
+
+          w    = calc_width(body, tol.value);
+
+          wold = parseInt(elem.getBoundingClientRect().width);
+
+          wmin = calc_width(body, elem.value);
+
+
+
+          /* Calculate required width of the 'tolerance' node, and the
+
+           * reduction of the original 'input' node */
+
+          let wnew = Math.max(wmin, wold - w);
+
+          tol.style.width  = w + "px";
+
+          elem.style.width = wnew + "px";
+
+      });
+
+  });
+
+
+
+  update_total_correct();
+
+}
+
+
+
+</script>
+
+
+
+
+</body></html>
