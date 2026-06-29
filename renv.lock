@@ -100,6 +100,31 @@
       "Maintainer": "Achim Zeileis <Achim.Zeileis@R-project.org>",
       "Repository": "CRAN"
     },
+    "KernSmooth": {
+      "Package": "KernSmooth",
+      "Version": "2.23-26",
+      "Source": "Repository",
+      "Priority": "recommended",
+      "Date": "2024-12-10",
+      "Title": "Functions for Kernel Smoothing Supporting Wand & Jones (1995)",
+      "Authors@R": "c(person(\"Matt\", \"Wand\", role = \"aut\", email = \"Matt.Wand@uts.edu.au\"), person(\"Cleve\", \"Moler\", role = \"ctb\", comment = \"LINPACK routines in src/d*\"), person(\"Brian\", \"Ripley\", role = c(\"trl\", \"cre\", \"ctb\"), email = \"Brian.Ripley@R-project.org\", comment = \"R port and updates\"))",
+      "Note": "Maintainers are not available to give advice on using a package they did not author.",
+      "Depends": [
+        "R (>= 2.5.0)",
+        "stats"
+      ],
+      "Suggests": [
+        "MASS",
+        "carData"
+      ],
+      "Description": "Functions for kernel smoothing (and density estimation) corresponding to the book:  Wand, M.P. and Jones, M.C. (1995) \"Kernel Smoothing\".",
+      "License": "Unlimited",
+      "ByteCompile": "yes",
+      "NeedsCompilation": "yes",
+      "Author": "Matt Wand [aut], Cleve Moler [ctb] (LINPACK routines in src/d*), Brian Ripley [trl, cre, ctb] (R port and updates)",
+      "Maintainer": "Brian Ripley <Brian.Ripley@R-project.org>",
+      "Repository": "CRAN"
+    },
     "MASS": {
       "Package": "MASS",
       "Version": "7.3-65",
@@ -392,6 +417,35 @@
       "Maintainer": "Georgi N. Boshnakov <georgi.boshnakov@manchester.ac.uk>",
       "Repository": "CRAN"
     },
+    "Rttf2pt1": {
+      "Package": "Rttf2pt1",
+      "Version": "1.3.14",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "'ttf2pt1' Program",
+      "Date": "2025-09-24",
+      "Depends": [
+        "R (>= 2.15)"
+      ],
+      "Suggests": [
+        "testthat",
+        "withr (>= 2.5.0)"
+      ],
+      "Authors@R": "c(person(given = \"Winston\", family = \"Chang\", role = c(\"aut\"), email = \"winston@stdout.org\"), person(given = \"Andrew\", family = \"Weeks\", role = \"aut\"), person(given = c(\"Frank\", \"M.\"), family = \"Siegert\", role = \"aut\"), person(given = \"Mark\", family = \"Heath\", role = \"aut\"), person(given = \"Thomas\", family = \"Henlick\", role = \"aut\"), person(given = \"Sergey\", family = \"Babkin\", role = \"aut\"), person(given = \"Turgut\", family = \"Uyar\", role = \"aut\"), person(given = \"Rihardas\", family = \"Hepas\", role = \"aut\"), person(given = \"Szalay\", family = \"Tamas\", role = \"aut\"), person(given = \"Johan\", family = \"Vromans\", role = \"aut\"), person(given = \"Petr\", family = \"Titera\", role = \"aut\"), person(given = \"Lei\", family = \"Wang\", role = \"aut\"), person(given = \"Chen\", family = \"Xiangyang\", role = \"aut\"), person(given = \"Zvezdan\", family = \"Petkovic\", role = \"aut\"), person(family = \"Rigel\", role = \"aut\"), person(given = c(\"I.\", \"Lee\"), family = \"Hetherington\", role = \"aut\"), person(given = \"Frederic\", family= \"Bertrand\", role = c(\"cre\"), email = \"frederic.bertrand@lecnam.net\", comment = c(ORCID = \"0000-0002-0837-8281\")) )",
+      "Author": "Winston Chang [aut], Andrew Weeks [aut], Frank M. Siegert [aut], Mark Heath [aut], Thomas Henlick [aut], Sergey Babkin [aut], Turgut Uyar [aut], Rihardas Hepas [aut], Szalay Tamas [aut], Johan Vromans [aut], Petr Titera [aut], Lei Wang [aut], Chen Xiangyang [aut], Zvezdan Petkovic [aut], Rigel [aut], I. Lee Hetherington [aut], Frederic Bertrand [cre] (ORCID: <https://orcid.org/0000-0002-0837-8281>)",
+      "Maintainer": "Frederic Bertrand <frederic.bertrand@lecnam.net>",
+      "Description": "Contains the program 'ttf2pt1', for use with the 'extrafont' package. This product includes software developed by the 'TTF2PT1' Project and its contributors.",
+      "License": "file LICENSE",
+      "URL": "https://github.com/fbertran/Rttf2pt1",
+      "BugReports": "https://github.com/fbertran/Rttf2pt1/issues",
+      "LazyLoad": "yes",
+      "NeedsCompilation": "yes",
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.3.3",
+      "Config/testthat/edition": "3",
+      "License_is_FOSS": "yes",
+      "Repository": "CRAN"
+    },
     "S7": {
       "Package": "S7",
       "Version": "0.2.0",
@@ -531,6 +585,19 @@
       "License": "MIT + file LICENSE",
       "NeedsCompilation": "no",
       "Author": "Tony Plate [aut, cre], Richard Heiberger [aut]",
+      "Repository": "CRAN"
+    },
+    "ash": {
+      "Package": "ash",
+      "Version": "1.0-15",
+      "Source": "Repository",
+      "Title": "David Scott's ASH Routines",
+      "Author": "S original by David W. Scott R port by Albrecht Gebhardt <albrecht.gebhardt@aau.at> adopted to recent S-PLUS by Stephen Kaluzny <spk@insightful.com>",
+      "Maintainer": "Albrecht Gebhardt <albrecht.gebhardt@aau.at>",
+      "Description": "David Scott's ASH routines ported from S-PLUS to R.",
+      "License": "GPL (>= 2)",
+      "Date": "2015-08-27",
+      "NeedsCompilation": "yes",
       "Repository": "CRAN"
     },
     "askpass": {
@@ -1989,6 +2056,69 @@
       "Maintainer": "Achim Zeileis <Achim.Zeileis@R-project.org>",
       "Repository": "CRAN"
     },
+    "extrafont": {
+      "Package": "extrafont",
+      "Version": "0.20",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Tools for Using Fonts",
+      "Date": "2025-09-24",
+      "Depends": [
+        "R (>= 2.15)"
+      ],
+      "Imports": [
+        "extrafontdb",
+        "grDevices",
+        "utils",
+        "Rttf2pt1"
+      ],
+      "Suggests": [
+        "fontcm",
+        "testthat",
+        "withr (>= 2.5.0)"
+      ],
+      "Authors@R": "c( person(given = \"Winston\", family= \"Chang\", role = c(\"aut\")), person(given = \"Frederic\", family= \"Bertrand\", role = c(\"cre\"), email = \"frederic.bertrand@lecnam.net\", comment = c(ORCID = \"0000-0002-0837-8281\")) )",
+      "Author": "Winston Chang [aut], Frederic Bertrand [cre] (ORCID: <https://orcid.org/0000-0002-0837-8281>)",
+      "Maintainer": "Frederic Bertrand <frederic.bertrand@lecnam.net>",
+      "Description": "Tools to using fonts other than the standard PostScript fonts. This package makes it easy to use system TrueType fonts and with PDF or PostScript output files, and with bitmap output files in Windows. extrafont can also be used with fonts packaged specifically to be used with, such as the fontcm package, which has Computer Modern PostScript fonts with math symbols.",
+      "License": "GPL-2",
+      "LazyLoad": "yes",
+      "NeedsCompilation": "no",
+      "URL": "https://github.com/fbertran/extrafont",
+      "BugReports": "https://github.com/fbertran/extrafont/issues",
+      "RoxygenNote": "7.3.3",
+      "Encoding": "UTF-8",
+      "Config/testthat/edition": "3",
+      "Repository": "CRAN"
+    },
+    "extrafontdb": {
+      "Package": "extrafontdb",
+      "Version": "1.1",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Holding the Database for the 'extrafont' Package",
+      "Date": "2025-09-25",
+      "Depends": [
+        "R (>= 2.14)"
+      ],
+      "Suggests": [
+        "testthat (>= 3.0.0)"
+      ],
+      "Authors@R": "c( person(given = \"Winston\", family= \"Chang\", role = c(\"aut\")), person(given = \"Frederic\", family= \"Bertrand\", role = c(\"cre\"), email = \"frederic.bertrand@lecnam.net\", comment = c(ORCID = \"0000-0002-0837-8281\")) )",
+      "Author": "Winston Chang [aut], Frederic Bertrand [cre] (ORCID: <https://orcid.org/0000-0002-0837-8281>)",
+      "Maintainer": "Frederic Bertrand <frederic.bertrand@lecnam.net>",
+      "Description": "It is meant to be used with the 'extrafont' package. The 'extrafont' package contains the code to install and use fonts, while the 'extrafontdb' package contains the font database.",
+      "License": "GPL-2",
+      "LazyLoad": "yes",
+      "NeedsCompilation": "no",
+      "URL": "https://github.com/fbertran/extrafontdb",
+      "BugReports": "https://github.com/fbertran/extrafontdb/issues",
+      "RoxygenNote": "7.3.3",
+      "Encoding": "UTF-8",
+      "Config/testthat/edition": "3",
+      "Collate": "'extrafontdb.r'",
+      "Repository": "CRAN"
+    },
     "farver": {
       "Package": "farver",
       "Version": "2.1.2",
@@ -2314,6 +2444,62 @@
       "Author": "Hadley Wickham [aut, cre] (ORCID: <https://orcid.org/0000-0003-4757-117X>), Max Kuhn [aut], Davis Vaughan [aut], Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
       "Maintainer": "Hadley Wickham <hadley@posit.co>",
       "Repository": "CRAN"
+    },
+    "ggalt": {
+      "Package": "ggalt",
+      "Version": "0.6.1",
+      "Source": "GitHub",
+      "Title": "Extra Coordinate Systems, 'Geoms', Statistical Transformations, Scales and Fonts for 'ggplot2'",
+      "Maintainer": "Bob Rudis <bob@rud.is>",
+      "Authors@R": "c( person(\"Bob\", \"Rudis\", email = \"bob@rud.is\", role = c(\"aut\", \"cre\"),  comment = c(ORCID = \"0000-0001-5670-2640\")), person(\"Ben\", \"Bolker\", comment=\"Encircling & additional splines\", role = c(\"aut\", \"ctb\")), person(\"Ben\", \"Marwick\", comment=\"General codebase cleanup\", role = c(\"ctb\")), person(\"Jan\", \"Schulz\", comment=\"Annotations\", role = c(\"aut\", \"ctb\")), person(\"Rosen\", \"Matev\", role=\"ctb\", comment=\"Original annotate_textp implementation on stackoverflow\"), person(\"ProPublica\", role=\"dtc\", comment=\"StateFace font\"), person(\"Aditya\", \"Kothari\", role=c(\"aut\", \"ctb\"), comment=\"Core functionality of horizon plots\"), person(\"Ather\", role=\"dtc\", comment=\"Core functionality of horizon plots\"), person(\"Jonathan\",\"Sidi\", role=c(\"aut\",\"ctb\"), comment=\"Annotation ticks\"), person(\"Tarcisio\",\"Fedrizzi\", role=\"ctb\", comment=\"Bytes formatter\") )",
+      "Description": "A compendium of new geometries, coordinate systems, statistical  transformations, scales and fonts for 'ggplot2', including splines, 1d and 2d densities,  univariate average shifted histograms, a new map coordinate system based on the  'PROJ.4'-library along with geom_cartogram() that mimics the original functionality of  geom_map(), formatters for \"bytes\", a stat_stepribbon() function, increased 'plotly' compatibility and the 'StateFace' open source font 'ProPublica'. Further new  functionality includes lollipop charts, dumbbell charts, the ability to encircle points and coordinate-system-based text annotations.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://github.com/hrbrmstr/ggalt",
+      "BugReports": "https://github.com/hrbrmstr/ggalt/issues",
+      "Encoding": "UTF-8",
+      "Depends": [
+        "R (>= 3.2.0)",
+        "ggplot2 (>= 2.2.1)"
+      ],
+      "Suggests": [
+        "testthat",
+        "gridExtra",
+        "knitr",
+        "rmarkdown",
+        "ggthemes",
+        "reshape2"
+      ],
+      "Imports": [
+        "utils",
+        "graphics",
+        "datasets",
+        "grDevices",
+        "plyr",
+        "dplyr",
+        "RColorBrewer",
+        "KernSmooth",
+        "proj4",
+        "scales",
+        "grid",
+        "gtable",
+        "ash",
+        "maps",
+        "MASS",
+        "extrafont",
+        "tibble",
+        "plotly (>= 3.4.1)"
+      ],
+      "RoxygenNote": "7.2.3",
+      "VignetteBuilder": "knitr",
+      "Collate": "'annotate_textp.r' 'annotation_ticks.r' 'coord_proj.r' 'formatters.r' 'fortify.r' 'position-dodgev.R' 'geom2plotly.r' 'geom_ash.r' 'geom_bkde.r' 'geom_bkde2d.r' 'geom_spikelines.R' 'geom_dumbbell.R' 'geom_cartogram.r' 'geom_encircle.r' 'geom_horizon.r' 'geom_lollipop.r' 'geom_table.r' 'geom_twoway_bar.r' 'geom_xspline.r' 'geom_xspline2.r' 'geom_ubar.r' 'stat-stepribbon.r' 'ggalt-package.r' 'grob_absolute.r' 'guide_axis.r' 'stateface.r' 'utils.r' 'zzz.r'",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "ggalt",
+      "RemoteUsername": "hrbrmstr",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "8941f8c9b13ac38ca0cf6500951017c35241de28",
+      "NeedsCompilation": "no",
+      "Author": "Bob Rudis [aut, cre] (ORCID: <https://orcid.org/0000-0001-5670-2640>), Ben Bolker [aut, ctb] (Encircling & additional splines), Ben Marwick [ctb] (General codebase cleanup), Jan Schulz [aut, ctb] (Annotations), Rosen Matev [ctb] (Original annotate_textp implementation on stackoverflow), ProPublica [dtc] (StateFace font), Aditya Kothari [aut, ctb] (Core functionality of horizon plots), Ather [dtc] (Core functionality of horizon plots), Jonathan Sidi [aut, ctb] (Annotation ticks), Tarcisio Fedrizzi [ctb] (Bytes formatter)"
     },
     "ggforce": {
       "Package": "ggforce",
@@ -3544,6 +3730,36 @@
       "Maintainer": "Lionel Henry <lionel@posit.co>",
       "Repository": "CRAN"
     },
+    "maps": {
+      "Package": "maps",
+      "Version": "3.4.3",
+      "Source": "Repository",
+      "Title": "Draw Geographical Maps",
+      "Date": "2025-05-15",
+      "Description": "Display of maps.  Projection code and larger maps are in separate packages ('mapproj' and 'mapdata').",
+      "Depends": [
+        "R (>= 3.5.0)"
+      ],
+      "Imports": [
+        "graphics",
+        "utils"
+      ],
+      "LazyData": "yes",
+      "Suggests": [
+        "mapproj (>= 1.2-0)",
+        "mapdata (>= 2.3.0)",
+        "sf",
+        "rnaturalearth"
+      ],
+      "License": "GPL-2",
+      "URL": "https://github.com/adeckmyn/maps",
+      "BugReports": "https://github.com/adeckmyn/maps/issues",
+      "Authors@R": "c(person(given  = c(\"Richard\", \"A.\"), family = \"Becker\", role   = \"aut\", comment= \"Original S code\"), person(given  = c(\"Allan\", \"R.\"), family = \"Wilks\", role   = \"aut\", comment= \"Original S code\"), person(given  = \"Ray\", family = \"Brownrigg\", role   = c(\"trl\", \"aut\"), comment= \"R version\"), person(given  = c(\"Thomas\", \"P.\"), family = \"Minka\", role   = \"aut\", comment= \"Enhancements\"), person(given  = \"Alex\", family = \"Deckmyn\", role   = c(\"aut\", \"cre\"), comment= c(ORCID=\"0009-0002-2010-8310\"), email  = \"alex.deckmyn@meteo.be\"))",
+      "NeedsCompilation": "yes",
+      "Repository": "CRAN",
+      "Author": "Richard A. Becker [aut] (Original S code), Allan R. Wilks [aut] (Original S code), Ray Brownrigg [trl, aut] (R version), Thomas P. Minka [aut] (Enhancements), Alex Deckmyn [aut, cre] (ORCID: <https://orcid.org/0009-0002-2010-8310>)",
+      "Maintainer": "Alex Deckmyn <alex.deckmyn@meteo.be>"
+    },
     "memoise": {
       "Package": "memoise",
       "Version": "2.0.1",
@@ -4167,6 +4383,43 @@
       "Maintainer": "Carson Sievert <cpsievert1@gmail.com>",
       "Repository": "CRAN"
     },
+    "plyr": {
+      "Package": "plyr",
+      "Version": "1.8.9",
+      "Source": "Repository",
+      "Title": "Tools for Splitting, Applying and Combining Data",
+      "Authors@R": "person(\"Hadley\", \"Wickham\", , \"hadley@rstudio.com\", role = c(\"aut\", \"cre\"))",
+      "Description": "A set of tools that solves a common set of problems: you need to break a big problem down into manageable pieces, operate on each piece and then put all the pieces back together.  For example, you might want to fit a model to each spatial location or time point in your study, summarise data by panels or collapse high-dimensional arrays to simpler summary statistics. The development of 'plyr' has been generously supported by 'Becton Dickinson'.",
+      "License": "MIT + file LICENSE",
+      "URL": "http://had.co.nz/plyr, https://github.com/hadley/plyr",
+      "BugReports": "https://github.com/hadley/plyr/issues",
+      "Depends": [
+        "R (>= 3.1.0)"
+      ],
+      "Imports": [
+        "Rcpp (>= 0.11.0)"
+      ],
+      "Suggests": [
+        "abind",
+        "covr",
+        "doParallel",
+        "foreach",
+        "iterators",
+        "itertools",
+        "tcltk",
+        "testthat"
+      ],
+      "LinkingTo": [
+        "Rcpp"
+      ],
+      "Encoding": "UTF-8",
+      "LazyData": "true",
+      "RoxygenNote": "7.2.3",
+      "NeedsCompilation": "yes",
+      "Author": "Hadley Wickham [aut, cre]",
+      "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
+      "Repository": "CRAN"
+    },
     "polyclip": {
       "Package": "polyclip",
       "Version": "1.10-7",
@@ -4284,6 +4537,25 @@
       "NeedsCompilation": "no",
       "Author": "Gábor Csárdi [aut, cre], Rich FitzJohn [aut], Posit Software, PBC [cph, fnd]",
       "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
+      "Repository": "CRAN"
+    },
+    "proj4": {
+      "Package": "proj4",
+      "Version": "1.0-15",
+      "Source": "Repository",
+      "Title": "A simple interface to the PROJ.4 cartographic projections library",
+      "Depends": [
+        "R (>= 2.0.0)"
+      ],
+      "Author": "Simon Urbanek [aut, cre, cph] (https://urbanek.org, <https://orcid.org/0000-0003-2297-1732>)",
+      "Authors@R": "person(\"Simon\", \"Urbanek\", role=c(\"aut\",\"cre\",\"cph\"), email=\"simon.urbanek@r-project.org\", comment=c(\"https://urbanek.org\", ORCID=\"0000-0003-2297-1732\"))",
+      "Maintainer": "Simon Urbanek <simon.urbanek@r-project.org>",
+      "Description": "A simple interface to lat/long projection and datum transformation of the PROJ.4 cartographic projections library. It allows transformation of geographic coordinates from one projection and/or datum to another.",
+      "SystemRequirements": "proj 4.4.6 or higher (https://proj.org/)",
+      "License": "GPL-2",
+      "URL": "https://www.rforge.net/proj4/",
+      "BugReports": "https://github.com/s-u/proj4/issues",
+      "NeedsCompilation": "yes",
       "Repository": "CRAN"
     },
     "promises": {

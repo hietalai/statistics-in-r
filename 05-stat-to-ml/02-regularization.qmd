@@ -1,0 +1,101 @@
+---
+engine: knitr
+filters: 
+  - webr
+  - diagram
+---
+<!-- CONTENT -->
+
+# Regularisering
+
+En stor del av statistisk inlärning berör generalisering, att modellen som tränas också ska kunna användas effektivt på ny data. Vid stora datamaterial med många observationer och variabler krävs ofta en flexibel men komplex modell för att modellen ska prestera bra, men det ger också en överhängande risk för att modellen överanpassas. Komplexitet kan mätas på olika sätt beroende på modellen; i det linjära fallet är det antalet variabler, interaktioner eller transformationer som har den största påverkan. Ett sätt att minska några av dessa dimensioner är att använda algoritmer för **variabelselektion** som "automatisk" väljer variabler utifrån ett valt utvärderingsmått. Mer om detta går att läsa i @sec-variable-selection-algorithms. 
+
+En stor nackdel med dessa algoritmer är att de oftast är giriga eller mycket beräkningstunga. En girig algoritm betyder att den vid varje steg vill hitta den bästa förbättringen av modellen och riskerar att missa steg som ger en sämre förbättring just nu men den "bästa" förbättringen två steg framåt. 
+
+Istället för giriga algoritmer finns ett annat sätt att motverka överanpassning som inte behöver välja variabler; **regularisering**. Idén bakom denna metod är att hindra modellen för att bli för komplex och ge ett (förhoppningsvis) bättre generaliseringsfel genom att begränsa parametrar för variabler som inte anses tillföra något till anpassningen. Regularisering tillsammans med en flexibel och komplex modell bör leda till en bra anpassning.
+
+:::{.callout-important}
+För alla former av regularisering behöver vi standardisera de förklarande variablerna först. Detta krävs för att variablernas individuella skalor inte ska påverka regulariseringen.
+
+[HUR STANDARDISERAS ORDINALSKALA?]{style="color: red"}
+:::
+
+## Ridge regression
+
+I vanlig linjär regression minimerar vi SSE:
+
+$$
+  \begin{aligned}
+  f(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2
+  \end{aligned}
+$$
+
+Inom **Ridge regression** lägger vi till en straffterm till denna kostnadsfunktion enligt:
+
+$$
+  \begin{aligned}
+  f_{Ridge}(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2 + \lambda \sum_{j = 1}^p \beta_j^2
+  \end{aligned}
+$$
+där $\lambda \ge 0$. Notera att ingen straffterm sätts på $\beta_0$ utan bara respektive lutningsparameter. $\lambda$ är en hyperparameter som måste bestämmas där ett värde av 0 indikerar på inget straff (bara vanlig SSE) och stora värden indikerar på stora straff där många parametrar sätts till väldigt små värden.
+
+Dessa två delar av funktionen samverkar när en variabel som inte anses ha något samband med responsvariabeln inte kommer påverka storleken av $Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij}$ vilket i sin tur leder till att den tillhörande parametern kan reduceras till 0 för att storleken av $\sum_{j = 1}^p \beta_j^2$ ska bli så liten som möjligt. 
+
+[RIDGE I R]{style="color: red"}
+
+## LASSO regression
+
+Ridge straffar parametrarna kraftigt med anledning av $\beta_j^2$. Vi kan använda ett mindre straff genom **LASSO regression** om vi ändrar till beloppet enligt:
+
+$$
+  \begin{aligned}
+  f_{LASSO}(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2 + \lambda \sum_{j = 1}^p |\beta_j|
+  \end{aligned}
+$$
+där $\lambda \ge 0$.
+
+[LASSO i R]{style="color: red"}
+
+På samma sätt som med Ridge väljs $\lambda$ som en hyperparameter men till skillnad från Ridge ger stora värden på $\lambda$ att flera parametrar sätts till exakt 0. En annan skillnad sker vid multikollinearitet där Ridge krymper alla parametrar vars variabler korrelerar med varandra lika mycket medan LASSO sätter enbart en till 0.
+
+Ridge passar bra när $Y_i$ beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten nära 0. Detta medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för.
+
+[VARFÖR RIDGE ENKLARE INFERENS? RELEVANS?]{style="color: red"}
+
+## Elastic Net
+
+Som en kombination av Ridge och LASSO finns **Elastic Net** som mixar de två strafftermerna med en ny hyperparameter $\alpha$.
+
+$$
+  \begin{aligned}
+  f_{Elastic}(\boldsymbol{\beta}) = SSE + \lambda \left((1 - \alpha) \sum_{j = 1}^p \beta_j^2 + \alpha \sum_{j = 1}^p |\beta_j| \right)
+  \end{aligned}
+$$
+där $\lambda \ge 0$ och $0\le \alpha \le 1$.
+
+$\alpha$ styr hur mycket vikt vi ger till Ridge respektive LASSO som ger en flexibel regularisering. Detta innebär att vi kan tvinga vissa $\beta$ till 0 men inte lika många som i vanlig LASSO och Elastic Net kan klara av korrelerade variabler bättre. 
+
+[I R?]{style="color: red"}
+
+## Statistisk inferens
+
+De tidigare presenterade algoritmerna och regulariseringsmetoderna är "automatiska" metoder för att välja variabler som bidrar till att förklara responsvariabeln. Efter variabelselektion är det vanligt att analysera parametrarnas p-värden och intervallskattning, även kallad för **post-selection inference**. Problemet är att vanliga inferensmetoder antar att modellen är fixerad innan data analyseras men med variabelselektion används data för att välja modell och introducerar ett beroende mellan data och modellen. Detta påverkar fördelningen av skattningarna vilket i sin tur leder till för snäva konfidensintervall, för små p-värden och ökad risk för typ I fel. Vi bör därför undvika att använda vanliga metoder för inferens och istället använda inferensmetoder som tar hänsyn till variabelselektionen.
+
+Några vanliga metoder är:
+
+- **Selective Inference**
+- **Sample Splitting**
+- **Bayesianska metoder**
+
+[INKLUDERA EN KORT BESKRIVNING AV DESSA METODER]{style="color: red"}
+
+Ingen av dessa metoder är perfekt, valet beror på syftet med analysen (prediktion eller inferens) och tillgången till data.
+
+## Referenser {.unnumbered}
+
+
+
+
+
+
+

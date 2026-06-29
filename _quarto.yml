@@ -58,10 +58,11 @@ book:
     - part: 05-stat-to-ml/index.qmd
       chapters: 
         - 05-stat-to-ml/00-introduction.qmd
-        # - 05-stat-to-ml/01-properties.qmd
-        # - 05-stat-to-ml/02-ar.qmd
-        # - 05-stat-to-ml/03-arima.qmd
-        # - 05-stat-to-ml/04-evaluation.qmd
+        - 05-stat-to-ml/01-validation.qmd
+        - 05-stat-to-ml/02-regularization.qmd
+        - 05-stat-to-ml/03-tree-models.qmd
+        - 05-stat-to-ml/04-neural-networks.qmd
+        - 05-stat-to-ml/05-ensembles.qmd
   search: 
     location: sidebar
     show-item-context: false

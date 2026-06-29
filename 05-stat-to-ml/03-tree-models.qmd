@@ -1,0 +1,261 @@
+---
+engine: knitr
+filters: 
+  - webr
+  - diagram
+---
+<!-- CONTENT -->
+
+# Splines och trädmodeller
+
+I tidigare kapitel har vi fokuserat på linjära modeller som är lätta att träna och tolka, men de kommer inte kunna lösa alla sorters problem. Ta följande exempel inom klassificering:
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: 100 observationer, två förklarande variabler och en binär respons
+#| label: fig-nonlinear-example
+#| echo: false
+#| out-width: "90%"
+
+set.seed(20260602)
+
+data <- 
+  tibble(
+    x1 = runif(100),
+    x2 = runif(100, min = -0.5, 1.5)
+  ) |> 
+  mutate(
+    y = 1 / (1 + exp(-25 * (x1 - 0.5))),
+    class = if_else(x2 * (1 + exp(-25*(x1-0.5))) > 1, "A", "B")
+  ) 
+
+data |> 
+  ggplot() + aes(x = x1, y = x2, color = class) + geom_point() + 
+  theme_bw() + scale_color_manual(values = c("steelblue", "firebrick"), guide = NULL)
+
+
+```
+
+
+Den sanna beslutsregeln som exakt separerar de två färgerna (klasserna) är $x_2 \cdot (1 + exp(-25 \cdot (x_1 - 0.5))) > 1$.
+
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Den icke-linjära beslutsregeln
+#| label: fig-nonlinear-boundary-example
+#| echo: false
+#| out-width: "90%"
+
+data |> 
+  ggplot() + aes(x = x1, y = x2, color = class) + geom_point() + 
+  geom_line(aes(y = y, color = NULL), linetype = 2, linewidth = 1) + 
+  theme_bw() + scale_color_manual(values = c("steelblue", "firebrick"), guide = NULL)
+
+
+```
+
+Men hur skulle vi kunna hitta en linjär beslutsregel som motsvarar denna? Vad gör vi om en linjär modell inte passar till data?
+
+Vi kan ta ett enklare exempel med regression.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Exempel på icke-linjär data
+#| label: fig-nonlinear-regression
+#| out-width: "90%"
+#| echo: false
+
+x <-  seq(0, 5, length.out = 1e3)
+y <-  5*cos(x*3) - 1*x + rnorm(n = length(x))
+
+tibble(
+  x = x,
+  y = y
+) |> 
+  ggplot() + aes(x = x, y = y) + geom_point(alpha = 0.5, color = "steelblue") + 
+  theme_bw() + geom_smooth(formula = y ~ x, se = FALSE, color = "black", linewidth = 1, method = "lm")
+
+```
+
+Ett alternativ är att modellera polynom (se @sec-polynomial) men ordningen av polynomet är svår att bestämma och data kräver ofta en hög ordning för att få en bra anpassning. 
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Polynom av ordning 6
+#| label: fig-nonlinear-polynomial
+#| out-width: "90%"
+#| echo: false
+
+tibble(
+  x = x,
+  y = y
+) |> 
+  ggplot() + aes(x = x, y = y) + geom_point(alpha = 0.5, color = "steelblue") + 
+  theme_bw() + geom_smooth(formula = y ~ x + I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6), se = FALSE, color = "black", linewidth = 1, method = "lm")
+
+```
+
+Vi skulle kunna dela upp data i olika områden och anpassa separata modeller för varje område som sedan knyts ihop till en sammanhängande modell. En sådan typ av metod är **splines**.
+
+## Splines
+
+Målet med splines är att anpassa en stegvis polynomfunktion på en uppdelat data där vi sätter begränsningar i skarvarna för att få kontinuitet, kontinuerliga derivator och andra eftersökta egenskaper. De olika delarna av data separeras av **knutar** (eng. knot) som bryter data i olika delar och frihetsgrader i denna kontext beskriver antalet parametrar som anpassas.
+
+[VAD SKA JAG TA MED?]{style="color: red"}
+
+## Trädmodeller
+
+Ytterligare en metod som använder sig av uppdelningar av data är **trädmodeller**. Istället för att använda knutar som brytpunkter delas variabelrummet in i icke-överlappande regioner (rektanglar) där alla observationer i samma region får samma anpassade värde. Att identifiera vilken region som en observation hamnar i kan beskrivas i en trädstruktur, därav namnet trädmodeller. Det anpassade värdet inom regionen beräknas oftast genom ett enkelt medelvärde eller typvärde beroende på responsvariabelns typ.
+
+En stor del av trädmodellernas träning är hur vi kan dela upp variabelrummet på ett bra sätt. Vi kan börja med att presentera strukturen av modellen och lite terminologi.
+
+
+::: {#fig-tree-structure}
+```{.tikz}
+\definecolor{myOrange}{RGB}{255,153,0}
+\definecolor{myBlue}{RGB}{16,152,247}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta}
+
+\begin{tikzpicture}[
+  block/.style={draw, rectangle, minimum width=1.6cm, minimum height=1cm, fill=myBlue!60},
+  orangeblock/.style={draw, rectangle, minimum width=1.6cm, minimum height=1cm, fill=myOrange!60},
+  node distance=2cm and 3cm,
+  >=Stealth
+]
+
+% Nodes
+\node[block] (N1) {Rotnod, N1};
+
+\node[orangeblock, below left=1.5cm and 1.2cm of N1] (N2) {N2};
+\node[orangeblock, below right=1.5cm and 1.2cm of N1] (N3) {N3};
+
+\node[orangeblock, below left=1.5cm and 0.4cm of N2] (N4) {N4};
+\node[orangeblock, below right=1.5cm and 0.4cm of N2] (N5) {N5};
+
+\node[orangeblock, below left=1.5cm and 0.4cm of N3] (N6) {N6};
+\node[orangeblock, below right=1.5cm and 0.4cm of N3] (N7) {N7};
+
+% Edges
+\draw[->, thick] (N1) -- (N2)
+  node[pos=0.5, black]{Regel 1};
+\draw[->, thick] (N1) -- (N3)
+  node[pos=0.5, black]{Regel 2};
+
+\draw[->, thick] (N2) -- (N4)
+  node[pos=0.5, black]{Regel 3};
+\draw[->, thick] (N2) -- (N5)
+  node[pos=0.5, black]{Regel 4};
+
+\draw[->, thick] (N3) -- (N6)
+  node[pos=0.5, black]{Regel 5};
+\draw[->, thick] (N3) -- (N7)
+  node[pos=0.5, black]{Regel 6};
+
+\end{tikzpicture}
+```
+Ett exempel på en trädmodell
+:::
+
+Ett träd består utav en **rotnod** där alla observationer börjar innan de går igenom ett antal **regler** via **noder** (N1-N7) innan de når ett **löv** (även kallad slutnod, N4-N7) där de sedan tilldelas ett värde på responsvariabeln. Denna struktur liknar ett släktträd vilket innebär att terminologin använder termer som **förälder** och **barn** för att beskriva relationen mellan noder. Till exempel är N2 föräldernod till N4 och N5, samt N6 är en barnnod till N3.
+
+Reglerna skapas utifrån de övriga variablerna i data beroende på dess variabeltyp, till exempel $X_1 = \text{"Varmblodig"} \rightarrow$ N2 och $X_1 = \text{"Kallblodig"} \rightarrow$ N3 för kategoriska variabler eller $X_2 \ge 150 \rightarrow$ N4 och $X_2 < 150 \rightarrow$ N5.
+
+### Beslutsregler
+
+Antalet olika regler som ett träd skulle kunna innehålla är oändliga. Vi måste på något sätt effektivt kunna välja och jämföra regler samt bedöma när trädet ska sluta förgrenas och anse en nod vara ett löv. Ett sätt är att använda Hunt's algoritm:
+
+:::{.callout-tip}
+## Hunt's algoritm
+
+1. Givet nuvarande datamängd $D_t = \{(X_i, Y_i), i = 1, \dots, n\}$ för den aktuella noden $t$.
+2. Om alla $Y_i$ är lika, markera $t$ som ett löv och ge värdet $Y_i$.
+3. Annars, använd en **testregel** för att dela upp $D_t$ i flera delar $D_{t_1}, \dots, D_{t_k}$ och upprepa 1-3 för alla barnnoder.
+:::
+
+Testreglerna ser olika ut beroende på variabeltyp och dess skala:
+
+- Binära variabler: binär uppdelning
+- Nominala variabler: binär eller mångfaldig uppdelning
+- Ordinala variabler: uppdelning som bevarar den ordinala skalan
+- Intervallskala: uppdelning till icke-överlappande intervall
+
+Att jämföra alla möjliga uppdelningar och värden är orimligt så vi behöver ytterligare en algoritm för att identifiera vilken variabel och vilken uppdelning som ger den bästa förbättringen av en vald kostnadsfunktion för nuvarande nod. Detta är ytterligare en girig algoritm som alltid väljer den bästa förbättringen vid varje steg oavsett om en sämre uppdelning just nu hade lett till en bättre uppdelning vid ett senare steg.
+
+**CART**-algoritmen (eng. Classification And Regression Trees) beräknar **informationsvinsten** för en testregel som:
+
+$$
+  \begin{aligned}
+  \Delta = I(\text{förälder}) - I(\text{barn}),\\
+  \Delta = I(\text{förälder}) - \sum_j \frac{N(R_j)}{N} I(R_j)
+  \end{aligned}
+$$
+där $I(\cdot)$ är den valda kostnadsfunktionen/föroreningsmått, $N$ är antal objekt i föräldranoden, $R_j$ är barnnod $j$ och $N(R_j)$ är antal objekt i barnnod $j$.
+
+Informationsvinsten ger en möjlighet att optimera variabler och dess uppdelningar med hjälp av effektiva algoritmer.
+
+[SÅSOM VAD?]{style="color: red"}
+
+### Klassificeringsträd
+
+För kontinuerliga variabler används ofta SSE som kostnadsfunktion men för klassificeringsträd kan vi använda någon av följande kostnadsfunktioner:
+
+- Felkvot: $E = 1 - max_k(p_{m,k})$
+- Gini index: $G = \sum_k p_{m,k} (1 - p_{m,k})$
+- Cross Entropy: $D = -\sum_k p_{m,k} log(p_{m,k})$
+
+där $p_{m,k}$ andelen i region $m$ som tillhör klass $k$.
+
+Varje löv får en predikterad klass via majoritetsröstning där vi helst vill att alla observationer i ett löv ska ha samma klass. Cross Entropy och Gini är ett bättre mått än felkvoten för detta ändamål men felkvoten brukar ändå användas för att utvärdera trädet på valideringsdata då det ger en enklare tolkning.
+
+Trädmodeller har en tendens att överanpassa till data väldigt lätt, vilket leder till en större vikt att fokusera på validering och generalisering. Vi har dock möjlighet att justera modellens komplexitet med vissa hyperparametrar: 
+
+- trädets djup
+- minsta antal observationer i ett löv
+
+Ju djupare trädet tillåts att vara, desto fler regler kommer användas och skapa fler löv med mindre storlek. Vi kan också sätta en gräns på när vi inte längre vill dela upp ett löv, att den måste innehålla ett visst antal observationer. Dessa hyperparametrar kan implementas på två olika sätt; **förbeskärning** eller **efterbeskärning**.
+
+Förbeskärning tillämpas under träningen där vi slutar att expandera trädet när den minsta antalet observationer i ett löv är uppnådd eller om informationsvinsten är lägre än en vald tröskel. Detta sätt minskar beräkningskostnaden då vi inte utforskar ett fullt utvecklat träd. Efterbeskärning utgår istället från ett fullt utvecklat träd där vi ersätter delträd (förgreningar) med ett löv ifall de inte uppfyller angivna begränsningar. Vi har med denna metod redan anpassat ett fullt träd ($T_0$) och har möjlighet att med hjälp av korsvalidering välja vilka delträd ($T$) som minimerar kostnaden när djupet av trädet också tas hänsyn till.
+
+$$
+  \begin{aligned}
+  C_{\alpha}(T) = \sum_{j = R \in \text{Löv i } T} N(R_j) \cdot I(R_j) + \alpha|T|
+  \end{aligned}
+$$
+där $|T|$ är antalet löv i $T$, $N(R_j)$ antal objekt i löv $j$. 
+
+På samma sätt som LASSO straffas informationsvinsten nu med avseende på antalet "parametrar" som här representeras av antalet antalet regler som leder till löv. Korsvalidering kan användas för att välja det $\alpha$ som ger minst valideringsfel.
+
+[ALPHA STYR INTE NÄR TRÄDET SKA BESKÄRAS ELLER HUR GÖR DEN DET?]{style="color: red"}
+
+### Fördelar och nackdelar
+Fördelar:
+Lätta att förstå och tolka
+Klarar av olika responsvariabler
+Kräver inte så mycket datahantering innan
+Funkar på relativt stora dataset
+Icke-parametrisk metod
+Automatisk variabelselektion
+Lär sig variabelinteraktioner automatiskt
+Kan anpassa många olika sorters funktioner
+
+Nackdelar sämre prediktiv förmåga, överanpassar lätt, omöjligt att hitta det optimala trädet, enkla funktioner kräver komplexa träd.
+
+Dessa nackdelar kan förbättras genom metoder som kommer presenteras i @sec-ensemble.
+
+
+
+
+## Referenser {.unnumbered}
+
+
+
+
+
+
+

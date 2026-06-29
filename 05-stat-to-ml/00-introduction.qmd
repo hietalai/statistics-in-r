@@ -1,0 +1,290 @@
+---
+engine: knitr
+filters: 
+  - webr
+  - diagram
+---
+<!-- CONTENT -->
+
+# Introduktion
+
+I dagens samhälle genereras över 400 miljoner terabyte data *dagligen* (https://www.statista.com/statistics/871513/worldwide-data-created/) av många olika former; text, ljud, video, bild. Klassiska statistiska modeller stöter ofta på problem dels när data inte är numeriska värden eller enkel text samt har stora problem att anpassas när data är alldeles för stort. Sedan 1990-talet har termer såsom Big Data, Knowledge Discovery, Data Mining, Artificial Intelligence, Machine Learning m.fl. alla försökt integrera statistisk teori med datavetenskapliga algoritmer för att hantera de specifika problem som uppkommer med stora datamängder av olika slag.
+
+I denna del kommer vi introducera och tillämpa begreppet **statistisk inlärning** som ett samlingsnamn för metoder som låter en dator lära sig mönster, samband och trender för att lösa uppgifter med både beskrivande och prediktiva syften. Vi kommer göra avtramp i klassiskt statistiska modeller såsom linjär regression och statistisk inferens, identifiera när dessa metoder brister och vägleda [(ORDVAL)]{style="color: red"} valet av mer kraftfulla metoder.
+
+## Statistisk modellering
+
+Vi kan kort sammanfatta statistisk modellering av samband med följande steg:
+
+- Utifrån en frågeställning, samla in relevant data (variabler)
+- Utforska data och välj en lämplig modell som beskriver det undersökta sambandet
+- Anpassa modellen och undersök dess fel för att bedöma modellens lämplighet och relevans
+- Använd modellen för inferens (slutsatser om populationen) och prediktioner (användning på ny data)
+
+Dessa steg kan tillämpas inom linjär regression som följer: 
+
+:::{.callout-tip}
+## Linjär regression
+
+Vi är intresserade av att undersöka sambandet mellan en responsvariabel $\mathbf{Y}$ och ett antal förklarande variabler $\mathbf{X}$ där vi antar ett linjärt samband mellan $\mathbf{X}$ och $\mathbf{Y}$. 
+
+En lämplig modell för att undersöka detta samband blir då:
+
+$$
+  \begin{aligned}
+  \mathbf{Y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}
+  \end{aligned}
+$$
+där: 
+
+$$
+    \mathbf{Y} = \underset{n \times 1}{\Ymatrix} \quad 
+    \mathbf{X} = \underset{n \times p}{\Xmatrix} \quad
+    \boldsymbol{\beta} = \underset{p \times 1}{\betamatrix} \quad
+    \boldsymbol{\varepsilon} = \underset{n \times 1} {\epsilonMatrix}
+$$
+och $\varepsilon \sim N(0, \sigma^2_e)$. $n$ beskriver antalet observationer, $k$ antalet variabler, och $p$ antalet parametrar ($k + 1$).
+
+Vi anpassar modellens parametrar med hjälp av minsta kvadratskattningen:
+
+$$
+  \begin{aligned}
+    \olsMatrix
+  \end{aligned}
+$$
+där kovariansmatrisen för $\boldsymbol{\hat{\beta}}$ beräknas enligt:
+$$
+  \begin{aligned}
+  \olsVarMatrix
+  \end{aligned}
+$$
+och $SSE = \sseMatrix$.
+
+Modellens residualer ($\mathbf{Y} - \mathbf{X}\boldsymbol{\hat{\beta}}$) beräknas och undersöks gentemot residualantaganden för att bedöma modellens lämplighet.
+
+Med hjälp av skattningarna $\boldsymbol{\hat{\beta}}$ och $s^2_{\boldsymbol{\hat{\beta}}}$ kan vi genomföra inferens på modellens parametrar, både hypotesprövningar och konfidensintervall, för att dra slutsatser om de olika förklarande variablernas effekt på responsvariabeln. Vi kan också använda modellen för att prediktera $\hat{Y}$ givet nya värden $\mathbf{X}_0$ med tillhörande intervallskattningar.
+
+:::
+
+:::{.callout-note}
+Om du behöver en mer djupgående repetition av linjär regression (eller matrisberäkningar) rekommenderas att du läser igenom @sec-regression. 
+:::
+
+I detta exempel kommer vi stöta på stora problem vid flera tillfällen, t.ex. om $n$ är stort eller $p > n$. Dessa data skulle kunna vara transaktionsdatabaser, hälsoregister, sociala nätverk, väder- och klimatdata, börsdata, textkorpus, sensordata m.fl. 
+
+[TODO: ADD MORE ABOUT THE LIMITATIONS]{style="color: red"}
+
+## Statistisk inlärning
+
+Inom statistisk inlärning använder vi fortfarande samma grundsteg i en undersökning av samband. Det som skiljer är valet av den lämpliga modellen där vi med maskininlärningsmetoder kan utöka vår verktygslåda med specifika metoder som kan hantera bristerna i klassiska statistiska metoder.
+
+Vi kan formalisera analysprocessen som följer:
+
+1. Formulering av problemet
+2. Insamling av data
+3. Databearbetning och hantering
+    - Bearbetning av variabler och/eller observationer
+    - Saknade värden, extremvärden, skalning/normalisering
+    - Explorativ analys med hjälp av beskrivande mått och visualiseringar
+4. Val av modell, dess anpassning och användning till prediktioner
+5. Utvärdering av modellen
+
+I resterande kapitel kommer fokus ligga på steg fyra och fem genom att introducera flertalet metoder och hur dessa utvärderas på bästa sätt. De första tre punkterna lämnar vi till "tidigare kunskaper" eller andra delar. [(ORDVAL)]{style="color: red"}
+
+Linjär regression är ett exempel på **supervised learning** (ungefärlig sv. övervakad inlärning) där vi vet sanna värden på responsvariabeln och "övervakar" inlärningen till den grad att modellen lär sig de observerade sanna värdena. Generellt kan vi dela upp supervised learning i två fält; **regression** och **klassificering**. 
+
+
+:::{.callout-note}
+Det finns flera andra metoder för inlärning som inte tas upp i detta material. Dessa löser både olika syften och olika situationer som kan uppstå med insamlad data:
+
+- Unsupervised learning där det inte finns någon responsvariabel och metoderna syftar till att hitta gömda grupperingar bland en mängd variabler.
+- Semi-supervised learning där endast delar av responsvariabeln har observerade sanna värden
+- Reinforcement learning där målet är att agera optimalt i en viss miljö och lär sig beteenden med hjälp av data
+:::
+
+Regression förutsätter att vi har en kontinuerlig responsvariabel medan klassificering förutsätter en kategorisk responsvariabel. Hädanefter i detta material kommer vi släppa på termen "linjär" när vi pratar om regression då vi inte längre begränsar oss till just den typen av regressionsmodeller. Klassificering har inom ren statistik historiskt modellerats med hjälp av **logistisk regression** där vi fortfarande använder grunderna från den linjära modellen på grund av dess enkelhet men behöver transformera den med en **länkfunktion** och skatta modellens parametrar med hjälp av **numerisk optimering**. En detaljerad genomgång av logistisk regression finns i @sec-logistic.
+
+### Val av modell
+
+Valet av en lämplig modell innefattar inte bara valet av modellfamilj (metod) [ORDVAL]{style="color: red"} utan även identifiering av modellens struktur och relevanta relationer. Det vi vill uppnå med en modellanpassning är att:
+
+- modellen fångar upp sambanden mellan responsvariabeln och de förklarande kopplat till frågeställningen.
+- modellen ska vara så enkel som möjligt för att underlätta både anpassning och användning.
+- modellen ska gå att beräkna inom "rimlig tid".
+  - Vi vill inte att modellen tar längre tid att anpassa än tidshorisonten den ska användas till, till exempel att det tar en dag att anpassa modell för att prediktera nästkommande dagsförsäljning i det extrema fallet.
+- modellen ska **generalisera** till ny liknande data.
+
+Vi kan formulera en standardmodell som följer:
+
+$$
+  \begin{aligned}
+  y = f(x|\theta) + \varepsilon
+  \end{aligned}
+$$ {#eq-standard-model}
+där $f$ är en okänd funktion, $\theta$ är funktionens parametrar, $\varepsilon$ är en slumpmässig felterm med $E[\varepsilon] = 0$ och $Var(\varepsilon) = \sigma^2_e$. 
+
+Med hjälp av @eq-standard-model kan vi formulera både mer strukturerade och mer godtyckliga modeller såsom:
+
+- $f(x|\theta) = \theta_0 + \theta_1 x_1 + \theta_2 x_2$
+- $f(x|\theta) = \theta_3 \cdot sin(2\pi\theta_1 x + \theta_2) + \theta_4$
+- $f(x|\theta) = exp\left(-\theta_1 (x - \theta_2)^2\right)$
+
+:::{.callout-note}
+Vanligtvis hittar vi inte på modeller helt godtyckligt då anpassningen, och användningen, av dessa riskerar bli alldeles för komplexa. Istället väljer vi någon av modellerna som har enkla sätt att anpassa dess parametrar givet vissa uppfyllda antaganden.
+:::
+
+Modellens generaliserbarhet är väldigt viktig då vi vill motverka att en modell **överanpassas** till det observerade data. Samtidigt vill vi inte heller **underanpassa** en för enkel modell då den också kommer få problem att generalisera till ny data. 
+
+:::: {.columns}
+
+::: {.column width="49%"}
+  
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Enkel modell med få parametrar
+#| label: fig-underfit
+#| out-width: "90%"
+
+set.seed(1234)
+data <- 
+  tibble(
+    x = 1:12,
+    y = exp(0.5*x) + rnorm(n = 12, mean = x, sd = 4*x)
+  ) |> 
+  mutate(
+    ylin = lm(y ~ x) |> fitted()
+  )
+
+data |> 
+  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 5) + 
+  theme_bw() + scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) + labs(x = NULL, y = NULL) + 
+  geom_line(mapping = aes(y = ylin), color = "firebrick", linewidth = 1)
+
+```
+
+:::
+
+::: {.column width="49%"}
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Komplex modell med många parametrar
+#| label: fig-overfit
+#| out-width: "90%"
+#| warning: false
+
+update_geom_defaults("Xspline", aes(size = 1))
+
+data |> 
+  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 5) + 
+  theme_bw() + scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) + labs(x = NULL, y = NULL) +
+  theme(line = element_line(linewidth = 1)) +
+  ggalt::geom_xspline(
+    color = "firebrick"
+  )
+
+```
+:::
+
+::::
+
+En underanpassad modell lyckas inte fånga up de relevanta strukturerna i data, exempelvis lyckas inte en enkel linjär modell fånga upp den krökta sambandet mellan x och y i @fig-underfit. En överanpassad modell antar att bruset är en del av sambandet, exempelvis i @fig-overfit där alla observerade punkter nås exakt av den anpassade modellen.
+
+Istället vill vi anpassa en generell modell som är lagomt komplex, som fångar upp strukturen men luras inte av bruset.
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Lagom komplex modell
+#| label: fig-acceptablefit
+#| out-width: "50%"
+#| out-height: "50%"
+#| warning: false
+
+data |> 
+  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 5) + 
+  theme_bw() + scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) + labs(x = NULL, y = NULL) +
+  theme(line = element_line(linewidth = 1)) +
+  geom_smooth(method = "glm", formula = y ~ x + I(x^2) + I(x^3), se = FALSE, color = "steelblue", linewidth = 1)
+
+```
+
+@fig-acceptablefit fångar upp de generella mönstrena men avviker inte när observationer avviker mycket från den. [ORDVAL]{style="color: red"}
+
+Denna form av visualisering är omöjlig att göra i praktiken när vi ska välja en lämplig modell då vi har betydligt fler än två dimensioner i data. Istället använder vi oss av två andra knep; **felfunktioner** (även kallad kostnadsfunktioner) och **datauppdelning**.
+
+### Felfunktioner {#sec-error-function}
+
+En felfunktion är en funktion som, givet data, ger oss ett värde på hur bra modellen anpassar data. Inom linjär regression använder vi oss exempelvis av **Mean Squared Error** (MSE) som ett sätt att visa hur mycket fel en modell gör. Detta mått kommer vi åter att använda inom regression men också ge några alternativ som lämpar sig för olika ändamål.
+
+MSE som mått kan beräknas som:
+
+$$
+  \begin{aligned}
+  MSE = \frac{1}{n} \Sum{n} \left(y_i - f(x_i | \hat{\theta})\right)^2
+  \end{aligned}
+$$ {#eq-mse}
+
+MSE kommer skapa stora värden om extremvärden förekommer i data. Då kan en alternativ felfunktion definieras som **Mean Absolute Error** (MAE):
+
+
+$$
+  \begin{aligned}
+  MAE = \frac{1}{n} \Sum{n} \left|y_i - f(x_i | \hat{\theta})\right|
+  \end{aligned}
+$$ {#eq-mae}
+
+För klassificering är två vanliga mått **Cross Entropy** och **Missclassification** vilka vi kommer återkomma till senare.
+
+Vi vet att när måtten är 0 så betyder det att inga fel alls är gjorda och att vi har en överanpassad modell eftersom den perfekt modellerar alla punkter i data, men vilket värde som innebär att vi underanpassar eller har hittat en lagom komplex modell är svårt att tyda med enbart felfunktioner.
+
+### Datauppdelning {#sec-data-split}
+
+Om vi delar upp data i minst två slumpmässiga delar, anpassar modellen på en del, beräknar felfunktionen för den första och en annan del, för att till sist jämföra dessa mått kan vi nu se när en modell är lagomt komplex.
+
+Data kan delas in i tre olika delar med olika syften:
+
+- **Träningsmängd**: används för att "träna", dvs. anpassa, modellen
+- **Valideringsmängd**: används för att "validera", dvs. välja den bästa modellen
+- **Testmängd**: används för att få en väntevärdesriktig skattning av felet för en modell
+
+Detta är en disjunkt uppdelning för att träningen och valideringen av modellen inte genomförs på samma data.
+
+:::{.callout-note}
+Notera att olika litteratur kan ibland blanda ihop termerna validering och test. De säger att de använder en testmängd när de i själva verket använder det som valideringsmängden, det vill säga för att välja den bästa modellen.
+:::
+
+För att modellen ska få så mycket information som möjligt för sin träning^[Hädanefter kommer vi använda tränas/träning för att mena anpassning av modeller.], bör vi använda det mesta av det insamlade datamaterialet till träningsmängden. Vi vill dock också få en bra mängd data till valideringen, och till sist testningen, så vi får försöka balansera proportionerna i denna uppdelning på något sätt. Vanliga proportioner är:
+
+- 1/3, 1/3, 1/3
+- 1/2, 1/4, 1/4
+- 0.8, 0.1, 0.1
+ 
+Det viktigaste är att träningsmängden inte är den minsta av de tre.
+
+## Exempeldata
+
+Genomgående i denna del kommer vi exemplifiera teorin med hjälp av olika datamaterial. Dessa datamaterial är enklare exempel på data som kan dyka upp i verkligheten men det är värt att komma ihåg att en stor del av en riktig analys kräver bearbetning av data till de format som våra modeller önskar.
+
+### Spammail
+
+Datamaterialet spambase
+
+
+
+## Referenser {.unnumbered}
+
+
+
+
+
+
+

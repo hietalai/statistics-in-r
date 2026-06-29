@@ -17,6 +17,8 @@ Within the project directory install the following extensions in the terminal
 
 `quarto add quarto-ext/shinylive`
 
+`quarto install extension pandoc-ext/diagram`
+
 ### Adding a Shinylive object
 
 

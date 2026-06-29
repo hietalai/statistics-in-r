@@ -6,6 +6,7 @@ suppressMessages({
   require(plotly, quietly = TRUE)
   require(kableExtra, quietly = TRUE)
   require(ggforce, quietly = TRUE)
+  require(ggalt, quietly = TRUE)
   require(olsrr)
   require(nnet)
   require(emmeans)

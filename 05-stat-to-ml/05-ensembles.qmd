@@ -1,0 +1,210 @@
+---
+engine: knitr
+filters: 
+  - webr
+  - diagram
+---
+<!-- CONTENT -->
+
+# Ensemblemetoder
+
+Istället för att förlita sig på en enstaka modell kan vi kombinera flera modeller i en **ensemblemodell**. Grundidén är att med hjälp av flera modeller kan respektive fokusera på olika områden av data och när de kombineras blir prediktionerna bättre.
+
+Det finns många olika varianter men de delas ofta upp i två olika metoder; fokusera på data eller på modeller. Vi kan med hjälp av **bootstrapping** eller **bagging** (bootstrap aggregating) göra slumpmässiga urval från träningsdata och skatta modeller på dessa olika urval. Vi kan också med hjälp av **boosting** vikta observationer i urvalen beroende på olika kriterier, exempelvis vikta upp de observationer som en modell inte lyckats prediktera rätt och vikta ner de observationer som en modell lyckats prediktera rätt. 
+
+
+
+::: {#fig-ensemble-data}
+```{.tikz}
+\definecolor{myOrange}{RGB}{255,153,0}
+\definecolor{myBlue}{RGB}{16,152,247}
+
+\usetikzlibrary{positioning,arrows.meta,calc,shapes.geometric}
+
+\begin{tikzpicture}[
+  block/.style={draw, rectangle, minimum width=2.4cm, minimum height=1cm, fill=myBlue!60},
+  model/.style={draw, circle, minimum size=1.4cm, fill=myBlue!80},
+  data/.style={draw, cylinder, cylinder uses custom fill,
+  cylinder body fill=myOrange!60, cylinder end fill=myOrange!80,
+  shape border rotate=90, aspect=0.25,
+  minimum height=1.9cm, minimum width=1.5cm},
+  >=Stealth
+]
+
+\node[data] (train) {Träningsdata};
+\node[data, fill = myBlue!60, right=2cm of train, yshift=2cm] (train1) {Urval 1};
+\node[data, fill = myBlue!60, right=2cm of train, yshift=0cm] (train2) {Urval 2};
+\node[data, fill = myBlue!60, right=2cm of train, yshift=-2cm] (train3) {Urval 3};
+\node[block, right=2cm of train2] (model) {Modell};
+\node[model, right=2cm of model, yshift=2cm] (model1) {Model 1}
+\node[model, right=2cm of model, yshift=0cm] (model2) {Model 2}
+\node[model, right=2cm of model, yshift=-2cm] (model3) {Model 3}
+\node[block, right=3cm of model2, align=center] (ens) {Ensemble Model\\(Average)};
+\node[data, right=2cm of ens] (score) {Testdata};
+
+\draw[->, thick] (train) -- (train1);
+\draw[->, thick] (train) -- (train2);
+\draw[->, thick] (train) -- (train3);
+\draw[->, thick] (train1) -- (model);
+\draw[->, thick] (train2) -- (model);
+\draw[->, thick] (train3) -- (model);
+\draw[->, thick] (model) -- (model1);
+\draw[->, thick] (model) -- (model2);
+\draw[->, thick] (model) -- (model3);
+\draw[->, thick] (model1) -- (ens);
+\draw[->, thick] (model2) -- (ens);
+\draw[->, thick] (model3) -- (ens);
+\draw[->, thick] (score) -- (ens);
+
+\end{tikzpicture}
+```
+Databaserad ensemble
+:::
+
+
+Metoder som fokuserar på olika modeller innebär att träna flera olika modeller på samma data eller samma modell med olika hyperparametervärden som sedan kombineras.
+
+
+
+::: {#fig-ensemble-model}
+```{.tikz}
+\definecolor{myOrange}{RGB}{255,153,0}
+\definecolor{myBlue}{RGB}{16,152,247}
+
+\usetikzlibrary{positioning,arrows.meta,calc,shapes.geometric}
+
+\begin{tikzpicture}[
+  block/.style={draw, rectangle, minimum width=2.4cm, minimum height=1cm, fill=myBlue!60},
+  model/.style={draw, circle, minimum size=1.4cm, fill=myBlue!80},
+  data/.style={draw, cylinder, cylinder uses custom fill,
+  cylinder body fill=myOrange!60, cylinder end fill=myOrange!80,
+  shape border rotate=90, aspect=0.25,
+  minimum height=1.9cm, minimum width=1.5cm},
+  >=Stealth
+]
+
+
+\node[data] (train) {Träningsdata};
+\node[block, right=2cm of train, yshift=1.4cm] (mA) {Beslutsträd};
+\node[block, right=2cm of train, yshift=-1.4cm] (mB) {Neuralt nätverk};
+\node[model, right=2cm of mA] (A) {Model A};
+\node[model, below=1.15cm of A] (B) {Model B};
+\node[block, right=3cm of $(A)!0.5!(B)$, align=center] (ens) {Ensemble Model\\(Average)};
+\node[data, right=2cm of ens] (score) {Testdata};
+\draw[->, thick] (train) -- (mA);
+\draw[->, thick] (train) -- (mB);
+\draw[->, thick] (mA) -- (A);
+\draw[->, thick] (mB) -- (B);
+\draw[->, thick] (A) -- (ens.west);
+\draw[->, thick] (B) -- (ens.mid west);
+\draw[->, thick] (score) -- (ens);
+
+\end{tikzpicture}
+```
+Modellbaserad ensemble
+:::
+
+## Bootstrapping och Bagging
+
+Bootstrapping är en klassisk teknik för att skapa nya datamaterial från ett begränsat insamlat data. Metoden går ut på att vi skapar $B$ urval där observationer väljs [med återläggning]{.underline} från träningsmängden som vi sedan använder för att skatta olika modell eller funktioner. Metoden har använts inom frekventistisk statistik för att skapa skattningar av de sanna parametrarna och deras medelfel och samplingfördelning. 
+
+Bagging tar alla $B$ bootstrapurval och tränar en modell på respektive urval $\hat{f}_b$. Den slutgiltiga modellen får vi genom att aggregera alla dessa modeller med exempelvis dess medelvärde.
+$$
+  \begin{aligned}
+  \hat{f}_{bag}(\boldsymbol{X}) = \frac{1}{B} \sum_{b=1}^B \hat{f}_b(\boldsymbol{X})
+  \end{aligned}
+$$
+För klassificering kan vi använda majoritetsröstning för att bestämma den slutgiltiga prediktionen. Bagging sänker variansen av den anpassade funktionen men påverkas *mycket* av kvalitén av modellen som anpassas. Om modellen är bra blir aggregeringen bättre, men en dålig modell blir sämre när den aggregeras. 
+
+[MER OM HUR DETTA KAN GÖRAS I PRAKTIKEN I R]{style="color: red"}
+
+## Random Forest
+
+Specifikt för trädmodeller kan bagging ge stora förbättringar i den slutgiltiga prestandan men det finns vissa problem. Bootstrapurvalen är korrelerade eftersom vi utgår från samma ursprungliga träningsmängd och detta medför att reduktionen i varians blir liten när vi tar ett medelvärde över de korrelerade variablerna [VARIABLERNA?]{style="color: red"}.
+
+**Random Forest** löser problemet med korrelerade modeller genom att slumpmässigt ändra modellerna som tränas. Vid varje uppdelning används endast en slumpmässig delmängd ($q \le p$) av de förklarande variablerna. Storleken på $q$ bestämmer vi själva men Leo Breiman [KÄLLA PÅ DENNA]{style="color: red"} föreslår följande tumregler:
+
+$$
+  \begin{aligned}
+  \text{Klassificering} \qquad &q = \sqrt{p}\\
+  \text{Regression} \qquad &q = \frac{p}{3}
+  \end{aligned}
+$$
+
+Varje modell tränas då på ett urval av observationer (med återläggning) och ett urval av variabler vilket leder till ett minskat bias, "artificiell" varians i varje träd och mindre korrelation mellan träden. Ofta dominerar den avkorrelerade effekten vilket leder till att MSE minskar på testdata. 
+
+Andra fördelar med Random Forest är att den är lätt att parallelisera samt att det urval av parametrar som görs minskar kostnaden för varje uppdelning.
+
+## Boosting
+
+En enkel modell kan vanligtvis fånga upp vissa aspekter av data. Om vi försöker lära oss en stor mängd av enkla modeller som var och en lär sig en liten del av data kan vi sedan kombinera dessa "dåliga" modeller till en tillsammans stark modell. Boostingmetoden lär sig *sekventiellt* en ensemble av svaga modeller, till skillnad från den parallella baggingmetoden. 
+
+Vi exemplifierar metoden för en binär klassificerare där $y$ antar värdena -1 eller 1. Utifrån dessa värden kan vi skriva en majoritetsröstning av $B$ klassificerare som:
+
+$$
+  \begin{aligned}
+  sign\left(\sum_{b=1}^B \hat{y}^b(\boldsymbol{X})\right)
+  \end{aligned}
+$$
+Första modellen som tränas har samma vikt på alla observationer, $w_i^1 = \frac{1}{n}\quad i = \{1, 2, \dots, n\}$. Denna modell kommer vara överlag en svag prediktor men vi använder dess prestanda för att uppdatera vikterna för nästa träning. Felklassificerade observationer får en högre vikt vilket gör att nästa modell behöver jobba mer för att klassificera dessa rätt, medan korrekta prediktioner får en mindre vikt. Denna process repeteras fram till att vi har $B$ modeller där vikterna successivt ökas och minskas beroende på resultaten från den föregående modellen. En observation som är svårklassificerad kommer få en större och större vikt tills modellen måste specifikt försöka prediktera den rätt.
+
+Prediktionerna från alla modellerna kombineras genom att använda en viktad majoritetsröstning:
+$$
+  \begin{aligned}
+  \hat{y}_{boost}(\boldsymbol{X}) = sign\left(\sum_{b = 1}^B \alpha^b \hat{y}^b(\boldsymbol{X})\right)
+  \end{aligned}
+$$
+där $\alpha^b$ är en viktningskoefficient för modell $b$.
+
+[BEHÖVER VISA HUR VIKTNING KAN ANVÄNDAS I EN FELFUNKTION FÖR ATT DENNA METOD SKA VARA LÄTT ATT FÖRSTÅ]{style="color: red"}
+
+Frågorna vi måste ställa oss nu är; hur ska vi öka/minska vikterna och hur ska vi bestämma värdet på $\alpha^b$. Olika boostingalgoritmer ger lite olika svar på dessa frågor. En utav de första algoritmerna, AdaBoost, besvarade dessa frågor genom att minimera den exponentiella kostnadsfunktionen. Det finns många olika varianter, den mest kända är nog XGBoost.
+
+[Mer om gradient boosting/XGBOOST? Slide 30 i FL6]{style="color: red"}
+
+## Bagging eller boosting?
+
+Valet av ensemblemetod kan ibland vara svårt att göra. Mycket beror på vad vi vill uppnå med metoden då deras syften och för-/nackdelar är lite olika.
+
+:::{#tbl-ensemble-comparison}
+
+<table style="margin-left: auto; margin-right: auto; border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid black; padding: 6px;">Bagging</th>
+      <th style="border: 1px solid black; padding: 6px;">Boosting</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid black; padding: 6px;">Kan träna modeller parallellt</td>
+      <td style="border: 1px solid black; padding: 6px;">Tränar modeller sekventiellt</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid black; padding: 6px;">Använder bootstrappade dataset</td>
+      <td style="border: 1px solid black; padding: 6px;">Använder viktade dataset</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid black; padding: 6px;">Överanpassar inte med ökande $B$</td>
+      <td style="border: 1px solid black; padding: 6px;">Kan överanpassa när $B$ ökar</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid black; padding: 6px;">Minskar variansen men inte bias</td>
+      <td style="border: 1px solid black; padding: 6px;">Minskar varians och bias</td>
+    </tr>
+  </tbody>
+</table>
+
+:::
+
+
+
+
+## Referenser {.unnumbered}
+
+
+
+
+
+
+

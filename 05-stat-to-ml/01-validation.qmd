@@ -1,0 +1,739 @@
+---
+engine: knitr
+filters: 
+  - webr
+  - diagram
+---
+<!-- CONTENT -->
+
+# Modellval
+Med hjälp av felfunktioner (@sec-error-function) och datauppdelning (@sec-data-split) och  kan vi nu skapa en process för att hitta den bästa modellen.
+
+
+## Modellvalsprocess {#sec-validation}
+Vi kan börja med att ta fram några kandidatfunktioner (modeller) som tränas på träningsmängden:
+
+::: {#fig-training-step}
+```{.tikz}
+\definecolor{myOrange}{RGB}{255,153,0}
+\definecolor{myBlue}{RGB}{16,152,247}
+
+\begin{tikzpicture}[
+    box/.style={draw, thick, fill=myOrange!30, minimum width=3cm, minimum height=1.2cm},
+    every node/.style={font=\sffamily},
+    bar/.style={draw, thick, minimum height=0.9cm},
+    arrow/.style={->, thick}
+]
+
+  % Bottom bar
+  \node[bar, fill=gray!20, minimum width=4cm] (train) at (0,0) {Träning};
+  \node[bar, fill=gray!30, minimum width=4cm] (val)   at (4,0) {Validering};
+  \node[bar, fill=gray!40, minimum width=4cm] (test)  at (8,0) {Test};
+  
+  % Model boxes
+  \node[box] (m1) at (1,3) {M1(?, ?)};
+  \node[box] (m2) at (5,3) {M2(?, ?, ?)};
+  \node[box] (m3) at (9,3) {M3(?, ?, ?, ?, ?)};
+  
+  % Arrows from training to models
+  \draw[arrow] (train.north) -- (m1.south);
+  \draw[arrow] (train.north) -- (m2.south);
+  \draw[arrow] (train.north) -- (m3.south);
+
+\end{tikzpicture}
+```
+Träningssteget av processen
+:::
+
+De tränade modellerna utvärderas sedan på valideringsmängden genom att beräkna felfunktionens värde.
+
+::: {#fig-validation-step}
+```{.tikz}
+\definecolor{myOrange}{RGB}{255,153,0}
+\definecolor{myBlue}{RGB}{16,152,247}
+\usetikzlibrary{fit}
+
+\begin{tikzpicture}[
+    box/.style={draw, thick, fill=myOrange!30, minimum width=3cm, minimum height=1.2cm},
+    every node/.style={font=\sffamily},
+    bar/.style={draw, thick, minimum height=0.9cm},
+    arrow/.style={->, thick}
+]
+
+  % Bottom bar
+  \node[bar, fill=gray!20, minimum width=4cm] (train) at (0,0) {Träning};
+  \node[bar, fill=gray!30, minimum width=4cm] (val)   at (4,0) {Validering};
+  \node[bar, fill=gray!40, minimum width=4cm] (test)  at (8,0) {Test};
+  
+  % Model boxes
+  \node[box] (m1) at (1,3) {M1(A1, A2)};
+  \node[box] (m2) at (5,3) {M2(B1, B2, B3)};
+  \node[box] (m3) at (9,3) {M3(C1, C2, C3, C4, C5)};
+  
+  % Arrows from training to models
+  \draw[arrow] (m1.south) -- (val.north);
+  \draw[arrow] (m2.south) -- (val.north);
+  \draw[arrow] (m3.south) -- (val.north);
+
+  \node[
+    draw,
+    red,
+    thick,
+    circle,
+    fit=(m2),
+    inner sep=4pt
+  ] {};
+
+\end{tikzpicture}
+```
+Valideringssteget av processen
+:::
+
+Anta att $M2$ valts som den bästa modellen enligt valideringsfelet. Det är bara denna modell som till sist används för att beräkna det väntevärdesriktiga felet på testmängden.
+
+::: {#fig-test-step}
+```{.tikz}
+\definecolor{myOrange}{RGB}{255,153,0}
+\definecolor{myBlue}{RGB}{16,152,247}
+
+\begin{tikzpicture}[
+    box/.style={draw, thick, fill=myOrange!30, minimum width=3cm, minimum height=1.2cm},
+    box2/.style={draw, thick, fill=gray!30, minimum width=3cm, minimum height=1.2cm},
+    every node/.style={font=\sffamily},
+    bar/.style={draw, thick, minimum height=0.9cm},
+    arrow/.style={->, thick}
+]
+
+  % Bottom bar
+  \node[bar, fill=gray!20, minimum width=4cm] (train) at (0,0) {Träning};
+  \node[bar, fill=gray!30, minimum width=4cm] (val)   at (4,0) {Validering};
+  \node[bar, fill=gray!40, minimum width=4cm] (test)  at (8,0) {Test};
+  
+  % Model boxes
+  \node[box2] (m1) at (1,3) {M1(A1, A2)};
+  \node[box] (m2) at (5,3) {M2(B1, B2, B3)};
+  \node[box2] (m3) at (9,3) {M3(C1, C2, C3, C4, C5)};
+  
+  % Arrows from training to models
+  \draw[arrow] (m2.south) -- (test.north);
+
+\end{tikzpicture}
+```
+Teststeget av processen
+:::
+
+Om vi också lägger till valideringsmängden till @fig-underfit, kan vi se effekten av att under och överanpassa modellen till träningsmängden. I följande diagram är valideringsmängdens observaterioner markerade med `x` medan träningsmängden fortfarande är markerade med `o`.
+
+:::: {.columns}
+
+::: {.column width="49%"}
+  
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Enkel modell med få parametrar
+#| label: fig-underfit-withValid
+#| out-width: "90%"
+
+
+set.seed(1234)
+data <- 
+  tibble(
+    x = 1:12,
+    y = exp(0.5*x) + rnorm(n = 12, mean = x, sd = 4*x)
+  ) |> 
+  mutate(
+    ylin = lm(y ~ x) |> fitted()
+  )
+
+set.seed(1234)
+
+data |> 
+  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 5) + 
+  theme_bw() + scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) + labs(x = NULL, y = NULL) + 
+  geom_line(mapping = aes(y = ylin), color = "firebrick", linewidth = 1) +
+  geom_jitter(shape = "x", size = 5, width = 0, height = 50)
+
+```
+
+:::
+
+::: {.column width="49%"}
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Komplex modell med många parametrar
+#| label: fig-overfit-withValid
+#| out-width: "90%"
+#| warning: false
+
+update_geom_defaults("Xspline", aes(size = 1))
+
+set.seed(1234)
+data |> 
+  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 5) + 
+  theme_bw() + scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) + labs(x = NULL, y = NULL) +
+  theme(line = element_line(linewidth = 1)) +
+  ggalt::geom_xspline(
+    color = "firebrick"
+  ) +
+  geom_jitter(shape = "x", size = 5, width = 0, height = 50)
+
+```
+:::
+
+::::
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Lagom komplex modell
+#| label: fig-acceptablefit-withValid
+#| out-width: "50%"
+#| out-height: "50%"
+#| warning: false
+
+set.seed(1234)
+data |> 
+  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 5) + 
+  theme_bw() + scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) + labs(x = NULL, y = NULL) +
+  theme(line = element_line(linewidth = 1)) +
+  geom_smooth(method = "glm", formula = y ~ x + I(x^2) + I(x^3), se = FALSE, color = "steelblue", linewidth = 1) +
+  geom_jitter(shape = "x", size = 5, width = 0, height = 60)
+
+```
+
+Vi ser att @fig-underfit-withValid får en dålig anpassning för båda mängderna vilket leder till höga värden på felfunktionen på respektive. @fig-overfit-withValid visar att när modellen exakt följer träningsmångden får vi extremt låga värden på träningens felfunktion men stora värden på valideringsmängden. Den "lagomt" komplexa modellen får "lagomt" stora värden på båda tränings- och valideringsfelet. 
+
+:::{.callout-important}
+Om en modell endast tränas på träningsmängden finns en stor risk att optimeringsalgoritmen avslutar träningen när modellen är överanpassad. Istället bör vi använda valideringsmängden i träningen iterativa process och optimera modellen 
+
+[NÅGONTING OM HUR VI STOPPAR TRÄNINGEN BASERAT PÅ VALIDERINGSMÄNGDEN, INTE TRÄNINGSMÄNGDEN]{style="color: red"}
+
+
+Vi kan också integrera tränings- och valideringsmängden direkt i träningsprocessen genom att iterativt optimera och utvärdera på valideringsmängden istället för enbart träningsmängden.
+:::
+
+Vi kan visualisera denna avvägning i följande diagram:
+
+::: {#fig-bias-variance}
+```{.tikz}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily}
+]
+
+\definecolor{firebrick}{RGB}{181,43,43}
+\definecolor{steelblue}{RGB}{70,130,180}
+
+% Axes
+\draw[->] (0,0) -- (8,0);
+\draw[->] (0,0) -- (0,5);
+
+% X-axis labels
+\node[below] at (0,0) {Låg};
+\node[below] at (7.5,0) {Hög};
+\node[below=8pt] at (4,0) {Modellens komplexitet};
+\node[left] at (-1,2.5) {Felfunktion};
+
+\draw[
+  thick,
+  steelblue
+]
+plot[smooth] coordinates {
+  (0.2,3.8)
+  (0.8,3.0)
+  (1.5,2.2)
+  (2.2,1.8)
+  (3.0,1.5)
+  (4.0,1.3)
+  (5.0,1.2)
+  (6.2,1.15)
+  (7.5,1.12)
+};
+
+\node[steelblue] at (6.2,1.85) {Träningsmängd};
+
+\draw[
+  thick,
+  firebrick
+]
+plot[smooth] coordinates {
+  (0.2,4.0)
+  (0.8,3.2)
+  (1.5,2.4)
+  (2.2,2.0)
+  (3.0,1.95)
+  (4.0,2.1)
+  (5.0,2.4)
+  (6.2,2.8)
+  (7.5,3.4)
+};
+
+\node[firebrick] at (4.2,3.25) {Valideringsmängd};
+
+% Bounding box (optional, matches image style)
+\draw[gray] (0,0) rectangle (8,5);
+\end{tikzpicture}
+```
+Visualisering av avvägningen mellan bias och varians.
+:::
+
+[ÄR DETTA RELEVANT MED VALIDERINGsmängd ISTÄLLET FÖR TEST?]{style="color: red"}  
+
+[BEHÖVER FÖRKLARA BIAS VARIANS OCH BRUS FÖR ATT DENNA BILD SKA KUNNA TOLKAS MER (SLIDE 38 FL1)]{style="color: red"}
+
+
+
+:::{.callout-note}
+För vissa extremt komplexa modeller förekommer ett fenomen benämnt **double descent** där valideringsfelet minskar och sedan ökar för att till sist minska igen. Ni kan läsa mer om detta fenomen via [Wikipedia](https://en.wikipedia.org/wiki/Double_descent), det är inget som vi kommer titta närmare på.
+:::
+
+
+## Korsvalidering
+
+Nackdelen med att dela upp data enligt @sec-data-split är att mycket av data behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är **korsvalidering** där vi delar upp data i en större träningsmängd och en testmängd. Träningsmängden delas sedan in i flera mindre delar, lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar. 
+
+
+Vi får direkt flera kandidatmodeller av samma metod som vi kan jämföra valideringsfelet och välja den bästa modellen eller beräkna ett genomsnittligt fel för alla valideringsmängder om flera metoder ska jämföras.
+
+[KAN MAN JÄMFÖRA MODELLER INOM KORSVALIDERING ELLER ÄR DET BARA GENOMSNITTET?]{style="color: red"}
+
+I det extrema fallet delar vi upp träningsmängden i $n$ lika stora delar vilket kallas för **Leave-one-out** korsvalidering. Som namnet antyder följer vi följande procedur:
+
+1. ta bort en observation och träna modellen på återstående data.
+2. beräkna valideringsfelet på den borttagna observationen.
+3. upprepar steg 1. och 2. för alla datapunkter.
+4. beräkna den genomsnittliga felet för alla modeller/observationer.
+
+Att välja modell utifrån enbart en observation är inget att rekommendera utan vi använder därför denna korsvalideringsmetod om vi vill jämföra modeller av olika strukturer. En annan nackdel med detta sätt är att vi måste anpassa $n$ modeller vilket för mer komplexa modeller kan bli mycket beräkningstungt.
+
+För att förenkla beräkningsprocessen kan istället **k-fold** korsvalidering användas där träningsmängden delas upp i $k$ olika block.^[Man kan uttrycka leave-one-out korsvalidering som ett specialfall av k-fold när $k = n$] Vi följer samma procedur som tidigare med några justeringar:
+
+1. ta bort *ett block* och träna modellen på återstående data.
+2. beräkna valideringsfelet på *det borttagna blocket*.
+3. upprepar steg 1. och 2. för alla *block*.
+4. beräkna den genomsnittliga felet för alla olika *block*.
+
+Med denna procedur behöver vi endast träna $k$ modeller vilket kan underlätta den totala beräkningskostnaden om det är en komplex modell som ska tränas.
+
+## Optimering
+
+När en modell tränas, vad som egentligen händer är att modellens parametrar iterativt **optimeras** genom att minimera felfunktionen eller maximera en sannolikhet. Till exempel minimeras SSE för linjär regression medan vi maximerar log-likelihood för logistisk regression. 
+
+### Kostnadsfunktion
+Inom maskininlärning vill vi ofta minimera en **kostnadsfunktion** $f(\boldsymbol{\theta})$ där $\boldsymbol{\theta}$ är parametrarnas värden som styr värdet på funktionen. Optimeringens syfte är då att hitta de parametervärden som ger lägst (ibland högst) kostnad. 
+
+[VAD ÄR DEN SPECIFIKA SKILLNADEN PÅ FEL- OCH KOSTNADSFUNKTION? BEHÖVS DESSA TVÅ TERMER?]{style="color: red"}
+
+:::{.callout-note}
+I vissa specialfall kan vi enkelt analytiskt lösa vilka parametervärden som ger det minsta/högsta värdet på funktionen. Vi kan exemplifiera detta genom en andragradsekvation.
+
+Vi undersöker funktionen:
+$$
+  \begin{aligned}
+  f(x) = x^2 - 4x + 5
+  \end{aligned}
+$$
+Derivatan av funktionen är:
+$$
+  \begin{aligned}
+  f'(x) = 2x - 4
+  \end{aligned}
+$$
+som är lika med $0$ när:
+$$
+  \begin{aligned}
+  2x - 4 = 0 \Rightarrow x = 2
+  \end{aligned}
+$$
+Genom andraderivatan får vi information om att det är ett minimum vid $x = 2$ då:
+$$
+  \begin{aligned}
+  f''(x) = 2 > 0
+  \end{aligned}
+$$
+Värdet på funktionen när $x = 2$ kan beräknas enligt:
+$$
+  \begin{aligned}
+  f(2) = 2^2 - 4\cdot2 + 5 = 4 - 8  + 5 = 1
+  \end{aligned}
+$$
+så vi drar slutsatsen att funktionen har ett minimum vid $(x, f(x)) = (2, 1)$.
+
+:::
+
+När en enkel lösning inte är tillgänglig måste vi använda stegvis (iterativa) algoritmer såsom **gradient descent/ascent**. Denna metod justerar parametrarna iterativt för att successivt närma oss ett minimum eller maximum av funktionen:
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Enkelt exempel på iterativ optimering
+#| label: fig-optimization
+#| out-width: "90%"
+#| echo: false
+
+x <- seq(0, 1, by = 0.001)
+y <- log(choose(344, 152) * x^152 * (1-x)^(344-152))
+data <- data.frame(x, y)
+
+theta <- numeric(10)
+
+set.seed(20211009)
+theta[1] <- 0.85
+
+deriv <- expression(152/x - 192/(1-x))
+
+for(i in 2:30){
+  
+  x <- theta[i-1]
+  
+  theta[i] <- theta[i-1] + 0.0002 * eval(deriv)
+  
+}
+
+ascent <- data.frame(theta, y = log(choose(344, 152) * theta^152 * (1-theta)^(344-152)))
+
+ggplot(data) + aes(x = x, y = y) + geom_line() + 
+  labs(x = expression(theta) , y = "ln L") + 
+  geom_point(
+    data = ascent,
+    aes(x = theta, y = y),
+    size = 3, 
+    color = "firebrick",
+    alpha = 0.5
+  ) + 
+  geom_path(
+    data = ascent,
+    aes(x = theta, y = y),
+    linewidth = 1.2,
+    color = "firebrick",
+  ) +
+  geom_vline(xintercept = theta[1], linetype = 2, color = "firebrick") + 
+  geom_vline(xintercept = 152/344, linetype = 2, color = "black") + 
+  theme_bw()
+
+```
+
+I denna illustration har en första "gissning" av parametrarnas värden gjorts vid den streckade röda linjen. Sedan har parametrarna justerats tills att de når fram till värdet som ger den största kostnaden, den svartstreckade linjen.
+
+### Gradient
+Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens **gradient**, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger en riktning till var nästa justering av parameterns värde bör ske, i den riktning där funktionen ökar snabbast.
+
+[NÅGOT OM EUKLIDISK NORM? DET BLIR NOG LITE FÖR KOMPLEXT FÖR DENNA KURS.]{style="color: red"}
+
+I dessa två föregående enkla exempel har vi ett globalt minimum/maximum (optimum) som identiferats, men för mer komplexa kostnadsfunktioner kan det finnas flera **lokala optimum** som algoritmen kan nå fram till. 
+
+:::: {.columns}
+
+::: {.column width="49%"}
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: En konvex funktion med endast ett minimum, det globala
+#| label: fig-convex-function
+#| out-width: "90%"
+#| echo: false
+
+tibble(
+  x = seq(-5, 5, by = 0.001),
+  y = x^2
+) |> 
+  ggplot() + aes(x = x, y = y) + geom_line() +
+  theme_bw() + 
+  geom_vline(xintercept = 0, linetype = 2, color = "black") + 
+  scale_y_continuous(breaks = NULL)
+
+```
+  
+:::
+
+::: {.column width="49%"}
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: En icke-konvex funktion med flera lokala minimum
+#| label: fig-nonconvex-function
+#| out-width: "90%"
+#| echo: false
+
+x <-  seq(-10, 10, by = 0.001)
+y <-  sin(x) + 0.05*x
+
+deriv <- expression(cos(x) + 0.05)
+
+tibble(
+  x = x,
+  y = y
+) |> 
+  ggplot() + aes(x = x, y = y) + geom_line() +
+  theme_bw() + 
+  geom_vline(xintercept = x[which(eval(deriv) |> abs() < 0.0005)[y[which(eval(deriv) |> abs() < 0.0005)] < 0]], linetype = 2, color = "black") + 
+  scale_y_continuous(breaks = NULL)
+
+```
+:::
+
+::::
+
+Konvexa kostnadsfunktioner gör det enklare att hitta ett optimum, och vi vet att det inte finns några fällor som algoritmen kan fastna i. För de icke-konvexa funktionerna kräver det att vi startar algoritmen på flera olika ställen för att utforska en större del av funktionen men trots detta finns det inga garantier att vi hittat det globala optimum.
+
+### Konvergens och inlärningshastighet
+För att motverka att optimeringsalgoritmer genomför oändligt många iterationer med (till slut) ytterst små justeringar av parametervärdena, avslutas optimeringen när vi anser den **konvergerat**. Konvergens betyder att algoritmen nått ett tillstånd där ytterligare iterationer inte leder till någon meningsfull förbättring. Detta skulle kunna vara:
+
+- Liten förändring i kostnadsfunktionen, $|f(\boldsymbol{\theta}_i) - f(\boldsymbol{\theta}_{i-1})| < \xi_1$
+- Liten förändring i parametrarna, $||\boldsymbol{\theta}_i - \boldsymbol{\theta}_{i-1}|| < \xi_2$
+- Maximalt antal iterationer har uppnåtts
+
+$\xi_1$ och $\xi_2$ är oftast vald till väldigt små värden, till exempel $\frac{1}{10 000}$ eller liknande.
+
+Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet förändras samt den totala beräkningstiden.
+
+Ytterligare en aspekt av iterativa algoritmer är **inlärningshastigheten** vilket påverkar hur snabbt vi rör oss mot bättre parametervärden närmare kostnadsfunktionens optimum. I @fig-optimization är denna 0.0002 = 2E-04 men vi kan öka eller minska den för att (förhoppningsvis) effektivisera algoritmen.
+
+:::: {.columns}
+
+::: {.column width="49%"}
+  
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Optimering med inlärningshastighet 6E-04
+#| label: fig-learning-rate-high
+#| out-width: "90%"
+#| echo: false
+
+x <- seq(0, 1, by = 0.001)
+y <- log(choose(344, 152) * x^152 * (1-x)^(344-152))
+data <- data.frame(x, y)
+
+theta <- numeric(10)
+
+set.seed(20211009)
+theta[1] <- 0.85
+
+deriv <- expression(152/x - 192/(1-x))
+
+for(i in 2:30){
+  
+  x <- theta[i-1]
+  
+  theta[i] <- theta[i-1] + 6e-4 * eval(deriv)
+  
+}
+
+ascent <- data.frame(theta, y = log(choose(344, 152) * theta^152 * (1-theta)^(344-152)))
+
+ggplot(data) + aes(x = x, y = y) + geom_line() + 
+  labs(x = expression(theta) , y = "ln L") + 
+  geom_point(
+    data = ascent,
+    aes(x = theta, y = y),
+    size = 3, 
+    color = "firebrick",
+    alpha = 0.5
+  ) + 
+  geom_path(
+    data = ascent,
+    aes(x = theta, y = y),
+    linewidth = 1.2,
+    color = "firebrick",
+  ) +
+  geom_vline(xintercept = theta[1], linetype = 2, color = "firebrick") + 
+  geom_vline(xintercept = 152/344, linetype = 2, color = "black") + 
+  theme_bw()
+
+```
+:::
+
+::: {.column width="49%"}
+  
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Optimering med inlärningshastighet 5E-05
+#| label: fig-learning-rate-low
+#| out-width: "90%"
+#| echo: false
+
+x <- seq(0, 1, by = 0.001)
+y <- log(choose(344, 152) * x^152 * (1-x)^(344-152))
+data <- data.frame(x, y)
+
+theta <- numeric(10)
+
+set.seed(20211009)
+theta[1] <- 0.85
+
+deriv <- expression(152/x - 192/(1-x))
+
+for(i in 2:100){
+  
+  x <- theta[i-1]
+  
+  theta[i] <- theta[i-1] + 0.00005 * eval(deriv)
+  
+}
+
+ascent <- data.frame(theta, y = log(choose(344, 152) * theta^152 * (1-theta)^(344-152)))
+
+ggplot(data) + aes(x = x, y = y) + geom_line() + 
+  labs(x = expression(theta) , y = "ln L") + 
+  geom_point(
+    data = ascent,
+    aes(x = theta, y = y),
+    size = 3, 
+    color = "firebrick",
+    alpha = 0.5
+  ) + 
+  geom_path(
+    data = ascent,
+    aes(x = theta, y = y),
+    linewidth = 1.2,
+    color = "firebrick",
+  ) +
+  geom_vline(xintercept = theta[1], linetype = 2, color = "firebrick") + 
+  geom_vline(xintercept = 152/344, linetype = 2, color = "black") + 
+  theme_bw()
+
+```
+:::
+
+::::
+
+Om vi jämför dessa två diagram med @fig-optimization ser vi att med en större inlärningshastighet (@fig-learning-rate-high) har den första justeringen nu blivit betydligt större och att vi faktiskt hoppade över optimum under de första iterationerna vilket medförde att vi behövde gå tillbaka. Med en mindre inlärningshastighet (@fig-learning-rate-low) genomför vi mindre justeringar som kräver betydligt fler iterationer innan vi når konvergens. 
+
+:::{.callout-tip}
+## En slumpmässig promenad
+
+Säg att du tar på dig en ögonbindel på toppen av en kulle och ska navigera till dess botten. Genom att känna lutningen vid dina fötter kan du räkna ut i vilken riktning som du ska ta ditt nästa steg för att komma närmare. Om du vill vara säker att du inte råkar ramla eller springa förbi väljer du att ta små små steg i den valda riktningen. Det kommer ta ett tag för dig att nå botten men du vet att du inte missar någon viktig information under promenaden. 
+
+En av dina kompisar är lite mer våghalsig av sig och väljer att springa istället för att gå med långa steg varje gång. Det går fort, lite för fort kan man tycka, och det visar sig att kompisen springer förbi och upp på nästa kulle och behöver vända tillbaka.
+
+I detta exempel motsvarar lutningen vid dina fötter gradienten av kostnadsfunktionen och steglängden motsvarar inlärningshastigheten.
+:::
+
+:::{.callout-important}
+Det finns många nackdelar med Gradient Descent/Ascent algoritmerna trots att den är enkel. Vanliga förbättringar av algoritmen finns i form av:
+
+- Stochastic Gradient Descent (SGD)
+- Momentum
+- Adagrad
+- RMSprop
+- Adam och AdaDelta
+- Steglängdscheman
+:::
+
+[SKA VI HA DETALJER OM DESSA OPTIMERINGSALGORITMER ELLER BARA ANVÄNDA DE I SENARE MODELLER?]{style="color: red"}
+
+Inlärningshastigheten är ett exempel på en **hyperparameter**, alltså en parameter som hör till algoritmen/träningen, inte till modellen. Hyperparametrar kan också vara hur modellen ser ut, vilken optimeringsalgoritm som används, antalet iterationer eller konvergenskriterierna eller andra aspekter av hur träningen går till. Mängden hyperparametrar och de olika värdena som de kan anta blir snabbt överväldigande så vi behöver ofta anta en strukturerad process för att hitta dessa, till exempel Grid Search eller Random Search. Vi använder valideringsmängden för valet av hyperparametrar, det är inte bara olika modeller som vi kan validera enligt @sec-validation utan även olika inställningar för samma modell.
+
+Valet av hyperparametrar kallas för **hyperparameter tuning**
+
+[MER OM GRID/RANDOM SEARCH?]{style="color: red"}
+
+### Coordinate descent
+
+Vad är Coordinate Descent?
+En optimeringsmetod där man optimerar en variabel i taget.
+Alla andra variabler h˚alls fasta under varje steg.
+Itererar över variablerna tills konvergens uppn˚as.
+Nyckelidéer:
+Enkel att implementera, särskilt för stora problem.
+Effektiv när varje delproblem (en variabel) är lätt att lösa.
+Används ofta i t.ex. Lasso-regression (mer om det senare) och
+konvex optimering.
+Kräver inte beräkning av hela gradienten.
+
+### Reparameterisering
+
+Ibland måste vissa parametrar uppfylla villkor, till exempel att vara strikt positiva. Istället för att optimera direkt på parametern kan vi omformulera problemet så att en transformation av parametern optimeras. 
+
+Säg att vi vill optimera $\theta > 0$. Vi kan då välja att istället optimera över $\phi$ där $\theta = exp(\phi)$ vilket innebär att vi kan fortfarande använda gradientbaserade metoder utan att behöva begränsa algoritmen direkt för $\theta$.
+
+
+## Klassificeringens kostnadsfunktion
+
+För regression får vi en kostnadsfunktion från fördelningen av det vi vill modellera. För en (ofta) kontinuerlig variabel kan vi ange olika kontinuerliga fördelningar på feltermen, till exempel normal, t, Gamma, log-normal där dess likelihood blir den naturliga kostnadsfunktionen att optimera. Vi kan även för diskreta variabler använda regression för till exempel Poisson eller Negativ binomial fördelningarna. 
+
+För klassificering finns det inte alltid någon naturlig kostnadsfunktion. Däremot blir det betydligt enklare att räkna observerade och predikterade klasser från en modell eftersom antalet möjliga utfall är begränsade till skillnad från de oändliga utfallen för en kontinuerlig fördelning. Dessa kan sammanställas i en **förväxlingsmatris** (eng. confusion matrix):
+
+När vi skapar förväxlingsmatrisen räknas frekvenserna av antalet $Y = 1$ som blivit predikterade till de olika klasserna $\hat{Y} = 1$ ($f_{11}$) och $\hat{Y} = 0$ ($f_{10}$) och antalet $Y = 0$ som blivit predikterade till respektive klass ($f_{01}$ och $f_{00}$).
+
+::: {#tbl-confusion}
+<table style="border-collapse: collapse; width: 50%;">
+  <thead>
+    <tr>
+      <th colspan="2"></th>
+      <th colspan="2" style="text-align: center;">Predikterad klass</th>
+    </tr>
+    <tr>
+      <th colspan="2"></th>
+      <th style="border: 1px solid black; padding: 5px;">$\hat{Y} = 1$</th>
+      <th style="border: 1px solid black; padding: 5px;">$\hat{Y} = 0$</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2" style="padding-right: 15px; font-weight: bold;">Sann klass</td>
+      <td style="border: 1px solid black; padding: 5px;">$Y = 1$</td>
+      <td style="border: 1px solid black; padding: 5px; background-color: #D1FFBD;">$f_{11}$</td>
+      <td style="border: 1px solid black; padding: 5px;">$f_{10}$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid black; padding: 5px;">$Y = 0$</td>
+      <td style="border: 1px solid black; padding: 5px;">$f_{01}$</td>
+      <td style="border: 1px solid black; padding: 5px; background-color: #D1FFBD;">$f_{00}$</td>
+    </tr>
+  </tbody>
+</table>
+Förväxlingsmatris med frekvenser av olika fall.
+:::
+
+Utifrån förväxlingsmatrisen kan ett antal utvärderingsmått beräknas som fokuserar på olika aspekter av modellens prestanda.
+
+De två enklaste måtten är andelen korrekta prediktioner och andelen felaktiga prediktioner. Vi kallar andelen korrekta prediktioner för modellens **träffsäkerhet** (eng. Accuracy) och andelen felaktiga prediktioner för modellens **felkvot** (eng. Misclassification rate).
+
+$$
+\begin{aligned}
+  \text{Träffsäkerhet} &= \frac{f_{11} + f_{00}}{n} = \frac{f_{11} + f_{00}}{f_{11} + f_{10} + f_{01} + f_{00}} \\
+  \text{Felkvot} &= \frac{f_{10} + f_{01}}{n} = \frac{f_{10} + f_{01}}{f_{11} + f_{10} + f_{01} + f_{00}} = 1 - \text{Träffsäkerhet} \\
+\end{aligned}
+$$
+När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas. 
+
+Problemet med att använda någon av dessa mått som modellens kostnadsfunktion är att de kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering spelar andelen av data som tillhör vardera klass roll, detta kallas för **klassbalanser**. När vi ska modellera en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda. 
+
+Om andelarna är **balanserade**, det vill säga nära 50% för de båda andelarna, kommer modellen ha lika mycket information om de båda klasserna och träffsäkerheten/felkvoten tar hänsyn lika mycket till båda klasserna. Om andelarna däremot är **obalanserade**, stora skillnader i andel mellan klasserna, kommer träffsäkerheten/felkvoten ha problem att optimera den mindre av klasserna. Om vi exempelvis har 95% 0:or och 5% 1:or kommer kanske optimeringen anse att optimum är att prediktera alla observationer till majoritetsklassen, för då blir träffsäkerheten 95%. Vi behöver därför titta på ytterligare mått som kan användas för att hantera klassobalans. 
+
+Med fokus på $Y = 1$ beskriver **sensitiviteten** (eng. True Positive Rate, sensitivity, recall) hur stor andel av de observerade 1:orna som faktiskt också predikterades som 1:or. Motsatsen är **specificiteten** (eng. True Negative Rate, specificity) som beskriver hur stor andel observerade icke-1:or som också predikterades som icke-1:or.
+
+$$
+\begin{aligned}
+\text{Sensitivitet}_{Y = 1} &= \frac{f_{11}}{f_{11} + f_{10}}\\
+\text{Specificitet}_{Y = 1} &= \frac{f_{00}}{f_{01} + f_{00}}
+\end{aligned}
+$$
+Om det ena måttet är stort och det andra litet betyder det att modellen fokusera på endast någon av klasserna, medan om båda måtten är stora betyder det att modellen lyckats prediktera alla klasser lika bra.
+
+[Precision och F-Score]{style="color: red"}
+
+### Cross Entropy
+
+[CROSS ENTROPY MÅSTE FÖRKLARAS]{style="color: red"}
+
+## Referenser {.unnumbered}
+
+
+
+
+
+
+
