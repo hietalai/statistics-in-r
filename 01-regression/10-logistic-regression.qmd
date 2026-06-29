@@ -4,7 +4,7 @@ editor_options:
 ---
 
 <!-- CONTENT -->
-# Logistisk regression
+# Logistisk regression {#sec-logistic}
 
 De tidigare kapitlen har fokuserat på modeller där responsvariabeln antas vara kvantitativ och kontinuerlig. Dessa modeller är begränsade till just detta fall men det går med enkla transformeringar att utöka modellerna att också anpassa modeller där responsvariabeln är en annan variabeltyp eller följer en annan skala. En utav dessa utökningar kallas för **logistisk regression** som modellerar en binär (två kategorier) kvalitativ responsvariabel. 
 
@@ -28,7 +28,7 @@ E[Y|X] = P(Y_i = 1 | X_i)
 \end{aligned}
 $$
 
-### Logistiska funktionen
+### Logistiska funktionen {#sec-logistic-func}
 Eftersom linjära samband är lätta att arbeta med och tolka så vill vi formulera denna betingade sannolikhet utifrån den linjära modellen. En linjär regressionsmodell formuleras enligt:
 
 $$
@@ -251,7 +251,7 @@ I vanlig regression kan vi utvärdera modellens lämplighet genom residualanalys
 
 I ett klassificeringsproblem kan vi istället jämföra de observerade klasserna för $Y$ med predikterade klasser $\hat{Y}$ i en korstabell, även kallad **förväxlingsmatris**. Eftersom modellen egentligen predikterar en sannolikhet för $Y = 1$ och inte den faktiska klassen behöver vi gå ett steg längre för att faktiskt kunna skapa förväxlingsmatrisen. Vi kan tänka att sannolikheter större än 0.5 innebär att $Y = 1$ är mer sannolikt att inträffa än $Y = 0$ vilket leder oss till att också prediktera den klassen för dessa observationer, $\hat{Y} = 1$. 
 
-När vi skapar förväxlingsmatrisen räknar räknar frekvenserna av antalet $Y = 1$ som blivit predikterade till de olika klasserna $\hat{Y} = 1$ ($f_{11}$) och $\hat{Y} = 0$ ($f_{10}$) och antalet $Y = 0$ som blivit predikterade till respektive klass ($f_{01}$ och $f_{00}$).
+När vi skapar förväxlingsmatrisen räknas frekvenserna av antalet $Y = 1$ som blivit predikterade till de olika klasserna $\hat{Y} = 1$ ($f_{11}$) och $\hat{Y} = 0$ ($f_{10}$) och antalet $Y = 0$ som blivit predikterade till respektive klass ($f_{01}$ och $f_{00}$).
 
 <table style="border-collapse: collapse; width: 50%;">
   <caption>Förväxlingsmatris med frekvenser av olika fall.</caption>

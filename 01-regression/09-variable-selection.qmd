@@ -4,7 +4,7 @@ editor_options:
 ---
 
 <!-- CONTENT -->
-# Modellvalidering och variabelselektion
+# Modellvalidering och variabelselektion {#sec-variable-selection}
 
 Om ett datamaterial innehåller ett stort antal variabler finns det mängder med potentiella modeller av olika storlek som skulle kunna anpassas. Vi har i tidigare kapitel enbart fokuserat på enstaka modeller som baserat sin struktur utifrån ledtrådar som identifierats i det utforskande steget, men detta blir snabbt tidskrävande vid 10, 20, eller 50 förklarande variabler. 
 
@@ -209,7 +209,7 @@ tibble(
 Istället för att dela upp datamaterialet en gång i tränings- och valideringsmängd kan vi dela upp materialet i m lika stora grupper och successivt utvärdera en tränad modell på respektive grupp. Den tränade modellen använder då alla andra grupper som dess träningsmängd vilket innebär att vi får m stycken olika modeller och m stycken utvärderingar.
 
 
-## "Automatisk" variabelselektion
+## "Automatisk" variabelselektion {#sec-variable-selection-algorithms}
 Arbetet med att hitta potentiella kandidatmodeller att jämföra med en valideringsmängd kan ta väldigt lång tid. Antalet potentiella modeller av olika storlekar ökar exponentiellt enligt $2^k -1$.
 $$
 \begin{aligned}

@@ -10,4 +10,6 @@ filters:
 ARIMAx
 Transfer functions
 
+TODO: NOT RELEVANT FOR THE FIRST ITERATION OF THE COURSE! 
+
 

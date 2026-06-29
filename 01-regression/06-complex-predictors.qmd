@@ -341,7 +341,7 @@ ggplot(visData) + aes(x = X1, y = Residualer) +
 
 Residualerna mot temperatur har nu inte samma korsliknande mönster vilket har plockats upp av interaktionen dock syns ett svagt icke-linjärt mönster och framförallt problem med lika varians.
 
-## Polynom
+## Polynom {#sec-polynomial}
 Vi kan modellera vissa typer av icke-linjära samband mellan x och y genom att genomföra lämpliga transformationer av x, exempelvis polynomtermer. Vi simulerar ett datamaterial för att illustrera detta.
 
 ```{r}
