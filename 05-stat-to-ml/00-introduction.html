@@ -20,7 +20,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -765,7 +820,7 @@ Figur&nbsp;25.3: Lagom komplex modell
 <p>MSE kommer skapa stora värden om extremvärden förekommer i data. Då kan en alternativ felfunktion definieras som <strong>Mean Absolute Error</strong> (MAE):</p>
 <p><span id="eq-mae"><span class="math display">\[
   \begin{aligned}
-  MSE = \frac{1}{n} \Sum{n} \left|y_i - f(x_i | \hat{\theta})\right|
+  MAE = \frac{1}{n} \Sum{n} \left|y_i - f(x_i | \hat{\theta})\right|
   \end{aligned}
 \tag{25.3}\]</span></span></p>
 <p>För klassificering är två vanliga mått <strong>Cross Entropy</strong> och <strong>Missclassification</strong> vilka vi kommer återkomma till senare.</p>
@@ -801,20 +856,109 @@ Notera
 <li>0.8, 0.1, 0.1</li>
 </ul>
 <p>Det viktigaste är att träningsmängden inte är den minsta av de tre.</p>
+<p>I R finns det flera olika sätt att genomföra denna uppdelning, men den absolut enklaste är genom att använda indexering.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Anger antalet observationer i data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(mtcars)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Anger storleken av träningsmängden</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>trainSize <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Drar slumpmässigt n*trainSize observationsindex</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n), <span class="at">size =</span> n<span class="sc">*</span>trainSize)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut valda index till trainData</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>trainData <span class="ot">&lt;-</span> mtcars[trainIndex,]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar bort valda index till validData</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>validData <span class="ot">&lt;-</span> mtcars[<span class="sc">-</span>trainIndex,]</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>trainData</code> består nu utav 25 slumpmässigt utvalda observationer och <code>validData</code> består utav de resterande observationerna. Vill vi utöka till tre mängder kan vi genomföra ytterligare en indexering av <code>validData</code> till en kvarvarande valideringsmängd och en efterföljande testmängd.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En grundläggande genomgång i R visas i <a href="../00-programming/00-basics-R.html" class="quarto-xref"><span>Kapitel 1</span></a>. Känner du att du saknar vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.</p>
+</div>
+</div>
 </section>
 </section>
 <section id="exempeldata" class="level2" data-number="25.3">
 <h2 data-number="25.3" class="anchored" data-anchor-id="exempeldata"><span class="header-section-number">25.3</span> Exempeldata</h2>
+<p>Genomgående i denna del kommer vi exemplifiera teorin med hjälp av olika datamaterial. Dessa datamaterial är enklare exempel på data som kan dyka upp i verkligheten men det är värt att komma ihåg att en stor del av en riktig analys kräver bearbetning av data till de format som våra modeller önskar.</p>
+<section id="spammail" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="spammail">Spammail</h4>
+<div id="fig-spam" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spam-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Spam_wall_-_Flickr_-_freezelight.jpg" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spam-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;25.4: Spam<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>
+</figcaption>
+</figure>
+</div>
+<p>Datamaterialet <code>spambase</code> kan hämtas <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/spambase.csv">här</a>.</p>
+<p>Materialet består av 4601 mail där den (relativa) frekvensen av vissa utvalda ord (<code>Word1</code>-<code>Word48</code>), förekomsten av olika speciella symboler (<code>Char1</code>-<code>Char6</code>), samt tre variabler som beskriver medellängden av intilliggande stora bokstäver, den längsta längden av intilliggande stora bokstäver och det totala antalet stora bokstäver (<code>Capitalrun1</code>-<code>Capitalrun3</code>). Responsvariabeln (<code>spam</code>) för detta data är en binär variabel där värdet 1 indikerar att mailet var ett spam samt värdet 0 indikerar att mailet inte var ett spam.</p>
+<p>Detta datamaterial beskriver ett vanligt klassificeringsproblem, vi vill undvika att få onödiga mail i vår inkorg. Verkliga spamfilter är mer komplexa än denna men datamaterialet ger en bra indikation på hur vi kan använda kvantitativa data från text för att bedöma mailets relevans.</p>
+</section>
+<section id="klimatdata" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="klimatdata">Klimatdata</h4>
+<div id="fig-lake" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Lake_in_north_sweden.jpg" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;25.5: Sjö i norra Sverige<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>
+</figcaption>
+</figure>
+</div>
+<p>Datamaterialet <code>lakesurvey</code> kan hämtas <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/lakesurvey.csv">här</a>.</p>
+<p>Datamaterialet innehåller kemisk information från 2782 svenska sjöar uppmätta under 2005 inklusive dess longitud och latitud. Mätningarna beskriver olika egenskaper av sjön, dess temperatur, pH och halter av olika ämnen.</p>
+<p><span style="color: red">LÄgg till karta med alla sjöar</span></p>
+<p>Detta material kommer användas för regression.</p>
+<p>Vi har en sjö, Lerkilen, som har extrema värden på många av de kemiska mätningarna vilket gör att vi plockar bort den sjön.</p>
+</section>
+<section id="vindata" class="level4" data-number="25.3.0.1">
+<h4 data-number="25.3.0.1" class="anchored" data-anchor-id="vindata"><span class="header-section-number">25.3.0.1</span> Vindata</h4>
+<div id="fig-lake" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/56/2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_%28HiRes_focus_stack%29.jpg" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;25.6: Sjö i norra Sverige<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>
+</figcaption>
+</figure>
+</div>
+<p>Datamaterialet <code>wine</code> kan hämtas <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/wine.csv">här</a> tagen från <span class="citation" data-cites="wine_109">Aeberhard och Forina (<a href="#ref-wine_109" role="doc-biblioref">1992</a>)</span>. Datamaterialet innehåller 13 kemiska egenskaper om tre olika vintyper (<code>class</code>).</p>
+<p>Detta datamaterial kommer användas för multinomial klassificering.</p>
+</section>
 </section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-wine_109" class="csl-entry" role="listitem">
+Aeberhard, Stefan, och M. Forina. 1992. <span>”<span>Wine</span>”</span>. UCI Machine Learning Repository.
+</div>
+</div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn1"><p>Hädanefter kommer vi använda tränas/träning för att mena anpassning av modeller.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://commons.wikimedia.org/wiki/File:Spam_wall_-_Flickr_-_freezelight.jpg">freezelight</a>, <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>, via Wikimedia Commons<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://commons.wikimedia.org/wiki/File:Lake_in_north_sweden.jpg">Irrre</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://commons.wikimedia.org/wiki/File:2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_(HiRes_focus_stack).jpg">Franz van Duns</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

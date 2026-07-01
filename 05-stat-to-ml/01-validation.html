@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -651,7 +686,7 @@ Figur&nbsp;26.6: Lagom komplex modell
 </div>
 </div>
 </div>
-<p>Vi ser att <a href="#fig-underfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.4</span></a> får en dålig anpassning för båda mängderna vilket leder till höga värden på felfunktionen på respektive. <a href="#fig-overfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.5</span></a> visar att när modellen exakt följer träningsmångden får vi extremt låga värden på träningens felfunktion men stora värden på valideringsmängden. Den “lagomt” komplexa modellen får “lagomt” stora värden på båda tränings- och valideringsfelet.</p>
+<p>Vi ser att <a href="#fig-underfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.4</span></a> får en dålig anpassning för båda mängderna vilket leder till höga värden på felfunktionen på respektive. <a href="#fig-overfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.5</span></a> visar att när modellen exakt följer träningsmängden får vi extremt låga värden på träningens felfunktion men stora värden på valideringsmängden. Den “lagomt” komplexa modellen får “lagomt” stora värden på båda tränings- och valideringsfelet.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -693,6 +728,58 @@ Notera
 <p>För vissa extremt komplexa modeller förekommer ett fenomen benämnt <strong>double descent</strong> där valideringsfelet minskar och sedan ökar för att till sist minska igen. Ni kan läsa mer om detta fenomen via <a href="https://en.wikipedia.org/wiki/Double_descent">Wikipedia</a>, det är inget som vi kommer titta närmare på.</p>
 </div>
 </div>
+<p>Vi kan visa detta med ett enkelt exempel för <code>lake</code> data. Vi börjar med att först dela upp data i tre olika mängder där träningsmängden får 60% av data, valideringsmängden 30% och testmängden 10%.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sätter ett seed för reproducerbarhet</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20260701</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar de tre mängderna</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(lake)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>trainSize <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>validSize <span class="ot">&lt;-</span> <span class="fl">0.3</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n), <span class="at">size =</span> n<span class="sc">*</span>trainSize)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>trainData <span class="ot">&lt;-</span> lake[trainIndex, ]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>remaining <span class="ot">&lt;-</span> lake[<span class="sc">-</span>trainIndex, ] </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>validIndex <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(remaining)), <span class="at">size =</span> n<span class="sc">*</span>validSize)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>validData <span class="ot">&lt;-</span> remaining[validIndex, ]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>testData <span class="ot">&lt;-</span> remaining[<span class="sc">-</span>validIndex, ]</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Sedan tränar vi två olika regressionsmodeller utifrån träningsmängden.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tränar olika linjära regressionsmodeller</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>trainModel1 <span class="ot">&lt;-</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  trainData <span class="sc">|&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(pH <span class="sc">~</span> <span class="st">`</span><span class="at">Temp_ øC</span><span class="st">`</span>, <span class="at">data =</span> _)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>trainModel2 <span class="ot">&lt;-</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  trainData <span class="sc">|&gt;</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(pH <span class="sc">~</span> <span class="st">`</span><span class="at">Temp_ øC</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">Alk_/Acid meq/l</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">Cl meq/l</span><span class="st">`</span>, <span class="at">data =</span> _)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Dessa vill vi sedan jämföra valideringsfelet på. För regression innebär det att vi vill beräkna MSE på valideringsmängden.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar MSE på valideringsmängden</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>yhat1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel1, <span class="at">newdata =</span> validData)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>yhat2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel2, <span class="at">newdata =</span> validData)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>MSE1 <span class="ot">&lt;-</span> <span class="fu">sum</span>((validData<span class="sc">$</span>pH <span class="sc">-</span> yhat1)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">nrow</span>(validData)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>MSE2 <span class="ot">&lt;-</span> <span class="fu">sum</span>((validData<span class="sc">$</span>pH <span class="sc">-</span> yhat2)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">nrow</span>(validData)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span style="color: red">DETTA ÄR EGENTLIGEN MSPR</span></p>
+<p>MSE för den första modellen är 0.448 medan för den andra modellen vi får 0.307. Utifrån dessa två mått väljer vi att gå vidare med modell 2 då dess MSE var lägre. Vi använder till sist testmängden för att få en väntevärdesriktig skattning av modellens fel:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yhatTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel2, <span class="at">newdata =</span> testData)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>MSETest <span class="ot">&lt;-</span> <span class="fu">sum</span>((testData<span class="sc">$</span>pH <span class="sc">-</span> yhatTest)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">nrow</span>(testData)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>MSETest <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.321</code></pre>
+</div>
+</div>
 </section>
 <section id="korsvalidering" class="level2" data-number="26.2">
 <h2 data-number="26.2" class="anchored" data-anchor-id="korsvalidering"><span class="header-section-number">26.2</span> Korsvalidering</h2>
@@ -718,7 +805,7 @@ Notera
 </section>
 <section id="optimering" class="level2" data-number="26.3">
 <h2 data-number="26.3" class="anchored" data-anchor-id="optimering"><span class="header-section-number">26.3</span> Optimering</h2>
-<p>När en modell tränas, vad som egentligen händer är att modellens parametrar iterativt <strong>optimeras</strong> genom att minimera felfunktionen eller maximera en sannolikhet. Till exempel minimeras SSE för linjär regression medan vi maximerar log-likelihood för logistisk regression.</p>
+<p>När en maskininlärningsmodell tränas, vad som egentligen händer är att modellens parametrar iterativt <strong>optimeras</strong> genom att minimera felfunktionen eller maximera en sannolikhet. Till exempel minimeras SSE för linjär regression medan vi maximerar log-likelihood för logistisk regression.</p>
 <section id="kostnadsfunktion" class="level3" data-number="26.3.1">
 <h3 data-number="26.3.1" class="anchored" data-anchor-id="kostnadsfunktion"><span class="header-section-number">26.3.1</span> Kostnadsfunktion</h3>
 <p>Inom maskininlärning vill vi ofta minimera en <strong>kostnadsfunktion</strong> <span class="math inline">\(f(\boldsymbol{\theta})\)</span> där <span class="math inline">\(\boldsymbol{\theta}\)</span> är parametrarnas värden som styr värdet på funktionen. Optimeringens syfte är då att hitta de parametervärden som ger lägst (ibland högst) kostnad.</p>
@@ -777,7 +864,6 @@ Figur&nbsp;26.8: Enkelt exempel på iterativ optimering
 <section id="gradient" class="level3" data-number="26.3.2">
 <h3 data-number="26.3.2" class="anchored" data-anchor-id="gradient"><span class="header-section-number">26.3.2</span> Gradient</h3>
 <p>Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens <strong>gradient</strong>, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger en riktning till var nästa justering av parameterns värde bör ske, i den riktning där funktionen ökar snabbast.</p>
-<p><span style="color: red">NÅGOT OM EUKLIDISK NORM? DET BLIR NOG LITE FÖR KOMPLEXT FÖR DENNA KURS.</span></p>
 <p>I dessa två föregående enkla exempel har vi ett globalt minimum/maximum (optimum) som identiferats, men för mer komplexa kostnadsfunktioner kan det finnas flera <strong>lokala optimum</strong> som algoritmen kan nå fram till.</p>
 <div class="columns">
 <div class="column" style="width:49%;">
@@ -897,6 +983,7 @@ Viktigt
 </div>
 <p><span style="color: red">SKA VI HA DETALJER OM DESSA OPTIMERINGSALGORITMER ELLER BARA ANVÄNDA DE I SENARE MODELLER?</span></p>
 <p>Inlärningshastigheten är ett exempel på en <strong>hyperparameter</strong>, alltså en parameter som hör till algoritmen/träningen, inte till modellen. Hyperparametrar kan också vara hur modellen ser ut, vilken optimeringsalgoritm som används, antalet iterationer eller konvergenskriterierna eller andra aspekter av hur träningen går till. Mängden hyperparametrar och de olika värdena som de kan anta blir snabbt överväldigande så vi behöver ofta anta en strukturerad process för att hitta dessa, till exempel Grid Search eller Random Search. Vi använder valideringsmängden för valet av hyperparametrar, det är inte bara olika modeller som vi kan validera enligt <a href="#sec-validation" class="quarto-xref"><span>Avsnitt 26.1</span></a> utan även olika inställningar för samma modell.</p>
+<p>Valet av hyperparametrar kallas för <strong>hyperparameter tuning</strong></p>
 <p><span style="color: red">MER OM GRID/RANDOM SEARCH?</span></p>
 </section>
 <section id="coordinate-descent" class="level3" data-number="26.3.4">

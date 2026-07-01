@@ -167,6 +167,35 @@ ul.task-list li input[type="checkbox"] {
 
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../webex.css">
@@ -496,7 +525,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#referenser" id="toc-referenser" class="nav-link active" data-scroll-target="#referenser">Referenser</a></li>
+  <li><a href="#bootstrapping-och-bagging" id="toc-bootstrapping-och-bagging" class="nav-link active" data-scroll-target="#bootstrapping-och-bagging"><span class="header-section-number">30.1</span> Bootstrapping och Bagging</a></li>
+  <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest"><span class="header-section-number">30.2</span> Random Forest</a></li>
+  <li><a href="#boosting" id="toc-boosting" class="nav-link" data-scroll-target="#boosting"><span class="header-section-number">30.3</span> Boosting</a></li>
+  <li><a href="#bagging-eller-boosting" id="toc-bagging-eller-boosting" class="nav-link" data-scroll-target="#bagging-eller-boosting"><span class="header-section-number">30.4</span> Bagging eller boosting?</a></li>
+  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
     </div>
@@ -523,9 +556,129 @@ ul.task-list li input[type="checkbox"] {
 
 
 <!-- CONTENT -->
-<p>L6_Josef.pdf</p>
-<p>Bagging</p>
-<p>Boosting</p>
+<p>Istället för att förlita sig på en enstaka modell kan vi kombinera flera modeller i en <strong>ensemblemodell</strong>. Grundidén är att med hjälp av flera modeller kan respektive fokusera på olika områden av data och när de kombineras blir prediktionerna bättre.</p>
+<p>Det finns många olika varianter men de delas ofta upp i två olika metoder; fokusera på data eller på modeller. Vi kan med hjälp av <strong>bootstrapping</strong> eller <strong>bagging</strong> (bootstrap aggregating) göra slumpmässiga urval från träningsdata och skatta modeller på dessa olika urval. Vi kan också med hjälp av <strong>boosting</strong> vikta observationer i urvalen beroende på olika kriterier, exempelvis vikta upp de observationer som en modell inte lyckats prediktera rätt och vikta ner de observationer som en modell lyckats prediktera rätt.</p>
+<div id="fig-ensemble-data" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="05-ensembles_files\mediabag\046fbf59f7ad486d95b30db5fed712464090fc77.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;30.1: Databaserad ensemble
+</figcaption>
+</figure>
+</div>
+<p>Metoder som fokuserar på olika modeller innebär att träna flera olika modeller på samma data eller samma modell med olika hyperparametervärden som sedan kombineras.</p>
+<div id="fig-ensemble-model" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ensemble-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="05-ensembles_files\mediabag\4919e8aac7e02d2fc33036978ab8bf244e3cd609.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ensemble-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;30.2: Modellbaserad ensemble
+</figcaption>
+</figure>
+</div>
+<section id="bootstrapping-och-bagging" class="level2" data-number="30.1">
+<h2 data-number="30.1" class="anchored" data-anchor-id="bootstrapping-och-bagging"><span class="header-section-number">30.1</span> Bootstrapping och Bagging</h2>
+<p>Bootstrapping är en klassisk teknik för att skapa nya datamaterial från ett begränsat insamlat data. Metoden går ut på att vi skapar <span class="math inline">\(B\)</span> urval där observationer väljs <u>med återläggning</u> från träningsmängden som vi sedan använder för att skatta olika modell eller funktioner. Metoden har använts inom frekventistisk statistik för att skapa skattningar av de sanna parametrarna och deras medelfel och samplingfördelning.</p>
+<p>Bagging tar alla <span class="math inline">\(B\)</span> bootstrapurval och tränar en modell på respektive urval <span class="math inline">\(\hat{f}_b\)</span>. Den slutgiltiga modellen får vi genom att aggregera alla dessa modeller med exempelvis dess medelvärde. <span class="math display">\[
+  \begin{aligned}
+  \hat{f}_{bag}(\boldsymbol{X}) = \frac{1}{B} \sum_{b=1}^B \hat{f}_b(\boldsymbol{X})
+  \end{aligned}
+\]</span> För klassificering kan vi använda majoritetsröstning för att bestämma den slutgiltiga prediktionen. Bagging sänker variansen av den anpassade funktionen men påverkas <em>mycket</em> av kvalitén av modellen som anpassas. Om modellen är bra blir aggregeringen bättre, men en dålig modell blir sämre när den aggregeras.</p>
+<p><span style="color: red">MER OM HUR DETTA KAN GÖRAS I PRAKTIKEN I R</span></p>
+</section>
+<section id="random-forest" class="level2" data-number="30.2">
+<h2 data-number="30.2" class="anchored" data-anchor-id="random-forest"><span class="header-section-number">30.2</span> Random Forest</h2>
+<p>Specifikt för trädmodeller kan bagging ge stora förbättringar i den slutgiltiga prestandan men det finns vissa problem. Bootstrapurvalen är korrelerade eftersom vi utgår från samma ursprungliga träningsmängd och detta medför att reduktionen i varians blir liten när vi tar ett medelvärde över de korrelerade variablerna <span style="color: red">VARIABLERNA?</span>.</p>
+<p><strong>Random Forest</strong> löser problemet med korrelerade modeller genom att slumpmässigt ändra modellerna som tränas. Vid varje uppdelning används endast en slumpmässig delmängd (<span class="math inline">\(q \le p\)</span>) av de förklarande variablerna. Storleken på <span class="math inline">\(q\)</span> bestämmer vi själva men Leo Breiman <span style="color: red">KÄLLA PÅ DENNA</span> föreslår följande tumregler:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \text{Klassificering} \qquad &amp;q = \sqrt{p}\\
+  \text{Regression} \qquad &amp;q = \frac{p}{3}
+  \end{aligned}
+\]</span></p>
+<p>Varje modell tränas då på ett urval av observationer (med återläggning) och ett urval av variabler vilket leder till ett minskat bias, “artificiell” varians i varje träd och mindre korrelation mellan träden. Ofta dominerar den avkorrelerade effekten vilket leder till att MSE minskar på testdata.</p>
+<p>Andra fördelar med Random Forest är att den är lätt att parallelisera samt att det urval av parametrar som görs minskar kostnaden för varje uppdelning.</p>
+</section>
+<section id="boosting" class="level2" data-number="30.3">
+<h2 data-number="30.3" class="anchored" data-anchor-id="boosting"><span class="header-section-number">30.3</span> Boosting</h2>
+<p>En enkel modell kan vanligtvis fånga upp vissa aspekter av data. Om vi försöker lära oss en stor mängd av enkla modeller som var och en lär sig en liten del av data kan vi sedan kombinera dessa “dåliga” modeller till en tillsammans stark modell. Boostingmetoden lär sig <em>sekventiellt</em> en ensemble av svaga modeller, till skillnad från den parallella baggingmetoden.</p>
+<p>Vi exemplifierar metoden för en binär klassificerare där <span class="math inline">\(y\)</span> antar värdena -1 eller 1. Utifrån dessa värden kan vi skriva en majoritetsröstning av <span class="math inline">\(B\)</span> klassificerare som:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  sign\left(\sum_{b=1}^B \hat{y}^b(\boldsymbol{X})\right)
+  \end{aligned}
+\]</span> Första modellen som tränas har samma vikt på alla observationer, <span class="math inline">\(w_i^1 = \frac{1}{n}\quad i = \{1, 2, \dots, n\}\)</span>. Denna modell kommer vara överlag en svag prediktor men vi använder dess prestanda för att uppdatera vikterna för nästa träning. Felklassificerade observationer får en högre vikt vilket gör att nästa modell behöver jobba mer för att klassificera dessa rätt, medan korrekta prediktioner får en mindre vikt. Denna process repeteras fram till att vi har <span class="math inline">\(B\)</span> modeller där vikterna successivt ökas och minskas beroende på resultaten från den föregående modellen. En observation som är svårklassificerad kommer få en större och större vikt tills modellen måste specifikt försöka prediktera den rätt.</p>
+<p>Prediktionerna från alla modellerna kombineras genom att använda en viktad majoritetsröstning: <span class="math display">\[
+  \begin{aligned}
+  \hat{y}_{boost}(\boldsymbol{X}) = sign\left(\sum_{b = 1}^B \alpha^b \hat{y}^b(\boldsymbol{X})\right)
+  \end{aligned}
+\]</span> där <span class="math inline">\(\alpha^b\)</span> är en viktningskoefficient för modell <span class="math inline">\(b\)</span>.</p>
+<p><span style="color: red">BEHÖVER VISA HUR VIKTNING KAN ANVÄNDAS I EN FELFUNKTION FÖR ATT DENNA METOD SKA VARA LÄTT ATT FÖRSTÅ</span></p>
+<p>Frågorna vi måste ställa oss nu är; hur ska vi öka/minska vikterna och hur ska vi bestämma värdet på <span class="math inline">\(\alpha^b\)</span>. Olika boostingalgoritmer ger lite olika svar på dessa frågor. En utav de första algoritmerna, AdaBoost, besvarade dessa frågor genom att minimera den exponentiella kostnadsfunktionen. Det finns många olika varianter, den mest kända är nog XGBoost.</p>
+<p><span style="color: red">Mer om gradient boosting/XGBOOST? Slide 30 i FL6</span></p>
+</section>
+<section id="bagging-eller-boosting" class="level2" data-number="30.4">
+<h2 data-number="30.4" class="anchored" data-anchor-id="bagging-eller-boosting"><span class="header-section-number">30.4</span> Bagging eller boosting?</h2>
+<p>Valet av ensemblemetod kan ibland vara svårt att göra. Mycket beror på vad vi vill uppnå med metoden då deras syften och för-/nackdelar är lite olika.</p>
+<div id="tbl-ensemble-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-ensemble-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;30.1
+</figcaption>
+<div aria-describedby="tbl-ensemble-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table style="margin-left: auto; margin-right: auto; border-collapse: collapse;">
+<thead>
+<tr>
+<th style="border: 1px solid black; padding: 6px;">
+Bagging
+</th>
+<th style="border: 1px solid black; padding: 6px;">
+Boosting
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="border: 1px solid black; padding: 6px;">
+Kan träna modeller parallellt
+</td>
+<td style="border: 1px solid black; padding: 6px;">
+Tränar modeller sekventiellt
+</td>
+</tr>
+<tr>
+<td style="border: 1px solid black; padding: 6px;">
+Använder bootstrappade dataset
+</td>
+<td style="border: 1px solid black; padding: 6px;">
+Använder viktade dataset
+</td>
+</tr>
+<tr>
+<td style="border: 1px solid black; padding: 6px;">
+Överanpassar inte med ökande <span class="math inline">\(B\)</span>
+</td>
+<td style="border: 1px solid black; padding: 6px;">
+Kan överanpassa när <span class="math inline">\(B\)</span> ökar
+</td>
+</tr>
+<tr>
+<td style="border: 1px solid black; padding: 6px;">
+Minskar variansen men inte bias
+</td>
+<td style="border: 1px solid black; padding: 6px;">
+Minskar varians och bias
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 

@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -527,6 +547,11 @@ window.Quarto = {
    
   <ul>
   <li><a href="#feature-learning" id="toc-feature-learning" class="nav-link active" data-scroll-target="#feature-learning"><span class="header-section-number">29.1</span> Feature learning</a></li>
+  <li><a href="#optimering" id="toc-optimering" class="nav-link" data-scroll-target="#optimering"><span class="header-section-number">29.2</span> Optimering</a>
+  <ul class="collapse">
+  <li><a href="#batch" id="toc-batch" class="nav-link" data-scroll-target="#batch"><span class="header-section-number">29.2.1</span> Batch</a></li>
+  <li><a href="#hyperparametrar" id="toc-hyperparametrar" class="nav-link" data-scroll-target="#hyperparametrar"><span class="header-section-number">29.2.2</span> Hyperparametrar</a></li>
+  </ul></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -556,7 +581,7 @@ window.Quarto = {
 <!-- CONTENT -->
 <p><strong>Neurala nätverk</strong> förekommer i många olika former i samhället och vi termen kan användas för att beskriva lite vad som helst. I detta underlag beskriver neurala nätverk komplexa modeller som med hjälp av ……..</p>
 <p>Det finns <em>väldigt många</em> olika sorters nätverk, en översikt kan hittas <a href="https://www.asimovinstitute.org/neural-network-zoo/">här</a>. Alla dessa nätverk kan användas för att lösa många olika problem, till exempel supervised learning eller mer avancerade problem som reinforcement learning.</p>
-<p>För supervised learning kan vi använda <strong>feed-forward</strong> nätverk, där informationen endast går åt ett håll i nätverket. På samma sätt som för trädmodeller börjar vi med att visa en övergripande struktur för att definiera några termer som kommer användas frekvent.</p>
+<p>För supervised learning kan vi använda <strong>feed-forward</strong> nätverk, såsom Multi Layer Perceptron (MLP), där informationen endast går åt ett håll i nätverket. På samma sätt som för trädmodeller börjar vi med att visa en övergripande struktur för att definiera några termer som kommer användas frekvent.</p>
 <div id="fig-nn-structure" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-nn-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -569,18 +594,139 @@ Figur&nbsp;29.1: Ett exempel på ett neuralt nätverk
 </div>
 <p>I <a href="#fig-nn-structure" class="quarto-xref">Figur&nbsp;<span>29.1</span></a> innehåller <strong>neuroner</strong> uppdelat i tre lager; <strong>inputlagret</strong> bestående av <span class="math inline">\(p\)</span> förklarande variabler (<span class="math inline">\(x_1 - x_p\)</span>), ett <strong>gömt lager</strong> bestående av <span class="math inline">\(M\)</span> linjärkombinationer (<span class="math inline">\(z_1 - z_M\)</span>), och ett <strong>outputlager</strong> bestående av <span class="math inline">\(K\)</span> klassprediktioner för klassificering eller <span class="math inline">\(K\)</span> neuroner för de parametrar som ska predikteras för regression (vanligtvis en). Figuren visar också hur informationen flödar genom enkelriktade pilar från inputlagret, till det gömda lagret och till sist till outputlagret. Ett feed-forward nätverk kan bestå av ett eller flera gömda lager där kopplingar endast sker mellan neuroner i efterföljande lager, inte inom lagren.</p>
 <p>Inom “vanlig” regression kan vi transformera de förklarande variablerna för att lyckas modellera mer icke-linjära samband. Det är dock svårt att veta exakt vilken transformation som behövs för att lösa varje problem och det blir nästintill omöjligt att hantera komplexa datastrukturer såsom text eller bilder. Detta kallas för <strong>feature engineering</strong> inom maskininlärning.</p>
-<p>Syftet med neurala nätverkets gömda lager är att automatiskt lära sig lämpliga transformationer av de förklarande variablerna för att lyckas identifiera icke-linjära samband som sedan transformeras linjärt i det sista outputlagret.</p>
+<p>Syftet med neurala nätverkets gömda lager är att automatiskt lära sig lämpliga transformationer av de förklarande variablerna för att lyckas identifiera icke-linjära samband som sedan transformeras linjärt i det sista outputlagret. Denna process kallas för <strong>feature learning</strong>.</p>
 <section id="feature-learning" class="level2" data-number="29.1">
 <h2 data-number="29.1" class="anchored" data-anchor-id="feature-learning"><span class="header-section-number">29.1</span> Feature learning</h2>
-<p>L7_Josef.pdf</p>
-<p>MLP</p>
-<p>L8_Josef.pdf</p>
-<p>Optimering för NN</p>
+<p>Anta att vi har data <span class="math inline">\(\boldsymbol{X} = (x_1, x_2, \dots, x_p)\)</span> där vi kan skapa transformationer av data via en godtycklig funktion <span class="math inline">\(h(\cdot)\)</span>. Det första gömda lagret kan exempelvis formuleras som en linjärkombination av <span class="math inline">\(\boldsymbol{X}\)</span>.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  z_j = h(x) = \sum_{i = 1}^p w_{ij} x_i
+  \end{aligned}
+\]</span> där <span class="math inline">\(w_{ij}\)</span> är vikten som läggs på den <span class="math inline">\(i\)</span>:te variabelns koppling till den <span class="math inline">\(j\)</span>:te neuronen. Vanligtvis lägger vi till en <strong>bias</strong>-term till kombinationen <span style="color: red">VARFÖR? FINNS DET NÅGON PRAKTISK ORSAK?</span>.</p>
+<p>Denna funktion blir dock fortfarande en linjär transformation, så hur kan vi då modellera något icke-linjärt? Med hjälp av många enkla icke-linjära funktioner kan vi skapa en komplex icke-linjär funktion. All detta tillsammans kan vi skriva funktionen som:</p>
+<p><span id="eq-hidden-neuron"><span class="math display">\[
+  \begin{aligned}
+  z_j = h(x) = \sigma\left(b_0 + \sum_{i = 1}^p w_{ij} x_i\right)
+  \end{aligned}
+\tag{29.1}\]</span></span> där <span class="math inline">\(b_0\)</span> är bias-termen och <span class="math inline">\(\sigma(\cdot)\)</span> är en så kallad <strong>aktiveringsfunktion</strong>.</p>
+<p>Aktiveringsfunktionen har historiskt varit någon form av sigmoid funktion, det vill säga en differentierbar och s-formad kurva. Numera är <strong>ReLu</strong> eller dess varianter den vanligaste formen av aktiveringsfunktion. ReLu står för Rectified Linear Unit och beskriver en linjär funktion i det positiva området och en annan linjär funktion i det negativa området.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  ReLu(x) = max(0, x)
+  \end{aligned}
+\]</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-relu" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-relu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="04-neural-networks_files/figure-html/fig-relu-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-relu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;29.2: ReLu aktiveringsfunktion
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Det finns många fördelar med att använda ReLu som aktiveringsfunktion till förmån för de historiska sigmoid-kurvorna. Bland annat undviker ofta ReLu att gradienten i optimeringsalgoritmen går mot 0, ett fenomen som kallas för <strong>vanishing gradient</strong>, samt att beräkningarna i optimeringen endast omfattar enkla beräkningar som jämförelser och addition. Däremot förekommer också några nackdelar såsom att funktionen är icke-differentierbar vid värdet 0 samt att nätverket ibland kan hamna i en situation där alla neuroner inte aktiveras (<span class="math inline">\(ReLu(x) = 0\)</span>) och därigenom inte fortsätter att optimera.</p>
+<p>Det sista lagrets aktiveringsfunktion måste bestämmas utifrån responsvariabeln. För regression används identitetsfunktionen om vi tillåter värden från hela tallinjen eller en funktion såsom <span class="math inline">\(exp()\)</span> om vi bara tillåter positiva värden. För klassificering kan vi använda olika sigmoid-funktioner såsom den logistiska funktionen (se <a href="../01-regression/10-logistic-regression.html#sec-logistic-func" class="quarto-xref"><span>Avsnitt 14.1.1</span></a>) om responsvariabeln är binär eller <strong>Softmax</strong>-funktionen om responsvariabeln är nominell.</p>
+<p>Softmaxfunktionen normaliserar outputlagrets värden enligt:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  f_i = \sigma(\boldsymbol{z})_i = \frac{exp(z_i)}{\sum_{j = 1}^K exp(z_j)}
+  \end{aligned}
+\]</span></p>
+<p>Vi kan se det som att det neurala nätverket från input till de gömda lagrena lär sig transformationer av de förklarande variablerna för att i sista lagret genomföra linjär/logistisk/multinomial regression på dessa.</p>
+<p><strong>Universal approximation theorem</strong> säger informellt att “En MLP med ett gömt lager och en icke-linjär aktiveringsfunktion kan approximera en godtycklig kontinuerlig eller diskret funktion med ett godtyckligt litet fel givet tillräckligt många gömda neuroner”. Vad detta betyder i praktiken är att neurala nätverk är flexibla och givet en tillräckligt stor modell också har bra prestanda. När klassiska statistiska modeller inte kan hantera mängden observationer, ett stort antal parametrar, eller komplexa samband kan ett neuralt nätverk komma väl till pass för att lösa samma problem.</p>
+<p>Detta blir dock också till viss del en nackdel, ett neuralt nätverk <u>kräver mycket data</u> för att lära sig komplexa funktioner samt att nätverket <u>lätt kan överanpassa träningsdata</u>, men den absolut största nackdelen med neurala nätverk är att vi helt tappar den förklarande biten. Modellen blir en <u>“black box”</u> som inte kan beskriva den faktiska effekt som en förklarande variabel har på responsvariabeln som vi är vana vid från vanlig regression.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>På senare tid har metoder utvecklats som utvärderar variablers påverkan på modellens prediktioner som till viss del kan användas för att beskriva effekten av en förklarande variabel på responsvariabeln. Bland annat finns SHAP och LIME (<span class="citation" data-cites="salih2025">Salih m.fl. (<a href="#ref-salih2025" role="doc-biblioref">2025</a>)</span> och <span class="citation" data-cites="bobadilla2024">Ponce-Bobadilla m.fl. (<a href="#ref-bobadilla2024" role="doc-biblioref">2024</a>)</span>) som ni kan läsa om på egen hand.</p>
+</div>
+</div>
+</section>
+<section id="optimering" class="level2" data-number="29.2">
+<h2 data-number="29.2" class="anchored" data-anchor-id="optimering"><span class="header-section-number">29.2</span> Optimering</h2>
+<p>Till skillnad från de tidigare modellerna som vi introducerat, skapar optimering av ett neuralt nätverk ett nytt problem som måste lösas. Parametrarna som ska optimeras är nätverkets vikter (och bias) för varje lager men om vi skulle optimera vikterna lager för lager inser vi snabbt att vi inte har något sätt att mäta felet för något annat lager än det sista. Det är enbart för <span class="math inline">\(f_i\)</span> som vi har observerade värden som kan appliceras i en vald felfunktion. Vi behöver därför använda <strong>backpropagation</strong>, en metod som med hjälp av kedjeregler för derivator kan optimera vikterna även i början av nätverket.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>3Blue1Brown har en väldigt bra illustrativ serie om hur neurala nätverk fungerar, däribland en illustration av hur backpropagation arbetar inom optimeringen.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/Ilg3gGewQ5U" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</div>
+</div>
+<p>För de komplexa problem som neurala nätverk ofta försöker lösa, krävs att vi använder mer komplexa optimeringsalgoritmer. Det finns också en ökande kostnad att beräkna den totala gradienten för alla nätverkets vikter vid varje iteration. Detta leder oss till nya problem och avvägningar som vi måste ta ställning till.</p>
+<section id="batch" class="level3" data-number="29.2.1">
+<h3 data-number="29.2.1" class="anchored" data-anchor-id="batch"><span class="header-section-number">29.2.1</span> Batch</h3>
+<p>Istället för att beräkna hela derivatan på en gång för alla datapunkter kan vi beräkna en väntevärdesriktigskattning av gradienten från ett slummässigt urval av data. Detta urval kallas för en <strong>mini-batch</strong> och tillåter att vi uppdaterar vikterna oftare (fler iterationer) med lite mer variation men utan samma beräkningskomplexitet. Större batcher ger mindre varians i gradientens skattning men blir dyrare att beräkna.</p>
+<p>I och med att skattningen inte blir den “sanna” gradienten kan vi också försäkra oss om att vi inte hamnar helt fel genom att minska inlärningshastigheten. Då förhindrar vi att en dålig skattning påverkar algoritmen mycket.</p>
+</section>
+<section id="hyperparametrar" class="level3" data-number="29.2.2">
+<h3 data-number="29.2.2" class="anchored" data-anchor-id="hyperparametrar"><span class="header-section-number">29.2.2</span> Hyperparametrar</h3>
+<p>Inom neurala nätverk finns massvis med hyperparametrar, alltifrån nätverkets arkitektur; antalet gömda lager, neuroner i varje lager, aktiveringsfunktioner m.fl., till nätverkets optimering; batch-storleken, inlärningshastigheten, val av optimeringsalgoritm m.fl.</p>
+<p>En hyperparameter som hör till optimeringsdelen är <strong>epoker</strong>. En epok är en genomgång av all träningsdata där <span style="color: red">LÄGG TILL MER OM EPOKER OCH DESS INNEBÖRD</span></p>
+<p>Valet av hyperparametrarnas värden för neurala nätverk är mycket svårt utan något exakt svar. Med hjälp av olika sökmetoder kan vi få en strukturerad jämförelse men det kommer i praktiken bestå av mycket trial and error. Det finns också många föreslagna nätverksarkitekturer från litteraturen sam förtränade modeller som kan anpassas om för nya problem vilket kan underlätta. För stora problem kan det ta lång tid att hitta bra hyperparametrar!</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En utav de större ramverken för neurala nätverk är Tensorflow. Det har också skapat ett <a href="https://playground.tensorflow.org/">visualiseringsverktyg</a> där man kan leka runt med olika modeller och se vad som händer.</p>
+</div>
+</div>
+<p><strong>Stokastisk gradient descent</strong> är en utveckling av gradient descent som använder sig av batches för att förenkla optimeringen. Som tidigare nämnt, behöver inlärningshastigheten (<span class="math inline">\(\gamma\)</span>) justeras för att ta hänsyn till att vi endast tittar på ett slumpmässigt urval vid varje iteration istället för alla observationer.</p>
+<p>Det vanligaste är att vi justerar <span class="math inline">\(\gamma\)</span> med antalet iterationer enligt någon form av schema, <span class="math inline">\(\gamma_1, \gamma_2, \gamma_3, \dots\)</span>, som uppfyller några krav. Till exempel <span class="math inline">\(\sum_{k = 1}^\infty \gamma_k = \infty\)</span> och <span class="math inline">\(\sum_{k = 1}^\infty \gamma_k^2 &lt; \infty\)</span> som båda uppfylls om <span class="math inline">\(\gamma_k = 1 / k\)</span>.</p>
+<p>Backpropagation multiplicerar flera derviator med varandra (kedjeregeln) vilket lätt kan leda till försvinnande eller exploderande gradienter (eng. vanishing och exploding gradient). En försvinnande gradient inträffar när produkten av derivatorerna är nära 0 vilket leder till att vikterna inte uppdateras alls medan en exploderande gradient inträffar när produkten av derivatorerna är för stora vilket leder till instabil optimering. ReLu som aktiveringsfunktion hanterar båda dessa problem bättre än sigmoid-funktioner men det finns fortfarande tillfällen där även ReLu hamnar i dessa fällor.</p>
+<p>Vi kan lägga till ytterliggare en hyperparameter i optimeringslagoritmen som vi kallar för <strong>momentum</strong> (<span class="math inline">\(\alpha\)</span>) som beskriver hur mycket av den gamla derivatan som vi sparar i nästa iteration.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  v = \alpha \cdot v - \gamma_k \cdot \hat{\nabla L}
+  \end{aligned}
+\]</span> vilket sedan ger:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \theta_k = \theta_{k-1} + v
+  \end{aligned}
+\]</span> Detta tillåter oss att jämna ut stora steg så att en försvinnande eller exploderande gradient vid en iteration inte fullt ut inträffar.</p>
+<p><span style="color: color">SKRIV UPP DENNA TIDIGARE SÅ ATT SKILLNADEN MELLAN MOMENTUM OCH INGEN BLIR TYDLIGARE. DETTA FUNKAR VÄL INTE MED EXPLODERANDE DÅ <span class="math inline">\(\nabla\)</span> HADE BLIVIT STOR REGARDLESS?</span></p>
+<p>Varje optimeringsalgoritm måste börja med några initiala värden på parametrarna. Dessa kallas för <strong>startvärden</strong>. Valet av startvärden påverkar algoritmen tillsammans med de övriga hyperparametrarna, i värsta fall kan vi med dåliga startvärden få stora problem. Eftersom ett nätverk ofta består av tusentals parametrar som vi måste skatta sätts dessa startvärden oftast slumpmässigt, antingen likformigt eller normalfördelat. Vi kan också låta algoritmen initialisera flera startvärden för att utforska en större del av felfunktionen. Detta gör att vi minskar risken att hamna i ett dåligt lokalt minimum.</p>
+<p>Kan vara svårt att få till en bra learning rate som passar alla parametrar när vi använder SGD. En idé är att anpassa learning rate för varje parameter. <strong>RMSProp</strong> skalar om gradienten beroende på träningshistoriken så att vi tar större steg för de parametrar med små derivator och tar mindre steg för de parametrar med stora derivator. Metoden skalar med exponentiellt avtagande glidande medelvärden för tidigare gradienter. <strong>ADAM</strong> kan ses som en blandning av RMSProp och momentum. Finns ännu fler varianter, RMSProp och Adam är vanliga standardval för neurala nätverk och finns i de flesta paket.</p>
+<p><span style="color: color">BATCHNORMALIZATION, REGULARISERING, DROPOUT? DET BLIR GANSKA MYCKET I DETTA KAPITEL REDAN.</span></p>
+</section>
 </section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-bobadilla2024" class="csl-entry" role="listitem">
+Ponce-Bobadilla, Ana Victoria, Vanessa Schmitt, Corinna S. Maier, Sven Mensing, och Sven Stodtmann. 2024. <span>”Practical guide to SHAP analysis: Explaining supervised machine learning model predictions in drug development”</span>. <em>Clinical and Translational Science</em> 17 (11): e70056. https://doi.org/<a href="https://doi.org/10.1111/cts.70056">https://doi.org/10.1111/cts.70056</a>.
+</div>
+<div id="ref-salih2025" class="csl-entry" role="listitem">
+Salih, Ahmed M., Zahra Raisi-Estabragh, Ilaria Boscolo Galazzo, Petia Radeva, Steffen E. Petersen, Karim Lekadir, och Gloria Menegaz. 2025. <span>”A Perspective on Explainable Artificial Intelligence Methods: SHAP and LIME”</span>. <em>Advanced Intelligent Systems</em> 7 (1): 2400304. https://doi.org/<a href="https://doi.org/10.1002/aisy.202400304">https://doi.org/10.1002/aisy.202400304</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
