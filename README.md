@@ -1,4 +1,4 @@
-## Open the project Test
+## Open the project
 Open the project using the .Rproj file
 
 ## Install required packages
