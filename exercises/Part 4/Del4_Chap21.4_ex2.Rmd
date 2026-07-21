@@ -1,0 +1,28 @@
+Question
+========
+Många tidsseriemodeller bygger på antagandet om svag stationäritet. Det innebär att serien har konstant väntevärde och varians samt att autokovariansen mellan $Y_t$ och $Y_{t-k}$ endast beror på avståndet $k$. Vilka av följande påståenden är korrekta om antagandet inte är uppfyllt?
+
+Answerlist
+----------
+* Serien kan analyseras på samma sätt eftersom stationäritet främst påverkar seriens utseende.
+* Modellskattningar och slutsatser kan bli missvisande när seriens struktur förändras över tid.
+* Problemet försvinner automatiskt om fler observationer läggs till i tidsserien.
+* Autokovariansen kan bero på var i serien den beräknas och inte enbart på avståndet $k$.
+
+Solution
+========
+
+Answerlist
+----------
+
+* Falskt. Stationäritet påverkar om seriens nivå, variation och beroendestruktur kan beskrivas på ett stabilt sätt över tid.
+* Sant. Om seriens egenskaper förändras över tid kan en modell som antar en stabil struktur ge missvisande skattningar och slutsatser.
+* Falskt. Fler observationer gör inte automatiskt en icke-stationär serie stationär.
+* Sant. För en icke-stationär serie kan autokovariansen bero på både tidpunkten och avståndet mellan observationerna.
+
+Meta-information
+================
+exname: weak_stationarity_consequences
+extype: mchoice
+exsolution: 0101 
+exshuffle: 4
