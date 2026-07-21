@@ -1,0 +1,27 @@
+Question
+========
+En serie av vitt brus $e_t$ har väntevärde $0$, konstant varians och är stationär. En random walk definieras som $Y_t=Y_{t-1}+e_t$. Trots att $e_t$ är stationärt är $Y_t$ vanligtvis inte stationär. Vilken förklaring är korrekt?
+
+Answerlist
+----------
+* En random walk är inte stationär eftersom väntevärdet alltid ökar över tid.
+* En random walk är inte stationär eftersom variansen ökar när nya slumpchocker ackumuleras över tid.
+* En random walk är inte stationär eftersom vitt brus alltid är autokorrelerat.
+* En random walk är inte stationär eftersom den inte innehåller någon slumpmässighet.
+
+Solution
+========
+
+Answerlist
+----------
+* Falskt. För en random walk utan drift är väntevärdet konstant om startvärdet är konstant.
+* Sant. Slumpchockerna summeras över tid, vilket gör att variansen ökar.
+* Falskt. Vitt brus saknar autokorrelation mellan observationer vid olika tidpunkter.
+* Falskt. En random walk är slumpmässig eftersom den byggs upp av slumpchocker.
+
+Meta-information
+================
+exname: white_noise_random_walk
+extype: schoice
+exsolution: 0100
+exshuffle: 4
