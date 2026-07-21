@@ -1,0 +1,32 @@
+Question
+========
+Anta att $e_t$ är vitt brus med väntevärde $0$, konstant varians $\sigma_e^2$ och oberoende observationer. En tidsserie definieras som
+
+$$
+Y_t = \frac{e_t + e_{t-1}}{2}.
+$$
+
+Vilka av följande påståenden om serien är korrekta?
+
+Answerlist
+----------
+* $Y_t$ och $Y_{t-1}$ är korrelerade eftersom båda innehåller slumpvariabeln $e_{t-1}$.
+* $Y_t$ och $Y_{t-2}$ är okorrelerade eftersom de inte innehåller någon gemensam slumpvariabel.
+* $\operatorname{Var}(Y_t) = \sigma_e^2$, eftersom serien består av två termer som båda har variansen $\sigma_e^2$.
+* Kovariansen mellan $Y_t$ och $Y_{t-1}$ är $\sigma_e^2/4$.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Både $Y_t = (e_t + e_{t-1})/2$ och $Y_{t-1} = (e_{t-1} + e_{t-2})/2$ innehåller $e_{t-1}$. Den gemensamma slumpvariabeln gör att kovariansen är positiv.
+* Sant. $Y_t$ innehåller $e_t$ och $e_{t-1}$, medan $Y_{t-2}$ innehåller $e_{t-2}$ och $e_{t-3}$. Eftersom termerna i det vita bruset är oberoende är $\operatorname{Cov}(Y_t,Y_{t-2}) = 0$.
+* Falskt. Eftersom $e_t$ och $e_{t-1}$ är oberoende gäller $\operatorname{Var}(Y_t) = \{\operatorname{Var}(e_t) + \operatorname{Var}(e_{t-1})\}/4 = \sigma_e^2/2$.
+* Sant. Den enda gemensamma slumpvariabeln i $Y_t$ och $Y_{t-1}$ är $e_{t-1}$. Därför gäller $\operatorname{Cov}(Y_t,Y_{t-1}) = \operatorname{Var}(e_{t-1})/4 = \sigma_e^2/4$.
+
+Meta-information
+================
+exname: moving_average_dependence
+extype: mchoice
+exsolution: 1101
+exshuffle: 4
