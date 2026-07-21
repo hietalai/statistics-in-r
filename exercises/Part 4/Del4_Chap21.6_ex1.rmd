@@ -1,0 +1,34 @@
+Question
+========
+En random walk utan drift definieras som
+
+$$
+Y_t = Y_{t-1} + e_t,
+$$
+
+där $e_t$ är vitt brus. Serien kan bearbetas genom differentiering med funktionen `diff()`.
+
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Den första differensen med lagg $1$ kan skrivas som $\nabla Y_t = Y_t-Y_{t-1}=e_t$.
+* Den första differensen är stationär om $e_t$ är vitt brus, trots att den ursprungliga serien $Y_t$ inte är stationär.
+* Två differentieringar med lagg $1$ ger $\nabla^2Y_t=Y_t-2Y_{t-1}+Y_{t-2}$.
+* Uttrycket `diff(Y, lag = 2, differences = 2)` ger differensen $Y_t-Y_{t-4}$.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Från $Y_t=Y_{t-1}+e_t$ följer att $Y_t-Y_{t-1}=e_t$. Den första differensen är därför lika med den aktuella slumpchocken.
+* Sant. Den första differensen är lika med det vita bruset $e_t$, som har konstant väntevärde och varians samt saknar autokorrelation mellan olika tidpunkter.
+* Sant. Den andra differensen är differensen mellan två första differenser: $\nabla^2Y_t=(Y_t-Y_{t-1})-(Y_{t-1}-Y_{t-2})=Y_t-2Y_{t-1}+Y_{t-2}$.
+* Falskt. `lag = 2` innebär först att differensen $Y_t-Y_{t-2}$ beräknas. Eftersom `differences = 2` upprepas samma operation på den redan differentierade serien. Resultatet blir därför $(Y_t-Y_{t-2})-(Y_{t-2}-Y_{t-4})=Y_t-2Y_{t-2}+Y_{t-4}$. Uttrycket $Y_t-Y_{t-4}$ hade istället motsvarat en enda differentiering med lagg $4$.
+
+Meta-information
+================
+exname: random_walk_differencing
+extype: mchoice
+exsolution: 1110
+exshuffle: 4
