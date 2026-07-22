@@ -1,0 +1,30 @@
+Question
+========
+En tidsseriemodell har lågt fel på de observationer som användes vid modellanpassningen. För att undersöka om modellens prognoser är tillförlitliga delas tidsserien upp i en träningsdel och en testdel. Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Modellen ska anpassas på den tidigare delen av tidsserien och utvärderas på de senaste observationerna.
+* Testobservationerna ska hållas utanför modellanpassningen så att de kan användas för en mer rättvis utvärdering av prognoserna.
+* Ett lågt träningsfel garanterar att modellen ger tillförlitliga prognoser för nya tidpunkter.
+* Prognoserna kan jämföras med testobservationerna med mått som MAD, MSD eller MAPE.
+* Tidsserien bör delas slumpmässigt mellan tränings- och testdata.
+* En modell med något högre träningsfel men lägre prognosfel på testdelen kan ge bättre prognoser för framtida tidpunkter.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Tidsordningen måste bevaras. Modellen tränas därför på seriens tidigare observationer och utvärderas på senare observationer, vilket efterliknar hur modellen används för verkliga framtidsprognoser.
+* Sant. Testobservationerna hålls utanför modellanpassningen och används för att bedöma hur väl modellen prognostiserar nya tidpunkter.
+* Falskt. En komplex modell kan få mycket lågt fel på träningsdata genom överanpassning men ändå ge dåliga prognoser på nya tidpunkter. Träningsfelet räcker därför inte för att bedöma modellens prognosförmåga.
+* Sant. När de faktiska testvärdena är kända kan prognosfelen sammanfattas med exempelvis MAD, MSD eller MAPE. Låga värden innebär mindre avvikelse mellan prognoser och observerade värden.
+* Falskt. På grund av tidsberoendet ska uppdelningen göras vid en bestämd tidpunkt, så att testdelen består av de senaste observationerna.
+* Sant. En modell med lägre prognosfel på testdelen kan ge bättre prognoser för framtida tidpunkter, även om den inte passar träningsdata lika exakt.
+
+Meta-information
+================
+exname: time_series_train_test_forecasts
+extype: mchoice
+exsolution: 110101
+exshuffle: 6
