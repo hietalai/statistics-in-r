@@ -1,0 +1,26 @@
+Question
+========
+Ridge och LASSO använder olika typer av strafftermer. Elastic net kombinerar egenskaper från båda metoderna genom att använda både ett $L_1$-straff och ett $L_2$-straff. Vilka av följande påståenden beskriver elastic net korrekt?
+
+Answerlist
+----------
+* Elastic net kan både krympa regressionskoefficienterna och sätta vissa av dem exakt till $0$.
+* Elastic net kombinerar strafftermerna från ridge och LASSO, och blandningen styrs av en ytterligare parameter.
+* Elastic net kan hantera korrelerade prediktorer bättre än ren LASSO.
+* Elastic net skiljer sig från ridge genom att den aldrig kan genomföra variabelselektion.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Metodens $L_2$-del krymper koefficienterna, medan $L_1$-delen kan göra vissa koefficienter exakt lika med $0$.
+* Sant. Parametern $\lambda$ styr den totala graden av regularisering, medan blandningsparametern $\alpha$ bestämmer balansen mellan $L_1$- och $L_2$-straffet.
+* Sant. Kombinationen av $L_1$- och $L_2$-straff gör att elastic net kan hantera korrelerade variabler bättre än ren LASSO.
+* Falskt. Genom $L_1$-komponenten kan elastic net sätta vissa koefficienter exakt till $0$ och därmed genomföra variabelselektion.
+
+Meta-information
+================
+exname: elastic_net_regression
+extype: mchoice
+exsolution: 1110
+exshuffle: 4
