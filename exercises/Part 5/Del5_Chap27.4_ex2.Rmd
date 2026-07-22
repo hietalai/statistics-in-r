@@ -1,0 +1,26 @@
+Question
+========
+En modell har skattats med LASSO för att välja relevanta prediktorer. Efter variabelselektionen anpassas en vanlig regressionsmodell till samma datamaterial med endast de utvalda variablerna. Modellens vanliga $p$-värden är mycket små och konfidensintervallen ovanligt smala. Varför bör dessa slutsatser tolkas försiktigt?
+
+Answerlist
+----------
+* De vanliga $p$-värdena och konfidensintervallen tar inte hänsyn till att variablerna först valdes ut med hjälp av samma data.
+* LASSO kan välja variabler som råkade visa starka samband i det aktuella stickprovet, vilket kan leda till för små $p$-värden och underskattad osäkerhet.
+* Efter variabelselektion gäller automatiskt att alla utvalda variabler har statistiskt säkerställda effekter i populationen.
+* Vanliga statistiska slutsatser efter modellval behandlar den valda modellen som om den hade bestämts innan data observerades, trots att modellvalet var databeroende.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Urvalssteget är en extra källa till osäkerhet som vanliga $p$-värden och konfidensintervall inte tar hänsyn till.
+* Sant. Ett databeroende urval gynnar samband som ser ovanligt starka ut i det observerade stickprovet, vilket kan ge för små $p$-värden och för snäva konfidensintervall.
+* Falskt. Att en variabel har valts innebär inte att dess effekt automatiskt är säkerställd i populationen. Urvalet beror bland annat på stickprovet och värdet på $\lambda$.
+* Sant. Standardmetoderna behandlar modellen som om den hade bestämts i förväg. Det antagandet är inte uppfyllt när samma data har använts för variabelselektionen.
+
+Meta-information
+================
+exname: lasso_post_selection_inference
+extype: mchoice
+exsolution: 1101
+exshuffle: 4
