@@ -1,0 +1,28 @@
+Question
+========
+För en stationär tidsserie är autokorrelationerna vid lagg $1$ och $2$ lika med $\rho_1 = 0.5$ respektive $\rho_2 = 0.1$.
+Den partiella autokorrelationen vid lagg $2$ kan beräknas som $\phi_{22} = \frac{\rho_2 - \rho_1^2}{1 - \rho_1^2}$.
+Vilket av följande alternativ ger korrekt värde och tolkning av $\phi_{22}$?
+
+Answerlist
+----------
+* $\phi_{22} = -0.20$. Efter justering för $Y_{t-1}$ finns ett negativt partiellt samband mellan $Y_t$ och $Y_{t-2}$.
+* $\phi_{22} = 0.10$. Den partiella autokorrelationen vid lagg $2$ är alltid samma som den vanliga autokorrelationen $\rho_2$.
+* $\phi_{22} = 0.20$. Justeringen för mellanliggande observationer kan påverka sambandets storlek men inte dess tecken.
+* $\phi_{22} = 0$. När effekten av $Y_{t-1}$ justeras bort försvinner alltid sambandet mellan $Y_t$ och $Y_{t-2}$.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Beräkningen ger $\phi_{22} = \frac{0.1 - 0.5^2}{1 - 0.5^2} = \frac{-0.15}{0.75} = -0.20$. Det negativa värdet innebär att det återstående linjära sambandet mellan $Y_t$ och $Y_{t-2}$ är negativt efter att effekten av $Y_{t-1}$ har justerats bort.
+* Falskt. Autokorrelationen $\rho_2$ innehåller både direkta samband och indirekta samband som går via mellanliggande observationer. Den partiella autokorrelationen justerar bort effekten av dessa observationer.
+* Falskt. När effekten av mellanliggande observationer justeras bort kan både sambandets storlek och dess tecken förändras.
+* Falskt. Sambandet försvinner endast om den beräknade partiella autokorrelationen är lika med $0$. Det sker inte automatiskt när $Y_{t-1}$ justeras bort.
+
+Meta-information
+================
+exname: partial_autocorrelation_lag2
+extype: schoice
+exsolution: 1000
+exshuffle: 4
