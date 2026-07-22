@@ -1,0 +1,26 @@
+Question
+========
+Autokorrelation och invertibilitet är viktiga egenskaper hos glidande medelvärdesprocesser. Vilka av följande påståenden om MA-processer är korrekta?
+
+Answerlist
+----------
+* För en MA($q$)-process är autokorrelationen $0$ för alla lagg $k>q$.
+* En MA($q$)-process måste uppfylla särskilda stationäritetsvillkor för parametrarna $\theta_1,\ldots,\theta_q$.
+* För en MA($2$)-process kan autokorrelationen vara nollskild även för lagg större än $2$.
+* För en MA($1$)-process kan $\theta$ och $1/\theta$ ge samma autokorrelation vid lagg $1$, vilket motiverar ett invertibilitetsvillkor.
+
+Solution
+========
+Answerlist
+----------
+* Sant. För en MA($q$)-process kan autokorrelationen vara nollskild till och med lagg $q$, men är $0$ för alla större lagg.
+* Falskt. En MA-process är stationär oavsett värdena på parametrarna. Däremot används villkor på parametrarna för att säkerställa invertibilitet.
+* Falskt. För en MA($2$)-process är autokorrelationen $0$ för alla lagg $k>2$.
+* Sant. För en MA($1$)-process kan $\theta$ och $1/\theta$ ge samma autokorrelation, vilket gör att ett invertibilitetsvillkor behövs för att modellen ska kunna identifieras entydigt.
+
+Meta-information
+================
+exname: moving_average_properties
+extype: mchoice
+exsolution: 1001
+exshuffle: 4
