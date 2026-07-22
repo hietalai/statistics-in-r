@@ -1,0 +1,27 @@
+Question
+========
+När vi utvecklar en maskininlärningsmodell vill vi hitta en modell som beskriver sambandet mellan de förklarande variablerna och responsvariabeln så bra som möjligt, samtidigt som modellen ska fungera väl på nya observationer. Vilken av följande beskrivningar återger modellvalsprocessen korrekt?
+
+Answerlist
+----------
+* Alla kandidatmodeller tränas på hela datamängden. Därefter väljs modellen med lägst träningsfel och samma data används för att uppskatta modellens slutliga prestanda.
+* Kandidatmodeller tränas på träningsmängden och jämförs med hjälp av valideringsmängden. När den bästa modellen har valts används testmängden en gång för att uppskatta modellens prestanda på nya observationer.
+* Kandidatmodeller tränas på valideringsmängden. Testmängden används sedan för att välja modell och träningsmängden används slutligen för att kontrollera resultatet.
+* Testmängden används under hela träningsprocessen för att säkerställa att modellen hela tiden förbättras på nya observationer.
+
+Solution
+========
+Answerlist
+----------
+* Falskt. Om samma data används för träning, modellval och slutlig utvärdering blir prestandamåttet alltför optimistiskt och säger mindre om modellens förmåga att generalisera.
+* Sant. Träningsmängden används för att skatta modellens parametrar, valideringsmängden används för modell- och hyperparameterval och testmängden hålls undan till den slutliga utvärderingen.
+* Falskt. Rollerna är omkastade. Modellen ska tränas på träningsdata och inte på valideringsdata.
+* Falskt. Om testmängden används återkommande under modellutvecklingen anpassas modellvalet indirekt till testdatan.
+
+
+Meta-information
+================
+exname: model_selection_process
+extype: schoice
+exsolution: 0100
+exshuffle: 4
