@@ -1,0 +1,28 @@
+Question
+========
+Betrakta en AR($2$)-process $Y_t = \phi_1Y_{t-1} + \phi_2Y_{t-2} + e_t$.
+För att processen ska vara stationär måste följande tre villkor vara uppfyllda: $\phi_1 + \phi_2 < 1$, $\phi_2 - \phi_1 < 1$ och $|\phi_2| < 1$.
+Vilka av följande parameterpar uppfyller samtliga stationäritetsvillkor?
+
+Answerlist
+----------
+* $\phi_1 = 0.6$ och $\phi_2 = 0.3$.
+* $\phi_1 = 0.8$ och $\phi_2 = 0.25$.
+* $\phi_1 = -0.2$ och $\phi_2 = 0.85$.
+* $\phi_1 = -0.7$ och $\phi_2 = -0.2$.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Här gäller $\phi_1 + \phi_2 = 0.9 < 1$, $\phi_2 - \phi_1 = -0.3 < 1$ och $|\phi_2| = 0.3 < 1$. Samtliga stationäritetsvillkor är därför uppfyllda.
+* Falskt. Det första villkoret är inte uppfyllt eftersom $\phi_1 + \phi_2 = 1.05 > 1$.
+* Falskt. Det andra villkoret är inte uppfyllt eftersom $\phi_2 - \phi_1 = 0.85 - (-0.2) = 1.05 > 1$.
+* Sant. Här gäller $\phi_1 + \phi_2 = -0.9 < 1$, $\phi_2 - \phi_1 = 0.5 < 1$ och $|\phi_2| = 0.2 < 1$. Samtliga stationäritetsvillkor är därför uppfyllda.
+
+Meta-information
+================
+exname: ar2_stationarity_conditions
+extype: mchoice
+exsolution: 1001
+exshuffle: 4
