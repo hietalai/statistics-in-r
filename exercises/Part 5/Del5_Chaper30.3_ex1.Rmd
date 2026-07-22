@@ -1,0 +1,26 @@
+Question
+========
+I maskininlärning kan boosting användas för att klassificera observationer genom att kombinera flera svaga modeller. Efter att den första modellen har tränats visar det sig att vissa observationer har klassificerats fel. Vilka av följande påståenden beskriver korrekt hur boosting fortsätter träningen och kombinerar de olika modellerna?
+
+Answerlist
+----------
+* De felklassificerade observationerna får större betydelse när nästa modell tränas.
+* Observationer som redan klassificerats korrekt kan få lägre vikt i nästa steg.
+* Varje ny modell tränas utan information om resultaten från tidigare modeller.
+* Den slutliga prediktionen kan baseras på en viktad kombination av de tränade modellerna.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Felklassificerade observationer får vanligtvis högre vikt, så att nästa modell fokuserar mer på dem.
+* Sant. Korrekt klassificerade observationer kan få lägre vikt eftersom modellen redan hanterar dem relativt väl.
+* Falskt. Boosting är en sekventiell metod där resultaten från tidigare modeller påverkar träningen av nästa modell.
+* Sant. Modellernas prediktioner kan kombineras genom exempelvis en viktad majoritetsröstning.
+
+Meta-information
+================
+exname: boosting_classification
+extype: mchoice
+exsolution: 1101
+exshuffle: 4
