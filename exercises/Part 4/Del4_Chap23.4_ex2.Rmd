@@ -1,0 +1,26 @@
+Question
+========
+När en ARIMA-modell har identifierats ska modellens parametrar skattas. I materialet presenteras momentmetoden, den betingade minsta kvadratmetoden och maximum likelihood-metoden. Vilka av följande påståenden om metoderna är korrekta?
+
+Answerlist
+----------
+* Momentmetoden är särskilt lämplig för att skatta MA-termer eftersom momentekvationerna då är enkla att lösa.
+* Momentmetoden innebär att modellens teoretiska mått ersätts med motsvarande skattade mått från den observerade serien. För en AR($1$)-process kan $\phi$ exempelvis skattas med autokorrelationen vid lagg $1$.
+* Den betingade minsta kvadratmetoden väljer de parametrar som minimerar en kvadratsumma mellan observerade och anpassade värden.
+* Maximum likelihood-metoden väljer de parametervärden som maximerar likelihooden för den observerade tidsserien.
+
+Solution
+========
+Answerlist
+----------
+* Falskt. För MA-processer ger momentmetoden mer komplicerade ekvationer som även kräver kontroll av invertibilitet. Maximum likelihood är därför ofta mer lämplig.
+* Sant. För en stationär AR($1$)-process gäller $\rho_1=\phi$, vilket innebär att momentmetoden ger skattningen $\hat{\phi}=r_1$.
+* Sant. Den betingade minsta kvadratmetoden väljer de parametrar som minimerar den betingade kvadratsumman.
+* Sant. Maximum likelihood-metoden väljer de parametervärden som gör den observerade serien mest sannolik enligt modellen.
+
+Meta-information
+================
+exname: arima_parameter_estimation
+extype: mchoice
+exsolution: 0111
+exshuffle: 4
