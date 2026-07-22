@@ -1,0 +1,27 @@
+Question
+========
+När sambandet mellan en prediktor och responsvariabeln är icke-linjärt kan både polynomregression och splines användas. Vilka av följande påståenden om splines är korrekta?
+
+Answerlist
+----------
+* En vanlig polynomregression använder ett enda polynom för hela prediktorns intervall, medan en spline består av flera polynom som anpassas inom olika delar av intervallet.
+* Polynomdelarna i en spline skattas helt oberoende av varandra och behöver inte mötas vid knutpunkterna.
+* Punkterna där de olika polynomdelarna möts kallas knutpunkter, och villkor används för att göra den sammanfogade kurvan jämn.
+* Antalet frihetsgrader beskriver antalet parametrar som skattas i spline-modellen.
+
+Solution
+========
+Answerlist
+----------
+* Sant. En vanlig polynomregression använder ett globalt polynom, medan en spline består av styckvisa polynom som anpassas inom olika delintervall.
+* Falskt. Vid knutpunkterna används villkor som gör att polynomdelarna sammanfogas på ett kontinuerligt och jämnt sätt.
+* Sant. Delintervallen avgränsas av knutpunkter, och villkor på kontinuitet och derivator används för att sammanfoga polynomdelarna.
+* Sant. Frihetsgraderna motsvarar antalet parametrar som skattas i spline-modellen.
+
+Meta-information
+================
+exname: splines_vs_polynomial
+extype: mchoice
+exsolution: 1011
+exshuffle: 4
+
