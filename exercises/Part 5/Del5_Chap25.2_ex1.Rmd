@@ -1,0 +1,29 @@
+Question
+========
+Vilka av följande påståenden beskriver en modell som inte generaliserar väl till nya, liknande data?
+
+Answerlist
+----------
+* Modellen är lagom komplex och fångar de generella mönstren utan att följa enskilda avvikande observationer.
+* Modellen behandlar slumpmässigt brus i träningsdata som om det vore ett verkligt samband.
+* Modellen är för enkel för att fånga relevanta strukturer och samband i data.
+* Modellen har ungefär lika lågt fel på träningsdata som på valideringsdata.
+* Modellen anpassar träningsdata mycket väl men ger betydligt större fel på nya data.
+
+Solution
+========
+Answerlist
+----------
+* Falskt. En lagom komplex modell som fångar de generella mönstren utan att anpassa sig till bruset är den typ av modell som eftersträvas.
+* Sant. En överanpassad modell tolkar slumpmässigt brus som en del av det verkliga sambandet och kan därför fungera dåligt på nya data.
+* Sant. En underanpassad modell är för enkel för att fånga relevanta strukturer och kan därför inte generalisera väl.
+* Falskt. Liknande låga fel på tränings- och valideringsdata tyder på att modellen kan generalisera väl till nya, liknande data.
+* Sant. Ett mycket lågt träningsfel i kombination med ett betydligt större fel på nya data är ett tecken på överanpassning.
+
+Meta-information
+================
+exname: model_generalisation
+extype: mchoice
+exsolution: 01101
+exshuffle: 5
+
