@@ -1,0 +1,32 @@
+Question
+========
+En ARIMA-modell använder första differensiering, så att $\Delta Y_t=Y_t-Y_{t-1}$. Det senast observerade värdet är $Y_t=100$.
+Modellen ger följande prognoser för den differensierade serien: $\widehat{\Delta Y}_{t+1|t}=2$, $\widehat{\Delta Y}_{t+2|t}=1$ och $\widehat{\Delta Y}_{t+3|t}=-0.5$.
+Vilka av följande påståenden om prognoserna på seriens ursprungliga skala är korrekta?
+
+Answerlist
+----------
+* $\hat{Y}_{t+1|t}=102$.
+* $\hat{Y}_{t+2|t}=101$, eftersom prognosen $1$ ska adderas direkt till det senast observerade värdet $Y_t=100$.
+* $\hat{Y}_{t+3|t}=102.5$.
+* Prognosen för $Y_{t+3}$ är lägre än prognosen för $Y_{t+2}$, eftersom den prognostiserade tredje förändringen är negativ.
+* Prognosen tre steg framåt är $99.5$, eftersom $\widehat{\Delta Y}_{t+3|t}=-0.5$.
+* För att återgå till originalskalan måste de prognostiserade differenserna summeras successivt från det senast observerade värdet.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Den första prognosen på originalskalan är $\hat{Y}_{t+1|t}=Y_t+\widehat{\Delta Y}_{t+1|t}=100+2=102$.
+* Falskt. Vid flera steg framåt ska differenserna summeras successivt. Därför är $\hat{Y}_{t+2|t}=100+2+1=103$.
+* Sant. Prognosen blir $\hat{Y}_{t+3|t}=100+2+1-0.5=102.5$.
+* Sant. Eftersom $\widehat{\Delta Y}_{t+3|t}=-0.5$ minskar nivåprognosen från $103$ vid tidpunkt $t+2$ till $102.5$ vid tidpunkt $t+3$.
+* Falskt. Värdet $-0.5$ är en prognos för förändringen, inte för seriens nivå. Den ska därför inte adderas direkt till $Y_t$ utan hänsyn till de tidigare prognostiserade förändringarna.
+* Sant. Prognosen görs först för den differensierade serien. Återtransformeringen till originalskalan sker därefter genom successiv summering.
+
+Meta-information
+================
+exname: arima_differenced_forecast_backtransformation
+extype: mchoice
+exsolution: 101101
+exshuffle: 6
