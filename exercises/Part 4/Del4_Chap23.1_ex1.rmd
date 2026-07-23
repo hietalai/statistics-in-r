@@ -1,0 +1,31 @@
+Question
+========
+Betrakta följande fyra modeller, där $e_t$ är vitt brus:
+A: $Y_t=0.6Y_{t-1}+e_t-0.2e_{t-1}$
+B: $Y_t=0.4Y_{t-1}-0.1Y_{t-2}+e_t$
+C: $Y_t=e_t+0.5e_{t-1}-0.3e_{t-2}$
+D: $Y_t=0.7Y_{t-1}+e_t+0.2e_{t-2}$
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Modell A är en ARMA($1,1$)-process eftersom den innehåller ett laggat värde av $Y_t$ och en laggad felterm.
+* Modell B är en ARMA($2,1$)-process eftersom både $Y_{t-1}$ och feltermen $e_t$ ingår i modellen.
+* Modell C kan skrivas som en ARMA($0,2$)-process, vilket är detsamma som en MA($2$)-process.
+* Modell D är en ARMA($1,2$)-process trots att termen $e_{t-1}$ inte finns med i modellen.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Den högsta laggen bland de tidigare $Y$-värdena är $1$ och den högsta laggen bland de tidigare feltermerna är också $1$. Modellen är därför en ARMA($1,1$)-process.
+* Falskt. Modell B innehåller två laggade $Y$-värden och inga tidigare feltermer. Den är därför en ARMA($2,0$)-process, vilket är detsamma som en AR($2$)-process. Den aktuella feltermen $e_t$ räknas inte som en MA-term av ordning $1$.
+* Sant. Modell C saknar laggade $Y$-värden och innehåller tidigare feltermer till och med lagg $2$. Den kan därför betecknas ARMA($0,2$), vilket motsvarar en MA($2$)-process.
+* Sant. AR-ordningen bestäms av den högsta laggen för tidigare $Y$-värden och MA-ordningen av den högsta laggen för tidigare feltermer. Den högsta feltermen är $e_{t-2}$, så modellen har $q=2$ även om koefficienten framför $e_{t-1}$ är $0$.
+
+Meta-information
+================
+exname: arma_model_order
+extype: mchoice
+exsolution: 1011
+exshuffle: 4
