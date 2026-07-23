@@ -51,7 +51,7 @@ Vi kan simulera hur en AR(1) ser ut för olika värden på $\phi$.
 ar1 <- function(phi, n) {
   y <- numeric()
   
-  for (i in seq_len(n)) {
+  for (t in seq_len(n)) {
     if (t == 1) {
       y[t] <- rnorm(n = 1)
     } else {
