@@ -1,0 +1,29 @@
+Question
+========
+Anta att en observerad tidsserie $Y_t$ inte är stationär. Efter differentiering definieras den stationära serien som $W_t=\Delta^dY_t$.
+Vilka av följande påståenden är korrekta enligt beskrivningen av ARIMA-modeller?
+
+Answerlist
+----------
+* Bokstaven $d$ i ARIMA($p,d,q$) anger hur många gånger serien har differentierats.
+* När serien har differentierats anpassas AR- och MA-komponenterna till den stationära serien $W_t$.
+* En konstantterm $\theta_0$ kan läggas till om den stationära seriens väntevärde inte är $0$.
+* En konstantterm i en differentierad modell kan i vissa fall användas för att beskriva en linjär trend i den ursprungliga serien.
+* Om en serie inte är stationär måste både $p$ och $q$ alltid vara större än $0$.
+
+Solution
+========
+Answerlist
+----------
+* Sant. I ARIMA($p,d,q$) anger $d$ differentieringsordningen, det vill säga hur många gånger serien differentieras.
+* Sant. Efter differentiering behandlas $W_t=\Delta^dY_t$ som den stationära serie som ARMA-modellen anpassas till.
+* Sant. Underlaget beskriver att en konstantterm kan inkluderas när den stationära seriens väntevärde skiljer sig från $0$.
+* Sant. I vissa specialfall kan konstanttermen i en differentierad modell användas för att modellera en linjär trend i den ursprungliga serien.
+* Falskt. Differentieringens ordning bestäms av $d$. Modellen kan exempelvis innehålla enbart AR-komponenter, enbart MA-komponenter eller båda.
+
+Meta-information
+================
+exname: arima_differencing_constant
+extype: mchoice
+exsolution: 11110
+exshuffle: 5
