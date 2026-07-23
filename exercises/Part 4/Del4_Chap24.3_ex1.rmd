@@ -1,0 +1,34 @@
+Question
+========
+Två ARIMA-modeller har anpassats till samma tidsserie med $n=30$ observationer.
+Modell A är en ARIMA$(2,0,1)$ med konstant och har $\log(L)=-100$.
+Modell B är en ARIMA$(1,0,1)$ utan konstant och har $\log(L)=-102$.
+Använd $AIC=-2\log(L)+2k$ och $AIC_c=AIC+\frac{2(k+1)(k+2)}{n-k-2}$, där $k=p+q+1$ om en konstant inkluderas och $k=p+q$ annars.
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Båda modellerna har samma $AIC$.
+* För Modell A är $k=3$, eftersom modellen sammanlagt har tre AR- och MA-parametrar.
+* Modell A har $AIC_c=210.5$.
+* Modell B har lägre $AIC_c$ än Modell A och bör därför föredras enligt detta kriterium.
+* Korrigeringen från $AIC$ till $AIC_c$ blir större för Modell A eftersom den har fler skattade parametrar.
+* Eftersom modellerna har samma $AIC$ måste de också ha samma $AIC_c$.
+
+Solution
+========
+Answerlist
+----------
+* Sant. För Modell A är $k=2+1+1=4$, vilket ger $AIC=-2(-100)+2(4)=208$. För Modell B är $k=1+1=2$, vilket ger $AIC=-2(-102)+2(2)=208$.
+* Falskt. Konstanten ska räknas som en parameter. Därför är $k=2+1+1=4$ för Modell A.
+* Sant. För Modell A blir $AIC_c=208+\frac{2(4+1)(4+2)}{30-4-2}=208+\frac{60}{24}=210.5$.
+* Sant. För Modell B blir $AIC_c=208+\frac{2(2+1)(2+2)}{30-2-2}=208+\frac{24}{26}\approx208.92$. Modell B har därför lägre $AIC_c$.
+* Sant. Korrigeringstermen ökar när antalet parametrar är större i förhållande till antalet observationer. Modell A straffas därför hårdare.
+* Falskt. Modeller med samma $AIC$ kan få olika $AIC_c$, eftersom korrigeringen beror på både $k$ och $n$.
+
+Meta-information
+================
+exname: arima_aicc_model_comparison
+extype: mchoice
+exsolution: 101110
+exshuffle: 6
