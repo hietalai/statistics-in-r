@@ -643,8 +643,8 @@ Valet av hyperparametrar kallas för **hyperparameter tuning**
 
 Vad är Coordinate Descent?
 En optimeringsmetod där man optimerar en variabel i taget.
-Alla andra variabler h˚alls fasta under varje steg.
-Itererar över variablerna tills konvergens uppn˚as.
+Alla andra variabler hålls fasta under varje steg.
+Itererar över variablerna tills konvergens uppnås.
 Nyckelidéer:
 Enkel att implementera, särskilt för stora problem.
 Effektiv när varje delproblem (en variabel) är lätt att lösa.
