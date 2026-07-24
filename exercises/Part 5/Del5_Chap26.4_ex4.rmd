@@ -1,0 +1,36 @@
+Question
+========
+En modell används för att klassificera observationer i klasserna $Y=1$ och $Y=0$. På en valideringsmängd erhålls följande resultat:
+* $f_{11}=18$: observationer med $Y=1$ som predikterats som $\hat{Y}=1$.
+* $f_{10}=2$: observationer med $Y=1$ som predikterats som $\hat{Y}=0$.
+* $f_{01}=16$: observationer med $Y=0$ som predikterats som $\hat{Y}=1$.
+* $f_{00}=64$: observationer med $Y=0$ som predikterats som $\hat{Y}=0$.
+
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Modellens träffsäkerhet är $\frac{18+64}{100}=0.82$.
+* Modellens felkvot är $1-0.82=0.18$.
+* Modellens sensitivitet för $Y=1$ är $\frac{18}{18+2}=0.90$.
+* Modellens specificitet är $\frac{64}{16+64}=0.80$.
+* Eftersom sensitiviteten är högre än specificiteten kan man dra slutsatsen att modellen gör lika bra prediktioner för båda klasserna.
+* En modell som alltid predikterar majoritetsklassen $Y=0$ skulle få träffsäkerheten $0.80$, vilket visar varför träffsäkerheten ensam kan ge en ofullständig bild av modellen.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Antalet korrekta klassificeringar är $f_{11}+f_{00}=18+64=82$ av totalt $100$, vilket ger träffsäkerheten $0.82$.
+* Sant. Felkvoten är andelen felaktiga klassificeringar och kan beräknas som $1-\text{träffsäkerhet}=1-0.82=0.18$.
+* Sant. Sensitiviteten beskriver andelen observerade ettor som klassificerats korrekt och blir $\frac{f_{11}}{f_{11}+f_{10}}=\frac{18}{20}=0.90$.
+* Sant. Specificiteten beskriver andelen observerade nollor som klassificerats korrekt och blir $\frac{f_{00}}{f_{01}+f_{00}}=\frac{64}{80}=0.80$.
+* Falskt. Skillnaden mellan sensitivitet och specificitet visar att modellen lyckas olika väl för de två klasserna. Att båda måtten är relativt höga innebär inte att prestandan är identisk.
+* Sant. Det finns $80$ observationer med $Y=0$. En modell som alltid predikterar $0$ skulle därför klassificera $80$ av $100$ observationer korrekt, trots att den helt misslyckas med att identifiera $Y=1$.
+
+Meta-information
+================
+exname: confusion_matrix_class_imbalance
+extype: mchoice
+exsolution: 111101
+exshuffle: 6
