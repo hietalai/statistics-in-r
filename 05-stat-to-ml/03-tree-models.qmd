@@ -38,7 +38,7 @@ data |>
 ```
 
 
-Den sanna beslutsregeln som exakt separerar de två färgerna (klasserna) är $x_2 \cdot (1 + exp(-25 \cdot (x_1 - 0.5))) > 1$.
+Den sanna beslutsregeln som exakt separerar de två färgerna (klasserna) är $x_2 \cdot (1 + exp(-25 \cdot (x_1 - 0.5))) = 1$.
 
 
 ```{r}
