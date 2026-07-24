@@ -1,0 +1,29 @@
+Question
+========
+En statistisk inlärningsmodell kan generellt beskrivas som $y=f(x\mid\theta)+\varepsilon$, där $f$ beskriver sambandet mellan de förklarande variablerna och responsvariabeln.
+Vilka av följande påståenden beskriver korrekt analysprocessen och valet av en lämplig modell?
+
+Answerlist
+----------
+* Databearbetning kan innefatta hantering av saknade värden, extremvärden samt skalning eller normalisering av variabler.
+* En lämplig modell bör fånga relevanta samband men samtidigt vara så enkel som möjligt.
+* Modellens beräkningstid saknar betydelse så länge modellen ger korrekta prediktioner på träningsdata.
+* Explorativ analys med beskrivande mått och visualiseringar kan genomföras innan en modell väljs och anpassas.
+* Modellutvärdering är ett separat steg som används för att bedöma hur väl den anpassade modellen fungerar.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Databearbetning kan bland annat omfatta saknade värden, extremvärden, skalning och normalisering.
+* Sant. Modellen bör fånga de samband som är relevanta för frågeställningen utan att vara onödigt komplicerad.
+* Falskt. Modellen bör kunna anpassas och användas inom rimlig tid. En modell som tar för lång tid att beräkna kan vara opraktisk även om den passar träningsdata väl.
+* Sant. Explorativ analys är en del av det förberedande arbetet och kan hjälpa till att förstå data innan modellvalet.
+* Sant. Efter att modellen har valts och anpassats behöver den utvärderas för att bedöma dess användbarhet.
+
+Meta-information
+================
+exname: statistical_learning_process
+extype: mchoice
+exsolution: 11011
+exshuffle: 5
