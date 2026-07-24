@@ -252,7 +252,7 @@ Om vi delar upp data i minst två slumpmässiga delar, anpassar modellen på en 
 
 Data kan delas in i tre olika delar med olika syften:
 
-- **Träningsmängd**: används för att "träna", dvs. anpassa, modellen
+- **Träningsmängd**: används för att "träna", dvs. anpassa modellen
 - **Valideringsmängd**: används för att "validera", dvs. välja den bästa modellen
 - **Testmängd**: används för att få en väntevärdesriktig skattning av felet för en modell
 
