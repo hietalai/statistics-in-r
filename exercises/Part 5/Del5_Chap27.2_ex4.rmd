@@ -1,0 +1,34 @@
+Question
+========
+Två tänkbara lösningar för en regressionsmodell ska jämföras. Interceptet är inte inkluderat i koefficientvektorerna.
+* Lösning A har $SSE_A=20$ och koefficienterna $\boldsymbol{\beta}_A=(3,0,0)$.
+* Lösning B har $SSE_B=22$ och koefficienterna $\boldsymbol{\beta}_B=(1,1,1)$.
+För Ridge används kostnadsfunktionen $SSE+\lambda\sum_{j=1}^p\beta_j^2$, medan LASSO använder $SSE+\lambda\sum_{j=1}^p|\beta_j|$.
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* När $\lambda=1$ blir Ridge-kostnaden 29 för lösning A och 25 för lösning B, vilket innebär att lösning B föredras.
+* När $\lambda=1$ blir LASSO-kostnaden 23 för lösning A och 25 för lösning B, vilket innebär att lösning A föredras.
+* För Ridge har lösningarna samma kostnad när $\lambda=\frac{1}{3}$.
+* För LASSO kommer lösning B att föredras framför lösning A om $\lambda$ görs tillräckligt stor.
+* När $\lambda=0$ väljer både Ridge och LASSO lösning A eftersom endast SSE återstår i kostnadsfunktionen.
+* Resultatet visar att Ridge alltid väljer modeller med många koefficienter och att LASSO alltid väljer modeller med endast en nollskild koefficient.
+
+Solution
+========
+Answerlist
+----------
+* Sant. För lösning A blir Ridge-kostnaden $20+1\cdot(3^2+0^2+0^2)=29$. För lösning B blir den $22+1\cdot(1^2+1^2+1^2)=25$.
+* Sant. Båda lösningarna har LASSO-straffet 3. Kostnaderna blir därför $20+3=23$ för lösning A och $22+3=25$ för lösning B.
+* Sant. Ridge-kostnaderna är $20+9\lambda$ respektive $22+3\lambda$. Likheten $20+9\lambda=22+3\lambda$ ger $\lambda=\frac{1}{3}$.
+* Falskt. Båda lösningarna har samma LASSO-straff eftersom $|3|=|1|+|1|+|1|=3$. Lösning A har lägre SSE och kommer därför att ha lägre LASSO-kostnad för alla $\lambda\geq0$.
+* Sant. När $\lambda=0$ försvinner strafftermen. Eftersom $SSE_A=20$ är mindre än $SSE_B=22$ väljs lösning A av båda metoderna.
+* Falskt. Vilken lösning som väljs beror på både SSE, koefficienternas storlek och värdet på $\lambda$. Exemplet visar en möjlig skillnad mellan straffen, inte en regel som gäller för alla datamaterial och kandidatmodeller.
+
+Meta-information
+================
+exname: ridge_lasso_objective_comparison
+extype: mchoice
+exsolution: 111010
+exshuffle: 6
