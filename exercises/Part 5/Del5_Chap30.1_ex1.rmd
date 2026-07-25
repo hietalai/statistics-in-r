@@ -1,0 +1,32 @@
+Question
+========
+Vid bagging skapas flera bootstrapurval från samma träningsmängd. Anta att träningsmängden innehåller observationerna A, B, C, D och E. Ett av bootstrapurvalen med storlek 5 blev A, A, C, E, E.
+Fyra regressionsmodeller tränas därefter på var sitt bootstrapurval. För en ny observation ger modellerna prediktionerna 4.2, 5.8, 6.1 och 7.9. Den aggregerade prediktionen beräknas som $\hat{f}_{bag}(\boldsymbol{X})=\frac{1}{B}\sum_{b=1}^{B}\hat{f}_b(\boldsymbol{X})$.
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Bootstrapurvalet är giltigt trots att vissa observationer förekommer flera gånger och andra inte förekommer alls.
+* Bootstrapurval skapas utan återläggning, vilket innebär att varje observation kan förekomma högst en gång i ett urval.
+* Baggingmodellens prediktion för den nya observationen är 6.
+* Om samtliga enskilda modeller har ungefär samma systematiska bias garanterar ett större antal bootstrapmodeller att denna bias försvinner.
+* När antalet bootstrapmodeller $B$ ökar tränas varje enskild modell automatiskt på fler unika observationer.
+* Bagging används enligt underlaget främst för att minska modellens varians snarare än dess bias.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Bootstrap innebär urval med återläggning. Därför kan samma observation väljas flera gånger, samtidigt som andra observationer kan saknas i ett enskilt urval.
+* Falskt. Bootstrapurval görs med återläggning. Observationerna kan därför förekomma flera gånger i samma urval.
+* Sant. Den aggregerade prediktionen blir $(4.2+5.8+6.1+7.9)/4=6$.
+* Falskt. Bagging kan minska variationen mellan skattningar, men det innebär inte att en systematisk bias som delas av grundmodellerna automatiskt försvinner.
+* Falskt. Ett större $B$ innebär att fler bootstrapurval och fler modeller skapas. Det förändrar inte automatiskt antalet unika observationer i varje enskilt urval.
+* Sant. Enligt underlaget är baggings huvudsakliga effekt att minska variansen. Metoden beskrivs inte som en metod som i första hand minskar bias.
+
+Meta-information
+================
+exname: bootstrap_bagging_aggregation
+extype: mchoice
+exsolution: 101001
+exshuffle: 6
