@@ -1,0 +1,31 @@
+Question
+========
+Vid träningen av ett neuralt nätverk används en slumpmässigt vald mini-batch för att beräkna gradientskattningen $\hat{\nabla L}$. Skattningen antas vara väntevärdesriktig och inlärningshastigheten följer schemat $\gamma_k=1/k$.
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Att gradientskattningen är väntevärdesriktig innebär att $\mathrm{E}[\hat{\nabla L}]=\nabla L$.
+* En väntevärdesriktig gradientskattning behöver inte vara lika med den fullständiga gradienten i varje enskild iteration.
+* En större mini-batch ger vanligtvis lägre varians i gradientskattningen men är dyrare att beräkna.
+* En mindre mini-batch gör varje parameteruppdatering mer beräkningskrävande eftersom färre observationer används.
+* En lägre inlärningshastighet kan minska hur mycket en ovanligt dålig gradientskattning påverkar parametrarna.
+* Schemat $\gamma_k=1/k$ uppfyller inte kravet $\sum_{k=1}^{\infty}\gamma_k^2<\infty$.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Väntevärdesriktighet innebär att gradientskattningens förväntade värde är den fullständiga gradienten.
+* Sant. Skattningen kan variera mellan mini-batcher även om dess väntevärde är korrekt. Väntevärdesriktig betyder därför inte att varje enskild skattning är exakt.
+* Sant. Större batcher innehåller mer information och ger därmed mindre variation, men de kräver samtidigt fler beräkningar per uppdatering.
+* Falskt. En mindre mini-batch innehåller färre observationer och gör därför vanligtvis varje enskild gradientberäkning billigare.
+* Sant. När inlärningshastigheten minskas får en avvikande gradientskattning mindre påverkan på parameteruppdateringen.
+* Falskt. För $\gamma_k=1/k$ gäller både $\sum_{k=1}^{\infty}\gamma_k=\infty$ och $\sum_{k=1}^{\infty}\gamma_k^2<\infty$, vilket är de två krav som anges i underlaget.
+
+Meta-information
+================
+exname: neural_network_minibatch_sgd
+extype: mchoice
+exsolution: 111010
+exshuffle: 6
