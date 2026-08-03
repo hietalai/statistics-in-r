@@ -21,7 +21,7 @@ $$
 $$ {#eq-arp}
 det vill säga att $Y_t$ förklaras av en linjärkombination av $p$ tidigare värden. Vardera $\phi$ (grekiska bokstaven phi^[Uttalas fi.]) beskriver relationen mellan det specifika lagget och den nuvarande tidpunkten. Ett antagande som görs är att alla $Y_t$ är oberoende från $e_t$ där $e_t$ betraktas som den information som de tidigare observerade tidpunkterna inte lyckas förklara. Detta fel antas $N(0, \sigma^2_e)$. 
 
-I @eq-arp antas att $E[Y_t] = 0$ men vi kan enkelt utöka modellen till att ha $\mu$ som medelvärde genom att formulera $Y_t - \mu$ i vänsterledet (och för alla andra förekomster av $Y_{t-k}$. Genomgående i dessa kapitel kommer vi anta att väntevärdet är 0 men @cryer2008 visar varianter när väntevärdet är nollskild.
+I @eq-arp antas att $E[Y_t] = 0$ men vi kan enkelt utöka modellen till att ha $\mu$ som medelvärde genom att formulera $Y_t - \mu$ i vänsterledet (och för alla andra förekomster av $Y_{t-k}$). Genomgående i dessa kapitel kommer vi anta att väntevärdet är 0 men @cryer2008 visar varianter när väntevärdet är nollskild.
 
 <!-- TODO WHERE TO PUT 4.1/4.2? MAYBE SOMETHING IN RELATION TO THE MA PROCESS LAST IN THIS CHAPTER -->
 
