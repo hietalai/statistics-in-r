@@ -106,7 +106,9 @@ Vi skulle kunna dela upp data i olika områden och anpassa separata modeller fö
 
 Målet med splines är att anpassa en stegvis polynomfunktion på en uppdelat data där vi sätter begränsningar i skarvarna för att få kontinuitet, kontinuerliga derivator och andra eftersökta egenskaper. De olika delarna av data separeras av **knutar** (eng. knot) som bryter data i olika delar och frihetsgrader i denna kontext beskriver antalet parametrar som anpassas.
 
-[VAD SKA JAG TA MED?]{style="color: red"}
+[Lägg till naturliga splines med ns() och knutpunkter. Bara nämn att andra finns (stegfunktioner, basfunktioner mer sprecifikt med cosinusbaser osv., smoothing splines). Basfunktioner kan introduceras som transformationer på mindre områden där linjära funktionen får effekten på basfunktionen. Fler knutar kan ge en mer flexibel modell.]{style="color: green"}
+
+[NÄMN GAM SOM EN KOMBINATION AV ALLA OLIKA TYPER AV MODELLER, VISSA SPLINES ANDRA LINJÄRA OSV.]{style="color: green"}
 
 ## Trädmodeller
 

@@ -74,6 +74,12 @@ I detta exempel kommer vi stöta på stora problem vid flera tillfällen, t.ex. 
 
 [TODO: ADD MORE ABOUT THE LIMITATIONS]{style="color: red"}
 
+[- Nästan allting blir signifikant (p-värden) när n är större. Effektstorlek. - Modellval använder sig av samma data som sedan vi gör inferens på (data som används för träning används sen igen). Tsibrishani har tagit fram frekventistiska metoder som tar hänsyn till modellval men de är matematiskt svåra. Design av studier är klassiska fenomenet när "vanlig" inferens funkar när modellen är fix. - Multikollinearitetsproblem med stora p. - Välja variabler inom regression är svårt/jobbigt/subjektivt. Interaktioner och polynom.]{style="color: green"}
+
+
+
+
+
 ## Statistisk inlärning
 
 Inom statistisk inlärning använder vi fortfarande samma grundsteg i en undersökning av samband. Det som skiljer är valet av den lämpliga modellen där vi med maskininlärningsmetoder kan utöka vår verktygslåda med specifika metoder som kan hantera bristerna i klassiska statistiska metoder.
@@ -89,7 +95,7 @@ Vi kan formalisera analysprocessen som följer:
 4. Val av modell, dess anpassning och användning till prediktioner
 5. Utvärdering av modellen
 
-I resterande kapitel kommer fokus ligga på steg fyra och fem genom att introducera flertalet metoder och hur dessa utvärderas på bästa sätt. De första tre punkterna lämnar vi till "tidigare kunskaper" eller andra delar. [(ORDVAL)]{style="color: red"}
+I resterande kapitel kommer fokus ligga på steg fyra och fem genom att introducera flertalet metoder och hur dessa utvärderas på bästa sätt. Fokus i denna del kommer vara på punkt 4 och 5, men vi kommer också behöva använda tekniker för databearbetning under arbetets gång.
 
 Linjär regression är ett exempel på **supervised learning** (ungefärlig sv. övervakad inlärning) där vi vet sanna värden på responsvariabeln och "övervakar" inlärningen till den grad att modellen lär sig de observerade sanna värdena. Generellt kan vi dela upp supervised learning i två fält; **regression** och **klassificering**. 
 
@@ -106,7 +112,7 @@ Regression förutsätter att vi har en kontinuerlig responsvariabel medan klassi
 
 ### Val av modell
 
-Valet av en lämplig modell innefattar inte bara valet av modellfamilj (metod) [ORDVAL]{style="color: red"} utan även identifiering av modellens struktur och relevanta relationer. Det vi vill uppnå med en modellanpassning är att:
+Valet av en lämplig modell innefattar inte bara valet av modellfamilj, till exempel linjär regression, neurala nätverk, trädmodeller, [LÄGG TILL NÅGOT OM VERKTYG I VERKTYGSLÅDAN]{style="color: red"}utan även identifiering av modellens struktur och relevanta relationer. Det vi vill uppnå med en modellanpassning är att:
 
 - modellen fångar upp sambanden mellan responsvariabeln och de förklarande kopplat till frågeställningen.
 - modellen ska vara så enkel som möjligt för att underlätta både anpassning och användning.
@@ -114,14 +120,14 @@ Valet av en lämplig modell innefattar inte bara valet av modellfamilj (metod) [
   - Vi vill inte att modellen tar längre tid att anpassa än tidshorisonten den ska användas till, till exempel att det tar en dag att anpassa modell för att prediktera nästkommande dagsförsäljning i det extrema fallet.
 - modellen ska **generalisera** till ny liknande data.
 
-Vi kan formulera en standardmodell som följer:
+Vi kan formulera en standardmodell för en kontinuerlig responsvariabel som följer:
 
 $$
   \begin{aligned}
   y = f(x|\theta) + \varepsilon
   \end{aligned}
 $$ {#eq-standard-model}
-där $f$ är en okänd funktion, $\theta$ är funktionens parametrar, $\varepsilon$ är en slumpmässig felterm med $E[\varepsilon] = 0$ och $Var(\varepsilon) = \sigma^2_e$. 
+där $f$ är en okänd funktion, $\theta$ (grekiska theta) är funktionens parametrar, $\varepsilon$ är en slumpmässig felterm med $E[\varepsilon] = 0$ och $Var(\varepsilon) = \sigma^2$. 
 
 Med hjälp av @eq-standard-model kan vi formulera både mer strukturerade och mer godtyckliga modeller såsom:
 
@@ -217,38 +223,46 @@ data |>
 
 ```
 
-@fig-acceptablefit fångar upp de generella mönstrena men avviker inte när observationer avviker mycket från den. [ORDVAL]{style="color: red"}
+Modellen i @fig-acceptablefit fångar upp de generella mönstrena men är påverkas inte mycket av förändringar i data som förmodligen är brus. 
 
-Denna form av visualisering är omöjlig att göra i praktiken när vi ska välja en lämplig modell då vi har betydligt fler än två dimensioner i data. Istället använder vi oss av två andra knep; **felfunktioner** (även kallad kostnadsfunktioner) och **datauppdelning**.
+Denna form av visualisering är omöjlig att göra i praktiken när vi ska välja en lämplig modell då vi har betydligt fler än två dimensioner i data. Istället använder vi oss av två andra knep; **kostnadsfunktioner** (även kallad felfunktioner eller förlustfunktioner) och **datauppdelning**.
 
-### Felfunktioner {#sec-error-function}
+### Kostnadsfunktioner {#sec-cost-function}
 
-En felfunktion är en funktion som, givet data, ger oss ett värde på hur bra modellen anpassar data. Inom linjär regression använder vi oss exempelvis av **Mean Squared Error** (MSE) som ett sätt att visa hur mycket fel en modell gör. Detta mått kommer vi åter att använda inom regression men också ge några alternativ som lämpar sig för olika ändamål.
+En kostnadsfunktion är en funktion som, givet data, ger oss ett värde på hur bra modellen anpassar data. Inom linjär regression använder vi oss exempelvis av **Mean Squared Error** (MSE) som ett sätt att visa hur mycket fel en modell gör, som tolkas som modellens kostnad. Detta mått kommer vi åter att använda inom regression men också ge några alternativ som lämpar sig för olika ändamål. 
+
+Vi antar att det skattade värdet på vår observation kan betecknas som:
+
+$$
+  \begin{aligned}
+  \hat{y}_i = f(x_i | \hat{\theta})
+  \end{aligned}
+$$
 
 MSE som mått kan beräknas som:
 
 $$
   \begin{aligned}
-  MSE = \frac{1}{n} \Sum{n} \left(y_i - f(x_i | \hat{\theta})\right)^2
+  MSE = \frac{1}{n} \Sum{n} \left(y_i - \hat{y}_i\right)^2
   \end{aligned}
 $$ {#eq-mse}
 
-MSE kommer skapa stora värden om extremvärden förekommer i data. Då kan en alternativ felfunktion definieras som **Mean Absolute Error** (MAE):
+MSE kommer skapa stora värden om extremvärden förekommer i data. Då kan en alternativ kostnadsfunktion definieras som **Mean Absolute Error** (MAE)^[Den matematiska operatorn $|\cdot|$ beskriver absolutbeloppet och gör alla negativa tal positiva.]:
 
 
 $$
   \begin{aligned}
-  MAE = \frac{1}{n} \Sum{n} \left|y_i - f(x_i | \hat{\theta})\right|
+  MAE = \frac{1}{n} \Sum{n} \left|y_i - \hat{y}_i\right|
   \end{aligned}
 $$ {#eq-mae}
 
 För klassificering är två vanliga mått **Cross Entropy** och **Missclassification** vilka vi kommer återkomma till senare.
 
-Vi vet att när måtten är 0 så betyder det att inga fel alls är gjorda och att vi har en överanpassad modell eftersom den perfekt modellerar alla punkter i data, men vilket värde som innebär att vi underanpassar eller har hittat en lagom komplex modell är svårt att tyda med enbart felfunktioner.
+Vi vet att när måtten är 0 så betyder det att inga fel alls är gjorda och att vi har en överanpassad modell eftersom den perfekt modellerar alla punkter i data, men vilket värde som innebär att vi underanpassar eller har hittat en lagom komplex modell är svårt att tyda med enbart kostnadsfunktioner.
 
 ### Datauppdelning {#sec-data-split}
 
-Om vi delar upp data i minst två slumpmässiga delar, anpassar modellen på en del, beräknar felfunktionen för den första och en annan del, för att till sist jämföra dessa mått kan vi nu se när en modell är lagomt komplex.
+Om vi delar upp data i minst två slumpmässiga delar, anpassar modellen på en del, beräknar kostnadsfunktionen för den första och en annan del, för att till sist jämföra dessa mått kan vi nu se när en modell är lagom komplex.
 
 Data kan delas in i tre olika delar med olika syften:
 
@@ -270,13 +284,88 @@ För att modellen ska få så mycket information som möjligt för sin träning^
  
 Det viktigaste är att träningsmängden inte är den minsta av de tre.
 
+I R finns det flera olika sätt att genomföra denna uppdelning, men den absolut enklaste är genom att använda indexering.
+
+```{r}
+#| code-fold: false
+
+# Anger antalet observationer i data
+n <- nrow(mtcars)
+
+# Anger storleken av träningsmängden
+trainSize <- 0.8
+
+# Drar slumpmässigt n*trainSize observationsindex
+trainIndex <- sample(seq_len(n), size = n*trainSize)
+
+# Plockar ut valda index till trainData
+trainData <- mtcars[trainIndex,]
+
+# Tar bort valda index till validData
+validData <- mtcars[-trainIndex,]
+
+```
+
+`trainData` består nu utav `r nrow(trainData)` slumpmässigt utvalda observationer och `validData` består utav de resterande observationerna. Vill vi utöka till tre mängder kan vi genomföra ytterligare en indexering av `validData` till en kvarvarande valideringsmängd och en efterföljande testmängd.
+
+:::{.callout-tip}
+En grundläggande genomgång i R visas i @sec-basic-r. Känner du att du saknar vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.
+:::
+
 ## Exempeldata
 
 Genomgående i denna del kommer vi exemplifiera teorin med hjälp av olika datamaterial. Dessa datamaterial är enklare exempel på data som kan dyka upp i verkligheten men det är värt att komma ihåg att en stor del av en riktig analys kräver bearbetning av data till de format som våra modeller önskar.
 
-### Spammail
+#### Spammail {-}
 
-Datamaterialet spambase
+:::{#fig-spam}
+
+![](https://upload.wikimedia.org/wikipedia/commons/a/ae/Spam_wall_-_Flickr_-_freezelight.jpg){width=75%}
+
+Spam^[<a href="https://commons.wikimedia.org/wiki/File:Spam_wall_-_Flickr_-_freezelight.jpg">freezelight</a>, <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>, via Wikimedia Commons]
+:::
+
+Datamaterialet `spambase` kan hämtas [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/spambase.csv). 
+
+Materialet består av 4601 mail där den (relativa) frekvensen av vissa utvalda ord (`Word1`-`Word48`), förekomsten av olika speciella symboler (`Char1`-`Char6`), samt tre variabler som beskriver medellängden av intilliggande stora bokstäver, den längsta längden av intilliggande stora bokstäver och det totala antalet stora bokstäver (`Capitalrun1`-`Capitalrun3`). Responsvariabeln (`spam`) för detta data är en binär variabel där värdet 1 indikerar att mailet var ett spam samt värdet 0 indikerar att mailet inte var ett spam.
+
+Detta datamaterial beskriver ett vanligt klassificeringsproblem, vi vill undvika att få onödiga mail i vår inkorg. Verkliga spamfilter är mer komplexa än denna men datamaterialet ger en bra indikation på hur vi kan använda kvantitativa data från text för att bedöma mailets relevans.
+
+
+#### Klimatdata {-}
+
+:::{#fig-lake}
+
+![](https://upload.wikimedia.org/wikipedia/commons/1/17/Lake_in_north_sweden.jpg){width=75%}
+
+Sjö i norra Sverige^[<a href="https://commons.wikimedia.org/wiki/File:Lake_in_north_sweden.jpg">Irrre</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons]
+:::
+
+Datamaterialet `lakesurvey` kan hämtas [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/lakesurvey.csv).
+
+Datamaterialet innehåller kemisk information från 2782 svenska sjöar uppmätta under 2005 inklusive dess longitud och latitud. Mätningarna beskriver olika egenskaper av sjön, dess temperatur, pH och halter av olika ämnen.
+
+[LÄgg till karta med alla sjöar]{style="color: red"}
+
+Detta material kommer användas för regression.
+
+Vi har en sjö, Lerkilen, som har extrema värden på många av de kemiska mätningarna vilket gör att vi plockar bort den sjön.
+
+
+#### Vindata
+
+:::{#fig-lake}
+
+![](https://upload.wikimedia.org/wikipedia/commons/5/56/2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_%28HiRes_focus_stack%29.jpg){width=50%}
+
+Sjö i norra Sverige^[<a href="https://commons.wikimedia.org/wiki/File:2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_(HiRes_focus_stack).jpg">Franz van Duns</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons]
+:::
+
+
+Datamaterialet `wine` kan hämtas [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/wine.csv) tagen från @wine_109. Datamaterialet innehåller 13 kemiska egenskaper om tre olika vintyper (`class`).
+
+Detta datamaterial kommer användas för multinomial klassificering.
+
 
 
 

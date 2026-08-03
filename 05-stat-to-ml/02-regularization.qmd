@@ -8,17 +8,28 @@ filters:
 
 # Regularisering
 
-En stor del av statistisk inlärning berör generalisering, att modellen som tränas också ska kunna användas effektivt på ny data. Vid stora datamaterial med många observationer och variabler krävs ofta en flexibel men komplex modell för att modellen ska prestera bra, men det ger också en överhängande risk för att modellen överanpassas. Komplexitet kan mätas på olika sätt beroende på modellen; i det linjära fallet är det antalet variabler, interaktioner eller transformationer som har den största påverkan. Ett sätt att minska några av dessa dimensioner är att använda algoritmer för **variabelselektion** som "automatisk" väljer variabler utifrån ett valt utvärderingsmått. Mer om detta går att läsa i @sec-variable-selection-algorithms. 
+En stor del av statistisk inlärning berör generalisering, att modellen som tränas också ska kunna effektivt användas på ny data. Vid stora datamaterial, med många observationer och variabler, krävs ofta en flexibel men komplex modell för att modellen ska prestera bra, men det ger också en överhängande risk för att modellen överanpassas. 
 
-En stor nackdel med dessa algoritmer är att de oftast är giriga eller mycket beräkningstunga. En girig algoritm betyder att den vid varje steg vill hitta den bästa förbättringen av modellen och riskerar att missa steg som ger en sämre förbättring just nu men den "bästa" förbättringen två steg framåt. 
+Komplexitet kan mätas på olika sätt beroende på modellen; i det linjära fallet är det antalet variabler och förekomsten av interaktioner eller transformationer som har den största påverkan. Ett sätt att minska några av dessa dimensioner är att använda algoritmer för **variabelselektion** som "automatisk" väljer variabler utifrån ett valt utvärderingsmått. Mer om detta går att läsa i @sec-variable-selection-algorithms. En stor nackdel med dessa algoritmer är att de oftast är giriga eller mycket beräkningstunga. En girig algoritm betyder att den vid varje steg vill hitta den bästa förbättringen av modellen och riskerar att missa steg som ger en sämre förbättring just nu men den "bästa" förbättringen två steg framåt. 
 
 Istället för giriga algoritmer finns ett annat sätt att motverka överanpassning som inte behöver välja variabler; **regularisering**. Idén bakom denna metod är att hindra modellen för att bli för komplex och ge ett (förhoppningsvis) bättre generaliseringsfel genom att begränsa parametrar för variabler som inte anses tillföra något till anpassningen. Regularisering tillsammans med en flexibel och komplex modell bör leda till en bra anpassning.
 
-:::{.callout-important}
-För alla former av regularisering behöver vi standardisera de förklarande variablerna först. Detta krävs för att variablernas individuella skalor inte ska påverka regulariseringen.
+[L1 och L2 återkommer i senare kapitel.]{style="color: green"}
 
-[HUR STANDARDISERAS ORDINALSKALA?]{style="color: red"}
+## Standardisering
+För att vissa former av regularisering ska fungera väl, behöver vi standardisera de förklarande variablerna först.
+
+GLMNET standardiserar automatiskt i processen och återskapar rätt skala i parameterskattningarna sedan.
+
+För de former av regularisering som begränsar utefter parametervärden, behöver vi standardisera de förklarande variablerna först. Detta krävs för att variablernas individuella skalor inte ska påverka regulariseringen. 
+
+:::{.callout-note}
+Standardisering är ett specialfall av normalisering där vi skalar om variabeln till att ha 0 i väntevärde och 1 i standardavvikelse. Varje värde får då enheten "x standardavvikelser från medelvärdet".
 :::
+
+Ordinalskala skalar om de till kategoriska variabler utan ordning.
+
+[Kom ihåg kategoriska variabler indikatorkodas]{style="color: green"}
 
 ## Ridge regression
 
@@ -39,9 +50,15 @@ $$
 $$
 där $\lambda \ge 0$. Notera att ingen straffterm sätts på $\beta_0$ utan bara respektive lutningsparameter. $\lambda$ är en hyperparameter som måste bestämmas där ett värde av 0 indikerar på inget straff (bara vanlig SSE) och stora värden indikerar på stora straff där många parametrar sätts till väldigt små värden.
 
-Dessa två delar av funktionen samverkar när en variabel som inte anses ha något samband med responsvariabeln inte kommer påverka storleken av $Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij}$ vilket i sin tur leder till att den tillhörande parametern kan reduceras till 0 för att storleken av $\sum_{j = 1}^p \beta_j^2$ ska bli så liten som möjligt. 
+Dessa två delar av funktionen samverkar när en variabel som inte anses ha något samband med responsvariabeln inte kommer påverka storleken av $Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij}$ vilket i sin tur leder till att den tillhörande parametern kan reduceras till nära 0 för att storleken av $\sum_{j = 1}^p \beta_j^2$ ska bli så liten som möjligt. 
+
+[Kalla dessa L1 L2 strafftermer]{style="color: green"}
 
 [RIDGE I R]{style="color: red"}
+
+
+[De maximala värdena i betaparametrarna när lambda är 0 är OLS skattningarna. När lambda är >0 kommer parametrarna bli mindre än de maximala. Den flexibla modellen där vi tillåter alla effekter som tränignsmängden säger de ska ha (OLS), men har variabler som beskriver samma sak eller är för många.]{style="color: green"}
+
 
 ## LASSO regression
 
@@ -58,9 +75,15 @@ där $\lambda \ge 0$.
 
 På samma sätt som med Ridge väljs $\lambda$ som en hyperparameter men till skillnad från Ridge ger stora värden på $\lambda$ att flera parametrar sätts till exakt 0. En annan skillnad sker vid multikollinearitet där Ridge krymper alla parametrar vars variabler korrelerar med varandra lika mycket medan LASSO sätter enbart en till 0.
 
+[Vid multikollinearitet ridge delar på effekten, lasso väljer en som "vanlig effekt" och en nära 0. LASSO tillåter separat skattning av alla nollskilda parametrar efter analys, Ridge har inte många 0:or.]{style="color: green"}
+
+[Skattas med numerisk optimering, coordinate descent.]{style="color: green"}
+
 Ridge passar bra när $Y_i$ beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten nära 0. Detta medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för.
 
-[VARFÖR RIDGE ENKLARE INFERENS? RELEVANS?]{style="color: red"}
+[RDIGE kan anses som en skalning av OLS matriserna med lambda. LASSO har inte samma formelbenämning.]{style="color: green"}
+
+[Testa båda metoderna och se vilken som ger bäst prediktioner]{style="color: green"}
 
 ## Elastic Net
 
@@ -75,9 +98,14 @@ där $\lambda \ge 0$ och $0\le \alpha \le 1$.
 
 $\alpha$ styr hur mycket vikt vi ger till Ridge respektive LASSO som ger en flexibel regularisering. Detta innebär att vi kan tvinga vissa $\beta$ till 0 men inte lika många som i vanlig LASSO och Elastic Net kan klara av korrelerade variabler bättre. 
 
+[Nu har vi två hyperparametrar, lambda och alpha (1 = Ridge, 0 = Lasso).]{style="color: green"}
+
 [I R?]{style="color: red"}
 
-## Statistisk inferens
+[Inferens på dessa modeller görs egentligen inte, utan vi tolkar effektstorleken av de nollskilda parametrarna. Visa de i ett stapeldiagram.]{style="color: green"}
+
+:::{.callout-note}
+[Eventuellt ta bort helt]{style="color: red"}
 
 De tidigare presenterade algoritmerna och regulariseringsmetoderna är "automatiska" metoder för att välja variabler som bidrar till att förklara responsvariabeln. Efter variabelselektion är det vanligt att analysera parametrarnas p-värden och intervallskattning, även kallad för **post-selection inference**. Problemet är att vanliga inferensmetoder antar att modellen är fixerad innan data analyseras men med variabelselektion används data för att välja modell och introducerar ett beroende mellan data och modellen. Detta påverkar fördelningen av skattningarna vilket i sin tur leder till för snäva konfidensintervall, för små p-värden och ökad risk för typ I fel. Vi bör därför undvika att använda vanliga metoder för inferens och istället använda inferensmetoder som tar hänsyn till variabelselektionen.
 
@@ -87,9 +115,9 @@ Några vanliga metoder är:
 - **Sample Splitting**
 - **Bayesianska metoder**
 
-[INKLUDERA EN KORT BESKRIVNING AV DESSA METODER]{style="color: red"}
-
 Ingen av dessa metoder är perfekt, valet beror på syftet med analysen (prediktion eller inferens) och tillgången till data.
+
+:::
 
 ## Referenser {.unnumbered}
 
