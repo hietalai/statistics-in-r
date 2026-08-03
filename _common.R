@@ -65,6 +65,13 @@ prices <- readr::read_csv("resources/data/electricityprice.csv") |>
 consumption <- readr::read_csv2("resources/data/electricityconsumption.csv") |> 
   suppressMessages()
 
+lake <- readr::read_delim("resources/data/lakesurvey.csv", 
+                          delim = ";", escape_double = FALSE, trim_ws = TRUE) |> 
+  dplyr::filter(if_all(!Name, ~!is.na(.x))) |> 
+  dplyr::filter(Name != "Lerkilen") |> 
+  suppressMessages()
+
+
 diagnosticPlots <- 
   function(
     model, 
