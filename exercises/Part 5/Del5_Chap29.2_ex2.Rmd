@@ -1,0 +1,31 @@
+Question
+========
+Vid träningen av ett neuralt nätverk används backpropagation för att beräkna hur nätverkets parametrar påverkar förlustfunktionen. Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Backpropagation använder kedjeregeln för att beräkna förlustfunktionens gradient med avseende på nätverkets vikter och bias.
+* Backpropagation uppdaterar automatiskt nätverkets parametrar utan att någon optimeringsalgoritm behövs.
+* Vid backpropagation förs derivatorna bakåt från förlustfunktionen genom nätverkets olika lager.
+* Nätverkets bias påverkar inte förlustfunktionen och behöver därför inte ingå i gradientberäkningen.
+* En optimeringsalgoritm kan använda de beräknade gradienterna för att justera nätverkets vikter och bias.
+* Backpropagation kan endast användas när nätverkets dolda lager har en sigmoidfunktion och fungerar därför inte tillsammans med ReLU.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Backpropagation använder kedjeregeln för att beräkna hur varje vikt och bias påverkar förlustfunktionens värde.
+* Falskt. Backpropagation beräknar gradienterna. En optimeringsalgoritm använder därefter gradienterna för att uppdatera parametrarna.
+* Sant. Beräkningen börjar vid förlustfunktionen och förs bakåt genom nätverkets lager till de olika parametrarna.
+* Falskt. Bias påverkar nätverkets beräkningar och därmed även förlustfunktionen. Bias behöver därför ingå i gradientberäkningen.
+* Sant. Optimeringsalgoritmen använder gradienterna för att avgöra hur nätverkets vikter och bias ska justeras.
+* Falskt. Backpropagation är inte begränsad till sigmoidfunktioner utan kan även användas i nätverk med andra aktiveringsfunktioner, exempelvis ReLU.
+
+Meta-information
+================
+exname: backpropagation_parameter_updates
+extype: mchoice
+exsolution: 101010
+exshuffle: 6
+

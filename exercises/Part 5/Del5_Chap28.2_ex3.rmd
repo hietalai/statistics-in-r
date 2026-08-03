@@ -1,0 +1,33 @@
+Question
+========
+CART-algoritmen ska välja en testregel för en föräldernod med 100 observationer och orenheten $I(\text{förälder})=0.48$. Två möjliga testregler ger följande barnnoder:
+* Regel A: $N(R_1)=20$ med $I(R_1)=0.10$ och $N(R_2)=80$ med $I(R_2)=0.35$.
+* Regel B: $N(R_1)=50$ med $I(R_1)=0.24$ och $N(R_2)=50$ med $I(R_2)=0.28$.
+
+Informationsvinsten beräknas som $\Delta=I(\text{förälder})-\sum_j\frac{N(R_j)}{N}I(R_j)$.
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Den viktade orenheten i barnnoderna för regel A är $0.30$.
+* Informationsvinsten för regel A är $0.18$.
+* Den viktade orenheten för regel B är $0.26$, vilket ger informationsvinsten $0.22$.
+* Regel A bör väljas eftersom det oviktade medelvärdet av barnnodernas orenhet är lägre för regel A än för regel B.
+* Eftersom regel B ger störst informationsvinst i detta steg är den garanterad att ingå i det globalt optimala trädet.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Den viktade orenheten är $(20/100)\cdot0.10+(80/100)\cdot0.35=0.30$.
+* Sant. Informationsvinsten blir $0.48-0.30=0.18$.
+* Sant. Den viktade orenheten är $(50/100)\cdot0.24+(50/100)\cdot0.28=0.26$, vilket ger informationsvinsten $0.48-0.26=0.22$.
+* Falskt. Barnnodernas orenhet ska viktas med andelen observationer i respektive nod. Eftersom regel B ger större informationsvinst ska regel B väljas.
+* Falskt. CART är en girig algoritm som väljer den bästa förbättringen i det aktuella steget. Det garanterar inte att det slutliga trädet blir globalt optimalt.
+
+Meta-information
+================
+exname: cart_information_gain
+extype: mchoice
+exsolution: 11100
+exshuffle: 5

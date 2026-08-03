@@ -1,0 +1,28 @@
+Question
+========
+Vilka av följande påståenden om olika former av maskininlärning är korrekta?
+
+Answerlist
+----------
+* Vid supervised learning finns observerade värden på responsvariabeln som modellen kan använda under träningen.
+* Regression används när responsvariabeln är kontinuerlig, medan klassificering används när responsvariabeln är kategorisk.
+* Vid unsupervised learning finns ingen observerad responsvariabel och syftet kan vara att hitta grupper eller andra strukturer i data.
+* Semi-supervised learning innebär att samtliga observationer har observerade värden på responsvariabeln.
+* Reinforcement learning går ut på att lära sig ett beteende genom att agera i en miljö.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Vid supervised learning känner vi till responsvariabelns observerade värden och använder dem när modellen tränas.
+* Sant. Regression används för en kontinuerlig responsvariabel, medan klassificering används för en kategorisk responsvariabel.
+* Sant. Vid unsupervised learning saknas en observerad responsvariabel och metoderna kan exempelvis användas för att identifiera grupperingar i data.
+* Falskt. Vid semi-supervised learning är endast en del av observationerna försedda med observerade värden på responsvariabeln.
+* Sant. Reinforcement learning handlar om att lära sig hur man bör agera för att uppnå ett mål i en viss miljö.
+
+Meta-information
+================
+exname: learning_types
+extype: mchoice
+exsolution: 11101
+exshuffle: 5

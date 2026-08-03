@@ -1,0 +1,26 @@
+Question
+========
+Vilka av följande påståenden om trend och säsongsmönster i en tidsserie är korrekta?
+
+Answerlist
+----------
+* En trend beskriver den övergripande utvecklingen från början till slutet av tidsserien.
+* Ett säsongsmönster innebär att liknande variationer återkommer vid samma perioder över tid.
+* Ett säsongsmönster måste innebära att tidsserien ökar över tid.
+* En tidsserie kan innehålla både en trend och ett säsongsmönster samtidigt.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Trenden beskriver den övergripande utvecklingen i serien över tid.
+* Sant. Säsongsmönster återkommer regelbundet, exempelvis varje vecka, månad eller år.
+* Falskt. Ett säsongsmönster handlar om återkommande variationer och behöver inte innebära att serien ökar.
+* Sant. En tidsserie kan samtidigt innehålla en långsiktig trend och återkommande säsongsvariationer.
+
+Meta-information
+================
+exname: trend_and_seasonality
+extype: mchoice
+exsolution: 1101
+exshuffle: 4

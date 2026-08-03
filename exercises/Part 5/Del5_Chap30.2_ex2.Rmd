@@ -1,0 +1,31 @@
+Question
+========
+Random Forest är en ensemblemetod som bygger vidare på bagging genom att kombinera ett stort antal beslutsträd. Vilka av följande påståenden om Random Forest är korrekta?
+
+Answerlist
+----------
+* Varje beslutsträd tränas vanligtvis på ett bootstrapurval från den ursprungliga träningsmängden.
+* Varje nytt träd tränas för att korrigera de fel som det föregående trädet gjorde.
+* Vid varje uppdelning i ett träd väljs den bästa uppdelningen bland en slumpmässigt utvald delmängd av de förklarande variablerna.
+* Samtliga förklarande variabler måste användas som kandidater vid varje uppdelning för att träden ska bli tillräckligt olika.
+* Det slumpmässiga urvalet av variabler kan minska korrelationen mellan träden.
+* Vid regression kombineras trädens prediktioner vanligtvis med ett medelvärde, medan majoritetsröstning kan användas vid klassificering.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Varje träd tränas vanligtvis på ett eget bootstrapurval, vilket skapar variation mellan träden.
+* Falskt. Träden i Random Forest tränas oberoende av varandra. Att varje ny modell försöker korrigera tidigare fel är kännetecknande för boosting.
+* Sant. Vid varje uppdelning får trädet endast välja mellan en slumpmässigt utvald delmängd av de förklarande variablerna.
+* Falskt. Det slumpmässiga variabelurvalet är en central del av Random Forest och används för att göra träden mindre lika varandra.
+* Sant. Om träden inte alltid använder samma starka prediktorer kan deras prediktioner bli mindre korrelerade.
+* Sant. Vid regression används vanligtvis medelvärdet av trädens prediktioner. Vid klassificering kan den klass som får flest röster väljas.
+
+Meta-information
+================
+exname: random_forest
+extype: mchoice
+exsolution: 101011
+exshuffle: 6
+

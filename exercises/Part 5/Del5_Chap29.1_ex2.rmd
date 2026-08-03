@@ -1,0 +1,32 @@
+Question
+========
+Ett neuralt nätverk används för ett klassificeringsproblem med tre nominella klasser. Nätverkets outputlager ger värdena $z_1=0$, $z_2=\log(2)$ och $z_3=\log(3)$ innan aktiveringsfunktionen appliceras.
+Softmaxfunktionen beräknar outputvärdet för klass $i$ som $f_i=\frac{\exp(z_i)}{\sum_{j=1}^K\exp(z_j)}$.
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Softmax ger outputvärdena $f_1=1/6$, $f_2=2/6$ och $f_3=3/6$.
+* Om samma konstant adderas till samtliga $z_i$ förblir softmaxfunktionens outputvärden oförändrade.
+* Om samtliga $z_i$ multipliceras med 2 förblir softmaxfunktionens outputvärden oförändrade.
+* Eftersom de gömda lagren använder ReLU summerar outputlagrets värden automatiskt till 1 även utan softmax.
+* Softmax är en lämplig aktiveringsfunktion i outputlagret när responsvariabeln består av flera nominella klasser.
+* För regression där responsvariabeln kan anta alla reella värden bör exponentialfunktionen användas i outputlagret i stället för identitetsfunktionen.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Eftersom $\exp(0)=1$, $\exp(\log(2))=2$ och $\exp(\log(3))=3$ blir nämnaren $1+2+3=6$.
+* Sant. Om en konstant $c$ adderas till samtliga värden multipliceras både täljaren och nämnaren med $\exp(c)$. Faktorn förkortas bort.
+* Falskt. Efter multipliceringen blir de onormaliserade värdena proportionella mot $1$, $4$ och $9$, vilket ger en annan fördelning.
+* Falskt. ReLU används i de gömda lagren för att skapa icke-linjära transformationer. Den gör inte att outputvärdena automatiskt summerar till 1.
+* Sant. Softmax normaliserar outputlagrets värden och är lämplig när responsvariabeln består av flera nominella klasser.
+* Falskt. Identitetsfunktionen kan användas när regressionens output tillåts ligga på hela tallinjen. Exponentialfunktionen kan användas när endast positiva värden är tillåtna.
+
+Meta-information
+================
+exname: neural_network_softmax_output
+extype: mchoice
+exsolution: 110010
+exshuffle: 6

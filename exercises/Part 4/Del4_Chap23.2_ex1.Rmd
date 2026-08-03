@@ -1,0 +1,26 @@
+Question
+========
+EACF kan användas som hjälpmedel för att identifiera ordningen $p$ och $q$ i en ARMA($p,q$)-modell. Vilka av följande påståenden om EACF är korrekta?
+
+Answerlist
+----------
+* Raderna i EACF-tabellen motsvarar ordningen $p$ för AR-delen och kolumnerna motsvarar ordningen $q$ för MA-delen.
+* EACF kan endast användas för att identifiera rena AR- eller MA-modeller.
+* EACF är särskilt användbar för ARMA-modeller eftersom SAC och SPAC ofta avtar gradvis och därför kan vara svåra att tolka.
+* Om EACF visar flera möjliga kandidatmodeller bör modellen med högst värden på $p$ och $q$ väljas.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Raderna representerar AR-ordningen $p$ och kolumnerna representerar MA-ordningen $q$.
+* Falskt. EACF används framför allt för att föreslå lämpliga värden på $p$ och $q$ i ARMA-modeller.
+* Sant. För en ARMA-modell kan både SAC och SPAC avta gradvis, vilket gör EACF användbar vid val av modellordning.
+* Falskt. EACF används för att föreslå möjliga kandidatmodeller. Kandidaterna behöver därefter anpassas och utvärderas, och modellen med högst värden på $p$ och $q$ ska inte automatiskt väljas.
+
+Meta-information
+================
+exname: extended_autocorrelation
+extype: mchoice
+exsolution: 1010
+exshuffle: 4

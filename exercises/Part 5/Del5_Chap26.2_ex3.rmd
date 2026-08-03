@@ -1,0 +1,29 @@
+Question
+========
+Ett datamaterial består av 120 observationer. Två kandidatmodeller ska jämföras med hjälp av korsvalidering. För varje kandidatmodell överväger man antingen Leave-One-Out Cross-Validation (LOOCV) eller 6-fold-korsvalidering.
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Vid LOOCV tränas varje kandidatmodell 120 gånger och varje modellanpassning använder $119$ observationer för träning.
+* Vid 6-fold-korsvalidering består varje valideringsblock av 20 observationer och varje modellanpassning tränas på 100 observationer.
+* Om båda kandidatmodellerna utvärderas med LOOCV krävs totalt 120 modellanpassningar.
+* För att jämföra kandidatmodellerna kan man för varje modell beräkna medelvärdet av valideringsfelet över samtliga observationer eller block.
+* Eftersom LOOCV använder fler modellanpassningar än 6-fold-korsvalidering måste LOOCV alltid ge en bättre slutlig modell.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Vid LOOCV lämnas en observation ut i varje iteration. Med 120 observationer tränas därför modellen 120 gånger, varje gång på de återstående 119 observationerna.
+* Sant. Vid 6-fold-korsvalidering delas 120 observationer i 6 block med 20 observationer i varje. När ett block används för validering återstår 120-20=100 träningsobservationer.
+* Falskt. Varje kandidatmodell måste tränas 120 gånger. För två kandidatmodeller krävs därför totalt 240 modellanpassningar.
+* Sant. Varje observation eller block används som valideringsdata en gång. Valideringsfelen sammanfattas därefter, vanligtvis med ett genomsnitt, så att kandidatmodellerna kan jämföras.
+* Falskt. Fler modellanpassningar innebär högre beräkningskostnad men garanterar inte att den valda modellen blir bättre. LOOCV och k-fold är olika metoder för att uppskatta modellernas prestanda.
+
+Meta-information
+================
+exname: cross_validation_comparison
+extype: mchoice
+exsolution: 11010
+exshuffle: 5

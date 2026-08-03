@@ -1,0 +1,35 @@
+Question
+========
+I ett klassifikationsträd innehåller en föräldernod 100 observationer: 60 från klass A och 40 från klass B. Två möjliga uppdelningar ger följande barnnoder:
+* Uppdelning 1: vänster nod $(30,0)$ och höger nod $(30,40)$.
+* Uppdelning 2: vänster nod $(45,15)$ och höger nod $(15,25)$.
+
+Paren anger antalet observationer från klass A respektive klass B. För en nod $R$ definieras felkvoten som $I_E(R)=1-\max_k(\hat{p}_{kR})$ och Gini-indexet som $I_G(R)=1-\sum_k\hat{p}_{kR}^2$.
+Barnnodernas orenhet viktas med respektive nods andel av observationerna. Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Föräldernodens felkvot är $0.4$ och dess Gini-index är $0.48$.
+* Den viktade felkvoten efter uppdelning 1 är $0.3$.
+* Den viktade felkvoten efter uppdelning 2 är också $0.3$.
+* Det viktade Gini-indexet är lägre för uppdelning 1 än för uppdelning 2.
+* Om två uppdelningar har samma viktade felkvot måste de även ha samma viktade Gini-index.
+* Felkvoten kan vara mindre känslig än Gini-indexet när en uppdelning förändrar klassfördelningen utan att förändra majoritetsklassen.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Felkvoten är $1-0.6=0.4$. Gini-indexet är $1-0.6^2-0.4^2=0.48$.
+* Sant. Den vänstra noden är ren och har felkvoten $0$. I den högra noden är felkvoten $30/70$. Den viktade felkvoten blir därför $(30/100)\cdot 0+(70/100)\cdot(30/70)=0.3$.
+* Sant. Den viktade felkvoten blir $(60/100)\cdot(15/60)+(40/100)\cdot(15/40)=0.3$.
+* Sant. För uppdelning 1 är det viktade Gini-indexet ungefär $0.343$. För uppdelning 2 är det $0.375$. Uppdelning 1 ger därför lägre orenhet enligt Gini-indexet.
+* Falskt. Felkvoten beror endast på andelen observationer som inte tillhör majoritetsklassen. Gini-indexet tar hänsyn till hela klassfördelningen, så två uppdelningar kan ha samma felkvot men olika Gini-index.
+* Sant. Så länge majoritetsklassen inte förändras kan felkvoten förbli oförändrad trots att fördelningen mellan klasserna förändras. Gini-indexet reagerar mer gradvis på sådana förändringar.
+
+Meta-information
+================
+exname: classification_tree_impurity
+extype: mchoice
+exsolution: 111101
+exshuffle: 6

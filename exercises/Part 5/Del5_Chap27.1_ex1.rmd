@@ -1,0 +1,30 @@
+Question
+========
+En regressionsmodell innehåller en förklarande variabel $X_1$ som mäts i meter. Innan variablerna har standardiserats är dess skattade koefficient $\beta_1=2$.
+Samma variabel uttrycks därefter i centimeter som $X_1^*=100X_1$. För att modellens anpassade värden ska vara oförändrade ersätts koefficienten med $\beta_1^*=0.02$, så att $2X_1=0.02X_1^*$.
+Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Modellens prediktioner och SSE är oförändrade när $X_1$ och $\beta_1$ skalas om på detta sätt.
+* Variabelns bidrag till Ridge-straffet ändras från $\beta_1^2=4$ till $(\beta_1^*)^2=0.0004$, trots att modellens prediktioner är oförändrade.
+* Variabelns bidrag till LASSO-straffet är oförändrat, eftersom LASSO använder absolutbelopp i stället för kvadrater.
+* Exemplet visar varför förklarande variabler bör standardiseras före regularisering.
+* Interceptet $\beta_0$ bör ingå i strafftermen så att även responsvariabelns nivå påverkas av regulariseringen.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Eftersom $2X_1=0.02X_1^*$ blir varje anpassat värde detsamma. Residualerna och därmed SSE förändras därför inte.
+* Sant. Ridge-straffet beror på koefficienternas kvadrater. Enheten som används för variabeln kan därför kraftigt förändra straffet om variablerna inte har standardiserats.
+* Falskt. LASSO-straffets bidrag ändras från $|\beta_1|=2$ till $|\beta_1^*|=0.02$. Även LASSO påverkas alltså av variabelns skala.
+* Sant. Standardisering gör variablernas skalor mer jämförbara och motverkar att valet av måttenhet avgör hur hårt olika koefficienter straffas.
+* Falskt. I de regulariserade regressionsmodellerna straffas lutningskoefficienterna, men inte interceptet $\beta_0$.
+
+Meta-information
+================
+exname: regularization_scaling
+extype: mchoice
+exsolution: 11010
+exshuffle: 5

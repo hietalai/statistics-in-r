@@ -1,0 +1,26 @@
+Question
+========
+När en maskinininlärningsmodell tränas optimeras modellens parametrar iterativt. Vilka av följande påståenden om optimeringsprocessen är korrekta?
+
+Answerlist
+----------
+* Modellens parametrar kan optimeras genom att minimera en kostnadsfunktion eller maximera en log-likelihood.
+* Gradientens riktning visar var kostnadsfunktionen ökar snabbast. Vid minimering justeras därför parametrarna i motsatt riktning.
+* Gradient descent hittar alltid det globala minimumet, även om kostnadsfunktionen är icke-konvex.
+* En högre inlärningshastighet leder alltid till snabbare konvergens utan risk att algoritmen passerar optimum.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Modellträning innebär att parametervärden väljs för att minimera en kostnadsfunktion eller maximera en log-likelihood.
+* Sant. Gradienten visar riktningen där funktionen ökar snabbast. Vid minimering justeras parametrarna därför i motsatt riktning.
+* Falskt. En icke-konvex kostnadsfunktion kan ha flera lokala minimum och det finns ingen garanti för att algoritmen hittar det globala minimumet.
+* Falskt. En hög inlärningshastighet kan ge stora steg som gör att algoritmen passerar optimum och behöver vända tillbaka.
+
+Meta-information
+================
+exname: optimisation_gradient_learning_rate
+extype: mchoice
+exsolution: 1100
+exshuffle: 4

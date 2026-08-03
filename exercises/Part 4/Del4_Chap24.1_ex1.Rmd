@@ -1,0 +1,29 @@
+Question
+========
+En ARIMA-modell har anpassats till en tidsserie. För att modellen ska anses ha fångat seriens modellerbara tidsberoende vill vi att residualerna ungefär ska bete sig som vitt brus. Vilka av följande resultat talar för att residualerna kan betraktas som vitt brus?
+
+Answerlist
+----------
+* Residualerna varierar slumpmässigt kring $0$ utan tydlig trend eller återkommande mönster.
+* SAC och SPAC för residualerna saknar tydliga signifikanta spikar.
+* Residualernas SAC visar flera tydligt signifikanta autokorrelationer.
+* Ljung-Box-testet ger ett lågt $p$-värde, vilket visar att modellen har fångat allt tidsberoende.
+* Ljung-Box-testet ger ett högt $p$-värde, vilket innebär att nollhypotesen om frånvaro av autokorrelation inte förkastas.
+
+Solution
+========
+Answerlist
+----------
+* Sant. När modellen har fångat den systematiska tidsstrukturen bör residualerna huvudsakligen bestå av slumpmässiga variationer kring $0$, utan tydliga trender eller återkommande mönster.
+* Sant. Om SAC och SPAC saknar signifikanta spikar finns det inget tydligt tecken på kvarvarande seriellt beroende vid enskilda laggar.
+* Falskt. Flera signifikanta autokorrelationer tyder på att det finns tidsberoende kvar i residualerna som modellen inte har fångat.
+* Falskt. Ett lågt $p$-värde leder till att nollhypotesen om frånvaro av autokorrelation förkastas. Det talar alltså emot att residualerna är vitt brus.
+* Sant. Ljung-Box-testets nollhypotes är att autokorrelationerna upp till det valda antalet laggar gemensamt är $0$. Ett högt $p$-värde innebär att nollhypotesen inte förkastas och talar därför för att residualerna kan betraktas som vitt brus.
+
+
+Meta-information
+================
+exname: arima_residuals_white_noise
+extype: mchoice
+exsolution: 11001
+exshuffle: 5

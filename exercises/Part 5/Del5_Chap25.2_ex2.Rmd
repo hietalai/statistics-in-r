@@ -1,0 +1,29 @@
+Question
+========
+Vilka av följande påståenden beskriver korrekt vad en felfunktion är och hur den används?
+
+Answerlist
+----------
+* En felfunktion ger ett numeriskt mått på hur stora fel en modell gör på en viss datamängd.
+* MSE ger stora avvikelser större betydelse än MAE eftersom felen kvadreras.
+* Ett felvärde på $0$ för träningsdata garanterar att modellen generaliserar väl till nya data.
+* MAE kan användas som ett alternativ till MSE när man vill minska extremvärdens påverkan på det beräknade felet.
+* Samma felfunktion måste alltid användas för både regressions- och klassificeringsproblem.
+
+Solution
+========
+Answerlist
+----------
+* Sant. En felfunktion sammanfattar modellens fel på en viss datamängd till ett numeriskt värde som kan användas för att bedöma och jämföra modeller.
+* Sant. I MSE kvadreras avvikelserna, vilket gör att stora fel och extremvärden får större påverkan än i MAE.
+* Falskt. Ett mycket lågt fel på träningsdata visar endast att modellen anpassar träningsdata väl. Modellen kan vara överanpassad och fungera sämre på nya data.
+* Sant. MAE bygger på absoluta avvikelser och påverkas därför mindre av stora avvikelser än MSE.
+* Falskt. Olika felfunktioner lämpar sig för olika typer av problem. MSE och MAE används inom regression, medan exempelvis Cross Entropy och Missclassification kan användas inom klassificering.
+
+Meta-information
+================
+exname: error_functions
+extype: mchoice
+exsolution: 11010
+exshuffle: 5
+

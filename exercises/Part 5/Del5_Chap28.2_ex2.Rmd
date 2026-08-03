@@ -1,0 +1,26 @@
+Question
+========
+Trädmodeller kan överanpassa träningsdata. Förbeskärning och efterbeskärning är två metoder för att kontrollera trädets komplexitet. Vilka av följande påståenden är korrekta?
+
+Answerlist
+----------
+* Förbeskärning innebär att trädets tillväxt stoppas under träningen när ett kriterium är uppfyllt, exempelvis maximalt träddjup, för få observationer i en nod eller för liten förbättring.
+* Efterbeskärning innebär att man först tränar ett fullt utvecklat träd och därefter ersätter vissa delträd med löv för att minska modellens komplexitet.
+* Ett djupare träd bör alltid väljas, eftersom fler noder automatiskt ger bättre prediktioner på nya data.
+* Korsvalidering kan användas för att avgöra hur mycket trädet bör beskäras.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Förbeskärning begränsar trädets tillväxt genom stoppregler som används under träningen.
+* Sant. Efterbeskärning utgår från ett fullt utvecklat träd och förenklar det genom att ersätta vissa delträd med löv.
+* Falskt. Ett djupare träd får ofta lägre träningsfel men kan ge sämre prediktioner på nya data på grund av överanpassning.
+* Sant. Korsvalideringsfelet kan användas för att jämföra träd med olika komplexitet och välja en lämplig beskärningsnivå.
+
+Meta-information
+================
+exname: tree_pruning
+extype: mchoice
+exsolution: 1101
+exshuffle: 4

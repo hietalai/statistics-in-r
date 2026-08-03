@@ -1,0 +1,27 @@
+Question
+========
+Ett neuralt nätverk används för att modellera ett komplicerat icke-linjärt samband. Nätverket görs mer flexibelt genom att fler neuroner läggs till. Vilka av följande slutsatser är rimliga utifrån Universal Approximation Theorem och materialets diskussion?
+
+Answerlist
+----------
+* Ett tillräckligt flexibelt neuralt nätverk kan i princip representera mycket komplexa samband.
+* Eftersom nätverket är flexibelt krävs endast en liten mängd träningsdata för att få tillförlitliga prediktioner.
+* Ökad flexibilitet kan förbättra nätverkets förmåga att anpassa komplexa samband, men kan också öka risken för överanpassning.
+* Om nätverket kan approximera sambandet väl blir det automatiskt enkelt att tolka hur varje prediktor påverkar responsvariabeln.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Universal Approximation Theorem visar att neurala nätverk med tillräcklig flexibilitet kan representera mycket komplexa och icke-linjära funktioner.
+* Falskt. Neurala nätverk behöver ofta mycket träningsdata för att lära sig komplexa samband och ge tillförlitliga prediktioner.
+* Sant. Ett mer flexibelt nätverk kan anpassa mer komplicerade samband, men flexibiliteten innebär också en större risk att modellen överanpassas till träningsdata.
+* Falskt. Neurala nätverk är ofta svåra att tolka och betraktas därför som black box-modeller, även när de ger bra prediktioner.
+
+Meta-information
+================
+exname: neural_network_universal_approximation_theorem
+extype: mchoice
+exsolution: 1010
+exshuffle: 4
+

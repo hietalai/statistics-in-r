@@ -1,0 +1,27 @@
+Question
+========
+Vilka av följande påståenden om autoregressiva processer är korrekta?
+
+Answerlist
+----------
+* I en AR($p$)-process förklaras $Y_t$ av en linjärkombination av $p$ tidigare värden i tidsserien.
+* Feltermen $e_t$ beskriver den del av $Y_t$ som förklaras av tidigare observationer.
+* Autokorrelationen för en stationär AR($1$)-process är $0$ för alla lagg större än $1$.
+* För en AR($1$)-process krävs $|\phi|<1$ för att processen ska vara stationär.
+
+Solution
+========
+Answerlist
+----------
+* Sant. En AR($p$)-process använder $p$ tidigare värden för att beskriva det nuvarande värdet.
+* Falskt. Feltermen $e_t$ beskriver den nya information som tidigare observationer inte lyckas förklara.
+* Falskt. För en stationär AR($1$)-process gäller $\rho_k=\phi^k$, vilket innebär att autokorrelationen vanligtvis avtar gradvis.
+* Sant. Villkoret $|\phi|<1$ krävs för att en AR($1$)-process ska vara stationär.
+
+
+Meta-information
+================
+exname: autoregressive_processes
+extype: mchoice
+exsolution: 1001
+exshuffle: 4

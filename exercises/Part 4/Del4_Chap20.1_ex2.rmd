@@ -1,0 +1,27 @@
+Question
+========
+En tidsserie visar högre elförbrukning under vintermånaderna och lägre elförbrukning under sommarmånaderna varje år.
+Vilka av följande tolkningar är korrekta?
+
+Answerlist
+----------
+* Serien uppvisar ett säsongsmönster med ungefär ett års periodicitet.
+* Mönstret visar en långsiktig trend snarare än ett säsongsmönster.
+* Variationen bör beskrivas som slumpmässigt brus eftersom förbrukningen inte är exakt likadan varje år.
+* Mönstret tyder på att tidpunkten på året påverkar nivån på serien.
+
+Solution
+========
+Answerlist
+----------
+* Sant. Skillnaden mellan vinter- och sommarförbrukning återkommer årligen och är därför ett säsongsmönster med ett års periodicitet.
+* Falskt. Mönstret återkommer vid samma tidpunkt varje år och beskrivs därför som ett säsongsmönster.
+* Falskt. Ett tydligt återkommande mönster är inte enbart slumpmässigt brus, även om mönstrets storlek kan variera mellan år.
+* Sant. Det återkommande mönstret visar att elförbrukningens nivå är kopplad till vilken del av året observationen tillhör.
+
+Meta-information
+================
+exname: annual_seasonality
+extype: mchoice
+exsolution: 1001
+exshuffle: 4
