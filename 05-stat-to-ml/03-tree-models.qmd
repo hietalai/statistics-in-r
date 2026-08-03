@@ -231,7 +231,7 @@ $$
 $$
 där $|T|$ är antalet löv i $T$, $N(R_j)$ antal objekt i löv $j$. 
 
-På samma sätt som LASSO straffas informationsvinsten nu med avseende på antalet "parametrar" som här representeras av antalet antalet regler som leder till löv. Korsvalidering kan användas för att välja det $\alpha$ som ger minst valideringsfel.
+På samma sätt som LASSO straffas informationsvinsten nu med avseende på antalet "parametrar" som här representeras av antalet regler som leder till löv. Korsvalidering kan användas för att välja det $\alpha$ som ger minst valideringsfel.
 
 [ALPHA STYR INTE NÄR TRÄDET SKA BESKÄRAS ELLER HUR GÖR DEN DET?]{style="color: red"}
 
