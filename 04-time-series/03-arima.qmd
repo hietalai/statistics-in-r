@@ -43,7 +43,7 @@ $$
 \end{aligned}
 $$
 
-$\rho_k$ avtar avtar exponentiellt med en så kallad dämpningsfaktor $\phi$, men startvärdet $\rho_1$ påverkas även av $\theta$. Detta medför att många olika beteenden kan ses för autokorrelationen men som alla kommer från en ARMA(1,1)-process. 
+$\rho_k$ avtar exponentiellt med en så kallad dämpningsfaktor $\phi$, men startvärdet $\rho_1$ påverkas även av $\theta$. Detta medför att många olika beteenden kan ses för autokorrelationen men som alla kommer från en ARMA(1,1)-process. 
 
 :::{.callout-note}
 Nu börjar vi jobba med modeller som blir väldigt komplexa att både simulera med kod likt vi gjort i tidigare kapitel eller beräkna autokorrelationen. Istället kan vi börja använda inbyggda funktioner från `stats`, `forecast` och `TSA` paketen. 
