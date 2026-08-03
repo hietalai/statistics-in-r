@@ -69,7 +69,7 @@ consumption |>
 
 I båda figurerna visualiseras utvecklingen av mätvariabeln över tid vilket innebär att vi kan utläsa trender och återkommande mönster. 
 
-- En **trend** definieras som den övergripande utvecklingen från från första till sista mätpunkten. Till exempel visar @fig-price en negativ trend från början av mätperioden till dess slut, dock med perioder av variation. 
+- En **trend** definieras som den övergripande utvecklingen från första till sista mätpunkten. Till exempel visar @fig-price en negativ trend från början av mätperioden till dess slut, dock med perioder av variation. 
 
 - **Säsongsmönster** definieras som trender som återkommer vid samma specifika perioder, till exempel @fig-consumption visar en förhöjd förbrukning under vintermånaderna och en lägre förbrukning under sommarmånaderna. Båda dessa komponenter kommer vara viktiga i målen att både beskriva den observerade serien och prediktera nya värden för framtida tidpunkter. 
 
