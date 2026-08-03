@@ -1,6 +1,6 @@
 Question
 ========
-En tidsserie visar högre elförbrukning under vintermånaderna och lägre elförbrukning under sommarmånaderna varje år.
+Anta att en tidsserie visar högre elförbrukning under vintermånaderna och lägre elförbrukning under sommarmånaderna varje år.
 Vilka av följande tolkningar är korrekta?
 
 Answerlist
