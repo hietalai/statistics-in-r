@@ -101,7 +101,7 @@ $$
   \gamma_k = \phi \gamma_{k-1} + E\left[e_t Y_{t-k}\right]
   \end{aligned}
 $$
-som pga oberoendet mellan $e_t$ och $Y_t$ ger:
+som pga oberoendet mellan $e_t$ och $Y_{t-k}$ för k > 0 ger:
 $$
   \begin{aligned}
   \gamma_k = \phi \gamma_{k-1}
