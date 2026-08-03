@@ -245,7 +245,7 @@ $$
 $$ {#eq-maq}
 där de olika $\theta$ (grekiska theta^[Uttalas teta eller täta.]) beskriver hur stor effekt respektive tidpunkts felterm har på det nuvarande. En MA-process har inte några stationäritetsvillkor för $\theta$, däremot behöver vi titta närmare på **invertibilitet** i @sec-invertibility.
 
-:::{.callout-note}
+:::{.callout-important}
 Notera att vi ändrar symbolen framför $\theta$ från $-$ till $+$ jämfört med @cryer2008 på grund av att de funktioner vi använder i R använder denna formulering med positiva parametrar. Se dokumentationen för funktionen `stats::arima()` som `TSA`-paketet använder som grund.
 :::
 
@@ -323,7 +323,7 @@ $$
   \rho_2 &= \frac{\theta_2}{1 + \theta_1^2 + \theta_2^2}\\
   \rho_k &= 0 \qquad \text{för } k > 2
   \end{aligned}
-$$ {#eq-ar2-rho}
+$$ {#eq-ma2-rho}
 
 Vad detta betyder är att när $q = 2$ finner vi två nollskilda lagg och resterande är 0. Detta beteende går att utöka till den generella MA(q) processen där vi kan se nollskilda lagg när $k \le q$ och 0 för alla $k > q$.
 
@@ -364,7 +364,7 @@ $$
 $$
 eftersom $\rho_k = \phi^k$. 
 
-För en AR(2) fås via @eq-ar2-rho:
+För en AR(2) fås:
 $$
   \begin{aligned}
   \phi_{22} &= \frac{ \left(\frac{\phi_1^2}{1 - \phi_2} + \phi_2\right)  - \left(\frac{\phi_1}{1 - \phi_2}\right)^2}{1 - \left(\frac{\phi_1}{1 - \phi_2}\right)^2}\\
@@ -387,8 +387,6 @@ $$
   \phi_{22} = \frac{-\theta^2}{1 + \theta^2 + \theta^4}
   \end{aligned}
 $$
-och $\phi_{kk} = \frac{\theta^k(1 - \theta^2)}{1 - \theta^{2(k+1)}}$ för alla $k \ge 1$.
-
 Den partiella autokorrelationen för en MA(1), och generellt för en MA(q), avtar långsamt med större $k$ vilket är samma fenomen som en AR(p)-process uppvisar för autokorrelationen. Vi har alltså två spegelvända beteenden för AR och MA för autokorrelationen och den partiella autokorrelationen. Vi kan sammanfatta dessa i följande tabell:
 
 ```{r}

@@ -566,7 +566,7 @@ exams2forms(file = "../exercises/P3ex1.rmd")
 :::
 
 
-## SAC och SPAC
+## Autokorrelation (SAC)
 
 Dessa tre exempelserier har vi själva skapat vilket ger oss möjligheten att beräkna de sanna beskrivande måtten utifrån den teoretiska modellen. I verkligheten behöver vi identifiera en modell (en representation) som bäst beskriver den observerade serien där observationerna anses vara slumpmässiga dragningar från en *okänd* teoretisk modell. 
 
@@ -668,7 +668,7 @@ För den icke-stationära serien Random Walk ser SAC väldigt annorlunda ut. Vi 
 
 ## Differentiering {#sec-differentiation}
 
-Om en tidsserie inte anses stationär i sin ursprungliga form kan vi undersöka ifall enkla bearbetningar av serien istället uppfyller stationäritet. I exemplet med Random Walk vet vi att differensen mellan två olika tidssteg endast beror på en slumpmässig dragning från en normalfördelning, oberoende från all annan information i serien. 
+Om en tidsserie inte anses stationär i sin ursprungliga form kan vi undersöka ifall enkla bearbetningar av serien istället uppfyller stationäritet. I exemplet med Random Walk vet vi att differensen mellan två intilliggande tidssteg endast beror på en slumpmässig dragning från en normalfördelning, oberoende från all annan information i serien (se @eq-random-walk). 
 
 Vi kan då med hjälp av **differentiering** skapa en ny, stationär serie. Differentiering går ut på att vi skapar differensen mellan olika lagg av tidpunkter, den enklaste formen är att beräkna differensen mellan tidpunkt $t$ och $t-1$, lagg 1. 
 
