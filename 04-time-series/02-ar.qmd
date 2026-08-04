@@ -7,21 +7,25 @@ filters:
 
 # AR och MA modeller
 
-Hur kan en tidsserie utan en tydlig trend eller säsongsmönster modelleras? Vi kan på olika sätt ta tillvara på tidsberoendet i serien genom **autoregressiva** (AR) processer som innebär regression "på sig själv" och genom **glidande medelvärde** (MA) processer som innebär regression på tidigare feltermer.
+Hur kan en tidsserie utan en tydlig trend eller säsongsmönster modelleras? Vi kan på olika sätt ta tillvara på tidsberoendet i serien genom **autoregressiva** (AR) processer, som omfattar regression "på sig själv", eller genom **glidande medelvärde** (MA) processer som innebär regression på tidigare feltermer.
 
-I detta kapitel kommer dessa två processer att presenteras separat för att i nästa kapitel visa hur de kan sammanfogas till en gemensam modell. Vi kommer titta på hur processerna ser ut i teorin och vilka egenskaper de uppvisar för att lättare kunna identifiera när specifika processer är lämpliga modellval för en observerad serie.
+I detta kapitel kommer dessa två typer av processer att presenteras separat för att i nästa kapitel visa hur de kan sammanfogas till en gemensam modell. Vi kommer titta på hur processerna ser ut i teorin och vilka egenskaper de uppvisar för att lättare kunna identifiera när de specifika processerna är lämpliga modellval för en observerad serie.
 
-## Autoregressiva processer
+## Autoregressiva processer (AR)
  
-En autoregressiv process använder beroendet mellan olika tidpunkter som hjälpvariabler i en modell som väldigt mycket liknar en linjär regressionsmodell. Generellt kan vi beskriva en AR(p)-process som:
+En autoregressiv process använder beroendet mellan olika tidpunkter som hjälpvariabler i en modell som väldigt mycket liknar en linjär regressionsmodell i tiden. Generellt kan vi beskriva en AR(p)-process som:
 $$
   \begin{aligned}
   Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots + \phi_p Y_{t-p} + e_t
   \end{aligned}
 $$ {#eq-arp}
-det vill säga att $Y_t$ förklaras av en linjärkombination av $p$ tidigare värden. Vardera $\phi$ (grekiska bokstaven phi^[Uttalas fi.]) beskriver relationen mellan det specifika lagget och den nuvarande tidpunkten. Ett antagande som görs är att alla $Y_t$ är oberoende från $e_t$ där $e_t$ betraktas som den information som de tidigare observerade tidpunkterna inte lyckas förklara. Detta fel antas $N(0, \sigma^2_e)$. 
+det vill säga att $Y_t$ förklaras av en linjärkombination av $p$ tidigare värden. Vardera $\phi$ (grekiska bokstaven phi^[Uttalas fi.]) beskriver relationen mellan det specifika lagget ($t-k$) och den nuvarande tidpunkten ($t$). 
 
+Ett antagande som görs är att alla $Y_t$ är oberoende från $e_t$ där $e_t$ betraktas som den information som de tidigare observerade tidpunkterna inte lyckas förklara. Detta fel antas $N(0, \sigma^2_e)$, alltså ett vitt brus. 
+
+:::{.callout-note}
 I @eq-arp antas att $E[Y_t] = 0$ men vi kan enkelt utöka modellen till att ha $\mu$ som medelvärde genom att formulera $Y_t - \mu$ i vänsterledet (och för alla andra förekomster av $Y_{t-k}$). Genomgående i dessa kapitel kommer vi anta att väntevärdet är 0 men @cryer2008 visar varianter när väntevärdet är nollskild.
+:::
 
 <!-- TODO WHERE TO PUT 4.1/4.2? MAYBE SOMETHING IN RELATION TO THE MA PROCESS LAST IN THIS CHAPTER -->
 
@@ -36,9 +40,7 @@ $$ {#eq-ar1}
 
 Denna modell antar att $Y_t$ endast beror på den föregående tidpunkten och ett slumpfel. Detta slumpfel kan beskrivas som den nya informationen som nuvarande tidpunkt introducerar till serien.
 
-Vi kan simulera hur en AR(1) ser ut för olika värden på $\phi$.
-
-<!-- QUESTION: ÄR DETTA RELEVANT ELLER SKA VI ANVÄNDA INBYGGDA FUNKTIONER SÅSOM arima.sim() ISTÄLLET? -->
+Vi kan simulera hur en AR(1) ser ut för olika värden på $\phi$ med hjälp av funktionen `arima.sim()`. Vi kan ändra värdet på $\phi$ i följande kod för att se hur serien förändras, men vi måste tänka på vissa begränsningar som vi återkommer till nedanför.
 
 ```{webr-r}
 #| fig-width: 5
@@ -47,21 +49,6 @@ Vi kan simulera hur en AR(1) ser ut för olika värden på $\phi$.
 #| out-width: "90%"
 #| autorun: true
 
-# Skapar en funktion för att simulera en AR(1) process
-ar1 <- function(phi, n) {
-  y <- numeric()
-  
-  for (t in seq_len(n)) {
-    if (t == 1) {
-      y[t] <- rnorm(n = 1)
-    } else {
-      y[t] <- phi * y[t-1] + rnorm(n = 1)
-    }
-  }
-  
-  y
-}
-
 # Egenskaper för simuleringen
 n <- 100
 phi <- 0.9
@@ -69,13 +56,13 @@ phi <- 0.9
 # Visualisera serien i ett linjediagram
 tibble(
   t = seq_len(n),
-  yt = ar1(phi = phi, n = n)
+  yt = arima.sim(n = n, model = list(order = c(1,0,0), ar = phi)) |> as.numeric()
 ) |> 
   ggplot() + aes(x = t, y = yt) + geom_line() + 
   theme_bw()
 ```
 
-En av serierna vi tittade på i föregående kapitel, Random Walk i @eq-random-walk, är ett specialfall av en AR(1) process när $\phi = 1$. Vi bedömde dock tidigare att en Random Walk *inte* var en stationär serie så hur kan vi säkerställa att en AR-process uppfyller stationäritet? I just detta fall, hur behöver vi begränsa $\phi$ för att en AR(1) ska anses vara en stationär serie?
+En av serierna vi tittade på i föregående kapitel, Random Walk i @eq-random-walk, är ett specialfall av en AR(1) process när $\phi = 1$. Vi bedömde dock att en Random Walk *inte* var en stationär serie och ett utav grundkraven för att använda AR (och MA) modeller är stationäritet. Så hur kan vi säkerställa att en AR-process uppfyller stationäritet? I just detta fall, hur behöver vi begränsa $\phi$ för att en AR(1) ska anses vara en stationär serie?
 
 Vi kan börja med att beräkna variansen av @eq-ar1:
 
@@ -92,7 +79,13 @@ $$
 Kom ihåg att $\gamma_0 = cov(Y_t, Y_t) = Var(Y_t)$ gäller för alla $Y_{t-k}$ där $k \ge 0$.
 :::
 
-Redan vid detta uttryck ser vi några begränsningar som måste göras, nämligen $|\phi| < 1$, för att variansen ska vara definierbar och strikt positiv. Vi kallar detta för seriens **stationäritetsvillkor**.
+Redan vid detta uttryck framkommer några begränsningar som måste göras, nämligen 
+$$
+  \begin{aligned}
+  |\phi| < 1
+  \end{aligned}
+$$ {#eq-ar1-stationarity}
+, för att variansen ska vara definierbar och strikt positiv utifrån nämnaren. Vi kallar detta för seriens **stationäritetsvillkor**.
 
 Autokovariansen för lagg $k$ blir då:
 
@@ -130,7 +123,7 @@ $$
 $$
 det vill säga en exponentiellt minskande korrelation då $|\phi| < 1$. 
 
-Med hjälp av dessa härledningar kan vi visualisera hur $\rho_k$ ser ut för olika värden på $\phi$. När vi senare vill identifiera en lämplig modell kommer vi med hjälp av SAC kunna se skattade autokorrelationer och matcha den observerade seriens beteende till beteendet från en teoretisk modell.
+Med hjälp av dessa härledningar kan vi interaktivt visualisera hur $\rho_k$ ser ut för olika värden på $\phi$. Denna visualisering av den sanna autokorrelationen kan ge oss en intuition när vi senare vill identifiera lämpliga modeller med hjälp av den observerade autokorrelationen (SAC). 
 
 ```{webr-r}
 #| fig-width: 5
@@ -168,13 +161,13 @@ $$
   \end{aligned}
 $$
 
-Vi kan gå igenom liknande härledningar för de olika beskrivande måtten för en AR(2)-process som vi gjorde för AR(1) men det blir snabbt mycket komplicerat. Istället väljer vi i detta läge att visa stationäritetsvillkoren och kan läsa mer om denna härledning i @cryer2008^[sida 72-73 och 84]. 
+Vi kan gå igenom liknande härledningar för de olika beskrivande måtten för en AR(2)-process som vi gjorde för AR(1) men det blir snabbt mycket komplicerat. Istället väljer vi i detta läge att enbart visa stationäritetsvillkoren och vi kan läsa mer om denna härledning i @cryer2008^[sida 72-73 och 84]. Villkoren för stationäritet i en AR(2) kan sammanfattas med följande tre begränsningar.
 
 $$
   \begin{aligned}
-  \phi_1 + \phi_2 < 1 \qquad \phi_2 - \phi_1 < 1 \qquad |\phi_2| < 1
+  \phi_1 + \phi_2 < 1 \qquad \qquad \phi_2 - \phi_1 < 1 \qquad \qquad |\phi_2| < 1
   \end{aligned}
-$$
+$$ {#eq-ar2-stationarity}
 
 Att beräkna autokorrelationen för olika värden på $\phi$ blir också mer komplicerat eftersom vi numera har två variabler men vissa härledningar finns även för en AR(2) i @cryer2008. Med följande kod kan vi justera värden på $\phi_1$ och $\phi_2$ för att beräkna $\rho_k$ utifrån de härledda formlerna.
 
@@ -229,13 +222,33 @@ rho <- rhoAr2(phi1 = 0.5, phi2 = 0.25)
 
 ```
 
-Testa olika kombinationer av parametrarna och försök att identifiera några trender i modellernas autokorrelation. Notera att funktionen kommer generera ett felmeddelande om stationäritetsantaganden inte uppfylls och modellen inte är lämplig.
+Testa olika kombinationer av parametrarna och försök att identifiera några trender i modellernas autokorrelation. Notera att funktionen kommer generera ett felmeddelande om stationäritetsantaganden inte uppfylls och modellen inte är lämplig. Något vi kan ta med oss från dessa tester är att det är betydligt mer komplicerat att identifiera trender för autokorrelationen i en AR(2) än en AR(1). Detta blir än mer komplext när ordningen ökar vilket innebär att samma trender kan beskriva olika typer av modeller. Vi kommer återkomma till hur vi hanterar detta problem senare.
 
-<!-- TODO: Matcha par av stationäritetsvillkor för olika serier Edit:?? Vad menar jag med detta??-->
+:::{.callout-caution}
+## Övning 1
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap22.1_ex1.rmd")
+
+```
+:::
+
+:::{.callout-caution}
+## Övning 2
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap22.1_ex2.rmd")
+
+```
+:::
 
 ## Glidande medelvärdesprocesser
 
-Istället för att använda det observerade värdet från en föregående tidpunkt kan vi skapa en modell som baseras på den slumpmässiga feltermen från den nuvarande och $q$ tidigare tidpunkter. 
+Istället för att använda det observerade värdet från en föregående tidpunkt kan vi skapa en modell som baseras på den slumpmässiga felet från den nuvarande och $q$ tidigare tidpunkter. Detta liknar definitionen av @sec-moving-average-series men vi tittar nu istället på en generell process, inte en specifik serie.
 
 Generellt kan vi beskriva en MA(q) process som:
 $$
@@ -243,7 +256,9 @@ $$
   Y_t = e_t + \theta_1 e_{t-1} + \theta_2 e_{t-2} + \dots + \theta_q e_{t-q}
   \end{aligned}
 $$ {#eq-maq}
-där de olika $\theta$ (grekiska theta^[Uttalas teta eller täta.]) beskriver hur stor effekt respektive tidpunkts felterm har på det nuvarande. En MA-process har inte några stationäritetsvillkor för $\theta$, däremot behöver vi titta närmare på **invertibilitet** i @sec-invertibility.
+där de olika $\theta$ (grekiska theta^[Uttalas teta eller täta.]) beskriver hur stor effekt respektive tidpunkts felterm har på det nuvarande. 
+
+En MA-process har inte några specifika stationäritetsvillkor för $\theta$, däremot behöver vi titta närmare på **invertibilitet** som ett krav på modellen, vilket vi gör i @sec-invertibility.
 
 :::{.callout-important}
 Notera att vi ändrar symbolen framför $\theta$ från $-$ till $+$ jämfört med @cryer2008 på grund av att de funktioner vi använder i R använder denna formulering med positiva parametrar. Se dokumentationen för funktionen `stats::arima()` som `TSA`-paketet använder som grund.
@@ -251,7 +266,7 @@ Notera att vi ändrar symbolen framför $\theta$ från $-$ till $+$ jämfört me
 
 ### MA(1)
 
-Med endast en term blir modellen: 
+Med endast en MA-term blir modellen: 
 $$
   \begin{aligned}
   Y_t = e_t + \theta e_{t-1}
@@ -296,15 +311,32 @@ $$
     0 &\text{om } k \ge 2
   \end{cases}
   \end{aligned}
-$$
+$$ {#eq-ma1-rho}
 
-<!-- TODO Visualization of the rho for MA1 -->
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Autokorrelationen för en MA(1) med olika theta
+#| out-width: "90%"
+#| autorun: true
 
-### Invertibilitet {#sec-invertibility}
-När vi beräknar autokorrelationen för en MA-process ser vi att både $\theta$ och $1 / \theta$ ger samma värde, vilket blir ett problem när vi ska anpassa modellen. Vi kan visa att en MA-process kan **inverteras** till en oändlig serie av tidigare tidpunkter, likt en AR-process, om och endast om $|\theta| < 1$ för en MA(1) och för en generell MA(q) liknande krav på $\theta$ som för en generell AR(p). 
+# Ange ett värde på theta i processen
+theta <- 0.5
 
-Vi kräver både stationäritet och invertibilitet för alla modeller som inkluderar en MA-komponent. 
-[TODO: SHOW AR as an infinite MA series in an earlier chapter to make this make sense]{style="color: red"}
+tibble(
+  k = seq_len(20), 
+  rho = if_else(k == 1, theta / (1 + theta^2), 0)
+) |> 
+  ggplot() + aes(x = k, y = rho) + 
+  geom_bar(width = 0.3, stat = "identity") +
+  scale_y_continuous(limits = c(-1, 1)) + 
+  geom_hline(yintercept = 0, linewidth = 1) +
+  labs(y = expression(rho[k]), x = sprintf("k för %s = %s", expression(theta), theta)) + 
+  theme_bw()
+
+```
+
+Testa att ändra `theta` till olika värden och se vad som händer med visualiseringen. Specifikt testa $\theta = 0.5$ och $\theta = \frac{1}{0.5} = 2$ och se vad som händer med visualiseringen.
 
 ### MA(2)
 
@@ -327,9 +359,127 @@ $$ {#eq-ma2-rho}
 
 Vad detta betyder är att när $q = 2$ finner vi två nollskilda lagg och resterande är 0. Detta beteende går att utöka till den generella MA(q) processen där vi kan se nollskilda lagg när $k \le q$ och 0 för alla $k > q$.
 
+```{webr-r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Autokorrelationen för en MA(2) med olika theta
+#| out-width: "90%"
+#| autorun: true
+
+rhoMa2 <- function(theta1, theta2) {
+  
+  # Kontrollerar att invertibilitet är uppfylld
+  assert_that(theta1 + theta2 < 1, msg = "theta1 + theta2 är inte < 1")
+  assert_that(theta2 - theta1 < 1, msg = "theta2 - theta1 är inte < 1")
+  assert_that(abs(theta2) < 1,   msg = "|theta2| är inte < 1")
+  
+  n <- 20
+
+  # Skapa en tom vektor
+  rho <- numeric()
+  
+  # Beräkna rho med två specialfall för t = 1 och t = 2
+  for (t in seq_len(n)) {
+    if (t == 1) {
+      rho[t] <- (theta1 + theta1*theta2) / (1 + theta1^2 + theta2^2)
+    } else if (t == 2) {
+      rho[t] <- theta2 / (1 + theta1^2 + theta2^2)
+    } else {
+      rho[t] <- 0
+    }
+  }
+  
+  graph <- 
+    tibble(
+      k = seq_len(20), 
+      rho = rho
+    ) |> 
+      ggplot() + aes(x = k, y = rho) + 
+      geom_bar(width = 0.3, stat = "identity") +
+      scale_y_continuous(limits = c(-1, 1)) + 
+      geom_hline(yintercept = 0, linewidth = 1) +
+      labs(y = expression(rho[k])) + 
+      theme_bw()
+    
+  print(graph)
+  
+  return(rho)
+}
+
+rho <- rhoMa2(theta1 = 0.5, theta2 = 0.25)
+
+```
+
+Testa olika värden på `theta1` och `theta2`. Oavsett vad värdena är kommer vi se två staplar i seriens första två lagg och resterande lagg har 0 i autokorrelation. 
+
+### Invertibilitet {#sec-invertibility}
+När vi beräknar autokorrelationen för en MA-process ser vi att både $\theta$ och $1 / \theta$ ger samma värde, vilket blir ett problem när vi ska anpassa modellen. 
+
+:::{.callout-note}
+Vi kan definiera en generell linjär process som en oändlig serie av nuvarande och tidigare vitt brus:
+
+$$
+  \begin{aligned}
+  Y_t = e_t + \psi_1 e_{t-1} + \psi_2 e_{t-2} + \cdots
+  \end{aligned}
+$$ {#eq-infty-series}
+där $\Sum{\infty} \psi^2_i < \infty$ för att vara en oändlig serie.
+
+Vi kan omformulera en AR(1) (@eq-ar1) till denna generella linjära process enligt:
+$$
+  \begin{aligned}
+  Y_t = \phi Y_{t-1} + e_t &= \phi \left(\phi Y_{t-2} + e_{t-1}\right) + e_t \\
+    &= \phi \left(\phi \left(\phi Y_{t-3} + e_{t-2} \right) + e_{t-1}\right) + e_t\\
+    &\qquad \qquad \vdots \\
+    &= e_t + \phi^1 e_{t-1} + \phi^2 e_{t-2} + \phi^3 e_{t-3} + \dots
+  \end{aligned}
+$$
+det vill säga $\psi_j = \phi^j$ när $|\phi| < 1$.
+
+Från räkneregler för geometriska summor fås: 
+$$
+  \begin{aligned}
+  \gamma_k &= \frac{\phi^k \sigma^2_e}{1 - \phi^2} \\
+  \\
+  \rho_k &= \phi^k
+  \end{aligned}
+$$
+vilket är samma egenskaper som vi sett tidigare trots att vi nu formulerat modellen som en glidande medelvärdeprocess. 
+:::
+
+Problemet med att definiera modellen i en MA(1) kan lösas genom en transformation från en MA modell till en AR modell, alltså det motsatta som vi tidigare visat. 
+
+Vi kan skriva om @eq-ma1 såsom:
+
+$$
+  \begin{aligned}
+  Y_t &= e_t + \theta e_{t-1} \\
+  e_t &= Y_t - \theta e_{t-1} \\
+  e_t &= Y_t - \theta (Y_{t-1} + \theta e_{t-2})\\
+  e_t &= Y_t - \theta Y_{t-1} - \theta^2 e_{t-2}
+  \end{aligned}
+$$
+
+Om $|\theta| < 1$ kan vi fortsätta denna ekvation oändligt likt @eq-infty-series till $e_t = Y_t - \theta Y_{t-1} - \theta^2 Y_{t-2} \dots$. Detta kallas för att serien **inverteras** vilket endast kan ske om $|\theta| < 1$. För en generell MA(q) liknande krav på $\theta$ som för $\phi$ i en generell AR(p). 
+
+För alla modeller som innehåller en MA komponent krävs därför både stationäritet och invertibilitet.
+
+:::{.callout-caution}
+## Övning 3
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap22.2_ex2.rmd")
+
+```
+:::
+
 ## Partiell autokorrelation
 
-Vi har tidigare i detta kapitel kunnat visa hur autokorrelationen beter sig för olika modeller, men i praktiken räcker det inte att undersöka den skattade autokorrelationen (SAC) för att enkelt identifiera en lämplig modell. Vi såg till exempel hur $\rho_k$ för AR(1) och AR(2) uppvisade samma långsamt avtagande mönster. Vi behöver därför introducera ett annat mått som kan hjälpa att välja en lämplig ordning på en AR-process, på samma sätt som autokorrelationen tydligt indikerar på en ordning av en MA-process.
+Vi har tidigare i detta kapitel visat hur autokorrelationen beter sig för olika modeller, men i praktiken räcker det inte att undersöka den skattade autokorrelationen (SAC) för att identifiera en lämplig modell. Vi såg till exempel hur $\rho_k$ för AR(1) och AR(2) uppvisade väldigt liknande långsamt avtagande mönster för olika värden på $\phi$ och modellens ordning medan MA(1) och MA(2) uppvisade lika många nollskilda autokorrelationer som ordningen av processen. 
+
+Vi behöver därför introducera ytterligare ett mått som kan hjälpa att välja en lämplig ordning på en AR-process, på samma sätt som autokorrelationen tydligt indikerar på en ordning av en MA-process.
 
 Vi kan definiera den **partiella autokorrelationen** (eng. partial autocorrelation, PAC) som korrelationen mellan $Y_t$ och $Y_{t-k}$ när alla observationer emellan justerats bort. Vi definierar den enligt:
 
@@ -349,7 +499,7 @@ $$
 $$ {#eq-pacf}
 där $\beta_1$ till $\beta_{k-1}$ är parametrar i en linjär prediktor som anpassats för att minimera MSPR till $Y_t$ och $Y_{t-k}$ respektive. PAC kan med denna formulering beskrivas som korrelationen mellan prediktionsfelet från de två tidpunkterna.
 
-För enkelhetens skull anser vi $\phi_{11} = 1$ och kan visa att $\phi_{22}$ som:
+För enkelhetens skull definierar vi $\phi_{11} = 1$ och kan visa att $\phi_{22}$ är:
 $$
   \begin{aligned}
   \phi_{22} = \frac{\rho_2 - \rho_1^2}{1 - \rho_1^2}
@@ -380,14 +530,9 @@ det vill säga ytterligare ett lagg där den partiella autokorrelationen är nol
 
 En generell regel för AR(p) är att för större lagg gäller $\phi_{kk} = 0$ när $k > p$. Detta innebär att vi får samma beteende i den partiella autokorrelationen för en AR-process som vi har i autokorrelationen för en MA-process; antalet nollskilda lagg motsvarar ordningen för processen.
 
-Den partiella autokorrelationen kan också visas för en MA-process. För MA(1) gäller:
+Den partiella autokorrelationen för en MA(1), och generellt för en MA(q), avtar långsamt med större $k$ vilket är samma fenomen som en AR(p)-process uppvisar för autokorrelationen. Vi har alltså två spegelvända beteenden för AR och MA för autokorrelationen och den partiella autokorrelationen. 
 
-$$
-  \begin{aligned}
-  \phi_{22} = \frac{-\theta^2}{1 + \theta^2 + \theta^4}
-  \end{aligned}
-$$
-Den partiella autokorrelationen för en MA(1), och generellt för en MA(q), avtar långsamt med större $k$ vilket är samma fenomen som en AR(p)-process uppvisar för autokorrelationen. Vi har alltså två spegelvända beteenden för AR och MA för autokorrelationen och den partiella autokorrelationen. Vi kan sammanfatta dessa i följande tabell:
+Vi kan sammanfatta dessa i följande tabell:
 
 ```{r}
 #| echo: false
@@ -406,6 +551,17 @@ tibble(
 ```
 
 För enklare tidsserier kan denna tabell användas för att med hjälp av SAC och SPAC (eng. Sample Partial Autocorrelation) identifiera vilken typ av modell som är mest lämplig att använda. För mer komplicerade tidsserier kommer vi behöva ytterligare ett mått som introduceras i @sec-eacf.
+
+:::{.callout-caution}
+## Övning 4
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap22.3_ex1.rmd")
+
+```
+:::
 
 
 ## Referenser {.unnumbered}
