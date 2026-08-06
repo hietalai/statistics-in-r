@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>4&nbsp; Introduktion till regression – Statistisk teori och tillämpningar i R</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -24,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -54,15 +59,14 @@ div.csl-indent {
 <link href="../01-regression/index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-96e8a2c236aee144da7b9dc077376cca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6c85c9fc2bbb9926b7650676933c738f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -189,7 +193,7 @@ div.csl-indent {
 </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -229,8 +233,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
     </a>
@@ -284,10 +286,6 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Sök"></div>
@@ -665,7 +663,7 @@ Y|X \overset{\mathrm{iid}}{\sim} N(\beta_0 + \beta_1 \cdot X, \sigma^2_{Y|X})
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airplane-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;4.2: Ej lämplig flygplansmodell, <span class="citation" data-cites="chatgpt2024">(<a href="#ref-chatgpt2024" role="doc-biblioref"><span>”Create a model of a commercial airplane where some parts are taken from a car or a boat”</span> 2024</a>)</span>
+Figur&nbsp;4.2: Ej lämplig flygplansmodell, <span class="citation" data-cites="chatgpt2024">(<a href="#ref-chatgpt2024" role="doc-biblioref"><em>Create a model of a commercial airplane where some parts are taken from a car or a boat</em> 2024</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -682,7 +680,7 @@ Figur&nbsp;4.2: Ej lämplig flygplansmodell, <span class="citation" data-cites="
 <img src="00-intro-regression_files/figure-html/fig-correlation-1.png" class="img-fluid figure-img" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-correlation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;4.3: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och antalet dödsfall av drunkning mellan 1999 och 2009 i USA <span class="citation" data-cites="cdcNCHSNational imdbNicolasCage">(<a href="#ref-cdcNCHSNational" role="doc-biblioref"><span>”<span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — cdc.gov”</span></a>; <a href="#ref-imdbNicolasCage" role="doc-biblioref"><span>”<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — imdb.com”</span></a>)</span>
+Figur&nbsp;4.3: Sambandet mellan antalet filmer som Nicolas Cage medverkade i och antalet dödsfall av drunkning mellan 1999 och 2009 i USA <span class="citation" data-cites="cdcNCHSNational imdbNicolasCage">(<a href="#ref-cdcNCHSNational" role="doc-biblioref"><em><span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — cdc.gov</em></a>; <a href="#ref-imdbNicolasCage" role="doc-biblioref"><em><span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — imdb.com</em></a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -827,18 +825,18 @@ Figur&nbsp;4.5: Exempel på relationen mellan variabler i en experimentell studi
 <p>Effekten av en medicin på blodtryck kan också påverkas av personens ålder och kön <span class="citation" data-cites="gu2008">(<a href="#ref-gu2008" role="doc-biblioref">Gu m.fl. 2008</a>)</span> vilka inkluderas i modellen för att isolera den förklarande variabelns effekt. I alla dessa exempel är det endast en effekt som är av intresse att undersöka, trots att modellen innehåller flera variabler och tillhörande lutningsparametrar.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-cdcNCHSNational" class="csl-entry" role="listitem">
-<span>”<span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — cdc.gov”</span>. <a href="https://www.cdc.gov/nchs/" class="uri">https://www.cdc.gov/nchs/</a>.
+<em><span>C</span><span>D</span><span>C</span> - <span>N</span><span>C</span><span>H</span><span>S</span> - <span>N</span>ational <span>C</span>enter for <span>H</span>ealth <span>S</span>tatistics — cdc.gov</em>. <a href="https://www.cdc.gov/nchs/" class="uri">Https://www.cdc.gov/nchs/</a>.
 </div>
 <div id="ref-chatgpt2024" class="csl-entry" role="listitem">
-<span>”Create a model of a commercial airplane where some parts are taken from a car or a boat”</span>. 2024. OpenAI. <a href="https://chat.openai.com/chat">https://chat.openai.com/chat</a>.
+<em>Create a model of a commercial airplane where some parts are taken from a car or a boat</em>. 2024. OpenAI. <a href="https://chat.openai.com/chat">https://chat.openai.com/chat</a>.
 </div>
 <div id="ref-gu2008" class="csl-entry" role="listitem">
 Gu, Qiuping, Vicki L. Burt, Ryne Paulose-Ram, och Charles F. Dillon. 2008. <span>”<span>Gender Differences in Hypertension Treatment, Drug Utilization Patterns, and Blood Pressure Control Among US Adults With Hypertension: Data From the National Health and Nutrition Examination Survey 1999–2004</span>”</span>. <em>American Journal of Hypertension</em> 21 (7): 789–98. <a href="https://doi.org/10.1038/ajh.2008.185">https://doi.org/10.1038/ajh.2008.185</a>.
 </div>
 <div id="ref-imdbNicolasCage" class="csl-entry" role="listitem">
-<span>”<span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — imdb.com”</span>. <a href="https://www.imdb.com/name/nm0000115/" class="uri">https://www.imdb.com/name/nm0000115/</a>.
+<em><span>N</span>icolas <span>C</span>age | <span>A</span>ctor, <span>P</span>roducer, <span>D</span>irector — imdb.com</em>. <a href="https://www.imdb.com/name/nm0000115/" class="uri">Https://www.imdb.com/name/nm0000115/</a>.
 </div>
 </div>
 </section>

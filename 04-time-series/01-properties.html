@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>21&nbsp; Tidsserier – Statistisk teori och tillämpningar i R</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -59,7 +65,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -89,15 +94,14 @@ div.csl-indent {
 <link href="../04-time-series/00-introduction.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-96e8a2c236aee144da7b9dc077376cca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6c85c9fc2bbb9926b7650676933c738f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -522,7 +526,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"code":"checkSolution <- function(object, ex) {\n  \n  if (ex == 1) {\n    assert_that(object |> is.data.frame(), msg = \"Objektet måste vara en data.frame eller tibble\")\n    assert_that(\"t\" %in% colnames(object), msg = \"Variabeln t måste finnas i objektet.\")\n    assert_that(all(seq_len(nrow(prices)) %in% object$t), msg = \"Alla tidssindex måste finnas i objektet.\")\n  \n  } else if (ex == 2) {\n    \n    assert_that(object |> is.numeric(), msg = \"Objektet måste vara ett numeriskt värde.\")\n    answer <- prices$pris[10]\n    \n    assert_that(all.equal(object, answer, tolerance = 1E-3) |> isTRUE(),\n                msg = \"Svaret är fel.\")\n    \n  } else if (ex == 4) {\n    \n    assert_that(object |> class() == \"acf\", msg = \"Objektet måste vara ett objekt från acf().\")\n    \n    answer <- customAcf(randomWalk, plot = FALSE)\n    \n    \n    assert_that(all.equal(answer$acf, object$acf, tolerance = 1E-3) |> isTRUE(),\n                msg = \"Svaret är fel.\")\n  }\n  \n  print(\"Korrekt!\")\n  \n}","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"setup","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"## Läser in exempeldata i tre steg\n#  URL för källan\nurl <- \"https://hietalai.github.io/statistics-in-r/resources/data/electricityprice.csv\"\n\n#  Laddar ner data från URL\ndownload.file(url, \"electricityprice.csv\", quiet = TRUE)\n\n#  Läser in data till R\nprices <- read_csv(\"electricityprice.csv\", show_col_types = FALSE)\n\n#  Visar de första observationerna i serien\nhead(prices)","id":2,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Sparar den bearbetade tibblen i samma objekt: prices\nprices <- \n  prices |> \n  # mutate() förändrar eller skapar variabler i objektet\n  mutate(\n    t = seq_len(nrow(prices))\n  )\n\nhead(prices)","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"dataWithT <- ______\n\ncheckSolution(dataWithT, ex = 1)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"#  Plockar ut tidpunkt 5\nprices |> \n  slice(5) |> \n  pull(pris)\n\n# Alternativt plockar ut rad 5 och variabeln pris från en data.frame\nprices[5, \"pris\"]\n\n# Alternativt plockar ut element 5 från vektorn (variabeln) pris\nprices$pris[5]","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# TODO Tilldela värdet från den tionde observationen i serien\ny10 <- ________\n\ncheckSolution(y10, ex = 2)","id":6,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Dra 100 observationer från normalfördelningen\nn <- 100\n\nwhiteNoise <- rnorm(n = n, mean = 0, sd = 1)\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = whiteNoise\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":7,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"En serie med vitt brus","fig-height":"3","fig-width":"5","label":"fig-white-noise","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Ange längden av serien som ska genereras\nn <- 100\n\n# Initialisera ett tomt objekt\nrandomWalk <- numeric()\n\n# Generera en Random Walk serie\nfor (i in seq_len(n)) {\n  if (i == 1) {\n    randomWalk[i] <- rnorm(n = 1, mean = 0, sd = 1)\n  } else {\n    randomWalk[i] <- randomWalk[i-1] + rnorm(n = 1, mean = 0, sd = 1)\n  }\n}\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = randomWalk\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":8,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"En serie som visar en Random Walk","fig-height":"3","fig-width":"5","label":"fig-random-walk","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"n <- 100\n\n# Använd samma vita brus serie som en samling av dragningar från N(0,1)\net <- whiteNoise\nmovingAverage <- numeric()\n\nfor (i in seq_len(n)) {\n  if (i == 1) {\n    movingAverage[i] <- NA\n  } else {\n    movingAverage[i] <- mean(et[i] + et[i - 1])\n  }\n}\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = movingAverage\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":9,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"Exempelserie för ett glidande medelvärde","fig-height":"3","fig-width":"5","label":"fig-moving-average","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"false"}},{"code":"customAcf <- function(series, plot = FALSE) {\n  # Använder acf() från paketet stats\n  SAC <- acf(series, plot = FALSE)\n  \n  SAC$series <- deparse(substitute(series))\n  \n  # Tar bort lag 0 eftersom det alltid kommer vara SAC = 1\n  SAC$acf <- SAC$acf[-1,,, drop = FALSE]\n  SAC$lag <- SAC$lag[-1,,, drop = FALSE]\n  \n  if (plot) {\n    plot(SAC)  \n  }\n  \n  return(SAC)\n}\n\nSAC <- customAcf(whiteNoise, plot = TRUE)","id":10,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för vita brus serien med egenskapad kod","fig-height":"3","fig-width":"5","label":"unnamed-chunk-10","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# TODO Skapa ett acf-objekt för randomWalk\nSAC <- ________\n\ncheckSolution(SAC, ex = 4)","id":11,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för en Random Walk serie","fig-height":"3","fig-width":"5","label":"unnamed-chunk-11","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Differentiera en icke-stationär serie\ndiffY <- diff(randomWalk, lag = 1, differences = 1)\n\n# Beräkna SAC för den differentierade serien\ncustomAcf(diffY, plot = TRUE)","id":12,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för den differentierade Random Walk-serien","fig-height":"3","fig-width":"5","label":"fig-sac-diff-rw","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+globalThis.qwebrCellDetails = [{"code":"checkSolution <- function(object, ex) {\n  \n  if (ex == 1) {\n    assert_that(object |> is.data.frame(), msg = \"Objektet måste vara en data.frame eller tibble\")\n    assert_that(\"t\" %in% colnames(object), msg = \"Variabeln t måste finnas i objektet.\")\n    assert_that(all(seq_len(nrow(prices)) %in% object$t), msg = \"Alla tidssindex måste finnas i objektet.\")\n  \n  } else if (ex == 2) {\n    \n    assert_that(object |> is.numeric(), msg = \"Objektet måste vara ett numeriskt värde.\")\n    answer <- prices$pris[10]\n    \n    assert_that(all.equal(object, answer, tolerance = 1E-3) |> isTRUE(),\n                msg = \"Svaret är fel.\")\n    \n  } else if (ex == 4) {\n    \n    assert_that(object |> class() == \"acf\", msg = \"Objektet måste vara ett objekt från acf().\")\n    \n    answer <- customAcf(randomWalk, plot = FALSE)\n    \n    \n    assert_that(all.equal(answer$acf, object$acf, tolerance = 1E-3) |> isTRUE(),\n                msg = \"Svaret är fel.\")\n  }\n  \n  print(\"Korrekt!\")\n  \n}","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"setup","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"## Läser in exempeldata i tre steg\n#  URL för källan\nurl <- \"https://hietalai.github.io/statistics-in-r/resources/data/electricityprice.csv\"\n\n#  Laddar ner data från URL\ndownload.file(url, \"electricityprice.csv\", quiet = TRUE)\n\n#  Läser in data till R\nprices <- read_csv(\"electricityprice.csv\", show_col_types = FALSE)\n\n#  Visar de första observationerna i serien\nhead(prices)","id":2,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"t <- seq_len(nrow(prices))\n\nt","id":3,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"dataWithT <- ______\n\ncheckSolution(dataWithT, ex = 1)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"#  Plockar ut tidpunkt 5\nprices |> \n  slice(5) |> \n  pull(pris)\n\n# Alternativt plockar ut rad 5 och variabeln pris från en data.frame\nprices[5, \"pris\"]\n\n# Alternativt plockar ut element 5 från vektorn (variabeln) pris\nprices$pris[5]","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# TODO Tilldela värdet från den tionde observationen i serien\ny10 <- ________\n\ncheckSolution(y10, ex = 2)","id":6,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Dra 100 observationer från normalfördelningen\nn <- 100\n\nwhiteNoise <- rnorm(n = n, mean = 0, sd = 1)\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = whiteNoise\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":7,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"En serie med vitt brus","fig-height":"3","fig-width":"5","label":"fig-white-noise","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Ange längden av serien som ska genereras\nn <- 100\n\n# Initialisera ett tomt objekt\nrandomWalk <- numeric()\n\n# Generera en Random Walk serie\nfor (i in seq_len(n)) {\n  if (i == 1) {\n    randomWalk[i] <- rnorm(n = 1, mean = 0, sd = 1)\n  } else {\n    randomWalk[i] <- randomWalk[i-1] + rnorm(n = 1, mean = 0, sd = 1)\n  }\n}\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = randomWalk\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":8,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"En serie som visar en Random Walk","fig-height":"3","fig-width":"5","label":"fig-random-walk","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"n <- 100\n\n# Använd samma vita brus serie som en samling av dragningar från N(0,1)\net <- whiteNoise\nmovingAverage <- numeric()\n\nfor (i in seq_len(n)) {\n  if (i == 1) {\n    movingAverage[i] <- NA\n  } else {\n    movingAverage[i] <- mean(et[i] + et[i - 1])\n  }\n}\n\n# Visualisera serien i ett linjediagram\ntibble(\n  t = seq_len(n),\n  yt = movingAverage\n) |> \n  ggplot() + aes(x = t, y = yt) + geom_line() + \n  theme_bw()","id":9,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"Exempelserie för ett glidande medelvärde","fig-height":"3","fig-width":"5","label":"fig-moving-average","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"false"}},{"code":"customAcf <- function(series, plot = FALSE) {\n  # Använder acf() från paketet stats\n  SAC <- acf(series, plot = FALSE)\n  \n  SAC$series <- deparse(substitute(series))\n  \n  # Tar bort lag 0 eftersom det alltid kommer vara SAC = 1\n  SAC$acf <- SAC$acf[-1,,, drop = FALSE]\n  SAC$lag <- SAC$lag[-1,,, drop = FALSE]\n  \n  if (plot) {\n    plot(SAC)  \n  }\n  \n  return(SAC)\n}\n\nSAC <- customAcf(whiteNoise, plot = TRUE)","id":10,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"SAC för vita brus serien med egenskapad kod","fig-height":"3","fig-width":"5","label":"unnamed-chunk-10","message":"true","out-height":"","out-width":"90%","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 </script>
 <script type="module">
@@ -1777,7 +1781,7 @@ globalThis.qwebrExecuteCode = async function (
 </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -1817,8 +1821,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
     </a>
@@ -1872,10 +1874,6 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Sök"></div>
@@ -2135,7 +2133,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#databearbetning" id="toc-databearbetning" class="nav-link active" data-scroll-target="#databearbetning"><span class="header-section-number">21.1</span> Databearbetning</a></li>
-  <li><a href="#beskrivande-mått" id="toc-beskrivande-mått" class="nav-link" data-scroll-target="#beskrivande-mått"><span class="header-section-number">21.2</span> Beskrivande mått</a></li>
+  <li><a href="#beskrivande-mått-av-en-tidsserie" id="toc-beskrivande-mått-av-en-tidsserie" class="nav-link" data-scroll-target="#beskrivande-mått-av-en-tidsserie"><span class="header-section-number">21.2</span> Beskrivande mått av en tidsserie</a></li>
   <li><a href="#enkla-tidsserier" id="toc-enkla-tidsserier" class="nav-link" data-scroll-target="#enkla-tidsserier"><span class="header-section-number">21.3</span> Enkla tidsserier</a>
   <ul class="collapse">
   <li><a href="#sec-white-noise" id="toc-sec-white-noise" class="nav-link" data-scroll-target="#sec-white-noise"><span class="header-section-number">21.3.1</span> Vitt brus</a></li>
@@ -2143,7 +2141,7 @@ window.Quarto = {
   <li><a href="#sec-moving-average-series" id="toc-sec-moving-average-series" class="nav-link" data-scroll-target="#sec-moving-average-series"><span class="header-section-number">21.3.3</span> Glidande medelvärde</a></li>
   </ul></li>
   <li><a href="#stationäritet" id="toc-stationäritet" class="nav-link" data-scroll-target="#stationäritet"><span class="header-section-number">21.4</span> Stationäritet</a></li>
-  <li><a href="#sac-och-spac" id="toc-sac-och-spac" class="nav-link" data-scroll-target="#sac-och-spac"><span class="header-section-number">21.5</span> SAC och SPAC</a></li>
+  <li><a href="#observerad-autokorrelation-sac" id="toc-observerad-autokorrelation-sac" class="nav-link" data-scroll-target="#observerad-autokorrelation-sac"><span class="header-section-number">21.5</span> Observerad Autokorrelation (SAC)</a></li>
   <li><a href="#sec-differentiation" id="toc-sec-differentiation" class="nav-link" data-scroll-target="#sec-differentiation"><span class="header-section-number">21.6</span> Differentiering</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
@@ -2458,14 +2456,15 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <!-- CONTENT -->
 <div id="qwebr-insertion-location-1"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Tidsserierna som visualiserades i föregående kapitel sparas som data med två kolumner; tid och mätvariabeln. Varje rad motsvarar mätvariabelns värde vid tidpunkt <span class="math inline">\(t\)</span>, betecknad som <span class="math inline">\(Y_t\)</span>. Det är ofta i detta format som vi kommer vilja strukturera data för analys men vi kan ibland få tillgång till data med en annan struktur eller att vi av andra orsaker behöver bearbeta data på olika sätt.</p>
+<p>När det kommer till hantering, bearbetning och analys av tidsserier i R är det vanligast att vi sparar serien som en <code>tibble</code> med två kolumner; tid och variabeln som mäts. Varje rad motsvarar mätvariabelns värde vid tidpunkt <span class="math inline">\(t\)</span>, betecknad som <span class="math inline">\(Y_t\)</span>. Om vi får tillgång till data med en annan struktur behöver vi bearbeta om den till detta format.</p>
 <section id="databearbetning" class="level2" data-number="21.1">
 <h2 data-number="21.1" class="anchored" data-anchor-id="databearbetning"><span class="header-section-number">21.1</span> Databearbetning</h2>
 <p>Vi kan titta närmare på det exempeldata om elpriser som visualiserades i <a href="00-introduction.html#fig-price" class="quarto-xref">Figur&nbsp;<span>20.1</span></a>.</p>
 <div id="qwebr-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>I utskriften visas de sex första observationerna, med variabler som beskriver tidpunkten för mätningen och mätvariabeln elpris (<span class="math inline">\(Y_t\)</span>). Notera att tidsvariabeln <code>tid</code> i detta fall inte är numerisk utan en textsträng som innehåller både år och månad. För att analysera och visualisera detta data krävs en bearbetning till ett <strong>tidsindex</strong>, <span class="math inline">\(t\)</span>.</p>
-<p>Det enklaste sättet att göra detta är att lägga till en ny variabel i datamaterialet som helt enkelt räknar från 1 till den sista observationen i serien. Med hjälp av funktionerna <code>seq_len()</code> och <code>nrow()</code> kan vi skapa en sekvens av antalet raders längd.</p>
+<p>I utskriften visas de sex första observationerna, med ett antal variabler som beskriver tidpunkten för mätningen och mätvariabeln <code>pris</code> (<span class="math inline">\(Y_t\)</span>).</p>
+<p>Notera att tidsvariabeln <code>tid</code> i detta fall inte är numerisk utan en textsträng som innehåller både år och månad. För att analysera och visualisera detta data krävs en bearbetning till ett <strong>tidsindex</strong>, <span class="math inline">\(t\)</span>, som endast beskriver ordningen av observationer.</p>
+<p>Det enklaste sättet att göra detta är att skapa en ny variabel som helt enkelt räknar från 1 till den sista observationen i serien. Med hjälp av funktionerna <code>seq_len()</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> och <code>nrow()</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> kan vi skapa en sekvens av antalet raders längd.</p>
 <div id="qwebr-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -2478,9 +2477,10 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Kom ihåg att vi måste spara resultatet av databearbetningen i ett objekt för att den ska kunna användas vid ett senare tillfälle.</p>
+<p>Kom ihåg att vi inom R måste spara resultatet av databearbetningen i ett objekt för att den ska kunna användas vid ett senare tillfälle. Just nu finns endast <code>t</code> som ett separat objekt utanför datamaterialet <code>prices</code>.</p>
 </div>
 </div>
+<p>Testa nu att lägga till detta tidsindex till datamaterialet istället för att en separat vektor.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2500,7 +2500,11 @@ Viktigt
 <div id="qwebr-insertion-location-5"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>I utskriften visas nu samma <span class="math inline">\(Y_5\)</span> tre gånger, med något olika format. Vi behöver inte tänka så mycket på formatet av det resulterande objektet just nu, men det är värt att återkomma till när vi senare vill fortsätta analyserna då vissa metoder/funktioner kräver vissa specifika format.</p>
-<p>Verbet <code>slice()</code> plockar ut specifika rader och <code>pull()</code> plockar ut en specifik kolumn till en vektor. Det andra alternativet är att använda <code>[radindex, kolumnindex]</code> på ett objekt innehållande både rader och kolumner där kolumnindex kan anropas med antingen namnet på kolumnen om det är lättare att identifiera eller siffror. Om vi först väljer ut kolumnen <code>pris</code> från datamaterialet med hjälp av <code>$</code> har objektet endast en dimension och då används bara ett <code>[index]</code>.</p>
+<ul>
+<li>Verbet <code>slice()</code> plockar ut specifika rader och <code>pull()</code> plockar ut en specifik kolumn vilket resulterar i en vektor.</li>
+<li>Det andra alternativet är att använda <code>[radindex, kolumnindex]</code> på ett objekt innehållande både rader och kolumner där kolumnindex kan anropas med antingen namnet på kolumnen om det är lättare att identifiera eller siffror.</li>
+<li>Om vi först väljer ut kolumnen <code>pris</code> från datamaterialet med hjälp av <code>$</code> har objektet endast en dimension och då används bara ett <code>[index]</code>.</li>
+</ul>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2514,6 +2518,7 @@ Viktigt
 <p>Det är viktigt att komma ihåg att R indexerar med bas 1, alltså första elementet i en dimension är numrerad som 1.</p>
 </div>
 </div>
+<p>Testa nu själv att plocka ut det tionde priset i serien.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2530,10 +2535,10 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="beskrivande-mått" class="level2" data-number="21.2">
-<h2 data-number="21.2" class="anchored" data-anchor-id="beskrivande-mått"><span class="header-section-number">21.2</span> Beskrivande mått</h2>
-<p>Vi kan anse vardera <span class="math inline">\(Y_t\)</span> vara en slumpvariabel vilket innebär att hela serien är en sekvens av slumpmässiga utfall. På grund av tidsberoendet mellan intilliggande observationer kan vi definiera detta som en <strong>stokastisk process</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Ordet “process” antyder att vi tillåter en riktad påverkan mellan mätvärden till skillnad från ett datamaterial med stokastiska variabler där observationerna är oberoende.</p>
-<p>Likt en regressionsmodell kan vi sammanfatta serien med dess väntevärde och varians<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> men tidsberoendet kräver att vi lägger till ytterligare en aspekt av beskrivningen, relationen mellan olika tidssteg.</p>
+<section id="beskrivande-mått-av-en-tidsserie" class="level2" data-number="21.2">
+<h2 data-number="21.2" class="anchored" data-anchor-id="beskrivande-mått-av-en-tidsserie"><span class="header-section-number">21.2</span> Beskrivande mått av en tidsserie</h2>
+<p>Vi kan anse vardera <span class="math inline">\(Y_t\)</span> vara en slumpvariabel vilket innebär att hela serien är en sekvens av slumpmässiga utfall. På grund av tidsberoendet mellan intilliggande observationer kan vi definiera detta som en <strong>stokastisk process</strong><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Ordet “process” antyder att vi tillåter en riktad påverkan mellan mätvärden till skillnad från ett datamaterial med stokastiska <em>variabler</em> där observationerna är fullt oberoende.</p>
+<p>Likt en regressionsmodell kan vi sammanfatta serien med dess väntevärde och varians<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> men tidsberoendet kräver att vi lägger till ytterligare en aspekt av beskrivningen; relationen mellan olika tidssteg.</p>
 <p>Vi kan börja med att definiera väntevärdet av den stokastiska processen enligt:</p>
 <p><span id="eq-t-mean"><span class="math display">\[
   \begin{aligned}
@@ -2547,21 +2552,33 @@ Viktigt
 \tag{21.2}\]</span></span> där även variansen kan variera för olika värden på <span class="math inline">\(t\)</span>.</p>
 <!-- På samma sätt som i linjär regression kommer en bra tidsseriemodell kunna identifiera TODO KANSKE UTÖKA DENNA MENING -->
 <p>Tidsberoendet i serien kan modelleras med hjälp av <strong>autokovarians</strong> och <strong>autokorrelation</strong>, där den senare är mer använd på grund av dess enklare tolkning. Tillägget av ordet “auto” på mått som vanligtvis används för att beskriva relationen <em>mellan</em> två olika variabler, betyder att vi nu fokuserar på relationen mellan två tidssteg <em>inom</em> samma variabel.</p>
-<p>Autokovariansen mellan tid <span class="math inline">\(t\)</span> och <span class="math inline">\(s\)</span> definieras med hjälp av den grekiska bokstaven gamma som: <span id="eq-autocov"><span class="math display">\[
+<p>Autokovariansen mellan två tidpunkter, tid <span class="math inline">\(t\)</span> och <span class="math inline">\(s\)</span>, definieras med hjälp av den grekiska bokstaven gamma som: <span id="eq-autocov"><span class="math display">\[
   \begin{aligned}
   \gamma_{t,s} &amp;= cov(Y_t, Y_s) \\
   &amp;= E[(Y_t - \mu_t)(Y_s - \mu_s)]\\
   &amp;= E[Y_t Y_s] - \mu_t \mu_s
   \end{aligned}
 \tag{21.3}\]</span></span></p>
-<p>Autokorrelationen definieras med hjälp av den grekiska bokstaven rho<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> som: <span id="eq-autocor"><span class="math display">\[
+<p>Autokorrelationen mellan de två tidpunkterna definieras med hjälp av den grekiska bokstaven rho<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> som: <span id="eq-autocor"><span class="math display">\[
   \begin{aligned}
   \rho_{t,s} &amp;= corr(Y_t, Y_s) \\
   &amp;= \frac{\gamma_{t,s}}{\sqrt{\gamma_{t,t}\gamma_{s,s}}}
   \end{aligned}
 \tag{21.4}\]</span></span></p>
-<p>Autokovariansen mäter det linjära sambandet mellan de två tidsstegen där större värden indikerar på ett starkare samband. Dock är detta mått beroende av skalan på mätvariabeln vilket medför att autokorrelationen med dess skala från -1 till 1 är generellt lättare att tolka. Om <span class="math inline">\(\rho_{t, s} \approx \pm 1\)</span> indikeras ett starkt linjärt beroende medan värden nära 0 indikerar ett svagt linjärt beroende. När <span class="math inline">\(\rho_{t,s} = 0\)</span> anser vi att tidpunkterna är okorrelerade.</p>
-<p>Detta mått kan till exempel användas i en linjär regressionsmodell där ett av antagandena att feltermerna och därmed modellens residualer är okorrelerade. Under antagande att residualerna i observationsordning är en form av stokastisk process skulle autokorrelationen mellan intilliggande observationer kunna användas för att kontrollera ifall antagandet är uppfylld.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>Autokovariansen mäter det linjära sambandet mellan de två tidsstegen, där större värden indikerar på ett starkare samband. Dock är detta mått beroende av skalan på mätvariabeln vilket medför att autokorrelationen, med dess skala från -1 till 1, är generellt lättare att tolka. Om <span class="math inline">\(\rho_{t, s} \approx \pm 1\)</span> indikeras ett starkt linjärt beroende medan värden nära 0 indikerar ett svagt linjärt beroende. När <span class="math inline">\(\rho_{t,s} = 0\)</span> anser vi att tidpunkterna är okorrelerade.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Autokorrelationen kan till exempel användas i en linjär regressionsmodell där ett av antagandena att feltermerna och därmed modellens residualer är okorrelerade. Under antagande att residualerna i observationsordning är en form av stokastisk process skulle autokorrelationen mellan intilliggande observationer kunna användas för att kontrollera ifall antagandet är uppfylld.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+</div>
+</div>
 <p>Sammanfattningsvis kan vi beskriva egenskaper hos autokovarians och autokorrelation enligt:</p>
 <p><span id="eq-properties"><span class="math display">\[
   \begin{aligned}
@@ -2571,14 +2588,21 @@ Viktigt
   \end{aligned}
 \tag{21.5}\]</span></span></p>
 <p>I ord betyder dessa egenskaper att:</p>
+<div class="columns">
+<div class="column" style="width:49%;">
 <ul>
 <li>autokovariansen mellan samma tidpunkt är detsamma som variansen för tidpunkten,</li>
 <li>autokovariansen mellan <span class="math inline">\(s\)</span> och <span class="math inline">\(t\)</span> är densamma som mellan <span class="math inline">\(t\)</span> och <span class="math inline">\(s\)</span> då antalet tidssteg är lika,</li>
 <li>beloppet av autokovariansen mellan två tidssteg är alltid högst roten ur produkten av de två tidsstegens varianser,</li>
+</ul>
+</div><div class="column" style="width:49%;">
+<ul>
 <li>autokorrelationen mellan samma tidpunkt är 1,</li>
 <li>autokorrelationen mellan <span class="math inline">\(s\)</span> och <span class="math inline">\(t\)</span> är densamma som mellan <span class="math inline">\(t\)</span> och <span class="math inline">\(s\)</span> då antalet tidssteg är lika,</li>
 <li>autokorrelationen begränsas mellan -1 och 1.</li>
 </ul>
+</div>
+</div>
 </section>
 <section id="enkla-tidsserier" class="level2" data-number="21.3">
 <h2 data-number="21.3" class="anchored" data-anchor-id="enkla-tidsserier"><span class="header-section-number">21.3</span> Enkla tidsserier</h2>
@@ -2592,7 +2616,20 @@ Viktigt
 \]</span> Vi kan i R generera en serie med vitt brus genom dragningar från <code>rnorm()</code> med väntevärde 0 och en godytcklig varians.</p>
 <div id="qwebr-insertion-location-7"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Diagrammet visar en serie där i princip ingen trend eller mönster kan utläsas. Serien ser ut att vara centrerad kring <span class="math inline">\(y = 0\)</span> med en viss slumpmässig variation. Testa att ändra värdet på <code>sd</code> i funktionen <code>rnorm()</code> till något annat tal, kanske ett större. Diagrammet ser minst lika slumpmässigt ut men vi ser en större variation kring <span class="math inline">\(y = 0\)</span>.</p>
+<p>Diagrammet visar en serie där i princip ingen trend eller mönster kan utläsas. Serien ser ut att vara centrerad kring <span class="math inline">\(y = 0\)</span> med en viss slumpmässig variation. Testa att ändra värdet på <code>sd</code> i funktionen <code>rnorm()</code> till något annat tal, kanske ett större. Diagrammet ser minst lika slumpmässigt ut men vi ser då en större variation kring <span class="math inline">\(y = 0\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Vid linjär regression är det denna sorts mönster vi vill utläsa på residualerna över tid för att uppfylla kravet om oberoende för modellen. Detsamma gäller även för tidsserier, där vi vill att modellen endast ska efterlämna vitt brus i sina residualer.</p>
+</div>
+</div>
 <p>På grund av att vi drar oberoende dragningar antas intilliggande observationer inte ha någon påverkan på varandra och vi kan sammanfatta seriens egenskaper med följande beskrivande mått: <span class="math display">\[
   \begin{aligned}
   \mu_t = E[e_t] &amp;= 0 \quad \text{för alla } t\\
@@ -2619,7 +2656,7 @@ Viktigt
 \tag{21.6}\]</span></span></p>
 <div id="qwebr-insertion-location-8"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Namnet Random Walk (sv. slumpmässig promenad) kommer från representationen att man tar ett slumpmässigt steg vid varje tidpunkt och hela promenadens läge påverkas av var man har gått tidigare. Trots att serien endast består av slumpmässiga tilläggssteg ser det fortfarande ut som att serien har någon form av mönster, åtminstone en trend. Dock kan väntevärdet av serien beräknas till 0 för varje <span class="math inline">\(t\)</span> enligt: <span class="math display">\[
+<p>Namnet Random Walk (sv. slumpmässig promenad) kommer från att man vid en (slumpmässig) promenad tar (slumpmässiga) steg vid varje tidpunkt men var du befinner dig vid varje steg påverkas av var du gått tidigare. Trots att en Random Walk serie endast består av slumpmässiga tilläggssteg ser det fortfarande ut som att serien har någon form av mönster, åtminstone en trend. Dock kan väntevärdet av serien beräknas till 0 för varje <span class="math inline">\(t\)</span> enligt: <span class="math display">\[
   \begin{aligned}
   \mu_t = E[Y_t] &amp;= E[e_1 + e_2 + \dots + e_t] \\
   &amp;= E[e_1] + E[e_2] + \dots + E[e_t] \\
@@ -2687,7 +2724,7 @@ Figur&nbsp;21.1: Autokorrelationen för olika avstånd av tidssteg t och s i en 
 </div>
 </div>
 </div>
-<p>Figuren visar att ett kortare avstånd mellan <span class="math inline">\(t\)</span> och <span class="math inline">\(s\)</span>, ett kortare antal steg, visar en starkare autokorrelation än längre avstånd. Vi ser också ett fenomen där längre serier, stora <span class="math inline">\(s\)</span>, generellt har en långsammare nedgång av autokorrelationen när avståndet ökar vilket beror på att de delar en större del av serien.</p>
+<p>Figuren visar att ett kortare avstånd mellan <span class="math inline">\(t\)</span> och <span class="math inline">\(s\)</span>, ett kortare antal steg, visar en starkare autokorrelation än längre avstånd. Vi ser också ett fenomen där längre serier, stora <span class="math inline">\(s\)</span>, generellt har en långsammare nedgång av autokorrelationen när avståndet ökar vilket beror på att de delar en större del av serien. För att koppla tillbaka detta till den fysiska promenaden kan vi tolka det som att vår placering nära i tiden är mer sammankopplad med varandra än vår placering längre bort i tiden, vilket känns ganska naturligt.</p>
 <p>Till exempel har följande kombinationer mellan <span class="math inline">\(t\)</span> och <span class="math inline">\(s\)</span> samma avstånd men olika styrka:</p>
 <p><span class="math display">\[
   \begin{aligned}
@@ -2705,7 +2742,7 @@ Figur&nbsp;21.1: Autokorrelationen för olika avstånd av tidssteg t och s i en 
 \]</span></p>
 <div id="qwebr-insertion-location-9"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Ett glidande medelvärde är mindre <strong>volatil</strong> (mindre instabil med långsammare förändringar) än den ursprungliga serien vilket vi kan se genom att jämföra detta diagram med diagrammet över det vita bruset. Detta uppstår eftersom vi beräknar ett medelvärde mellan intilliggande punkter som successivt jämnar ut seriens värden över tid.</p>
+<p>Ett glidande medelvärde är mindre <strong>volatil</strong> (mindre instabil och förändringar sker mycket långsammare) än den ursprungliga serien vilket vi kan se genom att jämföra detta diagram med vita bruset. Orsaken till denna är att vi beräknar ett medelvärde mellan intilliggande punkter som agerar en form av utjämnare successivt över tid.</p>
 <p>Väntevärdet och variansen av serien kan beräknas till:</p>
 <p><span class="math display">\[
   \begin{aligned}
@@ -2760,12 +2797,44 @@ Notera
 <p>När <span class="math inline">\(k\)</span> introduceras som en beteckning av antalet steg, väljer vi härefter att beskriva måtten utefter ett antagande att nuvarande tidpunkt påverkas av äldre tidpunkter. Detta blir naturligt då framtida tidpunkter i praktiken ännu inte observerats när vi står vid tid <span class="math inline">\(t\)</span>.</p>
 </div>
 </div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 3
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>Anta att <span class="math inline">\(e_t\)</span> är vitt brus med väntevärde <span class="math inline">\(0\)</span>, konstant varians <span class="math inline">\(\sigma_e^2\)</span> och oberoende observationer. En tidsserie definieras som</p>
+<p><span class="math display">\[
+Y_t = \frac{e_t + e_{t-1}}{2}.
+\]</span></p>
+<p>Vilka av följande påståenden om serien är korrekta?</p>
+<div id="webex-a9c5b16f1c234bcf255f8f631b3f1ce3" class="webex-checkboxgroup" data-answer="OghPBE4AGlZs">
+<label><input type="checkbox" autocomplete="off" name="a9c5b16f1c234bcf255f8f631b3f1ce3"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är korrelerade eftersom båda innehåller slumpvariabeln <span class="math inline">\(e_{t-1}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="a9c5b16f1c234bcf255f8f631b3f1ce3"><span>Kovariansen mellan <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är <span class="math inline">\(\sigma_e^2/4\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="a9c5b16f1c234bcf255f8f631b3f1ce3"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-2}\)</span> är okorrelerade eftersom de inte innehåller någon gemensam slumpvariabel.</span></label><label><input type="checkbox" autocomplete="off" name="a9c5b16f1c234bcf255f8f631b3f1ce3"><span><span class="math inline">\(\operatorname{Var}(Y_t) = \sigma_e^2\)</span>, eftersom serien består av två termer som båda har variansen <span class="math inline">\(\sigma_e^2\)</span>.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Sant. Både <span class="math inline">\(Y_t = (e_t + e_{t-1})/2\)</span> och <span class="math inline">\(Y_{t-1} = (e_{t-1} + e_{t-2})/2\)</span> innehåller <span class="math inline">\(e_{t-1}\)</span>. Den gemensamma slumpvariabeln gör att kovariansen är positiv.</li>
+<li>Sant. Den enda gemensamma slumpvariabeln i <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är <span class="math inline">\(e_{t-1}\)</span>. Därför gäller <span class="math inline">\(\operatorname{Cov}(Y_t,Y_{t-1}) = \operatorname{Var}(e_{t-1})/4 = \sigma_e^2/4\)</span>.</li>
+<li>Sant. <span class="math inline">\(Y_t\)</span> innehåller <span class="math inline">\(e_t\)</span> och <span class="math inline">\(e_{t-1}\)</span>, medan <span class="math inline">\(Y_{t-2}\)</span> innehåller <span class="math inline">\(e_{t-2}\)</span> och <span class="math inline">\(e_{t-3}\)</span>. Eftersom termerna i det vita bruset är oberoende är <span class="math inline">\(\operatorname{Cov}(Y_t,Y_{t-2}) = 0\)</span>.</li>
+<li>Falskt. Eftersom <span class="math inline">\(e_t\)</span> och <span class="math inline">\(e_{t-1}\)</span> är oberoende gäller <span class="math inline">\(\operatorname{Var}(Y_t) = \{\operatorname{Var}(e_t) + \operatorname{Var}(e_{t-1})\}/4 = \sigma_e^2/2\)</span>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="stationäritet" class="level2" data-number="21.4">
 <h2 data-number="21.4" class="anchored" data-anchor-id="stationäritet"><span class="header-section-number">21.4</span> Stationäritet</h2>
-<p>Det sista exemplet beskriver en önskvärd egenskap hos tidsserier, <strong>stationäritet</strong>, vilket betyder att tidsseriens egenskaper hålls konstant genomgående över hela serien. Denna egenskap möjliggör att trovärdiga slutsatser kan dras från inferensmetoder. <!-- TODO: meh --></p>
-<p>Inom detta underlag kommer vi fokusera på en svag variant av stationäritet (vi kommer enbart kalla det stationäritet) som uppfylls genom två krav: <span class="math display">\[
+<p>Egenskaperna hos ett glidande medelvärde beskriver något speciellt; de beskrivande egenskaperna hålls konstant genomgående över hela serien. Detta fenomen kallas för <strong>stationäritet</strong> som möjliggör att trovärdiga slutsatser kan dras från inferensmetoder.</p>
+<p>Inom detta underlag kommer vi fokusera på en svag variant av stationäritet (vi kommer dock enbart kalla det stationäritet) som uppfylls genom två krav: <span class="math display">\[
   \begin{aligned}
   \mu_t &amp;= \mu \\
   \gamma_{t, t-k} &amp;= \gamma_{0,k}
@@ -2806,40 +2875,82 @@ Notera
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Caution</span>Övning 3
+<span class="screen-reader-only">Caution</span>Övning 4
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <div class="webex-question">
 <div class="webex-check webex-box">
-<p>Markera de serier som anses uppfylla kravet om svag stationäritet.</p>
-<div id="webex-98078e3ca10b2265fb5e1f6744e90da3" class="webex-checkboxgroup" data-answer="YgkcBxRUbg==">
-<label><input type="checkbox" autocomplete="off" name="98078e3ca10b2265fb5e1f6744e90da3"><span>Glidande medelvärde</span></label><label><input type="checkbox" autocomplete="off" name="98078e3ca10b2265fb5e1f6744e90da3"><span>Random Walk</span></label><label><input type="checkbox" autocomplete="off" name="98078e3ca10b2265fb5e1f6744e90da3"><span>Vitt brus</span></label>
+<p>En serie av vitt brus <span class="math inline">\(e_t\)</span> har väntevärde <span class="math inline">\(0\)</span>, konstant varians och är stationär. En random walk definieras som <span class="math inline">\(Y_t=Y_{t-1}+e_t\)</span>. Trots att <span class="math inline">\(e_t\)</span> är stationärt är <span class="math inline">\(Y_t\)</span> vanligtvis inte stationär. Vilken förklaring är korrekt?</p>
+<div id="webex-0c773712e544df49f361a8ba22a4725a" class="webex-radiogroup" data-answer="a1IbBx8HHQI4">
+<label><input type="radio" autocomplete="off" name="0c773712e544df49f361a8ba22a4725a"><span>En random walk är inte stationär eftersom variansen ökar när nya slumpchocker ackumuleras över tid.</span></label><label><input type="radio" autocomplete="off" name="0c773712e544df49f361a8ba22a4725a"><span>En random walk är inte stationär eftersom vitt brus alltid är autokorrelerat.</span></label><label><input type="radio" autocomplete="off" name="0c773712e544df49f361a8ba22a4725a"><span>En random walk är inte stationär eftersom väntevärdet alltid ökar över tid.</span></label><label><input type="radio" autocomplete="off" name="0c773712e544df49f361a8ba22a4725a"><span>En random walk är inte stationär eftersom den inte innehåller någon slumpmässighet.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Sant.</li>
-<li>Falskt.</li>
-<li>Sant.</li>
+<li>Sant. Slumpchockerna summeras över tid, vilket gör att variansen ökar.</li>
+<li>Falskt. Vitt brus saknar autokorrelation mellan observationer vid olika tidpunkter.</li>
+<li>Falskt. För en random walk utan drift är väntevärdet konstant om startvärdet är konstant.</li>
+<li>Falskt. En random walk är slumpmässig eftersom den byggs upp av slumpchocker.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 5
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>Många tidsseriemodeller bygger på antagandet om svag stationäritet. Det innebär att serien har konstant väntevärde och varians samt att autokovariansen mellan <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-k}\)</span> endast beror på avståndet <span class="math inline">\(k\)</span>. Vilka av följande påståenden är korrekta om antagandet inte är uppfyllt?</p>
+<div id="webex-e6bf75e8574e502ef018e3873247cf52" class="webex-checkboxgroup" data-answer="PgdOVhsFSQlo">
+<label><input type="checkbox" autocomplete="off" name="e6bf75e8574e502ef018e3873247cf52"><span>Modellskattningar och slutsatser kan bli missvisande när seriens struktur förändras över tid.</span></label><label><input type="checkbox" autocomplete="off" name="e6bf75e8574e502ef018e3873247cf52"><span>Problemet försvinner automatiskt om fler observationer läggs till i tidsserien.</span></label><label><input type="checkbox" autocomplete="off" name="e6bf75e8574e502ef018e3873247cf52"><span>Serien kan analyseras på samma sätt eftersom stationäritet främst påverkar seriens utseende.</span></label><label><input type="checkbox" autocomplete="off" name="e6bf75e8574e502ef018e3873247cf52"><span>Autokovariansen kan bero på var i serien den beräknas och inte enbart på avståndet <span class="math inline">\(k\)</span>.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Sant. Om seriens egenskaper förändras över tid kan en modell som antar en stabil struktur ge missvisande skattningar och slutsatser.</li>
+<li>Falskt. Fler observationer gör inte automatiskt en icke-stationär serie stationär.</li>
+<li>Falskt. Stationäritet påverkar om seriens nivå, variation och beroendestruktur kan beskrivas på ett stabilt sätt över tid.</li>
+<li>Sant. För en icke-stationär serie kan autokovariansen bero på både tidpunkten och avståndet mellan observationerna.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="sac-och-spac" class="level2" data-number="21.5">
-<h2 data-number="21.5" class="anchored" data-anchor-id="sac-och-spac"><span class="header-section-number">21.5</span> SAC och SPAC</h2>
-<p>Dessa tre exempelserier har vi själva skapat vilket ger oss möjligheten att beräkna de sanna beskrivande måtten utifrån den teoretiska modellen. I verkligheten behöver vi identifiera en modell (en representation) som bäst beskriver den observerade serien där observationerna anses vara slumpmässiga dragningar från en <em>okänd</em> teoretisk modell.</p>
-<p>Att lyckas identifiera en modell kan vara rätt så komplicerat men ett första steg är att beräkna den observerade autokorrelationen (<strong>Sample Autocorrelation</strong>, SAC<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>) under antagandet att serien är stationär. Resultatet ger oss ett bra verktyg att dels identifiera en lämplig modell men också att bedöma om stationäritetsantagandet är uppfyllt.</p>
+<section id="observerad-autokorrelation-sac" class="level2" data-number="21.5">
+<h2 data-number="21.5" class="anchored" data-anchor-id="observerad-autokorrelation-sac"><span class="header-section-number">21.5</span> Observerad Autokorrelation (SAC)</h2>
+<p>Dessa tre exempelserier har vi själva skapat vilket ger oss möjligheten att beräkna de sanna beskrivande måtten utifrån den teoretiska modellen. I verkligheten behöver vi identifiera en modell (en representation) som bäst beskriver den observerade serien där observationerna anses vara slumpmässiga dragningar från en <em>okänd</em> sann modell.</p>
+<p>Att lyckas identifiera en modell kan vara rätt så komplicerat men ett första steg är att beräkna den observerade autokorrelationen (<strong>Sample Autocorrelation</strong>, SAC<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>) under antagandet att serien är stationär. Resultatet ger oss ett bra verktyg att dels identifiera en lämplig modell men också att bedöma om stationäritetsantagandet är uppfyllt.</p>
 <p>Givet att vi antar stationäritet kan vi beräkna SAC, <span class="math inline">\(r_k\)</span>, enligt: <span id="eq-sac"><span class="math display">\[
   \begin{aligned}
   r_k = \frac{\sum_{t = k+1}^n \left(Y_t - \bar{Y}\right)\left(Y_{t-k} - \bar{Y}\right)}{\sum_{t = 1}^n \left(Y_t - \bar{Y}\right)^2}
   \end{aligned}
 \tag{21.9}\]</span></span></p>
 <p>för <span class="math inline">\(k &gt; 0\)</span>.</p>
-<p>Eftersom <span class="math inline">\(r_k\)</span> är en skattning av den sanna <span class="math inline">\(\rho_k\)</span> följer dessa en samplingfördelning från vilken vi kan dra approximativa gränser för ett 95% konfidensintervall vid <span class="math inline">\(r_k \pm \frac{2}{\sqrt{n}}\)</span>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> För en stationär serie förväntas <span class="math inline">\(r_k\)</span> ligga inom felmarginalen från 0 för alla lagg.</p>
-<p>Från <span class="citation" data-cites="cryer2008">Cryer och Chan (<a href="#ref-cryer2008" role="doc-biblioref">2008</a>)</span> <code>TSA</code> paket hittar vi funktionen <code>acf()</code> som gör denna beräkning åt oss på en angiven tidsserie.</p>
+<p>Eftersom <span class="math inline">\(r_k\)</span> är en skattning av den sanna <span class="math inline">\(\rho_k\)</span> följer dessa en samplingfördelning från vilken vi kan dra approximativa gränser för ett 95% konfidensintervall vid <span class="math inline">\(r_k \pm \frac{2}{\sqrt{n}}\)</span>.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> För en stationär serie förväntas <span class="math inline">\(r_k\)</span> ligga inom felmarginalen från 0 för alla lagg.</p>
+<p>Från <span class="citation" data-cites="cryer2008">Cryer och Chan (<a href="#ref-cryer2008" role="doc-biblioref">2008</a>)</span> <code>TSA</code> paket hittar vi funktionen <code>acf()</code> som gör denna beräkning åt oss på en angiven tidsserie för alla lagg <span class="math inline">\(k\)</span> och visualiserar resultatet i ett diagram.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>För att köra funktioner från TSA-paketet lokalt, läs <a href="../00-programming/00-basics-R.html" class="quarto-xref"><span>Kapitel 1</span></a> för hur du kan installera R och RStudio samt hur vi laddar ner paket.</p>
+</div>
+</div>
 <div class="cell" data-autorun="true">
 <details class="code-fold">
 <summary>Visa kod</summary>
@@ -2867,7 +2978,7 @@ Figur&nbsp;21.2: SAC för vita brus serien
 </div>
 </div>
 <div id="imp-webr-tsa" class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -2876,7 +2987,7 @@ Viktigt&nbsp;21.1: Expandera för att visa en variant av <code>TSA</code> i WEBR
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Tyvärr finns inte <code>TSA</code> tillgängligt via WEBR men vi kan återskapa paketets funktioner vid behov. I detta och efterföljande kapitel där funktioner från <code>TSA</code>-paketet används kommer vi först visa ett icke-interaktivt kodblock med TSA funktionen och tillhörande utskrift och sedan ett interaktivt WEBR-kodblock med motsvarande egenskapade funktion som speglar TSAs variant.</p>
 <p>På grund av att dessa två sätt att visa kod i detta material inte delar objektmiljöer med varandra kommer vi behöva återskapa objekten i koden, till exempel hur <code>whiteNoise</code> återskapades innan vi anropade <code>acf()</code> för <a href="#fig-sac-white-noise" class="quarto-xref">Figur&nbsp;<span>21.2</span></a> trots att tidigare WEBR kodblock har använt sig av <code>whiteNoise</code>.</p>
@@ -2886,30 +2997,61 @@ Viktigt&nbsp;21.1: Expandera för att visa en variant av <code>TSA</code> i WEBR
 </div>
 </div>
 </div>
-<p><a href="#fig-sac-white-noise" class="quarto-xref">Figur&nbsp;<span>21.2</span></a> visar att alla <span class="math inline">\(r_k\)</span> ligger inom felmarginalen från 0 vilket tyder på att de i praktiken kan tolkas som att det inte råder någon autokorrelation i serien. Detta blir då en indikation att serien är stationär.</p>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p><a href="#fig-sac-white-noise" class="quarto-xref">Figur&nbsp;<span>21.2</span></a> visar att alla <span class="math inline">\(r_k\)</span> ligger inom felmarginalen från 0 vilket tyder på att det i praktiken kan tolkas som att det inte råder någon autokorrelation i serien. Detta blir då en indikation att serien är stationär.</p>
+<!-- :::{.callout-caution} -->
+<!-- ## Övning 5 -->
+<!-- Beräkna (och visualisera) SAC för objeket `randomWalk`.  -->
+<!-- ```{webr-r} -->
+<!-- #| fig-width: 5 -->
+<!-- #| fig-height: 3 -->
+<!-- #| fig-cap: SAC för en Random Walk serie -->
+<!-- #| out-width: "90%" -->
+<!-- # TODO Skapa ett acf-objekt för randomWalk -->
+<!-- SAC <- ________ -->
+<!-- checkSolution(SAC, ex = 4) -->
+<!-- ``` -->
+<!-- *Glöm inte att köra kodblocket inuti @imp-webr-tsa för att använda den egenskapade `TSA`-liknande funktionen.* -->
+<!-- ::: -->
+<div class="cell" data-autorun="true">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ange längden av serien som ska genereras</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialisera ett tomt objekt</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>randomWalk <span class="ot">&lt;-</span> <span class="fu">numeric</span>()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generera en Random Walk serie</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n)) {</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    randomWalk[i] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    randomWalk[i] <span class="ot">&lt;-</span> randomWalk[i<span class="dv">-1</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar SAC för vita brus-serien</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(randomWalk)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-sac-random-walk" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sac-random-walk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-properties_files/figure-html/fig-sac-random-walk-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Caution</span>Övning 4
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sac-random-walk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;21.3: SAC för Random Walk
+</figcaption>
+</figure>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>Beräkna (och visualisera) SAC för objeket <code>randomWalk</code>.</p>
-<div id="qwebr-insertion-location-11"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p><em>Glöm inte att köra kodblocket inuti <a href="#imp-webr-tsa" class="quarto-xref">Important&nbsp;<span>21.1</span></a> för att använda den egenskapade <code>TSA</code>-liknande funktionen.</em></p>
 </div>
-</div>
-<p>För den icke-stationära serien Random Walk ser SAC väldigt annorlunda ut. Vi har flera lagg vars värden passerar felmarginalens gränser samt att det ser ut som att autokorrelationen har ett kubiskt mönster mellan intilliggande lagg. Detta ger oss en indikation på att serien inte är stationär.</p>
+<p>För den icke-stationära serien Random Walk ser SAC väldigt annorlunda ut. Vi har flera lagg vars värden passerar felmarginalens gränser samt att det ser ut som att autokorrelationen är långsamt avtagande. Detta är en tydlig visuell indikation att serien inte är stationär.</p>
 </section>
 <section id="sec-differentiation" class="level2" data-number="21.6">
 <h2 data-number="21.6" class="anchored" data-anchor-id="sec-differentiation"><span class="header-section-number">21.6</span> Differentiering</h2>
-<p>Om en tidsserie inte anses stationär i sin ursprungliga form kan vi undersöka ifall enkla bearbetningar av serien istället uppfyller stationäritet. I exemplet med Random Walk vet vi att differensen mellan två olika tidssteg endast beror på en slumpmässig dragning från en normalfördelning, oberoende från all annan information i serien.</p>
-<p>Vi kan då med hjälp av <strong>differentiering</strong> skapa en ny, stationär serie. Differentiering går ut på att vi skapar differensen mellan olika lagg av tidpunkter, den enklaste formen är att beräkna differensen mellan tidpunkt <span class="math inline">\(t\)</span> och <span class="math inline">\(t-1\)</span>, lagg 1.</p>
-<p>En mer generell beskrivning är att man anger hur många differenser (<span class="math inline">\(d\)</span>) och vilket lagg (<span class="math inline">\(k\)</span>) differenserna beräknas från enligt:</p>
+<p>Om en tidsserie inte anses stationär i sin ursprungliga form kan vi undersöka ifall enkla bearbetningar av serien istället uppfyller stationäritet. I exemplet med Random Walk vet vi att differensen mellan två intilliggande tidssteg endast beror på en slumpmässig dragning från en normalfördelning, oberoende från all annan information i serien (se <a href="#eq-random-walk" class="quarto-xref">Ekvation&nbsp;<span>21.6</span></a>).</p>
+<p>Vi kan då med hjälp av <strong>differentiering</strong> skapa en ny, stationär serie. Differentiering går ut på att vi skapar differensen mellan olika lagg av tidpunkter, den enklaste formen är att beräkna differensen mellan tidpunkt <span class="math inline">\(t\)</span> och <span class="math inline">\(t-1\)</span>. En mer generell beskrivning är att man anger hur många differenser (<span class="math inline">\(d\)</span>) och vilket lagg (<span class="math inline">\(k\)</span>) differenserna beräknas från enligt:</p>
 <p><span id="eq-differentiation"><span class="math display">\[
   \begin{aligned}
   \nabla^dY_t = \nabla^{d-1}(Y_t - Y_{t-k})
@@ -2923,13 +3065,66 @@ Viktigt&nbsp;21.1: Expandera för att visa en variant av <code>TSA</code> i WEBR
 \]</span> och den andra differensen av lagg 1 beräknas som:</p>
 <p><span class="math display">\[
   \begin{aligned}
-  \nabla^2 Y_t = \nabla(Y_t - Y_{t-1}) = \underbrace{(Y_t - Y_{t-1})}_{\nabla Y_t} - \underbrace{(Y_{t-1} - Y_{t-2})}_{\nabla Y_{t-1}}
+  \nabla^2 Y_t = \nabla\nabla Y_t = \nabla(Y_t - Y_{t-1}) = \underbrace{(Y_t - Y_{t-1})}_{\nabla Y_t} - \underbrace{(Y_{t-1} - Y_{t-2})}_{\nabla Y_{t-1}}
   \end{aligned}
 \]</span></p>
-<p>Funktionen <code>diff()</code> visar en serie som differentierats <code>differences</code> gånger baserat på <code>lag</code> lagg bakåt i serien.</p>
-<div id="qwebr-insertion-location-12"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Figuren visar att den differentierade seriens autokorrelation vid givna lag alla fellen inom (eller så gott som) konfidensbanden och vi kan bedöma den differentierade serien som stationär.</p>
+<p>Funktionen <code>diff()</code> skapar en serie som differentierats <code>differences</code> gånger baserat på <code>lag</code> lagg bakåt i serien.</p>
+<div class="cell" data-autorun="true">
+<details class="code-fold">
+<summary>Visa kod</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Differentiera en icke-stationär serie</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>diffY <span class="ot">&lt;-</span> <span class="fu">diff</span>(randomWalk, <span class="at">lag =</span> <span class="dv">1</span>, <span class="at">differences =</span> <span class="dv">1</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräkna SAC för den differentierade serien</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(diffY, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-sac-diff-random-walk" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sac-diff-random-walk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-properties_files/figure-html/fig-sac-diff-random-walk-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sac-diff-random-walk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;21.4: SAC för en differentierad Random Walk
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Figuren visar att den differentierade seriens autokorrelation vid givna lag alla faller inom (eller så gott som) konfidensbanden och vi kan bedöma den differentierade serien som stationär.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 6
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>En random walk utan drift definieras som</p>
+<p><span class="math display">\[
+Y_t = Y_{t-1} + e_t,
+\]</span></p>
+<p>där <span class="math inline">\(e_t\)</span> är vitt brus. Serien kan bearbetas genom differentiering med funktionen <code>diff()</code>.</p>
+<p>Vilka av följande påståenden är korrekta?</p>
+<div id="webex-1bff40c2edb28993c1efbd043f386de9" class="webex-checkboxgroup" data-answer="alJKVxgBTwM4">
+<label><input type="checkbox" autocomplete="off" name="1bff40c2edb28993c1efbd043f386de9"><span>Uttrycket <code>diff(Y, lag = 2, differences = 2)</code> ger differensen <span class="math inline">\(Y_t-Y_{t-4}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1bff40c2edb28993c1efbd043f386de9"><span>Den första differensen är stationär om <span class="math inline">\(e_t\)</span> är vitt brus, trots att den ursprungliga serien <span class="math inline">\(Y_t\)</span> inte är stationär.</span></label><label><input type="checkbox" autocomplete="off" name="1bff40c2edb28993c1efbd043f386de9"><span>Den första differensen med lagg <span class="math inline">\(1\)</span> kan skrivas som <span class="math inline">\(\nabla Y_t = Y_t-Y_{t-1}=e_t\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1bff40c2edb28993c1efbd043f386de9"><span>Två differentieringar med lagg <span class="math inline">\(1\)</span> ger <span class="math inline">\(\nabla^2Y_t=Y_t-2Y_{t-1}+Y_{t-2}\)</span>.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Falskt. <code>lag = 2</code> ger först den nya serien <span class="math inline">\(X_t=Y_t-Y_{t-2}\)</span>. Eftersom <code>differences = 2</code> differentieras även denna serie med lagg <span class="math inline">\(2\)</span>, vilket ger <span class="math inline">\(X_t-X_{t-2}=Y_t-2Y_{t-2}+Y_{t-4}\)</span>. Uttrycket <span class="math inline">\(Y_t-Y_{t-4}\)</span> motsvarar i stället en enda differentiering med lagg <span class="math inline">\(4\)</span>.</li>
+<li>Sant. Den första differensen är lika med det vita bruset <span class="math inline">\(e_t\)</span>, som har konstant väntevärde och varians samt saknar autokorrelation mellan olika tidpunkter.</li>
+<li>Sant. Från <span class="math inline">\(Y_t=Y_{t-1}+e_t\)</span> följer att <span class="math inline">\(Y_t-Y_{t-1}=e_t\)</span>. Den första differensen är därför lika med den aktuella slumpchocken.</li>
+<li>Sant. Den andra differensen är differensen mellan två första differenser: <span class="math inline">\(\nabla^2Y_t=(Y_t-Y_{t-1})-(Y_{t-1}-Y_{t-2})=Y_t-2Y_{t-1}+Y_{t-2}\)</span>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 <!-- TODO: Kanske något kort om regressionsmodeller och residualanalys? Kapitel 3 i Cryer? -->
 <!-- TODO: Andra transformationer för stationäritet, t.ex. Box-Cox -->
 </section>
@@ -2937,7 +3132,7 @@ Viktigt&nbsp;21.1: Expandera för att visa en variant av <code>TSA</code> i WEBR
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-cryer2008" class="csl-entry" role="listitem">
 Cryer, J. D., och K. S. Chan. 2008. <em>Time Series Analysis: With Applications in R</em>. Springer Texts in Statistics. Springer. <a href="https://books.google.se/books?id=MrNY3s2difIC">https://books.google.se/books?id=MrNY3s2difIC</a>.
 </div>
@@ -2946,12 +3141,14 @@ Cryer, J. D., och K. S. Chan. 2008. <em>Time Series Analysis: With Applications 
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>“Stokastisk” är ett annat ord för slumpmässig.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Se <a href="../01-regression/00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 4.2</span></a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Uttalas rå<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>I tidigare kapitel har vi endast använt en visuell analys av residualer mot observationsindex i ett linjediagram för att kontrollera detta.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Ibland betecknat som ACF från auto-correlation function<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Exakta egenskaper hos samplingfördelningen anges i <span class="citation" data-cites="cryer2008">Cryer och Chan (<a href="#ref-cryer2008" role="doc-biblioref">2008</a>)</span>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>som skapar en sekvens (seq) av en angiven längd (len).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>som räknar antalet rader i data.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>“Stokastisk” är ett annat ord för slumpmässig.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Se <a href="../01-regression/00-intro-regression.html#sec-model-assumptions" class="quarto-xref"><span>Avsnitt 4.2</span></a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Uttalas rå<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>I tidigare kapitel har vi endast använt en visuell analys av residualer mot observationsindex i ett linjediagram för att kontrollera detta.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Ibland betecknat som ACF för auto-correlation function<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Exakta egenskaper hos samplingfördelningen anges i <span class="citation" data-cites="cryer2008">Cryer och Chan (<a href="#ref-cryer2008" role="doc-biblioref">2008</a>)</span>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

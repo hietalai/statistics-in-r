@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>25&nbsp; Introduktion – Statistisk teori och tillämpningar i R</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -59,7 +65,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -89,15 +94,14 @@ div.csl-indent {
 <link href="../05-stat-to-ml/index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-96e8a2c236aee144da7b9dc077376cca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6c85c9fc2bbb9926b7650676933c738f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -224,7 +228,7 @@ div.csl-indent {
 </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -264,8 +268,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
     </a>
@@ -319,10 +321,6 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Sök"></div>
@@ -585,7 +583,7 @@ window.Quarto = {
   <li><a href="#statistisk-inlärning" id="toc-statistisk-inlärning" class="nav-link" data-scroll-target="#statistisk-inlärning"><span class="header-section-number">25.2</span> Statistisk inlärning</a>
   <ul class="collapse">
   <li><a href="#val-av-modell" id="toc-val-av-modell" class="nav-link" data-scroll-target="#val-av-modell"><span class="header-section-number">25.2.1</span> Val av modell</a></li>
-  <li><a href="#sec-error-function" id="toc-sec-error-function" class="nav-link" data-scroll-target="#sec-error-function"><span class="header-section-number">25.2.2</span> Felfunktioner</a></li>
+  <li><a href="#sec-cost-function" id="toc-sec-cost-function" class="nav-link" data-scroll-target="#sec-cost-function"><span class="header-section-number">25.2.2</span> Kostnadsfunktioner</a></li>
   <li><a href="#sec-data-split" id="toc-sec-data-split" class="nav-link" data-scroll-target="#sec-data-split"><span class="header-section-number">25.2.3</span> Datauppdelning</a></li>
   </ul></li>
   <li><a href="#exempeldata" id="toc-exempeldata" class="nav-link" data-scroll-target="#exempeldata"><span class="header-section-number">25.3</span> Exempeldata</a></li>
@@ -680,6 +678,7 @@ Notera
 </div>
 <p>I detta exempel kommer vi stöta på stora problem vid flera tillfällen, t.ex. om <span class="math inline">\(n\)</span> är stort eller <span class="math inline">\(p &gt; n\)</span>. Dessa data skulle kunna vara transaktionsdatabaser, hälsoregister, sociala nätverk, väder- och klimatdata, börsdata, textkorpus, sensordata m.fl.</p>
 <p><span style="color: red">TODO: ADD MORE ABOUT THE LIMITATIONS</span></p>
+<p><span style="color: green">- Nästan allting blir signifikant (p-värden) när n är större. Effektstorlek. - Modellval använder sig av samma data som sedan vi gör inferens på (data som används för träning används sen igen). Tsibrishani har tagit fram frekventistiska metoder som tar hänsyn till modellval men de är matematiskt svåra. Design av studier är klassiska fenomenet när “vanlig” inferens funkar när modellen är fix. - Multikollinearitetsproblem med stora p.&nbsp;- Välja variabler inom regression är svårt/jobbigt/subjektivt. Interaktioner och polynom.</span></p>
 </section>
 <section id="statistisk-inlärning" class="level2" data-number="25.2">
 <h2 data-number="25.2" class="anchored" data-anchor-id="statistisk-inlärning"><span class="header-section-number">25.2</span> Statistisk inlärning</h2>
@@ -697,7 +696,7 @@ Notera
 <li>Val av modell, dess anpassning och användning till prediktioner</li>
 <li>Utvärdering av modellen</li>
 </ol>
-<p>I resterande kapitel kommer fokus ligga på steg fyra och fem genom att introducera flertalet metoder och hur dessa utvärderas på bästa sätt. De första tre punkterna lämnar vi till “tidigare kunskaper” eller andra delar. <span style="color: red">(ORDVAL)</span></p>
+<p>I resterande kapitel kommer fokus ligga på steg fyra och fem genom att introducera flertalet metoder och hur dessa utvärderas på bästa sätt. Fokus i denna del kommer vara på punkt 4 och 5, men vi kommer också behöva använda tekniker för databearbetning under arbetets gång.</p>
 <p>Linjär regression är ett exempel på <strong>supervised learning</strong> (ungefärlig sv. övervakad inlärning) där vi vet sanna värden på responsvariabeln och “övervakar” inlärningen till den grad att modellen lär sig de observerade sanna värdena. Generellt kan vi dela upp supervised learning i två fält; <strong>regression</strong> och <strong>klassificering</strong>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -720,7 +719,7 @@ Notera
 <p>Regression förutsätter att vi har en kontinuerlig responsvariabel medan klassificering förutsätter en kategorisk responsvariabel. Hädanefter i detta material kommer vi släppa på termen “linjär” när vi pratar om regression då vi inte längre begränsar oss till just den typen av regressionsmodeller. Klassificering har inom ren statistik historiskt modellerats med hjälp av <strong>logistisk regression</strong> där vi fortfarande använder grunderna från den linjära modellen på grund av dess enkelhet men behöver transformera den med en <strong>länkfunktion</strong> och skatta modellens parametrar med hjälp av <strong>numerisk optimering</strong>. En detaljerad genomgång av logistisk regression finns i <a href="../01-regression/10-logistic-regression.html" class="quarto-xref"><span>Kapitel 14</span></a>.</p>
 <section id="val-av-modell" class="level3" data-number="25.2.1">
 <h3 data-number="25.2.1" class="anchored" data-anchor-id="val-av-modell"><span class="header-section-number">25.2.1</span> Val av modell</h3>
-<p>Valet av en lämplig modell innefattar inte bara valet av modellfamilj (metod) <span style="color: red">ORDVAL</span> utan även identifiering av modellens struktur och relevanta relationer. Det vi vill uppnå med en modellanpassning är att:</p>
+<p>Valet av en lämplig modell innefattar inte bara valet av modellfamilj, till exempel linjär regression, neurala nätverk, trädmodeller, <span style="color: red">LÄGG TILL NÅGOT OM VERKTYG I VERKTYGSLÅDAN</span>utan även identifiering av modellens struktur och relevanta relationer. Det vi vill uppnå med en modellanpassning är att:</p>
 <ul>
 <li>modellen fångar upp sambanden mellan responsvariabeln och de förklarande kopplat till frågeställningen.</li>
 <li>modellen ska vara så enkel som möjligt för att underlätta både anpassning och användning.</li>
@@ -730,12 +729,12 @@ Notera
 </ul></li>
 <li>modellen ska <strong>generalisera</strong> till ny liknande data.</li>
 </ul>
-<p>Vi kan formulera en standardmodell som följer:</p>
+<p>Vi kan formulera en standardmodell för en kontinuerlig responsvariabel som följer:</p>
 <p><span id="eq-standard-model"><span class="math display">\[
   \begin{aligned}
   y = f(x|\theta) + \varepsilon
   \end{aligned}
-\tag{25.1}\]</span></span> där <span class="math inline">\(f\)</span> är en okänd funktion, <span class="math inline">\(\theta\)</span> är funktionens parametrar, <span class="math inline">\(\varepsilon\)</span> är en slumpmässig felterm med <span class="math inline">\(E[\varepsilon] = 0\)</span> och <span class="math inline">\(Var(\varepsilon) = \sigma^2_e\)</span>.</p>
+\tag{25.1}\]</span></span> där <span class="math inline">\(f\)</span> är en okänd funktion, <span class="math inline">\(\theta\)</span> (grekiska theta) är funktionens parametrar, <span class="math inline">\(\varepsilon\)</span> är en slumpmässig felterm med <span class="math inline">\(E[\varepsilon] = 0\)</span> och <span class="math inline">\(Var(\varepsilon) = \sigma^2\)</span>.</p>
 <p>Med hjälp av <a href="#eq-standard-model" class="quarto-xref">Ekvation&nbsp;<span>25.1</span></a> kan vi formulera både mer strukturerade och mer godtyckliga modeller såsom:</p>
 <ul>
 <li><span class="math inline">\(f(x|\theta) = \theta_0 + \theta_1 x_1 + \theta_2 x_2\)</span></li>
@@ -805,33 +804,39 @@ Figur&nbsp;25.3: Lagom komplex modell
 </div>
 </div>
 </div>
-<p><a href="#fig-acceptablefit" class="quarto-xref">Figur&nbsp;<span>25.3</span></a> fångar upp de generella mönstrena men avviker inte när observationer avviker mycket från den. <span style="color: red">ORDVAL</span></p>
-<p>Denna form av visualisering är omöjlig att göra i praktiken när vi ska välja en lämplig modell då vi har betydligt fler än två dimensioner i data. Istället använder vi oss av två andra knep; <strong>felfunktioner</strong> (även kallad kostnadsfunktioner) och <strong>datauppdelning</strong>.</p>
+<p>Modellen i <a href="#fig-acceptablefit" class="quarto-xref">Figur&nbsp;<span>25.3</span></a> fångar upp de generella mönstrena men är påverkas inte mycket av förändringar i data som förmodligen är brus.</p>
+<p>Denna form av visualisering är omöjlig att göra i praktiken när vi ska välja en lämplig modell då vi har betydligt fler än två dimensioner i data. Istället använder vi oss av två andra knep; <strong>kostnadsfunktioner</strong> (även kallad felfunktioner eller förlustfunktioner) och <strong>datauppdelning</strong>.</p>
 </section>
-<section id="sec-error-function" class="level3" data-number="25.2.2">
-<h3 data-number="25.2.2" class="anchored" data-anchor-id="sec-error-function"><span class="header-section-number">25.2.2</span> Felfunktioner</h3>
-<p>En felfunktion är en funktion som, givet data, ger oss ett värde på hur bra modellen anpassar data. Inom linjär regression använder vi oss exempelvis av <strong>Mean Squared Error</strong> (MSE) som ett sätt att visa hur mycket fel en modell gör. Detta mått kommer vi åter att använda inom regression men också ge några alternativ som lämpar sig för olika ändamål.</p>
+<section id="sec-cost-function" class="level3" data-number="25.2.2">
+<h3 data-number="25.2.2" class="anchored" data-anchor-id="sec-cost-function"><span class="header-section-number">25.2.2</span> Kostnadsfunktioner</h3>
+<p>En kostnadsfunktion är en funktion som, givet data, ger oss ett värde på hur bra modellen anpassar data. Inom linjär regression använder vi oss exempelvis av <strong>Mean Squared Error</strong> (MSE) som ett sätt att visa hur mycket fel en modell gör, som tolkas som modellens kostnad. Detta mått kommer vi åter att använda inom regression men också ge några alternativ som lämpar sig för olika ändamål.</p>
+<p>Vi antar att det skattade värdet på vår observation kan betecknas som:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \hat{y}_i = f(x_i | \hat{\theta})
+  \end{aligned}
+\]</span></p>
 <p>MSE som mått kan beräknas som:</p>
 <p><span id="eq-mse"><span class="math display">\[
   \begin{aligned}
-  MSE = \frac{1}{n} \Sum{n} \left(y_i - f(x_i | \hat{\theta})\right)^2
+  MSE = \frac{1}{n} \Sum{n} \left(y_i - \hat{y}_i\right)^2
   \end{aligned}
 \tag{25.2}\]</span></span></p>
-<p>MSE kommer skapa stora värden om extremvärden förekommer i data. Då kan en alternativ felfunktion definieras som <strong>Mean Absolute Error</strong> (MAE):</p>
+<p>MSE kommer skapa stora värden om extremvärden förekommer i data. Då kan en alternativ kostnadsfunktion definieras som <strong>Mean Absolute Error</strong> (MAE)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <p><span id="eq-mae"><span class="math display">\[
   \begin{aligned}
-  MAE = \frac{1}{n} \Sum{n} \left|y_i - f(x_i | \hat{\theta})\right|
+  MAE = \frac{1}{n} \Sum{n} \left|y_i - \hat{y}_i\right|
   \end{aligned}
 \tag{25.3}\]</span></span></p>
 <p>För klassificering är två vanliga mått <strong>Cross Entropy</strong> och <strong>Missclassification</strong> vilka vi kommer återkomma till senare.</p>
-<p>Vi vet att när måtten är 0 så betyder det att inga fel alls är gjorda och att vi har en överanpassad modell eftersom den perfekt modellerar alla punkter i data, men vilket värde som innebär att vi underanpassar eller har hittat en lagom komplex modell är svårt att tyda med enbart felfunktioner.</p>
+<p>Vi vet att när måtten är 0 så betyder det att inga fel alls är gjorda och att vi har en överanpassad modell eftersom den perfekt modellerar alla punkter i data, men vilket värde som innebär att vi underanpassar eller har hittat en lagom komplex modell är svårt att tyda med enbart kostnadsfunktioner.</p>
 </section>
 <section id="sec-data-split" class="level3" data-number="25.2.3">
 <h3 data-number="25.2.3" class="anchored" data-anchor-id="sec-data-split"><span class="header-section-number">25.2.3</span> Datauppdelning</h3>
-<p>Om vi delar upp data i minst två slumpmässiga delar, anpassar modellen på en del, beräknar felfunktionen för den första och en annan del, för att till sist jämföra dessa mått kan vi nu se när en modell är lagomt komplex.</p>
+<p>Om vi delar upp data i minst två slumpmässiga delar, anpassar modellen på en del, beräknar kostnadsfunktionen för den första och en annan del, för att till sist jämföra dessa mått kan vi nu se när en modell är lagom komplex.</p>
 <p>Data kan delas in i tre olika delar med olika syften:</p>
 <ul>
-<li><strong>Träningsmängd</strong>: används för att “träna”, dvs. anpassa, modellen</li>
+<li><strong>Träningsmängd</strong>: används för att “träna”, dvs. anpassa modellen</li>
 <li><strong>Valideringsmängd</strong>: används för att “validera”, dvs. välja den bästa modellen</li>
 <li><strong>Testmängd</strong>: används för att få en väntevärdesriktig skattning av felet för en modell</li>
 </ul>
@@ -849,7 +854,7 @@ Notera
 <p>Notera att olika litteratur kan ibland blanda ihop termerna validering och test. De säger att de använder en testmängd när de i själva verket använder det som valideringsmängden, det vill säga för att välja den bästa modellen.</p>
 </div>
 </div>
-<p>För att modellen ska få så mycket information som möjligt för sin träning<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, bör vi använda det mesta av det insamlade datamaterialet till träningsmängden. Vi vill dock också få en bra mängd data till valideringen, och till sist testningen, så vi får försöka balansera proportionerna i denna uppdelning på något sätt. Vanliga proportioner är:</p>
+<p>För att modellen ska få så mycket information som möjligt för sin träning<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, bör vi använda det mesta av det insamlade datamaterialet till träningsmängden. Vi vill dock också få en bra mängd data till valideringen, och till sist testningen, så vi får försöka balansera proportionerna i denna uppdelning på något sätt. Vanliga proportioner är:</p>
 <ul>
 <li>1/3, 1/3, 1/3</li>
 <li>1/2, 1/4, 1/4</li>
@@ -900,7 +905,7 @@ Tips
 <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Spam_wall_-_Flickr_-_freezelight.jpg" class="img-fluid figure-img" style="width:75.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spam-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;25.4: Spam<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>
+Figur&nbsp;25.4: Spam<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>
 </figcaption>
 </figure>
 </div>
@@ -916,7 +921,7 @@ Figur&nbsp;25.4: Spam<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-n
 <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Lake_in_north_sweden.jpg" class="img-fluid figure-img" style="width:75.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;25.5: Sjö i norra Sverige<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>
+Figur&nbsp;25.5: Sjö i norra Sverige<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>
 </figcaption>
 </figure>
 </div>
@@ -934,7 +939,7 @@ Figur&nbsp;25.5: Sjö i norra Sverige<a href="#fn3" class="footnote-ref" id="fnr
 <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_%28HiRes_focus_stack%29.jpg" class="img-fluid figure-img" style="width:50.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;25.6: Sjö i norra Sverige<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>
+Figur&nbsp;25.6: Sjö i norra Sverige<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>
 </figcaption>
 </figure>
 </div>
@@ -946,19 +951,20 @@ Figur&nbsp;25.6: Sjö i norra Sverige<a href="#fn4" class="footnote-ref" id="fnr
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-wine_109" class="csl-entry" role="listitem">
-Aeberhard, Stefan, och M. Forina. 1992. <span>”<span>Wine</span>”</span>. UCI Machine Learning Repository.
+Aeberhard, Stefan, och M. Forina. 1992. <em><span>Wine</span></em>. UCI Machine Learning Repository.
 </div>
 </div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Hädanefter kommer vi använda tränas/träning för att mena anpassning av modeller.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><a href="https://commons.wikimedia.org/wiki/File:Spam_wall_-_Flickr_-_freezelight.jpg">freezelight</a>, <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>, via Wikimedia Commons<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p><a href="https://commons.wikimedia.org/wiki/File:Lake_in_north_sweden.jpg">Irrre</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p><a href="https://commons.wikimedia.org/wiki/File:2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_(HiRes_focus_stack).jpg">Franz van Duns</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Den matematiska operatorn <span class="math inline">\(|\cdot|\)</span> beskriver absolutbeloppet och gör alla negativa tal positiva.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Hädanefter kommer vi använda tränas/träning för att mena anpassning av modeller.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://commons.wikimedia.org/wiki/File:Spam_wall_-_Flickr_-_freezelight.jpg">freezelight</a>, <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>, via Wikimedia Commons<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://commons.wikimedia.org/wiki/File:Lake_in_north_sweden.jpg">Irrre</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://commons.wikimedia.org/wiki/File:2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_(HiRes_focus_stack).jpg">Franz van Duns</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

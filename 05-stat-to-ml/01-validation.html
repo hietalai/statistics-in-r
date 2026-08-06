@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sv-SE" xml:lang="sv-SE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>26&nbsp; Modellval – Statistisk teori och tillämpningar i R</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -69,15 +75,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../05-stat-to-ml/00-introduction.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-96e8a2c236aee144da7b9dc077376cca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6c85c9fc2bbb9926b7650676933c738f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -204,7 +209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -244,8 +249,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Statistisk teori och tillämpningar i R</span>
     </a>
@@ -299,10 +302,6 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Sök"></div>
@@ -568,13 +567,13 @@ window.Quarto = {
   <li><a href="#kostnadsfunktion" id="toc-kostnadsfunktion" class="nav-link" data-scroll-target="#kostnadsfunktion"><span class="header-section-number">26.3.1</span> Kostnadsfunktion</a></li>
   <li><a href="#gradient" id="toc-gradient" class="nav-link" data-scroll-target="#gradient"><span class="header-section-number">26.3.2</span> Gradient</a></li>
   <li><a href="#konvergens-och-inlärningshastighet" id="toc-konvergens-och-inlärningshastighet" class="nav-link" data-scroll-target="#konvergens-och-inlärningshastighet"><span class="header-section-number">26.3.3</span> Konvergens och inlärningshastighet</a></li>
-  <li><a href="#coordinate-descent" id="toc-coordinate-descent" class="nav-link" data-scroll-target="#coordinate-descent"><span class="header-section-number">26.3.4</span> Coordinate descent</a></li>
-  <li><a href="#reparameterisering" id="toc-reparameterisering" class="nav-link" data-scroll-target="#reparameterisering"><span class="header-section-number">26.3.5</span> Reparameterisering</a></li>
+  <li><a href="#hyperparametrar" id="toc-hyperparametrar" class="nav-link" data-scroll-target="#hyperparametrar"><span class="header-section-number">26.3.4</span> Hyperparametrar</a></li>
   </ul></li>
-  <li><a href="#klassificeringens-kostnadsfunktion" id="toc-klassificeringens-kostnadsfunktion" class="nav-link" data-scroll-target="#klassificeringens-kostnadsfunktion"><span class="header-section-number">26.4</span> Klassificeringens kostnadsfunktion</a>
+  <li><a href="#optimering-och-utvärdering-i-klassificering" id="toc-optimering-och-utvärdering-i-klassificering" class="nav-link" data-scroll-target="#optimering-och-utvärdering-i-klassificering"><span class="header-section-number">26.4</span> Optimering och utvärdering i klassificering</a>
   <ul class="collapse">
   <li><a href="#cross-entropy" id="toc-cross-entropy" class="nav-link" data-scroll-target="#cross-entropy"><span class="header-section-number">26.4.1</span> Cross Entropy</a></li>
   </ul></li>
+  <li><a href="#case" id="toc-case" class="nav-link" data-scroll-target="#case"><span class="header-section-number">26.5</span> Case</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -602,14 +601,14 @@ window.Quarto = {
 
 
 <!-- CONTENT -->
-<p>Med hjälp av felfunktioner (<a href="00-introduction.html#sec-error-function" class="quarto-xref"><span>Avsnitt 25.2.2</span></a>) och datauppdelning (<a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.2.3</span></a>) och kan vi nu skapa en process för att hitta den bästa modellen.</p>
+<p>Med hjälp av felfunktioner (<a href="00-introduction.html#sec-cost-function" class="quarto-xref"><span>Avsnitt 25.2.2</span></a>) och datauppdelning (<a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.2.3</span></a>) och kan vi nu skapa en process för att hitta den bästa modellen.</p>
 <section id="sec-validation" class="level2" data-number="26.1">
 <h2 data-number="26.1" class="anchored" data-anchor-id="sec-validation"><span class="header-section-number">26.1</span> Modellvalsprocess</h2>
 <p>Vi kan börja med att ta fram några kandidatfunktioner (modeller) som tränas på träningsmängden:</p>
 <div id="fig-training-step" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-training-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01-validation_files\mediabag\7aedca1eca69204525e6baba880a942b359e7470.svg" class="img-fluid figure-img">
+<img src="01-validation_files/mediabag/7aedca1eca69204525e6baba880a942b359e7470.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-training-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;26.1: Träningssteget av processen
@@ -620,7 +619,7 @@ Figur&nbsp;26.1: Träningssteget av processen
 <div id="fig-validation-step" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-validation-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01-validation_files\mediabag\e12ce7ddb8e2502e5d4f728cfe33e957b889f698.svg" class="img-fluid figure-img">
+<img src="01-validation_files/mediabag/e12ce7ddb8e2502e5d4f728cfe33e957b889f698.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-validation-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;26.2: Valideringssteget av processen
@@ -631,7 +630,7 @@ Figur&nbsp;26.2: Valideringssteget av processen
 <div id="fig-test-step" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-test-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01-validation_files\mediabag\133d214f06659f3640ef0f91d15aef839a26f81a.svg" class="img-fluid figure-img">
+<img src="01-validation_files/mediabag/133d214f06659f3640ef0f91d15aef839a26f81a.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-test-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;26.3: Teststeget av processen
@@ -686,7 +685,9 @@ Figur&nbsp;26.6: Lagom komplex modell
 </div>
 </div>
 </div>
-<p>Vi ser att <a href="#fig-underfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.4</span></a> får en dålig anpassning för båda mängderna vilket leder till höga värden på felfunktionen på respektive. <a href="#fig-overfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.5</span></a> visar att när modellen exakt följer träningsmängden får vi extremt låga värden på träningens felfunktion men stora värden på valideringsmängden. Den “lagomt” komplexa modellen får “lagomt” stora värden på båda tränings- och valideringsfelet.</p>
+<p>Vi ser att <a href="#fig-underfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.4</span></a> får en dålig anpassning för båda mängderna vilket leder till höga värden på felfunktionen på respektive. <a href="#fig-overfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.5</span></a> visar att när modellen exakt följer träningsmängden får vi extremt låga värden på träningens felfunktion men stora värden på valideringsmängden. Den “lagom” komplexa modellen får “lagom” stora värden på båda tränings- och valideringsfelet.</p>
+<p><span style="color: green">Traditionelt inom regression, tar all data tränar, och väljer modell med lägst SSE. Om vi stannar där finns det risk för både under- och överanpassning. Enbart från ett mått kan det vara svårt att välja den bästa modellen. Generalisering tas inte hänsyn till i denna process. Historiskt har man inte haft mycket data och behövt använda all data till träningen.</span></p>
+<p><span style="color: orange">EXEMPEL MED FÅ PUNKTER OCH POLYNOM</span></p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -706,14 +707,13 @@ Viktigt
 <div id="fig-bias-variance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bias-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01-validation_files\mediabag\d3b1a73f307289f72686bdad7432a22a9397911f.svg" class="img-fluid figure-img">
+<img src="01-validation_files/mediabag/d3b1a73f307289f72686bdad7432a22a9397911f.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bias-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;26.7: Visualisering av avvägningen mellan bias och varians.
 </figcaption>
 </figure>
 </div>
-<p><span style="color: red">ÄR DETTA RELEVANT MED VALIDERINGsmängd ISTÄLLET FÖR TEST?</span></p>
 <p><span style="color: red">BEHÖVER FÖRKLARA BIAS VARIANS OCH BRUS FÖR ATT DENNA BILD SKA KUNNA TOLKAS MER (SLIDE 38 FL1)</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -768,7 +768,19 @@ Notera
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>MSE1 <span class="ot">&lt;-</span> <span class="fu">sum</span>((validData<span class="sc">$</span>pH <span class="sc">-</span> yhat1)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">nrow</span>(validData)</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>MSE2 <span class="ot">&lt;-</span> <span class="fu">sum</span>((validData<span class="sc">$</span>pH <span class="sc">-</span> yhat2)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">nrow</span>(validData)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><span style="color: red">DETTA ÄR EGENTLIGEN MSPR</span></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Inom maskininlärning använder vi den generella formeln för MSE där nämnaren endast består av antalet observationer, <span class="math inline">\(n\)</span>. Inom linjär regression, är vi vana vid att ta hänsyn till antalet frihetsgrader <span class="math inline">\(MSE = \frac{SSE}{n - (k + 1)}\)</span> för att få en väntevärdesriktig skattning av felet. Det är av samma anledning som standardavvikelser beräknas med <span class="math inline">\(n - 1\)</span> i nämnaren istället för enbart <span class="math inline">\(n\)</span>. Skillnaden i nämnare blir försumbar när vi har ett stort <span class="math inline">\(n\)</span>, vilket vi oftast har när vi använder maskininlärningsmetoder.</p>
+</div>
+</div>
 <p>MSE för den första modellen är 0.448 medan för den andra modellen vi får 0.307. Utifrån dessa två mått väljer vi att gå vidare med modell 2 då dess MSE var lägre. Vi använder till sist testmängden för att få en väntevärdesriktig skattning av modellens fel:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yhatTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel2, <span class="at">newdata =</span> testData)</span>
@@ -785,7 +797,6 @@ Notera
 <h2 data-number="26.2" class="anchored" data-anchor-id="korsvalidering"><span class="header-section-number">26.2</span> Korsvalidering</h2>
 <p>Nackdelen med att dela upp data enligt <a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.2.3</span></a> är att mycket av data behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är <strong>korsvalidering</strong> där vi delar upp data i en större träningsmängd och en testmängd. Träningsmängden delas sedan in i flera mindre delar, lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar.</p>
 <p>Vi får direkt flera kandidatmodeller av samma metod som vi kan jämföra valideringsfelet och välja den bästa modellen eller beräkna ett genomsnittligt fel för alla valideringsmängder om flera metoder ska jämföras.</p>
-<p><span style="color: red">KAN MAN JÄMFÖRA MODELLER INOM KORSVALIDERING ELLER ÄR DET BARA GENOMSNITTET?</span></p>
 <p>I det extrema fallet delar vi upp träningsmängden i <span class="math inline">\(n\)</span> lika stora delar vilket kallas för <strong>Leave-one-out</strong> korsvalidering. Som namnet antyder följer vi följande procedur:</p>
 <ol type="1">
 <li>ta bort en observation och träna modellen på återstående data.</li>
@@ -802,14 +813,16 @@ Notera
 <li>beräkna den genomsnittliga felet för alla olika <em>block</em>.</li>
 </ol>
 <p>Med denna procedur behöver vi endast träna <span class="math inline">\(k\)</span> modeller vilket kan underlätta den totala beräkningskostnaden om det är en komplex modell som ska tränas.</p>
+<p><span style="color: green">NÄR KORVALIDERING VALT EN MODELL SOM ÄR BÄST MED LÄGST GENOMSNITTLIG KORSVALIDERINGSFEL SKATTAS MODELLEN OM I SIN HLEHET PÅ ALL TRÄNINGSDATA FÖR ATT FÅ DE RIKTIGA PARAMETERSKATTNINGARNA.</span></p>
 </section>
 <section id="optimering" class="level2" data-number="26.3">
 <h2 data-number="26.3" class="anchored" data-anchor-id="optimering"><span class="header-section-number">26.3</span> Optimering</h2>
 <p>När en maskininlärningsmodell tränas, vad som egentligen händer är att modellens parametrar iterativt <strong>optimeras</strong> genom att minimera felfunktionen eller maximera en sannolikhet. Till exempel minimeras SSE för linjär regression medan vi maximerar log-likelihood för logistisk regression.</p>
 <section id="kostnadsfunktion" class="level3" data-number="26.3.1">
 <h3 data-number="26.3.1" class="anchored" data-anchor-id="kostnadsfunktion"><span class="header-section-number">26.3.1</span> Kostnadsfunktion</h3>
-<p>Inom maskininlärning vill vi ofta minimera en <strong>kostnadsfunktion</strong> <span class="math inline">\(f(\boldsymbol{\theta})\)</span> där <span class="math inline">\(\boldsymbol{\theta}\)</span> är parametrarnas värden som styr värdet på funktionen. Optimeringens syfte är då att hitta de parametervärden som ger lägst (ibland högst) kostnad.</p>
-<p><span style="color: red">VAD ÄR DEN SPECIFIKA SKILLNADEN PÅ FEL- OCH KOSTNADSFUNKTION? BEHÖVS DESSA TVÅ TERMER?</span></p>
+<p>Inom maskininlärning vill vi ofta minimera en <strong>kostnadsfunktion</strong> <span class="math inline">\(l(\boldsymbol{\theta})\)</span> där <span class="math inline">\(\boldsymbol{\theta}\)</span> är parametrarnas värden som styr värdet på funktionen. Optimeringens syfte är då att hitta de parametervärden som ger lägst kostnad.</p>
+<p><span style="color: green">ÄNDRA TILL KOSTNADSFUNKTION</span></p>
+<p><span style="color: red">LÄGG TILL EN LITEN RUTA OM VAD EN DERIVATA ÄR</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -860,6 +873,7 @@ Figur&nbsp;26.8: Enkelt exempel på iterativ optimering
 </div>
 </div>
 <p>I denna illustration har en första “gissning” av parametrarnas värden gjorts vid den streckade röda linjen. Sedan har parametrarna justerats tills att de når fram till värdet som ger den största kostnaden, den svartstreckade linjen.</p>
+<p><span style="color: red">FLIPPA BILDEN SOM DEN NEGATIVA LOG-LIKELIHOOD</span></p>
 </section>
 <section id="gradient" class="level3" data-number="26.3.2">
 <h3 data-number="26.3.2" class="anchored" data-anchor-id="gradient"><span class="header-section-number">26.3.2</span> Gradient</h3>
@@ -875,7 +889,7 @@ Figur&nbsp;26.8: Enkelt exempel på iterativ optimering
 <img src="01-validation_files/figure-html/fig-convex-function-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-convex-function-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;26.9: En konvex funktion med endast ett minimum, det globala
+Figur&nbsp;26.9: En enkel funktion med endast ett minimum, det globala
 </figcaption>
 </figure>
 </div>
@@ -890,7 +904,7 @@ Figur&nbsp;26.9: En konvex funktion med endast ett minimum, det globala
 <img src="01-validation_files/figure-html/fig-nonconvex-function-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonconvex-function-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;26.10: En icke-konvex funktion med flera lokala minimum
+Figur&nbsp;26.10: En komplex funktion med flera lokala minimum
 </figcaption>
 </figure>
 </div>
@@ -898,17 +912,17 @@ Figur&nbsp;26.10: En icke-konvex funktion med flera lokala minimum
 </div>
 </div>
 </div>
-<p>Konvexa kostnadsfunktioner gör det enklare att hitta ett optimum, och vi vet att det inte finns några fällor som algoritmen kan fastna i. För de icke-konvexa funktionerna kräver det att vi startar algoritmen på flera olika ställen för att utforska en större del av funktionen men trots detta finns det inga garantier att vi hittat det globala optimum.</p>
+<p>Vissa kostnadsfunktioner definieras endast av ett minimum vilket gör det enklare att hitta då vi vet att det inte finns några fällor som algoritmen kan fastna i. För de komplexa funktionerna kräver det att vi startar algoritmen på flera olika ställen för att utforska en större del av funktionen men trots detta finns det inga garantier att vi hittat det globala optimum.</p>
 </section>
 <section id="konvergens-och-inlärningshastighet" class="level3" data-number="26.3.3">
 <h3 data-number="26.3.3" class="anchored" data-anchor-id="konvergens-och-inlärningshastighet"><span class="header-section-number">26.3.3</span> Konvergens och inlärningshastighet</h3>
 <p>För att motverka att optimeringsalgoritmer genomför oändligt många iterationer med (till slut) ytterst små justeringar av parametervärdena, avslutas optimeringen när vi anser den <strong>konvergerat</strong>. Konvergens betyder att algoritmen nått ett tillstånd där ytterligare iterationer inte leder till någon meningsfull förbättring. Detta skulle kunna vara:</p>
 <ul>
-<li>Liten förändring i kostnadsfunktionen, <span class="math inline">\(|f(\boldsymbol{\theta}_i) - f(\boldsymbol{\theta}_{i-1})| &lt; \xi_1\)</span></li>
-<li>Liten förändring i parametrarna, <span class="math inline">\(||\boldsymbol{\theta}_i - \boldsymbol{\theta}_{i-1}|| &lt; \xi_2\)</span></li>
+<li>Liten förändring i kostnadsfunktionen mellan iterationer, <span class="math inline">\(|l(\boldsymbol{\theta}_i) - l(\boldsymbol{\theta}_{i-1})| &lt; \xi\)</span></li>
+<li>Liten förändring i skattade parametervärden mellan iterationer</li>
 <li>Maximalt antal iterationer har uppnåtts</li>
 </ul>
-<p><span class="math inline">\(\xi_1\)</span> och <span class="math inline">\(\xi_2\)</span> är oftast vald till väldigt små värden, till exempel <span class="math inline">\(\frac{1}{10 000}\)</span> eller liknande.</p>
+<p><span class="math inline">\(\xi\)</span> (grekiska xi) är oftast vald till väldigt små värden, till exempel <span class="math inline">\(\frac{1}{10 000}\)</span> eller liknande.</p>
 <p>Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet förändras samt den totala beräkningstiden.</p>
 <p>Ytterligare en aspekt av iterativa algoritmer är <strong>inlärningshastigheten</strong> vilket påverkar hur snabbt vi rör oss mot bättre parametervärden närmare kostnadsfunktionens optimum. I <a href="#fig-optimization" class="quarto-xref">Figur&nbsp;<span>26.8</span></a> är denna 0.0002 = 2E-04 men vi kan öka eller minska den för att (förhoppningsvis) effektivisera algoritmen.</p>
 <div class="columns">
@@ -979,28 +993,48 @@ Viktigt
 <li>Adam och AdaDelta</li>
 <li>Steglängdscheman</li>
 </ul>
+<p>Vissa av dessa återkommer i senare kapitel.</p>
 </div>
 </div>
-<p><span style="color: red">SKA VI HA DETALJER OM DESSA OPTIMERINGSALGORITMER ELLER BARA ANVÄNDA DE I SENARE MODELLER?</span></p>
-<p>Inlärningshastigheten är ett exempel på en <strong>hyperparameter</strong>, alltså en parameter som hör till algoritmen/träningen, inte till modellen. Hyperparametrar kan också vara hur modellen ser ut, vilken optimeringsalgoritm som används, antalet iterationer eller konvergenskriterierna eller andra aspekter av hur träningen går till. Mängden hyperparametrar och de olika värdena som de kan anta blir snabbt överväldigande så vi behöver ofta anta en strukturerad process för att hitta dessa, till exempel Grid Search eller Random Search. Vi använder valideringsmängden för valet av hyperparametrar, det är inte bara olika modeller som vi kan validera enligt <a href="#sec-validation" class="quarto-xref"><span>Avsnitt 26.1</span></a> utan även olika inställningar för samma modell.</p>
+</section>
+<section id="hyperparametrar" class="level3" data-number="26.3.4">
+<h3 data-number="26.3.4" class="anchored" data-anchor-id="hyperparametrar"><span class="header-section-number">26.3.4</span> Hyperparametrar</h3>
+<p>Inlärningshastigheten är ett exempel på en <strong>hyperparameter</strong>, alltså en parameter som hör till algoritmen/träningen, inte en parameter i modellen. Hyperparametrar kan också vara hur modellen ser ut (dess övergripande egenskaper), vilken optimeringsalgoritm som används, antalet iterationer eller konvergenskriterierna eller andra aspekter av hur träningen går till.</p>
+<p>Mängden hyperparametrar och de olika värdena som de kan anta blir snabbt överväldigande så vi behöver ofta anta en strukturerad process för att hitta dessa, till exempel Grid Search eller Random Search. Vi använder valideringsmängden för valet av hyperparametrar, det är inte bara olika modeller som vi kan validera enligt <a href="#sec-validation" class="quarto-xref"><span>Avsnitt 26.1</span></a> utan även olika inställningar för samma modell.</p>
 <p>Valet av hyperparametrar kallas för <strong>hyperparameter tuning</strong></p>
 <p><span style="color: red">MER OM GRID/RANDOM SEARCH?</span></p>
-</section>
-<section id="coordinate-descent" class="level3" data-number="26.3.4">
-<h3 data-number="26.3.4" class="anchored" data-anchor-id="coordinate-descent"><span class="header-section-number">26.3.4</span> Coordinate descent</h3>
-<p>Vad är Coordinate Descent? En optimeringsmetod där man optimerar en variabel i taget. Alla andra variabler h˚alls fasta under varje steg. Itererar över variablerna tills konvergens uppn˚as. Nyckelidéer: Enkel att implementera, särskilt för stora problem. Effektiv när varje delproblem (en variabel) är lätt att lösa. Används ofta i t.ex. Lasso-regression (mer om det senare) och konvex optimering. Kräver inte beräkning av hela gradienten.</p>
-</section>
-<section id="reparameterisering" class="level3" data-number="26.3.5">
-<h3 data-number="26.3.5" class="anchored" data-anchor-id="reparameterisering"><span class="header-section-number">26.3.5</span> Reparameterisering</h3>
+<p><span style="color: green">HYPERPARAMETRAR I REGRESSION ÄR DESIGNMATRISEN. FÖR MASKININLÄRNING FINNS MODELLPARAMETRAR OCH OPTIMERINGSPARAMETRAR. KORSTABELL MED TRE DESIGNMATRISER OCH 4 LEARNING RATES. KONFIGURATION 1-12.</span></p>
+<!-- ### Coordinate descent -->
+<!-- Vad är Coordinate Descent? -->
+<!-- En optimeringsmetod där man optimerar en variabel i taget. -->
+<!-- Alla andra variabler h˚alls fasta under varje steg. -->
+<!-- Itererar över variablerna tills konvergens uppn˚as. -->
+<!-- Nyckelidéer: -->
+<!-- Enkel att implementera, särskilt för stora problem. -->
+<!-- Effektiv när varje delproblem (en variabel) är lätt att lösa. -->
+<!-- Används ofta i t.ex. Lasso-regression (mer om det senare) och -->
+<!-- konvex optimering. -->
+<!-- Kräver inte beräkning av hela gradienten. -->
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Ibland måste vissa parametrar uppfylla villkor, till exempel att vara strikt positiva. Istället för att optimera direkt på parametern kan vi omformulera problemet så att en transformation av parametern optimeras.</p>
 <p>Säg att vi vill optimera <span class="math inline">\(\theta &gt; 0\)</span>. Vi kan då välja att istället optimera över <span class="math inline">\(\phi\)</span> där <span class="math inline">\(\theta = exp(\phi)\)</span> vilket innebär att vi kan fortfarande använda gradientbaserade metoder utan att behöva begränsa algoritmen direkt för <span class="math inline">\(\theta\)</span>.</p>
+</div>
+</div>
 </section>
 </section>
-<section id="klassificeringens-kostnadsfunktion" class="level2" data-number="26.4">
-<h2 data-number="26.4" class="anchored" data-anchor-id="klassificeringens-kostnadsfunktion"><span class="header-section-number">26.4</span> Klassificeringens kostnadsfunktion</h2>
-<p>För regression får vi en kostnadsfunktion från fördelningen av det vi vill modellera. För en (ofta) kontinuerlig variabel kan vi ange olika kontinuerliga fördelningar på feltermen, till exempel normal, t, Gamma, log-normal där dess likelihood blir den naturliga kostnadsfunktionen att optimera. Vi kan även för diskreta variabler använda regression för till exempel Poisson eller Negativ binomial fördelningarna.</p>
-<p>För klassificering finns det inte alltid någon naturlig kostnadsfunktion. Däremot blir det betydligt enklare att räkna observerade och predikterade klasser från en modell eftersom antalet möjliga utfall är begränsade till skillnad från de oändliga utfallen för en kontinuerlig fördelning. Dessa kan sammanställas i en <strong>förväxlingsmatris</strong> (eng. confusion matrix):</p>
-<p>När vi skapar förväxlingsmatrisen räknas frekvenserna av antalet <span class="math inline">\(Y = 1\)</span> som blivit predikterade till de olika klasserna <span class="math inline">\(\hat{Y} = 1\)</span> (<span class="math inline">\(f_{11}\)</span>) och <span class="math inline">\(\hat{Y} = 0\)</span> (<span class="math inline">\(f_{10}\)</span>) och antalet <span class="math inline">\(Y = 0\)</span> som blivit predikterade till respektive klass (<span class="math inline">\(f_{01}\)</span> och <span class="math inline">\(f_{00}\)</span>).</p>
+<section id="optimering-och-utvärdering-i-klassificering" class="level2" data-number="26.4">
+<h2 data-number="26.4" class="anchored" data-anchor-id="optimering-och-utvärdering-i-klassificering"><span class="header-section-number">26.4</span> Optimering och utvärdering i klassificering</h2>
+<p>Inom regression får vi naturligt en kostnadsfunktion från fördelningen av det vi vill modellera. För en kontinuerlig variabel kan vi ange olika kontinuerliga fördelningar på feltermen, till exempel normal, t, Gamma, log-normal, där dess likelihood blir den naturliga kostnadsfunktionen att optimera. Vi kan även för diskreta variabler använda regression för till exempel Poisson eller Negativ binomial fördelningarna.</p>
+<p>För klassificering finns det inte riktigt någon naturlig kostnadsfunktion. Däremot blir det betydligt enklare att räkna observerade och predikterade klasser från en modell eftersom antalet möjliga utfall är begränsade till skillnad från de oändliga utfallen för en kontinuerlig fördelning. Dessa utfall kan sammanställas i en <strong>förväxlingsmatris</strong> (eng. confusion matrix). När vi skapar matrisen räknas frekvenserna av antalet <span class="math inline">\(Y = 1\)</span> som blivit predikterade till de olika klasserna <span class="math inline">\(\hat{Y} = 1\)</span> (<span class="math inline">\(TP\)</span>, True Positive) och <span class="math inline">\(\hat{Y} = 0\)</span> (<span class="math inline">\(FN\)</span>, False Negative) och antalet <span class="math inline">\(Y = 0\)</span> som blivit predikterade till respektive klass (<span class="math inline">\(FP\)</span>, False Positive, och <span class="math inline">\(TN\)</span>, True Negative).</p>
 <div id="tbl-confusion" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1036,10 +1070,10 @@ Sann klass
 <span class="math inline">\(Y = 1\)</span>
 </td>
 <td style="border: 1px solid black; padding: 5px; background-color: #D1FFBD;">
-<span class="math inline">\(f_{11}\)</span>
+<span class="math inline">\(TP\)</span>
 </td>
 <td style="border: 1px solid black; padding: 5px;">
-<span class="math inline">\(f_{10}\)</span>
+<span class="math inline">\(FN\)</span>
 </td>
 </tr>
 <tr>
@@ -1047,10 +1081,10 @@ Sann klass
 <span class="math inline">\(Y = 0\)</span>
 </td>
 <td style="border: 1px solid black; padding: 5px;">
-<span class="math inline">\(f_{01}\)</span>
+<span class="math inline">\(FP\)</span>
 </td>
 <td style="border: 1px solid black; padding: 5px; background-color: #D1FFBD;">
-<span class="math inline">\(f_{00}\)</span>
+<span class="math inline">\(TN\)</span>
 </td>
 </tr>
 </tbody>
@@ -1058,28 +1092,32 @@ Sann klass
 </div>
 </figure>
 </div>
-<p>Utifrån förväxlingsmatrisen kan ett antal utvärderingsmått beräknas som fokuserar på olika aspekter av modellens prestanda.</p>
-<p>De två enklaste måtten är andelen korrekta prediktioner och andelen felaktiga prediktioner. Vi kallar andelen korrekta prediktioner för modellens <strong>träffsäkerhet</strong> (eng. Accuracy) och andelen felaktiga prediktioner för modellens <strong>felkvot</strong> (eng. Misclassification rate).</p>
+<p>Utifrån förväxlingsmatrisen kan ett antal utvärderingsmått beräknas som fokuserar på olika aspekter av modellens prestanda. Vi vill att så många av prediktionerna är korrekta, det vill säga hamnar i den grönmarkerade diagonalen. Utifrån dessa två celler kan vi beräkna två enkla mått; andelen korrekta prediktioner och andelen felaktiga prediktioner. Vi kallar andelen korrekta prediktioner för modellens <strong>träffsäkerhet</strong> (eng. accuracy) och andelen felaktiga prediktioner för modellens <strong>felkvot</strong> (eng. misclassification rate).</p>
 <p><span class="math display">\[
 \begin{aligned}
-  \text{Träffsäkerhet} &amp;= \frac{f_{11} + f_{00}}{n} = \frac{f_{11} + f_{00}}{f_{11} + f_{10} + f_{01} + f_{00}} \\
-  \text{Felkvot} &amp;= \frac{f_{10} + f_{01}}{n} = \frac{f_{10} + f_{01}}{f_{11} + f_{10} + f_{01} + f_{00}} = 1 - \text{Träffsäkerhet} \\
+  \text{Träffsäkerhet} &amp;= \frac{TP + TN}{n} = \frac{TP + TN}{TP + FN + FP + TN} \\
+  \text{Felkvot} &amp;= \frac{FN + FP}{n} = \frac{FN + FP}{TP + FN + FP + TN} = 1 - \text{Träffsäkerhet} \\
 \end{aligned}
 \]</span> När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas.</p>
-<p>Problemet med att använda någon av dessa mått som modellens kostnadsfunktion är att de kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering spelar andelen av data som tillhör vardera klass roll, detta kallas för <strong>klassbalanser</strong>. När vi ska modellera en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda.</p>
-<p>Om andelarna är <strong>balanserade</strong>, det vill säga nära 50% för de båda andelarna, kommer modellen ha lika mycket information om de båda klasserna och träffsäkerheten/felkvoten tar hänsyn lika mycket till båda klasserna. Om andelarna däremot är <strong>obalanserade</strong>, stora skillnader i andel mellan klasserna, kommer träffsäkerheten/felkvoten ha problem att optimera den mindre av klasserna. Om vi exempelvis har 95% 0:or och 5% 1:or kommer kanske optimeringen anse att optimum är att prediktera alla observationer till majoritetsklassen, för då blir träffsäkerheten 95%. Vi behöver därför titta på ytterligare mått som kan användas för att hantera klassobalans.</p>
-<p>Med fokus på <span class="math inline">\(Y = 1\)</span> beskriver <strong>sensitiviteten</strong> (eng. True Positive Rate, sensitivity, recall) hur stor andel av de observerade 1:orna som faktiskt också predikterades som 1:or. Motsatsen är <strong>specificiteten</strong> (eng. True Negative Rate, specificity) som beskriver hur stor andel observerade icke-1:or som också predikterades som icke-1:or.</p>
+<p>Problemet med att använda felkvoten som modellens kostnadsfunktion (för att fortsätta minimera kostnadsfunktionen) är att de kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering påverkar andelen av data som tillhör vardera klass modellens övergripande prestanda. Denna andel kallas för <strong>klassbalans</strong>. När vi modellerar en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda.</p>
+<p>Om andelarna är <strong>balanserade</strong>, det vill säga nära 50%/50% för de båda andelarna, kommer modellen ha lika mycket information om klasserna och felkvoten tar hänsyn lika mycket till båda klasserna i optimeringen. Om andelarna däremot är <strong>obalanserade</strong>, när stora skillnader i andel förekommer mellan klasserna, kommer felkvoten ha problem att optimera den mindre av klasserna. I ett extremt fall, om vi har 95% 0:or och 5% 1:or riskerar optimeringen anse att den minsta felkvoten som kan uppnås är att prediktera alla observationer till majoritetsklassen, för då blir felkvoten 5%. Vi behöver därför titta på ytterligare mått som kan användas för att hantera klassobalans.</p>
+<p>Med fokus på en av klasserna, vanligtvis <span class="math inline">\(Y = 1\)</span>, beskriver <strong>sensitiviteten</strong> (eng. True Positive Rate, sensitivity, recall) hur stor andel sanna 1:or som också predikterades som 1:or. Detta mått ger en indikation på hur bra modellen är på att göra korrekta prediktioner för en utav klasserna, men en modell kan ha 100% sensitivitet om alla prediktioner är 1:or. Ett mått som mäter hur bra prediktionerna av klass är <strong>specificiteten</strong> (eng. True Negative Rate, specificity). Detta mått beskriver andelen sanna 0:or (<span class="math inline">\(Y \ne 1\)</span>) som också predikterades som 0:or. Om alla observationer predikteras till 1:or för att få en hög sensitivitet, kommer specificiteten bli 0%.</p>
 <p><span class="math display">\[
 \begin{aligned}
-\text{Sensitivitet}_{Y = 1} &amp;= \frac{f_{11}}{f_{11} + f_{10}}\\
-\text{Specificitet}_{Y = 1} &amp;= \frac{f_{00}}{f_{01} + f_{00}}
+\text{Sensitivitet}_{Y = 1} &amp;= \frac{TP}{TP + FN}\\
+\text{Specificitet}_{Y = 1} &amp;= \frac{TN}{FP + TN}
 \end{aligned}
-\]</span> Om det ena måttet är stort och det andra litet betyder det att modellen fokusera på endast någon av klasserna, medan om båda måtten är stora betyder det att modellen lyckats prediktera alla klasser lika bra.</p>
+\]</span> Med hjälp av båda måtten kan vi då undersöka ifall modellen fokuserar mer på den ena eller andra klassen. En optimal modell har höga värden på båda måtten, men om det ena måttet är markant större än det andra visar det att modellen har lättare att prediktera den ena klassen. I och med att måtten</p>
 <p><span style="color: red">Precision och F-Score</span></p>
+<p>Problemen med dessa mått är att de inte är bra kostnadsfunktioner ur en matematisk synpunkt. De används främst för att utvärdera prestandan av modellen, speciellt att undersöka ifall modellen är generellt bra på att prediktera alla klasser i problemet. Istället används vanligtvis en annan kostnadsfunktion, <strong>cross entropy</strong>.</p>
 <section id="cross-entropy" class="level3" data-number="26.4.1">
 <h3 data-number="26.4.1" class="anchored" data-anchor-id="cross-entropy"><span class="header-section-number">26.4.1</span> Cross Entropy</h3>
 <p><span style="color: red">CROSS ENTROPY MÅSTE FÖRKLARAS</span></p>
 </section>
+</section>
+<section id="case" class="level2" data-number="26.5">
+<h2 data-number="26.5" class="anchored" data-anchor-id="case"><span class="header-section-number">26.5</span> Case</h2>
+<p><span style="color: red">LÄGG TILL ETT NYTT KAPITEL DÄR VI GÅR IGENOM CASE FÖR REGRESSION OCH LOGISTISK REGRESSION</span></p>
 </section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
