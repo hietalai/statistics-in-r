@@ -1,15 +1,15 @@
 Question
 ========
 Två ARIMA-modeller har anpassats till samma tidsserie med $n=30$ observationer.
-Modell A är en ARIMA$(2,0,1)$ med konstant och har $\log(L)=-100$.
-Modell B är en ARIMA$(1,0,1)$ utan konstant och har $\log(L)=-102$.
-Använd $AIC=-2\log(L)+2k$ och $AIC_c=AIC+\frac{2(k+1)(k+2)}{n-k-2}$, där $k=p+q+1$ om en konstant inkluderas och $k=p+q$ annars.
+Modell A är en ARIMA$(2,0,1)$ med konstant och har $\ln(L)=-100$.
+Modell B är en ARIMA$(1,0,1)$ utan konstant och har $\ln(L)=-102$.
+Använd $AIC=-2\ln(L)+2m$ och $AIC_c=AIC+\frac{2(m+1)(m+2)}{n-m-2}$, där $m=p+q+1$ om en konstant inkluderas och $m=p+q$ annars.
 Vilka av följande påståenden är korrekta?
 
 Answerlist
 ----------
 * Båda modellerna har samma $AIC$.
-* För Modell A är $k=3$, eftersom modellen sammanlagt har tre AR- och MA-parametrar.
+* För Modell A är $m=3$, eftersom modellen sammanlagt har tre AR- och MA-parametrar.
 * Modell A har $AIC_c=210.5$.
 * Modell B har lägre $AIC_c$ än Modell A och bör därför föredras enligt detta kriterium.
 * Korrigeringen från $AIC$ till $AIC_c$ blir större för Modell A eftersom den har fler skattade parametrar.
