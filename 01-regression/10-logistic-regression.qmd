@@ -166,28 +166,101 @@ I denna litteratur betecknar $log()$ alltid den naturliga logaritmen^[Detta gäl
 
 Denna länk visar också hur vi bör tolka parametrar från den linjära modellen. Uttrycket inuti logaritmen beskriver ett **odds**, sannolikheten att något inträffar dividerat med sannolikheten att något inte inträffar, specifikt oddset att $Y_i = 1$. Den linjära modellen beskriver då **logodds** och en lutningsparameter beskriver en förändring i logodds, även kallad en **oddskvot**, som vi kommer återkomma till senare.
 
-## Logistisk regression
-Till skillnad från vanlig linjär regression kan vi inte längre använda minsta kvadratmetoden för att skatta modellens parametrar då vi inte längre har en linjär relation mellan de förklarande och responsvariabeln. Istället behöver vi använda responsvariabelns (log)likelihoodfunktion och iterativt optimera för att hitta de parametervärden som genererar det högsta värdet på funktionen.
+## Maximum likelihoodmetoden {#sec-maximum-likelihood}
+Till skillnad från vanlig linjär regression kan vi inte längre använda minsta kvadratmetoden för att skatta modellens parametrar då vi inte längre har en linjär relation mellan de förklarande och responsvariabeln. Istället behöver vi använda responsvariabelns (log)**likelihoodfunktion** och iterativt optimera för att hitta de parametervärden som genererar det högsta värdet på funktionen.
 
-<!-- TODO EXPLAIN MORE ABOUT LIKELIHOOD FUNCTIONS -->
+En likelihoodfunktion är en funktion som givet parametervärden visar hur troligt det observerade data är. När likelihoodfunktionen är som störst indikerar den på parametrarna som är mest trolig att ha genererat de observerade data, det vill säga optimeringen vill maximera funktionen iterativt. Vanligtvis optimeras **loglikelihood**-funktionen då transformationen till log ger enklare ekvationer av derivatorer för optimeringsalgoritmerna.
 
-För en Bernoulli-fördelad slumpvariabel kan vi skriva loglikelihoodfunktionen som: 
+Vi kan visa processen med ett enkelt exempel där vi har en analytisk lösning. För en Bernoulli-fördelad slumpvariabel kan vi skriva loglikelihoodfunktionen som: 
 $$
 \begin{aligned}
-logL(\pi) &= log\left[\prod\limits_{i = 1}^n \left( \pi^{Y_i} \cdot (1 - \pi)^{1 - Y_i}\right) \right] 
-\\&= \sum\limits_{i = 1}^{n_1}log(\pi) + \sum\limits_{i = n_1 + 1}^{n}log(1 - \pi)
+  \ln L(\pi) &= log\left[\prod\limits_{i = 1}^n \left( \pi^{Y_i} \cdot (1 - \pi)^{1 - Y_i}\right) \right] 
+  \\&= \sum\limits_{i = 1}^{n_1}\ln(\pi) + \sum\limits_{i = n_1 + 1}^{n}\ln(1 - \pi) \\
+  &= n_1 \cdot \ln(\pi) + (n - n_1) \ln (1 - \pi)
 \end{aligned}
 $$
 
-där $\pi$ är sannolikheten för $P(Y=1)$, $n$ är antalet observationer och $n_1$ är antalet 1:or i materialet^[Vi antar att vi summerar uttrycket först över alla 1:or med tillhörande sannolikhet $\pi$.]. När vi modellerar den Bernoullifördelade variabeln med en logistisk regression antar vi att $P(Y=1)$ varierar beroende på värden av våra förklarande variabler, så vi byter ut $\pi$ med ett uttryck som förhåller sig till de förklarande variablerna och $\beta$. Detta ger loglikelihoodfunktionen: 
+där $\pi$ är sannolikheten för $P(Y=1)$, $n$ är antalet observationer och $n_1$ är antalet 1:or i materialet^[Vi antar att vi summerar uttrycket först över alla 1:or med tillhörande sannolikhet $\pi$.]. 
+
+Nästa steg i optimeringen är att derivera uttrycket.
+
 $$
 \begin{aligned}
-logL(\boldsymbol{\beta}) = \sum_{i = n_1 + 1}^{n} \operatorname{-}\mathbf{X}_i'\boldsymbol{\beta} - \sum_{i=1}^n \ln (1 + exp\left[\operatorname{-}\mathbf{X}_i'\boldsymbol{\beta} \right])
+\frac{d}{d\pi}logL(\pi) &= n_1 \cdot \frac{1}{\pi} + (n - n_1) \frac{1}{1 - \pi} \cdot -1 \\
+&= \frac{n_1}{\pi} - \frac{n - n_1}{1 - \pi}
 \end{aligned}
 $$
-Denna funktion optimeras numeriskt, vanligtvis med Fisher Scoring Algorithm^[En algoritm som använder andraderivator för att succestivt hitta bättre värden för $\boldsymbol{\beta}$. För mer detaljer, se \url{https://en.wikipedia.org/wiki/Scoring_algorithm}.]. Det är denna algoritm som R använder sig utav när vi en logistisk regressionsmodell anpassas.
+och till sist identifiera när derivatan är lika med 0. 
 
-### `glm()`
+$$
+\begin{aligned}
+\frac{d}{d\pi}logL(\pi) = 0 &= n_1 \cdot (1 - \pi) - (n - n_1) \cdot \pi\\
+0 &= n_1 - n\pi \\
+\pi &= \frac{n_1}{n}
+\end{aligned}
+$$
+I detta enkla fall med den analytiska lösningen får vi fram en enkel formel som visar på den skattning som ger det största värdet på likelihoodfunktionen. I mer komplexa fall behöver vi använda någon form av iterativ optimering som successivt förflyttar sig i derivatans riktning tills ett optimum nås.
+
+Följande visualisering visar hur ett slumpmässigt valt startvärde (rödstreckad linje) stegvis flyttar sig tills vi når ett optimum (svartstreckade linje).
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Enkelt exempel på iterativ optimering
+#| label: fig-optimization
+#| out-width: "90%"
+#| echo: false
+
+x <- seq(0, 1, by = 0.001)
+y <- log(choose(344, 152) * x^152 * (1-x)^(344-152))
+data <- data.frame(x, y)
+
+theta <- numeric(10)
+
+set.seed(20211009)
+theta[1] <- 0.85
+
+deriv <- expression(152/x - 192/(1-x))
+
+for(i in 2:30){
+  
+  x <- theta[i-1]
+  
+  theta[i] <- theta[i-1] + 0.0002 * eval(deriv)
+  
+}
+
+ascent <- data.frame(theta, y = log(choose(344, 152) * theta^152 * (1-theta)^(344-152)))
+
+ggplot(data) + aes(x = x, y = y) + geom_line() + 
+  labs(x = expression(pi) , y = "lnL") + 
+  geom_point(
+    data = ascent,
+    aes(x = theta, y = y),
+    size = 3, 
+    color = "firebrick",
+    alpha = 0.5
+  ) + 
+  geom_path(
+    data = ascent,
+    aes(x = theta, y = y),
+    linewidth = 1.2,
+    color = "firebrick",
+  ) +
+  geom_vline(xintercept = theta[1], linetype = 2, color = "firebrick") + 
+  geom_vline(xintercept = 152/344, linetype = 2, color = "black") + 
+  theme_bw()
+
+```
+
+När vi modellerar den Bernoullifördelade variabeln med en logistisk regression antar vi att $P(Y = 1)$ varierar beroende på värden av våra förklarande variabler, så vi byter ut $\pi$ med ett uttryck som förhåller sig till de förklarande variablerna och $\beta$. Detta ger loglikelihoodfunktionen: 
+$$
+\begin{aligned}
+\ln L(\boldsymbol{\beta}) = \sum_{i = n_1 + 1}^{n} \operatorname{-}\mathbf{X}_i'\boldsymbol{\beta} - \sum_{i=1}^n \ln (1 + exp\left[\operatorname{-}\mathbf{X}_i'\boldsymbol{\beta} \right])
+\end{aligned}
+$$
+Denna funktion optimeras numeriskt, vanligtvis med Fisher Scoring Algorithm^[En algoritm som använder andraderivator för att succestivt hitta bättre värden för $\boldsymbol{\beta}$. För mer detaljer, se följande länk: https://en.wikipedia.org/wiki/Scoring_algorithm.]. Det är denna algoritm som R använder sig utav när en logistisk regressionsmodell anpassas.
+
+### Logistisk regression
 `glm()` används för att anpassa **generaliserade** linjära modeller, en mer flexibel typ av linjära modeller. Med hjälp av argumentet `family` kan vi ange vilken fördelning och länkfunktion som vi anser responsvariabeln behöver för att transformera den linjära modellen till den aktuella modellen för responsvariabeln. 
 
 Objektet som `glm()` returnerna har många liknande delobjekt som `lm()`. Det går även att använda liknande funktioner såsom `summary()`, `coef()`, och `residuals()` för att plocka ut enskilda objekt som vi är vana vid att göra. Däremot kommer dessa objekt inte tolkas på samma sätt som vi har gjort i tidigare kapitel då vi måste ta hänsyn till den förändrade modellstrukturen.
