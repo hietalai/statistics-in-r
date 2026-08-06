@@ -5,9 +5,30 @@ filters:
 ---
 <!-- CONTENT -->
 
+```{r}
+#| include: false
+
+
+set.seed(123)
+n <- 1000
+
+# Simulerar en ARMA(1,1) med givna parametervärden 
+y <- arima.sim(n, model = list(order = c(1,0,1), ar = 0.5, ma = -0.3))
+
+data <- 
+  tibble(
+    x = seq_len(n),
+    y = y |> c()
+  )
+
+modelARMA <- arima(y, order = c(1, 0, 1), include.mean = FALSE)
+modelMA <- arima(y, order = c(0, 0, 2), include.mean = FALSE)
+
+```
+
 # Modellutvärdering {#sec-tsa-model-evaluation}
 
-Trots att vi kan använda SAC och SPAC för att fatta ett informerat beslut om vilket typ av modell (AR, MA eller ARMA, med eller utan differentiering) är det inte alltid så lätt att definitivt välja enbart en modell. Istället kan vi anse dessa verktyg som en del av processen och utvärdering av anpassade modeller som ytterligare delar vilka bör vägas in innan en slutgiltig modell väljs. 
+Trots att vi kan använda SAC, SPAC och EACF för att fatta ett informerat beslut om vilken modell (AR(p), MA(q) eller ARMA(p,q), med eller utan differentiering) som är lämpligast för en observerad tidsserie, är det inte alltid så lätt att enbart välja en modell. Istället kan vi anse dessa verktyg som en del av processen och utvärdering av anpassade modeller som ytterligare en del, vilken bör vägas in innan en slutgiltig modell väljs. 
 
 Modellutvärdering kan fokusera på ett par olika aspekter, till exempel: 
 
@@ -16,31 +37,31 @@ Modellutvärdering kan fokusera på ett par olika aspekter, till exempel:
 - hur komplex är modellen?
 - hur rimliga prediktioner kan modellen skapa?
 
-Vi kan återanvända några mått från regressionsteorin för att besvara vissa av dessa frågor (AIC) och varianter på residualspridning (MSE) anpassad för tidsserier. En visuell analys av prediktioner i relation till den observerade serien ger oss också möjligheten att se hur modellen skulle tillämpas för framtida tidpunkter.
+Vi kan återanvända några mått från regressionsteorin för att besvara vissa av dessa frågor, till exempel AIC för generalisering och varianter på residualspridning (MSE) anpassad för tidsserier. En visuell analys av prediktioner i relation till den observerade serien ger oss också möjligheten att se hur modellen skulle tillämpas för framtida tidpunkter.
 
 ## Modellantaganden (vitt brus)
 
-I en regressionsmodell måste vissa antaganden uppfyllas (se @sec-residual-simple) för att modellen ska vara en lämplig och trovärdig anpassning av datamaterialet. För dessa modeller kan vi formulera om modellantaganden till residualantaganden och genomföra en residualanalys för att kontrollera dessa. 
+I en regressionsmodell måste vissa antaganden uppfyllas (se @sec-residual-simple) för att modellen ska vara en lämplig och trovärdig anpassning av datamaterialet. För regressionsmodeller kan vi formulera om modellantaganden till residualantaganden och genomföra en residualanalys för att kontrollera dessa. För ARIMA modeller finns det inga riktiga residualantaganden som sådan men vi vill att modellens AR och/eller MA komponenter plockar upp allt tidsberoende som går att modellera. Den resterande delen av modellen (residualerna, $\hat{e}_t$) är då ren slump, det som vi kallade vitt brus i @sec-white-noise. 
 
-För ARIMA modeller finns det inga riktiga residualantaganden men vi vill att modellens AR och/eller MA komponenter plockar upp allt tidsberoende som går att modellera. Den resterande delen av modellen (residualerna, $\hat{e}_t$) är då ren slump, det som vi kallade vitt brus i @sec-white-noise. Vi kan undersöka $\hat{e}_t$ från den skattade modellen för att se om den följer de egenskaper som vi förväntar vitt brus att ha.
+Vi kan undersöka $\hat{e}_t$ från den skattade modellen för att se om den följer de egenskaper som vi förväntar vitt brus ska ha. 
 
-Vi kan undersöka $\hat{e}_t$ på följande sätt:
+#### 1. Visualisering {-}
 
-1. Visualisering
+Vi kan betrakta $\hat{e}_t$ som en egen tidsserie och skapa ett linjediagram för att visuellt bedöma om serien uppvisar några trender eller andra mönster. Vi vill att serien förhåller sig kring 0 och ser "slumpmässig" ut. Vad som anses vara slumpmässigt kan vara rätt så subjektivt och svårtydat men vi vill inte se perioder med tätt följda punkter (positiv autokorrelation) eller perioder där serien slår från positiva till negativa värden och vice versa (negativ autokorrelation). 
 
-Vi kan betrakta $\hat{e}_t$ som en ren tidsserie och skapa ett linjediagram för att visuellt bedöma om serien uppvisar några trender eller andra mönster. Vi vill att serien förhåller sig kring 0 och ser "slumpmässig" ut. Vad som anses vara slumpmässigt kan vara rätt så subjektivt och svårtydat men vi vill inte se perioder med tätt följda punkter (positiv autokorrelation) eller perioder där serien slår från positiva till negativa värden och vice versa (negativ autokorrelation). 
+#### 2. Normalfördelningen {-}
 
-2. Normalfördelningen
+Vi kan låna ett verktyg från @sec-residual-simple och skapa ett QQ-diagram över residualerna för att undersöka om de anses följa en normalfördelning då vitt brus antas vara slumpmässiga dragningar från den fördelningen. Om punkterna inte följer linjen i diagrammet finns det då en risk att de inte kommer från en normalfördelning.
 
-Vi kan låna ett verktyg från @sec-residual-simple och skapa ett QQ-diagram över residualerna för att undersöka om de anses följa en normalfördelning då vitt brus antas vara slumpmässiga dragningar från den fördelningen.
+#### 3. SAC och SPAC {-}
 
-3. SAC och SPAC
+Det kan ibland vara svårt att visuellt bedöma om en serie ser slumpmässig ut vilket leder till användningen av mer objektiva mått såsom SAC och SPAC. Dessa kan beräknas på $\hat{e}_t$ och skapa liknande diagram som vi såg i @fig-ex-acf-pacf men nu vi vill *inte* se några spikar i respektive diagram, likt det vi såg i @fig-sac-white-noise.
 
-Det kan ibland vara svårt att visuellt bedöma om en serie ser slumpmässig ut vilket leder till användningen av mer objectiva mått såsom SAC och SPAC. Vi vill inte se några spikar i respektive diagram, likt det vi skapade i @fig-sac-white-noise. 
+Förekommer det spikar i dessa diagram antyder det att vi saknar någon komponent i modellen, vilket vi då skulle kunna använda som stöd för att anpassa en mer komplex modell enligt @tbl-behavior-ac-pac. Ser SAC långsamt avtagande ut i residualerna ger det en indikation att serien möjligtvis inte var stationär eller att en mer komplex modell krävs för att modellera tidsberoendet korrekt.
 
-4. Ljung-Box
+#### 4. Ljung-Box {-}
 
-Även om SAC inte uppvisar några signifikanta spikar kan vi ändå få problem om flera lagg uppvisar stora autokorrelationer. Ett test som undersöker summan av $K$ lagg är ett Ljung-Box test som utgår från följande teststatistika:
+Även om SAC inte uppvisar några signifikanta spikar kan vi ändå få problem om många lagg uppvisar stora autokorrelationer. Ett test som undersöker summan av $K$ lagg är ett **Ljung-Box test** som utgår från följande teststatistika:
 
 $$
   \begin{aligned}
@@ -51,17 +72,230 @@ som vi kan anse följa $\chi^2(df = K - p - q)$. Om ett tidsberoende finns kvar 
 
 Dessa fyra sätt vägs sedan samman för en helhetsbedömning huruvida modellen har lyckats modellera allt tidsberoende så att residualerna bara är vitt brus. Om någon av dessa inte indikerar på vitt brus, behöver vi tänka om i vår modellanpassning och undersöka alternativa, oftast mer komplexa, ARIMA-modeller.
 
+### ARMA(1,1) eller MA(2)?
+
+Vi vill titta närmare på våra två modeller, ARIMA(1,0,1) och MA(2) från @sec-tsa-in-r. Först plockar vi ut residualerna från respektive modell med hjälp av `residuals()`.
+
+```{r}
+#| code-fold: false
+
+residARMA <- residuals(modelARMA)
+
+residMA <- residuals(modelMA)
+
+```
+
+Vi börjar med att visualisera de båda residualserierna för att få en bild av hur modellen ser ut.
+
+```{r}
+#| code-fold: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Residualer över tid för de två kandidatmodellerna
+#| label: fig-ex-resid-time
+#| out-width: "90%"
+
+data <- tibble(
+  t = seq_len(length(residARMA)),
+  resARMA = residARMA,
+  resMA = residMA
+) |> 
+  pivot_longer(cols = !t)
+
+data |> 
+  ggplot() + aes(x = t, y = value) + geom_line() + 
+  theme_bw() + labs(y = "Residualer") + 
+  facet_wrap(vars(name), ncol = 1)
+
+```
+
+Som tidigare nämnt är det mycket svårt att utläsa någonting från dessa visualiseringar, men vi ser åtminstone inga tydliga indikationer på trender i någon av dem.
+
+Vi kontrollerar även residualernas normalfördelning med hjälp av ett QQ-diagram.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: QQ diagram av residualerna från ARIMA(1,0,1) och MA(2)
+#| label: fig-ex-arma-resid-qq
+#| out-width: "90%"
+
+data |> 
+  ggplot() + 
+  ## Använd standardiserade residualer
+  aes(sample = scale(value)) + 
+  geom_qq_line() + 
+  geom_qq(color = "steelblue") +
+  theme_bw() + 
+  labs(x= "Teoretiska kvantiler", y = "Observerade kvantiler") +
+  facet_wrap(vars(name), ncol = 1)
+
+```
+
+Figuren visar inga större avvikelser för någon av modellerna.
+
+Nästa steg är att räkna ut autokorrelationen med hjälp av SAC och SPAC så att vi får en bättre bild av serien. Först beräknas och visualiseras residualerna från ARIMA(1,0,1).
+
+
+```{r}
+#| include: false
+data <- 
+  tibble(
+    lag = 1:30,
+    ACF = acf(residARMA, lag.max = 30)$acf,
+    PACF = pacf(residARMA, lag.max = 30)$acf
+  ) |> 
+  pivot_longer(!lag)
+
+```
+
+```{r}
+#| eval: false
+#| code-fold: FALSE
+
+data <- 
+  tibble(
+    lag = 1:30,
+    # Beräknar SAC och SPAC samt plockar ut endast acf delen av objektet som innehåller korrelationerna
+    ACF = acf(residARMA, lag.max = 30)$acf,
+    PACF = pacf(residARMA, lag.max = 30)$acf
+  ) |> 
+  pivot_longer(!lag)
+
+ggplot(data) + aes(x = lag, y = value) + 
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_hline(yintercept = 1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  geom_hline(yintercept = -1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  theme_bw() + 
+  scale_y_continuous(breaks = seq(-1, 1, by = 0.05)) +
+  labs(x = "Lag", y = "ACF") + 
+  facet_wrap(~name, nrow = 1)
+
+```
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Autokorrelation och partiell autokorrelation för residualerna från ARIMA(1,0,1) modellen
+#| label: fig-ex-arma-resid-sac
+#| out-width: "90%"
+
+ggplot(data) + aes(x = lag, y = value) + 
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_hline(yintercept = 1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  geom_hline(yintercept = -1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  theme_bw() + 
+  scale_y_continuous(breaks = seq(-1, 1, by = 0.05)) +
+  labs(x = "Lag", y = "ACF") + 
+  facet_wrap(~name, nrow = 1)
+
+```
+
+Sedan visualiseras residualerna för MA(2).
+
+```{r}
+#| include: false
+data <- 
+  tibble(
+    lag = 1:30,
+    ACF = acf(residMA, lag.max = 30)$acf,
+    PACF = pacf(residMA, lag.max = 30)$acf
+  ) |> 
+  pivot_longer(!lag)
+
+```
+
+```{r}
+#| eval: false
+#| code-fold: FALSE
+
+data <- 
+  tibble(
+    lag = 1:30,
+    # Beräknar SAC och SPAC samt plockar ut endast acf delen av objektet som innehåller korrelationerna
+    ACF = acf(residMA, lag.max = 30)$acf,
+    PACF = pacf(residMA, lag.max = 30)$acf
+  ) |> 
+  pivot_longer(!lag)
+
+ggplot(data) + aes(x = lag, y = value) + 
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_hline(yintercept = 1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  geom_hline(yintercept = -1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  theme_bw() + 
+  scale_y_continuous(breaks = seq(-1, 1, by = 0.05)) +
+  labs(x = "Lag", y = "ACF") + 
+  facet_wrap(~name, nrow = 1)
+
+```
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Autokorrelation och partiell autokorrelation för residualerna från MA(2) modellen
+#| label: fig-ex-ma-resid-sac
+#| out-width: "90%"
+
+ggplot(data) + aes(x = lag, y = value) + 
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_hline(yintercept = 1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  geom_hline(yintercept = -1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  theme_bw() + 
+  scale_y_continuous(breaks = seq(-1, 1, by = 0.05)) +
+  labs(x = "Lag", y = "ACF") + 
+  facet_wrap(~name, nrow = 1)
+
+```
+
+@fig-ex-arma-resid-sac och @fig-ex-ma-resid-sac ser väldigt snarlika ut, med i princip alla lagg innanför signifikansgränserna. Det syns endast en spik vid lagg $k = 12$ i båda men det är ingenting som sticker ut.
+
+:::{.callout-important}
+Ibland kan enskilda lagg vara signifikanta på grund av slumpen. 
+
+När ett större lagg är signifikant behöver vi fundera ifall det finns några säsongseffekter i data som inte plockats upp. Just lagg 12 är speciellt för timvisa data där periodiciteten är 24, eftersom 12 är halva perioden kan ibland effekter synas även för dessa lagg. 
+
+I detta fall har vi ingen information om att data är uppmätt timvist (det är det inte då vi inte simulerade en säsongseffekt i serien), så vi anser då att spiken uppkommer utav ren slump.
+:::
+
+Båda modellerna verkar alltså inte ha några problem med kvarvarande autokorrelation men till sist undersöker vi detta även med ett Ljung Box test. Funktionen `LB.test()` genomför ett sådant test för en angiven `model` och `lag`. Vanligtvis är det aktuellt att titta på de första laggen i en serie, men vi kan också genomföra flera tester på flera olika lagg för att se ifall vi verkar ha avvikelser från vitt brus över större områden.
+
+```{r}
+#| code-fold: false
+
+LB.test(model = modelARMA, lag = 12, type = "Ljung-Box")
+LB.test(model = modelMA, lag = 12, type = "Ljung-Box")
+
+```
+
+Båda dessa tester visar på p-värden som är större än 0.05 vilket innebär att nollhypotesen (ingen autokorrelation) inte kan förkastas. I praktiken innebär detta då att vi inte anser serien avvika från ett vitt brus, vilket är bra.
+
+Så båda dessa modeller är väldigt snarlika i sina utvärderingar av det vita bruset, så vi får egentligen ingen hjälp att välja modell mer än att vi kan säga att båda verkar modellera serien bra.
+
 <!-- TODO: VARFÖR HATT PÅ R I BOKEN? -->
 
-### Dickey-Fuller test
+<!-- ### Dickey-Fuller test -->
 
-[TODO: Gör vi detta på residualerna?]{style="color: red;"}
+<!-- [TODO: Gör vi detta på residualerna?]{style="color: red;"} -->
+
+:::{.callout-caution}
+## Övning 1
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap24.1_ex1.rmd")
+
+```
+:::
+
 
 ## Utvärderingsmått
 
-För att utvärdera hur bra modellen anpassas till den observerade serien kan vi använda visualiseringar där vi visar både den observerade och anpassade serien i samma diagram. Denna tolkning är dock subjektiv och det kan vara svårt att faktiskt få en helhetsbild av anpassningen. Visualiseringen är bra för att identifiera vissa problemområden av modellanpassningen, ofta tidpunkter som avviker mycket från det generella sambandet, vilket en modell ofta har svårt att plocka upp.
+För att utvärdera hur bra modellen anpassas till den observerade serien kan vi använda visualiseringar där vi visar både den observerade och anpassade serien i samma diagram. Denna tolkning är dock subjektiv och det kan vara svårt att faktiskt få en helhetsbild av anpassningen. Visualiseringen är bra för att identifiera vissa problemområden av modellanpassningen, ofta tidpunkter som avviker mycket från det generella sambandet där en modell har svårt att hänga med.
 
-Utöver visualiseringar finns tre mått som ger en sammanfattande bild av modellens anpassning och kan då användas för att jämföra olika modeller:
+Utöver visualiseringar finns tre mått som ger en sammanfattande bild av modellens anpassning vilka kan användas för att jämföra olika modeller.
 
 **Mean Square Deviation (MSD)** liknar MSE från regressionsmodelleringen där vi numera inte tar hänsyn till antalet parametrar. Måttet beräknas enligt:
 
@@ -92,45 +326,135 @@ $$ {#eq-mape}
 
 En bra modell har låga värden på dessa mått då det indikerar på mindre fel, men ibland kan måtten säga emot varandra. Detta gäller främst MSD och MAD/MAPE då förekomsten av extremvärden kan överskatta felet i MSD. Då behöver vi göra en sammanlagd avvägning där vi också tar hänsyn till andra utvärderingar för att bedöma vilken modell som är bättre anpassad.
 
+### Exempel
+
+Från våra två modeller fås följande utvärderingsmått:
+
+```{r}
+#| code-fold: false
+
+MSD <- function(model) {
+  sum(residuals(model)^2) / length(y)
+}
+
+MAD <- function(model) {
+  sum(abs(residuals(model))) / length(y)
+}
+
+MAPE <- function(model) {
+  sum(abs(residuals(model) / y)) / length(y)
+}
+
+tibble(
+  Mått = c("MSD", "MAD", "MAPE"),
+  `ARIMA(1,0,1)` = c(
+    MSD(modelARMA),
+    MAD(modelARMA),
+    MAPE(modelARMA)
+  ),
+  `MA(2)` = c(
+    MSD(modelMA),
+    MAD(modelMA),
+    MAPE(modelMA)
+  )
+)
+
+```
+
+Även här är måtten väldigt snarlika, med ARIMA(1,0,1) har en lägre MSD medan MA(2) har en lägre MAPE. Då skillnaderna är väldigt små får vi inte heller här någon tydlig indikation vilken modell som är bäst.
 
 ## Överanpassning och generaliserbarhet
 
-Med hjälp av enkla sammanfattande mått kan vi få en bild av hur bra modellen är på att beskriva den observerade serien. Det finns också ett mått som kan utvärdera hur bra en modell anpassas samt hur bra generaliserbar den är. 
+Med hjälp av enkla sammanfattande mått kan vi få en bild av hur bra modellen är på att beskriva den observerade serien. Det finns också ett mått som kan utvärdera hur bra en modell anpassas *och* hur bra generaliserbar den är. 
 
-AIC (läs mer i @sec-aic) går att beräkna även för en generell ARIMA-modell enligt:
+Akaikes Information Criteria (AIC, läs mer om måttet i @sec-aic) går att beräkna även för en generell ARIMA-modell enligt:
 
 $$
   \begin{aligned}
-  AIC = -2\log(L)+2k
+  AIC = -2\ln(L)+2\cdot m
   \end{aligned}
 $$
-där $k = p + q + 1$ om en konstant inkluderas i modellen, $k = p + q$ annars. För att justera för eventuell skevhet som uppkommer om $k / n > 0.1$ kan vi beräkna en **korrigerad AIC** enligt:
+där $m = p + q + 1$ om en konstant inkluderas i modellen, $m = p + q$ annars. För att justera för eventuell skevhet som uppkommer om $m / n > 0.1$ kan vi beräkna en **korrigerad AIC** enligt:
 
 $$
   \begin{aligned}
-  AIC_c = AIC + \frac{2(k+1)(k+2)}{n-k-2}
+  AIC_c = AIC + \frac{2(m+1)(m+2)}{n-m-2}
   \end{aligned}
 $$ {#eq-aicc}
 
-$AIC_c$ kommer vara lägre för en modell som är mer generaliserbar och inte inkluderar onödiga komponenter vilket riskerar att modellen blir överanpassad till den observerade serien. Eftersom ARIMA-modeller är prediktiva i sin natur vill vi att modellen ska kunna prediktera nya tidpunkter.
+$AIC_c$ kommer vara lägre för en modell som är "mer generaliserbar" och inte inkluderar onödiga komponenter som riskerar att modellen blir överanpassad till den observerade serien. Eftersom ARIMA-modeller är prediktiva i sin natur vill vi att modellen ska generaliser för att prediktera nya tidpunkter som inte observerats.
 
+### Exempel
+
+I våra modellutskrifter fås även AIC direkt.
+
+```{r}
+#| code-fold: false
+
+modelARMA
+
+modelMA
+
+```
+
+Återigen inga större skillnader men AIC är något lägre för ARIMA(1,0,1). 
+
+$AIC_C$ kan beräknas "för hand" enligt:
+```{r}
+#| code-fold: false
+
+
+aicc <- function(model) {
+  aic <- model$aic
+  m <- model$coef |> length()
+  n <- model$residuals |> length()
+  
+  
+  model$aic + (2*(m + 1) * (m + 2)) / (n - m - 2)
+}
+
+aicc(modelARMA)
+
+aicc(modelMA)
+```
+
+Eftersom de båda modellerna har två parametrar vardera blir den relativa skillnaden samma. $AIC_C$ är mer användbart när modeller av olika storlek ska jämföras.
+
+:::{.callout-note}
 Ett ytterligare sätt att kontrollera för överanpassning är att anpassa en mer komplex modell för endast en av AR eller MA komponenterna där den aktuella modellen är inkluderad. Exempelvis kan vi anpassa en AR(2) för att kontrollera en AR(1) eller en ARMA(2, 1) för att kontrollera en ARMA(1, 1). Vilken komponent som vi väljer att utöka kan vägledas av SAC och SPAC för residualerna från den enkla modellen. Till exempel om SAC för residualerna från en MA(1) modell uppvisar signifikanta lagg vid $k = 2$, bör en MA(2) vara aktuell, inte en ARMA(1,1).
 
 Vi tittar sedan på parameterskattningen för den utökade komponenten. Om den visar sig vara icke-signifikant med en koefficient nära 0 samt att de skattade parametrarna för övriga komponenter inte skiljer sig mycket, kan vi anse att den mindre modellen är nog komplex.
+:::
+
+:::{.callout-caution}
+## Övning 2
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap24.3_ex1.rmd")
+
+```
+:::
+
 
 ## Prediktioner
 
-Syftet med ARIMA-modeller är att prediktera nya värden då det är svårt att tolka beskrivande samband utifrån de komplexa modellstrukturer som oftast anpassas. Vi vill därför att en modell producerar trovärdiga och rimliga prediktioner. Utifrån de utvärderingsmått som tagits upp i tidigare i detta kapitel undersöks i huvudsak hur bra modellen anpassats till den observerade serien (med undantag för @eq-aicc) men vi kan också använda prediktioner på en del av serien som ett sätt att mäta hur bra modellen är på att prediktera nya tidpunkter. 
+Det huvudsakliga syftet med ARIMA-modeller är att prediktera nya värden. Att beskriva sambanden som finns är otroligt svårt att tolka då komplexa modellstrukturer oftast anpassas. Som en sista utvärderingsaspekt vill vi därför att en modell ska producera trovärdiga och rimliga prediktioner. 
 
-Prediktioner gjorda på tidpunkter som inte använts till modellanpassningen eller nya tidpunkter som samlats in under undersökningsperioden kan jämföras med de sanna observerade värdena med mått såsom MSPR (se @eq-mspr). Om vi däremot utgår från helt nya tidpunkter där sanna observerade värden inte ännu finns för jämförelse, blir bedömningen mer subjektiv och visuell. 
+Utifrån de utvärderingsmått som tagits upp i tidigare i detta kapitel undersöks i huvudsak hur bra modellen anpassats till den observerade serien (med undantag för @eq-aicc) men vi kan också använda prediktioner på en del av serien som ett sätt att mäta hur bra modellen är på att prediktera nya tidpunkter. 
 
-Prediktioner görs alltid på den stationära versionen av serien (efter differentiering) och transformeras sedan tillbaka till den ursprungliga skalan. Vi kan anta att det predikterade värdet för tidpunkt $t + h$ ges av det betingade väntevärdet:
+Om vi samlar in ytterligare data, eller lägger åt sidan de sista observationerna av tidsserien innan och modellerar resten, har vi sanna värden som vi kan jämföra modellens prediktioner med exempelvis kan vi använda mått som MSPR (se @eq-mspr). Om vi däremot inte har möjlighet att jämföra prediktioner med sanna observerade värden blir bedömningen mer subjektiv och visuell. 
+
+Vi skapar alltid prediktioner utifrån den stationära versionen av serien (efter differentiering), som sedan transformeras tillbaka till den ursprungliga, observerade skalan. Vi kan anta att det predikterade värdet för tidpunkt $t + \ell$ ($\ell$ är ett litet l) ges av det betingade väntevärdet:
 $$
   \begin{aligned}
-  \hat{Y}_{t+h | t} = E[Y_{t+h} | Y_{t}, Y_{t-1}, \dots]
+  \hat{Y}_{t}(\ell) = E[Y_{t+\ell} | Y_{t}, Y_{t-1}, \dots]
   \end{aligned}
 $$
-För prediktioner flera tidssteg framåt används rekursion, där prediktioner används som utfyllnadsobservationer när de observerade värdena tar slut.
+$t$ är prediktionens ursprung och $\ell$ är antalet steg framåt i tiden som prediktionen ska genomföras. 
+
+För prediktioner flera tidssteg framåt används rekursion, där andra prediktioner används som utfyllnadsobservationer när de observerade värdena tar slut.
 
 För en ARIMA(p,d,q)-modell med $d > 0$ beräknas prognosen i två steg:
 
@@ -149,22 +473,39 @@ blir prognosen tillbaka på ursprungsskalan:
 
 $$
 \begin{aligned}
-\hat{Y}_{t+1|t} = Y_t + \widehat{\Delta Y}_{t+1|t}.
+\hat{Y}_{t}(\ell) = Y_t + \widehat{\Delta Y}_{t}(\ell).
 \end{aligned}
 $$
-[TODO: Prediktionsintervall]{style="color: red"}
+
+I det enkla exemplet med ARIMA(1,0,1) kan vi beräkna prognosen som:
+
+$$
+  \begin{aligned}
+  \hat{Y}_{t}(1)= \hat{\phi}Y_t + \hat{\theta}e_{t}
+  \end{aligned}
+$$
+där $Y_t$ och $e_t$ är de sanna värdena från tidpunkt $t$. Notera att väntevärdet för feltermen $e_{t}(1)$ är 0 och stryks därför i alla prediktioner. Detta återkommer i prediktionen för nästa tidpunkt:
+
+$$
+  \begin{aligned}
+  \hat{Y}_{t}(2)= \hat{\phi}Y_t(1)
+  \end{aligned}
+$$
+och prediktionen baseras då helt och hållet på (prediktionerna av) $Y_t$.
+
+<!-- TODO: Prediktionsintervall -->
 
 ### Datauppdelning 
 
-Ett sätt att skapa nya tidpunkter som har observerade värden att jämföra med, kan vi dela upp den observerade tidsserien i två delar; en **tränings**- och en **testdel**. Dessa termer lånas in från maskininlärningfältet där många metoder använder sig av datauppdelning för att motverka överanpassning. 
+Ett sätt att skapa nya tidpunkter som har observerade värden att jämföra med är att dela upp den observerade tidsserien i två delar; en **tränings**- och en **testmängd**. Dessa termer lånas in från maskininlärningfältet där många metoder använder sig av datauppdelning för att motverka överanpassning. 
 
-Träningsdata används för att anpassa modellen och ska bestå av majoriteten av data (helst >70%) medan testdata används för prediktioner där de observerade värdena kan användas för att utvärdera de gjorda prediktionerna. 
+Träningsdata används för att anpassa modellen och ska bestå av majoriteten av data (helst >70%) medan testdata används för prediktioner där de observerade värdena kan användas för att utvärdera den anpassade modellens prediktionerna. 
 
-På grund av tidsberoendet görs denna uppdelning vid en viss tidpunkt, inte slumpmässiga dragningar som vanligtvis används inom maskininlärning, så att testdata är de senaste observationerna i serien. Vi måste tänka på att testdata ska spegla de egenskaper som vi ser i träningsdata, en modell kommer aldrig kunna skapa lämpliga prediktioner på en serie som har helt andra egenskaper än serien som användes vid anpassningen. Har vi serier som uppvisar olika egenskaper under olika perioder kommer vi förmodligen stöta på problem med att använda datauppdelning.
+På grund av tidsberoendet görs denna uppdelning vid en viss tidpunkt, inte slumpmässiga dragningar som vanligtvis används inom maskininlärning. Då får vi ett testmängd med de sista observationerna i serien. Vi måste tänka på att testmängden ska spegla de egenskaper som vi ser i träningsdata, en modell kommer aldrig kunna skapa lämpliga prediktioner på en serie som har helt andra egenskaper än serien som användes vid anpassningen. I praktiken betyder detta att vi måste visuellt bedöma om serien ser likadan ut över hela tidsperioden. Har vi serier som uppvisar olika egenskaper under olika perioder kommer vi förmodligen stöta på problem med att använda datauppdelning.
 
-Ytterligare en skillnad från maskininlärning är att antalet observationer är betydligt färre när det kommer till tidsseriedata. Då träningsdata behöver bestå av en absolut majoritet av serien kan testdata ibland reduceras till endast ett fåtal observationer. Dessa punkter kan ibland räcka för att vi ändå ska få en realistisk bild av hur modellen beter sig på framtida prognoser.
+Ytterligare en skillnad från maskininlärning är att antalet observationer är betydligt färre när det kommer till tidsseriedata. Då träningsdata behöver bestå av en absolut majoritet av serien kan testdata ibland reduceras till ett fåtal observationer. Dessa punkter kan ibland räcka för att vi ändå ska få en realistisk bild av hur modellen beter sig på framtida prognoser.
 
-I R görs denna uppdelning enkelt genom att indexera tidsserien:
+I R görs denna uppdelning enkelt genom att indexera tidsserien. Vi simulerar här en ny tidsserie med månadsdata, periodiciteten kan också agera vägledning i hur vi delar upp serien, till exempel att testmängden består av det sista året.
 
 ```{r}
 #| code-fold: false
@@ -193,11 +534,14 @@ length(train)
 length(test)
 ```
 
-När vi väl anpassar modellen gör vi det utifrån `train`. Till exempel kan vi försöka anpassa den simulerade ARIMA(1,1,1):
+När vi väl anpassar modellen gör vi det utifrån `train`. Då vi har med prediktioner att göra kan vi använda funktioner från `forecast`-paketet istället för `TSA`. Orsaken till detta byte är att funktionerna är bättre anpassade för våra nuvarande ändamål. 
+
+Till exempel kan vi försöka anpassa den simulerade ARIMA(1,1,1):
 
 ```{r}
 #| code-fold: false
 
+# Anpassar modellen med Arima() från forecast
 fit <- Arima(train, order = c(1,1,1))
 summary(fit)
 
@@ -207,11 +551,12 @@ När modellen är anpassad gör vi prognoser för lika många observationer fram
 
 ```{r}
 fc <- forecast(fit, h = length(test))
+
 plot(fc)
-lines(c(rep(NA, times = length(train)), test), col = "red")
+lines(c(rep(NA, times = length(train)), test), col = "firebrick")
 ```
 
-Skillnaden mellan testdata och prediktionerna kan beräknas med måtten som vi tidigare tittat på MAD, MSD, MAPE, men att de nu speglar prediktionsfelet.
+De observerade värdena markeras i rött medan de predikterade visas i blått med tillhörande prediktionsintervall (80% i mörkare färg, 95% i ljusare). Skillnaden mellan testdata och prediktionerna kan beräknas med måtten som vi tidigare tittat på MAD, MSD, MAPE, men att de nu speglar prediktionsfelet.
 
 ```{r}
 #| code-fold: false
@@ -225,115 +570,139 @@ MAPE <- mean(abs(errors / test)) * 100
 c(MAD = MAD, MSD = MSD, MAPE = MAPE)
 ```
 
-### $\tau$-steg framåt
+<!-- ### $\tau$-steg framåt -->
 
-Prediktionerna ovan beräknar nästkommande tidpunkt utifrån den nuvarande. Vi kan också vara intresserade av att prediktera $\tau$ steg framåt utifrån den nuvarande. Exempelvisualiseringar:
+<!-- Prediktionerna ovan beräknar nästkommande tidpunkt utifrån den nuvarande. Vi kan också vara intresserade av att prediktera $\tau$ steg framåt utifrån den nuvarande. Exempelvisualiseringar: -->
 
-```{mermaid}
+<!-- ```{mermaid} -->
 
-flowchart LR
-  A@{ shape: circle, label: "t = 1"}
-  B@{ shape: circle, label: "t = 2"}
-  C@{ shape: circle, label: "t = 3"}
-  D@{ shape: circle, label: "t = 4"}
-  E@{ shape: circle, label: "t = 5"}
-  F@{ shape: circle, label: "t = 6"}
-  G@{ shape: circle, label: "t = 7"}
-  H@{ shape: circle, label: "t = 8"}
-  I@{ shape: circle, label: "t = 9"}
-  X@{ shape: rounded, label: "1 steg
-  framåt"}
-  Y@{ shape: rounded, label: "1 steg
-  framåt"}
-  Z@{ shape: rounded, label: "1 steg
-  framåt"}
-  
-  classDef predict fill:#d9544d,stroke:#000,color:#FFF
+<!-- flowchart LR -->
+<!--   A@{ shape: circle, label: "t = 1"} -->
+<!--   B@{ shape: circle, label: "t = 2"} -->
+<!--   C@{ shape: circle, label: "t = 3"} -->
+<!--   D@{ shape: circle, label: "t = 4"} -->
+<!--   E@{ shape: circle, label: "t = 5"} -->
+<!--   F@{ shape: circle, label: "t = 6"} -->
+<!--   G@{ shape: circle, label: "t = 7"} -->
+<!--   H@{ shape: circle, label: "t = 8"} -->
+<!--   I@{ shape: circle, label: "t = 9"} -->
+<!--   X@{ shape: rounded, label: "1 steg -->
+<!--   framåt"} -->
+<!--   Y@{ shape: rounded, label: "1 steg -->
+<!--   framåt"} -->
+<!--   Z@{ shape: rounded, label: "1 steg -->
+<!--   framåt"} -->
 
-subgraph observationer
-  A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict
-end
-subgraph prediktioner
-  X ~~~ Y ~~~ Z
-end
-D --- X --> E --- Y --> F --- Z --> G
+<!--   classDef predict fill:#d9544d,stroke:#000,color:#FFF -->
 
-style observationer fill:#fcfcfc,stroke:#fcfcfc
-style prediktioner fill:#eee,stroke:#eee
+<!-- subgraph observationer -->
+<!--   A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict -->
+<!-- end -->
+<!-- subgraph prediktioner -->
+<!--   X ~~~ Y ~~~ Z -->
+<!-- end -->
+<!-- D --- X --> E --- Y --> F --- Z --> G -->
 
+<!-- style observationer fill:#fcfcfc,stroke:#fcfcfc -->
+<!-- style prediktioner fill:#eee,stroke:#eee -->
+
+
+<!-- ``` -->
+
+<!-- ```{mermaid} -->
+
+<!-- flowchart LR -->
+<!--   A@{ shape: circle, label: "t = 1"} -->
+<!--   B@{ shape: circle, label: "t = 2"} -->
+<!--   C@{ shape: circle, label: "t = 3"} -->
+<!--   D@{ shape: circle, label: "t = 4"} -->
+<!--   E@{ shape: circle, label: "t = 5"} -->
+<!--   F@{ shape: circle, label: "t = 6"} -->
+<!--   G@{ shape: circle, label: "t = 7"} -->
+<!--   H@{ shape: circle, label: "t = 8"} -->
+<!--   I@{ shape: circle, label: "t = 9"} -->
+<!--   X@{ shape: rounded, label: "2 steg -->
+<!--   framåt"} -->
+<!--   Y@{ shape: rounded, label: "2 steg -->
+<!--   framåt"} -->
+<!--   Z@{ shape: rounded, label: "2 steg -->
+<!--   framåt"} -->
+
+<!--   classDef predict fill:#d9544d,stroke:#000,color:#FFF -->
+
+<!-- subgraph observationer -->
+<!--   A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict -->
+<!-- end -->
+<!-- subgraph prediktioner -->
+<!--   X ~~~ Y ~~~ Z -->
+<!-- end -->
+<!-- D --- X --> F  -->
+<!-- E --- Y --> G  -->
+<!-- F --- Z --> H -->
+
+<!-- style observationer fill:#fcfcfc,stroke:#fcfcfc -->
+<!-- style prediktioner fill:#eee,stroke:#eee -->
+
+<!-- ``` -->
+
+<!-- ```{mermaid} -->
+
+<!-- flowchart LR -->
+<!--   A@{ shape: circle, label: "t = 1"} -->
+<!--   B@{ shape: circle, label: "t = 2"} -->
+<!--   C@{ shape: circle, label: "t = 3"} -->
+<!--   D@{ shape: circle, label: "t = 4"} -->
+<!--   E@{ shape: circle, label: "t = 5"} -->
+<!--   F@{ shape: circle, label: "t = 6"} -->
+<!--   G@{ shape: circle, label: "t = 7"} -->
+<!--   H@{ shape: circle, label: "t = 8"} -->
+<!--   I@{ shape: circle, label: "t = 9"} -->
+<!--   X@{ shape: rounded, label: "3 steg -->
+<!--   framåt"} -->
+<!--   Y@{ shape: rounded, label: "3 steg -->
+<!--   framåt"} -->
+<!--   Z@{ shape: rounded, label: "3 steg -->
+<!--   framåt"} -->
+
+<!--   classDef predict fill:#d9544d,stroke:#000,color:#FFF -->
+
+<!-- subgraph observationer -->
+<!--   A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict -->
+<!-- end -->
+<!-- D --- X --> G -->
+<!-- E --- Y --> H -->
+<!-- F --- Z --> I -->
+<!-- subgraph prediktioner -->
+<!--   X ~~~ Y ~~~ Z -->
+<!-- end -->
+
+<!-- style observationer fill:#fcfcfc,stroke:#fcfcfc -->
+<!-- style prediktioner fill:#eee,stroke:#eee -->
+
+<!-- ``` -->
+
+<!-- [TODO: Utöka detta kapitel]{style="color: red"} -->
+
+:::{.callout-caution}
+## Övning 3
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap24.4_ex1.rmd")
 
 ```
+:::
 
-```{mermaid}
+:::{.callout-caution}
+## Övning 4
 
-flowchart LR
-  A@{ shape: circle, label: "t = 1"}
-  B@{ shape: circle, label: "t = 2"}
-  C@{ shape: circle, label: "t = 3"}
-  D@{ shape: circle, label: "t = 4"}
-  E@{ shape: circle, label: "t = 5"}
-  F@{ shape: circle, label: "t = 6"}
-  G@{ shape: circle, label: "t = 7"}
-  H@{ shape: circle, label: "t = 8"}
-  I@{ shape: circle, label: "t = 9"}
-  X@{ shape: rounded, label: "2 steg
-  framåt"}
-  Y@{ shape: rounded, label: "2 steg
-  framåt"}
-  Z@{ shape: rounded, label: "2 steg
-  framåt"}
-  
-  classDef predict fill:#d9544d,stroke:#000,color:#FFF
-
-subgraph observationer
-  A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict
-end
-subgraph prediktioner
-  X ~~~ Y ~~~ Z
-end
-D --- X --> F 
-E --- Y --> G 
-F --- Z --> H
-
-style observationer fill:#fcfcfc,stroke:#fcfcfc
-style prediktioner fill:#eee,stroke:#eee
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap24.4_ex2.rmd")
 
 ```
+:::
 
-```{mermaid}
-
-flowchart LR
-  A@{ shape: circle, label: "t = 1"}
-  B@{ shape: circle, label: "t = 2"}
-  C@{ shape: circle, label: "t = 3"}
-  D@{ shape: circle, label: "t = 4"}
-  E@{ shape: circle, label: "t = 5"}
-  F@{ shape: circle, label: "t = 6"}
-  G@{ shape: circle, label: "t = 7"}
-  H@{ shape: circle, label: "t = 8"}
-  I@{ shape: circle, label: "t = 9"}
-  X@{ shape: rounded, label: "3 steg
-  framåt"}
-  Y@{ shape: rounded, label: "3 steg
-  framåt"}
-  Z@{ shape: rounded, label: "3 steg
-  framåt"}
-  
-  classDef predict fill:#d9544d,stroke:#000,color:#FFF
-
-subgraph observationer
-  A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict
-end
-D --- X --> G
-E --- Y --> H
-F --- Z --> I
-subgraph prediktioner
-  X ~~~ Y ~~~ Z
-end
-
-style observationer fill:#fcfcfc,stroke:#fcfcfc
-style prediktioner fill:#eee,stroke:#eee
-
-```
-
-[TODO: Utöka detta kapitel]{style="color: red"}
+## Referenser

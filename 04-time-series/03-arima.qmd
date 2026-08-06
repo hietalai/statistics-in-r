@@ -7,13 +7,13 @@ filters:
 
 # ARMA och ARIMA modeller
 
-I verkligheten är det inte så enkelt som att identifiera de separata AR och MA processerna från @tbl-behavior-ac-pac. När en modell innehåller både AR och MA komponenter kommer autokorrelationen och den partiella autokorrelationen långsamt avta med större $k$ vilket innebär att det finns oändligt många nollskilda lagg. En modell med båda typer av komponenter kallas för en **ARMA**-modell och kräver andra verktyg för att identifiera ordningen av de olika delarna. Behöver serien först differentieras för stationäritet (@sec-differentiation) kallar vi istället serien för en **integrerad ARMA**-modell, förkortat **ARIMA**.
+I verkligheten är det inte så enkelt som att identifiera de separata AR och MA processerna från @tbl-behavior-ac-pac då en modell oftast innehåller en kombination av de båda processerna. I dessa fall kommer autokorrelationen *och* den partiella autokorrelationen långsamt avta med större $k$ vilket innebär att det finns oändligt många nollskilda lagg. En modell med båda typer av komponenter kallas för en **ARMA**-modell och kräver andra verktyg för att identifiera ordningen av de olika delarna. Ofta kan serien först behöver differentieras för stationäritet (se @sec-differentiation), därför kallar vi serien mer generellt för en **integrerad ARMA**-modell, förkortat **ARIMA**^[Enskilda AR/MA processer som kräver differentiering brukar förkortas som ARI eller IMA modeller].
 
-Flera olika metoder har utvecklats för att lösa problematiken med att identifiera en lämplig ordning på men detta underlag kommer fokusera på den **utökade autokorrelationen** (eng. Extended Autocorrelation Function, EACF).
+Flera olika metoder har utvecklats för att lösa problematiken med att identifiera en lämplig ordning på ARIMA modeller men detta underlag kommer fokusera på den **utökade autokorrelationen** (eng. Extended Autocorrelation Function, EACF).
 
 ## ARMA(p,q) {#sec-arma}
 
-När en tidsserie uppvisar mer komplexa beroenden än vad en ren AR- eller MA-process kan plocka upp, kan vi kombinera dessa till en mer flexibel modell. En ARMA process kombinerar $p > 0$ AR komponenter och $q > 0$ MA komponenter till en ARMA(p,q)‑process genom att helt enkelt slå ihop @eq-arp och @eq-maq enligt:
+När en tidsserie uppvisar mer komplexa beroenden än vad en ren AR- eller MA-process plockar upp, kan vi kombinera dessa till en mer flexibel modell. En ARMA process kombinerar $p > 0$ AR komponenter och $q > 0$ MA komponenter till en ARMA(p,q)‑process genom att helt enkelt slå ihop @eq-arp och @eq-maq enligt:
 
 $$
 \begin{aligned}
@@ -43,13 +43,13 @@ $$
 \end{aligned}
 $$
 
-$\rho_k$ avtar exponentiellt med en så kallad dämpningsfaktor $\phi$, men startvärdet $\rho_1$ påverkas även av $\theta$. Detta medför att många olika beteenden kan ses för autokorrelationen men som alla kommer från en ARMA(1,1)-process. 
+$\rho_k$ avtar exponentiellt med en så kallad dämpningsfaktor $\phi$, men startvärdet $\rho_1$ påverkas även av $\theta$. Detta medför återigen att vi kan see många olika trender i autokorrelationen men som alla kommer från en ARMA(1,1)-process. 
 
 :::{.callout-note}
-Nu börjar vi jobba med modeller som blir väldigt komplexa att både simulera med kod likt vi gjort i tidigare kapitel eller beräkna autokorrelationen. Istället kan vi börja använda inbyggda funktioner från `stats`, `forecast` och `TSA` paketen. 
+Nu börjar vi jobba med modeller som blir väldigt komplexa. Vi kommer härefter gå ifrån mycket av de härledningar som visats i tidigare kapitel och istället fokusera mer på simulering med hjälp av funktioner från `stats`, `forecast` och `TSA` paketen. 
 :::
 
-Om vi vill simulera och visualisera en ARMA(1,1) kan vi visa detta med hjälp av funktionen `arima.sim()` från paketet `stats`, till exempel $Y_t = 0.5 Y_{t-1} + e_t - 0.3 e_{t-1}$. 
+Om vi vill simulera och visualisera en ARMA(1,1) kan vi visa detta med hjälp av funktionen `arima.sim()` från paketet `stats`, till exempel $Y_t = 0.5 Y_{t-1} + e_t - 0.3 e_{t-1}$. I argumentet `model` anger vi en lista med dels modellens ordning, `order = c(1, 0, 1)` och vilka värden på modellens parametrar som önskas i `ar = phi` och `ma = theta`.
 
 ```{r}
 #| fig-width: 5
@@ -57,12 +57,13 @@ Om vi vill simulera och visualisera en ARMA(1,1) kan vi visa detta med hjälp av
 #| fig-cap: Simulerad ARMA(1,1)
 #| label: fig-ex-arma11
 #| out-width: "90%"
+#| code-fold: FALSE
 
 set.seed(123)
 n <- 1000
 
 # Simulerar en ARMA(1,1) med givna parametervärden 
-y <- arima.sim(n, model = list(ar = 0.5, ma = -0.3))
+y <- arima.sim(n, model = list(order = c(1,0,1), ar = 0.5, ma = -0.3))
 
 data <- 
   tibble(
@@ -74,7 +75,7 @@ ggplot(data) + aes(x = x, y = y) + geom_line() +
   theme_bw() + labs(x = "Time", y = "y")
 ```
 
-Som vi ser i @fig-ex-arma11 går det inte på något lätt sätt att visuellt bestämma $p$ och $q$ bara från den observerade serien. Figuren uppvisar en stationär serie utan tydliga trender men som vi vet bör serien (lämpligen) modelleras med hjälp av en ARMA(1,1).
+Som vi ser i @fig-ex-arma11 går det inte på något lätt sätt visuellt bestämma $p$ och $q$ bara från den observerade serien. Figuren ser stationär ut då den verkar centreras runt samma väntevärde och har ungefär samma variation för alla tidpunkter. Eftersom vi själv skapat serien vet vi ju att serien bör (lämpligen) modelleras med hjälp av en ARMA(1,1), men i ett riktigt fall behöver vi kontrollera SAC (funktionen `acf()`) och SPAC (funktionen `pacf()`) för att se vad vi kan utläsa för beteenden.
 
 ```{r}
 #| include: false
@@ -90,10 +91,12 @@ data <-
 
 ```{r}
 #| eval: false
+#| code-fold: FALSE
 
 data <- 
   tibble(
     lag = 1:30,
+    # Beräknar SAC och SPAC samt plockar ut endast acf delen av objektet som innehåller korrelationerna
     ACF = acf(y, lag.max = 30)$acf,
     PACF = pacf(y, lag.max = 30)$acf
   ) |> 
@@ -129,117 +132,20 @@ ggplot(data) + aes(x = lag, y = value) +
 
 ```
 
-Från @fig-ex-acf-pacf visas två signifikanta lagg vid $k = 1$ i båda figurerna, eller kanske främst att de visar ett snabbt avtagande mönster. Vi skulle kunna dra oss och säga att en ARMA(1,1) är lämplig men det uppkommer nog för att vi vet att den modellen är den rätta. Tolkningen är något osäker så vi kan använda ytterligare ett verktyg för att fatta ett mer objektivt och informerat beslut om modellvalet.
+Från @fig-ex-acf-pacf visas ungefär ett signifikant lagg (även kallad **spik**) vid $k = 1$ i respektive figur, eller kanske främst att de visar ett snabbt avtagande mönster. Utifrån detta skulle vi kunna dra slutsatsen att en ARMA(1,1) är lämplig, men hur mycket av den slutsatsen som kommer från att vi vet hur vi simulerat serien och hur mycket som kommer enbart från diagrammen är svårt att säga. Tolkningen är något osäker så vi kan använda ytterligare ett verktyg för att fatta ett mer objektivt och informerat beslut om modellvalet som också går att använda i fall där vi inte simulerat serien.
 
-## Utökad Autokorrelation {#sec-eacf}
+:::{.callout-caution}
+## Övning 1
 
-Den utökade autokorrelationen använder att en ARMA process kan transformeras till en ren MA process om AR delen filtreras ut genom successiva regressionsmodeller för olika lagg där $k = p$. Den utökade autokorrelationen för denna transformerade serie uppvisar på ett ungefär samma beteende som autokorrelationen för en "vanlig" MA(q) där ordningen kan bestämmas utifrån vilket lagg som är den sista nollskilda värdet.
-
-En risk med denna metod är om vi fortsätter filtrera då $k > p$ vilket i sin tur leder till att MA-ordningen överanpassas. Om vi sammanfattar alla de olika kombinationerna i en övergripande tabell minskar vi risken för överanpassning då vi kan välja den enklaste modellen. I tabellen beskriver rader ($i$) ordningen av AR(p) och kolumnerna ($j$) ordningen av MA(q). I cellerna anges ett kryss ($\times$) om autokorrelationen på lagg $j + 1$ är signifikant nollskild, annars anges $\circ$.
-
-Valet av modell styrs av ett format hörn av den triangel som bildas när vi separerar $\times$ och $\circ$ i tabellen. I hörnet fås den minst komplexa modell som verkar modellera serien bra givet dess autokorrelation. Funktionen `eacf()` från `TSA` beräknar denna transformation och sammanställning i en läsbar tabell.
-
-:::{#fig-sample-eacf}
 ```{r}
-
-eacf(z = y)
-
-```
-
-EACF för en simulerad ARMA(1,1) modell
-::: 
-
-
-:::{.callout-important collapse="true"}
-## EACF i WEBR
-
-```{webr-r}
-#| out-width: "90%"
-#| autorun: true
-
-set.seed(123)
-# Simulerar en ARMA(1,1) med givna parametervärden 
-y <- arima.sim(1000, model = list(ar = 0.5, ma = -0.3))
-
-# Skapar en WEBR version av eacf() från TSA
-customEacf <- function (z, ar.max = 7, ma.max = 13) {
-  lag1 <- function(z, lag = 1) {
-    c(rep(NA, lag), z[1:(length(z) - lag)])
-  }
-  reupm <- function(m1, nrow, ncol) {
-    k <- ncol - 1
-    m2 <- NULL
-    for (i in 1:k) {
-      i1 <- i + 1
-      work <- lag1(m1[, i])
-      work[1] <- -1
-      temp <- m1[, i1] - work * m1[i1, i1]/m1[i, i]
-      temp[i1] <- 0
-      m2 <- cbind(m2, temp)
-    }
-    m2
-  }
-  ceascf <- function(m, cov1, nar, ncol, count, ncov, z, zm) {
-    result <- 0 * seq(1, nar + 1)
-    result[1] <- cov1[ncov + count]
-    for (i in 1:nar) {
-      temp <- cbind(z[-(1:i)], zm[-(1:i), 1:i]) %*% c(1, 
-        -m[1:i, i])
-      result[i + 1] <- acf(temp, plot = FALSE, lag.max = count, 
-        drop.lag.0 = FALSE)$acf[count + 1]
-    }
-    result
-  }
-  ar.max <- ar.max + 1
-  ma.max <- ma.max + 1
-  nar <- ar.max - 1
-  nma <- ma.max
-  ncov <- nar + nma + 2
-  nrow <- nar + nma + 1
-  ncol <- nrow - 1
-  z <- z - mean(z)
-  zm <- NULL
-  for (i in 1:nar) zm <- cbind(zm, lag1(z, lag = i))
-  cov1 <- acf(z, lag.max = ncov, plot = FALSE, drop.lag.0 = FALSE)$acf
-  cov1 <- c(rev(cov1[-1]), cov1)
-  ncov <- ncov + 1
-  m1 <- matrix(0, ncol = ncol, nrow = nrow)
-  for (i in 1:ncol) m1[1:i, i] <- ar.ols(z, order.max = i, 
-    aic = FALSE, demean = FALSE, intercept = FALSE)$ar
-  eacfm <- NULL
-  for (i in 1:nma) {
-    m2 <- reupm(m1 = m1, nrow = nrow, ncol = ncol)
-    ncol <- ncol - 1
-    eacfm <- cbind(eacfm, ceascf(m2, cov1, nar, ncol, i, 
-      ncov, z, zm))
-    m1 <- m2
-  }
-  work <- 1:(nar + 1)
-  work <- length(z) - work + 1
-  symbol <- NULL
-  for (i in 1:nma) {
-    work <- work - 1
-    symbol <- cbind(symbol, ifelse(abs(eacfm[, i]) > 2/work^0.5, 
-      "x", "o"))
-  }
-  rownames(symbol) <- 0:(ar.max - 1)
-  colnames(symbol) <- 0:(ma.max - 1)
-  
-  cat("AR/MA\n")
-  print(symbol, quote = FALSE) 
-  
-  invisible(list(eacf = eacfm, ar.max = ar.max, ma.ma = ma.max, 
-    symbol = symbol))
-}
-
-customEacf(y)
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap23.1_ex1.rmd")
 
 ```
 :::
 
-I en teoretisk modell är separationen mellan $\times$ och $\circ$ väldigt tydlig^[Se exempel 6.4 på sidan 117 i @cryer2008] men för en observerad serie, som i @fig-sample-eacf, är det inte alltid lika tydligt. Till exempel verkar separationen sträcka över två rader, ARMA(1,1) och MA(2)^[ARMA(0,2) enligt tabellen.], trots att vi vet att den sanna modellen är en ARMA(1,1). Denna tabell ger oss dock en översikt av de enklaste alternativen som vi kan börja med att anpassa och sedan utvärdera för att till slut välja den modell som är bäst lämpad. 
-
-## ARIMA(p,d,q)
+### ARIMA(p,d,q)
 
 När en serie inte är stationär kan differentiering genomföras för att sedan anpassa en ARMA-process. Vi kan beteckna den stationära serien som $W_t = \Delta^d Y_t$ och följer sedan teorin presenterad i @sec-arma.
 
@@ -255,11 +161,295 @@ $$
   \end{aligned}
 $$ {#eq-arimapdq}
 
+Vi kan simulera en enkel ARIMA(1,1,1) för att se hur den skiljer sig åt @fig-ex-arma11. På grund av att vi differentierar kommer `arima.sim()` skapa en differentierad ARMA(1,1) av längd `n` som sedan "återdifferentieras" till den observerade serien ARIMA(1,1,1), det vill säga en serie av längd `n + 1`.
+
+```{r}
+#| code-fold: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Simulerad ARIMA(1,1,1)
+#| label: fig-ex-arima11
+#| out-width: "90%"
+
+set.seed(123)
+n <- 1000
+
+# Simulerar en ARIMA(1,1,1) med givna parametervärden 
+arima111 <- arima.sim(n, model = list(order = c(1,1,1), ar = 0.5, ma = -0.3))
+
+data <- 
+  tibble(
+    # Lägger till en tidpunkt pga differentieringen
+    x = seq_len(n + 1),
+    y = arima111 |> c()
+  )
+
+ggplot(data) + aes(x = x, y = y) + geom_line() + 
+  theme_bw() + labs(x = "Time", y = "y")
+
+
+```
+
+@fig-ex-arima11 visar stora skillnader med @fig-ex-arma11, framförallt att serien ser ut att följa mer långtgående trender. Detta ger oss rent visuellt en indikation att serien behöver differentieras innan modellanpassningen, vilket vi också kan se i seriens SAC och SPAC.
+
+```{r}
+#| include: false
+data <- 
+  tibble(
+    lag = 1:30,
+    ACF = acf(arima111, lag.max = 30)$acf,
+    PACF = pacf(arima111, lag.max = 30)$acf
+  ) |> 
+  pivot_longer(!lag)
+
+```
+
+```{r}
+#| eval: false
+#| code-fold: FALSE
+
+data <- 
+  tibble(
+    lag = 1:30,
+    # Beräknar SAC och SPAC samt plockar ut endast acf delen av objektet som innehåller korrelationerna
+    ACF = acf(arima111, lag.max = 30)$acf,
+    PACF = pacf(arima111, lag.max = 30)$acf
+  ) |> 
+  pivot_longer(!lag)
+
+ggplot(data) + aes(x = lag, y = value) + 
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_hline(yintercept = 1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  geom_hline(yintercept = -1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  theme_bw() + 
+  scale_y_continuous(breaks = seq(-1, 1, by = 0.1)) +
+  labs(x = "Lag", y = "ACF") + 
+  facet_wrap(~name, nrow = 1)
+
+```
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Autokorrelation och partiell autokorrelation för den simulerade ARIMA(1,1,1)
+#| label: fig-ex-arima-acf-pacf
+#| out-width: "90%"
+
+ggplot(data) + aes(x = lag, y = value) + 
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_hline(yintercept = 1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  geom_hline(yintercept = -1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  theme_bw() + 
+  scale_y_continuous(breaks = seq(-1, 1, by = 0.1)) +
+  labs(x = "Lag", y = "ACF") + 
+  facet_wrap(~name, nrow = 1)
+
+```
+
+Till skillnad från @fig-ex-acf-pacf, där autokorrelationerna för båda måtten snabbt avtar, visar SAC ett extremt långsamt avtagande mönster. Detta är ytterligare en indikation att serien inte är stationär och vi behöver differentiera innan modellanpassningen. 
+
+Efter differentiering kan vi beräkna SAC och SPAC igen för att se samma typ av form som @fig-ex-acf-pacf.
+
+```{r}
+#| include: false
+arima111diff <- diff(arima111)
+
+data <- 
+  tibble(
+    lag = 1:30,
+    ACF = acf(arima111diff, lag.max = 30)$acf,
+    PACF = pacf(arima111diff, lag.max = 30)$acf
+  ) |> 
+  pivot_longer(!lag)
+
+```
+
+```{r}
+#| code-fold: false
+#| eval: false
+
+arima111diff <- diff(arima111)
+
+data <- 
+  tibble(
+    lag = 1:30,
+    ACF = acf(arima111diff, lag.max = 30)$acf,
+    PACF = pacf(arima111diff, lag.max = 30)$acf
+  ) |> 
+  pivot_longer(!lag)
+
+ggplot(data) + aes(x = lag, y = value) + 
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_hline(yintercept = 1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  geom_hline(yintercept = -1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  theme_bw() + 
+  scale_y_continuous(breaks = seq(-1, 1, by = 0.1)) +
+  labs(x = "Lag", y = "ACF") + 
+  facet_wrap(~name, nrow = 1)
+
+```
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Autokorrelation och partiell autokorrelation för den differentierade simulerade ARIMA(1,1,1)-serien
+#| label: fig-ex-arima-diff-acf-pacf
+#| out-width: "90%"
+
+ggplot(data) + aes(x = lag, y = value) + 
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_hline(yintercept = 1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  geom_hline(yintercept = -1.96/sqrt(length(y)), linetype = 2, color = "firebrick") +
+  theme_bw() + 
+  scale_y_continuous(breaks = seq(-1, 1, by = 0.1)) +
+  labs(x = "Lag", y = "ACF") + 
+  facet_wrap(~name, nrow = 1)
+
+```
+
+:::{.callout-caution}
+## Övning 2
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap23.3_ex1.rmd")
+
+```
+:::
+
+## Utökad autokorrelation {#sec-eacf}
+
+Den utökade autokorrelationen använder att en ARMA process kan transformeras till en ren MA process om AR delen filtreras ut genom successiva regressionsmodeller för olika lagg där $k = p$. Den utökade autokorrelationen för denna transformerade serie uppvisar på ett ungefär samma beteende som autokorrelationen för en "vanlig" MA(q) där ordningen kan bestämmas utifrån vilket lagg som är den sista nollskilda värdet. Till exempel om de första tre laggen uppvisar nollskilda autokorrelationer, motiveras att modellen inkluderar tre MA komponenter. En risk med denna metod är när vi fortsätter filtrera lagg då $k > p$ vilket i sin tur leder till att MA-ordningen överanpassas. 
+
+note
+
+Ett sätt att minska risken för överanpassning är att sammanställa en tabell med alla olika kombinationer av $p$ och $q$, går det att få en övergripande bild av modellerna och vi kan då välja den enklaste modellen. I tabellen beskriver raderna ($i$) ordningen av AR(p) och kolumnerna ($j$) ordningen av MA(q). I cellerna anges ett kryss ($\times$) om autokorrelationen på lagg $j + 1$ är signifikant nollskild, annars anges en circel ($\circ$).
+
+Valet av modell styrs av att vi kan forma en triangel där vi separerar $\times$ och $\circ$ i tabellen och dess hörn innebär den minst komplexa modell som verkar modellera serien bra givet dess autokorrelation. Funktionen `eacf()` från `TSA` beräknar denna transformation och sammanställning i en läsbar tabell.
+
+:::{#fig-sample-eacf}
+```{r}
+#| code-fold: false
+
+# y är den simulerade ARMA(1,1)-serien
+eacf(z = y)
+
+```
+
+EACF för en simulerad ARMA(1,1) modell
+::: 
+
+
+<!-- :::{.callout-important collapse="true"} -->
+<!-- ## EACF i WEBR -->
+
+<!-- ```{webr-r} -->
+<!-- #| out-width: "90%" -->
+<!-- #| autorun: true -->
+
+<!-- set.seed(123) -->
+<!-- # Simulerar en ARMA(1,1) med givna parametervärden  -->
+<!-- y <- arima.sim(1000, model = list(ar = 0.5, ma = -0.3)) -->
+
+<!-- # Skapar en WEBR version av eacf() från TSA -->
+<!-- customEacf <- function (z, ar.max = 7, ma.max = 13) { -->
+<!--   lag1 <- function(z, lag = 1) { -->
+<!--     c(rep(NA, lag), z[1:(length(z) - lag)]) -->
+<!--   } -->
+<!--   reupm <- function(m1, nrow, ncol) { -->
+<!--     k <- ncol - 1 -->
+<!--     m2 <- NULL -->
+<!--     for (i in 1:k) { -->
+<!--       i1 <- i + 1 -->
+<!--       work <- lag1(m1[, i]) -->
+<!--       work[1] <- -1 -->
+<!--       temp <- m1[, i1] - work * m1[i1, i1]/m1[i, i] -->
+<!--       temp[i1] <- 0 -->
+<!--       m2 <- cbind(m2, temp) -->
+<!--     } -->
+<!--     m2 -->
+<!--   } -->
+<!--   ceascf <- function(m, cov1, nar, ncol, count, ncov, z, zm) { -->
+<!--     result <- 0 * seq(1, nar + 1) -->
+<!--     result[1] <- cov1[ncov + count] -->
+<!--     for (i in 1:nar) { -->
+<!--       temp <- cbind(z[-(1:i)], zm[-(1:i), 1:i]) %*% c(1,  -->
+<!--         -m[1:i, i]) -->
+<!--       result[i + 1] <- acf(temp, plot = FALSE, lag.max = count,  -->
+<!--         drop.lag.0 = FALSE)$acf[count + 1] -->
+<!--     } -->
+<!--     result -->
+<!--   } -->
+<!--   ar.max <- ar.max + 1 -->
+<!--   ma.max <- ma.max + 1 -->
+<!--   nar <- ar.max - 1 -->
+<!--   nma <- ma.max -->
+<!--   ncov <- nar + nma + 2 -->
+<!--   nrow <- nar + nma + 1 -->
+<!--   ncol <- nrow - 1 -->
+<!--   z <- z - mean(z) -->
+<!--   zm <- NULL -->
+<!--   for (i in 1:nar) zm <- cbind(zm, lag1(z, lag = i)) -->
+<!--   cov1 <- acf(z, lag.max = ncov, plot = FALSE, drop.lag.0 = FALSE)$acf -->
+<!--   cov1 <- c(rev(cov1[-1]), cov1) -->
+<!--   ncov <- ncov + 1 -->
+<!--   m1 <- matrix(0, ncol = ncol, nrow = nrow) -->
+<!--   for (i in 1:ncol) m1[1:i, i] <- ar.ols(z, order.max = i,  -->
+<!--     aic = FALSE, demean = FALSE, intercept = FALSE)$ar -->
+<!--   eacfm <- NULL -->
+<!--   for (i in 1:nma) { -->
+<!--     m2 <- reupm(m1 = m1, nrow = nrow, ncol = ncol) -->
+<!--     ncol <- ncol - 1 -->
+<!--     eacfm <- cbind(eacfm, ceascf(m2, cov1, nar, ncol, i,  -->
+<!--       ncov, z, zm)) -->
+<!--     m1 <- m2 -->
+<!--   } -->
+<!--   work <- 1:(nar + 1) -->
+<!--   work <- length(z) - work + 1 -->
+<!--   symbol <- NULL -->
+<!--   for (i in 1:nma) { -->
+<!--     work <- work - 1 -->
+<!--     symbol <- cbind(symbol, ifelse(abs(eacfm[, i]) > 2/work^0.5,  -->
+<!--       "x", "o")) -->
+<!--   } -->
+<!--   rownames(symbol) <- 0:(ar.max - 1) -->
+<!--   colnames(symbol) <- 0:(ma.max - 1) -->
+
+<!--   cat("AR/MA\n") -->
+<!--   print(symbol, quote = FALSE)  -->
+
+<!--   invisible(list(eacf = eacfm, ar.max = ar.max, ma.ma = ma.max,  -->
+<!--     symbol = symbol)) -->
+<!-- } -->
+
+<!-- customEacf(y) -->
+
+<!-- ``` -->
+<!-- ::: -->
+
+I en teoretisk modell är separationen mellan $\times$ och $\circ$ väldigt tydlig^[Se exempel 6.4 på sidan 117 i @cryer2008] men för en observerad serie, som i @fig-sample-eacf, är det inte alltid lika tydligt. Till exempel verkar separationen sträcka över två rader, ARMA(1,1) och MA(2)^[ARMA(0,2) enligt tabellen.], trots att vi vet att den sanna modellen är en ARMA(1,1). Denna tabell ger oss dock en översikt av de enklaste alternativen som vi kan börja med att anpassa och sedan utvärderas kandidaterna för att till slut välja den modell som är bäst lämpad utifrån vissa mått (se @sec-tsa-model-evaluation).
+
+:::{.callout-caution}
+## Övning 3
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap23.2_ex1.rmd")
+
+```
+:::
+
 ## Modellanpassning
 
-Givet att en modell har identifierats utifrån observerade SAC och SPAC (eller EACF) diagram blir nästa steg att anpassa modellens parametrar. I denna del utgår vi från en stationär tidsserie betecknat $Y_t$ oavsett om det direkt är den observerade $Y_t$ eller differentierade $W_t$.
+Givet att en modell har identifierats utifrån observerade SAC och SPAC (eller EACF) diagram blir nästa steg att anpassa modellens parametrar. I denna del utgår vi från en stationär tidsserie betecknat $Y_t$ oavsett om det direkt är den observerade $Y_t$ eller differentierade $W_t$. 
 
-### Momentmetoden
+Vi börjar med två metoder som till synes verkar enkla men stöter på problem när MA komponenter inkluderas i modellen.
+
+#### Momentmetoden {-}
 
 **Momentmetoden** är den enklaste varianten av modellanpassning som innebär att vi skattar de teoretiska beskrivande måtten utifrån den observerade serien, till exempel skattar modellens teoretiska väntevärde utifrån stickprovets medelvärde. 
 
@@ -271,12 +461,11 @@ $$
 $$
 där $r_1$ är den skattade autokorrelationen vid lagg 1. För övriga parametrar i processer av högre ordning byter vi helt enkelt ut de sanna $\rho_k$ med skattade $r_k$ för respektive $\hat{\phi}$.
 
-[TODO: STÄM AV ATT JAG ANVÄNT "ORDNING" TIDIGARE]{style="color: red"}
-[TODO: YULE-WALKER EKVATIONER HAR INTE ANVÄNTS TIDIGARE MEN FINNS MED SOM EN DEL I DETTA KAPITEL SID 150]{style="color: red"}
+<!-- TODO: YULE-WALKER EKVATIONER HAR INTE ANVÄNTS TIDIGARE MEN FINNS MED SOM EN DEL I DETTA KAPITEL SID 150 -->
 
 För MA-processer kommer momentmetoden inte fungera lika rättframt eftersom de skattade autokorrelationerna omfattar kvadratiska ekvationer som kräver kontroll av invertibilitet hos rötterna. Vi lägger inte så mycket mer tid på dessa beskrivningar då momentmetoden inte är en effektiv metod för att anpassa MA-termer.
 
-### Minsta kvadratskattning
+#### Minsta kvadratskattning {-}
 
 Likt en linjär regressionsmodell kan en ARIMA-modell anpassas med hjälp av minsta kvadratmetoden.^[Se @sec-least-squares för en detaljerad genomgång i regressionssammanhang.] 
 
@@ -287,29 +476,27 @@ $$
   \end{aligned}
 $$ {#eq-cond-ss}
 
-eftersom vi måste observera två tidpunkter för ett värde och $Y_0$ inte finns observerad. Vi kallar detta för en betingad kvadratsumma eftersom vi endast observerar $Y_1$.
+eftersom vi måste observera två tidpunkter för ett värde och $Y_0$ inte finns observerad. Vi kallar detta för en betingad kvadratsumma (eng. conditional sum of squares) eftersom vi endast observerar $Y_1$.
 
-För mer komplexa modeller kommer vi anpassa en liknande betingad kvadratsumma men om någon MA komponent finns med blir funktionen icke-linjär vilket kräver numerisk optimering för att lösa. 
+För mer komplexa modeller kan vi anpassa en liknande betingad kvadratsumma men om någon MA komponent finns med blir funktionen icke-linjär vilket kräver numerisk optimering för att lösa. 
 
-[TODO: Bestäm om vi ska gå in i detaljerna med dessa metoder eller om vi bara nöjer oss med att titta på fördel/nackdel. Kunna anpassa som lärandemåll gäller ju främst att göra det med funktioner i R.]{style="color: red"}
+<!-- TODO: Bestäm om vi ska gå in i detaljerna med dessa metoder eller om vi bara nöjer oss med att titta på fördel/nackdel. Kunna anpassa som lärandemåll gäller ju främst att göra det med funktioner i R. -->
 
 ### Maximum Likelihood
 
-[TODO: ML har inte direkt tagits upp i tidigare kapitel men bör göras det i kapitel 14 (logistisk regression)]{style="color: red"}
-
-Vi märker att båda de tidigare metoderna blir komplicerade när en MA-komponent inkluderas i modellen. Den tredje, och föredragna, metoden är maximum likelihood, som (vi kommer ihåg) är en metod som visar vilka parametervärden som är mest troliga att ha skapat den observerade serien (se @sec-maximum-likelihood). Metoden går kortfattat ut på att: 
+Vi märker att båda de tidigare metoderna blir komplicerade när en MA-komponent inkluderas i modellen. Den tredje, och föredragna, metoden är maximum likelihood, som är en metod som visar vilka parametervärden som är mest troliga att ha skapat den observerade serien (se @sec-maximum-likelihood). Metoden går kortfattat ut på att: 
 
 1. Beskriva seriens data med en likelihood beräknad från en simultanfördelning
-2. (Transformera till en loglikelihood för enklare optimering)
-3. Maximera (log)likelihood / Minimera negativ (log)likelihood genom iterativ optimering
+2. Transformera till en loglikelihood för enklare optimering
+3. Maximera loglikelihood / Minimera negativ loglikelihood genom iterativ optimering
 
-Vi kan återigen börja med att visa processen för @eq-ar1. Kom ihåg att $|\phi| < 1$ och $e_t \sim N(0, \sigma^2_e)$. Vi kan definiera likelihooden som:
+Vi kan återigen börja med att visa processen för @eq-ar1 där de två parametrarna som skattas är $\phi$ och $\sigma_e^2$. Kom ihåg att $|\phi| < 1$ och $e_t \sim N(0, \sigma^2_e)$. Vi kan definiera likelihooden som:
 $$
   \begin{aligned}
   L(\phi, \sigma_e) = f_{\phi, \sigma_e}(Y_1, Y_2, Y_3, \dots, Y_n)
   \end{aligned}
 $$
-Eftersom det finns ett beroende mellan de intilliggande tidsstegen kan vi omformulera likelihooden som:
+Eftersom det finns ett beroende mellan de intilliggande tidsstegen, till skillnad från den enkla produkt som kan skapas av oberoende observationer för exemplena i @seq-maximum-likelihood, kan vi omformulera likelihooden som:
 $$
   \begin{aligned}
   L(\phi, \sigma_e) = f_{\phi, \sigma_e}(Y_1) f_{\phi, \sigma_e}(Y_2 | Y_1) f_{\phi, \sigma_e}(Y_3 | Y_2, Y_1) \cdots f_{\phi, \sigma_e}(Y_n|Y_{n-1}, Y_{n-2}, \dots Y_2, Y_1)
@@ -325,7 +512,7 @@ $$
 som ger:
 $$
   \begin{aligned}
-  f_{\phi, \sigma_e}(Y_t | Y_{t_1}) = \frac{1}{\sigma_e\sqrt{2\pi}}exp\left[- \frac{1}{2\sigma^2_e}(Y_t - \phi Y_{t-1})^2 \right]
+  f_{\phi, \sigma_e}(Y_t | Y_{t-1}) = \frac{1}{\sigma_e\sqrt{2\pi}}exp\left[- \frac{1}{2\sigma^2_e}(Y_t - \phi Y_{t-1})^2 \right]
   \end{aligned}
 $$
 Den enda delen som saknas är $f_{\phi, \sigma_e}(Y_1)$ som vi kan definiera som $Y_t \sim N\left(0, \frac{\sigma^2_e}{(1-\phi^2)}\right)$ vilket ger:
@@ -355,47 +542,60 @@ $$
   \end{aligned}
 $$
 
-[TODO: MÅSTE IN MED MER KRING SIGMA skattning och ur det sen påverkar skattningen]{style="color: red"}
+Eftersom vi inte kommer optimera detta själva stannar vi nu här innan deriveringsteget och fortsätter med anpassningen i R. För mer komplexa modeller blir härledningen av loglikelihooden än mer komplicerad.
 
-[TODO: Vad är syftet med detta?? Är det ens relevant]{style="color: red"}
+### Modellanpassning i R {#seq-tsa-in-r}
 
-För mer komplexa modeller blir härledningen av loglikelihooden mer komplicerad men samma grundsteg utförs.
+I praktiken använder vi R för att anpassa dessa modeller. Till exempel skulle vi kunna använda funktionen `arima()` från `TSA` som använder sig av den betingande minsta kvadratsumman för att hitta startvärden och senare iterativ optimerar med maximum likelihood. 
 
-### Modellanpassning i R
-
-I praktiken använder vi R för att anpassa dessa modeller. Till exempel skulle vi kunna använda funktionen `arima()` från `TSA`. Denna funktion kräver följande argument:
+Denna funktion kräver följande argument:
 
 - `x`: tidsserien som ska modelleras
 - `order`: en vektor enligt formen `c(p, d, q)` som beskriver ordningen av de olika komponenterna
 - `include.mean`: TRUE/FALSE som indikerar om serien har ett nollskilt medelvärde eller ej
 
-Ytterligare argument finns som vi kommer återkomma till senare i underlaget. 
+<!-- Ytterligare argument finns som vi kommer återkomma till senare i underlaget.  -->
 
-Säg att vi vill anpassa en ARIMA(1,0,1) från @fig-ex-arma11. Vi vet att de sanna parametrarna som användes vid skapandet av serien var $\phi = 0.5$ och $\theta = -0.3$. Då figuren uppvisar en modell som verkar centreras kring 0, anpassas modellen med $\theta_0 = 0$. 
+Säg att vi vill anpassa en ARIMA(1,0,1) från @fig-ex-arma11. Vi vet att de sanna parametrarna som användes vid skapandet av serien var $\phi = 0.5$ och $\theta = -0.3$. Då figuren uppvisar en modell som verkar centreras kring 0, anpassas modellen med $\theta_0 = 0$ det vill säga `include.mean = FALSE`. 
 
 ```{r}
+#| code-fold: false
 
-model <- arima(y, order = c(1, 0, 1), include.mean = FALSE)
+modelARMA <- arima(y, order = c(1, 0, 1), include.mean = FALSE)
 
-model
+modelARMA
 
 ```
 
-I utskriften från modellen fås båda skattade komponenterna $\hat{\phi} = `r coef(model)[1] |> round(3)`$ och $\hat{\theta} = `r coef(model)[2] |> round(3)`$.
+Utksriften sammanfattar den skattade modellen i tre olika steg; vilken modell som anpassats under `Call`, de skattade parametrarna och deras medelfel under `Coefficients`, samt utvärderingsmått som vi kommer återkomma till längst ner. Vi kan läsa av i utskriften båda de skattade komponenterna $\hat{\phi} = `r coef(modelARMA)[1] |> round(3)`$ och $\hat{\theta} = `r coef(modelARMA)[2] |> round(3)`$, vilket ligger hyfsat nära de sanna parametrarna som vi använde vid simuleringen. I praktiken kan vi inte jämföra med "sanna" värde då de är okända.
 
-Vi såg dock en viss osäkerhet i @fig-sample-eacf att en alternativ modell var en ren MA(2). Vi skulle nu kunna anpassa även denna och se hur modellen ser ut.
+Vi såg dock en viss otydlighet i @fig-sample-eacf och att en alternativ modell mycket väl kan vara en MA(2). För att utforska några alternativ kan vi anpassa även denna och se hur modellen ser ut.
 
 ```{r}
+#| code-fold: false
 
-model <- arima(y, order = c(0, 0, 2), include.mean = FALSE)
+modelMA <- arima(y, order = c(0, 0, 2), include.mean = FALSE)
 
-model
+modelMA
 
 ```
 
-Från utskriften utläses $\hat{\theta}_1 = `r coef(model)[1] |> round(3)`$ och $\hat{\theta}_2 = `r coef(model)[2] |> round(3)`$.
+Från utskriften utläses $\hat{\theta}_1 = `r coef(modelMA)[1] |> round(3)`$ och $\hat{\theta}_2 = `r coef(modelMA)[2] |> round(3)`$.
 
-Så vilken modell är bäst lämpad för att beskriva modellen? Metoder för att utvärdera och jämföra modeller introduceras i  @sec-tsa-model-evaluation. I just detta fall vet vi den sanna strukturen så ser vi att ARIMA(1,0,1) inte riktigt anpassat de sanna parametervärden som användes i simuleringen men detta kan vi attribuera till simuleringsprocessens slump.
+Så vilken modell är bäst lämpad för att beskriva modellen? Om vi jämför modellernas två loglikelihood värden från de två utskrifterna ser vi att ARIMA(1,0,1) har ett något högre ($-1416.68$) värde än MA(2) ($-1416.89$) och kan anses vara den som är bäst lämpad. Fler metoder för att utvärdera och jämföra modeller introduceras i  @sec-tsa-model-evaluation. 
+
+I just detta fall vet vi den sanna strukturen och kan se att ARIMA(1,0,1) inte riktigt anpassat de sanna parametervärdena men detta kan vi säga uppkommer från simuleringsprocessens osäkerhet.
+
+:::{.callout-caution}
+## Övning 4
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap23.4_ex2.rmd")
+
+```
+:::
 
 ## Referenser {.unnumbered}
 
