@@ -2814,16 +2814,16 @@ Notera
 Y_t = \frac{e_t + e_{t-1}}{2}.
 \]</span></p>
 <p>Vilka av följande påståenden om serien är korrekta?</p>
-<div id="webex-a9c5b16f1c234bcf255f8f631b3f1ce3" class="webex-checkboxgroup" data-answer="OghPBE4AGlZs">
-<label><input type="checkbox" autocomplete="off" name="a9c5b16f1c234bcf255f8f631b3f1ce3"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är korrelerade eftersom båda innehåller slumpvariabeln <span class="math inline">\(e_{t-1}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="a9c5b16f1c234bcf255f8f631b3f1ce3"><span>Kovariansen mellan <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är <span class="math inline">\(\sigma_e^2/4\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="a9c5b16f1c234bcf255f8f631b3f1ce3"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-2}\)</span> är okorrelerade eftersom de inte innehåller någon gemensam slumpvariabel.</span></label><label><input type="checkbox" autocomplete="off" name="a9c5b16f1c234bcf255f8f631b3f1ce3"><span><span class="math inline">\(\operatorname{Var}(Y_t) = \sigma_e^2\)</span>, eftersom serien består av två termer som båda har variansen <span class="math inline">\(\sigma_e^2\)</span>.</span></label>
+<div id="webex-026040ebf5612feb48cab6063ff72a97" class="webex-checkboxgroup" data-answer="awMaARgASVM7">
+<label><input type="checkbox" autocomplete="off" name="026040ebf5612feb48cab6063ff72a97"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är korrelerade eftersom båda innehåller slumpvariabeln <span class="math inline">\(e_{t-1}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="026040ebf5612feb48cab6063ff72a97"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-2}\)</span> är okorrelerade eftersom de inte innehåller någon gemensam slumpvariabel.</span></label><label><input type="checkbox" autocomplete="off" name="026040ebf5612feb48cab6063ff72a97"><span><span class="math inline">\(\operatorname{Var}(Y_t) = \sigma_e^2\)</span>, eftersom serien består av två termer som båda har variansen <span class="math inline">\(\sigma_e^2\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="026040ebf5612feb48cab6063ff72a97"><span>Kovariansen mellan <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är <span class="math inline">\(\sigma_e^2/4\)</span>.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
 <li>Sant. Både <span class="math inline">\(Y_t = (e_t + e_{t-1})/2\)</span> och <span class="math inline">\(Y_{t-1} = (e_{t-1} + e_{t-2})/2\)</span> innehåller <span class="math inline">\(e_{t-1}\)</span>. Den gemensamma slumpvariabeln gör att kovariansen är positiv.</li>
-<li>Sant. Den enda gemensamma slumpvariabeln i <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är <span class="math inline">\(e_{t-1}\)</span>. Därför gäller <span class="math inline">\(\operatorname{Cov}(Y_t,Y_{t-1}) = \operatorname{Var}(e_{t-1})/4 = \sigma_e^2/4\)</span>.</li>
 <li>Sant. <span class="math inline">\(Y_t\)</span> innehåller <span class="math inline">\(e_t\)</span> och <span class="math inline">\(e_{t-1}\)</span>, medan <span class="math inline">\(Y_{t-2}\)</span> innehåller <span class="math inline">\(e_{t-2}\)</span> och <span class="math inline">\(e_{t-3}\)</span>. Eftersom termerna i det vita bruset är oberoende är <span class="math inline">\(\operatorname{Cov}(Y_t,Y_{t-2}) = 0\)</span>.</li>
 <li>Falskt. Eftersom <span class="math inline">\(e_t\)</span> och <span class="math inline">\(e_{t-1}\)</span> är oberoende gäller <span class="math inline">\(\operatorname{Var}(Y_t) = \{\operatorname{Var}(e_t) + \operatorname{Var}(e_{t-1})\}/4 = \sigma_e^2/2\)</span>.</li>
+<li>Sant. Den enda gemensamma slumpvariabeln i <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är <span class="math inline">\(e_{t-1}\)</span>. Därför gäller <span class="math inline">\(\operatorname{Cov}(Y_t,Y_{t-1}) = \operatorname{Var}(e_{t-1})/4 = \sigma_e^2/4\)</span>.</li>
 </ul>
 </div>
 </div>
@@ -2882,15 +2882,15 @@ Y_t = \frac{e_t + e_{t-1}}{2}.
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>En serie av vitt brus <span class="math inline">\(e_t\)</span> har väntevärde <span class="math inline">\(0\)</span>, konstant varians och är stationär. En random walk definieras som <span class="math inline">\(Y_t=Y_{t-1}+e_t\)</span>. Trots att <span class="math inline">\(e_t\)</span> är stationärt är <span class="math inline">\(Y_t\)</span> vanligtvis inte stationär. Vilken förklaring är korrekt?</p>
-<div id="webex-0c773712e544df49f361a8ba22a4725a" class="webex-radiogroup" data-answer="a1IbBx8HHQI4">
-<label><input type="radio" autocomplete="off" name="0c773712e544df49f361a8ba22a4725a"><span>En random walk är inte stationär eftersom variansen ökar när nya slumpchocker ackumuleras över tid.</span></label><label><input type="radio" autocomplete="off" name="0c773712e544df49f361a8ba22a4725a"><span>En random walk är inte stationär eftersom vitt brus alltid är autokorrelerat.</span></label><label><input type="radio" autocomplete="off" name="0c773712e544df49f361a8ba22a4725a"><span>En random walk är inte stationär eftersom väntevärdet alltid ökar över tid.</span></label><label><input type="radio" autocomplete="off" name="0c773712e544df49f361a8ba22a4725a"><span>En random walk är inte stationär eftersom den inte innehåller någon slumpmässighet.</span></label>
+<div id="webex-b1a03f96c5dd28a3a70d80e4bd9593d0" class="webex-radiogroup" data-answer="OQFNAB9XFQY+">
+<label><input type="radio" autocomplete="off" name="b1a03f96c5dd28a3a70d80e4bd9593d0"><span>En random walk är inte stationär eftersom väntevärdet alltid ökar över tid.</span></label><label><input type="radio" autocomplete="off" name="b1a03f96c5dd28a3a70d80e4bd9593d0"><span>En random walk är inte stationär eftersom vitt brus alltid är autokorrelerat.</span></label><label><input type="radio" autocomplete="off" name="b1a03f96c5dd28a3a70d80e4bd9593d0"><span>En random walk är inte stationär eftersom variansen ökar när nya slumpchocker ackumuleras över tid.</span></label><label><input type="radio" autocomplete="off" name="b1a03f96c5dd28a3a70d80e4bd9593d0"><span>En random walk är inte stationär eftersom den inte innehåller någon slumpmässighet.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Sant. Slumpchockerna summeras över tid, vilket gör att variansen ökar.</li>
-<li>Falskt. Vitt brus saknar autokorrelation mellan observationer vid olika tidpunkter.</li>
 <li>Falskt. För en random walk utan drift är väntevärdet konstant om startvärdet är konstant.</li>
+<li>Falskt. Vitt brus saknar autokorrelation mellan observationer vid olika tidpunkter.</li>
+<li>Sant. Slumpchockerna summeras över tid, vilket gör att variansen ökar.</li>
 <li>Falskt. En random walk är slumpmässig eftersom den byggs upp av slumpchocker.</li>
 </ul>
 </div>
@@ -2910,16 +2910,16 @@ Y_t = \frac{e_t + e_{t-1}}{2}.
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Många tidsseriemodeller bygger på antagandet om svag stationäritet. Det innebär att serien har konstant väntevärde och varians samt att autokovariansen mellan <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-k}\)</span> endast beror på avståndet <span class="math inline">\(k\)</span>. Vilka av följande påståenden är korrekta om antagandet inte är uppfyllt?</p>
-<div id="webex-e6bf75e8574e502ef018e3873247cf52" class="webex-checkboxgroup" data-answer="PgdOVhsFSQlo">
-<label><input type="checkbox" autocomplete="off" name="e6bf75e8574e502ef018e3873247cf52"><span>Modellskattningar och slutsatser kan bli missvisande när seriens struktur förändras över tid.</span></label><label><input type="checkbox" autocomplete="off" name="e6bf75e8574e502ef018e3873247cf52"><span>Problemet försvinner automatiskt om fler observationer läggs till i tidsserien.</span></label><label><input type="checkbox" autocomplete="off" name="e6bf75e8574e502ef018e3873247cf52"><span>Serien kan analyseras på samma sätt eftersom stationäritet främst påverkar seriens utseende.</span></label><label><input type="checkbox" autocomplete="off" name="e6bf75e8574e502ef018e3873247cf52"><span>Autokovariansen kan bero på var i serien den beräknas och inte enbart på avståndet <span class="math inline">\(k\)</span>.</span></label>
+<div id="webex-8ba528996452d3279867138bc6b74dc4" class="webex-checkboxgroup" data-answer="Y1NNBB4IFQlr">
+<label><input type="checkbox" autocomplete="off" name="8ba528996452d3279867138bc6b74dc4"><span>Modellskattningar och slutsatser kan bli missvisande när seriens struktur förändras över tid.</span></label><label><input type="checkbox" autocomplete="off" name="8ba528996452d3279867138bc6b74dc4"><span>Autokovariansen kan bero på var i serien den beräknas och inte enbart på avståndet <span class="math inline">\(k\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="8ba528996452d3279867138bc6b74dc4"><span>Serien kan analyseras på samma sätt eftersom stationäritet främst påverkar seriens utseende.</span></label><label><input type="checkbox" autocomplete="off" name="8ba528996452d3279867138bc6b74dc4"><span>Problemet försvinner automatiskt om fler observationer läggs till i tidsserien.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
 <li>Sant. Om seriens egenskaper förändras över tid kan en modell som antar en stabil struktur ge missvisande skattningar och slutsatser.</li>
-<li>Falskt. Fler observationer gör inte automatiskt en icke-stationär serie stationär.</li>
-<li>Falskt. Stationäritet påverkar om seriens nivå, variation och beroendestruktur kan beskrivas på ett stabilt sätt över tid.</li>
 <li>Sant. För en icke-stationär serie kan autokovariansen bero på både tidpunkten och avståndet mellan observationerna.</li>
+<li>Falskt. Stationäritet påverkar om seriens nivå, variation och beroendestruktur kan beskrivas på ett stabilt sätt över tid.</li>
+<li>Falskt. Fler observationer gör inte automatiskt en icke-stationär serie stationär.</li>
 </ul>
 </div>
 </div>
@@ -3110,16 +3110,16 @@ Y_t = Y_{t-1} + e_t,
 \]</span></p>
 <p>där <span class="math inline">\(e_t\)</span> är vitt brus. Serien kan bearbetas genom differentiering med funktionen <code>diff()</code>.</p>
 <p>Vilka av följande påståenden är korrekta?</p>
-<div id="webex-1bff40c2edb28993c1efbd043f386de9" class="webex-checkboxgroup" data-answer="alJKVxgBTwM4">
-<label><input type="checkbox" autocomplete="off" name="1bff40c2edb28993c1efbd043f386de9"><span>Uttrycket <code>diff(Y, lag = 2, differences = 2)</code> ger differensen <span class="math inline">\(Y_t-Y_{t-4}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1bff40c2edb28993c1efbd043f386de9"><span>Den första differensen är stationär om <span class="math inline">\(e_t\)</span> är vitt brus, trots att den ursprungliga serien <span class="math inline">\(Y_t\)</span> inte är stationär.</span></label><label><input type="checkbox" autocomplete="off" name="1bff40c2edb28993c1efbd043f386de9"><span>Den första differensen med lagg <span class="math inline">\(1\)</span> kan skrivas som <span class="math inline">\(\nabla Y_t = Y_t-Y_{t-1}=e_t\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1bff40c2edb28993c1efbd043f386de9"><span>Två differentieringar med lagg <span class="math inline">\(1\)</span> ger <span class="math inline">\(\nabla^2Y_t=Y_t-2Y_{t-1}+Y_{t-2}\)</span>.</span></label>
+<div id="webex-da198b6d195e2d09cf52e116daf442e1" class="webex-checkboxgroup" data-answer="P1EdCBRTGlVs">
+<label><input type="checkbox" autocomplete="off" name="da198b6d195e2d09cf52e116daf442e1"><span>Uttrycket <code>diff(Y, lag = 2, differences = 2)</code> ger differensen <span class="math inline">\(Y_t-Y_{t-4}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="da198b6d195e2d09cf52e116daf442e1"><span>Två differentieringar med lagg <span class="math inline">\(1\)</span> ger <span class="math inline">\(\nabla^2Y_t=Y_t-2Y_{t-1}+Y_{t-2}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="da198b6d195e2d09cf52e116daf442e1"><span>Den första differensen är stationär om <span class="math inline">\(e_t\)</span> är vitt brus, trots att den ursprungliga serien <span class="math inline">\(Y_t\)</span> inte är stationär.</span></label><label><input type="checkbox" autocomplete="off" name="da198b6d195e2d09cf52e116daf442e1"><span>Den första differensen med lagg <span class="math inline">\(1\)</span> kan skrivas som <span class="math inline">\(\nabla Y_t = Y_t-Y_{t-1}=e_t\)</span>.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
 <li>Falskt. <code>lag = 2</code> ger först den nya serien <span class="math inline">\(X_t=Y_t-Y_{t-2}\)</span>. Eftersom <code>differences = 2</code> differentieras även denna serie med lagg <span class="math inline">\(2\)</span>, vilket ger <span class="math inline">\(X_t-X_{t-2}=Y_t-2Y_{t-2}+Y_{t-4}\)</span>. Uttrycket <span class="math inline">\(Y_t-Y_{t-4}\)</span> motsvarar i stället en enda differentiering med lagg <span class="math inline">\(4\)</span>.</li>
+<li>Sant. Den andra differensen är differensen mellan två första differenser: <span class="math inline">\(\nabla^2Y_t=(Y_t-Y_{t-1})-(Y_{t-1}-Y_{t-2})=Y_t-2Y_{t-1}+Y_{t-2}\)</span>.</li>
 <li>Sant. Den första differensen är lika med det vita bruset <span class="math inline">\(e_t\)</span>, som har konstant väntevärde och varians samt saknar autokorrelation mellan olika tidpunkter.</li>
 <li>Sant. Från <span class="math inline">\(Y_t=Y_{t-1}+e_t\)</span> följer att <span class="math inline">\(Y_t-Y_{t-1}=e_t\)</span>. Den första differensen är därför lika med den aktuella slumpchocken.</li>
-<li>Sant. Den andra differensen är differensen mellan två första differenser: <span class="math inline">\(\nabla^2Y_t=(Y_t-Y_{t-1})-(Y_{t-1}-Y_{t-2})=Y_t-2Y_{t-1}+Y_{t-2}\)</span>.</li>
 </ul>
 </div>
 </div>
