@@ -1,3 +1,6 @@
+ANVÄNDS EJ
+
+
 Question
 ========
 Vilka av följande påståenden om olika former av maskininlärning är korrekta?
