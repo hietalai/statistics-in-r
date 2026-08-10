@@ -4,7 +4,7 @@ editor_options:
 ---
 
 <!-- CONTENT -->
-# Multikollinearitet
+# Multikollinearitet {#sec-multicollinearity}
 
 I en multipel linjär regression behöver vi inte bara ta hänsyn till sambandet mellan de förklarande variablerna (X) och responsvariabeln (Y) utan vi behöver också ta hänsyn till sambandet mellan de förklarande variablerna. Detta kallas för **multikollinearitet**. Om det huvudsakliga syftet med en regressionsmodell är att beskriva sambandet mellan $\mathbf{X}$ och Y, och flera $X_j$ beskriver samma sorts samband, kommer modellen fokusera på en av dessa och anse att de övriga variablerna inte har något samband. Modellen kan också överskatta variansen i parameterskattningen vilket i sin tur leder till icke-informativ inferens. 
 
