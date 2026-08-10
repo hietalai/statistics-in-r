@@ -87,7 +87,7 @@ Den första punkten är väldigt viktig för att bilda en uppfattning om vilka f
 
 ## Övningsuppgifter
 
-Återkommande i detta kapitel förekommer övningsuppgifter i form av enklare flervalsfrågor. Syftet med dessa frågor är att ge en form av direkt återkoppling där din förståelse av det tidigare materialet sätts på prov. Följande två exempel behandlar det kapitel du nyss läst, introduktionen till tidsserier. Utifrån frågans formulering bör det vara tydligt ifall endast ett eller flera svar (markeringar) tillåts. Om du klickar på bocken till vänster får du en återkoppling på dina svar och frågetecknet till höger visar svaren och en kortare förklaring till dessa.
+Återkommande i denna del förekommer övningsuppgifter i form av enklare flervalsfrågor. Syftet med dessa frågor är att ge en form av direkt återkoppling där din förståelse av det tidigare materialet sätts på prov. Följande två exempel behandlar det kapitel du nyss läst, introduktionen till tidsserier. Utifrån frågans formulering bör det vara tydligt ifall endast ett eller flera svar (markeringar) tillåts. Om du klickar på bocken till vänster får du en återkoppling på dina svar och frågetecknet till höger visar svaren och en kortare förklaring till dessa.
 
 :::{.callout-caution}
 ## Övning 1
