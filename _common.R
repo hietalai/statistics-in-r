@@ -16,6 +16,8 @@ suppressMessages({
   require(forecast)
   require(assertthat)
   require(exams2forms)
+  require(sf)
+  require(swemaps2)
 })
 
 utils::data(penguins)
@@ -67,8 +69,6 @@ consumption <- readr::read_csv2("resources/data/electricityconsumption.csv") |>
 
 lake <- readr::read_delim("resources/data/lakesurvey.csv", 
                           delim = ";", escape_double = FALSE, trim_ws = TRUE) |> 
-  dplyr::filter(if_all(!Name, ~!is.na(.x))) |> 
-  dplyr::filter(Name != "Lerkilen") |> 
   suppressMessages()
 
 
