@@ -18,6 +18,7 @@ suppressMessages({
   require(exams2forms)
   require(sf)
   require(swemaps2)
+  require(splines)
 })
 
 utils::data(penguins)
@@ -67,10 +68,23 @@ prices <- readr::read_csv("resources/data/electricityprice.csv") |>
 consumption <- readr::read_csv2("resources/data/electricityconsumption.csv") |> 
   suppressMessages()
 
-lake <- readr::read_delim("resources/data/lakesurvey.csv", 
+lakeFull <- 
+  readr::read_delim("resources/data/lakesurvey.csv", 
                           delim = ";", escape_double = FALSE, trim_ws = TRUE) |> 
   suppressMessages()
 
+lake <- 
+  lakeFull |> 
+  # Tar bort en observation om minst en variabel är saknad
+  dplyr::filter(if_all(!Name, ~!is.na(.x))) |> 
+  # Tar bort observationer som heter LERKILEN eller BOGEVIK
+  dplyr::filter(!(Name %in% c("LERKILEN", "BOGEVIK")))
+
+spambase <- readr::read_csv2("resources/data/spambase.csv") |> 
+  suppressMessages()
+
+wine <- readr::read_csv2("resources/data/wine.csv") |> 
+  suppressMessages()
 
 diagnosticPlots <- 
   function(
