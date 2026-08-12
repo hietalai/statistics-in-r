@@ -571,9 +571,10 @@ window.Quarto = {
   </ul></li>
   <li><a href="#optimering-och-utvärdering-i-klassificering" id="toc-optimering-och-utvärdering-i-klassificering" class="nav-link" data-scroll-target="#optimering-och-utvärdering-i-klassificering"><span class="header-section-number">26.4</span> Optimering och utvärdering i klassificering</a>
   <ul class="collapse">
-  <li><a href="#cross-entropy" id="toc-cross-entropy" class="nav-link" data-scroll-target="#cross-entropy"><span class="header-section-number">26.4.1</span> Cross Entropy</a></li>
+  <li><a href="#klassbalans" id="toc-klassbalans" class="nav-link" data-scroll-target="#klassbalans"><span class="header-section-number">26.4.1</span> Klassbalans</a></li>
+  <li><a href="#sensitivitet-och-specificitet" id="toc-sensitivitet-och-specificitet" class="nav-link" data-scroll-target="#sensitivitet-och-specificitet"><span class="header-section-number">26.4.2</span> Sensitivitet och specificitet</a></li>
+  <li><a href="#sec-cross-entropy" id="toc-sec-cross-entropy" class="nav-link" data-scroll-target="#sec-cross-entropy"><span class="header-section-number">26.4.3</span> Cross Entropy</a></li>
   </ul></li>
-  <li><a href="#case" id="toc-case" class="nav-link" data-scroll-target="#case"><span class="header-section-number">26.5</span> Case</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -601,7 +602,7 @@ window.Quarto = {
 
 
 <!-- CONTENT -->
-<p>Med hjälp av felfunktioner (<a href="00-introduction.html#sec-cost-function" class="quarto-xref"><span>Avsnitt 25.2.2</span></a>) och datauppdelning (<a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.2.3</span></a>) och kan vi nu skapa en process för att hitta den bästa modellen.</p>
+<p>Med hjälp av kostnadsfunktioner (<a href="00-introduction.html#sec-cost-function" class="quarto-xref"><span>Avsnitt 25.3.2</span></a>) och datauppdelning (<a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.3.3</span></a>) och kan vi nu skapa en process för att både utforska flera modeller och identifiera den bästa av dem.</p>
 <section id="sec-validation" class="level2" data-number="26.1">
 <h2 data-number="26.1" class="anchored" data-anchor-id="sec-validation"><span class="header-section-number">26.1</span> Modellvalsprocess</h2>
 <p>Vi kan börja med att ta fram några kandidatfunktioner (modeller) som tränas på träningsmängden:</p>
@@ -615,7 +616,7 @@ Figur&nbsp;26.1: Träningssteget av processen
 </figcaption>
 </figure>
 </div>
-<p>De tränade modellerna utvärderas sedan på valideringsmängden genom att beräkna felfunktionens värde.</p>
+<p>De tränade modellerna utvärderas sedan på valideringsmängden genom att beräkna kostnadfunktionens värde.</p>
 <div id="fig-validation-step" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-validation-step-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -686,8 +687,8 @@ Figur&nbsp;26.6: Lagom komplex modell
 </div>
 </div>
 <p>Vi ser att <a href="#fig-underfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.4</span></a> får en dålig anpassning för båda mängderna vilket leder till höga värden på felfunktionen på respektive. <a href="#fig-overfit-withValid" class="quarto-xref">Figur&nbsp;<span>26.5</span></a> visar att när modellen exakt följer träningsmängden får vi extremt låga värden på träningens felfunktion men stora värden på valideringsmängden. Den “lagom” komplexa modellen får “lagom” stora värden på båda tränings- och valideringsfelet.</p>
-<p><span style="color: green">Traditionelt inom regression, tar all data tränar, och väljer modell med lägst SSE. Om vi stannar där finns det risk för både under- och överanpassning. Enbart från ett mått kan det vara svårt att välja den bästa modellen. Generalisering tas inte hänsyn till i denna process. Historiskt har man inte haft mycket data och behövt använda all data till träningen.</span></p>
-<p><span style="color: orange">EXEMPEL MED FÅ PUNKTER OCH POLYNOM</span></p>
+<p>Traditionellt inom regression används all data för att träna modellen och vi väljer den modell som har lägst SSE (högst <span class="math inline">\(R^2_{adj}\)</span>). Genom att inte kontrollera modellanpassningen på ny data finns det risk för både över- och underanpassning och vi tar inte hänsyn till generaliseringen i denna process. Den främsta orsaken är man historiskt inte haft stora datamängder och därför behövt använda all data till träningen.</p>
+<!-- DEVELOPMENT: Lägg till exempel om polynom och data med få punkter -->
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -698,8 +699,7 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Om en modell endast tränas på träningsmängden finns en stor risk att optimeringsalgoritmen avslutar träningen när modellen är överanpassad. Istället bör vi använda valideringsmängden i träningen iterativa process och optimera modellen</p>
-<p><span style="color: red">NÅGONTING OM HUR VI STOPPAR TRÄNINGEN BASERAT PÅ VALIDERINGSMÄNGDEN, INTE TRÄNINGSMÄNGDEN</span></p>
+<p>Inom maskininlärning, om en modell endast tränas på träningsmängden finns en stor risk att optimeringsalgoritmen avslutar träningen när modellen är överanpassad. Vi kan använda valideringsmängden för att få en indikation om så är fallet men det blir svårt att ändra träningen i efterhand.</p>
 <p>Vi kan också integrera tränings- och valideringsmängden direkt i träningsprocessen genom att iterativt optimera och utvärdera på valideringsmängden istället för enbart träningsmängden.</p>
 </div>
 </div>
@@ -714,7 +714,16 @@ Figur&nbsp;26.7: Visualisering av avvägningen mellan bias och varians.
 </figcaption>
 </figure>
 </div>
-<p><span style="color: red">BEHÖVER FÖRKLARA BIAS VARIANS OCH BRUS FÖR ATT DENNA BILD SKA KUNNA TOLKAS MER (SLIDE 38 FL1)</span></p>
+<p>Vi kan dela upp väntevärdet för MSE i valideringsmängden<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> till tre separata komponenter; modellens varians, modellens <strong>bias</strong>, och felets varians.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+    E(MSE) = Var(\hat{f}(x_0)) + [Bias(\hat{f}(x_0))]^2 + Var(\varepsilon)
+  \end{aligned}
+\]</span></p>
+<p>Oavsett modell kommer felets varians vara konstant, vi kan kalla det för icke-reducerbart brus, så för att minimera MSE behöver vi ha en låg varians <em>och</em> bias för modellen.</p>
+<p>Variansen i modellen beskriver osäkerheten som uppkommer om samma modell anpassas på ett annat träningsdata där generellt mer komplexa modellen har en högre varians då mindre skillnader i data genererar större skillnader i <span class="math inline">\(\hat{f}(x)\)</span>.</p>
+<p>Modellens bias beskriver det fel som uppkommer av själva modellen som en representation av det sanna sambandet. En enkel förenkling av verkligheten har en hög bias eftersom verkligheten oftast inte är så pass enkel. Vi kan tänka som att vi modellerar ett komplext icke-linjärt problem med en linjär modell. Den linjära modellen kommer aldrig lyckas modellera det icke-linjära sambandet på grund av dess mekaniska begränsningar.</p>
+<p>I relation till <a href="#fig-bias-variance" class="quarto-xref">Figur&nbsp;<span>26.7</span></a> betyder det att området till vänster har en hög bias men låg varians och området till höger har en låg bias men hög varians; alltså ett motviktssamband. Valet av modell blir en avvägning att hitta modellen som har så låg varians och bias som möjligt, vilket ofta inträffar när valideringsfelet börjar öka igen, där vi väljer att stanna träningen.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -725,10 +734,10 @@ Notera
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>För vissa extremt komplexa modeller förekommer ett fenomen benämnt <strong>double descent</strong> där valideringsfelet minskar och sedan ökar för att till sist minska igen. Ni kan läsa mer om detta fenomen via <a href="https://en.wikipedia.org/wiki/Double_descent">Wikipedia</a>, det är inget som vi kommer titta närmare på.</p>
+<p>För vissa extremt komplexa modeller förekommer ett fenomen benämnt <strong>double descent</strong> där valideringsfelet minskar och sedan ökar för att till sist minska igen. Ni kan läsa mer om detta fenomen via <a href="https://en.wikipedia.org/wiki/Double_descent">Wikipedia</a>, det är inget som vi kommer titta närmare på i detta material.</p>
 </div>
 </div>
-<p>Vi kan visa detta med ett enkelt exempel för <code>lake</code> data. Vi börjar med att först dela upp data i tre olika mängder där träningsmängden får 60% av data, valideringsmängden 30% och testmängden 10%.</p>
+<p>Vi kan visa dette fenomen med ett enkelt exempel för <code>lake</code> data. Vi börjar med att först dela upp data i tre olika mängder där träningsmängden får 60% av data, valideringsmängden 30% och testmängden 10%.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sätter ett seed för reproducerbarhet</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20260701</span>)</span>
@@ -748,7 +757,7 @@ Notera
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>validData <span class="ot">&lt;-</span> remaining[validIndex, ]</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>testData <span class="ot">&lt;-</span> remaining[<span class="sc">-</span>validIndex, ]</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Sedan tränar vi två olika regressionsmodeller utifrån träningsmängden.</p>
+<p>Sedan tränar vi två olika regressionsmodeller utifrån träningsmängden, en med endast en förklarande variabel som blir en enkel modell och en med tre förklarande variabler som blir den mer komplexa modellen.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tränar olika linjära regressionsmodeller</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>trainModel1 <span class="ot">&lt;-</span> </span>
@@ -759,7 +768,7 @@ Notera
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  trainData <span class="sc">|&gt;</span> </span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(pH <span class="sc">~</span> <span class="st">`</span><span class="at">Temp_ øC</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">Alk_/Acid meq/l</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">Cl meq/l</span><span class="st">`</span>, <span class="at">data =</span> _)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Dessa vill vi sedan jämföra valideringsfelet på. För regression innebär det att vi vill beräkna MSE på valideringsmängden.</p>
+<p>Dessa två modeller vill vi sedan jämföra valideringsfelet på. För regression innebär det att vi vill beräkna MSE på valideringsmängden.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar MSE på valideringsmängden</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>yhat1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel1, <span class="at">newdata =</span> validData)</span>
@@ -778,10 +787,11 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Inom maskininlärning använder vi den generella formeln för MSE där nämnaren endast består av antalet observationer, <span class="math inline">\(n\)</span>. Inom linjär regression, är vi vana vid att ta hänsyn till antalet frihetsgrader <span class="math inline">\(MSE = \frac{SSE}{n - (k + 1)}\)</span> för att få en väntevärdesriktig skattning av felet. Det är av samma anledning som standardavvikelser beräknas med <span class="math inline">\(n - 1\)</span> i nämnaren istället för enbart <span class="math inline">\(n\)</span>. Skillnaden i nämnare blir försumbar när vi har ett stort <span class="math inline">\(n\)</span>, vilket vi oftast har när vi använder maskininlärningsmetoder.</p>
+<p>Inom maskininlärning använder vi den generella formeln för MSE där nämnaren endast består av antalet observationer, <span class="math inline">\(n\)</span>. Inom linjär regression är vi vana vid att ta hänsyn till antalet frihetsgrader <span class="math inline">\(MSE = \frac{SSE}{n - (k + 1)}\)</span> för att få en väntevärdesriktig skattning av felet. Det är av samma anledning som standardavvikelser beräknas med <span class="math inline">\(n - 1\)</span> i nämnaren istället för enbart <span class="math inline">\(n\)</span>.</p>
+<p>Skillnaden i nämnare blir försumbar när vi har ett stort <span class="math inline">\(n\)</span>, vilket vi oftast har när vi använder maskininlärningsmetoder, därav att vi förenklar till den generella formeln.</p>
 </div>
 </div>
-<p>MSE för den första modellen är 0.448 medan för den andra modellen vi får 0.307. Utifrån dessa två mått väljer vi att gå vidare med modell 2 då dess MSE var lägre. Vi använder till sist testmängden för att få en väntevärdesriktig skattning av modellens fel:</p>
+<p>MSE för den första modellen är 0.45 medan för den andra modellen vi får 0.303. Utifrån dessa två mått väljer vi att gå vidare med modell 2 då dess MSE var lägre. Vi använder till sist testmängden för att få en väntevärdesriktig skattning av modellens fel:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yhatTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel2, <span class="at">newdata =</span> testData)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -789,15 +799,43 @@ Viktigt
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>MSETest <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.321</code></pre>
+<pre><code>[1] 0.334</code></pre>
+</div>
+</div>
+<!-- DEVELOPMENT: Lägg till en tredje mest komplex modell för att visa att det svänger tillbaka upp -->
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>När vi utvecklar en maskininlärningsmodell vill vi hitta en modell som beskriver sambandet mellan de förklarande variablerna och responsvariabeln så bra som möjligt, samtidigt som modellen ska fungera väl på nya observationer. Vilken av följande beskrivningar återger modellvalsprocessen korrekt?</p>
+<div id="webex-a13a8810058878309f341e0636e460f6" class="webex-radiogroup" data-answer="OgEfURQIHQFt">
+<label><input type="radio" autocomplete="off" name="a13a8810058878309f341e0636e460f6"><span>Alla kandidatmodeller tränas på hela datamängden. Därefter väljs modellen med lägst träningsfel och samma data används för att uppskatta modellens slutliga prestanda.</span></label><label><input type="radio" autocomplete="off" name="a13a8810058878309f341e0636e460f6"><span>Kandidatmodeller tränas på valideringsmängden. Testmängden används sedan för att välja modell och träningsmängden används slutligen för att kontrollera resultatet.</span></label><label><input type="radio" autocomplete="off" name="a13a8810058878309f341e0636e460f6"><span>Testmängden används under hela träningsprocessen för att säkerställa att modellen hela tiden förbättras på nya observationer.</span></label><label><input type="radio" autocomplete="off" name="a13a8810058878309f341e0636e460f6"><span>Kandidatmodeller tränas på träningsmängden och jämförs med hjälp av valideringsmängden. När den bästa modellen har valts används testmängden en gång för att uppskatta modellens prestanda på nya observationer.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Falskt. Om samma data används för träning, modellval och slutlig utvärdering blir prestandamåttet alltför optimistiskt och säger mindre om modellens förmåga att generalisera.</li>
+<li>Falskt. Rollerna är omkastade. Modellen ska tränas på träningsdata och inte på valideringsdata.</li>
+<li>Falskt. Om testmängden används återkommande under modellutvecklingen anpassas modellvalet indirekt till testdatan.</li>
+<li>Sant. Träningsmängden används för att skatta modellens parametrar, valideringsmängden används för modell- och hyperparameterval och testmängden hålls undan till den slutliga utvärderingen.</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </section>
 <section id="korsvalidering" class="level2" data-number="26.2">
 <h2 data-number="26.2" class="anchored" data-anchor-id="korsvalidering"><span class="header-section-number">26.2</span> Korsvalidering</h2>
-<p>Nackdelen med att dela upp data enligt <a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.2.3</span></a> är att mycket av data behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är <strong>korsvalidering</strong> där vi delar upp data i en större träningsmängd och en testmängd. Träningsmängden delas sedan in i flera mindre delar, lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar.</p>
-<p>Vi får direkt flera kandidatmodeller av samma metod som vi kan jämföra valideringsfelet och välja den bästa modellen eller beräkna ett genomsnittligt fel för alla valideringsmängder om flera metoder ska jämföras.</p>
-<p>I det extrema fallet delar vi upp träningsmängden i <span class="math inline">\(n\)</span> lika stora delar vilket kallas för <strong>Leave-one-out</strong> korsvalidering. Som namnet antyder följer vi följande procedur:</p>
+<p>Nackdelen med att dela upp data enligt <a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.3.3</span></a> är att mycket av data behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är <strong>korsvalidering</strong> där vi delar upp data i en större träningsmängd och en testmängd. Korsvalidering innebär att träningsmängden delas sedan in i flera mindre delar, vi lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar. När alla delar använts för validering beräknas det genomsnittliga valideringsfelet som sedan kan jämföras mellan olika modeller.</p>
+<p>I det extrema fallet delar vi upp träningsmängden i <span class="math inline">\(n\)</span> lika stora delar vilket kallas för <strong>Leave-one-out</strong> korsvalidering (LOOCV). Som namnet antyder följer vi följande procedur:</p>
 <ol type="1">
 <li>ta bort en observation och träna modellen på återstående data.</li>
 <li>beräkna valideringsfelet på den borttagna observationen.</li>
@@ -805,24 +843,74 @@ Viktigt
 <li>beräkna den genomsnittliga felet för alla modeller/observationer.</li>
 </ol>
 <p>Att välja modell utifrån enbart en observation är inget att rekommendera utan vi använder därför denna korsvalideringsmetod om vi vill jämföra modeller av olika strukturer. En annan nackdel med detta sätt är att vi måste anpassa <span class="math inline">\(n\)</span> modeller vilket för mer komplexa modeller kan bli mycket beräkningstungt.</p>
-<p>För att förenkla beräkningsprocessen kan istället <strong>k-fold</strong> korsvalidering användas där träningsmängden delas upp i <span class="math inline">\(k\)</span> olika block.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Vi följer samma procedur som tidigare med några justeringar:</p>
+<p>För att förenkla beräkningsprocessen kan istället <strong>k-fold</strong> korsvalidering användas där träningsmängden delas upp i <span class="math inline">\(k\)</span> olika block.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Vi följer samma procedur som tidigare med några justeringar:</p>
 <ol type="1">
 <li>ta bort <em>ett block</em> och träna modellen på återstående data.</li>
 <li>beräkna valideringsfelet på <em>det borttagna blocket</em>.</li>
 <li>upprepar steg 1. och 2. för alla <em>block</em>.</li>
 <li>beräkna den genomsnittliga felet för alla olika <em>block</em>.</li>
 </ol>
+<div id="fig-cross-validation" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cross-validation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-validation_files/mediabag/2c91117159f925ee8ea46bcf04bc0ecfb8170031.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cross-validation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;26.8: Illustration av 5-fold korsvalidering
+</figcaption>
+</figure>
+</div>
 <p>Med denna procedur behöver vi endast träna <span class="math inline">\(k\)</span> modeller vilket kan underlätta den totala beräkningskostnaden om det är en komplex modell som ska tränas.</p>
-<p><span style="color: green">NÄR KORVALIDERING VALT EN MODELL SOM ÄR BÄST MED LÄGST GENOMSNITTLIG KORSVALIDERINGSFEL SKATTAS MODELLEN OM I SIN HLEHET PÅ ALL TRÄNINGSDATA FÖR ATT FÅ DE RIKTIGA PARAMETERSKATTNINGARNA.</span></p>
+<p>När en modell väl har valts ut, tränas en slutgiltig modell på all träningsdata för att få de riktiga parameterskattningarna.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Notera</span>Korsvalidering i R
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Korsvalidering kan implementeras direkt i R genom att använda loopar men många av de metoder som vi kommer till i senare kapitel har integrerade alternativ för korsvalidering i dess tillhörande funktioner. Vi kommer därför återkomma till korsvalidering senare.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>Ett datamaterial består av 120 observationer. Två kandidatmodeller ska jämföras med hjälp av korsvalidering. För varje kandidatmodell överväger man antingen Leave-One-Out Cross-Validation (LOOCV) eller 6-fold-korsvalidering. Vilka av följande påståenden är korrekta?</p>
+<div id="webex-6240decf2c8aa13268495c0925918968" class="webex-checkboxgroup" data-answer="bQIYAUhUT1ceU2U=">
+<label><input type="checkbox" autocomplete="off" name="6240decf2c8aa13268495c0925918968"><span>Eftersom LOOCV använder fler modellanpassningar än 6-fold-korsvalidering måste LOOCV alltid ge en bättre slutlig modell.</span></label><label><input type="checkbox" autocomplete="off" name="6240decf2c8aa13268495c0925918968"><span>Vid LOOCV tränas varje kandidatmodell 120 gånger och varje modellanpassning använder <span class="math inline">\(119\)</span> observationer för träning.</span></label><label><input type="checkbox" autocomplete="off" name="6240decf2c8aa13268495c0925918968"><span>Vid 6-fold-korsvalidering består varje valideringsblock av 20 observationer och varje modellanpassning tränas på 100 observationer.</span></label><label><input type="checkbox" autocomplete="off" name="6240decf2c8aa13268495c0925918968"><span>För att jämföra kandidatmodellerna kan man för varje modell beräkna medelvärdet av valideringsfelet över samtliga observationer eller block.</span></label><label><input type="checkbox" autocomplete="off" name="6240decf2c8aa13268495c0925918968"><span>Om båda kandidatmodellerna utvärderas med LOOCV krävs totalt 120 modellanpassningar.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Falskt. Fler modellanpassningar innebär högre beräkningskostnad men garanterar inte att den valda modellen blir bättre. LOOCV och k-fold är olika metoder för att uppskatta modellernas prestanda.</li>
+<li>Sant. Vid LOOCV lämnas en observation ut i varje iteration. Med 120 observationer tränas därför modellen 120 gånger, varje gång på de återstående 119 observationerna.</li>
+<li>Sant. Vid 6-fold-korsvalidering delas 120 observationer i 6 block med 20 observationer i varje. När ett block används för validering återstår 120-20=100 träningsobservationer.</li>
+<li>Sant. Varje observation eller block används som valideringsdata en gång. Valideringsfelen sammanfattas därefter, vanligtvis med ett genomsnitt, så att kandidatmodellerna kan jämföras.</li>
+<li>Falskt. Varje kandidatmodell måste tränas 120 gånger. För två kandidatmodeller krävs därför totalt 240 modellanpassningar.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="optimering" class="level2" data-number="26.3">
 <h2 data-number="26.3" class="anchored" data-anchor-id="optimering"><span class="header-section-number">26.3</span> Optimering</h2>
-<p>När en maskininlärningsmodell tränas, vad som egentligen händer är att modellens parametrar iterativt <strong>optimeras</strong> genom att minimera felfunktionen eller maximera en sannolikhet. Till exempel minimeras SSE för linjär regression medan vi maximerar log-likelihood för logistisk regression.</p>
+<p>När en maskininlärningsmodell tränas, vad som egentligen händer är att modellens parametrar iterativt <strong>optimeras</strong> genom att minimera kostnadsfunktionen. För linjär regression kan vi minimera SSE medan för logistisk regression vi anger kostnadsfunktionen som den negativa loglikelihooden vilket då också minimeras<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
 <section id="kostnadsfunktion" class="level3" data-number="26.3.1">
 <h3 data-number="26.3.1" class="anchored" data-anchor-id="kostnadsfunktion"><span class="header-section-number">26.3.1</span> Kostnadsfunktion</h3>
-<p>Inom maskininlärning vill vi ofta minimera en <strong>kostnadsfunktion</strong> <span class="math inline">\(l(\boldsymbol{\theta})\)</span> där <span class="math inline">\(\boldsymbol{\theta}\)</span> är parametrarnas värden som styr värdet på funktionen. Optimeringens syfte är då att hitta de parametervärden som ger lägst kostnad.</p>
-<p><span style="color: green">ÄNDRA TILL KOSTNADSFUNKTION</span></p>
-<p><span style="color: red">LÄGG TILL EN LITEN RUTA OM VAD EN DERIVATA ÄR</span></p>
+<p>Inom maskininlärning vill vi ofta minimera en <strong>kostnadsfunktion</strong> <span class="math inline">\(c(\boldsymbol{\theta})\)</span> där <span class="math inline">\(\boldsymbol{\theta}\)</span> är parametrarnas värden som styr värdet på funktionen. Optimeringens syfte är att hitta de parametervärden som ger lägst kostnad.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -830,6 +918,20 @@ Viktigt
 </div>
 <div class="callout-title-container flex-fill">
 Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I detta delkapitel kommer vi använda begreppet <strong>derivata</strong> flertalet gånger. En derivata är kortfattat en förenklad funktion som beskriver lutningen av en kurva endast vid en viss punkt, alltså hur kurvan förändras vid en viss punkt.</p>
+<p>Mer om derivata finns att läsa om <a href="https://www.matteboken.se/lektioner/gymnasiet/matte-fortsattning-niva-1/derivata#!/">här</a>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tips</span>Enkelt exempel med analytisk lösning
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -857,7 +959,7 @@ Notera
 \]</span> så vi drar slutsatsen att funktionen har ett minimum vid <span class="math inline">\((x, f(x)) = (2, 1)\)</span>.</p>
 </div>
 </div>
-<p>När en enkel lösning inte är tillgänglig måste vi använda stegvis (iterativa) algoritmer såsom <strong>gradient descent/ascent</strong>. Denna metod justerar parametrarna iterativt för att successivt närma oss ett minimum eller maximum av funktionen:</p>
+<p>När en enkel lösning inte är tillgänglig måste vi använda stegvis (iterativa) algoritmer såsom <strong>gradient descent</strong>. Denna metod justerar parametrarna iterativt för att successivt närma oss ett minimum av funktionen:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-optimization" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -866,19 +968,18 @@ Notera
 <img src="01-validation_files/figure-html/fig-optimization-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-optimization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;26.8: Enkelt exempel på iterativ optimering
+Figur&nbsp;26.9: Enkelt exempel på iterativ optimering
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>I denna illustration har en första “gissning” av parametrarnas värden gjorts vid den streckade röda linjen. Sedan har parametrarna justerats tills att de når fram till värdet som ger den största kostnaden, den svartstreckade linjen.</p>
-<p><span style="color: red">FLIPPA BILDEN SOM DEN NEGATIVA LOG-LIKELIHOOD</span></p>
 </section>
 <section id="gradient" class="level3" data-number="26.3.2">
 <h3 data-number="26.3.2" class="anchored" data-anchor-id="gradient"><span class="header-section-number">26.3.2</span> Gradient</h3>
-<p>Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens <strong>gradient</strong>, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger en riktning till var nästa justering av parameterns värde bör ske, i den riktning där funktionen ökar snabbast.</p>
-<p>I dessa två föregående enkla exempel har vi ett globalt minimum/maximum (optimum) som identiferats, men för mer komplexa kostnadsfunktioner kan det finnas flera <strong>lokala optimum</strong> som algoritmen kan nå fram till.</p>
+<p>Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens negativa <strong>gradient</strong>, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger riktningen till var nästa justering av parameterns värde bör ske, i den negativa riktningen där funktionen ökar snabbast.</p>
+<p>I dessa två föregående exempel har vi ett globalt minimum (optimum) som identiferats, men för mer komplexa kostnadsfunktioner kan det finnas flera <strong>lokala optimum</strong> som algoritmen kan nå fram till.</p>
 <div class="columns">
 <div class="column" style="width:49%;">
 <div class="cell">
@@ -889,7 +990,7 @@ Figur&nbsp;26.8: Enkelt exempel på iterativ optimering
 <img src="01-validation_files/figure-html/fig-convex-function-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-convex-function-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;26.9: En enkel funktion med endast ett minimum, det globala
+Figur&nbsp;26.10: En enkel funktion med endast ett minimum, det globala
 </figcaption>
 </figure>
 </div>
@@ -904,7 +1005,7 @@ Figur&nbsp;26.9: En enkel funktion med endast ett minimum, det globala
 <img src="01-validation_files/figure-html/fig-nonconvex-function-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonconvex-function-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;26.10: En komplex funktion med flera lokala minimum
+Figur&nbsp;26.11: En komplex funktion med flera lokala minimum
 </figcaption>
 </figure>
 </div>
@@ -918,13 +1019,13 @@ Figur&nbsp;26.10: En komplex funktion med flera lokala minimum
 <h3 data-number="26.3.3" class="anchored" data-anchor-id="konvergens-och-inlärningshastighet"><span class="header-section-number">26.3.3</span> Konvergens och inlärningshastighet</h3>
 <p>För att motverka att optimeringsalgoritmer genomför oändligt många iterationer med (till slut) ytterst små justeringar av parametervärdena, avslutas optimeringen när vi anser den <strong>konvergerat</strong>. Konvergens betyder att algoritmen nått ett tillstånd där ytterligare iterationer inte leder till någon meningsfull förbättring. Detta skulle kunna vara:</p>
 <ul>
-<li>Liten förändring i kostnadsfunktionen mellan iterationer, <span class="math inline">\(|l(\boldsymbol{\theta}_i) - l(\boldsymbol{\theta}_{i-1})| &lt; \xi\)</span></li>
+<li>Liten förändring i kostnadsfunktionen mellan iterationer (<span class="math inline">\(i\)</span>), <span class="math inline">\(|c(\boldsymbol{\theta}_i) - c(\boldsymbol{\theta}_{i-1})| &lt; \xi\)</span></li>
 <li>Liten förändring i skattade parametervärden mellan iterationer</li>
 <li>Maximalt antal iterationer har uppnåtts</li>
 </ul>
-<p><span class="math inline">\(\xi\)</span> (grekiska xi) är oftast vald till väldigt små värden, till exempel <span class="math inline">\(\frac{1}{10 000}\)</span> eller liknande.</p>
-<p>Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet förändras samt den totala beräkningstiden.</p>
-<p>Ytterligare en aspekt av iterativa algoritmer är <strong>inlärningshastigheten</strong> vilket påverkar hur snabbt vi rör oss mot bättre parametervärden närmare kostnadsfunktionens optimum. I <a href="#fig-optimization" class="quarto-xref">Figur&nbsp;<span>26.8</span></a> är denna 0.0002 = 2E-04 men vi kan öka eller minska den för att (förhoppningsvis) effektivisera algoritmen.</p>
+<p><span class="math inline">\(\xi\)</span> (grekiska xi) är oftast vald till något väldigt litet värde, till exempel <span class="math inline">\(\frac{1}{10 000}\)</span> eller liknande.</p>
+<p>Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet samt den totala beräkningstiden förändras.</p>
+<p>Ytterligare en aspekt av iterativa algoritmer är <strong>inlärningshastigheten</strong> (betecknat med <span class="math inline">\(\gamma\)</span>, grekiska gamma) vilket påverkar hur snabbt vi rör oss mot bättre parametervärden närmare kostnadsfunktionens optimum. I <a href="#fig-optimization" class="quarto-xref">Figur&nbsp;<span>26.9</span></a> är denna 0.0002 = 2E-04 men vi kan öka eller minska den för att (förhoppningsvis) effektivisera algoritmen.</p>
 <div class="columns">
 <div class="column" style="width:49%;">
 <div class="cell">
@@ -935,7 +1036,7 @@ Figur&nbsp;26.10: En komplex funktion med flera lokala minimum
 <img src="01-validation_files/figure-html/fig-learning-rate-high-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-learning-rate-high-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;26.11: Optimering med inlärningshastighet 6E-04
+Figur&nbsp;26.12: Optimering med inlärningshastighet 6E-04
 </figcaption>
 </figure>
 </div>
@@ -950,7 +1051,7 @@ Figur&nbsp;26.11: Optimering med inlärningshastighet 6E-04
 <img src="01-validation_files/figure-html/fig-learning-rate-low-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-learning-rate-low-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;26.12: Optimering med inlärningshastighet 5E-05
+Figur&nbsp;26.13: Optimering med inlärningshastighet 5E-05
 </figcaption>
 </figure>
 </div>
@@ -958,7 +1059,7 @@ Figur&nbsp;26.12: Optimering med inlärningshastighet 5E-05
 </div>
 </div>
 </div>
-<p>Om vi jämför dessa två diagram med <a href="#fig-optimization" class="quarto-xref">Figur&nbsp;<span>26.8</span></a> ser vi att med en större inlärningshastighet (<a href="#fig-learning-rate-high" class="quarto-xref">Figur&nbsp;<span>26.11</span></a>) har den första justeringen nu blivit betydligt större och att vi faktiskt hoppade över optimum under de första iterationerna vilket medförde att vi behövde gå tillbaka. Med en mindre inlärningshastighet (<a href="#fig-learning-rate-low" class="quarto-xref">Figur&nbsp;<span>26.12</span></a>) genomför vi mindre justeringar som kräver betydligt fler iterationer innan vi når konvergens.</p>
+<p>Om vi jämför dessa två nya diagram med <a href="#fig-optimization" class="quarto-xref">Figur&nbsp;<span>26.9</span></a> ser vi att med en större inlärningshastighet (<a href="#fig-learning-rate-high" class="quarto-xref">Figur&nbsp;<span>26.12</span></a> med 6E-04) har den första justeringen nu blivit betydligt större och att vi faktiskt hoppade över optimum flera gånger under de första iterationerna men vi kommer ganska snabbt inpå optimum och når konvergens. Med en mindre inlärningshastighet (<a href="#fig-learning-rate-low" class="quarto-xref">Figur&nbsp;<span>26.13</span></a> med 5E-05) genomför vi mindre justeringar som kräver betydligt fler iterationer innan vi når konvergens.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -969,7 +1070,8 @@ Figur&nbsp;26.12: Optimering med inlärningshastighet 5E-05
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Säg att du tar på dig en ögonbindel på toppen av en kulle och ska navigera till dess botten. Genom att känna lutningen vid dina fötter kan du räkna ut i vilken riktning som du ska ta ditt nästa steg för att komma närmare. Om du vill vara säker att du inte råkar ramla eller springa förbi väljer du att ta små små steg i den valda riktningen. Det kommer ta ett tag för dig att nå botten men du vet att du inte missar någon viktig information under promenaden.</p>
+<p>Säg att du tar på dig en ögonbindel på toppen av en kulle och ska navigera till dess botten. Genom att känna lutningen vid dina fötter kan du räkna ut i vilken riktning som du ska ta ditt nästa steg för att komma längre ner.</p>
+<p>Om du vill vara säker att du inte råkar ramla eller springa förbi väljer du att ta små små steg i den valda riktningen. Det kommer ta ett tag för dig att nå botten men du vet att du inte missar någon viktig information under promenaden.</p>
 <p>En av dina kompisar är lite mer våghalsig av sig och väljer att springa istället för att gå med långa steg varje gång. Det går fort, lite för fort kan man tycka, och det visar sig att kompisen springer förbi och upp på nästa kulle och behöver vända tillbaka.</p>
 <p>I detta exempel motsvarar lutningen vid dina fötter gradienten av kostnadsfunktionen och steglängden motsvarar inlärningshastigheten.</p>
 </div>
@@ -984,7 +1086,7 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Det finns många nackdelar med Gradient Descent/Ascent algoritmerna trots att den är enkel. Vanliga förbättringar av algoritmen finns i form av:</p>
+<p>Det finns många nackdelar med Gradient Descent algoritmen trots att den är enkel. Vanliga förbättringar av algoritmen finns i form av:</p>
 <ul>
 <li>Stochastic Gradient Descent (SGD)</li>
 <li>Momentum</li>
@@ -1000,10 +1102,60 @@ Viktigt
 <section id="hyperparametrar" class="level3" data-number="26.3.4">
 <h3 data-number="26.3.4" class="anchored" data-anchor-id="hyperparametrar"><span class="header-section-number">26.3.4</span> Hyperparametrar</h3>
 <p>Inlärningshastigheten är ett exempel på en <strong>hyperparameter</strong>, alltså en parameter som hör till algoritmen/träningen, inte en parameter i modellen. Hyperparametrar kan också vara hur modellen ser ut (dess övergripande egenskaper), vilken optimeringsalgoritm som används, antalet iterationer eller konvergenskriterierna eller andra aspekter av hur träningen går till.</p>
-<p>Mängden hyperparametrar och de olika värdena som de kan anta blir snabbt överväldigande så vi behöver ofta anta en strukturerad process för att hitta dessa, till exempel Grid Search eller Random Search. Vi använder valideringsmängden för valet av hyperparametrar, det är inte bara olika modeller som vi kan validera enligt <a href="#sec-validation" class="quarto-xref"><span>Avsnitt 26.1</span></a> utan även olika inställningar för samma modell.</p>
-<p>Valet av hyperparametrar kallas för <strong>hyperparameter tuning</strong></p>
-<p><span style="color: red">MER OM GRID/RANDOM SEARCH?</span></p>
-<p><span style="color: green">HYPERPARAMETRAR I REGRESSION ÄR DESIGNMATRISEN. FÖR MASKININLÄRNING FINNS MODELLPARAMETRAR OCH OPTIMERINGSPARAMETRAR. KORSTABELL MED TRE DESIGNMATRISER OCH 4 LEARNING RATES. KONFIGURATION 1-12.</span></p>
+<p>Vi kan koppla denna term tillbaka till vanlig linjär regression genom att anse designmatrisen vara en modells hyperparameter eftersom den styr modellens struktur. Vi kan välja matrisen relativt fritt och den kommer påverka modellens värde på kostnadsfunktionen. Nu använder vi ju inte vanligtvis iterativ optimering för att träna denna modell så inga hyperparametrar som hör till optimeringen används.</p>
+<p>Valet av hyperparametrar och dess värden kallas för <strong>hyperparameter tuning</strong> (ungefärlig sv. justering av hyperparametrar) där vi använder valideringsmängden för att välja de hyperparametervärden som ger bäst generaliserbarhet. Inom maskininärning blir mängden hyperparametrar, och de olika värdena som de kan anta, snabbt överväldigande så vi behöver ofta använda en strukturerad process för att hitta dessa. Några enkla exempel på processer är <strong>Grid Search</strong> eller <strong>Random Search</strong>.</p>
+<p>Grid Search går ut på att vi väljer några hyperparametrar som vi vill justera, till exempel tre uppsättningar förklarande variabler (designmatriser) och fyra olika inlärningshastigheter, och de övriga hålls fixa. Dessa alternativ sammanställs sedan till ett rutnät med alla kombinationer av värden som kan skapas utifrån de valda hyperparametrarna.</p>
+<div id="tbl-grid-search-example" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-grid-search-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;26.1: Exempel på en Grid Search av hyperparametrar
+</figcaption>
+<div aria-describedby="tbl-grid-search-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong><span class="math inline">\(\gamma = 0.001\)</span></strong></th>
+<th><strong><span class="math inline">\(\gamma = 0.005\)</span></strong></th>
+<th><strong><span class="math inline">\(\gamma = 0.0001\)</span></strong></th>
+<th><strong><span class="math inline">\(\gamma = 0.0005\)</span></strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><span class="math inline">\(X_1\)</span></strong></td>
+<td>Modell 1</td>
+<td>Modell 2</td>
+<td>Modell 3</td>
+<td>Modell 4</td>
+</tr>
+<tr class="even">
+<td><strong><span class="math inline">\(X_1, X_2, X_3\)</span></strong></td>
+<td>Modell 5</td>
+<td>Modell 6</td>
+<td>Modell 7</td>
+<td>Modell 8</td>
+</tr>
+<tr class="odd">
+<td><strong><span class="math inline">\(X_1 - X_5\)</span></strong></td>
+<td>Modell 9</td>
+<td>Modell 10</td>
+<td>Modell 11</td>
+<td>Modell 12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Utifrån följande rutnät tränas 12 olika modeller och den modell med minst valideringskostnad väljs som den bästa.</p>
 <!-- ### Coordinate descent -->
 <!-- Vad är Coordinate Descent? -->
 <!-- En optimeringsmetod där man optimerar en variabel i taget. -->
@@ -1029,16 +1181,45 @@ Notera
 <p>Säg att vi vill optimera <span class="math inline">\(\theta &gt; 0\)</span>. Vi kan då välja att istället optimera över <span class="math inline">\(\phi\)</span> där <span class="math inline">\(\theta = exp(\phi)\)</span> vilket innebär att vi kan fortfarande använda gradientbaserade metoder utan att behöva begränsa algoritmen direkt för <span class="math inline">\(\theta\)</span>.</p>
 </div>
 </div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 3
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>När en maskinininlärningsmodell tränas optimeras modellens parametrar iterativt. Vilka av följande påståenden om optimeringsprocessen är korrekta?</p>
+<div id="webex-fa3a2e5eb3a3ec6fa2ba95bc58eb728f" class="webex-checkboxgroup" data-answer="PVAfUR5UGVU/">
+<label><input type="checkbox" autocomplete="off" name="fa3a2e5eb3a3ec6fa2ba95bc58eb728f"><span>Gradientens riktning visar var kostnadsfunktionen ökar snabbast. Vid minimering justeras därför parametrarna i motsatt riktning.</span></label><label><input type="checkbox" autocomplete="off" name="fa3a2e5eb3a3ec6fa2ba95bc58eb728f"><span>Gradient descent hittar alltid det globala minimumet, även om kostnadsfunktionen är icke-konvex.</span></label><label><input type="checkbox" autocomplete="off" name="fa3a2e5eb3a3ec6fa2ba95bc58eb728f"><span>Modellens parametrar kan optimeras genom att minimera en kostnadsfunktion eller maximera en log-likelihood.</span></label><label><input type="checkbox" autocomplete="off" name="fa3a2e5eb3a3ec6fa2ba95bc58eb728f"><span>En högre inlärningshastighet leder alltid till snabbare konvergens utan risk att algoritmen passerar optimum.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Sant. Gradienten visar riktningen där funktionen ökar snabbast. Vid minimering justeras parametrarna därför i motsatt riktning.</li>
+<li>Falskt. En icke-konvex kostnadsfunktion kan ha flera lokala minimum och det finns ingen garanti för att algoritmen hittar det globala minimumet.</li>
+<li>Sant. Modellträning innebär att parametervärden väljs för att minimera en kostnadsfunktion eller maximera en log-likelihood.</li>
+<li>Falskt. En hög inlärningshastighet kan ge stora steg som gör att algoritmen passerar optimum och behöver vända tillbaka.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="optimering-och-utvärdering-i-klassificering" class="level2" data-number="26.4">
 <h2 data-number="26.4" class="anchored" data-anchor-id="optimering-och-utvärdering-i-klassificering"><span class="header-section-number">26.4</span> Optimering och utvärdering i klassificering</h2>
-<p>Inom regression får vi naturligt en kostnadsfunktion från fördelningen av det vi vill modellera. För en kontinuerlig variabel kan vi ange olika kontinuerliga fördelningar på feltermen, till exempel normal, t, Gamma, log-normal, där dess likelihood blir den naturliga kostnadsfunktionen att optimera. Vi kan även för diskreta variabler använda regression för till exempel Poisson eller Negativ binomial fördelningarna.</p>
-<p>För klassificering finns det inte riktigt någon naturlig kostnadsfunktion. Däremot blir det betydligt enklare att räkna observerade och predikterade klasser från en modell eftersom antalet möjliga utfall är begränsade till skillnad från de oändliga utfallen för en kontinuerlig fördelning. Dessa utfall kan sammanställas i en <strong>förväxlingsmatris</strong> (eng. confusion matrix). När vi skapar matrisen räknas frekvenserna av antalet <span class="math inline">\(Y = 1\)</span> som blivit predikterade till de olika klasserna <span class="math inline">\(\hat{Y} = 1\)</span> (<span class="math inline">\(TP\)</span>, True Positive) och <span class="math inline">\(\hat{Y} = 0\)</span> (<span class="math inline">\(FN\)</span>, False Negative) och antalet <span class="math inline">\(Y = 0\)</span> som blivit predikterade till respektive klass (<span class="math inline">\(FP\)</span>, False Positive, och <span class="math inline">\(TN\)</span>, True Negative).</p>
+<p>Inom regression får vi naturligt en kostnadsfunktion från fördelningen av det vi vill modellera. För en kontinuerlig variabel kan vi ange olika kontinuerliga fördelningar på feltermen, till exempel normal, t, Gamma, log-normal, där dess likelihood blir den naturliga kostnadsfunktionen att optimera. Vi kan även för diskreta variabler använda regression för till exempel Poisson- eller Negativ binomialfördelningen.</p>
+<p>För klassificering finns det inte alltid en naturlig kostnadsfunktion. Däremot blir det betydligt enklare att räkna observerade och predikterade klasser från en modell eftersom antalet möjliga utfall är begränsade till skillnad från de oändliga utfallen för en kontinuerlig fördelning.</p>
+<p>Dessa utfall kan sammanställas i en <strong>förväxlingsmatris</strong> (eng. confusion matrix). När vi skapar matrisen räknas frekvenserna av antalet <span class="math inline">\(Y = 1\)</span> som blivit predikterade till de olika klasserna <span class="math inline">\(\hat{Y} = 1\)</span> (<span class="math inline">\(TP\)</span>, True Positive) och <span class="math inline">\(\hat{Y} = 0\)</span> (<span class="math inline">\(FN\)</span>, False Negative) och antalet <span class="math inline">\(Y = 0\)</span> som blivit predikterade till respektive klass (<span class="math inline">\(FP\)</span>, False Positive, och <span class="math inline">\(TN\)</span>, True Negative).</p>
 <div id="tbl-confusion" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;26.1: Förväxlingsmatris med frekvenser av olika fall.
+Tabell&nbsp;26.2: Förväxlingsmatris med frekvenser av olika fall.
 </figcaption>
 <div aria-describedby="tbl-confusion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table style="border-collapse: collapse; width: 50%;">
@@ -1099,25 +1280,78 @@ Sann klass
   \text{Felkvot} &amp;= \frac{FN + FP}{n} = \frac{FN + FP}{TP + FN + FP + TN} = 1 - \text{Träffsäkerhet} \\
 \end{aligned}
 \]</span> När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas.</p>
-<p>Problemet med att använda felkvoten som modellens kostnadsfunktion (för att fortsätta minimera kostnadsfunktionen) är att de kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering påverkar andelen av data som tillhör vardera klass modellens övergripande prestanda. Denna andel kallas för <strong>klassbalans</strong>. När vi modellerar en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda.</p>
+<section id="klassbalans" class="level3" data-number="26.4.1">
+<h3 data-number="26.4.1" class="anchored" data-anchor-id="klassbalans"><span class="header-section-number">26.4.1</span> Klassbalans</h3>
+<p>Problemet med att använda felkvoten som modellens kostnadsfunktion är att måttet kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering påverkar den sanna andelen av data som tillhör vardera klass modellens övergripande prestanda. Denna andel kallas för <strong>klassbalans</strong>. När vi modellerar en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda.</p>
 <p>Om andelarna är <strong>balanserade</strong>, det vill säga nära 50%/50% för de båda andelarna, kommer modellen ha lika mycket information om klasserna och felkvoten tar hänsyn lika mycket till båda klasserna i optimeringen. Om andelarna däremot är <strong>obalanserade</strong>, när stora skillnader i andel förekommer mellan klasserna, kommer felkvoten ha problem att optimera den mindre av klasserna. I ett extremt fall, om vi har 95% 0:or och 5% 1:or riskerar optimeringen anse att den minsta felkvoten som kan uppnås är att prediktera alla observationer till majoritetsklassen, för då blir felkvoten 5%. Vi behöver därför titta på ytterligare mått som kan användas för att hantera klassobalans.</p>
-<p>Med fokus på en av klasserna, vanligtvis <span class="math inline">\(Y = 1\)</span>, beskriver <strong>sensitiviteten</strong> (eng. True Positive Rate, sensitivity, recall) hur stor andel sanna 1:or som också predikterades som 1:or. Detta mått ger en indikation på hur bra modellen är på att göra korrekta prediktioner för en utav klasserna, men en modell kan ha 100% sensitivitet om alla prediktioner är 1:or. Ett mått som mäter hur bra prediktionerna av klass är <strong>specificiteten</strong> (eng. True Negative Rate, specificity). Detta mått beskriver andelen sanna 0:or (<span class="math inline">\(Y \ne 1\)</span>) som också predikterades som 0:or. Om alla observationer predikteras till 1:or för att få en hög sensitivitet, kommer specificiteten bli 0%.</p>
+</section>
+<section id="sensitivitet-och-specificitet" class="level3" data-number="26.4.2">
+<h3 data-number="26.4.2" class="anchored" data-anchor-id="sensitivitet-och-specificitet"><span class="header-section-number">26.4.2</span> Sensitivitet och specificitet</h3>
+<p>Med fokus på en av klasserna, vanligtvis <span class="math inline">\(Y = 1\)</span>, beskriver <strong>sensitiviteten</strong> (eng. True Positive Rate, sensitivity, recall) hur stor andel sanna 1:or som också predikterades som 1:or. Detta mått ger en indikation på hur bra modellen är på att göra korrekta prediktioner för en utav klasserna, men en modell kan ha 100% sensitivitet om alla prediktioner är 1:or. Ett mått som mäter hur bra prediktionerna av den andra klassen är, är <strong>specificiteten</strong> (eng. True Negative Rate, specificity). I det binära fallet beskriver detta mått andelen sanna 0:or (<span class="math inline">\(Y \ne 1\)</span>) som också predikterades som 0:or. Om alla observationer predikteras till 1:or för att få en hög sensitivitet, kommer specificiteten bli 0%.</p>
 <p><span class="math display">\[
 \begin{aligned}
 \text{Sensitivitet}_{Y = 1} &amp;= \frac{TP}{TP + FN}\\
 \text{Specificitet}_{Y = 1} &amp;= \frac{TN}{FP + TN}
 \end{aligned}
-\]</span> Med hjälp av båda måtten kan vi då undersöka ifall modellen fokuserar mer på den ena eller andra klassen. En optimal modell har höga värden på båda måtten, men om det ena måttet är markant större än det andra visar det att modellen har lättare att prediktera den ena klassen. I och med att måtten</p>
-<p><span style="color: red">Precision och F-Score</span></p>
-<p>Problemen med dessa mått är att de inte är bra kostnadsfunktioner ur en matematisk synpunkt. De används främst för att utvärdera prestandan av modellen, speciellt att undersöka ifall modellen är generellt bra på att prediktera alla klasser i problemet. Istället används vanligtvis en annan kostnadsfunktion, <strong>cross entropy</strong>.</p>
-<section id="cross-entropy" class="level3" data-number="26.4.1">
-<h3 data-number="26.4.1" class="anchored" data-anchor-id="cross-entropy"><span class="header-section-number">26.4.1</span> Cross Entropy</h3>
-<p><span style="color: red">CROSS ENTROPY MÅSTE FÖRKLARAS</span></p>
+\]</span> Med hjälp av båda måtten kan vi då undersöka ifall modellen fokuserar mer på den ena eller andra klassen. En optimal modell har höga värden på båda måtten, men om det ena måttet är markant större än det andra visar det att modellen har lättare att prediktera den ena klassen.</p>
+<p><strong>Precision</strong> (eng. positive predictive value) är ytterligare ett mått som enbart fokuserar på den ena klassen. Den beskriver hur stor andel av de predikterade <span class="math inline">\(\hat{Y} = 1\)</span> som faktiskt är samma klass.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \text{Precision} = \frac{TP}{TP + FP}
+  \end{aligned}
+\]</span></p>
+<p>Var och en av dessa mått beskriver en viss aspekt av modellens prestanda, men de visar inte en helhetsbild. Ytterliggare ett mått finns som kombinerar två av måtten, <strong>F-score</strong>.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+    F_1 = 2 \frac{\text{Precision} \cdot \text{Sensitivitet}}{\text{Precision} + \text{Sensitivitet}}
+  \end{aligned}
+\]</span></p>
+<p>Måttet går mellan 0 och 1 där högre värden är bättre. Den generella formeln<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> tillåter en justering baserat på hur mycket vi värderar precision jämfört med sensitivitet.</p>
 </section>
+<section id="sec-cross-entropy" class="level3" data-number="26.4.3">
+<h3 data-number="26.4.3" class="anchored" data-anchor-id="sec-cross-entropy"><span class="header-section-number">26.4.3</span> Cross Entropy</h3>
+<p>Problemen med dessa mått är att de inte är bra kostnadsfunktioner ur en matematisk synpunkt. De används främst för att utvärdera prestandan av modellen, speciellt att undersöka ifall modellen är bra på att prediktera alla klasser i problemet. Istället används vanligtvis en annan kostnadsfunktion, <strong>cross entropy</strong>.</p>
+<p>Funktionen beräknas som:</p>
+<p><span class="math display">\[
+  \begin{aligned}
+    - \Sum{n} y_i \cdot log\left(\hat{f}(x_i)\right)
+  \end{aligned}
+\]</span></p>
+<p>där <span class="math inline">\(y_i = {0, 1}\)</span> och <span class="math inline">\(\hat{f}(x_i)\)</span> är sannolikheten att observation <span class="math inline">\(i\)</span> är klass 1 från den tränade modellen.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 4
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>En modell används för att klassificera observationer i klasserna <span class="math inline">\(Y=1\)</span> och <span class="math inline">\(Y=0\)</span>. På en valideringsmängd erhålls följande resultat: * <span class="math inline">\(f_{11}=18\)</span>: observationer med <span class="math inline">\(Y=1\)</span> som predikterats som <span class="math inline">\(\hat{Y}=1\)</span>. * <span class="math inline">\(f_{10}=2\)</span>: observationer med <span class="math inline">\(Y=1\)</span> som predikterats som <span class="math inline">\(\hat{Y}=0\)</span>. * <span class="math inline">\(f_{01}=16\)</span>: observationer med <span class="math inline">\(Y=0\)</span> som predikterats som <span class="math inline">\(\hat{Y}=1\)</span>. * <span class="math inline">\(f_{00}=64\)</span>: observationer med <span class="math inline">\(Y=0\)</span> som predikterats som <span class="math inline">\(\hat{Y}=0\)</span>.</p>
+<p>Vilka av följande påståenden är korrekta?</p>
+<div id="webex-197fffcee383ac18711662ea7f865865" class="webex-checkboxgroup" data-answer="aggbV0pXT1RJAhQDPA==">
+<label><input type="checkbox" autocomplete="off" name="197fffcee383ac18711662ea7f865865"><span>Modellens felkvot är <span class="math inline">\(1-0.82=0.18\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="197fffcee383ac18711662ea7f865865"><span>Modellens träffsäkerhet är <span class="math inline">\(\frac{18+64}{100}=0.82\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="197fffcee383ac18711662ea7f865865"><span>En modell som alltid predikterar majoritetsklassen <span class="math inline">\(Y=0\)</span> skulle få träffsäkerheten <span class="math inline">\(0.80\)</span>, vilket visar varför träffsäkerheten ensam kan ge en ofullständig bild av modellen.</span></label><label><input type="checkbox" autocomplete="off" name="197fffcee383ac18711662ea7f865865"><span>Modellens specificitet är <span class="math inline">\(\frac{64}{16+64}=0.80\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="197fffcee383ac18711662ea7f865865"><span>Modellens sensitivitet för <span class="math inline">\(Y=1\)</span> är <span class="math inline">\(\frac{18}{18+2}=0.90\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="197fffcee383ac18711662ea7f865865"><span>Eftersom sensitiviteten är högre än specificiteten kan man dra slutsatsen att modellen gör lika bra prediktioner för båda klasserna.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Sant. Felkvoten är andelen felaktiga klassificeringar och kan beräknas som <span class="math inline">\(1-\text{träffsäkerhet}=1-0.82=0.18\)</span>.</li>
+<li>Sant. Antalet korrekta klassificeringar är <span class="math inline">\(f_{11}+f_{00}=18+64=82\)</span> av totalt <span class="math inline">\(100\)</span>, vilket ger träffsäkerheten <span class="math inline">\(0.82\)</span>.</li>
+<li>Sant. Det finns <span class="math inline">\(80\)</span> observationer med <span class="math inline">\(Y=0\)</span>. En modell som alltid predikterar <span class="math inline">\(0\)</span> skulle därför klassificera <span class="math inline">\(80\)</span> av <span class="math inline">\(100\)</span> observationer korrekt, trots att den helt misslyckas med att identifiera <span class="math inline">\(Y=1\)</span>.</li>
+<li>Sant. Specificiteten beskriver andelen observerade nollor som klassificerats korrekt och blir <span class="math inline">\(\frac{f_{00}}{f_{01}+f_{00}}=\frac{64}{80}=0.80\)</span>.</li>
+<li>Sant. Sensitiviteten beskriver andelen observerade ettor som klassificerats korrekt och blir <span class="math inline">\(\frac{f_{11}}{f_{11}+f_{10}}=\frac{18}{20}=0.90\)</span>.</li>
+<li>Falskt. Skillnaden mellan sensitivitet och specificitet visar att modellen lyckas olika väl för de två klasserna. Att båda måtten är relativt höga innebär inte att prestandan är identisk.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- ## Case -->
+<!-- DEVELOPMENT: LÄGG TILL ETT NYTT KAPITEL DÄR VI GÅR IGENOM CASE FÖR REGRESSION OCH LOGISTISK REGRESSION -->
 </section>
-<section id="case" class="level2" data-number="26.5">
-<h2 data-number="26.5" class="anchored" data-anchor-id="case"><span class="header-section-number">26.5</span> Case</h2>
-<p><span style="color: red">LÄGG TILL ETT NYTT KAPITEL DÄR VI GÅR IGENOM CASE FÖR REGRESSION OCH LOGISTISK REGRESSION</span></p>
 </section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
@@ -1127,7 +1361,10 @@ Sann klass
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Man kan uttrycka leave-one-out korsvalidering som ett specialfall av k-fold när <span class="math inline">\(k = n\)</span><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>eller testmängden<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Man kan uttrycka leave-one-out korsvalidering som ett specialfall av k-fold när <span class="math inline">\(k = n\)</span><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>En negativ loglikelihood innebär att det minsta värdet på funktionen ger den troligaste uppsättningen parametervärden för data<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><span class="math inline">\(F_\beta = (1 + \beta^2) \frac{\text{Precision} \cdot \text{Sensitivitet}}{\beta^2\cdot\text{Precision} + \text{Sensitivitet}}\)</span><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

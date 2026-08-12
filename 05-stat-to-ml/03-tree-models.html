@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -525,12 +560,14 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#splines" id="toc-splines" class="nav-link active" data-scroll-target="#splines"><span class="header-section-number">28.1</span> Splines</a></li>
-  <li><a href="#trädmodeller" id="toc-trädmodeller" class="nav-link" data-scroll-target="#trädmodeller"><span class="header-section-number">28.2</span> Trädmodeller</a>
+  <li><a href="#icke-linjära-modeller" id="toc-icke-linjära-modeller" class="nav-link active" data-scroll-target="#icke-linjära-modeller"><span class="header-section-number">28.1</span> Icke-linjära modeller</a></li>
+  <li><a href="#splines" id="toc-splines" class="nav-link" data-scroll-target="#splines"><span class="header-section-number">28.2</span> Splines</a></li>
+  <li><a href="#trädmodeller" id="toc-trädmodeller" class="nav-link" data-scroll-target="#trädmodeller"><span class="header-section-number">28.3</span> Trädmodeller</a>
   <ul class="collapse">
-  <li><a href="#beslutsregler" id="toc-beslutsregler" class="nav-link" data-scroll-target="#beslutsregler"><span class="header-section-number">28.2.1</span> Beslutsregler</a></li>
-  <li><a href="#klassificeringsträd" id="toc-klassificeringsträd" class="nav-link" data-scroll-target="#klassificeringsträd"><span class="header-section-number">28.2.2</span> Klassificeringsträd</a></li>
-  <li><a href="#fördelar-och-nackdelar" id="toc-fördelar-och-nackdelar" class="nav-link" data-scroll-target="#fördelar-och-nackdelar"><span class="header-section-number">28.2.3</span> Fördelar och nackdelar</a></li>
+  <li><a href="#att-skapa-beslutsregler" id="toc-att-skapa-beslutsregler" class="nav-link" data-scroll-target="#att-skapa-beslutsregler"><span class="header-section-number">28.3.1</span> Att skapa beslutsregler</a></li>
+  <li><a href="#regressionsträd" id="toc-regressionsträd" class="nav-link" data-scroll-target="#regressionsträd"><span class="header-section-number">28.3.2</span> Regressionsträd</a></li>
+  <li><a href="#klassificeringsträd" id="toc-klassificeringsträd" class="nav-link" data-scroll-target="#klassificeringsträd"><span class="header-section-number">28.3.3</span> Klassificeringsträd</a></li>
+  <li><a href="#fördelar-och-nackdelar" id="toc-fördelar-och-nackdelar" class="nav-link" data-scroll-target="#fördelar-och-nackdelar"><span class="header-section-number">28.3.4</span> Fördelar och nackdelar</a></li>
   </ul></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
@@ -568,13 +605,13 @@ window.Quarto = {
 <img src="03-tree-models_files/figure-html/fig-nonlinear-example-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonlinear-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;28.1: 100 observationer, två förklarande variabler och en binär respons
+Figur&nbsp;28.1: 100 observationer, två förklarande variabler och en binär respons med två klasser markerade med färg och symbol
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Den sanna beslutsregeln som exakt separerar de två färgerna (klasserna) är <span class="math inline">\(x_2 \cdot (1 + exp(-25 \cdot (x_1 - 0.5))) &gt; 1\)</span>. I bilden nedan visas gränsen som regeln skapar med en linje där uttrycket är lika med 1.</p>
+<p>Den sanna beslutsregeln som exakt separerar de två färgerna (klasserna) är <span class="math inline">\(x_2 \cdot (1 + exp(-25 \cdot (x_1 - 0.5))) &gt; 1\)</span>. I bilden nedan visas gränsen som regeln skapar med en streckad linje där uttrycket är lika med 1.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-nonlinear-boundary-example" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -590,7 +627,14 @@ Figur&nbsp;28.2: Den icke-linjära beslutsregeln
 </div>
 </div>
 <p>Men hur skulle vi kunna hitta en linjär beslutsregel som motsvarar denna? Vad gör vi om en linjär modell inte passar till data?</p>
+<section id="icke-linjära-modeller" class="level2" data-number="28.1">
+<h2 data-number="28.1" class="anchored" data-anchor-id="icke-linjära-modeller"><span class="header-section-number">28.1</span> Icke-linjära modeller</h2>
 <p>Vi kan ta ett enklare exempel med regression.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Genererar icke-linjär data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span>  <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="at">length.out =</span> <span class="fl">1e3</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span>  <span class="dv">5</span><span class="sc">*</span><span class="fu">cos</span>(x<span class="sc">*</span><span class="dv">3</span>) <span class="sc">-</span> <span class="dv">1</span><span class="sc">*</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="fu">length</span>(x))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-nonlinear-regression" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -599,7 +643,7 @@ Figur&nbsp;28.2: Den icke-linjära beslutsregeln
 <img src="03-tree-models_files/figure-html/fig-nonlinear-regression-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonlinear-regression-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;28.3: Exempel på icke-linjär data
+Figur&nbsp;28.3: Exempel på icke-linjär data där det är uppenbart att en rät linje inte passar
 </figcaption>
 </figure>
 </div>
@@ -620,32 +664,122 @@ Figur&nbsp;28.4: Polynom av ordning 6
 </div>
 </div>
 </div>
+<p>Till och med ett polynom av ordning 6 räcker inte att modellera data på ett bra sätt i <a href="#fig-nonlinear-polynomial" class="quarto-xref">Figur&nbsp;<span>28.4</span></a>. Polynom av hög ordning bidrar också till instabila anpassningar och numeriska problem i skattningen, då det är inte ett optimalt alternativ.</p>
 <p>Vi skulle kunna dela upp data i olika områden och anpassa separata modeller för varje område som sedan knyts ihop till en sammanhängande modell. En sådan typ av metod är <strong>splines</strong>.</p>
-<section id="splines" class="level2" data-number="28.1">
-<h2 data-number="28.1" class="anchored" data-anchor-id="splines"><span class="header-section-number">28.1</span> Splines</h2>
-<p>Målet med splines är att anpassa en stegvis polynomfunktion på en uppdelat data där vi sätter begränsningar i skarvarna för att få kontinuitet, kontinuerliga derivator och andra eftersökta egenskaper. De olika delarna av data separeras av <strong>knutar</strong> (eng. knot) som bryter data i olika delar och frihetsgrader i denna kontext beskriver antalet parametrar som anpassas.</p>
-<p><span style="color: green">Lägg till naturliga splines med ns() och knutpunkter. Bara nämn att andra finns (stegfunktioner, basfunktioner mer sprecifikt med cosinusbaser osv., smoothing splines). Basfunktioner kan introduceras som transformationer på mindre områden där linjära funktionen får effekten på basfunktionen. Fler knutar kan ge en mer flexibel modell.</span></p>
-<p><span style="color: green">NÄMN GAM SOM EN KOMBINATION AV ALLA OLIKA TYPER AV MODELLER, VISSA SPLINES ANDRA LINJÄRA OSV.</span></p>
 </section>
-<section id="trädmodeller" class="level2" data-number="28.2">
-<h2 data-number="28.2" class="anchored" data-anchor-id="trädmodeller"><span class="header-section-number">28.2</span> Trädmodeller</h2>
-<p>Ytterligare en metod som använder sig av uppdelningar av data är <strong>trädmodeller</strong>. Istället för att använda knutar som brytpunkter delas variabelrummet in i icke-överlappande regioner (rektanglar) där alla observationer i samma region får samma anpassade värde. Att identifiera vilken region som en observation hamnar i kan beskrivas i en trädstruktur, därav namnet trädmodeller. Det anpassade värdet inom regionen beräknas oftast genom ett enkelt medelvärde eller typvärde beroende på responsvariabelns typ.</p>
-<p>En stor del av trädmodellernas träning är hur vi kan dela upp variabelrummet på ett bra sätt. Vi kan börja med att presentera strukturen av modellen och lite terminologi.</p>
+<section id="splines" class="level2" data-number="28.2">
+<h2 data-number="28.2" class="anchored" data-anchor-id="splines"><span class="header-section-number">28.2</span> Splines</h2>
+<p>Målet med splines är att anpassa en stegvis polynomfunktion på en uppdelat data där vi sätter begränsningar i skarvarna för att få kontinuitet, kontinuerliga derivator och andra eftersökta egenskaper. De olika delarna av data separeras av <strong>knutar</strong> (eng. knot) som bryter data i olika delar och frihetsgrader i denna kontext beskriver antalet parametrar som anpassas.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-nonlinear-spline" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nonlinear-spline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03-tree-models_files/figure-html/fig-nonlinear-spline-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonlinear-spline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;28.5: Polynom av ordning 6
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-nonlinear-spline" class="quarto-xref">Figur&nbsp;<span>28.5</span></a> visar hur vi kan dela upp datamaterialet med hjälp av fyra knutar (de röda strecken) och anpassa enklare polynom för varje område. I just denna figur har vi begränsat modellen i dess knutpunkter för att få en sammanhängande anpassning, men enklare funktioner såsom stegfunktioner, basfunktioner m.fl. kan också anpassas.</p>
+<!-- DEVELOPMENT: Visa samma uppdelning med separata regressionsmodeller istället för spline. -->
+<p>Splines anpassas i R med hjälp av <code>ns()</code> från paketet <code>splines</code>. Funktionen styrs av hyperparametern <code>df</code> som beskriver funktionens frihetsgrader vilket motsvarar antalet knutar + 1 som standard. I figuren ovan har vi valt 5 frihetsgrader som motsvarar 4 knutar på angivna platser, men valet av frihetsgrader bör väljas med hjälp av korsvalidering</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ns</span>(x, <span class="at">df =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Generaliserade Additiva Modeller</strong> (GAM) är ett samlingsnamn för modeller som kombinerar olika typer av modeller inom olika områden eller variabler. Till exempel kan en GAM kombinera linjära modeller med splines.</p>
+</div>
+</div>
+<!-- DEVELOPMENT: Fördelar nackdelar och mer om i slutet så kan man lägga till att det finns utökningar som smoothing splines, B-splines, thin plate spline mm -->
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>När sambandet mellan en prediktor och responsvariabeln är icke-linjärt kan både polynomregression och splines användas. Vilka av följande påståenden om splines är korrekta?</p>
+<div id="webex-acd583948be564aeb31db5968a1b5127" class="webex-checkboxgroup" data-answer="OlJIBBQCFQRl">
+<label><input type="checkbox" autocomplete="off" name="acd583948be564aeb31db5968a1b5127"><span>Antalet frihetsgrader beskriver antalet parametrar som skattas i spline-modellen.</span></label><label><input type="checkbox" autocomplete="off" name="acd583948be564aeb31db5968a1b5127"><span>Punkterna där de olika polynomdelarna möts kallas knutpunkter, och villkor används för att göra den sammanfogade kurvan jämn.</span></label><label><input type="checkbox" autocomplete="off" name="acd583948be564aeb31db5968a1b5127"><span>En vanlig polynomregression använder ett enda polynom för hela prediktorns intervall, medan en spline består av flera polynom som anpassas inom olika delar av intervallet.</span></label><label><input type="checkbox" autocomplete="off" name="acd583948be564aeb31db5968a1b5127"><span>Polynomdelarna i en spline skattas helt oberoende av varandra och behöver inte mötas vid knutpunkterna.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Sant. Frihetsgraderna motsvarar antalet parametrar som skattas i spline-modellen.</li>
+<li>Sant. Delintervallen avgränsas av knutpunkter, och villkor på kontinuitet och derivator används för att sammanfoga polynomdelarna.</li>
+<li>Sant. En vanlig polynomregression använder ett globalt polynom, medan en spline består av styckvisa polynom som anpassas inom olika delintervall.</li>
+<li>Falskt. Vid knutpunkterna används villkor som gör att polynomdelarna sammanfogas på ett kontinuerligt och jämnt sätt.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="trädmodeller" class="level2" data-number="28.3">
+<h2 data-number="28.3" class="anchored" data-anchor-id="trädmodeller"><span class="header-section-number">28.3</span> Trädmodeller</h2>
+<p>Ytterligare en metod som delar upp data och modellerar delar är <strong>trädmodeller</strong>. Istället för att använda knutar som brytpunkter delas variabelrummet in i icke-överlappande regioner (rektanglar) där alla observationer i samma region får samma anpassade värde.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-nonlinear-tree-region" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nonlinear-tree-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03-tree-models_files/figure-html/fig-nonlinear-tree-region-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonlinear-tree-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;28.6: Binära klasser uppdelad i olika regioner
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Att identifiera vilken region som en observation hamnar i kan beskrivas i en trädstruktur, därav namnet trädmodeller, där gränserna för respektive region används som förgreningar. Det anpassade värdet inom regionen beräknas oftast genom ett enkelt medelvärde eller typvärde beroende på responsvariabelns typ.</p>
+<p>En stor del av trädmodellernas träning styrs av hur vi kan dela upp variabelrummet på ett bra sätt. Vi kan börja med att presentera strukturen av modellen och lite terminologi. Följande diagram visar ett binärt träd där varje uppdelning sker med två utfall.</p>
 <div id="fig-tree-structure" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-tree-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="03-tree-models_files/mediabag/5d061d4e1dd2bc15178211b099174b03f59a6a89.svg" class="img-fluid figure-img">
+<img src="03-tree-models_files/mediabag/36f7401c93ef8c8d89f090a87abc055de36f6367.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tree-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;28.5: Ett exempel på en trädmodell
+Figur&nbsp;28.7: Ett exempel på en trädmodell
 </figcaption>
 </figure>
 </div>
 <p>Ett träd består utav en <strong>rotnod</strong> där alla observationer börjar innan de går igenom ett antal <strong>regler</strong> via <strong>noder</strong> (N1-N7) innan de når ett <strong>löv</strong> (även kallad slutnod, N4-N7) där de sedan tilldelas ett värde på responsvariabeln. Denna struktur liknar ett släktträd vilket innebär att terminologin använder termer som <strong>förälder</strong> och <strong>barn</strong> för att beskriva relationen mellan noder. Till exempel är N2 föräldernod till N4 och N5, samt N6 är en barnnod till N3.</p>
-<p>Reglerna skapas utifrån de övriga variablerna i data beroende på dess variabeltyp, till exempel <span class="math inline">\(X_1 = \text{"Varmblodig"} \rightarrow\)</span> N2 och <span class="math inline">\(X_1 = \text{"Kallblodig"} \rightarrow\)</span> N3 för kategoriska variabler eller <span class="math inline">\(X_2 \ge 150 \rightarrow\)</span> N4 och <span class="math inline">\(X_2 &lt; 150 \rightarrow\)</span> N5.</p>
-<section id="beslutsregler" class="level3" data-number="28.2.1">
-<h3 data-number="28.2.1" class="anchored" data-anchor-id="beslutsregler"><span class="header-section-number">28.2.1</span> Beslutsregler</h3>
-<p>Antalet olika regler som ett träd skulle kunna innehålla är oändliga. Vi måste på något sätt effektivt kunna välja och jämföra regler samt bedöma när trädet ska sluta förgrenas och anse en nod vara ett löv. Ett sätt är att använda Hunt’s algoritm:</p>
+<p>Reglerna skapas utifrån de förklarande variablerna i data beroende på dess variabeltyp. Kategoriska variabler omfattar två mängder med olika utfall, till exempel <span class="math inline">\(X_1 = \text{"Varmblodig"} \rightarrow\)</span> N2 och <span class="math inline">\(X_1 = \text{"Kallblodig"} \rightarrow\)</span> N3, medan kontinuerliga variabler delas upp utifrån olikheter, t.ex. eller <span class="math inline">\(X_2 \ge 150 \rightarrow\)</span> N4 och <span class="math inline">\(X_2 &lt; 150 \rightarrow\)</span> N5.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En viktig aspekt av uppdelningen är att variabelns skala och typ ska bibehållas även i barnnoderna. Detta betyder specifikt för variabler som följer en ordinalskala att de två mängderna som används till uppdelningen måste också följa ordinalskalan inom och mellan sig.</p>
+</div>
+</div>
+<section id="att-skapa-beslutsregler" class="level3" data-number="28.3.1">
+<h3 data-number="28.3.1" class="anchored" data-anchor-id="att-skapa-beslutsregler"><span class="header-section-number">28.3.1</span> Att skapa beslutsregler</h3>
+<p>Vilka regler, vilka variabler och dess värden, samt hur många regler som ett träd ska använda kan i regel göras på oändligt antal sätt. Vi måste därför effektivt kunna välja och jämföra regler samt bedöma när trädet ska sluta förgrenas och anse en nod vara ett löv. Ett sätt är att använda <strong>Hunt’s algoritm</strong>:</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -665,52 +799,160 @@ Figur&nbsp;28.5: Ett exempel på en trädmodell
 </div>
 <p>Testreglerna ser olika ut beroende på variabeltyp och dess skala:</p>
 <ul>
-<li>Binära variabler: binär uppdelning</li>
-<li>Nominala variabler: binär eller mångfaldig uppdelning</li>
-<li>Ordinala variabler: uppdelning som bevarar den ordinala skalan</li>
-<li>Intervallskala: uppdelning till icke-överlappande intervall</li>
+<li>Binära eller nominala variabler: binär uppdelning</li>
+<li>Ordinala variabler: binär uppdelning som bevarar den ordinala skalan</li>
+<li>Intervallskala: binär uppdelning till icke-överlappande intervall</li>
 </ul>
-<p>Att jämföra alla möjliga uppdelningar och värden är orimligt så vi behöver ytterligare en algoritm för att identifiera vilken variabel och vilken uppdelning som ger den bästa förbättringen av en vald kostnadsfunktion för nuvarande nod. Detta är ytterligare en girig algoritm som alltid väljer den bästa förbättringen vid varje steg oavsett om en sämre uppdelning just nu hade lett till en bättre uppdelning vid ett senare steg.</p>
+<p>Att jämföra alla möjliga uppdelningar och värden är orimligt så vi behöver ytterligare en algoritm för att identifiera vilken variabel och vilken uppdelning som ger den bästa förbättringen av en vald kostnadsfunktion för nuvarande nod. Många av dessa algoritmer är ytterligare exempelpå giriga algoritmer, som alltid väljer den bästa förbättringen vid varje steg oavsett om en sämre uppdelning för stunden hade lett till en bättre uppdelning vid ett senare steg.</p>
 <p><strong>CART</strong>-algoritmen (eng. Classification And Regression Trees) beräknar <strong>informationsvinsten</strong> för en testregel som:</p>
 <p><span class="math display">\[
   \begin{aligned}
   \Delta = I(\text{förälder}) - I(\text{barn}),\\
   \Delta = I(\text{förälder}) - \sum_j \frac{N(R_j)}{N} I(R_j)
   \end{aligned}
-\]</span> där <span class="math inline">\(I(\cdot)\)</span> är den valda kostnadsfunktionen/föroreningsmått, <span class="math inline">\(N\)</span> är antal objekt i föräldranoden, <span class="math inline">\(R_j\)</span> är barnnod <span class="math inline">\(j\)</span> och <span class="math inline">\(N(R_j)\)</span> är antal objekt i barnnod <span class="math inline">\(j\)</span>.</p>
+\]</span> där <span class="math inline">\(I(\cdot)\)</span> är den valda kostnadsfunktionen/föroreningsmåttet, <span class="math inline">\(N\)</span> är antal objekt i föräldranoden, <span class="math inline">\(R_j\)</span> är barnnod <span class="math inline">\(j\)</span> och <span class="math inline">\(N(R_j)\)</span> är antal objekt i barnnod <span class="math inline">\(j\)</span>.</p>
 <p>Informationsvinsten ger en möjlighet att optimera variabler och dess uppdelningar med hjälp av effektiva algoritmer.</p>
-<p><span style="color: red">SÅSOM VAD?</span></p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>CART-algoritmen ska välja en testregel för en föräldernod med 100 observationer och orenheten <span class="math inline">\(I(\text{förälder})=0.48\)</span>. Två möjliga testregler ger följande barnnoder: * Regel A: <span class="math inline">\(N(R_1)=20\)</span> med <span class="math inline">\(I(R_1)=0.10\)</span> och <span class="math inline">\(N(R_2)=80\)</span> med <span class="math inline">\(I(R_2)=0.35\)</span>. * Regel B: <span class="math inline">\(N(R_1)=50\)</span> med <span class="math inline">\(I(R_1)=0.24\)</span> och <span class="math inline">\(N(R_2)=50\)</span> med <span class="math inline">\(I(R_2)=0.28\)</span>.</p>
+<p>Informationsvinsten beräknas som <span class="math inline">\(\Delta=I(\text{förälder})-\sum_j\frac{N(R_j)}{N}I(R_j)\)</span>. Vilka av följande påståenden är korrekta?</p>
+<div id="webex-f13b8ad30e07476f009de4909ff0ed47" class="webex-checkboxgroup" data-answer="PQAfUxRQSAMcVW0=">
+<label><input type="checkbox" autocomplete="off" name="f13b8ad30e07476f009de4909ff0ed47"><span>Informationsvinsten för regel A är <span class="math inline">\(0.18\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f13b8ad30e07476f009de4909ff0ed47"><span>Den viktade orenheten i barnnoderna för regel A är <span class="math inline">\(0.30\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f13b8ad30e07476f009de4909ff0ed47"><span>Den viktade orenheten för regel B är <span class="math inline">\(0.26\)</span>, vilket ger informationsvinsten <span class="math inline">\(0.22\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f13b8ad30e07476f009de4909ff0ed47"><span>Regel A bör väljas eftersom det oviktade medelvärdet av barnnodernas orenhet är lägre för regel A än för regel B.</span></label><label><input type="checkbox" autocomplete="off" name="f13b8ad30e07476f009de4909ff0ed47"><span>Eftersom regel B ger störst informationsvinst i detta steg är den garanterad att ingå i det globalt optimala trädet.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Sant. Informationsvinsten blir <span class="math inline">\(0.48-0.30=0.18\)</span>.</li>
+<li>Sant. Den viktade orenheten är <span class="math inline">\((20/100)\cdot0.10+(80/100)\cdot0.35=0.30\)</span>.</li>
+<li>Sant. Den viktade orenheten är <span class="math inline">\((50/100)\cdot0.24+(50/100)\cdot0.28=0.26\)</span>, vilket ger informationsvinsten <span class="math inline">\(0.48-0.26=0.22\)</span>.</li>
+<li>Falskt. Barnnodernas orenhet ska viktas med andelen observationer i respektive nod. Eftersom regel B ger större informationsvinst ska regel B väljas.</li>
+<li>Falskt. CART är en girig algoritm som väljer den bästa förbättringen i det aktuella steget. Det garanterar inte att det slutliga trädet blir globalt optimalt.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="klassificeringsträd" class="level3" data-number="28.2.2">
-<h3 data-number="28.2.2" class="anchored" data-anchor-id="klassificeringsträd"><span class="header-section-number">28.2.2</span> Klassificeringsträd</h3>
-<p>För kontinuerliga variabler används ofta SSE som kostnadsfunktion men för klassificeringsträd kan vi använda någon av följande kostnadsfunktioner:</p>
+<section id="regressionsträd" class="level3" data-number="28.3.2">
+<h3 data-number="28.3.2" class="anchored" data-anchor-id="regressionsträd"><span class="header-section-number">28.3.2</span> Regressionsträd</h3>
+<p><span style="color: red">SE KAPITEL 8.1</span></p>
+</section>
+<section id="klassificeringsträd" class="level3" data-number="28.3.3">
+<h3 data-number="28.3.3" class="anchored" data-anchor-id="klassificeringsträd"><span class="header-section-number">28.3.3</span> Klassificeringsträd</h3>
+<p>För klassificeringsträd behöver vi använda andra kostnadsfunktioner för att ta hänsyn till den kategoriska responsvariabeln. Tre vanliga alternativ är:</p>
 <ul>
 <li>Felkvot: <span class="math inline">\(E = 1 - max_k(p_{m,k})\)</span></li>
 <li>Gini index: <span class="math inline">\(G = \sum_k p_{m,k} (1 - p_{m,k})\)</span></li>
-<li>Cross Entropy: <span class="math inline">\(D = -\sum_k p_{m,k} log(p_{m,k})\)</span></li>
+<li>Entropy: <span class="math inline">\(D = -\sum_k p_{m,k} log(p_{m,k})\)</span></li>
 </ul>
 <p>där <span class="math inline">\(p_{m,k}\)</span> andelen i region <span class="math inline">\(m\)</span> som tillhör klass <span class="math inline">\(k\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Entropy och Cross Entropy (<a href="01-validation.html#sec-cross-entropy" class="quarto-xref"><span>Avsnitt 26.4.3</span></a>) är snarlika mått. Entropy tittar enbart på “sig själv”, i detta fall på andelen observationer av en viss kategori i en viss nod, medan Cross Entropy använder sig av två omfång, andelen i data och andelen i modellanpassningen.</p>
+</div>
+</div>
 <p>Varje löv får en predikterad klass via majoritetsröstning där vi helst vill att alla observationer i ett löv ska ha samma klass. Cross Entropy och Gini är ett bättre mått än felkvoten för detta ändamål men felkvoten brukar ändå användas för att utvärdera trädet på valideringsdata då det ger en enklare tolkning.</p>
 <p>Trädmodeller har en tendens att överanpassa till data väldigt lätt, vilket leder till en större vikt att fokusera på validering och generalisering. Vi har dock möjlighet att justera modellens komplexitet med vissa hyperparametrar:</p>
 <ul>
 <li>trädets djup</li>
-<li>minsta antal observationer i ett löv</li>
+<li>minsta antal observationer för att överväga att dela upp en nod</li>
 </ul>
-<p>Ju djupare trädet tillåts att vara, desto fler regler kommer användas och skapa fler löv med mindre storlek. Vi kan också sätta en gräns på när vi inte längre vill dela upp ett löv, att den måste innehålla ett visst antal observationer. Dessa hyperparametrar kan implementas på två olika sätt; <strong>förbeskärning</strong> eller <strong>efterbeskärning</strong>.</p>
-<p>Förbeskärning tillämpas under träningen där vi slutar att expandera trädet när den minsta antalet observationer i ett löv är uppnådd eller om informationsvinsten är lägre än en vald tröskel. Detta sätt minskar beräkningskostnaden då vi inte utforskar ett fullt utvecklat träd. Efterbeskärning utgår istället från ett fullt utvecklat träd där vi ersätter delträd (förgreningar) med ett löv ifall de inte uppfyller angivna begränsningar. Vi har med denna metod redan anpassat ett fullt träd (<span class="math inline">\(T_0\)</span>) och har möjlighet att med hjälp av korsvalidering välja vilka delträd (<span class="math inline">\(T\)</span>) som minimerar kostnaden när djupet av trädet också tas hänsyn till.</p>
+<p>Ju djupare trädet tillåts att vara, desto fler regler kommer användas och skapa fler löv med mindre storlek. Vi kan också sätta en gräns på när vi inte längre vill dela upp ett löv, att den måste innehålla ett visst antal observationer. Dessa hyperparametrar kan implementas på två olika sätt; <strong>förbeskärning</strong> eller <strong>efterbeskärning</strong>, ofta med hjälp av någon metod för hyperparameter tuning.</p>
+<p>Förbeskärning tillämpas under träningen där vi slutar att expandera trädet när den minsta antalet observationer i ett löv är uppnådd eller om informationsvinsten är lägre än en vald tröskel. Detta sätt minskar beräkningskostnaden då vi inte utforskar ett fullt utvecklat träd.</p>
+<p>Efterbeskärning utgår istället från ett fullt utvecklat träd där vi ersätter delträd (förgreningar) med ett löv ifall de inte uppfyller angivna begränsningar. Vi har med denna metod redan anpassat ett fullt träd (<span class="math inline">\(T_0\)</span>) och har möjlighet att med hjälp av korsvalidering välja vilka delträd (<span class="math inline">\(T\)</span>) som minimerar kostnaden när djupet av trädet också tas hänsyn till.</p>
 <p><span class="math display">\[
   \begin{aligned}
-  C_{\alpha}(T) = \sum_{j = R \in \text{Löv i } T} N(R_j) \cdot I(R_j) + \alpha|T|
+  c_{\alpha}(T) = \sum_{j = R \in \text{Löv i } T} N(R_j) \cdot I(R_j) + \alpha|T|
   \end{aligned}
 \]</span> där <span class="math inline">\(|T|\)</span> är antalet löv i <span class="math inline">\(T\)</span>, <span class="math inline">\(N(R_j)\)</span> antal objekt i löv <span class="math inline">\(j\)</span>.</p>
-<p>På samma sätt som LASSO straffas informationsvinsten nu med avseende på antalet “parametrar” som här representeras av antalet regler som leder till löv. Korsvalidering kan användas för att välja det <span class="math inline">\(\alpha\)</span> som ger minst valideringsfel.</p>
-<p><span style="color: red">ALPHA STYR INTE NÄR TRÄDET SKA BESKÄRAS ELLER HUR GÖR DEN DET?</span></p>
+<p>På samma sätt som LASSO, lägger vi till en straffterm i kostnadsfunktionen som straffar modellen för dess komplexitet. Parametrarna representeras här med antalet löv, det vill säga storleken av trädet, där flera löv inneburit flera regler (parametrar). <span class="math inline">\(\alpha\)</span> styr hur mycket efterbeskärning som sker, där stora värden innebär en mer omfattande beskärning som leder till ett mindre slutgiltigt träd. Korsvalidering kan användas för att välja det <span class="math inline">\(\alpha\)</span> som ger minst valideringsfel.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 3
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>I ett klassificeringsträd innehåller en föräldernod 100 observationer: 60 från klass A och 40 från klass B. Två möjliga uppdelningar ger följande barnnoder: * Uppdelning 1: vänster nod <span class="math inline">\((30,0)\)</span> och höger nod <span class="math inline">\((30,40)\)</span>. * Uppdelning 2: vänster nod <span class="math inline">\((45,15)\)</span> och höger nod <span class="math inline">\((15,25)\)</span>.</p>
+<p>Paren anger antalet observationer från klass A respektive klass B. För en nod <span class="math inline">\(R\)</span> definieras felkvoten som <span class="math inline">\(I_E(R)=1-\max_k(\hat{p}_{kR})\)</span> och Gini-indexet som <span class="math inline">\(I_G(R)=1-\sum_k\hat{p}_{kR}^2\)</span>. Barnnodernas orenhet viktas med respektive nods andel av observationerna. Vilka av följande påståenden är korrekta?</p>
+<div id="webex-a9cae1490826d05752980d6bbd564754" class="webex-checkboxgroup" data-answer="OglPUEkAGAgcCR4HOQ==">
+<label><input type="checkbox" autocomplete="off" name="a9cae1490826d05752980d6bbd564754"><span>Om två uppdelningar har samma viktade felkvot måste de även ha samma viktade Gini-index.</span></label><label><input type="checkbox" autocomplete="off" name="a9cae1490826d05752980d6bbd564754"><span>Den viktade felkvoten efter uppdelning 2 är också <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="a9cae1490826d05752980d6bbd564754"><span>Det viktade Gini-indexet är lägre för uppdelning 1 än för uppdelning 2.</span></label><label><input type="checkbox" autocomplete="off" name="a9cae1490826d05752980d6bbd564754"><span>Föräldernodens felkvot är <span class="math inline">\(0.4\)</span> och dess Gini-index är <span class="math inline">\(0.48\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="a9cae1490826d05752980d6bbd564754"><span>Den viktade felkvoten efter uppdelning 1 är <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="a9cae1490826d05752980d6bbd564754"><span>Felkvoten kan vara mindre känslig än Gini-indexet när en uppdelning förändrar klassfördelningen utan att förändra majoritetsklassen.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Falskt. Felkvoten beror endast på andelen observationer som inte tillhör majoritetsklassen. Gini-indexet tar hänsyn till hela klassfördelningen, så två uppdelningar kan ha samma felkvot men olika Gini-index.</li>
+<li>Sant. Den viktade felkvoten blir <span class="math inline">\((60/100)\cdot(15/60)+(40/100)\cdot(15/40)=0.3\)</span>.</li>
+<li>Sant. För uppdelning 1 är det viktade Gini-indexet ungefär <span class="math inline">\(0.343\)</span>. För uppdelning 2 är det <span class="math inline">\(0.375\)</span>. Uppdelning 1 ger därför lägre orenhet enligt Gini-indexet.</li>
+<li>Sant. Felkvoten är <span class="math inline">\(1-0.6=0.4\)</span>. Gini-indexet är <span class="math inline">\(1-0.6^2-0.4^2=0.48\)</span>.</li>
+<li>Sant. Den vänstra noden är ren och har felkvoten <span class="math inline">\(0\)</span>. I den högra noden är felkvoten <span class="math inline">\(30/70\)</span>. Den viktade felkvoten blir därför <span class="math inline">\((30/100)\cdot 0+(70/100)\cdot(30/70)=0.3\)</span>.</li>
+<li>Sant. Så länge majoritetsklassen inte förändras kan felkvoten förbli oförändrad trots att fördelningen mellan klasserna förändras. Gini-indexet reagerar mer gradvis på sådana förändringar.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 4
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>Trädmodeller kan överanpassa träningsdata. Förbeskärning och efterbeskärning är två metoder för att kontrollera trädets komplexitet. Vilka av följande påståenden är korrekta?</p>
+<div id="webex-dfd632bbbdd393cbe0d84bead9d5e728" class="webex-checkboxgroup" data-answer="P1ZIBx8DTlM/">
+<label><input type="checkbox" autocomplete="off" name="dfd632bbbdd393cbe0d84bead9d5e728"><span>Ett djupare träd bör alltid väljas, eftersom fler noder automatiskt ger bättre prediktioner på nya data.</span></label><label><input type="checkbox" autocomplete="off" name="dfd632bbbdd393cbe0d84bead9d5e728"><span>Efterbeskärning innebär att man först tränar ett fullt utvecklat träd och därefter ersätter vissa delträd med löv för att minska modellens komplexitet.</span></label><label><input type="checkbox" autocomplete="off" name="dfd632bbbdd393cbe0d84bead9d5e728"><span>Korsvalidering kan användas för att avgöra hur mycket trädet bör beskäras.</span></label><label><input type="checkbox" autocomplete="off" name="dfd632bbbdd393cbe0d84bead9d5e728"><span>Förbeskärning innebär att trädets tillväxt stoppas under träningen när ett kriterium är uppfyllt, exempelvis maximalt träddjup, för få observationer i en nod eller för liten förbättring.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Falskt. Ett djupare träd får ofta lägre träningsfel men kan ge sämre prediktioner på nya data på grund av överanpassning.</li>
+<li>Sant. Efterbeskärning utgår från ett fullt utvecklat träd och förenklar det genom att ersätta vissa delträd med löv.</li>
+<li>Sant. Korsvalideringsfelet kan användas för att jämföra träd med olika komplexitet och välja en lämplig beskärningsnivå.</li>
+<li>Sant. Förbeskärning begränsar trädets tillväxt genom stoppregler som används under träningen.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="fördelar-och-nackdelar" class="level3" data-number="28.2.3">
-<h3 data-number="28.2.3" class="anchored" data-anchor-id="fördelar-och-nackdelar"><span class="header-section-number">28.2.3</span> Fördelar och nackdelar</h3>
-<p>Fördelar: Lätta att förstå och tolka Klarar av olika responsvariabler Kräver inte så mycket datahantering innan Funkar på relativt stora dataset Icke-parametrisk metod Automatisk variabelselektion Lär sig variabelinteraktioner automatiskt Kan anpassa många olika sorters funktioner</p>
-<p>Nackdelar sämre prediktiv förmåga, överanpassar lätt, omöjligt att hitta det optimala trädet, enkla funktioner kräver komplexa träd.</p>
+<section id="fördelar-och-nackdelar" class="level3" data-number="28.3.4">
+<h3 data-number="28.3.4" class="anchored" data-anchor-id="fördelar-och-nackdelar"><span class="header-section-number">28.3.4</span> Fördelar och nackdelar</h3>
+<p>Trädmodeller har många fördelar. Modellerna är oftast lätta att förstå och tolka på grund av dess binära uppdelningar där det går lätt att följa en observations väg till ett löv. Träd klarar också av olika sorters responsvariabler utan att markant behöva förändra tillämpningen.</p>
+<p>Om vi har mycket data eller många variabler kan trädmodeller effektivt hantera detta, bland annat genom att vi i processen faktiskt också får en form av variabelselektion. Om en variabel inte har någon relation till responsvariabeln kommer den aldrig väljas som en beslutsregel, medan variabler som har ett samband kommer användas oftare eller vid uppdelningar som ger stora förbättringar av kostnadsfunktionen.</p>
+<p>Metoden lär sig också interaktioner, fall där kombinationer av variabelvärden har en förändrad relation till responsvariabeln, eftersom beslutsregler som följer efter varandra naturligt kan leda till olika relationer för olika områden av en variabel.</p>
+<p>Trots att trädmodeller generellt har möjlighet att anpassa många olika sorts funktioner, även icke-linjära som visats i <a href="#fig-nonlinear-tree-region" class="quarto-xref">Figur&nbsp;<span>28.6</span></a>, kan modellerna snabbt bli onödigt komplexa om sambandet är s.k. mjukt varierande. Vi kan se en trappliknande form på regionerna som separerar färgerna i <a href="#fig-nonlinear-tree-region" class="quarto-xref">Figur&nbsp;<span>28.6</span></a> som en approximering av den enkla icke-linjära beslutsgränsen. Ju mer komplex och varierande den icke-linjära gränsen är, desto fler “trappsteg” behöver skapas av trädmodellen. Detta gäller även för gränser som inte är ortogonala (rätvinklade), t.ex. <span class="math inline">\(x_1 &lt; x_2\)</span> eftersom beslutsreglerna inte kan förhålla sig till fler än en variabel åt gången.</p>
+<p>En konsekvens av denna onödiga komplexitet är att trädmodeller ofta överanpassar träningsdata vilket ger modellen en något sämre prediktiv förmåga jämfört med andra modeller.</p>
 <p>Dessa nackdelar kan förbättras genom metoder som kommer presenteras i <span class="quarto-unresolved-ref">?sec-ensemble</span>.</p>
+<!-- DEVELOPMENT: Jämför GAM med träd -->
 </section>
 </section>
 <section id="referenser" class="level2 unnumbered">

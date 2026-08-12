@@ -526,9 +526,9 @@ window.Quarto = {
    
   <ul>
   <li><a href="#standardisering" id="toc-standardisering" class="nav-link active" data-scroll-target="#standardisering"><span class="header-section-number">27.1</span> Standardisering</a></li>
-  <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link" data-scroll-target="#ridge-regression"><span class="header-section-number">27.2</span> Ridge regression</a></li>
-  <li><a href="#lasso-regression" id="toc-lasso-regression" class="nav-link" data-scroll-target="#lasso-regression"><span class="header-section-number">27.3</span> LASSO regression</a></li>
-  <li><a href="#elastic-net" id="toc-elastic-net" class="nav-link" data-scroll-target="#elastic-net"><span class="header-section-number">27.4</span> Elastic Net</a></li>
+  <li><a href="#sec-ridge" id="toc-sec-ridge" class="nav-link" data-scroll-target="#sec-ridge"><span class="header-section-number">27.2</span> Ridge regression</a></li>
+  <li><a href="#sec-lasso" id="toc-sec-lasso" class="nav-link" data-scroll-target="#sec-lasso"><span class="header-section-number">27.3</span> LASSO regression</a></li>
+  <li><a href="#sec-elastic-net" id="toc-sec-elastic-net" class="nav-link" data-scroll-target="#sec-elastic-net"><span class="header-section-number">27.4</span> Elastic Net</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -559,75 +559,62 @@ window.Quarto = {
 <p>En stor del av statistisk inlärning berör generalisering, att modellen som tränas också ska kunna effektivt användas på ny data. Vid stora datamaterial, med många observationer och variabler, krävs ofta en flexibel men komplex modell för att modellen ska prestera bra, men det ger också en överhängande risk för att modellen överanpassas.</p>
 <p>Komplexitet kan mätas på olika sätt beroende på modellen; i det linjära fallet är det antalet variabler och förekomsten av interaktioner eller transformationer som har den största påverkan. Ett sätt att minska några av dessa dimensioner är att använda algoritmer för <strong>variabelselektion</strong> som “automatisk” väljer variabler utifrån ett valt utvärderingsmått. Mer om detta går att läsa i <a href="../01-regression/09-variable-selection.html#sec-variable-selection-algorithms" class="quarto-xref"><span>Avsnitt 13.2</span></a>. En stor nackdel med dessa algoritmer är att de oftast är giriga eller mycket beräkningstunga. En girig algoritm betyder att den vid varje steg vill hitta den bästa förbättringen av modellen och riskerar att missa steg som ger en sämre förbättring just nu men den “bästa” förbättringen två steg framåt.</p>
 <p>Istället för giriga algoritmer finns ett annat sätt att motverka överanpassning som inte behöver välja variabler; <strong>regularisering</strong>. Idén bakom denna metod är att hindra modellen för att bli för komplex och ge ett (förhoppningsvis) bättre generaliseringsfel genom att begränsa parametrar för variabler som inte anses tillföra något till anpassningen. Regularisering tillsammans med en flexibel och komplex modell bör leda till en bra anpassning.</p>
-<p><span style="color: green">L1 och L2 återkommer i senare kapitel.</span></p>
 <section id="standardisering" class="level2" data-number="27.1">
 <h2 data-number="27.1" class="anchored" data-anchor-id="standardisering"><span class="header-section-number">27.1</span> Standardisering</h2>
-<p>För att vissa former av regularisering ska fungera väl, behöver vi standardisera de förklarande variablerna först.</p>
-<p>GLMNET standardiserar automatiskt i processen och återskapar rätt skala i parameterskattningarna sedan.</p>
-<p>För de former av regularisering som begränsar utefter parametervärden, behöver vi standardisera de förklarande variablerna först. Detta krävs för att variablernas individuella skalor inte ska påverka regulariseringen.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<p>För de former av regularisering som begränsar utefter parametervärden, behöver vi standardisera de förklarande variablerna först. Standardisering innebär att varje variabel får samma väntevärde och varians, så att skillnader i skala inte ska påverka storleken av parametern.</p>
+<p>Varje kontinuerliga variabel standardiseras genom: <span id="eq-standardization"><span class="math display">\[
+  \begin{aligned}
+  z_{ij} = \frac{x_{ij} - \mu_{x_j}}{\sigma_{x_j}}
+  \end{aligned}
+\tag{27.1}\]</span></span> där <span class="math inline">\(z_{ij}\)</span> är det standardiserade värdet för observation <span class="math inline">\(i\)</span> för variabel <span class="math inline">\(j\)</span>, <span class="math inline">\(x_{ij}\)</span> är det ursprungliga värdet för samma observation och variabel, <span class="math inline">\(\mu_{x_j}\)</span> är medelvärdet för variabel <span class="math inline">\(j\)</span> och <span class="math inline">\(\sigma_{x_j}\)</span> är standardavvikelsen för variabel <span class="math inline">\(j\)</span>.</p>
+<p>Den variabeln får nu <span class="math inline">\(E(z) = 0\)</span> och <span class="math inline">\(Var(z) = 1\)</span> vilket innebär att alla värden kan tolkas som “enheter standardavvikelse från sitt medelvärde”. Detta gäller för alla variabler vilket innebär att variablerna nu inte längre har några skillnader i skala.</p>
+<p>Vissa metoder integrerar standardiseringen direkt i metoden, t.ex. <code>glmnet()</code> för <span class="citation" data-cites="seq-elastic-net">(<a href="#ref-seq-elastic-net" role="doc-biblioref"><strong>seq-elastic-net?</strong></a>)</span>, och visar sedan resultaten i originalskalan sedan. Metoden hanterar både standardiseringen och “återstandardiseringen” utan att det riktigt syns, allt för att göra de slutgiltiga tolkningarna relaterbara till datamaterialet som samlats in.</p>
+<p>För andra typer av variabler behöver vi hantera detta på andra sätt. Variabler som följer ordinalskala skalas om som att den följer nominalskala, det vill säga indikatorkodas (se <a href="../01-regression/02-model-structure.html#sec-indicator-variable" class="quarto-xref"><span>Avsnitt 6.1</span></a>). Dessa binära variabler standardiseras inte enligt <a href="#eq-standardization" class="quarto-xref">Ekvation&nbsp;<span>27.1</span></a>, utan lämnas som de är eftersom deras skala redan är likvärdig.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Notera
+<span class="screen-reader-only">Caution</span>Övning 1
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Standardisering är ett specialfall av normalisering där vi skalar om variabeln till att ha 0 i väntevärde och 1 i standardavvikelse. Varje värde får då enheten “x standardavvikelser från medelvärdet”.</p>
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>En regressionsmodell innehåller en förklarande variabel <span class="math inline">\(X_1\)</span> som mäts i meter. Innan variablerna har standardiserats är dess skattade koefficient <span class="math inline">\(\beta_1=2\)</span>. Samma variabel uttrycks därefter i centimeter som <span class="math inline">\(X_1^*=100X_1\)</span>. För att modellens anpassade värden ska vara oförändrade ersätts koefficienten med <span class="math inline">\(\beta_1^*=0.02\)</span>, så att <span class="math inline">\(2X_1=0.02X_1^*\)</span>. Vilka av följande påståenden är korrekta?</p>
+<div id="webex-9bfe67715071cf1442dbe642ebb3a39d" class="webex-checkboxgroup" data-answer="YlNKVRoGGwAZAGo=">
+<label><input type="checkbox" autocomplete="off" name="9bfe67715071cf1442dbe642ebb3a39d"><span>Modellens prediktioner och SSE är oförändrade när <span class="math inline">\(X_1\)</span> och <span class="math inline">\(\beta_1\)</span> skalas om på detta sätt.</span></label><label><input type="checkbox" autocomplete="off" name="9bfe67715071cf1442dbe642ebb3a39d"><span>Variabelns bidrag till LASSO-straffet är oförändrat, eftersom LASSO använder absolutbelopp i stället för kvadrater.</span></label><label><input type="checkbox" autocomplete="off" name="9bfe67715071cf1442dbe642ebb3a39d"><span>Variabelns bidrag till Ridge-straffet ändras från <span class="math inline">\(\beta_1^2=4\)</span> till <span class="math inline">\((\beta_1^*)^2=0.0004\)</span>, trots att modellens prediktioner är oförändrade.</span></label><label><input type="checkbox" autocomplete="off" name="9bfe67715071cf1442dbe642ebb3a39d"><span>Exemplet visar varför förklarande variabler bör standardiseras före regularisering.</span></label><label><input type="checkbox" autocomplete="off" name="9bfe67715071cf1442dbe642ebb3a39d"><span>Interceptet <span class="math inline">\(\beta_0\)</span> bör ingå i strafftermen så att även responsvariabelns nivå påverkas av regulariseringen.</span></label>
 </div>
 </div>
-<p>Ordinalskala skalar om de till kategoriska variabler utan ordning.</p>
-<p><span style="color: green">Kom ihåg kategoriska variabler indikatorkodas</span></p>
+<div class="webex-solution">
+<ul>
+<li>Sant. Eftersom <span class="math inline">\(2X_1=0.02X_1^*\)</span> blir varje anpassat värde detsamma. Residualerna och därmed SSE förändras därför inte.</li>
+<li>Falskt. LASSO-straffets bidrag ändras från <span class="math inline">\(|\beta_1|=2\)</span> till <span class="math inline">\(|\beta_1^*|=0.02\)</span>. Även LASSO påverkas alltså av variabelns skala.</li>
+<li>Sant. Ridge-straffet beror på koefficienternas kvadrater. Enheten som används för variabeln kan därför kraftigt förändra straffet om variablerna inte har standardiserats.</li>
+<li>Sant. Standardisering gör variablernas skalor mer jämförbara och motverkar att valet av måttenhet avgör hur hårt olika koefficienter straffas.</li>
+<li>Falskt. I de regulariserade regressionsmodellerna straffas lutningskoefficienterna, men inte interceptet <span class="math inline">\(\beta_0\)</span>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="ridge-regression" class="level2" data-number="27.2">
-<h2 data-number="27.2" class="anchored" data-anchor-id="ridge-regression"><span class="header-section-number">27.2</span> Ridge regression</h2>
+<section id="sec-ridge" class="level2" data-number="27.2">
+<h2 data-number="27.2" class="anchored" data-anchor-id="sec-ridge"><span class="header-section-number">27.2</span> Ridge regression</h2>
 <p>I vanlig linjär regression minimerar vi SSE:</p>
 <p><span class="math display">\[
   \begin{aligned}
   f(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2
   \end{aligned}
-\]</span></p>
+\]</span> där vi kan anse <span class="math inline">\(f(x_i) = \beta_0 + \sum_j^{p}\beta_jX_{ij}\)</span>.</p>
 <p>Inom <strong>Ridge regression</strong> lägger vi till en straffterm till denna kostnadsfunktion enligt:</p>
 <p><span class="math display">\[
   \begin{aligned}
   f_{Ridge}(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2 + \lambda \sum_{j = 1}^p \beta_j^2
   \end{aligned}
-\]</span> där <span class="math inline">\(\lambda \ge 0\)</span>. Notera att ingen straffterm sätts på <span class="math inline">\(\beta_0\)</span> utan bara respektive lutningsparameter. <span class="math inline">\(\lambda\)</span> är en hyperparameter som måste bestämmas där ett värde av 0 indikerar på inget straff (bara vanlig SSE) och stora värden indikerar på stora straff där många parametrar sätts till väldigt små värden.</p>
-<p>Dessa två delar av funktionen samverkar när en variabel som inte anses ha något samband med responsvariabeln inte kommer påverka storleken av <span class="math inline">\(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij}\)</span> vilket i sin tur leder till att den tillhörande parametern kan reduceras till nära 0 för att storleken av <span class="math inline">\(\sum_{j = 1}^p \beta_j^2\)</span> ska bli så liten som möjligt.</p>
-<p><span style="color: green">Kalla dessa L1 L2 strafftermer</span></p>
-<p><span style="color: red">RIDGE I R</span></p>
-<p><span style="color: green">De maximala värdena i betaparametrarna när lambda är 0 är OLS skattningarna. När lambda är &gt;0 kommer parametrarna bli mindre än de maximala. Den flexibla modellen där vi tillåter alla effekter som tränignsmängden säger de ska ha (OLS), men har variabler som beskriver samma sak eller är för många.</span></p>
-</section>
-<section id="lasso-regression" class="level2" data-number="27.3">
-<h2 data-number="27.3" class="anchored" data-anchor-id="lasso-regression"><span class="header-section-number">27.3</span> LASSO regression</h2>
-<p>Ridge straffar parametrarna kraftigt med anledning av <span class="math inline">\(\beta_j^2\)</span>. Vi kan använda ett mindre straff genom <strong>LASSO regression</strong> om vi ändrar till beloppet enligt:</p>
-<p><span class="math display">\[
-  \begin{aligned}
-  f_{LASSO}(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2 + \lambda \sum_{j = 1}^p |\beta_j|
-  \end{aligned}
-\]</span> där <span class="math inline">\(\lambda \ge 0\)</span>.</p>
-<p><span style="color: red">LASSO i R</span></p>
-<p>På samma sätt som med Ridge väljs <span class="math inline">\(\lambda\)</span> som en hyperparameter men till skillnad från Ridge ger stora värden på <span class="math inline">\(\lambda\)</span> att flera parametrar sätts till exakt 0. En annan skillnad sker vid multikollinearitet där Ridge krymper alla parametrar vars variabler korrelerar med varandra lika mycket medan LASSO sätter enbart en till 0.</p>
-<p><span style="color: green">Vid multikollinearitet ridge delar på effekten, lasso väljer en som “vanlig effekt” och en nära 0. LASSO tillåter separat skattning av alla nollskilda parametrar efter analys, Ridge har inte många 0:or.</span></p>
-<p><span style="color: green">Skattas med numerisk optimering, coordinate descent.</span></p>
-<p>Ridge passar bra när <span class="math inline">\(Y_i\)</span> beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten nära 0. Detta medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för.</p>
-<p><span style="color: green">RDIGE kan anses som en skalning av OLS matriserna med lambda. LASSO har inte samma formelbenämning.</span></p>
-<p><span style="color: green">Testa båda metoderna och se vilken som ger bäst prediktioner</span></p>
-</section>
-<section id="elastic-net" class="level2" data-number="27.4">
-<h2 data-number="27.4" class="anchored" data-anchor-id="elastic-net"><span class="header-section-number">27.4</span> Elastic Net</h2>
-<p>Som en kombination av Ridge och LASSO finns <strong>Elastic Net</strong> som mixar de två strafftermerna med en ny hyperparameter <span class="math inline">\(\alpha\)</span>.</p>
-<p><span class="math display">\[
-  \begin{aligned}
-  f_{Elastic}(\boldsymbol{\beta}) = SSE + \lambda \left((1 - \alpha) \sum_{j = 1}^p \beta_j^2 + \alpha \sum_{j = 1}^p |\beta_j| \right)
-  \end{aligned}
-\]</span> där <span class="math inline">\(\lambda \ge 0\)</span> och <span class="math inline">\(0\le \alpha \le 1\)</span>.</p>
-<p><span class="math inline">\(\alpha\)</span> styr hur mycket vikt vi ger till Ridge respektive LASSO som ger en flexibel regularisering. Detta innebär att vi kan tvinga vissa <span class="math inline">\(\beta\)</span> till 0 men inte lika många som i vanlig LASSO och Elastic Net kan klara av korrelerade variabler bättre.</p>
-<p><span style="color: green">Nu har vi två hyperparametrar, lambda och alpha (1 = Ridge, 0 = Lasso).</span></p>
-<p><span style="color: red">I R?</span></p>
-<p><span style="color: green">Inferens på dessa modeller görs egentligen inte, utan vi tolkar effektstorleken av de nollskilda parametrarna. Visa de i ett stapeldiagram.</span></p>
+\]</span> där <span class="math inline">\(\lambda \ge 0\)</span>. Notera att ingen straffterm sätts på <span class="math inline">\(\beta_0\)</span> utan bara respektive lutningsparameter. <span class="math inline">\(\lambda\)</span> är en hyperparameter som måste bestämmas där ett värde av 0 indikerar på inget straff (bara vanlig SSE) och stora värden indikerar på stora straff där många parametrar sätts till väldigt små värden. Strafftermen kallas för <span class="math inline">\(L_2\)</span>-regularisering.</p>
+<p>Dessa två delar av funktionen samverkar på följande sätt. När en variabel inte har något samband med Y, kommer dess effekt på <span class="math inline">\(f(x_i)\)</span> vara liten och vi kan reducera dess parametervärde till nära 0 för att också effekten på strafftermen ska vara så liten som möjligt. När en variabeln har ett samband med Y, kommmer istället dess effekt på <span class="math inline">\(f(x_i)\)</span> vara noterbar och nollskilda värden kommer ge en förbättring av SSE mer än straffet ökar. Syftet med straffet är alltså att väga samman variabelns effekt i modellen med det tillhörande straff som parametern får.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -638,17 +625,128 @@ Notera
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><span style="color: red">Eventuellt ta bort helt</span></p>
-<p>De tidigare presenterade algoritmerna och regulariseringsmetoderna är “automatiska” metoder för att välja variabler som bidrar till att förklara responsvariabeln. Efter variabelselektion är det vanligt att analysera parametrarnas p-värden och intervallskattning, även kallad för <strong>post-selection inference</strong>. Problemet är att vanliga inferensmetoder antar att modellen är fixerad innan data analyseras men med variabelselektion används data för att välja modell och introducerar ett beroende mellan data och modellen. Detta påverkar fördelningen av skattningarna vilket i sin tur leder till för snäva konfidensintervall, för små p-värden och ökad risk för typ I fel. Vi bör därför undvika att använda vanliga metoder för inferens och istället använda inferensmetoder som tar hänsyn till variabelselektionen.</p>
-<p>Några vanliga metoder är:</p>
+<p>De maximala värdena som fås i träningen sker när <span class="math inline">\(\lambda = 0\)</span> vilket motsvarar en ren minsta kvadratskattning. När <span class="math inline">\(\lambda &gt; 0\)</span> kommer parametrarna endast bli mindre. Ridge ger oss en flexibel modell där vi tillåter alla effekter som kan identifieras i träningsmängden, men som också tar bort effekten av variabler som beskriver samma sak som en annan eller som är överflödiga.</p>
+</div>
+</div>
+<!-- DEVELOPMENT! Ridge example in R -->
+</section>
+<section id="sec-lasso" class="level2" data-number="27.3">
+<h2 data-number="27.3" class="anchored" data-anchor-id="sec-lasso"><span class="header-section-number">27.3</span> LASSO regression</h2>
+<p>Ridge straffar parametrarna kraftigt med anledning av de kvadrerade parametrarna genom <span class="math inline">\(\beta_j^2\)</span>. Denna sorts regularisering blir då känslig för extremt stora parametrar. Vi kan använda ett mindre straff (<span class="math inline">\(L_1\)</span>-regularisering) genom <strong>LASSO regression</strong> om vi ändrar att strafftermen använder absolutbeloppet.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  f_{LASSO}(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2 + \lambda \sum_{j = 1}^p |\beta_j|
+  \end{aligned}
+\]</span> där <span class="math inline">\(\lambda \ge 0\)</span>.</p>
+<!-- DEVELOPMENT! LASSO example in R -->
+<p>Båda former av regularisering hjälper till att reducera antalet variabler som har en distinkt effekt på responsvariabeln men de har också vissa skillnader.</p>
+<p>På samma sätt som med Ridge väljs <span class="math inline">\(\lambda\)</span> som en hyperparameter men till skillnad från Ridge ger stora värden på <span class="math inline">\(\lambda\)</span> att flera parametrar sätts till nära 0. Vid multikollinearitet delar Ridge regularisering på effekten till alla variabler som beskriver samma relation medan LASSO “väljer” en parameter som nollskild och de övriga sätts nära 0. LASSO resulterar i en modell där många parametrar är nära 0 vilket ger oss möjligheten att träna om modellen med enbart de nollskilda parametrarna. Ridge passar bra när <span class="math inline">\(Y_i\)</span> beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten nära 0. I de flesta tillfällen vet vi inte detta förrän modellerna tränas så ett tips är att testa båda metoderna och se vilken som ger bäst prediktioner.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Dessa metoder tränas med en speciell optimeringsalgoritm som kallas för Coordinate Descent. Kortfattat kan algoritmen fokusera på specifika parametrar att optimera vid varje iteration till skillnad från de algoritmer vi tidigare tagit upp. Vi kommer inte gå in mer på denna metod i detta underlag men mer information finns <a href="https://en.wikipedia.org/wiki/Coordinate_descent">här</a>.</p>
+</div>
+</div>
+<p>Skillnaderna i de två metodernas tillvägagångssätt medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för. Ridge kan ses som en skalning (<span class="math inline">\(\lambda\)</span>) av de vanliga minsta kvadratskattningsmatriserna och vi kan då använda inferensteori därifrån. Detsamma gäller inte för LASSO.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>Två tänkbara lösningar för en regressionsmodell ska jämföras. Interceptet är inte inkluderat i koefficientvektorerna.</p>
 <ul>
-<li><strong>Selective Inference</strong></li>
-<li><strong>Sample Splitting</strong></li>
-<li><strong>Bayesianska metoder</strong></li>
+<li>Lösning A har <span class="math inline">\(SSE_A=20\)</span> och koefficienterna <span class="math inline">\(\boldsymbol{\beta}_A=(3,0,0)\)</span>.</li>
+<li>Lösning B har <span class="math inline">\(SSE_B=22\)</span> och koefficienterna <span class="math inline">\(\boldsymbol{\beta}_B=(1,1,1)\)</span>. För Ridge används kostnadsfunktionen <span class="math inline">\(SSE+\lambda\sum_{j=1}^p\beta_j^2\)</span>, medan LASSO använder <span class="math inline">\(SSE+\lambda\sum_{j=1}^p|\beta_j|\)</span>. Vilka av följande påståenden är korrekta?</li>
 </ul>
-<p>Ingen av dessa metoder är perfekt, valet beror på syftet med analysen (prediktion eller inferens) och tillgången till data.</p>
+<div id="webex-e33195f8d50c4e98e8b190f3b3806078" class="webex-checkboxgroup" data-answer="PgIfABUFSglIBBxTaQ==">
+<label><input type="checkbox" autocomplete="off" name="e33195f8d50c4e98e8b190f3b3806078"><span>När <span class="math inline">\(\lambda=0\)</span> väljer både Ridge och LASSO lösning A eftersom endast SSE återstår i kostnadsfunktionen.</span></label><label><input type="checkbox" autocomplete="off" name="e33195f8d50c4e98e8b190f3b3806078"><span>För Ridge har lösningarna samma kostnad när <span class="math inline">\(\lambda=\frac{1}{3}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="e33195f8d50c4e98e8b190f3b3806078"><span>Resultatet visar att Ridge alltid väljer modeller med många koefficienter och att LASSO alltid väljer modeller med endast en nollskild koefficient.</span></label><label><input type="checkbox" autocomplete="off" name="e33195f8d50c4e98e8b190f3b3806078"><span>När <span class="math inline">\(\lambda=1\)</span> blir Ridge-kostnaden 29 för lösning A och 25 för lösning B, vilket innebär att lösning B föredras.</span></label><label><input type="checkbox" autocomplete="off" name="e33195f8d50c4e98e8b190f3b3806078"><span>När <span class="math inline">\(\lambda=1\)</span> blir LASSO-kostnaden 23 för lösning A och 25 för lösning B, vilket innebär att lösning A föredras.</span></label><label><input type="checkbox" autocomplete="off" name="e33195f8d50c4e98e8b190f3b3806078"><span>För LASSO kommer lösning B att föredras framför lösning A om <span class="math inline">\(\lambda\)</span> görs tillräckligt stor.</span></label>
 </div>
 </div>
+<div class="webex-solution">
+<ul>
+<li>Sant. När <span class="math inline">\(\lambda=0\)</span> försvinner strafftermen. Eftersom <span class="math inline">\(SSE_A=20\)</span> är mindre än <span class="math inline">\(SSE_B=22\)</span> väljs lösning A av båda metoderna.</li>
+<li>Sant. Ridge-kostnaderna är <span class="math inline">\(20+9\lambda\)</span> respektive <span class="math inline">\(22+3\lambda\)</span>. Likheten <span class="math inline">\(20+9\lambda=22+3\lambda\)</span> ger <span class="math inline">\(\lambda=\frac{1}{3}\)</span>.</li>
+<li>Falskt. Vilken lösning som väljs beror på både SSE, koefficienternas storlek och värdet på <span class="math inline">\(\lambda\)</span>. Exemplet visar en möjlig skillnad mellan straffen, inte en regel som gäller för alla datamaterial och kandidatmodeller.</li>
+<li>Sant. För lösning A blir Ridge-kostnaden <span class="math inline">\(20+1\cdot(3^2+0^2+0^2)=29\)</span>. För lösning B blir den <span class="math inline">\(22+1\cdot(1^2+1^2+1^2)=25\)</span>.</li>
+<li>Sant. Båda lösningarna har LASSO-straffet 3. Kostnaderna blir därför <span class="math inline">\(20+3=23\)</span> för lösning A och <span class="math inline">\(22+3=25\)</span> för lösning B.</li>
+<li>Falskt. Båda lösningarna har samma LASSO-straff eftersom <span class="math inline">\(|3|=|1|+|1|+|1|=3\)</span>. Lösning A har lägre SSE och kommer därför att ha lägre LASSO-kostnad för alla <span class="math inline">\(\lambda\geq0\)</span>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-elastic-net" class="level2" data-number="27.4">
+<h2 data-number="27.4" class="anchored" data-anchor-id="sec-elastic-net"><span class="header-section-number">27.4</span> Elastic Net</h2>
+<p>Som en kombination av Ridge och LASSO finns <strong>Elastic Net</strong> som blandar de två <span class="math inline">\(L_1\)</span> och <span class="math inline">\(L_2\)</span> strafftermerna med en ny hyperparameter <span class="math inline">\(\alpha\)</span>.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  f_{Elastic}(\boldsymbol{\beta}) = SSE + \lambda \left((1 - \alpha) \sum_{j = 1}^p \beta_j^2 + \alpha \sum_{j = 1}^p |\beta_j| \right)
+  \end{aligned}
+\]</span> där <span class="math inline">\(\lambda \ge 0\)</span> och <span class="math inline">\(0\le \alpha \le 1\)</span>.</p>
+<p>Metoden blir en flexibel form av regularisern där <span class="math inline">\(\alpha\)</span> styr hur mycket vikt vi ger till Ridge respektive LASSO straffen. Detta innebär att vi kan tvinga vissa <span class="math inline">\(\beta\)</span> till 0 men inte lika många som i vanlig LASSO och Elastic Net kan klara av korrelerade variabler bättre än enbart Ridge. Vi kan se att när <span class="math inline">\(\alpha = 1\)</span> så får vi Ridge, medan om <span class="math inline">\(\alpha = 0\)</span> så får vi LASSO.</p>
+<!-- DEVELOPMENT! Elastic net example in R -->
+<p>Likt LASSO kommer Elastic Net få det svårt att genomföra någon form av inferens, så fokus ligger på att tolka effektstorleken av de nollskilda variablerna, t.ex. via ett stapeldiagram för att få en enklare visuell överblick.</p>
+<!-- :::{.callout-note} -->
+<!-- De tidigare presenterade algoritmerna och regulariseringsmetoderna är "automatiska" metoder för att välja variabler som bidrar till att förklara responsvariabeln. Efter variabelselektion är det vanligt att analysera parametrarnas p-värden och intervallskattning, även kallad för **post-selection inference**. Problemet är att vanliga inferensmetoder antar att modellen är fixerad innan data analyseras men med variabelselektion används data för att välja modell och introducerar ett beroende mellan data och modellen. Detta påverkar fördelningen av skattningarna vilket i sin tur leder till för snäva konfidensintervall, för små p-värden och ökad risk för typ I fel. Vi bör därför undvika att använda vanliga metoder för inferens och istället använda inferensmetoder som tar hänsyn till variabelselektionen. -->
+<!-- Några vanliga metoder är: -->
+<!-- - **Selective Inference** -->
+<!-- - **Sample Splitting** -->
+<!-- - **Bayesianska metoder** -->
+<!-- Ingen av dessa metoder är perfekt, valet beror på syftet med analysen (prediktion eller inferens) och tillgången till data.  -->
+<!-- Behöver hitta någon lämplig källa för vidare läsning om detta ska inkluderas. -->
+<!-- ::: -->
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 3
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>Ridge och LASSO använder olika typer av strafftermer. Elastic net kombinerar egenskaper från båda metoderna genom att använda både ett <span class="math inline">\(L_1\)</span>-straff och ett <span class="math inline">\(L_2\)</span>-straff. Vilka av följande påståenden beskriver elastic net korrekt?</p>
+<div id="webex-3a3cf5e969375a033694a02bfaf41144" class="webex-checkboxgroup" data-answer="aFAfU0oESQhr">
+<label><input type="checkbox" autocomplete="off" name="3a3cf5e969375a033694a02bfaf41144"><span>Elastic net kombinerar strafftermerna från ridge och LASSO, och blandningen styrs av en ytterligare parameter.</span></label><label><input type="checkbox" autocomplete="off" name="3a3cf5e969375a033694a02bfaf41144"><span>Elastic net skiljer sig från ridge genom att den aldrig kan genomföra variabelselektion.</span></label><label><input type="checkbox" autocomplete="off" name="3a3cf5e969375a033694a02bfaf41144"><span>Elastic net kan både krympa regressionskoefficienterna och sätta vissa av dem exakt till <span class="math inline">\(0\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="3a3cf5e969375a033694a02bfaf41144"><span>Elastic net kan hantera korrelerade prediktorer bättre än ren LASSO.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Sant. Parametern <span class="math inline">\(\lambda\)</span> styr den totala graden av regularisering, medan blandningsparametern <span class="math inline">\(\alpha\)</span> bestämmer balansen mellan <span class="math inline">\(L_1\)</span>- och <span class="math inline">\(L_2\)</span>-straffet.</li>
+<li>Falskt. Genom <span class="math inline">\(L_1\)</span>-komponenten kan elastic net sätta vissa koefficienter exakt till <span class="math inline">\(0\)</span> och därmed genomföra variabelselektion.</li>
+<li>Sant. Metodens <span class="math inline">\(L_2\)</span>-del krymper koefficienterna, medan <span class="math inline">\(L_1\)</span>-delen kan göra vissa koefficienter exakt lika med <span class="math inline">\(0\)</span>.</li>
+<li>Sant. Kombinationen av <span class="math inline">\(L_1\)</span>- och <span class="math inline">\(L_2\)</span>-straff gör att elastic net kan hantera korrelerade variabler bättre än ren LASSO.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- :::{.callout-caution} -->
+<!-- ## Övning 4 -->
+<!-- STRYKS PGA TILLHÖR INFORMATION UTANFÖR SCOPE AV MATERIALET -->
+<!-- ```{r} -->
+<!-- #| echo: FALSE -->
+<!-- #| results: asis -->
+<!-- exams2forms(file = "../exercises/Part 5/Del5_Chap27.4_ex2.rmd") -->
+<!-- ``` -->
+<!-- ::: -->
 </section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
