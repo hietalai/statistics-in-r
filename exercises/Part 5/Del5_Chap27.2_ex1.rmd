@@ -1,6 +1,7 @@
 Question
 ========
 Två tänkbara lösningar för en regressionsmodell ska jämföras. Interceptet är inte inkluderat i koefficientvektorerna.
+
 * Lösning A har $SSE_A=20$ och koefficienterna $\boldsymbol{\beta}_A=(3,0,0)$.
 * Lösning B har $SSE_B=22$ och koefficienterna $\boldsymbol{\beta}_B=(1,1,1)$.
 För Ridge används kostnadsfunktionen $SSE+\lambda\sum_{j=1}^p\beta_j^2$, medan LASSO använder $SSE+\lambda\sum_{j=1}^p|\beta_j|$.
