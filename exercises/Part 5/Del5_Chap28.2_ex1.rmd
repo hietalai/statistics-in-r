@@ -1,6 +1,6 @@
 Question
 ========
-I ett klassifikationsträd innehåller en föräldernod 100 observationer: 60 från klass A och 40 från klass B. Två möjliga uppdelningar ger följande barnnoder:
+I ett klassificeringsträd innehåller en föräldernod 100 observationer: 60 från klass A och 40 från klass B. Två möjliga uppdelningar ger följande barnnoder:
 * Uppdelning 1: vänster nod $(30,0)$ och höger nod $(30,40)$.
 * Uppdelning 2: vänster nod $(45,15)$ och höger nod $(15,25)$.
 

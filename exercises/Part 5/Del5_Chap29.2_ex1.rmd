@@ -1,6 +1,6 @@
 Question
 ========
-Vid träningen av ett neuralt nätverk används en slumpmässigt vald mini-batch för att beräkna gradientskattningen $\hat{\nabla L}$. Skattningen antas vara väntevärdesriktig och inlärningshastigheten följer schemat $\gamma_k=1/k$.
+Vid träningen av ett neuralt nätverk används en slumpmässigt vald mini-batch för att beräkna gradientskattningen $\nabla\hat{c}$. Skattningen antas vara väntevärdesriktig och inlärningshastigheten följer schemat $\gamma_t=1/t$.
 Vilka av följande påståenden är korrekta?
 
 Answerlist

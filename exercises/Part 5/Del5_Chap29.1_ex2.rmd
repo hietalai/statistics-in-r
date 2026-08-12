@@ -1,6 +1,6 @@
 Question
 ========
-Ett neuralt nätverk används för ett klassificeringsproblem med tre nominella klasser. Nätverkets outputlager ger värdena $z_1=0$, $z_2=\log(2)$ och $z_3=\log(3)$ innan aktiveringsfunktionen appliceras.
+Ett neuralt nätverk används för ett klassificeringsproblem med tre nominala klasser. Nätverkets outputlager ger värdena $z_1=0$, $z_2=\log(2)$ och $z_3=\log(3)$ innan aktiveringsfunktionen appliceras.
 Softmaxfunktionen beräknar outputvärdet för klass $i$ som $f_i=\frac{\exp(z_i)}{\sum_{j=1}^K\exp(z_j)}$.
 Vilka av följande påståenden är korrekta?
 
