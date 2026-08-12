@@ -14,24 +14,36 @@ Komplexitet kan mätas på olika sätt beroende på modellen; i det linjära fal
 
 Istället för giriga algoritmer finns ett annat sätt att motverka överanpassning som inte behöver välja variabler; **regularisering**. Idén bakom denna metod är att hindra modellen för att bli för komplex och ge ett (förhoppningsvis) bättre generaliseringsfel genom att begränsa parametrar för variabler som inte anses tillföra något till anpassningen. Regularisering tillsammans med en flexibel och komplex modell bör leda till en bra anpassning.
 
-[L1 och L2 återkommer i senare kapitel.]{style="color: green"}
-
 ## Standardisering
-För att vissa former av regularisering ska fungera väl, behöver vi standardisera de förklarande variablerna först.
+För de former av regularisering som begränsar utefter parametervärden, behöver vi standardisera de förklarande variablerna först. Standardisering innebär att varje variabel får samma väntevärde och varians, så att skillnader i skala inte ska påverka storleken av parametern. 
 
-GLMNET standardiserar automatiskt i processen och återskapar rätt skala i parameterskattningarna sedan.
+Varje kontinuerliga variabel standardiseras genom:
+$$
+  \begin{aligned}
+  z_{ij} = \frac{x_{ij} - \mu_{x_j}}{\sigma_{x_j}}
+  \end{aligned}
+$$ {#eq-standardization}
+där $z_{ij}$ är det standardiserade värdet för observation $i$ för variabel $j$, $x_{ij}$ är det ursprungliga värdet för samma observation och variabel, $\mu_{x_j}$ är medelvärdet för variabel $j$ och $\sigma_{x_j}$ är standardavvikelsen för variabel $j$.
 
-För de former av regularisering som begränsar utefter parametervärden, behöver vi standardisera de förklarande variablerna först. Detta krävs för att variablernas individuella skalor inte ska påverka regulariseringen. 
+Den variabeln får nu $E(z) = 0$ och $Var(z) = 1$ vilket innebär att alla värden kan tolkas som "enheter standardavvikelse från sitt medelvärde". Detta gäller för alla variabler vilket innebär att variablerna nu inte längre har några skillnader i skala.
 
-:::{.callout-note}
-Standardisering är ett specialfall av normalisering där vi skalar om variabeln till att ha 0 i väntevärde och 1 i standardavvikelse. Varje värde får då enheten "x standardavvikelser från medelvärdet".
+Vissa metoder integrerar standardiseringen direkt i metoden, t.ex. `glmnet()` för @seq-elastic-net, och visar sedan resultaten i originalskalan sedan. Metoden hanterar både standardiseringen och "återstandardiseringen" utan att det riktigt syns, allt för att göra de slutgiltiga tolkningarna relaterbara till datamaterialet som samlats in.
+
+För andra typer av variabler behöver vi hantera detta på andra sätt. Variabler som följer ordinalskala skalas om som att den följer nominalskala, det vill säga indikatorkodas (se @sec-indicator-variable). Dessa binära variabler standardiseras inte enligt @eq-standardization, utan lämnas som de är eftersom deras skala redan är likvärdig.
+
+:::{.callout-caution}
+## Övning 1
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap27.1_ex1.rmd")
+
+```
 :::
 
-Ordinalskala skalar om de till kategoriska variabler utan ordning.
 
-[Kom ihåg kategoriska variabler indikatorkodas]{style="color: green"}
-
-## Ridge regression
+## Ridge regression {#sec-ridge}
 
 I vanlig linjär regression minimerar vi SSE:
 
@@ -40,6 +52,7 @@ $$
   f(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2
   \end{aligned}
 $$
+där vi kan anse $f(x_i) = \beta_0 + \sum_j^{p}\beta_jX_{ij}$.
 
 Inom **Ridge regression** lägger vi till en straffterm till denna kostnadsfunktion enligt:
 
@@ -48,21 +61,19 @@ $$
   f_{Ridge}(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2 + \lambda \sum_{j = 1}^p \beta_j^2
   \end{aligned}
 $$
-där $\lambda \ge 0$. Notera att ingen straffterm sätts på $\beta_0$ utan bara respektive lutningsparameter. $\lambda$ är en hyperparameter som måste bestämmas där ett värde av 0 indikerar på inget straff (bara vanlig SSE) och stora värden indikerar på stora straff där många parametrar sätts till väldigt små värden.
+där $\lambda \ge 0$. Notera att ingen straffterm sätts på $\beta_0$ utan bara respektive lutningsparameter. $\lambda$ är en hyperparameter som måste bestämmas där ett värde av 0 indikerar på inget straff (bara vanlig SSE) och stora värden indikerar på stora straff där många parametrar sätts till väldigt små värden. Strafftermen kallas för $L_2$-regularisering.
 
-Dessa två delar av funktionen samverkar när en variabel som inte anses ha något samband med responsvariabeln inte kommer påverka storleken av $Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij}$ vilket i sin tur leder till att den tillhörande parametern kan reduceras till nära 0 för att storleken av $\sum_{j = 1}^p \beta_j^2$ ska bli så liten som möjligt. 
+Dessa två delar av funktionen samverkar på följande sätt. När en variabel inte har något samband med Y, kommer dess effekt på $f(x_i)$ vara liten och vi kan reducera dess parametervärde till nära 0 för att också effekten på strafftermen ska vara så liten som möjligt. När en variabeln har ett samband med Y, kommmer istället dess effekt på $f(x_i)$ vara noterbar och nollskilda värden kommer ge en förbättring av SSE mer än straffet ökar. Syftet med straffet är alltså att väga samman variabelns effekt i modellen med det tillhörande straff som parametern får.
 
-[Kalla dessa L1 L2 strafftermer]{style="color: green"}
+:::{.callout-note}
+De maximala värdena som fås i träningen sker när $\lambda = 0$ vilket motsvarar en ren minsta kvadratskattning. När $\lambda > 0$ kommer parametrarna endast bli mindre. Ridge ger oss en flexibel modell där vi tillåter alla effekter som kan identifieras i träningsmängden, men som också tar bort effekten av variabler som beskriver samma sak som en annan eller som är överflödiga.
+:::
 
-[RIDGE I R]{style="color: red"}
+<!-- DEVELOPMENT! Ridge example in R -->
 
+## LASSO regression {#sec-lasso}
 
-[De maximala värdena i betaparametrarna när lambda är 0 är OLS skattningarna. När lambda är >0 kommer parametrarna bli mindre än de maximala. Den flexibla modellen där vi tillåter alla effekter som tränignsmängden säger de ska ha (OLS), men har variabler som beskriver samma sak eller är för många.]{style="color: green"}
-
-
-## LASSO regression
-
-Ridge straffar parametrarna kraftigt med anledning av $\beta_j^2$. Vi kan använda ett mindre straff genom **LASSO regression** om vi ändrar till beloppet enligt:
+Ridge straffar parametrarna kraftigt med anledning av de kvadrerade parametrarna genom $\beta_j^2$. Denna sorts regularisering blir då känslig för extremt stora parametrar. Vi kan använda ett mindre straff ($L_1$-regularisering) genom **LASSO regression** om vi ändrar att strafftermen använder absolutbeloppet.
 
 $$
   \begin{aligned}
@@ -71,23 +82,34 @@ $$
 $$
 där $\lambda \ge 0$.
 
-[LASSO i R]{style="color: red"}
 
-På samma sätt som med Ridge väljs $\lambda$ som en hyperparameter men till skillnad från Ridge ger stora värden på $\lambda$ att flera parametrar sätts till exakt 0. En annan skillnad sker vid multikollinearitet där Ridge krymper alla parametrar vars variabler korrelerar med varandra lika mycket medan LASSO sätter enbart en till 0.
+<!-- DEVELOPMENT! LASSO example in R -->
 
-[Vid multikollinearitet ridge delar på effekten, lasso väljer en som "vanlig effekt" och en nära 0. LASSO tillåter separat skattning av alla nollskilda parametrar efter analys, Ridge har inte många 0:or.]{style="color: green"}
+Båda former av regularisering hjälper till att reducera antalet variabler som har en distinkt effekt på responsvariabeln men de har också vissa skillnader.
 
-[Skattas med numerisk optimering, coordinate descent.]{style="color: green"}
+På samma sätt som med Ridge väljs $\lambda$ som en hyperparameter men till skillnad från Ridge ger stora värden på $\lambda$ att flera parametrar sätts till nära 0. Vid multikollinearitet delar Ridge regularisering på effekten till alla variabler som beskriver samma relation medan LASSO "väljer" en parameter som nollskild och de övriga sätts nära 0. LASSO resulterar i en modell där många parametrar är nära 0 vilket ger oss möjligheten att träna om modellen med enbart de nollskilda parametrarna. Ridge passar bra när $Y_i$ beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten nära 0. I de flesta tillfällen vet vi inte detta förrän modellerna tränas så ett tips är att testa båda metoderna och se vilken som ger bäst prediktioner.
 
-Ridge passar bra när $Y_i$ beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten nära 0. Detta medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för.
+:::{.callout-note}
+Dessa metoder tränas med en speciell optimeringsalgoritm som kallas för Coordinate Descent. Kortfattat kan algoritmen fokusera på specifika parametrar att optimera vid varje iteration till skillnad från de algoritmer vi tidigare tagit upp. Vi kommer inte gå in mer på denna metod i detta underlag men mer information finns [här](https://en.wikipedia.org/wiki/Coordinate_descent).
+:::
 
-[RDIGE kan anses som en skalning av OLS matriserna med lambda. LASSO har inte samma formelbenämning.]{style="color: green"}
+Skillnaderna i de två metodernas tillvägagångssätt medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för. Ridge kan ses som en skalning ($\lambda$) av de vanliga minsta kvadratskattningsmatriserna och vi kan då använda inferensteori därifrån. Detsamma gäller inte för LASSO.
 
-[Testa båda metoderna och se vilken som ger bäst prediktioner]{style="color: green"}
+:::{.callout-caution}
+## Övning 2
 
-## Elastic Net
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap27.2_ex1.rmd")
 
-Som en kombination av Ridge och LASSO finns **Elastic Net** som mixar de två strafftermerna med en ny hyperparameter $\alpha$.
+```
+:::
+
+
+## Elastic Net {#sec-elastic-net}
+
+Som en kombination av Ridge och LASSO finns **Elastic Net** som blandar de två $L_1$ och $L_2$ strafftermerna med en ny hyperparameter $\alpha$.
 
 $$
   \begin{aligned}
@@ -96,28 +118,47 @@ $$
 $$
 där $\lambda \ge 0$ och $0\le \alpha \le 1$.
 
-$\alpha$ styr hur mycket vikt vi ger till Ridge respektive LASSO som ger en flexibel regularisering. Detta innebär att vi kan tvinga vissa $\beta$ till 0 men inte lika många som i vanlig LASSO och Elastic Net kan klara av korrelerade variabler bättre. 
+Metoden blir en flexibel form av regularisern där $\alpha$ styr hur mycket vikt vi ger till Ridge respektive LASSO straffen. Detta innebär att vi kan tvinga vissa $\beta$ till 0 men inte lika många som i vanlig LASSO och Elastic Net kan klara av korrelerade variabler bättre än enbart Ridge. Vi kan se att när $\alpha = 1$ så får vi Ridge, medan om $\alpha = 0$ så får vi LASSO. 
 
-[Nu har vi två hyperparametrar, lambda och alpha (1 = Ridge, 0 = Lasso).]{style="color: green"}
+<!-- DEVELOPMENT! Elastic net example in R -->
 
-[I R?]{style="color: red"}
+Likt LASSO kommer Elastic Net få det svårt att genomföra någon form av inferens, så fokus ligger på att tolka effektstorleken av de nollskilda variablerna, t.ex. via ett stapeldiagram för att få en enklare visuell överblick.
 
-[Inferens på dessa modeller görs egentligen inte, utan vi tolkar effektstorleken av de nollskilda parametrarna. Visa de i ett stapeldiagram.]{style="color: green"}
+<!-- :::{.callout-note} -->
+<!-- De tidigare presenterade algoritmerna och regulariseringsmetoderna är "automatiska" metoder för att välja variabler som bidrar till att förklara responsvariabeln. Efter variabelselektion är det vanligt att analysera parametrarnas p-värden och intervallskattning, även kallad för **post-selection inference**. Problemet är att vanliga inferensmetoder antar att modellen är fixerad innan data analyseras men med variabelselektion används data för att välja modell och introducerar ett beroende mellan data och modellen. Detta påverkar fördelningen av skattningarna vilket i sin tur leder till för snäva konfidensintervall, för små p-värden och ökad risk för typ I fel. Vi bör därför undvika att använda vanliga metoder för inferens och istället använda inferensmetoder som tar hänsyn till variabelselektionen. -->
 
-:::{.callout-note}
-[Eventuellt ta bort helt]{style="color: red"}
+<!-- Några vanliga metoder är: -->
 
-De tidigare presenterade algoritmerna och regulariseringsmetoderna är "automatiska" metoder för att välja variabler som bidrar till att förklara responsvariabeln. Efter variabelselektion är det vanligt att analysera parametrarnas p-värden och intervallskattning, även kallad för **post-selection inference**. Problemet är att vanliga inferensmetoder antar att modellen är fixerad innan data analyseras men med variabelselektion används data för att välja modell och introducerar ett beroende mellan data och modellen. Detta påverkar fördelningen av skattningarna vilket i sin tur leder till för snäva konfidensintervall, för små p-värden och ökad risk för typ I fel. Vi bör därför undvika att använda vanliga metoder för inferens och istället använda inferensmetoder som tar hänsyn till variabelselektionen.
+<!-- - **Selective Inference** -->
+<!-- - **Sample Splitting** -->
+<!-- - **Bayesianska metoder** -->
 
-Några vanliga metoder är:
+<!-- Ingen av dessa metoder är perfekt, valet beror på syftet med analysen (prediktion eller inferens) och tillgången till data.  -->
+<!-- Behöver hitta någon lämplig källa för vidare läsning om detta ska inkluderas. -->
+<!-- ::: -->
 
-- **Selective Inference**
-- **Sample Splitting**
-- **Bayesianska metoder**
+:::{.callout-caution}
+## Övning 3
 
-Ingen av dessa metoder är perfekt, valet beror på syftet med analysen (prediktion eller inferens) och tillgången till data.
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap27.3_ex1.rmd")
 
+```
 :::
+
+<!-- :::{.callout-caution} -->
+<!-- ## Övning 4 -->
+<!-- STRYKS PGA TILLHÖR INFORMATION UTANFÖR SCOPE AV MATERIALET -->
+<!-- ```{r} -->
+<!-- #| echo: FALSE -->
+<!-- #| results: asis -->
+<!-- exams2forms(file = "../exercises/Part 5/Del5_Chap27.4_ex2.rmd") -->
+
+<!-- ``` -->
+<!-- ::: -->
+
 
 ## Referenser {.unnumbered}
 

@@ -8,16 +8,33 @@ filters:
 
 # Introduktion
 
-I dagens samhälle genereras över 400 miljoner terabyte data *dagligen* (https://www.statista.com/statistics/871513/worldwide-data-created/) av många olika former; text, ljud, video, bild. Klassiska statistiska modeller stöter ofta på problem dels när data inte är numeriska värden eller enkel text samt har stora problem att anpassas när data är alldeles för stort. Sedan 1990-talet har termer såsom Big Data, Knowledge Discovery, Data Mining, Artificial Intelligence, Machine Learning m.fl. alla försökt integrera statistisk teori med datavetenskapliga algoritmer för att hantera de specifika problem som uppkommer med stora datamängder av olika slag.
+I dagens samhälle genereras över 400 miljoner terabyte data *dagligen*^[https://www.statista.com/statistics/871513/worldwide-data-created/] av många olika former; text, ljud, video, bild. Klassiska statistiska modeller stöter ofta på problem dels när data varken är numeriska värden eller enkel text, samt att modellerna har stora problem att anpassas när data är alldeles för stort. Sedan 1990-talet har termer såsom Big Data, Knowledge Discovery, Data Mining, Artificial Intelligence, Machine Learning m.fl. alla försökt integrera statistisk teori med datavetenskapliga algoritmer för att hantera de specifika problem som uppkommer med stora datamängder av olika slag.
 
-I denna del kommer vi introducera och tillämpa begreppet **statistisk inlärning** som ett samlingsnamn för metoder som låter en dator lära sig mönster, samband och trender för att lösa uppgifter med både beskrivande och prediktiva syften. Vi kommer göra avtramp i klassiskt statistiska modeller såsom linjär regression och statistisk inferens, identifiera när dessa metoder brister och vägleda [(ORDVAL)]{style="color: red"} valet av mer kraftfulla metoder.
+I denna del kommer vi introducera och tillämpa begreppet **statistisk inlärning** som ett samlingsnamn för metoder som låter en dator lära sig mönster, samband och trender för att lösa uppgifter med både beskrivande och prediktiva syften. Vi kommer göra avtramp i klassiskt statistiska modeller såsom linjär regression och statistisk inferens, identifiera när dessa metoder brister och vägleda valet av mer kraftfulla metoder.
+
+## Övningsuppgifter
+
+Återkommande i denna del förekommer övningsuppgifter i form av enklare flervalsfrågor. Syftet med dessa frågor är att ge en form av direkt återkoppling där din förståelse av det tidigare materialet sätts på prov. Följande två exempel behandlar det kapitel du nyss läst, introduktionen till tidsserier. Utifrån frågans formulering bör det vara tydligt ifall endast ett eller flera svar (markeringar) tillåts. Om du klickar på bocken till vänster får du en återkoppling på dina svar och frågetecknet till höger visar svaren och en kortare förklaring till dessa.
+
+Till exempel skulle en övningsuppgift se ut som följer:
+
+:::{.callout-caution}
+## Övning X
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap25.2_ex1.rmd")
+
+```
+:::
 
 ## Statistisk modellering
 
 Vi kan kort sammanfatta statistisk modellering av samband med följande steg:
 
 - Utifrån en frågeställning, samla in relevant data (variabler)
-- Utforska data och välj en lämplig modell som beskriver det undersökta sambandet
+- Utforska data och välj en lämplig modell som beskriver det eftersökta sambandet
 - Anpassa modellen och undersök dess fel för att bedöma modellens lämplighet och relevans
 - Använd modellen för inferens (slutsatser om populationen) och prediktioner (användning på ny data)
 
@@ -72,33 +89,32 @@ Om du behöver en mer djupgående repetition av linjär regression (eller matris
 
 I detta exempel kommer vi stöta på stora problem vid flera tillfällen, t.ex. om $n$ är stort eller $p > n$. Dessa data skulle kunna vara transaktionsdatabaser, hälsoregister, sociala nätverk, väder- och klimatdata, börsdata, textkorpus, sensordata m.fl. 
 
-[TODO: ADD MORE ABOUT THE LIMITATIONS]{style="color: red"}
+Vid större $n$ kommer stora talens lag innebära att parametrars medelfel närmar sig 0 vilket i sin tur leder till att i princip alla parametrar är signifikant skilda från 0. Om alla parametrar anses signifikanta blir det väldigt svårt att få en uppfattning om de viktigaste relationerna i en modell utan att behöva introducera termer såsom effektstorlekar. 
 
-[- Nästan allting blir signifikant (p-värden) när n är större. Effektstorlek. - Modellval använder sig av samma data som sedan vi gör inferens på (data som används för träning används sen igen). Tsibrishani har tagit fram frekventistiska metoder som tar hänsyn till modellval men de är matematiskt svåra. Design av studier är klassiska fenomenet när "vanlig" inferens funkar när modellen är fix. - Multikollinearitetsproblem med stora p. - Välja variabler inom regression är svårt/jobbigt/subjektivt. Interaktioner och polynom.]{style="color: green"}
+När data innehåller många parametrar finns det en stor risk för multikollinearitetsproblem (se @sec-multicollinearity) som både försvårar valet av modell om flera variabler bidrar med samma information samt påverkar slutsatser som dras från inferens. Ytterligare en aspekt är behovet av mer komplexa samband, till exempel interaktioner och polynom, som gör att modellvalsprocessen består av många subjektiva val och svåra avvägningar.
 
-
-
-
+En annan aspekt av klassisk statistik är att valet av modell ofta använder sig av samma data som vi sedan gör inferens på, vilket leder till ett beroende i två steg som egentligen anses oberoende. Inom mer experimentella studier där valet av modell är fix kan vi undvika denna problematik då det enda syfte data används till är inferensen.
 
 ## Statistisk inlärning
 
-Inom statistisk inlärning använder vi fortfarande samma grundsteg i en undersökning av samband. Det som skiljer är valet av den lämpliga modellen där vi med maskininlärningsmetoder kan utöka vår verktygslåda med specifika metoder som kan hantera bristerna i klassiska statistiska metoder.
+Inom statistisk inlärning använder vi fortfarande samma grundsteg när vi vill undersöka samband. Det som skiljer är valet av modellen där vi med maskininlärningsmetoder kan utöka vår verktygslåda med specifika metoder som kan hantera bristerna i klassiska statistiska metoder.
 
 Vi kan formalisera analysprocessen som följer:
 
 1. Formulering av problemet
 2. Insamling av data
 3. Databearbetning och hantering
+    - Explorativ analys med hjälp av beskrivande mått och visualiseringar
     - Bearbetning av variabler och/eller observationer
     - Saknade värden, extremvärden, skalning/normalisering
-    - Explorativ analys med hjälp av beskrivande mått och visualiseringar
 4. Val av modell, dess anpassning och användning till prediktioner
 5. Utvärdering av modellen
 
-I resterande kapitel kommer fokus ligga på steg fyra och fem genom att introducera flertalet metoder och hur dessa utvärderas på bästa sätt. Fokus i denna del kommer vara på punkt 4 och 5, men vi kommer också behöva använda tekniker för databearbetning under arbetets gång.
+I resterande kapitel kommer fokus ligga på steg fyra och fem genom att introducera flertalet metoder och hur dessa utvärderas på bästa sätt. Vi kommer också behöva använda tekniker från steg 3 för viss databearbetning under arbetets gång.
 
-Linjär regression är ett exempel på **supervised learning** (ungefärlig sv. övervakad inlärning) där vi vet sanna värden på responsvariabeln och "övervakar" inlärningen till den grad att modellen lär sig de observerade sanna värdena. Generellt kan vi dela upp supervised learning i två fält; **regression** och **klassificering**. 
+Linjär regression är ett exempel på **supervised learning** (ungefärlig sv. övervakad inlärning) där vi vet sanna värden på responsvariabeln och "övervakar" inlärningen till den grad att modellen lär sig de observerade sanna värdena. Generellt kan vi dela upp supervised learning i två fält; **regression** och **klassificering** beroende på vilken variabeltyp responsvariabeln är. 
 
+Regression förutsätter att vi har en kontinuerlig responsvariabel medan klassificering förutsätter en kategorisk responsvariabel. Hädanefter i detta material kommer vi släppa på termen "linjär" när vi pratar om regression då vi inte längre begränsar oss till just den typen av regressionsmodeller. Klassificering har inom ren statistik historiskt modellerats med hjälp av **logistisk regression**. Logistisk regression grundar sig i den linjära modellen, på grund av dess enkelhet, men där vi behöver transformera modellen med en **länkfunktion** och skatta modellens parametrar med hjälp av **numerisk optimering** istället för minsta kvadratskattningen. En detaljerad genomgång av logistisk regression finns i @sec-logistic.
 
 :::{.callout-note}
 Det finns flera andra metoder för inlärning som inte tas upp i detta material. Dessa löser både olika syften och olika situationer som kan uppstå med insamlad data:
@@ -106,30 +122,38 @@ Det finns flera andra metoder för inlärning som inte tas upp i detta material.
 - Unsupervised learning där det inte finns någon responsvariabel och metoderna syftar till att hitta gömda grupperingar bland en mängd variabler.
 - Semi-supervised learning där endast delar av responsvariabeln har observerade sanna värden
 - Reinforcement learning där målet är att agera optimalt i en viss miljö och lär sig beteenden med hjälp av data
-:::
 
-Regression förutsätter att vi har en kontinuerlig responsvariabel medan klassificering förutsätter en kategorisk responsvariabel. Hädanefter i detta material kommer vi släppa på termen "linjär" när vi pratar om regression då vi inte längre begränsar oss till just den typen av regressionsmodeller. Klassificering har inom ren statistik historiskt modellerats med hjälp av **logistisk regression** där vi fortfarande använder grunderna från den linjära modellen på grund av dess enkelhet men behöver transformera den med en **länkfunktion** och skatta modellens parametrar med hjälp av **numerisk optimering**. En detaljerad genomgång av logistisk regression finns i @sec-logistic.
+Inom detta material fokuserar vi [enbart på supervised learning.]{.underline} 
+:::
 
 ### Val av modell
 
-Valet av en lämplig modell innefattar inte bara valet av modellfamilj, till exempel linjär regression, neurala nätverk, trädmodeller, [LÄGG TILL NÅGOT OM VERKTYG I VERKTYGSLÅDAN]{style="color: red"}utan även identifiering av modellens struktur och relevanta relationer. Det vi vill uppnå med en modellanpassning är att:
+Vi kan tänka på valet av modell som valet av verktyg för att hantera ett specifikt problem. Vill vi fästa två brädor med varandra kan vi antingen använda hammare och spik eller en skruvmejsel och skruv. Båda verktygen kan lösa ändamålet men har båda för- och nackdelar som kan påverka vilket verktyg vi använder vid olika tillfällen. 
 
-- modellen fångar upp sambanden mellan responsvariabeln och de förklarande kopplat till frågeställningen.
+Inom statistisk inlärning omfattar modellval inte bara valet av modellfamilj (typ av verktyg), till exempel linjär regression, neurala nätverk, trädmodeller, utan även identifiering av modellens struktur (t.ex. en gummi- eller metallhammare) och relevanta relationer mellan variabler (t.ex. hur en viss sorts spik passar till ett visst sorts trä). Det vi vill uppnå med en modellanpassning är att:
+
+- modellen fångar upp sambanden mellan responsvariabeln och de förklarande variablerna kopplat till frågeställningen.
 - modellen ska vara så enkel som möjligt för att underlätta både anpassning och användning.
 - modellen ska gå att beräkna inom "rimlig tid".
-  - Vi vill inte att modellen tar längre tid att anpassa än tidshorisonten den ska användas till, till exempel att det tar en dag att anpassa modell för att prediktera nästkommande dagsförsäljning i det extrema fallet.
+  - vi vill inte att modellen tar längre tid att anpassa än tidshorisonten den ska användas till, i det extrema fallet att det tar en dag att anpassa modell av föregående dagsförsäljning för att prediktera nästkommande dag.
 - modellen ska **generalisera** till ny liknande data.
 
 Vi kan formulera en standardmodell för en kontinuerlig responsvariabel som följer:
 
 $$
   \begin{aligned}
-  y = f(x|\theta) + \varepsilon
+  y_i = f(x_i|\theta) + \varepsilon
   \end{aligned}
 $$ {#eq-standard-model}
-där $f$ är en okänd funktion, $\theta$ (grekiska theta) är funktionens parametrar, $\varepsilon$ är en slumpmässig felterm med $E[\varepsilon] = 0$ och $Var(\varepsilon) = \sigma^2$. 
+där 
 
-Med hjälp av @eq-standard-model kan vi formulera både mer strukturerade och mer godtyckliga modeller såsom:
+- $y_i$ är responsvariabeln för observation $i$, 
+- $f$ är en okänd funktion, 
+- $x_i$ är de förklarande variablerna,
+- $\theta$ (grekiska theta^[Uttalas teta eller täta]) är funktionens parametrar, 
+- $\varepsilon$ är en slumpmässig felterm med $E[\varepsilon] = 0$ och $Var(\varepsilon) = \sigma^2$. 
+
+Med hjälp av @eq-standard-model kan vi formulera både mer strukturerade och mer godtyckliga modeller som vi antar fångar upp relationen mellan variablerna:
 
 - $f(x|\theta) = \theta_0 + \theta_1 x_1 + \theta_2 x_2$
 - $f(x|\theta) = \theta_3 \cdot sin(2\pi\theta_1 x + \theta_2) + \theta_4$
@@ -202,7 +226,7 @@ data |>
 
 En underanpassad modell lyckas inte fånga up de relevanta strukturerna i data, exempelvis lyckas inte en enkel linjär modell fånga upp den krökta sambandet mellan x och y i @fig-underfit. En överanpassad modell antar att bruset är en del av sambandet, exempelvis i @fig-overfit där alla observerade punkter nås exakt av den anpassade modellen.
 
-Istället vill vi anpassa en generell modell som är lagomt komplex, som fångar upp strukturen men luras inte av bruset.
+Istället vill vi anpassa en generell modell som är lagomt komplex, som fångar upp strukturen och inte luras av bruset.
 
 ```{r}
 #| echo: false
@@ -223,13 +247,24 @@ data |>
 
 ```
 
-Modellen i @fig-acceptablefit fångar upp de generella mönstrena men är påverkas inte mycket av förändringar i data som förmodligen är brus. 
+Modellen i @fig-acceptablefit fångar upp de generella mönstrena men påverkas inte mycket av alla små förändringar i data som förmodligen är brus. 
 
-Denna form av visualisering är omöjlig att göra i praktiken när vi ska välja en lämplig modell då vi har betydligt fler än två dimensioner i data. Istället använder vi oss av två andra knep; **kostnadsfunktioner** (även kallad felfunktioner eller förlustfunktioner) och **datauppdelning**.
+De tre visualiseringarna är omöjliga att göra i praktiken när vi ska välja en lämplig modell då vi har betydligt fler än två dimensioner i data. Istället använder vi oss av två andra knep; **kostnadsfunktioner** (även kallad felfunktioner eller förlustfunktioner) och **datauppdelning**.
+
+:::{.callout-caution}
+## Övning 1
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap25.2_ex1.rmd")
+
+```
+:::
 
 ### Kostnadsfunktioner {#sec-cost-function}
 
-En kostnadsfunktion är en funktion som, givet data, ger oss ett värde på hur bra modellen anpassar data. Inom linjär regression använder vi oss exempelvis av **Mean Squared Error** (MSE) som ett sätt att visa hur mycket fel en modell gör, som tolkas som modellens kostnad. Detta mått kommer vi åter att använda inom regression men också ge några alternativ som lämpar sig för olika ändamål. 
+En kostnadsfunktion är en funktion som, givet data, ger oss ett värde på hur bra modellen anpassar data. Inom linjär regression använder vi oss exempelvis av **Mean Squared Error** (MSE) som ett sätt att visa hur mycket fel en modell gör, som också kan tolkas som modellens kostnad. Detta mått kommer vi återanvända för att lösa regressionsproblem men det finns några alternativ som lämpar sig för olika ändamål. 
 
 Vi antar att det skattade värdet på vår observation kan betecknas som:
 
@@ -237,7 +272,7 @@ $$
   \begin{aligned}
   \hat{y}_i = f(x_i | \hat{\theta})
   \end{aligned}
-$$
+$$ {#eq-fitted-standard-model}
 
 MSE som mått kan beräknas som:
 
@@ -247,7 +282,7 @@ $$
   \end{aligned}
 $$ {#eq-mse}
 
-MSE kommer skapa stora värden om extremvärden förekommer i data. Då kan en alternativ kostnadsfunktion definieras som **Mean Absolute Error** (MAE)^[Den matematiska operatorn $|\cdot|$ beskriver absolutbeloppet och gör alla negativa tal positiva.]:
+MSE kommer skapa stora värden om extremvärden förekommer i data. Då kan en alternativ kostnadsfunktion definieras som **Mean Absolute Error** (MAE)^[Den matematiska operatorn |x| beskriver absolutbeloppet och gör alla negativa tal positiva.]:
 
 
 $$
@@ -256,27 +291,38 @@ $$
   \end{aligned}
 $$ {#eq-mae}
 
-För klassificering är två vanliga mått **Cross Entropy** och **Missclassification** vilka vi kommer återkomma till senare.
+För klassificering är två vanliga mått **Cross Entropy** och **Missclassification**, vilka vi kommer återkomma till senare.
 
-Vi vet att när måtten är 0 så betyder det att inga fel alls är gjorda och att vi har en överanpassad modell eftersom den perfekt modellerar alla punkter i data, men vilket värde som innebär att vi underanpassar eller har hittat en lagom komplex modell är svårt att tyda med enbart kostnadsfunktioner.
+Gemensamt med alla dessa mått är att när måttet är 0 så betyder det att inga fel alls är gjorda och att vi (förmodligen) har en överanpassad modell eftersom den perfekt modellerar alla punkter i data. Däremot är det svårt att identifiera när en modell underanpassar data eller har hittat en lagom komplex modell med enbart kostnadsfunktionermen.
+
+:::{.callout-caution}
+## Övning 2
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap25.2_ex2.rmd")
+
+```
+:::
 
 ### Datauppdelning {#sec-data-split}
 
-Om vi delar upp data i minst två slumpmässiga delar, anpassar modellen på en del, beräknar kostnadsfunktionen för den första och en annan del, för att till sist jämföra dessa mått kan vi nu se när en modell är lagom komplex.
+Ett sätt att identifiera värden som beskriver en lagomt komplex modell är att jämföra kostnadsfunktionens värde på olika data där samma modell används. Säg att vi delar upp originaldata i två slumpmässiga delar och anpassar modellen på en av delarna. Sedan använder vi denna modell på båda delarna, den ena som använts för att anpassa modellen och den andra som är helt ny data. Kostnadsfunktionen kan nu jämföras för att bedöma om modellen är lagomt bra att beskriva båda datamaterialen.
 
-Data kan delas in i tre olika delar med olika syften:
+Data delas vanligtvis in i två eller tre olika delar med olika syften:
 
 - **Träningsmängd**: används för att "träna", dvs. anpassa modellen
 - **Valideringsmängd**: används för att "validera", dvs. välja den bästa modellen
 - **Testmängd**: används för att få en väntevärdesriktig skattning av felet för en modell
 
-Detta är en disjunkt uppdelning för att träningen och valideringen av modellen inte genomförs på samma data.
+Detta är en disjunkt uppdelning för att träningen och valideringen av modellen inte genomförs på samma data. Om endast två delar används vill vi använda träning och valideringsmängden.
 
 :::{.callout-note}
 Notera att olika litteratur kan ibland blanda ihop termerna validering och test. De säger att de använder en testmängd när de i själva verket använder det som valideringsmängden, det vill säga för att välja den bästa modellen.
 :::
 
-För att modellen ska få så mycket information som möjligt för sin träning^[Hädanefter kommer vi använda tränas/träning för att mena anpassning av modeller.], bör vi använda det mesta av det insamlade datamaterialet till träningsmängden. Vi vill dock också få en bra mängd data till valideringen, och till sist testningen, så vi får försöka balansera proportionerna i denna uppdelning på något sätt. Vanliga proportioner är:
+För att modellen ska få så mycket information som möjligt för sin träning^[Hädanefter kommer vi använda tränas/träning för att mena anpassning av modeller.], bör vi använda det mesta av det insamlade datamaterialet till träningsmängden. Dock vi vill också få en bra mängd data till valideringen, och till sist testningen, så vi får försöka balansera proportionerna i denna uppdelning på något sätt. Vanliga proportioner är:
 
 - 1/3, 1/3, 1/3
 - 1/2, 1/4, 1/4
@@ -306,11 +352,23 @@ validData <- mtcars[-trainIndex,]
 
 ```
 
-`trainData` består nu utav `r nrow(trainData)` slumpmässigt utvalda observationer och `validData` består utav de resterande observationerna. Vill vi utöka till tre mängder kan vi genomföra ytterligare en indexering av `validData` till en kvarvarande valideringsmängd och en efterföljande testmängd.
+Objektet `trainData` består nu utav `r nrow(trainData)` slumpmässigt utvalda observationer och `validData` består utav de resterande observationerna. Vill vi utöka till tre mängder kan vi genomföra ytterligare en indexering av `validData` till en kvarvarande valideringsmängd och en efterföljande testmängd.
 
 :::{.callout-tip}
 En grundläggande genomgång i R visas i @sec-basic-r. Känner du att du saknar vissa av dessa kunskaper, titta tillbaka på tidigare material innan du går vidare.
 :::
+
+:::{.callout-caution}
+## Övning 3
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap25.2_ex4.rmd")
+
+```
+:::
+
 
 ## Exempeldata
 
@@ -329,8 +387,7 @@ Datamaterialet `spambase` kan hämtas [här](https://raw.githubusercontent.com/h
 
 Materialet består av 4601 mail där den (relativa) frekvensen av vissa utvalda ord (`Word1`-`Word48`), förekomsten av olika speciella symboler (`Char1`-`Char6`), samt tre variabler som beskriver medellängden av intilliggande stora bokstäver, den längsta längden av intilliggande stora bokstäver och det totala antalet stora bokstäver (`Capitalrun1`-`Capitalrun3`). Responsvariabeln (`spam`) för detta data är en binär variabel där värdet 1 indikerar att mailet var ett spam samt värdet 0 indikerar att mailet inte var ett spam.
 
-Detta datamaterial beskriver ett vanligt klassificeringsproblem, vi vill undvika att få onödiga mail i vår inkorg. Verkliga spamfilter är mer komplexa än denna men datamaterialet ger en bra indikation på hur vi kan använda kvantitativa data från text för att bedöma mailets relevans.
-
+Detta datamaterial beskriver ett verkligt klassificeringsproblem, vi vill undvika att få onödiga mail i vår inkorg. I verkligheten är spamfilter mer komplexa än det vi kommer titta på i denna del men datamaterialet ger en bra indikation på hur vi kan använda kvantitativa data av text för att bedöma mailets relevans.
 
 #### Klimatdata {-}
 
@@ -345,28 +402,112 @@ Datamaterialet `lakesurvey` kan hämtas [här](https://raw.githubusercontent.com
 
 Datamaterialet innehåller kemisk information från 2782 svenska sjöar uppmätta under 2005 inklusive dess longitud och latitud. Mätningarna beskriver olika egenskaper av sjön, dess temperatur, pH och halter av olika ämnen.
 
-[LÄgg till karta med alla sjöar]{style="color: red"}
+```{r}
+#| include: false
 
-Detta material kommer användas för regression.
+lake <- lakeFull
 
-Vi har en sjö, Lerkilen, som har extrema värden på många av de kemiska mätningarna vilket gör att vi plockar bort den sjön.
+```
 
 
-#### Vindata
+<!-- ```{r} -->
+<!-- #| fig-width: 5 -->
+<!-- #| fig-height: 3 -->
+<!-- #| fig-cap: Sjöarnas position i data -->
+<!-- #| label: fig-lake-map -->
+<!-- #| out-width: "90%" -->
+<!-- #| echo: false -->
 
-:::{#fig-lake}
+
+<!-- lake <-  -->
+<!--   lake |>  -->
+<!--   mutate(swerefX = X_SMHI * (6535187/653600), -->
+<!--          swerefY = Y_SMHI * (666681/162119)) |>  -->
+<!--   mutate(swerefY = swerefY * swerefY/mean(swerefY) - 1e5) -->
+
+
+<!-- lakeSf <- st_as_sf(lake, coords = c("swerefY", "swerefX"), crs = 3006) -->
+
+
+<!-- ggplot() +  -->
+<!--   geom_sf(data = county) +  -->
+<!--   geom_sf(data = lakeSf, alpha = 0.5, color = "firebrick") -->
+
+<!-- lakeSf |>  -->
+<!--   ggplot() + geom_sf() -->
+
+<!-- county |>  -->
+<!--   ggplot() + geom_sf() +  -->
+<!--   geom_sf(fill = "red", data = lakeSf) -->
+
+
+<!-- ``` -->
+
+Då detta material innehåller flera kontinuerliga variabler, kommer vi använda det för regression för att undersöka relationen mellan olika ämnen.
+
+Detta material gör oss också uppmärksamma på en aspekt av statistisk modellering; databearbetning. Vid en explorativ analys av de olika variablerna kan vi identifiera följande diagram:
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Lådagram som visar fördelningen av magnesium och natrium
+#| label: fig-lake-magnesium
+#| out-width: "90%"
+#| echo: false
+
+p1 <- 
+  lake |> 
+  ggplot() + aes(y = `Mg meq/l`) +
+  geom_boxplot(fill = "steelblue") + 
+  scale_x_continuous(breaks = NULL) + 
+  theme_bw()
+
+p2 <- 
+  lake |> 
+  ggplot() + aes(y = `Na meq/l`) +
+  geom_boxplot(fill = "steelblue") + 
+  scale_x_continuous(breaks = NULL) + 
+  theme_bw()
+
+cowplot::plot_grid(p1, p2)
+
+```
+
+Vi ser två extremt stora värden i båda dessa diagram som skiljer sig mycket från de övriga sjöarna. Det är så pass extremt att lådagrammet inte ens syns mer än den vågräta linje som vi kan ana vid y = 0 där både första, andra (medianen) och tredje kvartilen finns. Om vi utforskar datamaterialet för att identifiera dessa punkter som sjöerna Lerkilen och Bogevik som har extrema värden på flera variabler. Vi vet att extremvärden kan ha en negativ påverkan på modellanpassningar och väljer därför att plocka bort dessa innan vi fortsätter med analysen.
+
+I samband med denna utforskning identifieras också en del saknade värden på ett antal variabler. Vi väljer även att plocka bort dessa observationer.
+
+```{r}
+#| code-fold: false
+
+lake <- 
+  lake |> 
+  # Tar bort en observation om minst en variabel är saknad
+  dplyr::filter(if_all(!Name, ~!is.na(.x))) |> 
+  # Tar bort observationer som heter LERKILEN eller BOGEVIK
+  dplyr::filter(!(Name %in% c("LERKILEN", "BOGEVIK")))
+
+```
+
+:::{.callout-note}
+Ibland kan flera paket ha samma namn på sina funktioner, exempelvis `filter()`. Beroende på hur vi laddar paketen kan vi ibland skriva över den funktion som R läser av som default men vi kan säkerställa att "rätt" funktion används genom `paket::funktion`. 
+:::
+
+Datamaterialet innehåller nu till sist 2472 observationer när saknade och de två extrema observationerna tagits bort. Vi har fortfarande observationer som skulle kunna anses extrema, men vi bör inte ta bort observationer för mycket så vi väljer att avvakta med ytterligare databearbetning.
+
+#### Vindata {-}
+
+:::{#fig-wine}
 
 ![](https://upload.wikimedia.org/wikipedia/commons/5/56/2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_%28HiRes_focus_stack%29.jpg){width=50%}
 
-Sjö i norra Sverige^[<a href="https://commons.wikimedia.org/wiki/File:2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_(HiRes_focus_stack).jpg">Franz van Duns</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons]
+Tre olika druvor^[<a href="https://commons.wikimedia.org/wiki/File:2023-08-25_-_grapes_on_the_vine_-_3_strands_dangling_side_by_side_-_(HiRes_focus_stack).jpg">Franz van Duns</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons]
 :::
 
 
-Datamaterialet `wine` kan hämtas [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/wine.csv) tagen från @wine_109. Datamaterialet innehåller 13 kemiska egenskaper om tre olika vintyper (`class`).
+Datamaterialet `wine` kan hämtas [här](https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/wine.csv) tagen från @wine_109. 
 
-Detta datamaterial kommer användas för multinomial klassificering.
-
-
+Datamaterialet innehåller 13 kemiska egenskaper om tre olika vintyper (`class`). Responsvariabeln i detta data är återigen kategorisk men till skillnad från `spambase` innehåller den nu fler än två klasser. Detta betyder att vi behöver använda metoder för multinomial klassificering.
 
 
 ## Referenser {.unnumbered}

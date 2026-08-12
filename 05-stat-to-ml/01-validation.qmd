@@ -7,7 +7,7 @@ filters:
 <!-- CONTENT -->
 
 # Modellval
-Med hjälp av felfunktioner (@sec-cost-function) och datauppdelning (@sec-data-split) och  kan vi nu skapa en process för att hitta den bästa modellen.
+Med hjälp av kostnadsfunktioner (@sec-cost-function) och datauppdelning (@sec-data-split) och  kan vi nu skapa en process för att både utforska flera modeller och identifiera den bästa av dem.
 
 
 ## Modellvalsprocess {#sec-validation}
@@ -45,7 +45,7 @@ Vi kan börja med att ta fram några kandidatfunktioner (modeller) som tränas p
 Träningssteget av processen
 :::
 
-De tränade modellerna utvärderas sedan på valideringsmängden genom att beräkna felfunktionens värde.
+De tränade modellerna utvärderas sedan på valideringsmängden genom att beräkna kostnadfunktionens värde.
 
 ::: {#fig-validation-step}
 ```{.tikz}
@@ -151,11 +151,11 @@ data <-
 set.seed(1234)
 
 data |> 
-  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 5) + 
+  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 6) + 
   theme_bw() + scale_x_continuous(breaks = NULL) + 
   scale_y_continuous(breaks = NULL) + labs(x = NULL, y = NULL) + 
   geom_line(mapping = aes(y = ylin), color = "firebrick", linewidth = 1) +
-  geom_jitter(shape = "x", size = 5, width = 0, height = 50)
+  geom_jitter(shape = "x", size = 6, width = 0, height = 50)
 
 ```
 
@@ -176,14 +176,14 @@ update_geom_defaults("Xspline", aes(size = 1))
 
 set.seed(1234)
 data |> 
-  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 5) + 
+  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 6) + 
   theme_bw() + scale_x_continuous(breaks = NULL) + 
   scale_y_continuous(breaks = NULL) + labs(x = NULL, y = NULL) +
   theme(line = element_line(linewidth = 1)) +
   ggalt::geom_xspline(
     color = "firebrick"
   ) +
-  geom_jitter(shape = "x", size = 5, width = 0, height = 50)
+  geom_jitter(shape = "x", size = 6, width = 0, height = 50)
 
 ```
 :::
@@ -202,26 +202,23 @@ data |>
 
 set.seed(1234)
 data |> 
-  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 5) + 
+  ggplot() + aes(x = x, y = y) + geom_point(shape = "o", size = 6) + 
   theme_bw() + scale_x_continuous(breaks = NULL) + 
   scale_y_continuous(breaks = NULL) + labs(x = NULL, y = NULL) +
   theme(line = element_line(linewidth = 1)) +
   geom_smooth(method = "glm", formula = y ~ x + I(x^2) + I(x^3), se = FALSE, color = "steelblue", linewidth = 1) +
-  geom_jitter(shape = "x", size = 5, width = 0, height = 60)
+  geom_jitter(shape = "x", size = 6, width = 0, height = 60)
 
 ```
 
 Vi ser att @fig-underfit-withValid får en dålig anpassning för båda mängderna vilket leder till höga värden på felfunktionen på respektive. @fig-overfit-withValid visar att när modellen exakt följer träningsmängden får vi extremt låga värden på träningens felfunktion men stora värden på valideringsmängden. Den "lagom" komplexa modellen får "lagom" stora värden på båda tränings- och valideringsfelet. 
 
-[Traditionelt inom regression, tar all data tränar, och väljer modell med lägst SSE. Om vi stannar där finns det risk för både under- och överanpassning. Enbart från ett mått kan det vara svårt att välja den bästa modellen. Generalisering tas inte hänsyn till i denna process. Historiskt har man inte haft mycket data och behövt använda all data till träningen. ]{style="color: green"}
+Traditionellt inom regression används all data för att träna modellen och vi väljer den modell som har lägst SSE (högst $R^2_{adj}$). Genom att inte kontrollera modellanpassningen på ny data finns det risk för både över- och underanpassning och vi tar inte hänsyn till generaliseringen i denna process. Den främsta orsaken är man historiskt inte haft stora datamängder och därför behövt använda all data till träningen.
 
-[EXEMPEL MED FÅ PUNKTER OCH POLYNOM]{style="color: orange"}
+<!-- DEVELOPMENT: Lägg till exempel om polynom och data med få punkter -->
 
 :::{.callout-important}
-Om en modell endast tränas på träningsmängden finns en stor risk att optimeringsalgoritmen avslutar träningen när modellen är överanpassad. Istället bör vi använda valideringsmängden i träningen iterativa process och optimera modellen 
-
-[NÅGONTING OM HUR VI STOPPAR TRÄNINGEN BASERAT PÅ VALIDERINGSMÄNGDEN, INTE TRÄNINGSMÄNGDEN]{style="color: red"}
-
+Inom maskininlärning, om en modell endast tränas på träningsmängden finns en stor risk att optimeringsalgoritmen avslutar träningen när modellen är överanpassad. Vi kan använda valideringsmängden för att få en indikation om så är fallet men det blir svårt att ändra träningen i efterhand. 
 
 Vi kan också integrera tränings- och valideringsmängden direkt i träningsprocessen genom att iterativt optimera och utvärdera på valideringsmängden istället för enbart träningsmängden.
 :::
@@ -290,13 +287,27 @@ plot[smooth] coordinates {
 Visualisering av avvägningen mellan bias och varians.
 :::
 
-[BEHÖVER FÖRKLARA BIAS VARIANS OCH BRUS FÖR ATT DENNA BILD SKA KUNNA TOLKAS MER (SLIDE 38 FL1)]{style="color: red"}
+Vi kan dela upp väntevärdet för MSE i valideringsmängden^[eller testmängden] till tre separata komponenter; modellens varians, modellens **bias**, och felets varians.
+
+$$
+  \begin{aligned}
+    E(MSE) = Var(\hat{f}(x_0)) + [Bias(\hat{f}(x_0))]^2 + Var(\varepsilon)
+  \end{aligned}
+$$
+
+Oavsett modell kommer felets varians vara konstant, vi kan kalla det för icke-reducerbart brus, så för att minimera MSE behöver vi ha en låg varians *och* bias för modellen. 
+
+Variansen i modellen beskriver osäkerheten som uppkommer om samma modell anpassas på ett annat träningsdata där generellt mer komplexa modellen har en högre varians då mindre skillnader i data genererar större skillnader i $\hat{f}(x)$. 
+
+Modellens bias beskriver det fel som uppkommer av själva modellen som en representation av det sanna sambandet. En enkel förenkling av verkligheten har en hög bias eftersom verkligheten oftast inte är så pass enkel. Vi kan tänka som att vi modellerar ett komplext icke-linjärt problem med en linjär modell. Den linjära modellen kommer aldrig lyckas modellera det icke-linjära sambandet på grund av dess mekaniska begränsningar.
+
+I relation till @fig-bias-variance betyder det att området till vänster har en hög bias men låg varians och området till höger har en låg bias men hög varians; alltså ett motviktssamband. Valet av modell blir en avvägning att hitta modellen som har så låg varians och bias som möjligt, vilket ofta inträffar när valideringsfelet börjar öka igen, där vi väljer att stanna träningen.
 
 :::{.callout-note}
-För vissa extremt komplexa modeller förekommer ett fenomen benämnt **double descent** där valideringsfelet minskar och sedan ökar för att till sist minska igen. Ni kan läsa mer om detta fenomen via [Wikipedia](https://en.wikipedia.org/wiki/Double_descent), det är inget som vi kommer titta närmare på.
+För vissa extremt komplexa modeller förekommer ett fenomen benämnt **double descent** där valideringsfelet minskar och sedan ökar för att till sist minska igen. Ni kan läsa mer om detta fenomen via [Wikipedia](https://en.wikipedia.org/wiki/Double_descent), det är inget som vi kommer titta närmare på i detta material.
 :::
 
-Vi kan visa detta med ett enkelt exempel för `lake` data. Vi börjar med att först dela upp data i tre olika mängder där träningsmängden får 60% av data, valideringsmängden 30% och testmängden 10%.
+Vi kan visa dette fenomen med ett enkelt exempel för `lake` data. Vi börjar med att först dela upp data i tre olika mängder där träningsmängden får 60% av data, valideringsmängden 30% och testmängden 10%.
 
 ```{r}
 #| code-fold: false
@@ -321,7 +332,7 @@ testData <- remaining[-validIndex, ]
 
 ```
 
-Sedan tränar vi två olika regressionsmodeller utifrån träningsmängden.
+Sedan tränar vi två olika regressionsmodeller utifrån träningsmängden, en med endast en förklarande variabel som blir en enkel modell och en med tre förklarande variabler som blir den mer komplexa modellen.
 
 ```{r}
 #| code-fold: false
@@ -337,7 +348,7 @@ trainModel2 <-
 
 ```
 
-Dessa vill vi sedan jämföra valideringsfelet på. För regression innebär det att vi vill beräkna MSE på valideringsmängden.
+Dessa två modeller vill vi sedan jämföra valideringsfelet på. För regression innebär det att vi vill beräkna MSE på valideringsmängden.
 
 ```{r}
 #| code-fold: false
@@ -352,7 +363,9 @@ MSE2 <- sum((validData$pH - yhat2)^2) / nrow(validData)
 ```
 
 :::{.callout-important}
-Inom maskininlärning använder vi den generella formeln för MSE där nämnaren endast består av antalet observationer, $n$. Inom linjär regression,  är vi vana vid att ta hänsyn till antalet frihetsgrader $MSE = \frac{SSE}{n - (k + 1)}$ för att få en väntevärdesriktig skattning av felet. Det är av samma anledning som standardavvikelser beräknas med $n - 1$ i nämnaren istället för enbart $n$. Skillnaden i nämnare blir försumbar när vi har ett stort $n$, vilket vi oftast har när vi använder maskininlärningsmetoder.
+Inom maskininlärning använder vi den generella formeln för MSE där nämnaren endast består av antalet observationer, $n$. Inom linjär regression är vi vana vid att ta hänsyn till antalet frihetsgrader $MSE = \frac{SSE}{n - (k + 1)}$ för att få en väntevärdesriktig skattning av felet. Det är av samma anledning som standardavvikelser beräknas med $n - 1$ i nämnaren istället för enbart $n$. 
+
+Skillnaden i nämnare blir försumbar när vi har ett stort $n$, vilket vi oftast har när vi använder maskininlärningsmetoder, därav att vi förenklar till den generella formeln.
 :::
 
 MSE för den första modellen är `r MSE1 |> round(3)` medan för den andra modellen vi får `r MSE2 |> round(3)`. Utifrån dessa två mått väljer vi att gå vidare med modell 2 då dess MSE var lägre. Vi använder till sist testmängden för att få en väntevärdesriktig skattning av modellens fel:
@@ -368,14 +381,24 @@ MSETest |> round(3)
 
 ```
 
+<!-- DEVELOPMENT: Lägg till en tredje mest komplex modell för att visa att det svänger tillbaka upp -->
+
+:::{.callout-caution}
+## Övning 1
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap26.1_ex1.rmd")
+
+```
+:::
+
 ## Korsvalidering
 
-Nackdelen med att dela upp data enligt @sec-data-split är att mycket av data behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är **korsvalidering** där vi delar upp data i en större träningsmängd och en testmängd. Träningsmängden delas sedan in i flera mindre delar, lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar. 
+Nackdelen med att dela upp data enligt @sec-data-split är att mycket av data behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är **korsvalidering** där vi delar upp data i en större träningsmängd och en testmängd. Korsvalidering innebär att träningsmängden delas sedan in i flera mindre delar, vi lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar. När alla delar använts för validering beräknas det genomsnittliga valideringsfelet som sedan kan jämföras mellan olika modeller.  
 
-
-Vi får direkt flera kandidatmodeller av samma metod som vi kan jämföra valideringsfelet och välja den bästa modellen eller beräkna ett genomsnittligt fel för alla valideringsmängder om flera metoder ska jämföras.
-
-I det extrema fallet delar vi upp träningsmängden i $n$ lika stora delar vilket kallas för **Leave-one-out** korsvalidering. Som namnet antyder följer vi följande procedur:
+I det extrema fallet delar vi upp träningsmängden i $n$ lika stora delar vilket kallas för **Leave-one-out** korsvalidering (LOOCV). Som namnet antyder följer vi följande procedur:
 
 1. ta bort en observation och träna modellen på återstående data.
 2. beräkna valideringsfelet på den borttagna observationen.
@@ -391,22 +414,108 @@ För att förenkla beräkningsprocessen kan istället **k-fold** korsvalidering 
 3. upprepar steg 1. och 2. för alla *block*.
 4. beräkna den genomsnittliga felet för alla olika *block*.
 
+
+:::{#fig-cross-validation}
+```{.tikz}
+\definecolor{myOrange}{RGB}{255,153,0}
+\definecolor{myBlue}{RGB}{16,152,247}
+
+\begin{tikzpicture}[
+    box/.style={draw, thick, fill=myOrange!30, minimum width=2.4cm, minimum height=1cm},
+    box2/.style={draw, thick, fill=gray!30, minimum width=2.4cm, minimum height=1cm},
+    every node/.style={font=\sffamily},
+    bar/.style={draw, thick, minimum height=0.8cm},
+    arrow/.style={->, thick}
+]
+
+% Fold 1
+\node[bar, fill=myOrange!50, minimum width=1.5cm] (f11) at (0,0) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f12) at (1.5,0) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f13) at (3,0) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f14) at (4.5,0) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f15) at (6,0) {};
+\node at (-2,0) {Fold 1};
+
+% Fold 2
+\node[bar, fill=gray!20, minimum width=1.5cm] (f21) at (0,-1) {};
+\node[bar, fill=myOrange!50, minimum width=1.5cm] (f22) at (1.5,-1) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f23) at (3,-1) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f24) at (4.5,-1) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f25) at (6,-1) {};
+\node at (-2,-1) {Fold 2};
+
+% Fold 3
+\node[bar, fill=gray!20, minimum width=1.5cm] (f31) at (0,-2) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f32) at (1.5,-2) {};
+\node[bar, fill=myOrange!50, minimum width=1.5cm] (f33) at (3,-2) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f34) at (4.5,-2) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f35) at (6,-2) {};
+\node at (-2,-2) {Fold 3};
+
+% Fold 4
+\node[bar, fill=gray!20, minimum width=1.5cm] (f41) at (0,-3) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f42) at (1.5,-3) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f43) at (3,-3) {};
+\node[bar, fill=myOrange!50, minimum width=1.5cm] (f44) at (4.5,-3) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f45) at (6,-3) {};
+\node at (-2,-3) {Fold 4};
+
+% Fold 5
+\node[bar, fill=gray!20, minimum width=1.5cm] (f51) at (0,-4) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f52) at (1.5,-4) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f53) at (3,-4) {};
+\node[bar, fill=gray!20, minimum width=1.5cm] (f54) at (4.5,-4) {};
+\node[bar, fill=myOrange!50, minimum width=1.5cm] (f55) at (6,-4) {};
+\node at (-2,-4) {Fold 5};
+
+% Legend
+\node[bar, fill=gray!20, minimum width=1cm] at (8,-1) {};
+\node[right=0.2cm] at (8.5,-1) {Träning};
+
+\node[bar, fill=myOrange!50, minimum width=1cm] at (8,-2) {};
+\node[right=0.2cm] at (8.5,-2) {Validering};
+
+\end{tikzpicture}
+```
+Illustration av 5-fold korsvalidering
+:::
+
 Med denna procedur behöver vi endast träna $k$ modeller vilket kan underlätta den totala beräkningskostnaden om det är en komplex modell som ska tränas.
 
-[NÄR KORVALIDERING VALT EN MODELL SOM ÄR BÄST MED LÄGST GENOMSNITTLIG KORSVALIDERINGSFEL SKATTAS MODELLEN OM I SIN HLEHET PÅ ALL TRÄNINGSDATA FÖR ATT FÅ DE RIKTIGA PARAMETERSKATTNINGARNA.]{style="color: green"}
+När en modell väl har valts ut, tränas en slutgiltig modell på all träningsdata för att få de riktiga parameterskattningarna.
+
+:::{.callout-note}
+## Korsvalidering i R
+
+Korsvalidering kan implementeras direkt i R genom att använda loopar men många av de metoder som vi kommer till i senare kapitel har integrerade alternativ för korsvalidering i dess tillhörande funktioner. Vi kommer därför återkomma till korsvalidering senare.
+:::
+
+:::{.callout-caution}
+## Övning 2
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap26.2_ex3.rmd")
+
+```
+:::
 
 ## Optimering
 
-När en maskininlärningsmodell tränas, vad som egentligen händer är att modellens parametrar iterativt **optimeras** genom att minimera felfunktionen eller maximera en sannolikhet. Till exempel minimeras SSE för linjär regression medan vi maximerar log-likelihood för logistisk regression. 
+När en maskininlärningsmodell tränas, vad som egentligen händer är att modellens parametrar iterativt **optimeras** genom att minimera kostnadsfunktionen. För linjär regression kan vi minimera SSE medan för logistisk regression vi anger kostnadsfunktionen som den negativa loglikelihooden vilket då också minimeras^[En negativ loglikelihood innebär att det minsta värdet på funktionen ger den troligaste uppsättningen parametervärden för data].
 
 ### Kostnadsfunktion
-Inom maskininlärning vill vi ofta minimera en **kostnadsfunktion** $l(\boldsymbol{\theta})$ där $\boldsymbol{\theta}$ är parametrarnas värden som styr värdet på funktionen. Optimeringens syfte är då att hitta de parametervärden som ger lägst kostnad. 
-
-[ÄNDRA TILL KOSTNADSFUNKTION]{style="color: green"}
-
-[LÄGG TILL EN LITEN RUTA OM VAD EN DERIVATA ÄR]{style="color: red"}
+Inom maskininlärning vill vi ofta minimera en **kostnadsfunktion** $c(\boldsymbol{\theta})$ där $\boldsymbol{\theta}$ är parametrarnas värden som styr värdet på funktionen. Optimeringens syfte är att hitta de parametervärden som ger lägst kostnad. 
 
 :::{.callout-note}
+I detta delkapitel kommer vi använda begreppet **derivata** flertalet gånger. En derivata är kortfattat en förenklad funktion som beskriver lutningen av en kurva endast vid en viss punkt, alltså hur kurvan förändras vid en viss punkt.
+
+Mer om derivata finns att läsa om [här](https://www.matteboken.se/lektioner/gymnasiet/matte-fortsattning-niva-1/derivata#!/).
+:::
+
+:::{.callout-tip}
+## Enkelt exempel med analytisk lösning
 I vissa specialfall kan vi enkelt analytiskt lösa vilka parametervärden som ger det minsta/högsta värdet på funktionen. Vi kan exemplifiera detta genom en andragradsekvation.
 
 Vi undersöker funktionen:
@@ -443,7 +552,7 @@ så vi drar slutsatsen att funktionen har ett minimum vid $(x, f(x)) = (2, 1)$.
 
 :::
 
-När en enkel lösning inte är tillgänglig måste vi använda stegvis (iterativa) algoritmer såsom **gradient descent/ascent**. Denna metod justerar parametrarna iterativt för att successivt närma oss ett minimum eller maximum av funktionen:
+När en enkel lösning inte är tillgänglig måste vi använda stegvis (iterativa) algoritmer såsom **gradient descent**. Denna metod justerar parametrarna iterativt för att successivt närma oss ett minimum av funktionen:
 
 ```{r}
 #| fig-width: 5
@@ -454,7 +563,10 @@ När en enkel lösning inte är tillgänglig måste vi använda stegvis (iterati
 #| echo: false
 
 x <- seq(0, 1, by = 0.001)
-y <- log(choose(344, 152) * x^152 * (1-x)^(344-152))
+cost <- function(x) {
+  -(log(choose(344, 152) * x^152 * (1-x)^(344-152)))
+}
+y <- cost(x)
 data <- data.frame(x, y)
 
 theta <- numeric(10)
@@ -462,20 +574,20 @@ theta <- numeric(10)
 set.seed(20211009)
 theta[1] <- 0.85
 
-deriv <- expression(152/x - 192/(1-x))
+deriv <- expression(-(152/x - 192/(1-x)))
 
 for(i in 2:30){
   
   x <- theta[i-1]
   
-  theta[i] <- theta[i-1] + 0.0002 * eval(deriv)
+  theta[i] <- theta[i-1] - 0.0002 * eval(deriv)
   
 }
 
-ascent <- data.frame(theta, y = log(choose(344, 152) * theta^152 * (1-theta)^(344-152)))
+ascent <- data.frame(theta, y = cost(theta))
 
 ggplot(data) + aes(x = x, y = y) + geom_line() + 
-  labs(x = expression(theta) , y = "l") + 
+  labs(x = expression(theta) , y = "Kostnad") + 
   geom_point(
     data = ascent,
     aes(x = theta, y = y),
@@ -497,12 +609,10 @@ ggplot(data) + aes(x = x, y = y) + geom_line() +
 
 I denna illustration har en första "gissning" av parametrarnas värden gjorts vid den streckade röda linjen. Sedan har parametrarna justerats tills att de når fram till värdet som ger den största kostnaden, den svartstreckade linjen.
 
-[FLIPPA BILDEN SOM DEN NEGATIVA LOG-LIKELIHOOD]{style="color: red"}
-
 ### Gradient
-Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens **gradient**, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger en riktning till var nästa justering av parameterns värde bör ske, i den riktning där funktionen ökar snabbast.
+Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens negativa **gradient**, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger riktningen till var nästa justering av parameterns värde bör ske, i den negativa riktningen där funktionen ökar snabbast.
 
-I dessa två föregående enkla exempel har vi ett globalt minimum/maximum (optimum) som identiferats, men för mer komplexa kostnadsfunktioner kan det finnas flera **lokala optimum** som algoritmen kan nå fram till. 
+I dessa två föregående exempel har vi ett globalt minimum (optimum) som identiferats, men för mer komplexa kostnadsfunktioner kan det finnas flera **lokala optimum** som algoritmen kan nå fram till. 
 
 :::: {.columns}
 
@@ -561,15 +671,15 @@ Vissa kostnadsfunktioner definieras endast av ett minimum vilket gör det enklar
 ### Konvergens och inlärningshastighet
 För att motverka att optimeringsalgoritmer genomför oändligt många iterationer med (till slut) ytterst små justeringar av parametervärdena, avslutas optimeringen när vi anser den **konvergerat**. Konvergens betyder att algoritmen nått ett tillstånd där ytterligare iterationer inte leder till någon meningsfull förbättring. Detta skulle kunna vara:
 
-- Liten förändring i kostnadsfunktionen mellan iterationer, $|l(\boldsymbol{\theta}_i) - l(\boldsymbol{\theta}_{i-1})| < \xi$
+- Liten förändring i kostnadsfunktionen mellan iterationer ($i$), $|c(\boldsymbol{\theta}_i) - c(\boldsymbol{\theta}_{i-1})| < \xi$
 - Liten förändring i skattade parametervärden mellan iterationer
 - Maximalt antal iterationer har uppnåtts
 
-$\xi$ (grekiska xi) är oftast vald till väldigt små värden, till exempel $\frac{1}{10 000}$ eller liknande.
+$\xi$ (grekiska xi) är oftast vald till något väldigt litet värde, till exempel $\frac{1}{10 000}$ eller liknande.
 
-Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet förändras samt den totala beräkningstiden.
+Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet samt den totala beräkningstiden förändras.
 
-Ytterligare en aspekt av iterativa algoritmer är **inlärningshastigheten** vilket påverkar hur snabbt vi rör oss mot bättre parametervärden närmare kostnadsfunktionens optimum. I @fig-optimization är denna 0.0002 = 2E-04 men vi kan öka eller minska den för att (förhoppningsvis) effektivisera algoritmen.
+Ytterligare en aspekt av iterativa algoritmer är **inlärningshastigheten** (betecknat med $\gamma$, grekiska gamma) vilket påverkar hur snabbt vi rör oss mot bättre parametervärden närmare kostnadsfunktionens optimum. I @fig-optimization är denna 0.0002 = 2E-04 men vi kan öka eller minska den för att (förhoppningsvis) effektivisera algoritmen.
 
 :::: {.columns}
 
@@ -584,7 +694,7 @@ Ytterligare en aspekt av iterativa algoritmer är **inlärningshastigheten** vil
 #| echo: false
 
 x <- seq(0, 1, by = 0.001)
-y <- log(choose(344, 152) * x^152 * (1-x)^(344-152))
+y <- cost(x)
 data <- data.frame(x, y)
 
 theta <- numeric(10)
@@ -592,20 +702,20 @@ theta <- numeric(10)
 set.seed(20211009)
 theta[1] <- 0.85
 
-deriv <- expression(152/x - 192/(1-x))
+deriv <- expression(-(152/x - 192/(1-x)))
 
 for(i in 2:30){
   
   x <- theta[i-1]
   
-  theta[i] <- theta[i-1] + 6e-4 * eval(deriv)
+  theta[i] <- theta[i-1] - 6e-4 * eval(deriv)
   
 }
 
-ascent <- data.frame(theta, y = log(choose(344, 152) * theta^152 * (1-theta)^(344-152)))
+ascent <- data.frame(theta, y = cost(theta))
 
 ggplot(data) + aes(x = x, y = y) + geom_line() + 
-  labs(x = expression(theta) , y = "ln L") + 
+  labs(x = expression(theta) , y = "Kostnad") + 
   geom_point(
     data = ascent,
     aes(x = theta, y = y),
@@ -637,7 +747,7 @@ ggplot(data) + aes(x = x, y = y) + geom_line() +
 #| echo: false
 
 x <- seq(0, 1, by = 0.001)
-y <- log(choose(344, 152) * x^152 * (1-x)^(344-152))
+y <- cost(x)
 data <- data.frame(x, y)
 
 theta <- numeric(10)
@@ -645,20 +755,20 @@ theta <- numeric(10)
 set.seed(20211009)
 theta[1] <- 0.85
 
-deriv <- expression(152/x - 192/(1-x))
+deriv <- expression(-(152/x - 192/(1-x)))
 
 for(i in 2:100){
   
   x <- theta[i-1]
   
-  theta[i] <- theta[i-1] + 0.00005 * eval(deriv)
+  theta[i] <- theta[i-1] - 0.00005 * eval(deriv)
   
 }
 
-ascent <- data.frame(theta, y = log(choose(344, 152) * theta^152 * (1-theta)^(344-152)))
+ascent <- data.frame(theta, y = cost(theta))
 
 ggplot(data) + aes(x = x, y = y) + geom_line() + 
-  labs(x = expression(theta) , y = "ln L") + 
+  labs(x = expression(theta) , y = "Kostnad") + 
   geom_point(
     data = ascent,
     aes(x = theta, y = y),
@@ -681,12 +791,14 @@ ggplot(data) + aes(x = x, y = y) + geom_line() +
 
 ::::
 
-Om vi jämför dessa två diagram med @fig-optimization ser vi att med en större inlärningshastighet (@fig-learning-rate-high) har den första justeringen nu blivit betydligt större och att vi faktiskt hoppade över optimum under de första iterationerna vilket medförde att vi behövde gå tillbaka. Med en mindre inlärningshastighet (@fig-learning-rate-low) genomför vi mindre justeringar som kräver betydligt fler iterationer innan vi når konvergens. 
+Om vi jämför dessa två nya diagram med @fig-optimization ser vi att med en större inlärningshastighet (@fig-learning-rate-high med 6E-04) har den första justeringen nu blivit betydligt större och att vi faktiskt hoppade över optimum flera gånger under de första iterationerna men vi kommer ganska snabbt inpå optimum och når konvergens. Med en mindre inlärningshastighet (@fig-learning-rate-low med 5E-05) genomför vi mindre justeringar som kräver betydligt fler iterationer innan vi når konvergens. 
 
 :::{.callout-tip}
 ## En slumpmässig promenad
 
-Säg att du tar på dig en ögonbindel på toppen av en kulle och ska navigera till dess botten. Genom att känna lutningen vid dina fötter kan du räkna ut i vilken riktning som du ska ta ditt nästa steg för att komma närmare. Om du vill vara säker att du inte råkar ramla eller springa förbi väljer du att ta små små steg i den valda riktningen. Det kommer ta ett tag för dig att nå botten men du vet att du inte missar någon viktig information under promenaden. 
+Säg att du tar på dig en ögonbindel på toppen av en kulle och ska navigera till dess botten. Genom att känna lutningen vid dina fötter kan du räkna ut i vilken riktning som du ska ta ditt nästa steg för att komma längre ner.
+
+Om du vill vara säker att du inte råkar ramla eller springa förbi väljer du att ta små små steg i den valda riktningen. Det kommer ta ett tag för dig att nå botten men du vet att du inte missar någon viktig information under promenaden. 
 
 En av dina kompisar är lite mer våghalsig av sig och väljer att springa istället för att gå med långa steg varje gång. Det går fort, lite för fort kan man tycka, och det visar sig att kompisen springer förbi och upp på nästa kulle och behöver vända tillbaka.
 
@@ -694,7 +806,7 @@ I detta exempel motsvarar lutningen vid dina fötter gradienten av kostnadsfunkt
 :::
 
 :::{.callout-important}
-Det finns många nackdelar med Gradient Descent/Ascent algoritmerna trots att den är enkel. Vanliga förbättringar av algoritmen finns i form av:
+Det finns många nackdelar med Gradient Descent algoritmen trots att den är enkel. Vanliga förbättringar av algoritmen finns i form av:
 
 - Stochastic Gradient Descent (SGD)
 - Momentum
@@ -710,13 +822,24 @@ Vissa av dessa återkommer i senare kapitel.
 
 Inlärningshastigheten är ett exempel på en **hyperparameter**, alltså en parameter som hör till algoritmen/träningen, inte en parameter i modellen. Hyperparametrar kan också vara hur modellen ser ut (dess övergripande egenskaper), vilken optimeringsalgoritm som används, antalet iterationer eller konvergenskriterierna eller andra aspekter av hur träningen går till. 
 
-Mängden hyperparametrar och de olika värdena som de kan anta blir snabbt överväldigande så vi behöver ofta anta en strukturerad process för att hitta dessa, till exempel Grid Search eller Random Search. Vi använder valideringsmängden för valet av hyperparametrar, det är inte bara olika modeller som vi kan validera enligt @sec-validation utan även olika inställningar för samma modell.
+Vi kan koppla denna term tillbaka till vanlig linjär regression genom att anse designmatrisen vara en modells hyperparameter eftersom den styr modellens struktur. Vi kan välja matrisen relativt fritt och den kommer påverka modellens värde på kostnadsfunktionen. Nu använder vi ju inte vanligtvis iterativ optimering för att träna denna modell så inga hyperparametrar som hör till optimeringen används.
 
-Valet av hyperparametrar kallas för **hyperparameter tuning**
+Valet av hyperparametrar och dess värden kallas för **hyperparameter tuning** (ungefärlig sv. justering av hyperparametrar) där vi använder valideringsmängden för att välja de hyperparametervärden som ger bäst generaliserbarhet. Inom maskininärning blir mängden hyperparametrar, och de olika värdena som de kan anta, snabbt överväldigande så vi behöver ofta använda en strukturerad process för att hitta dessa. Några enkla exempel på processer är **Grid Search** eller **Random Search**. 
 
-[MER OM GRID/RANDOM SEARCH?]{style="color: red"}
+Grid Search går ut på att vi väljer några hyperparametrar som vi vill justera, till exempel tre uppsättningar förklarande variabler (designmatriser) och fyra olika inlärningshastigheter, och de övriga hålls fixa. Dessa alternativ sammanställs sedan till ett rutnät med alla kombinationer av värden som kan skapas utifrån de valda hyperparametrarna.
 
-[HYPERPARAMETRAR I REGRESSION ÄR DESIGNMATRISEN. FÖR MASKININLÄRNING FINNS MODELLPARAMETRAR OCH OPTIMERINGSPARAMETRAR. KORSTABELL MED TRE DESIGNMATRISER OCH 4 LEARNING RATES. KONFIGURATION 1-12.]{style="color: green"}
+::: {#tbl-grid-search-example}
+
+|                      | **$\gamma = 0.001$** | **$\gamma = 0.005$** | **$\gamma = 0.0001$** | **$\gamma = 0.0005$** |
+|----------------------|----------------------|----------------------|-----------------------|-----------------------|
+| **$X_1$**            | Modell 1             | Modell 2             | Modell 3              | Modell 4              |
+| **$X_1, X_2, X_3$**  | Modell 5             | Modell 6             | Modell 7              | Modell 8              |
+| **$X_1 - X_5$**      | Modell 9             | Modell 10            | Modell 11             | Modell 12             |
+
+Exempel på en Grid Search av hyperparametrar
+:::
+
+Utifrån följande rutnät tränas 12 olika modeller och den modell med minst valideringskostnad väljs som den bästa.
 
 <!-- ### Coordinate descent -->
 
@@ -738,12 +861,24 @@ Ibland måste vissa parametrar uppfylla villkor, till exempel att vara strikt po
 Säg att vi vill optimera $\theta > 0$. Vi kan då välja att istället optimera över $\phi$ där $\theta = exp(\phi)$ vilket innebär att vi kan fortfarande använda gradientbaserade metoder utan att behöva begränsa algoritmen direkt för $\theta$.
 :::
 
+:::{.callout-caution}
+## Övning 3
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap26.3_ex2.rmd")
+
+```
+:::
 
 ## Optimering och utvärdering i klassificering
 
-Inom regression får vi naturligt en kostnadsfunktion från fördelningen av det vi vill modellera. För en kontinuerlig variabel kan vi ange olika kontinuerliga fördelningar på feltermen, till exempel normal, t, Gamma, log-normal, där dess likelihood blir den naturliga kostnadsfunktionen att optimera. Vi kan även för diskreta variabler använda regression för till exempel Poisson eller Negativ binomial fördelningarna. 
+Inom regression får vi naturligt en kostnadsfunktion från fördelningen av det vi vill modellera. För en kontinuerlig variabel kan vi ange olika kontinuerliga fördelningar på feltermen, till exempel normal, t, Gamma, log-normal, där dess likelihood blir den naturliga kostnadsfunktionen att optimera. Vi kan även för diskreta variabler använda regression för till exempel Poisson- eller Negativ binomialfördelningen. 
 
-För klassificering finns det inte riktigt någon naturlig kostnadsfunktion. Däremot blir det betydligt enklare att räkna observerade och predikterade klasser från en modell eftersom antalet möjliga utfall är begränsade till skillnad från de oändliga utfallen för en kontinuerlig fördelning. Dessa utfall kan sammanställas i en **förväxlingsmatris** (eng. confusion matrix). När vi skapar matrisen räknas frekvenserna av antalet $Y = 1$ som blivit predikterade till de olika klasserna $\hat{Y} = 1$ ($TP$, True Positive) och $\hat{Y} = 0$ ($FN$, False Negative) och antalet $Y = 0$ som blivit predikterade till respektive klass ($FP$, False Positive, och $TN$, True Negative).
+För klassificering finns det inte alltid en naturlig kostnadsfunktion. Däremot blir det betydligt enklare att räkna observerade och predikterade klasser från en modell eftersom antalet möjliga utfall är begränsade till skillnad från de oändliga utfallen för en kontinuerlig fördelning. 
+
+Dessa utfall kan sammanställas i en **förväxlingsmatris** (eng. confusion matrix). När vi skapar matrisen räknas frekvenserna av antalet $Y = 1$ som blivit predikterade till de olika klasserna $\hat{Y} = 1$ ($TP$, True Positive) och $\hat{Y} = 0$ ($FN$, False Negative) och antalet $Y = 0$ som blivit predikterade till respektive klass ($FP$, False Positive, och $TN$, True Negative).
 
 ::: {#tbl-confusion}
 <table style="border-collapse: collapse; width: 50%;">
@@ -785,11 +920,13 @@ $$
 $$
 När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas. 
 
-Problemet med att använda felkvoten som modellens kostnadsfunktion (för att fortsätta minimera kostnadsfunktionen) är att de kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering påverkar andelen av data som tillhör vardera klass modellens övergripande prestanda. Denna andel kallas för **klassbalans**. När vi modellerar en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda. 
+### Klassbalans
+Problemet med att använda felkvoten som modellens kostnadsfunktion är att måttet kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering påverkar den sanna andelen av data som tillhör vardera klass modellens övergripande prestanda. Denna andel kallas för **klassbalans**. När vi modellerar en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda. 
 
 Om andelarna är **balanserade**, det vill säga nära 50%/50% för de båda andelarna, kommer modellen ha lika mycket information om klasserna och felkvoten tar hänsyn lika mycket till båda klasserna i optimeringen. Om andelarna däremot är **obalanserade**, när stora skillnader i andel förekommer mellan klasserna, kommer felkvoten ha problem att optimera den mindre av klasserna. I ett extremt fall, om vi har 95% 0:or och 5% 1:or riskerar optimeringen anse att den minsta felkvoten som kan uppnås är att prediktera alla observationer till majoritetsklassen, för då blir felkvoten 5%. Vi behöver därför titta på ytterligare mått som kan användas för att hantera klassobalans. 
 
-Med fokus på en av klasserna, vanligtvis $Y = 1$, beskriver **sensitiviteten** (eng. True Positive Rate, sensitivity, recall) hur stor andel sanna 1:or som också predikterades som 1:or. Detta mått ger en indikation på hur bra modellen är på att göra korrekta prediktioner för en utav klasserna, men en modell kan ha 100% sensitivitet om alla prediktioner är 1:or. Ett mått som mäter hur bra prediktionerna av klass är **specificiteten** (eng. True Negative Rate, specificity). Detta mått beskriver andelen sanna 0:or ($Y \ne 1$) som också predikterades som 0:or. Om alla observationer predikteras till 1:or för att få en hög sensitivitet, kommer specificiteten bli 0%.
+### Sensitivitet och specificitet
+Med fokus på en av klasserna, vanligtvis $Y = 1$, beskriver **sensitiviteten** (eng. True Positive Rate, sensitivity, recall) hur stor andel sanna 1:or som också predikterades som 1:or. Detta mått ger en indikation på hur bra modellen är på att göra korrekta prediktioner för en utav klasserna, men en modell kan ha 100% sensitivitet om alla prediktioner är 1:or. Ett mått som mäter hur bra prediktionerna av den andra klassen är, är **specificiteten** (eng. True Negative Rate, specificity). I det binära fallet beskriver detta mått andelen sanna 0:or ($Y \ne 1$) som också predikterades som 0:or. Om alla observationer predikteras till 1:or för att få en hög sensitivitet, kommer specificiteten bli 0%.
 
 $$
 \begin{aligned}
@@ -797,21 +934,53 @@ $$
 \text{Specificitet}_{Y = 1} &= \frac{TN}{FP + TN}
 \end{aligned}
 $$
-Med hjälp av båda måtten kan vi då undersöka ifall modellen fokuserar mer på den ena eller andra klassen. En optimal modell har höga värden på båda måtten, men om det ena måttet är markant större än det andra visar det att modellen har lättare att prediktera den ena klassen. I och med att måtten 
+Med hjälp av båda måtten kan vi då undersöka ifall modellen fokuserar mer på den ena eller andra klassen. En optimal modell har höga värden på båda måtten, men om det ena måttet är markant större än det andra visar det att modellen har lättare att prediktera den ena klassen. 
 
-[Precision och F-Score]{style="color: red"}
+**Precision** (eng. positive predictive value) är ytterligare ett mått som enbart fokuserar på den ena klassen. Den beskriver hur stor andel av de predikterade $\hat{Y} = 1$ som faktiskt är samma klass.
 
-Problemen med dessa mått är att de inte är bra kostnadsfunktioner ur en matematisk synpunkt. De används främst för att utvärdera prestandan av modellen, speciellt att undersöka ifall modellen är generellt bra på att prediktera alla klasser i problemet. Istället används vanligtvis en annan kostnadsfunktion, **cross entropy**.
+$$
+  \begin{aligned}
+  \text{Precision} = \frac{TP}{TP + FP}
+  \end{aligned}
+$$
 
-### Cross Entropy
+Var och en av dessa mått beskriver en viss aspekt av modellens prestanda, men de visar inte en helhetsbild. Ytterliggare ett mått finns som kombinerar två av måtten, **F-score**.
 
-[CROSS ENTROPY MÅSTE FÖRKLARAS]{style="color: red"}
+$$
+  \begin{aligned}
+    F_1 = 2 \frac{\text{Precision} \cdot \text{Sensitivitet}}{\text{Precision} + \text{Sensitivitet}}
+  \end{aligned}
+$$
+
+Måttet går mellan 0 och 1 där högre värden är bättre. Den generella formeln^[$F_\beta = (1 + \beta^2) \frac{\text{Precision} \cdot \text{Sensitivitet}}{\beta^2\cdot\text{Precision} + \text{Sensitivitet}}$] tillåter en justering baserat på hur mycket vi värderar precision jämfört med sensitivitet.
+
+### Cross Entropy {#sec-cross-entropy}
+Problemen med dessa mått är att de inte är bra kostnadsfunktioner ur en matematisk synpunkt. De används främst för att utvärdera prestandan av modellen, speciellt att undersöka ifall modellen är bra på att prediktera alla klasser i problemet. Istället används vanligtvis en annan kostnadsfunktion, **cross entropy**.
+
+Funktionen beräknas som:
+
+$$
+  \begin{aligned}
+    - \Sum{n} y_i \cdot log\left(\hat{f}(x_i)\right)
+  \end{aligned}
+$$
+
+där $y_i = {0, 1}$ och $\hat{f}(x_i)$ är sannolikheten att observation $i$ är klass 1 från den tränade modellen.
+
+:::{.callout-caution}
+## Övning 4
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap26.4_ex4.rmd")
+
+```
+:::
 
 
-## Case
-
-[LÄGG TILL ETT NYTT KAPITEL DÄR VI GÅR IGENOM CASE FÖR REGRESSION OCH LOGISTISK REGRESSION]{style="color: red"}
-
+<!-- ## Case -->
+<!-- DEVELOPMENT: LÄGG TILL ETT NYTT KAPITEL DÄR VI GÅR IGENOM CASE FÖR REGRESSION OCH LOGISTISK REGRESSION -->
 
 
 ## Referenser {.unnumbered}
