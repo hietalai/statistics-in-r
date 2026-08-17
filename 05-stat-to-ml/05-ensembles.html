@@ -26,7 +26,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -297,7 +316,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Att använda R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -526,8 +545,12 @@ window.Quarto = {
   <ul>
   <li><a href="#bootstrapping-och-bagging" id="toc-bootstrapping-och-bagging" class="nav-link active" data-scroll-target="#bootstrapping-och-bagging"><span class="header-section-number">30.1</span> Bootstrapping och Bagging</a></li>
   <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest"><span class="header-section-number">30.2</span> Random Forest</a></li>
-  <li><a href="#boosting" id="toc-boosting" class="nav-link" data-scroll-target="#boosting"><span class="header-section-number">30.3</span> Boosting</a></li>
-  <li><a href="#bagging-eller-boosting" id="toc-bagging-eller-boosting" class="nav-link" data-scroll-target="#bagging-eller-boosting"><span class="header-section-number">30.4</span> Bagging eller boosting?</a></li>
+  <li><a href="#boosting" id="toc-boosting" class="nav-link" data-scroll-target="#boosting"><span class="header-section-number">30.3</span> Boosting</a>
+  <ul class="collapse">
+  <li><a href="#xgboost" id="toc-xgboost" class="nav-link" data-scroll-target="#xgboost"><span class="header-section-number">30.3.1</span> XGBoost</a></li>
+  </ul></li>
+  <li><a href="#modellbaserad-ensemblemetod" id="toc-modellbaserad-ensemblemetod" class="nav-link" data-scroll-target="#modellbaserad-ensemblemetod"><span class="header-section-number">30.4</span> Modellbaserad ensemblemetod</a></li>
+  <li><a href="#bagging-eller-boosting" id="toc-bagging-eller-boosting" class="nav-link" data-scroll-target="#bagging-eller-boosting"><span class="header-section-number">30.5</span> Bagging eller boosting?</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -555,12 +578,12 @@ window.Quarto = {
 
 
 <!-- CONTENT -->
-<p>Istället för att förlita sig på en enstaka modell kan vi kombinera flera modeller i en <strong>ensemblemodell</strong>. Grundidén är att med hjälp av flera modeller kan respektive fokusera på olika områden av data och när de kombineras blir prediktionerna bättre.</p>
+<p>Istället för att förlita sig på en enstaka modell kan vi kombinera flera modeller i en <strong>ensemblemodell</strong>. Grundidén är att med hjälp av flera modeller kan respektive fokusera på olika egenskaper av data och när de kombineras blir prediktionerna bättre.</p>
 <p>Det finns många olika varianter men de delas ofta upp i två olika metoder; fokusera på data eller på modeller. Vi kan med hjälp av <strong>bootstrapping</strong> eller <strong>bagging</strong> (bootstrap aggregating) göra slumpmässiga urval från träningsdata och skatta modeller på dessa olika urval. Vi kan också med hjälp av <strong>boosting</strong> vikta observationer i urvalen beroende på olika kriterier, exempelvis vikta upp de observationer som en modell inte lyckats prediktera rätt och vikta ner de observationer som en modell lyckats prediktera rätt.</p>
 <div id="fig-ensemble-data" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="05-ensembles_files/mediabag/046fbf59f7ad486d95b30db5fed712464090fc77.svg" class="img-fluid figure-img">
+<img src="05-ensembles_files/mediabag/788dd4d3826e129abf4793f9334daa5fb2708c9c.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;30.1: Databaserad ensemble
@@ -571,7 +594,7 @@ Figur&nbsp;30.1: Databaserad ensemble
 <div id="fig-ensemble-model" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ensemble-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="05-ensembles_files/mediabag/4919e8aac7e02d2fc33036978ab8bf244e3cd609.svg" class="img-fluid figure-img">
+<img src="05-ensembles_files/mediabag/49cb26729b8320cb6d702cc560ecd3c712dde43f.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ensemble-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;30.2: Modellbaserad ensemble
@@ -580,47 +603,245 @@ Figur&nbsp;30.2: Modellbaserad ensemble
 </div>
 <section id="bootstrapping-och-bagging" class="level2" data-number="30.1">
 <h2 data-number="30.1" class="anchored" data-anchor-id="bootstrapping-och-bagging"><span class="header-section-number">30.1</span> Bootstrapping och Bagging</h2>
-<p>Bootstrapping är en klassisk teknik för att skapa nya datamaterial från ett begränsat insamlat data. Metoden går ut på att vi skapar <span class="math inline">\(B\)</span> urval där observationer väljs <u>med återläggning</u> från träningsmängden som vi sedan använder för att skatta olika modell eller funktioner. Metoden har använts inom frekventistisk statistik för att skapa skattningar av de sanna parametrarna och deras medelfel och samplingfördelning.</p>
-<p>Bagging tar alla <span class="math inline">\(B\)</span> bootstrapurval och tränar en modell på respektive urval <span class="math inline">\(\hat{f}_b\)</span>. Den slutgiltiga modellen får vi genom att aggregera alla dessa modeller med exempelvis dess medelvärde. <span class="math display">\[
+<p>Bootstrapping är en klassisk teknik för att skapa nya datamaterial från ett begränsat insamlat data. Metoden går ut på att vi skapar <span class="math inline">\(B\)</span> urval där observationer väljs <u>med återläggning</u> från träningsmängden som vi sedan använder för att skatta olika modeller eller funktioner. Metoden används inom frekventistisk statistik för att skapa skattningar av de sanna parametrarna och deras medelfel och samplingfördelning, men inom maskininlärning används den med ett annat syfte.</p>
+<p>Bagging tar alla <span class="math inline">\(B\)</span> bootstrapurval och tränar en modell på respektive urval <span class="math inline">\(\hat{f}_b\)</span>. Vi kan se det som att vi replikerar datainsamlingen <span class="math inline">\(B\)</span> gånger och tränar en modell för varje replikat. Nu är inte bootstrapurval ett helt nytt datamaterial eftersom vi utgår från samma ursprungliga data men vi kan ändå få nytta av den ytterligare informationen. Den slutgiltiga modellen får vi genom att aggregera alla dessa modeller med exempelvis dess medelvärde vid regression. För klassificering kan vi använda majoritetsröstning för att bestämma den slutgiltiga prediktionen. <span class="math display">\[
   \begin{aligned}
-  \hat{f}_{bag}(\boldsymbol{X}) = \frac{1}{B} \sum_{b=1}^B \hat{f}_b(\boldsymbol{X})
+  \hat{f}_{bag}(\boldsymbol{X}) &amp;= \frac{1}{B} \sum_{b=1}^B \hat{f}_b(\boldsymbol{X})\\
+  \hat{f}_{bag}(\boldsymbol{X}) &amp;= argmax_j \sum_{b=1}^B I\left(\hat{f}_b(\boldsymbol{X}) = j\right)
   \end{aligned}
-\]</span> För klassificering kan vi använda majoritetsröstning för att bestämma den slutgiltiga prediktionen. Bagging sänker variansen av den anpassade funktionen men påverkas <em>mycket</em> av kvalitén av modellen som anpassas. Om modellen är bra blir aggregeringen bättre, men en dålig modell blir sämre när den aggregeras.</p>
-<p><span style="color: red">MER OM HUR DETTA KAN GÖRAS I PRAKTIKEN I R</span></p>
+\]</span></p>
+<p>Om vi minns tillbaka till <a href="01-validation.html#fig-bias-variance" class="quarto-xref">Figur&nbsp;<span>26.7</span></a> vet vi att en komplex modell ofta har en hög(re) varians som ökar felet. Bagging sänker variansen av den anpassade funktionen så att en mer komplex modell ändå blir generaliserbar men påverkas <em>mycket</em> av kvalitén av modellen som anpassas. Om modellen är bra blir aggregeringen bättre, men en dålig modell blir sämre när den aggregeras.</p>
+<!-- TODO: LABBUPPGIFTER + EXEMPELKOD I ISLRv2 -->
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>Vid bagging skapas flera bootstrapurval från samma träningsmängd. Anta att träningsmängden innehåller observationerna A, B, C, D och E. Ett av bootstrapurvalen med storlek 5 blev A, A, C, E, E. Fyra regressionsmodeller tränas därefter på var sitt bootstrapurval. För en ny observation ger modellerna prediktionerna 4.2, 5.8, 6.1 och 7.9. Den aggregerade prediktionen beräknas som <span class="math inline">\(\hat{f}_{bag}(\boldsymbol{X})=\frac{1}{B}\sum_{b=1}^{B}\hat{f}_b(\boldsymbol{X})\)</span>. Vilka av följande påståenden är korrekta?</p>
+<div id="webex-1462934625aceca3696fb401e234e5b1" class="webex-checkboxgroup" data-answer="agQaAxUDGAceBU1SOA==">
+<label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>När antalet bootstrapmodeller <span class="math inline">\(B\)</span> ökar tränas varje enskild modell automatiskt på fler unika observationer.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Bootstrapurvalet är giltigt trots att vissa observationer förekommer flera gånger och andra inte förekommer alls.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Om samtliga enskilda modeller har ungefär samma systematiska bias garanterar ett större antal bootstrapmodeller att denna bias försvinner.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Baggingmodellens prediktion för den nya observationen är 6.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Bootstrapurval skapas utan återläggning, vilket innebär att varje observation kan förekomma högst en gång i ett urval.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Bagging används enligt underlaget främst för att minska modellens varians snarare än dess bias.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Falskt. Ett större <span class="math inline">\(B\)</span> innebär att fler bootstrapurval och fler modeller skapas. Det förändrar inte automatiskt antalet unika observationer i varje enskilt urval.</li>
+<li>Sant. Bootstrap innebär urval med återläggning. Därför kan samma observation väljas flera gånger, samtidigt som andra observationer kan saknas i ett enskilt urval.</li>
+<li>Falskt. Bagging kan minska variationen mellan skattningar, men det innebär inte att en systematisk bias som delas av grundmodellerna automatiskt försvinner.</li>
+<li>Sant. Den aggregerade prediktionen blir <span class="math inline">\((4.2+5.8+6.1+7.9)/4=6\)</span>.</li>
+<li>Falskt. Bootstrapurval görs med återläggning. Observationerna kan därför förekomma flera gånger i samma urval.</li>
+<li>Sant. Enligt underlaget är baggings huvudsakliga effekt att minska variansen. Metoden beskrivs inte som en metod som i första hand minskar bias.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="random-forest" class="level2" data-number="30.2">
 <h2 data-number="30.2" class="anchored" data-anchor-id="random-forest"><span class="header-section-number">30.2</span> Random Forest</h2>
-<p>Specifikt för trädmodeller kan bagging ge stora förbättringar i den slutgiltiga prestandan men det finns vissa problem. Bootstrapurvalen är korrelerade eftersom vi utgår från samma ursprungliga träningsmängd och detta medför att reduktionen i varians blir liten när vi tar ett medelvärde över de korrelerade variablerna <span style="color: red">VARIABLERNA?</span>.</p>
-<p><strong>Random Forest</strong> löser problemet med korrelerade modeller genom att slumpmässigt ändra modellerna som tränas. Vid varje uppdelning används endast en slumpmässig delmängd (<span class="math inline">\(q \le p\)</span>) av de förklarande variablerna. Storleken på <span class="math inline">\(q\)</span> bestämmer vi själva men Leo Breiman <span style="color: red">KÄLLA PÅ DENNA</span> föreslår följande tumregler:</p>
+<p>Specifikt för trädmodeller kan bagging ge stora förbättringar i den slutgiltiga prestandan men det finns vissa problem. Bootstrapurvalen är korrelerade, varje urval ser nästan likadana ut vilket ofta leder till väldigt snarlika modeller. En konsekvens blir att den modellvarians som vi hoppas bli mindre, inte längre blir det när vi beräknar ett medelvärde över modellanpassningar som liknar varandra mycket.</p>
+<p><strong>Random Forest</strong> löser problemet med korrelerade modeller genom att slumpmässigt ändra modellerna som tränas. När vi tränar ett träd från ett bootstrapurval används endast en slumpmässig delmängd (<span class="math inline">\(q \le p\)</span>) av de förklarande variablerna vid varje uppdelning. Storleken på <span class="math inline">\(q\)</span> bestämmer vi själva men skaparen av Random Forest, Leo Breiman (<span class="citation" data-cites="hastieESL">Hastie m.fl. (<a href="#ref-hastieESL" role="doc-biblioref">2001</a>)</span>), föreslår följande tumregler:</p>
 <p><span class="math display">\[
   \begin{aligned}
   \text{Klassificering} \qquad &amp;q = \sqrt{p}\\
   \text{Regression} \qquad &amp;q = \frac{p}{3}
   \end{aligned}
 \]</span></p>
-<p>Varje modell tränas då på ett urval av observationer (med återläggning) och ett urval av variabler vilket leder till ett minskat bias, “artificiell” varians i varje träd och mindre korrelation mellan träden. Ofta dominerar den avkorrelerade effekten vilket leder till att MSE minskar på testdata.</p>
-<p>Andra fördelar med Random Forest är att den är lätt att parallelisera samt att det urval av parametrar som görs minskar kostnaden för varje uppdelning.</p>
+<p>Varje modell tränas både på ett urval av observationer (med återläggning) <em>och</em> ett urval av variabler vilket leder till ett minskat bias, “artificiell” varians i varje träd och mindre korrelation mellan träden. Ofta dominerar den avkorrelerade effekten vilket leder till att MSE minskar på testdata. Andra fördelar med Random Forest är att den är lätt att parallelisera samt att det urval av parametrar som görs minskar kostnaden för varje uppdelning.</p>
+<p>Metoden har, utöver de vanliga hyperparametrar från ett enskilt beslutsträd, två ytterligare hyperparametrar i form av <span class="math inline">\(B\)</span> och <span class="math inline">\(q\)</span>.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>Random Forest är en ensemblemetod som bygger vidare på bagging genom att kombinera ett stort antal beslutsträd. Vilka av följande påståenden om Random Forest är korrekta?</p>
+<div id="webex-2cce9b7f32e871dc7580c2ea782f0c9c" class="webex-checkboxgroup" data-answer="aVJPVBVSG1cfA0kIag==">
+<label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Varje beslutsträd tränas vanligtvis på ett bootstrapurval från den ursprungliga träningsmängden.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Det slumpmässiga urvalet av variabler kan minska korrelationen mellan träden.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Samtliga förklarande variabler måste användas som kandidater vid varje uppdelning för att träden ska bli tillräckligt olika.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Vid regression kombineras trädens prediktioner vanligtvis med ett medelvärde, medan majoritetsröstning kan användas vid klassificering.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Vid varje uppdelning i ett träd väljs den bästa uppdelningen bland en slumpmässigt utvald delmängd av de förklarande variablerna.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Varje nytt träd tränas för att korrigera de fel som det föregående trädet gjorde.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Sant. Varje träd tränas vanligtvis på ett eget bootstrapurval, vilket skapar variation mellan träden.</li>
+<li>Sant. Om träden inte alltid använder samma starka prediktorer kan deras prediktioner bli mindre korrelerade.</li>
+<li>Falskt. Det slumpmässiga variabelurvalet är en central del av Random Forest och används för att göra träden mindre lika varandra.</li>
+<li>Sant. Vid regression används vanligtvis medelvärdet av trädens prediktioner. Vid klassificering kan den klass som får flest röster väljas.</li>
+<li>Sant. Vid varje uppdelning får trädet endast välja mellan en slumpmässigt utvald delmängd av de förklarande variablerna.</li>
+<li>Falskt. Träden i Random Forest tränas oberoende av varandra. Att varje ny modell försöker korrigera tidigare fel är kännetecknande för boosting.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="boosting" class="level2" data-number="30.3">
 <h2 data-number="30.3" class="anchored" data-anchor-id="boosting"><span class="header-section-number">30.3</span> Boosting</h2>
-<p>En enkel modell kan vanligtvis fånga upp vissa aspekter av data. Om vi försöker lära oss en stor mängd av enkla modeller som var och en lär sig en liten del av data kan vi sedan kombinera dessa “dåliga” modeller till en tillsammans stark modell. Boostingmetoden lär sig <em>sekventiellt</em> en ensemble av svaga modeller, till skillnad från den parallella baggingmetoden.</p>
-<p>Vi exemplifierar metoden för en binär klassificerare där <span class="math inline">\(y\)</span> antar värdena -1 eller 1. Utifrån dessa värden kan vi skriva en majoritetsröstning av <span class="math inline">\(B\)</span> klassificerare som:</p>
+<p>En enkel modell kan vanligtvis fånga upp vissa aspekter av data. Om vi försöker lära oss en stor mängd av enkla modeller som var och en lär sig en liten del av data kan vi sedan kombinera dessa “dåliga” modeller till en tillsammans stark modell. Boostingmetoden lär sig <em>sekventiellt</em> en ensemble av svaga modeller, till skillnad från den parallella baggingmetoden, genom att successivt vikta urvalet så att nästa modell får ett urval bestående av observationer som tidigare modeller inte lyckats anpassa bra.</p>
+<div id="fig-ensemble-data" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="05-ensembles_files/mediabag/7e7d0af1635a86af9d65d795869a826c4b1e1c3d.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;30.3: Illustration av boosting
+</figcaption>
+</figure>
+</div>
+<p>Första modellen som tränas har samma vikt på alla observationer, <span class="math inline">\(w_i^1 = \frac{1}{n}\quad i = \{1, 2, \dots, n\}\)</span>. Denna modell kommer vara överlag en svag prediktor men vi använder dess prestanda för att uppdatera vikterna för nästa träning. Felklassificerade observationer (eller observationer som har en större residual) får en högre vikt, och blir mer viktiga att optimera i nästa modellträning, medan korrekta prediktioner får en mindre vikt, vilket gör att nästa modell fokuserar på att prediktera de felaktiva observationerna korrekt. Denna process repeteras fram till att vi har <span class="math inline">\(B\)</span> modeller med successivt ökande och minskande vikter beroende på resultaten från den föregående modellen. En observation som är svårklassificerad kommer få större och större vikt tills modellen tvingas att prediktera den rätt.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Inom boosting används en <strong>viktad kostnadsfunktion</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I <a href="00-introduction.html#sec-cost-function" class="quarto-xref"><span>Avsnitt 25.3.2</span></a> har vi antagit att varje observation bidrar lika mycket till den totala kostnaden. Vi kan omformulera <a href="00-introduction.html#eq-mse" class="quarto-xref">Ekvation&nbsp;<span>25.3</span></a> till en viktad summa enligt: <span id="eq-mse-weighted"><span class="math display">\[
+  \begin{aligned}
+    MSE = \Sum{n} w_i \cdot (y_i - \hat{y}_i)^2
+  \end{aligned}
+\tag{30.1}\]</span></span> där vi får det “vanliga” MSE om <span class="math inline">\(w_i = 1/n\)</span>.</p>
+<p>Om vi vill lägga en större (eller mindre) vikt på vissa observationer, har vi nu en mer generell formel där vi kan göra detta.</p>
+</div>
+</div>
+<p>Vi börjar med ett klassificeringsexempel där <span class="math inline">\(Y\)</span> antar värdena -1 eller 1, kan vi beräkna en majoritetsröstning av <span class="math inline">\(B\)</span> klassificerare som:</p>
 <p><span class="math display">\[
   \begin{aligned}
-  sign\left(\sum_{b=1}^B \hat{y}^b(\boldsymbol{X})\right)
+    \hat{f}_{boost} (\boldsymbol{X})= sign\left(\sum_{b=1}^B \hat{f}_b(\boldsymbol{X})\right)
   \end{aligned}
-\]</span> Första modellen som tränas har samma vikt på alla observationer, <span class="math inline">\(w_i^1 = \frac{1}{n}\quad i = \{1, 2, \dots, n\}\)</span>. Denna modell kommer vara överlag en svag prediktor men vi använder dess prestanda för att uppdatera vikterna för nästa träning. Felklassificerade observationer får en högre vikt vilket gör att nästa modell behöver jobba mer för att klassificera dessa rätt, medan korrekta prediktioner får en mindre vikt. Denna process repeteras fram till att vi har <span class="math inline">\(B\)</span> modeller där vikterna successivt ökas och minskas beroende på resultaten från den föregående modellen. En observation som är svårklassificerad kommer få en större och större vikt tills modellen måste specifikt försöka prediktera den rätt.</p>
-<p>Prediktionerna från alla modellerna kombineras genom att använda en viktad majoritetsröstning: <span class="math display">\[
+\]</span> där <span class="math inline">\(sign(\cdot)\)</span> identifierar om summan är positiv eller negativ och predikterar en klass som +1 eller -1 respektive. <span class="math inline">\(\hat{f}_b(\boldsymbol{X})\)</span> är en modell tränad på ett boostat urval.</p>
+<p>Men eftersom vi vill lägga olika vikt på de olika modellerna, lägger vi till en koefficient som ger en viktad majoritetsröstning: <span class="math display">\[
   \begin{aligned}
-  \hat{y}_{boost}(\boldsymbol{X}) = sign\left(\sum_{b = 1}^B \alpha^b \hat{y}^b(\boldsymbol{X})\right)
+  \hat{f}_{boost}(\boldsymbol{X}) = sign\left(\sum_{b = 1}^B \alpha_b \hat{f}_b(\boldsymbol{X})\right)
   \end{aligned}
-\]</span> där <span class="math inline">\(\alpha^b\)</span> är en viktningskoefficient för modell <span class="math inline">\(b\)</span>.</p>
-<p><span style="color: red">BEHÖVER VISA HUR VIKTNING KAN ANVÄNDAS I EN FELFUNKTION FÖR ATT DENNA METOD SKA VARA LÄTT ATT FÖRSTÅ</span></p>
-<p>Frågorna vi måste ställa oss nu är; hur ska vi öka/minska vikterna och hur ska vi bestämma värdet på <span class="math inline">\(\alpha^b\)</span>. Olika boostingalgoritmer ger lite olika svar på dessa frågor. En utav de första algoritmerna, AdaBoost, besvarade dessa frågor genom att minimera den exponentiella kostnadsfunktionen. Det finns många olika varianter, den mest kända är nog XGBoost.</p>
-<p><span style="color: red">Mer om gradient boosting/XGBOOST? Slide 30 i FL6</span></p>
+\]</span> där <span class="math inline">\(\alpha_b\)</span> är viktningskoefficienten för modell <span class="math inline">\(b\)</span>.</p>
+<p>Flera olika algoritmer finns för att bestämma hur vikterna justeras och hur <span class="math inline">\(\alpha_b\)</span> bestäms, den vanligaste är <strong>ADABOOST</strong> (<span class="citation" data-cites="hastieESL">Hastie m.fl. (<a href="#ref-hastieESL" role="doc-biblioref">2001</a>)</span>).</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tips</span>ADABOOST
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Ge varje datapunkt en vikt <span class="math inline">\(w_i^1 = 1/n\)</span>.</li>
+<li>För <span class="math inline">\(b = 1, \dots, B\)</span>
+<ol type="a">
+<li>Träna en “svag” klassificerare <span class="math inline">\(\hat{f}_b(\boldsymbol{X})\)</span> på den viktade träningsdatan <span class="math inline">\(\{(\boldsymbol{x}_i, y_i, w_i^b\}_{i=1}^n\)</span></li>
+<li>Uppdatera vikterna <span class="math inline">\(\{w_i^{b+1}\}_{i = 1}^n\)</span> från <span class="math inline">\(\{w_i^{b}\}_{i = 1}^n\)</span>
+<ol type="i">
+<li>Beräkna <span class="math inline">\(err_b = \frac{\Sum{n} w_i^b \cdot I(y_i \ne \hat{f}_b(\boldsymbol{x}_i))}{\Sum{n}w_i^b}\)</span></li>
+<li>Beräkna <span class="math inline">\(\alpha_b = \log\left((1 - err_b) / err_b \right)\)</span></li>
+<li>Beräkna <span class="math inline">\(w_i^{b+1} = w_i^b \cdot exp\left(\alpha_b \cdot I\left(y_i \ne \hat{f}_b(\boldsymbol{x}_i)\right)\right)\)</span></li>
+</ol></li>
+</ol></li>
+</ol>
+</div>
+</div>
+<p>Kortfattat beräknar algoritmen hur mycket fel modell <span class="math inline">\(b\)</span> gör, <span class="math inline">\(err_b\)</span>, genom att en viktad summa för de missklassificerade observationerna<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> och använder sedan denna summa för att beräkna koefficienten <span class="math inline">\(\alpha_b\)</span>. En bra modell har ett lågt värde på <span class="math inline">\(err_b\)</span> vilket leder till ett positivt värde på <span class="math inline">\(\alpha_b\)</span> och en dålig modell får negativa värden.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-adaboost-alpha" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-adaboost-alpha-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="05-ensembles_files/figure-html/fig-adaboost-alpha-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-adaboost-alpha-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;30.4: <span class="math inline">\(\alpha_b\)</span> för olika prestanda på modellerna
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>I viktuppdateringen, <span class="math inline">\(w_i^{b+1}\)</span>, kommer alla vikter där modellen gjort fel uppdateras med en faktor <span class="math inline">\(exp(\alpha_b)\)</span>, vilket vi kan visualisera för att få en bättre uppfattning.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-adaboost-wb-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-adaboost-wb-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="05-ensembles_files/figure-html/fig-adaboost-wb-1-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-adaboost-wb-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;30.5: <span class="math inline">\(w^{(b+1)}\)</span> utifrån <span class="math inline">\(w^b = 1/1000\)</span> med olika värden på <span class="math inline">\(\alpha_b\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>I <a href="#fig-adaboost-wb-1" class="quarto-xref">Figur&nbsp;<span>30.5</span></a> ser vi hur vikterna för en missklassificerad observation med <span class="math inline">\(w_i^b = 1/1000\)</span> förändras beroende på modellens prestanda. För en bra modell (positiv <span class="math inline">\(\alpha_b\)</span>) kommer <span class="math inline">\(w_i^{b+1}\)</span> bli mycket större eftersom den är en av få observationer som blivit fel, medan i en sämre modell (negativ <span class="math inline">\(\alpha_b\)</span>) får många observationer istället en mindre ökning.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 3
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>I maskininlärning kan boosting användas för att klassificera observationer genom att kombinera flera svaga modeller. Efter att den första modellen har tränats visar det sig att vissa observationer har klassificerats fel. Vilka av följande påståenden beskriver korrekt hur boosting fortsätter träningen och kombinerar de olika modellerna?</p>
+<div id="webex-014312c54843a4302649c3ae1883b592" class="webex-checkboxgroup" data-answer="awEYAh0DTwRp">
+<label><input type="checkbox" autocomplete="off" name="014312c54843a4302649c3ae1883b592"><span>Varje ny modell tränas utan information om resultaten från tidigare modeller.</span></label><label><input type="checkbox" autocomplete="off" name="014312c54843a4302649c3ae1883b592"><span>Observationer som redan klassificerats korrekt kan få lägre vikt i nästa steg.</span></label><label><input type="checkbox" autocomplete="off" name="014312c54843a4302649c3ae1883b592"><span>De felklassificerade observationerna får större betydelse när nästa modell tränas.</span></label><label><input type="checkbox" autocomplete="off" name="014312c54843a4302649c3ae1883b592"><span>Den slutliga prediktionen kan baseras på en viktad kombination av de tränade modellerna.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Falskt. Boosting är en sekventiell metod där resultaten från tidigare modeller påverkar träningen av nästa modell.</li>
+<li>Sant. Korrekt klassificerade observationer kan få lägre vikt eftersom modellen redan hanterar dem relativt väl.</li>
+<li>Sant. Felklassificerade observationer får vanligtvis högre vikt, så att nästa modell fokuserar mer på dem.</li>
+<li>Sant. Modellernas prediktioner kan kombineras genom exempelvis en viktad majoritetsröstning.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<section id="xgboost" class="level3" data-number="30.3.1">
+<h3 data-number="30.3.1" class="anchored" data-anchor-id="xgboost"><span class="header-section-number">30.3.1</span> XGBoost</h3>
+<p>Ytterligare en form av boosting är den populära algoritmen <strong>XGBoost</strong> (eng. eXtreme Gradient Boosting). Den är en form av <strong>Gradient Boosting</strong> som approximerar <span class="math inline">\(f(\boldsymbol{X})\)</span> genom att minimera en differentiabel kostnadsfunktion. Istället för att vi förändrar vikterna i kostnadsfunktionen vid varje modell, kommer varje ny modell approximera den negativa gradienten av kostnaden från den föregående modellen.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+    \hat{f}_{b} (\boldsymbol{X})= \hat{f}_{b-1}(\boldsymbol{X}) +
+        v \cdot h_b(\boldsymbol{X})
+  \end{aligned}
+\]</span> där <span class="math inline">\(h_b(\boldsymbol{X})\)</span> är en approximation av den negativa gradienten. Vi känner också igen <span class="math inline">\(v\)</span> från gradient descent som inlärningshastigheten.</p>
+<p>Gradient Boosting är teoretisk välgrundad då den bygger på just gradient descent och fungerar på olika kostnadsfunktioner. Varje iteration fokuserar på att minska felet mest effektivt. XGBoost gör algoritmen än mer effektiv med fokus på modellens prestanda och skalbarhet samtidigt som den hanterar saknade värden automatiskt. Med hjälp av inbyggd regularisering kan algoritmen kontrollera modellens komplexitet och minska risken för överanpassning där kostnadsfunktionen kombinerar storleken på felet och komplexiteten. XGBoost är optimerad för parallellisering och hantering av stora datamängder.</p>
+<ul>
+<li>eta – Inlärningshastighet. Lägger mindre vikt vid varje nytt träd.</li>
+<li>nrounds – Antal boosting-rundor, dvs. antal träd som byggs.</li>
+<li>lambda – L2-regularisering av vikter. Minskar överanpassning.</li>
+<li>gamma – Minsta förbättring som krävs för att göra en split. Påverkar pruning.</li>
+<li>max depth – Maximal djup för varje träd. Påverkar modellens komplexitet.</li>
+<li>subsample – Andel av träningsdata som används för varje träd. Minskar överanpassning.</li>
+<li>colsample bytree – Andel features som används vid varje träd. Ökar variation mellan träden</li>
+</ul>
 </section>
-<section id="bagging-eller-boosting" class="level2" data-number="30.4">
-<h2 data-number="30.4" class="anchored" data-anchor-id="bagging-eller-boosting"><span class="header-section-number">30.4</span> Bagging eller boosting?</h2>
+</section>
+<section id="modellbaserad-ensemblemetod" class="level2" data-number="30.4">
+<h2 data-number="30.4" class="anchored" data-anchor-id="modellbaserad-ensemblemetod"><span class="header-section-number">30.4</span> Modellbaserad ensemblemetod</h2>
+<p>Med modellbaserade ensemblemetoder</p>
+<p>Case 1: Data: dela upp i träning, val (och test) - skattar 2-3 olika modeller av olika sort och sen kombinera deras predktioner. Visa tabell med utvärderingsmått för enskilda modeller för träning och validering + dessa mått för den kombinerade modellen - lasso reg + beslutsträd + neurala nätverk Case 2: Skatta samma modelltyp, men olika hyperparametervärden. Tex träna nätverk med 3 olika startvärden och sen kombinera prediktioner</p>
+</section>
+<section id="bagging-eller-boosting" class="level2" data-number="30.5">
+<h2 data-number="30.5" class="anchored" data-anchor-id="bagging-eller-boosting"><span class="header-section-number">30.5</span> Bagging eller boosting?</h2>
 <p>Valet av ensemblemetod kan ibland vara svårt att göra. Mycket beror på vad vi vill uppnå med metoden då deras syften och för-/nackdelar är lite olika.</p>
 <div id="tbl-ensemble-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -677,11 +898,53 @@ Minskar varians och bias
 </div>
 </figure>
 </div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 4
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="webex-question">
+<div class="webex-check webex-box">
+<p>Två modellproblem ska hanteras med ensemblemetoder. * I problem A används en instabil modell vars prediktioner varierar mycket mellan olika träningsurval. Modellens systematiska bias bedöms däremot vara relativt liten. Modellerna behöver helst kunna tränas parallellt. * I problem B används enkla svaga modeller som var för sig underanpassar data. Det är möjligt att träna modellerna sekventiellt och låta senare modeller fokusera på tidigare fel. Vilka av följande påståenden är korrekta enligt jämförelsen mellan bagging och boosting i underlaget?</p>
+<div id="webex-9ad08d2044563bee52b69c0507ff1185" class="webex-checkboxgroup" data-answer="YlBIABRUHgAYBRkHbg==">
+<label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Bagging är ett rimligt val för problem A eftersom metoden främst används för att minska variansen hos instabila modeller.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Boosting kan inte överanpassa när antalet modeller <span class="math inline">\(B\)</span> ökar, eftersom varje enskild modell är svag.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Bagging bör väljas för problem B eftersom metoden främst reducerar hög bias hos en underanpassad grundmodell.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Kravet på parallell träning i problem A talar för boosting snarare än bagging.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>När <span class="math inline">\(B\)</span> ökar brukar baggingprediktionen stabiliseras, medan boosting kan överanpassa om alltför många modeller läggs till.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Boosting är ett rimligt val för problem B eftersom flera svaga modeller stegvis kan kombineras till en starkare modell.</span></label>
+</div>
+</div>
+<div class="webex-solution">
+<ul>
+<li>Sant. Bagging tränar modeller på olika bootstrapurval och aggregerar deras resultat. Metoden används främst för att minska variansen, vilket är relevant för en instabil grundmodell.</li>
+<li>Falskt. Underlaget anger att boosting kan överanpassa när antalet modeller ökar, trots att de enskilda modellerna är svaga.</li>
+<li>Falskt. Enligt jämförelsen i underlaget minskar bagging främst variansen och inte bias. En modell som underanpassar kan därför kräva en metod som också angriper bias.</li>
+<li>Falskt. Baggingmodeller kan tränas oberoende och parallellt. Boosting är däremot sekventiell eftersom varje ny modell påverkas av resultaten från tidigare modeller.</li>
+<li>Sant. Baggingprediktionen stabiliseras normalt när fler modeller aggregeras, medan boosting kan börja överanpassa när antalet modeller blir stort.</li>
+<li>Sant. Boosting tränar svaga modeller sekventiellt och låter senare modeller fokusera på de fel som tidigare modeller gjort. Detta kan minska både bias och varians.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-hastieESL" class="csl-entry" role="listitem">
+Hastie, Trevor, Robert Tibshirani, och Jerome Friedman. 2001. <em>The Elements of Statistical Learning</em>. Springer Series in Statistics. Springer New York Inc.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Den används för många andra syften utöver boosting, framförallt när det finns ett intresse av att fokusera på vissa observationer i träningen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><span class="math inline">\(I(y_i \ne \hat{f}_b(\boldsymbol{x}_i))\)</span> blir 1 om observationen inte överensstämmer med prediktionen.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

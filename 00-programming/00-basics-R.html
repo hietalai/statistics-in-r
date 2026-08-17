@@ -304,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Att använda R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -531,7 +531,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#introduktion" id="toc-introduktion" class="nav-link active" data-scroll-target="#introduktion"><span class="header-section-number">1.1</span> Introduktion</a>
+  <li><a href="#gränssnittet-rstudio" id="toc-gränssnittet-rstudio" class="nav-link active" data-scroll-target="#gränssnittet-rstudio"><span class="header-section-number">1.1</span> Gränssnittet RStudio</a>
   <ul class="collapse">
   <li><a href="#starta-rstudio" id="toc-starta-rstudio" class="nav-link" data-scroll-target="#starta-rstudio"><span class="header-section-number">1.1.1</span> Starta RStudio</a></li>
   <li><a href="#r-kod-i-underlaget" id="toc-r-kod-i-underlaget" class="nav-link" data-scroll-target="#r-kod-i-underlaget"><span class="header-section-number">1.1.2</span> R kod i underlaget</a></li>
@@ -542,6 +542,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sec-objectTypes" id="toc-sec-objectTypes" class="nav-link" data-scroll-target="#sec-objectTypes"><span class="header-section-number">1.2.2</span> Objekt och dess typer</a></li>
   <li><a href="#felsökning" id="toc-felsökning" class="nav-link" data-scroll-target="#felsökning"><span class="header-section-number">1.2.3</span> Felsökning</a></li>
   <li><a href="#datastrukturer" id="toc-datastrukturer" class="nav-link" data-scroll-target="#datastrukturer"><span class="header-section-number">1.2.4</span> Datastrukturer</a></li>
+  <li><a href="#datastrukturer-och-statistik" id="toc-datastrukturer-och-statistik" class="nav-link" data-scroll-target="#datastrukturer-och-statistik"><span class="header-section-number">1.2.5</span> Datastrukturer och statistik</a></li>
   </ul></li>
   <li><a href="#sammanfattning" id="toc-sammanfattning" class="nav-link" data-scroll-target="#sammanfattning"><span class="header-section-number">1.3</span> Sammanfattning</a></li>
   <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">1.4</span> Övningsuppgifter</a></li>
@@ -571,10 +572,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>R är ett så kallat open-source programmeringsspråk. Open-source betyder att programmet är gratis att ladda ner och använda, samt att vem som helst har möjlighet att skapa egna, skräddarsydda metoder eller analyser som enkelt kan delas med omvärlden. R har använts av statistiker och analytiker i mer än 20 års tid och många bidrag har byggt upp ett starkt och flexibelt verktyg som kan anpassas för många ändamål.</p>
-<section id="introduktion" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="introduktion"><span class="header-section-number">1.1</span> Introduktion</h2>
-<p>R kännetecknas av sina <strong>paket</strong> med <strong>funktioner</strong> som vi kan använda för att genomföra olika <strong>operationer</strong>. Vi kan se på funktionerna som olika verktyg ämnade att lösa specifika problem, till exempel om vi vill slå in en spik i en bräda kan vi använda en hammare, och paketen som olika verktygslådor fokuserade på att genomföra en viss form utav arbete. När vi installerar R för första gången får vi tillgång till en stor mängd olika paket, men vi har möjligheten att utöka dessa väldigt enkelt. Vem som helst skapa funktioner och paket för allmänheten och ibland finns det ett behov av att ladda ner nya paket (motsv. köpa in nya verktygslådor) för att genomföra en viss sorts analys.</p>
-<p>Det finns flertalet gränssnitt som hjälper till att programmera med R, men vi rekommenderar att använda RStudio. Detta visuella gränssnitt medför att vi inte behöver programmera med en kommandotolk. För att installera R och RStudio kan du följa instruktionerna <a href="https://posit.co/download/rstudio-desktop/">här</a>. Detta underlag är skapad med R version 4.5.1 (2025-06-13 ucrt).</p>
+<p>R kännetecknas av sina <strong>paket</strong> med <strong>funktioner</strong> som vi kan använda för att genomföra olika <strong>operationer</strong>. Vi kan se på funktionerna som olika verktyg ämnade att lösa specifika problem, till exempel om vi vill slå in en spik i en bräda kan vi använda en hammare, och paketen som olika verktygslådor fokuserade på att genomföra en viss form utav arbete.</p>
+<p>När vi installerar R för första gången får vi tillgång till en stor mängd olika paket som standard, men vi har möjligheten att själva installera nya paket som lämpar sig för olika ändamål väldigt enkelt. Vem som helst skapa funktioner och paket för allmänheten och ibland finns det ett behov av att ladda ner nya paket (motsvarande att köpa in nya verktygslådor) för att genomföra en viss sorts analys.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -585,16 +584,47 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>När vi programmerar i R, sparas objekt som vi skapar i datorns arbetsminne (RAM-minne). Arbetsminnet kan vi säga motsvarar ett korttidsminne, vilket innebär att vi har ett mindre utrymme att arbeta med än datorns hårddisk och information finns endast där temporärt. När vi startar upp R börjar vi en <code>session</code> som avslutas när vi stänger ner programmet. Vi kan spara objekt för att använda de senare i samma session, men dessa rensas när vi stänger ner programmet. Om vi vill använda objekt mellan sessioner kan vi spara ner information till datorns hårddisk, eller dess långtidsminne, på några olika sätt.</p>
+<p>Detta underlag är skapad med R version 4.5.1 (2025-06-13 ucrt). Vissa paket fungerar olika beroende på vilken version av R som använts vid dess skapande, så det är viktigt att hålla koll på och ibland installera äldre versioner vid behov. Det är framförallt vid uppdateringen av huvudversionen (<code>3.x.x</code> -&gt; <code>4.x.x</code>) som kompatibilitetsproblem kan uppstå.</p>
+</div>
+</div>
+<section id="gränssnittet-rstudio" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="gränssnittet-rstudio"><span class="header-section-number">1.1</span> Gränssnittet RStudio</h2>
+<p>Det finns flertalet gränssnitt som hjälper till att programmera med R, men vi rekommenderar att använda RStudio. Detta visuella gränssnitt medför att vi inte behöver programmera med en kommandotolk som endast visar den senaste använda koden och dess resultat.</p>
+<p>För att installera R och RStudio kan du följa instruktionerna <a href="https://posit.co/download/rstudio-desktop/">här</a>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>När vi programmerar i R, sparas objekt som vi skapar i datorns arbetsminne (RAM-minne). Arbetsminnet kan vi säga motsvarar ett korttidsminne, vilket innebär att vi har ett mindre utrymme att arbeta med än datorns hårddisk och information finns endast där temporärt. När vi startar upp R börjar vi en <code>session</code> som avslutas när vi stänger ner programmet. Vi kan spara objekt för att använda de senare i samma session, men dessa rensas när vi stänger ner programmet. Det är väldigt vanligt att man till en början glömmer bort detta och tappar information som man gjort.</p>
+<p>Om vi vill använda kod eller objekt mellan sessioner kan vi spara ner information till datorns hårddisk, eller dess långtidsminne, på några olika sätt:</p>
+<ul>
+<li>som R-skript för kod</li>
+<li>som specifika R-datafiler för resultat från funktioner</li>
+<li>som textfiler för data</li>
+</ul>
+<p>De olika varianterna lämpar sig för olika ändamål och kommer presenteras mer i detalj senare i detta underlag.</p>
 </div>
 </div>
 <section id="starta-rstudio" class="level3" data-number="1.1.1">
 <h3 data-number="1.1.1" class="anchored" data-anchor-id="starta-rstudio"><span class="header-section-number">1.1.1</span> Starta RStudio</h3>
-<p>När vi startar RStudio för första gången, delas programmet in i tre olika fönster. Det är starkt rekommenderat att alltid börja med att öppna eller skapa ett dokument där kod sparas (även kallad ett <code>R Script</code> eller <strong>skript</strong>) genom <em>File</em> -&gt; <em>New file</em> -&gt; <em>R Script</em> (eller kortkommandot <em>Ctrl</em> el. <em>Command</em> + <em>Shift</em> + <em>N</em>). När detta skript öppnas delas RStudio in i fyra olika fönster. Ett skript har ändelsen <code>.R</code> men är i grunden en textfil och kan öppnas i alla enkla texthanterare, t.ex. Notepad, om vi vill redigera koden utanför R eller RStudio.</p>
+<p>När vi startar RStudio för första gången, delas programmet in i tre olika fönster. Det är starkt rekommenderat att alltid börja med att öppna eller skapa ett dokument där kod sparas (även kallad ett <code>R Script</code> eller <strong>R-skript</strong>) genom <em>File</em> -&gt; <em>New file</em> -&gt; <em>R Script</em> (eller kortkommandot <em>Ctrl</em> el. <em>Command</em> + <em>Shift</em> + <em>N</em>). När detta skript öppnas delas RStudio in i fyra olika fönster. Ett skript har ändelsen <code>.R</code> men är i grunden en textfil och kan öppnas i alla enkla texthanterare, t.ex. Notepad, om vi vill redigera koden utanför R eller RStudio.</p>
+<p><u>Vi rekommenderar starkt att använda detta skript för att skriva kod istället för terminalen.</u> Att köra kod från skriptet kan göras på flera olika sätt:</p>
+<ul>
+<li>markera en rad och tryck på kortkommandot <em>CTRL + ENTER</em> eller <em>COMMAND + ENTER</em> på tangentbordet för att köra raden</li>
+<li>markera flera rader och använd kortkommandot för att köra alla markerade rader</li>
+<li>sätt tangentbordsmarkören<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> på en rad och använd kortkommandot för att köra raden.</li>
+</ul>
+<p>Det finns också en knapp högst upp till höger på R-skriptet som heter <code>Run</code> vilket motsvarar användandet av kortkommandot.</p>
 <section id="kort-genomgång-av-rstudio" class="level4" data-number="1.1.1.1">
 <h4 data-number="1.1.1.1" class="anchored" data-anchor-id="kort-genomgång-av-rstudio"><span class="header-section-number">1.1.1.1</span> Kort genomgång av RStudio</h4>
 <p>När ett skript skapats innehåller nu det övre vänstra fönstret denna fil. Här kan vi skriva kod som kan sparas ned och användas igen nästa gång vi öppnar programmet. Skriptet kan också skickas mellan datorer och är ett bra sätt att kunna dela med sig utav vad det är man jobbar med. Det rekommenderas starkt att alltid skriva kod i ett skript för att ha möjligheten att återanvända och redigera koden på ett lätt sätt.</p>
-<p>Det nedre vänstra fönstret innehåller en <strong>konsol</strong>. Här visas all kod som vi kör och tillhörande utskrifter och vi kan också skriva kod direkt i konsollen. Det som skiljer användandet av konsollen med ett skript är att all kod som vi skriver i konsollen inte sparas någonstans och kommer försvinna nästa gång vi startar upp programmet. Det är också svårt att redigera kod, till exempel om man gjort något stavfel eller måste revidera kod som man skrivit för länge sedan.</p>
+<p>Det nedre vänstra fönstret innehåller en <strong>konsol</strong>. Här visas all kod som vi kör och tillhörande utskrifter och vi kan också skriva kod direkt i konsollen. Det som skiljer användandet av konsollen med ett skript är att all kod som vi skriver i konsollen inte sparas någonstans och kommer försvinna nästa gång vi startar upp programmet. Det är också svårt att redigera kod, till exempel om man gjort något stavfel eller måste revidera kod som man skrivit för länge sedan till skillnad från kod som finns sparat i ett R-skript.</p>
 <p>I det nedre högra fönstret kan vi se olika flikar som visar filer från datorn, skapade visualiseringar, en översikt av de paket som vi har tillgängliga, samt få hjälp om olika funktioner i hjälpdokumentationen. Paket i R har inbyggda hjälpfiler som kan underlätta förståelsen av vad en funktion gör, hur den arbetar, vad den behöver för att köras med mera. Det rekommenderas att alltid börja med att titta i dokumentationen för en funktion om man är osäker på vad det är den gör.</p>
 <p>Det övre högra fönstret innehåller en översikt av alla objekt som vi skapar under en session och som R lagrar i korttidsminnet. Objekten som vi ser i RStudios <strong>Environment</strong>-flik kan vi klicka på för att antingen få mer detaljer om objektet, exempelvis hur stort ett visst objekt är eller om den innehåller fler delobjekt.</p>
 <p>Vi kommer återkomma till dessa olika fönster senare i underlaget.</p>
@@ -602,7 +632,7 @@ Viktigt
 </section>
 <section id="r-kod-i-underlaget" class="level3" data-number="1.1.2">
 <h3 data-number="1.1.2" class="anchored" data-anchor-id="r-kod-i-underlaget"><span class="header-section-number">1.1.2</span> R kod i underlaget</h3>
-<p>I detta underlag kommer kodexempel (ljus bakgrund) visas som du kan kopiera till din egna dator. En knapp finns överst i det högra hörnet som kopierar allt innehåll i kodblocket. Från exemplena visas också utskrifter (mörk bakgrund) från koden som vi i RStudio ser i konsollen.</p>
+<p>I detta underlag kommer kodexempel visas som du kan kopiera till din egna dator. En knapp finns överst i det högra hörnet som kopierar allt innehåll i kodblocket. Från exemplena visas också utskrifter från koden som vi i RStudio ser i konsollen.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exempelkod som kan kopieras med en knapp i det övra högra hörnet.</span></span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -615,11 +645,11 @@ Viktigt
 </section>
 <section id="sec-basics-R" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec-basics-R"><span class="header-section-number">1.2</span> Grundläggande programmering i R</h2>
-<p>R är ett kraftfullt språk som kan genomföra väldigt komplexa och avancerade beräkningar. Innan vi kommer dit måste vi första börja med grunderna i R och en utav de vanligaste användningsområdena för R är att använda språket som en vanlig miniräknare. R kommer läsa varje rad kod som en enskild operation och vi kan <code>köra</code> kod på flera olika sätt.</p>
-<p>Vi kan antingen använda knappen uppe till höger av skriptet som heter Run eller använda kortkommandot <em>Ctrl</em> el. <em>Command</em> + <em>Enter</em> för att köra enstaka rader kod. R kan också köra flera rader kod samtidigt om vi markerar flera rader och klickar på Run eller använder kortkommandot.</p>
+<p>R är ett kraftfullt språk som kan genomföra väldigt komplexa och avancerade beräkningar. Innan vi kommer dit måste vi första börja med grunderna i R och en utav de vanligaste användningsområdena för R är att använda språket som en vanlig miniräknare. R kommer läsa varje rad kod som en enskild operation och vi kan <strong>köra</strong> kod på flera olika sätt.</p>
+<p>Vi kan som tidigare nämnt antingen använda knappen uppe till höger av skriptet som heter Run eller använda kortkommandot <em>CTRL</em> el. <em>COMMAND</em> + <em>ENTER</em> för att köra enstaka rader kod. R kan också köra flera rader kod samtidigt om vi markerar flera rader och klickar på Run eller använder kortkommandot.</p>
 <section id="r-som-miniräknare" class="level3" data-number="1.2.1">
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="r-som-miniräknare"><span class="header-section-number">1.2.1</span> R som miniräknare</h3>
-<p>Till att börja med kan vi använda matematiska operatorer såsom <code>+</code>, <code>-</code>, <code>*</code>, och <code>/</code>.</p>
+<p>Till att börja med kan vi använda enkla matematiska operatorer såsom <code>+</code>, <code>-</code>, <code>*</code>, och <code>/</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Addition</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span></span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -642,7 +672,7 @@ Viktigt
 <pre><code>[1] 5</code></pre>
 </div>
 </div>
-<p>R kommer genomföra dessa operationer mellan siffrorna och skriva ut svaret i konsollen. De vanliga räknereglerna för matematiska operatorer gäller här vilket innebär att t.ex. kommer:</p>
+<p>R kommer genomföra dessa matematiska operationer och skriva ut svaret i konsollen. De vanliga räknereglerna för matematiska operatorer gäller här vilket innebär att t.ex.:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Räkneregler</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">3</span></span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -650,7 +680,7 @@ Viktigt
 <pre><code>[1] 7</code></pre>
 </div>
 </div>
-<p>generera ett annorlunda svar än:</p>
+<p>genererar ett annorlunda svar än:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Räkneregler forts.</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">*</span> <span class="dv">3</span></span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -658,22 +688,23 @@ Viktigt
 <pre><code>[1] 9</code></pre>
 </div>
 </div>
+<p>på grund av hur parenteser och ordningen av operatorer fungerar.</p>
 <section id="kommentarer-i-koden" class="level4" data-number="1.2.1.1">
 <h4 data-number="1.2.1.1" class="anchored" data-anchor-id="kommentarer-i-koden"><span class="header-section-number">1.2.1.1</span> Kommentarer i koden</h4>
-<p>I ovanstående kodexempel ser vi också något speciellt. Om du kopierar all text från ett utav blocken och kör den på egen hand, kommer R endast skriva ut resultat från raden som inte innehåller <code>#</code>. En rad som börjar med <code>#</code> kommer R istället läsa som en kommentar. Detta medför att vi kan kommentera kod som vi skriver vilket har många fördelar.</p>
+<p>I ovanstående kodexempel ser vi också något speciellt. Om du kopierar all text från ett utav blocken till ditt skript och kör den på egen hand, kommer R endast skriva ut resultat från raden som inte innehåller <code>#</code>. En rad som börjar med <code>#</code> kommer R istället läsa som en <strong>kommentar</strong>. Detta medför att vi kan kommentera kod som vi skriver vilket har många fördelar.</p>
 <p>Dels kan vi i anslutning till specifika bitar kod själva beskriva vad koden gör och vad för resultat som vi förväntar oss att få. Det är väldigt lätt att man i ett stort skript tappar bort sig själv, eller när man öppnar skriptet vid nästa session har glömt bort vad det är koden gör. Med kommentarer kan vi lättare komma ihåg vad de olika delarna gör, men framförallt om vi skickar koden till någon annan kan vi skicka med tillhörande instruktioner så att det blir lättare att följa vad det är som händer. <strong>Försök att få in en rutin att kommentera kod som du skriver redan från början!</strong></p>
 </section>
 </section>
 <section id="sec-objectTypes" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="sec-objectTypes"><span class="header-section-number">1.2.2</span> Objekt och dess typer</h3>
 <p>I tidigare exempel kommer svaret på beräkningarna endast skrivas ut i konsollen, men om vi hade varit intresserade av att spara ner informationen och använda den senare behöver vi specifikt säga till R att göra det.</p>
-<p>Vi kan spara resultat av en operation till ett <strong>objekt</strong> med hjälp av <code>&lt;-</code>. När vi vill ge ett objekt ett värde är det praxis att använda <code>&lt;-</code> och vi kan skriva detta som en kombination av symbolerna, <code>&lt;</code> och <code>-</code>. Vi kan läsa det som ’‘<em>ett värde ges till objektet i pilens riktning</em>’’.</p>
+<p>Vi kan spara resultat av en operation till ett <strong>objekt</strong>. När vi vill tilldela ett objekt ett värde är det praxis att använda <code>&lt;-</code> och vi kan skriva detta som en kombination av symbolerna, <code>&lt;</code> och <code>-</code>. Vi kan läsa det som ’‘<em>ett värde tilldelas objektet i pilens riktning</em>’’.</p>
 <p>Objekt kan heta nästintill vadsomhelst men vi måste förhålla oss till ett par begränsningar:</p>
 <ul>
 <li>ett objektnamn kan <strong>inte</strong> börja med en siffa, ex. <code>9tal &lt;- 9</code> är inte tillåtet.</li>
-<li>ett objektnamn kan <strong>inte</strong> innehålla mellanslag, ex. <code>ett tal &lt;- 2</code> är inte tillåtet. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>ett objektnamn kan <strong>inte</strong> innehålla mellanslag, ex. <code>ett tal &lt;- 2</code> är inte tillåtet. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
 </ul>
-<p>Istället kan vi använda siffror och andra symboler <em>inuti</em> namnet, ex. <code>tal9</code>. Istället för mellanslag för att separera ord kan vi använda ett system kallad <em>camelCase</em>. Detta sätt att namnge objekt medför att vi tar bort alla mellanslag, slår ihop orden, och använder stor bokstav för att urskilja enskilda delar, ex. <code>ettTal</code>.</p>
+<p>Istället kan vi använda siffror och andra symboler <em>inuti</em> namnet, ex. <code>tal9</code>. Istället för mellanslag för att separera ord kan vi använda ett system kallad <em>camelCase</em>. Detta sätt att namnge objekt medför att vi tar bort alla mellanslag, slår ihop orden, och använder stor bokstav för att urskilja de enskilda delarna, ex. <code>ettTal</code>.</p>
 <p>Vi kan spara några matematiska operationer för att använda de senare.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Summan av 2 + 3 tilldelas till ett objekt, döpt till a</span></span>
@@ -714,7 +745,21 @@ Viktigt
 <li>heltal (<strong>integer</strong>), ett specialfall av numeriskt när det bara förekommer heltal: <code>2L</code> där <code>L</code> anger till R att objektet ska vara av typen <code>integer</code>,</li>
 <li>komplex (<strong>complex</strong>) innehållande komplexa tal</li>
 </ul>
-<p>Vanligtvis räcker det med att använda <code>numeric</code>, <code>character</code> och <code>logical</code>-typer. I praktiken använder sig R utav ytterligare ett specialfall för textsträngar, <strong>Factor</strong>. Ett <code>Factor</code>-objekt är en blandning av en siffra och text där R lagrar en siffra men har ett lexikon där varje siffra egentligen representerar en textsträng.</p>
+<p>Vanligtvis räcker det med att använda <code>numeric</code>, <code>character</code> och <code>logical</code>-typer.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I praktiken använder sig R utav ytterligare ett specialfall för textsträngar, <strong>Factor</strong>. Ett <code>Factor</code>-objekt är en blandning av en siffra och text där R lagrar en siffra men har ett lexikon där varje siffra egentligen representerar en textsträng.</p>
+<p>Detta medför att objektet som sparas i minnet blir mycket mindre då enskilda siffror förekommer oftare än de fullständiga textsträngarna.</p>
+</div>
+</div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Siffror anges som vanliga siffror</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>valfrittNummer <span class="ot">&lt;-</span> <span class="dv">3</span></span>
@@ -768,7 +813,7 @@ Viktigt
 <section id="vektorer" class="level4" data-number="1.2.4.1">
 <h4 data-number="1.2.4.1" class="anchored" data-anchor-id="vektorer"><span class="header-section-number">1.2.4.1</span> Vektorer</h4>
 <p>Låt oss säga att vi har en massa kläder som ligger kaotiskt utspritt i ett rum. För att strukturera dessa kan vi exempelvis ta alla sockar och lägga dem i en låda. Lådan innehåller därmed en grupp av liknande objekt, som i R motsvarar en <strong>vektor</strong>.</p>
-<p>En vektor måste innehålla värden av samma typ, siffror, text, eller logiska värden. För att skapa en vektor använder vi funktionen <code>c()</code>, där varje delobjekt kallas för <strong>element</strong>. Vi separarar elementen i funktionen med ett kommatecken.</p>
+<p>En vektor måste innehålla värden av samma typ; siffror, text, eller logiska värden. För att skapa en vektor använder vi funktionen <code>c()</code>, där varje delobjekt kallas för <strong>element</strong>. Vi separarar elementen i funktionen med ett kommatecken.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="do">## En vektor med numeriska värden</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">7</span>)</span>
@@ -792,7 +837,7 @@ Viktigt
 <pre><code>[1] "Apelsin" "Banan"   "Citron" </code></pre>
 </div>
 </div>
-<p>Vektor <code>A</code> och <code>B</code> har fyra element och vektor <code>ord</code> har tre element, alla av samma typ. Om vi vill titta på ett element kan vi <strong>indexera</strong> vektorn. Indexering innebär att vi säger till R att plocka ut angivna element ur objektets <strong>dimensionser</strong>. En vektor har bara en dimension vilket innebär att indexfunktionen <code>[]</code> endast behöver ett värde.</p>
+<p>Vektor <code>A</code> och <code>B</code> har fyra element och vektor <code>ord</code> har tre element, alla av samma typ. Om vi vill titta på specifik ett element kan vi <strong>indexera</strong> vektorn. Indexering innebär att vi säger till R att plocka ut angivna element ur objektets <strong>dimensioner</strong>. En vektor har bara en dimension vilket innebär att indexfunktionen <code>[]</code> endast behöver ett värde.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -844,7 +889,7 @@ Viktigt
 [4,]    7    4</code></pre>
 </div>
 </div>
-<p>Vi ser nu i marginalerna (raderna och kolumnerna) att R använder två dimensioner för att peka på ett element. Indexeringen behöver nu två värden <code>[radindex, kolumnindex]</code> för att plocka ut enskilda element. Ordningen av dessa värden spelar roll eftersom R först letar efter en specifik rad (före ,) och sedan en specifik kolumn (efter ,). Om inget värde anges som rad- eller kolumnindex förutsätter R att vi vill se alla index från den dimensionen.</p>
+<p>Vi ser nu i marginalerna (raderna och kolumnerna) att R använder två dimensioner för att peka på ett element. Indexeringen behöver nu två värden <code>[radindex, kolumnindex]</code> för att plocka ut enskilda element. Ordningen av dessa värden spelar roll eftersom R först letar efter en specifik rad (före <code>,</code>) och sedan en specifik kolumn (efter <code>,</code>). Om inget värde anges som rad- eller kolumnindex förutsätter R att vi vill se alla element från den dimensionen.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Plockar ut den andra kolumnen ur matris, vektor B</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>matris[,<span class="dv">2</span>]</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -889,7 +934,7 @@ Viktigt
 [4,]    7    4</code></pre>
 </div>
 </div>
-<p>För att plocka ut ett element från listan behöver vi använda ytterligare en form av indexering. Vi behöver först ta oss in i en utav lådorna för att indexera den som vanligt, och det gör vi genom <code>[[element]]</code>.</p>
+<p>För att plocka ut ett element från listan behöver vi använda ytterligare en form av indexering. Vi behöver först ta oss in i en utav lådorna för att sedan indexera den “som vanligt”, och det gör vi genom <code>[[element]]</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Plockar ut det fjärde elementet ur vektorn A, listans första element</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>lista[[<span class="dv">1</span>]][<span class="dv">4</span>]</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -915,7 +960,11 @@ Viktigt
 4    7    4</code></pre>
 </div>
 </div>
-<p>När vi samlar in data inom statistik brukar vi ställa upp informationen med samma struktur som en data frame, där varje rad är en observerad enhet och varje kolumn är en variabel som vi gör mätningar på. Varje enskilda cell blir då enhetens uppmätta värde på den angivna variabeln, till exempel halten kväveoxid i Vänern. Detta kallar vi ofta för <strong>rådata</strong>-format.</p>
+</section>
+</section>
+<section id="datastrukturer-och-statistik" class="level3" data-number="1.2.5">
+<h3 data-number="1.2.5" class="anchored" data-anchor-id="datastrukturer-och-statistik"><span class="header-section-number">1.2.5</span> Datastrukturer och statistik</h3>
+<p>När vi samlar in data inom statistik brukar vi ställa upp informationen med samma struktur som en data frame, där varje rad är en observerad enhet och varje kolumn är en variabel som vi gör mätningar på. Varje enskilda cell blir då enhetens uppmätta värde på den angivna variabeln, till exempel längden på Jakob. Detta kallar vi ofta för <strong>rådata</strong>-format.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Skapar data</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>student <span class="ot">&lt;-</span> </span>
@@ -935,7 +984,7 @@ Viktigt
 4  Noor   174  Statistik</code></pre>
 </div>
 </div>
-<p>Vi kan i objektet <code>student</code> till exempel läsa att den första studenten Anna är 158 cm lång och studerar Biologi. Om vi är intresserade av en specifik variabel ur denna data frame kan vi återigen indexera med hjälp av <code>[]</code> men det vanligaste är att istället använda <code>$</code>.</p>
+<p>Vi kan i objektet <code>student</code> till exempel läsa att den första studenten Anna är 158 cm lång och studerar Biologi. Om vi är intresserade av en specifik variabel ur denna data frame kan vi återigen indexera med hjälp av <code>[]</code> men det vanligaste är att istället använda <code>$</code> när vi har med namngivna element att göra.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Indexerar variabeln "utbildning" ur data frame "student"</span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>student<span class="sc">$</span>utbildning</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
@@ -956,13 +1005,22 @@ Viktigt
 <p>För att plocka ut enskilda rader (observationer) eller celler kan vi indexera med <code>[radindex, kolumnindex]</code> likt en matris.</p>
 </section>
 </section>
-</section>
 <section id="sammanfattning" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sammanfattning"><span class="header-section-number">1.3</span> Sammanfattning</h2>
 <p>Nu har vi fått en genomgång av grunderna i R, hur man kodar enkla matematiska operationer, vilka typer av objekt som R kan arbeta med, och hur vi sparar information till arbetsminnet på olika sätt som kan användas senare i samma session. Vi kommer i nästkommande kapitel gå igenom olika hjälpmedel som R och RStudio erbjuder så att vi inte alltid behöver koda allting från grunden.</p>
 </section>
 <section id="övningsuppgifter" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">1.4</span> Övningsuppgifter</h2>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Övning 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Med hjälp av R på din egna dator försök att lösa följande uppgifter. Efter varje uppgift får du en utskrift som visar hur resultatet ska se ut från din kod.</p>
 <ol type="a">
 <li>Spara en numerisk vektor med alla värden från 1 till och med 6 i ökande ordning.</li>
@@ -995,12 +1053,14 @@ Viktigt
 </div>
 </div>
 <ol start="4" type="a">
-<li>Plocka ut den fjärde observationen.</li>
+<li>Plocka ut den fjärde observationen ur c).</li>
 </ol>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>  ID  Art
 4  4 Hund</code></pre>
+</div>
+</div>
 </div>
 </div>
 
@@ -1009,7 +1069,8 @@ Viktigt
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Det finns ett sätt att tillåta detta som vi kommer till i kapitel <a href="02-tidyverse.html" class="quarto-xref"><span>Kapitel 3</span></a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Det blinkande | symbolen i skriptet.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Det finns ett sätt att tillåta detta som vi kommer till i kapitel <a href="02-tidyverse.html" class="quarto-xref"><span>Kapitel 3</span></a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -1421,8 +1482,8 @@ Viktigt
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../00-programming/01-packages-and-functions.html" class="pagination-link" aria-label="Paket och funktioner">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../00-programming/01-packages-and-functions.html" class="pagination-link" aria-label="Att använda R">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Att använda R</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Paket och funktioner – Statistisk teori och tillämpningar i R</title>
+<title>2&nbsp; Att använda R – Statistisk teori och tillämpningar i R</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -260,7 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/01-packages-and-functions.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/01-packages-and-functions.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Att använda R</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
@@ -304,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Att använda R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -531,20 +531,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#paket-och-funktioner" id="toc-paket-och-funktioner" class="nav-link active" data-scroll-target="#paket-och-funktioner"><span class="header-section-number">2.1</span> Paket och funktioner</a></li>
+  <li><a href="#paket-och-funktioner" id="toc-paket-och-funktioner" class="nav-link active" data-scroll-target="#paket-och-funktioner"><span class="header-section-number">2.1</span> Paket och funktioner</a>
+  <ul class="collapse">
+  <li><a href="#funktioner" id="toc-funktioner" class="nav-link" data-scroll-target="#funktioner"><span class="header-section-number">2.1.1</span> Funktioner</a></li>
+  </ul></li>
   <li><a href="#sec-readData" id="toc-sec-readData" class="nav-link" data-scroll-target="#sec-readData"><span class="header-section-number">2.2</span> Ladda in datamaterial</a></li>
   <li><a href="#arbetsmappar" id="toc-arbetsmappar" class="nav-link" data-scroll-target="#arbetsmappar"><span class="header-section-number">2.3</span> Arbetsmappar</a></li>
-  <li><a href="#help" id="toc-help" class="nav-link" data-scroll-target="#help"><span class="header-section-number">2.4</span> Hjälpdokumentation</a></li>
-  <li><a href="#chat-GPT" id="toc-chat-GPT" class="nav-link" data-scroll-target="#chat-GPT"><span class="header-section-number">2.5</span> ChatGPT eller annan AI</a></li>
+  <li><a href="#sec-help" id="toc-sec-help" class="nav-link" data-scroll-target="#sec-help"><span class="header-section-number">2.4</span> Hjälpdokumentation</a>
+  <ul class="collapse">
+  <li><a href="#sec-chat-GPT" id="toc-sec-chat-GPT" class="nav-link" data-scroll-target="#sec-chat-GPT"><span class="header-section-number">2.4.1</span> ChatGPT eller annan AI</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/01-packages-and-functions.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../00-programming/00-basics-R.html"><strong>DEL I - Programmering i R</strong></a></li><li class="breadcrumb-item"><a href="../00-programming/01-packages-and-functions.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Att använda R</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-packages" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></h1>
+<h1 class="title"><span id="sec-using-R" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Att använda R</span></span></h1>
 </div>
 
 
@@ -561,19 +566,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Det kommer bli väldigt jobbigt om vi alltid måste skapa data för hand eller beräkna summor som <code>a + b + c + ...</code>. Användandet av en programvara ska underlätta de statistiska beräkningarna och i den andan följer här några kapitel om hur R eller RStudio kan hjälpa till.</p>
+<p>Det kommer bli väldigt jobbigt om vi alltid måste skapa data för hand eller beräkna summor utifrån enskilda objekt eller element, <code>a + b + c + ...</code>. Användandet av en programvara ska underlätta de statistiska beräkningarna och i den andan följer här några kapitel om hur R eller RStudio kan hjälpa till att bearbeta och analysera information.</p>
 <section id="paket-och-funktioner" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="paket-och-funktioner"><span class="header-section-number">2.1</span> Paket och funktioner</h2>
-<p>Inom programmering är det vanligt att man genomför samma komplexa operation flera gånger och ett enkelt sätt att underlätta kodningen är att skapa en <strong>funktion</strong> som förkortar flera rader kod till en. Flera liknande funktioner samlas i olika <strong>paket</strong> som antingen redan är installerade på datorn eller måste installeras en gång.</p>
+<p>Inom programmering är det vanligt att man genomför samma komplexa operation flera gånger och ett enkelt sätt att underlätta kodningen är att skapa en <strong>funktion</strong> som förkortar flera rader kod till en. Flera liknande funktioner samlas i olika <strong>paket</strong> som vi antingen har skapat själv, hittat i paket som redan finns med standardinstallationen av R eller laddat hem från internet.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Paket som inte finns med i standardinstallationen av R måste först <strong>installeras</strong> för att kunna användas. Installera betyder i detta ändamål att ladda hem och göra tillgängligt paketet för användning i R. Detta kan låta komplicerat men i 99% av fallen behöver vi inte göra mer än att använda funktionen <code>install.packages("PAKETNAMN")</code>. Notera användningen av <code>"</code> i funktionen för att inuti ange det namn som paketet har.</p>
+</div>
+</div>
 <p>Installerade paket måste också <strong>laddas</strong> till arbetsminnet för att R ska kunna använda sig utav dem. Vi kan visualisera detta som att även fast vi har köpt in en verktygslåda, måste vi ställa upp den på arbetsbänken för att kunna använda verktygen däri. Om du inte har verktygslådan bredvid dig kommer det bli svårt att använda något av verktygen. Vi kan ladda upp ett paket till arbetsminnet med hjälp av <code>library()</code> eller <code>require()</code>, där namnet på paketet anges inuti parenteserna.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Laddar paketet dplyr med dess tillhörande funktioner</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(dplyr)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Om du har en ny installation av R på datorn måste du ibland <strong>installera</strong> paket, det vill säga ladda ner paketets information från internet. Som tur är finns det en funktion för detta också, nämligen <code>install.packages()</code>. Skillnaden här är att namnet på paketet måste anges inom citationstecken, ex. <code>"PAKET"</code>, istället för bara namnet som vi gjorde i <code>require()</code>. Om du en gång redan installerat paketet till din version av R behöver du <strong>inte installera paketetet för varje ny session</strong> utan kan direkt ladda det genom <code>library()</code> eller <code>require()</code>.</p>
+<p>Skillnaden här är att namnet på paketet inte ska anges inom citationstecken, ex. <code>PAKETNAMN</code>, istället för inom som vi gjorde i <code>install.packages()</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Om du en gång redan installerat paketet till din version av R behöver du <strong>inte installera paketetet för varje ny session</strong> utan kan direkt ladda det genom <code>library()</code> eller <code>require()</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Om paketen inte finns på datorn måste de installeras. </span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KÖRS ENDAST EN GÅNG I SAMBAND MED EN NY INSTALLATION ELLER UPPDATERING AV R!</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="do">## KÖRS ENDAST EN GÅNG I SAMBAND MED EN NY INSTALLATION ELLER UPPDATERING AV R-versionen!</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"RColorBrewer"</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -581,11 +599,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(RColorBrewer)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Termen funktion har använts frekvent tidigare och kan behöva förtydligas. En funktion är en större operation, oftast flera rader kod, som sammanfattas med en rad. Vi kan använda redan inbyggda funktioner från olika paket (som vi gjort i tidigare kapitel) eller skapa en egen funktion, men vi kommer i detta underlag fokusera på att använda redan skapade funktioner. För att använda en funktion behöver vi veta namnet på funktionen och eventuella <strong>argument</strong> som funktionen behöver. Argument motsvarar inställningar eller information som behövs i operationerna som funktionen genomför. För att tilldela ett argument ett värde eller information används <code>=</code> till skillnad från <code>&lt;-</code> i “vanlig” kodning.</p>
+<section id="funktioner" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="funktioner"><span class="header-section-number">2.1.1</span> Funktioner</h3>
+<p>Termen <strong>funktion</strong> har använts frekvent tidigare och kan behöva förtydligas. En funktion är en större operation, oftast flera rader kod, som sammanfattas med en rad. Vi kan använda redan inbyggda funktioner från olika paket (som vi gjort i tidigare kapitel) eller skapa en egen funktion, men vi kommer i denna del fokusera på att använda redan skapade funktioner.</p>
+<p>För att använda en funktion behöver vi veta namnet på funktionen och eventuella <strong>argument</strong> som funktionen behöver. Argument motsvarar inställningar eller information som behövs i operationerna som funktionen genomför. För att tilldela ett argument ett värde eller information används <code>=</code> till skillnad från <code>&lt;-</code> i “vanlig” kodning.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">funktion</span>(<span class="at">argument1 =</span> värde1, <span class="at">argument2 =</span> värde2)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Alla argument i en funktion omsluts av parenteser, <code>(</code> och <code>)</code>, och detta betyder att man kan skriva funktioner på en eller flera rader. Fördelen med att skriva en funktion på flera rader är att göra det lättare att läsa av vad som egentligen händer. Notera att R dock måste ha någon form utav indikation att funktionen fortsätter, t.ex. ett <code>,</code> för att ange att flera argument tillkommer eller <code>&lt;-</code> som tilldelar ett värde till ett objekt.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Denna kod kör funktionen <code>funktion</code> där <code>argument1</code> antar värdet <code>värde1</code> och <code>argument2</code> antar värdet <code>värde2</code>.</p>
+<p>Alla argument i en funktion omsluts av parenteser, <code>(</code> och <code>)</code>, och detta betyder att man kan skriva funktioner på en eller flera rader. Fördelen med att skriva en funktion på flera rader är att göra det lättare att läsa av vad som egentligen händer. Notera att R dock måste ha någon form utav indikation att funktionen fortsätter, t.ex. ett <code>,</code> för att ange att flera argument tillkommer eller <code>&lt;-</code> som tilldelar ett värde till ett objekt.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Skapar en numerisk vektor </span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>vektor <span class="ot">&lt;-</span> </span>
@@ -597,7 +619,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>R fortsätter att läsa på nästa rad om programmet inte anser att raden avslutas, i detta fall med att funktionen avslutas med <code>)</code>. Mer specifikt kan vi läsa av raderna en och en likt:</p>
+<p>R fortsätter att läsa på nästa rad om programmet inte anser att raden avslutats, i detta fall med att funktionen avslutas med <code>)</code>. Mer specifikt kan vi läsa av raderna en och en likt:</p>
 <ul>
 <li><code>&lt;-</code> behöver ett värde att tilldela till objektet <code>vektor</code>, men eftersom det inte anges något värde på samma rad fortsätter R läsa av nästa rad,</li>
 <li>Funktionen <code>c</code> får inget avslutande <code>)</code> så R fortsätter läsa av nästa rad,</li>
@@ -606,11 +628,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>En annan fördel med att skriva funktioner på flera rader är att vi kan kommentera varje enskilda argument som används. Detta kommer vi se exempel på senare.</p>
 </section>
+</section>
 <section id="sec-readData" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="sec-readData"><span class="header-section-number">2.2</span> Ladda in datamaterial</h2>
 <p>Vid datainsamling, eller vid inhämtning av material som någon annan har samlat in, är det vanligt att vi sammanställer informationen utanför R, till exempel skulle ett arbetsblad i Microsoft Excel ge oss ett lätt sätt att strukturera information. Istället för att behöva återskapa materialet från grunden i R kan vi läsa in information från andra typer av filer på datorn.</p>
-<p>Den enklaste formen av fil som R läser in är rena textfiler (med filändelser <code>.txt</code>, <code>.csv</code>, <code>.dat</code>) som på olika sätt sparat ner datans struktur på ett organiserat sätt. Vi kan läsa in informationen från dessa sorters filer till R med hjälp av specifika funktioner.</p>
-<p>Inom statistik är det vanligt att använda kommaseparerade filer, <code>.csv</code>, som vi kan skapa från Excel genom menyn <code>Spara som...</code>. Med hjälp av funktionen <code>read.csv</code> och dess argument kan vi säga till R vilken struktur som filen har och få samma struktur i en data frame. Ett tips är att öppna datafilen i <strong>Notepad</strong>, <strong>Anteckningar</strong> eller annan enkel ordbehandlare för att se vilka symboler som används för att beskriva strukturen.</p>
+<p>Den enklaste formen av fil som R läser in är rena textfiler (med filändelser <code>.txt</code>, <code>.csv</code>, <code>.dat</code>) som på olika sätt sparat ner datans struktur på ett simpelt och organiserat sätt. Vi kan läsa in informationen från dessa sorters filer till R med hjälp av specifika funktioner.</p>
+<p>Inom statistik är det vanligt att använda kommaseparerade filer, <code>.csv</code>, som vi kan skapa från Excel genom menyn <code>Spara som...</code> och ange <code>.csv</code> som filformat. Med hjälp av funktionen <code>read.csv</code> och dess argument kan vi säga till R vilken struktur som filen har och läsa in samma struktur som vi hade i Excel i en data frame.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ett tips är att öppna datafilen i <strong>Notepad</strong>, <strong>Anteckningar</strong> eller annan enkel ordbehandlare för att se vilka symboler som används för att beskriva strukturen. Detta är speciellt viktigt för <code>.csv</code> filer då svenska standarder inte använder <code>,</code> som kolumnavskiljare utan istället <code>;</code>. Varför detta är så ligger utanför detta material.</p>
+</div>
+</div>
 <p>Exempelvis skulle en textfil kunna se ut så här:</p>
 <div id="fig-notepad" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -643,36 +679,63 @@ Figur&nbsp;2.1: Exempel på en fil öppnad i Notepad
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">";"</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>I ovanstående exempel får vi nu ett objekt <code>ekar</code> som innegåller fyra kolumner med information. Vi ser också i kodexemplet hur en uppdelning på flera rader ger oss möjligheten att kommentera respektive argument.</p>
 </section>
 <section id="arbetsmappar" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="arbetsmappar"><span class="header-section-number">2.3</span> Arbetsmappar</h2>
-<p>Att importera datamaterial är endast ett sätt där vi interagerar med datorns hårddisk. Vi kan ibland vilja spara ner objekt eller visualiseringar mer permanent och då kommer vi återigen behöva ange en <strong>sökväg</strong> till någonstans på datorn. För att underlätta denna process kan vi använda oss utav <strong>arbetsmappar</strong> (eng. working directory).</p>
+<p>Att importera datamaterial är endast ett sätt att interagera med datorns hårddisk. Vi kan ibland vilja spara ner objekt eller visualiseringar mer permanent och då kommer vi återigen behöva ange en <strong>sökväg</strong> till någonstans på datorn. För att underlätta denna process kan vi använda oss utav <strong>arbetsmappar</strong> (eng. working directory).</p>
 <p>En arbetsmapp är ett sätt för oss att snabbt och enkelt ge information till R att den ska leta i en specifik del av datorns hårddisk. Om vi arbetar med ett projekt, till exempel datorlaborationer i en specifik kurs, kan det vara lämpligt att skapa en mapp på datorn där all information som hör till kursen sparas ner. Då är det också lämpligt att i R säga att denna mapp är den arbetsmapp som vi ska importera från och exportera till under en session. Vi behöver dock först veta vilken sökväg som leder oss in till mappen.</p>
 <p>För att hitta denna sökväg, kan du öppna upp mappen i ditt operativssystems filhanterare. Du kan följa lämplig instruktion för just ditt operativsystem via någon av följande länkar:</p>
 <ul>
 <li><a href="https://www.top-password.com/blog/tag/how-to-find-file-path-windows-10/" target="_blank">instruktioner för Windows</a></li>
 <li><a href="http://osxdaily.com/2013/06/19/copy-file-folder-path-mac-os-x/" target="_blank">instruktioner för Mac</a></li>
-<li><a href="https://www.systranbox.com/how-to-copy-file-path-in-linux/" target="_blank">instruktioner för Linux</a></li>
+<li><a href="https://askubuntu.com/questions/1528790/how-to-copy-file-path-to-clipboard" target="_blank">instruktioner för Linux</a></li>
 </ul>
 <p>När du väl har hittat din sökväg ska du kopiera den i sin helhet och sedan använda funktionen <code>setwd()</code> för att R ska spara mappen i arbetsminnet. <strong>Notera att alla <code>\</code> måste bytas ut med antingen <code>\\</code> eller <code>/</code> för att R ska kunna läsa av sökvägen korrekt.</strong> Exempelvis kan det se ut så här:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Arbetsmappen anger en sökväg till en mapp på datorn med alla filer som ska användas </span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/MIN ANVÄNDARE/MAPPENS NAMN"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Arbetsmappen anger en sökväg till en mapp på datorn med alla </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">## filer som ska användas </span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/MIN ANVÄNDARE/MAPPENS NAMN"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Vi måste lägga in sökvägen inom <code>"sökväg"</code> för att R ska kunna läsa av den som en textsträng och inte en massa objekt. Låt oss säga att vi har en fil i denna mapp som heter <code>dataOmEkar.csv</code>. Om vi inte har en arbetsmapp i sessionen behöver vi ange hela sökvägen till filen om vi ska importera den till R via <code>read.csv("C:/Users/MIN ANVÄNDARE/MAPPENS NAMN/dataOmEkar.csv)"</code>. Däremot efter att ha kört raden kod vet R att den ska leta efter filen i arbetsmappen och vi behöver därför bara använda filens namn likt <code>read.csv("dataOmEkar.csv")</code>. I det långa loppet kommer arbetsmappar underlätta kodningen avsevärt om vi organiserar filer på datorn på ett strukturerat sätt. Om vi endast är intresserade av någon enstaka fil kanske vi kan klara oss att skriva den långa sökvägen en eller två gånger, men det blir lätt mycket text om fler filer behöver importeras.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>RStudio har ett alternativt sätt att använda specifika delar av hårddisken för olika ändamål. Ett <strong>Projekt</strong> kan skapas som säger åt R att arbeta inom den mapp som projektet finns i. Ni kan läsa mer om denna funktion <a href="https://support.posit.co/hc/en-us/articles/200526207-Using-RStudio-Projects">här</a>.</p>
+</div>
+</div>
 </section>
-<section id="help" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="help"><span class="header-section-number">2.4</span> Hjälpdokumentation</h2>
+<section id="sec-help" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-help"><span class="header-section-number">2.4</span> Hjälpdokumentation</h2>
 <p>Att alltid komma ihåg vad R kan göra, vilka funktioner som finns, vilka argument som de behöver, är omöjligt. Som tur är finns många resurser att hjälpa oss, inte minst den interna dokumentationen.</p>
 <p>Genom att använda <code>?</code> och ett funktionsnamn letar R upp den tillhörande hjälpdokumentationen för funktionen. Den innehåller en detaljerad beskrivning av funktionens syfte, hur man använder den, vilka argument som finns och vad respektive styr, mer djupgående detaljer om funktionen och dess resultat, ytterligare referenser, och allra sist exempel när funktionen används som man kan ta inspiration från.</p>
 <p>Läs hjälpdokumentationen för funktionen att skapa en vektor och testa några av de exempel som visas allra sist i artikeln.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>?c</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Eftersom R är open-source finns det väldigt mycket material tillgänglig på internet, detta underlag kan ses som en sådan resurs. Genom att använda en sökmotor där man beskriver det problem som man stött på eller fråga hur en funktion fungerar kommer du hitta en stor samling av sidor som säkerligen beskriver exakt det du är ute efter.</p>
-</section>
-<section id="chat-GPT" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="chat-GPT"><span class="header-section-number">2.5</span> ChatGPT eller annan AI</h2>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Du kan också använda kortkommandot <code>F1</code> på tangentbordet när du markerat en funktion för att direkt komma till dess dokumentation.</p>
+</div>
+</div>
+<p>Eftersom R är open-source finns det väldigt mycket material tillgänglig på internet, detta underlag kan ses som ett exempel på en sådan resurs. Genom att använda en sökmotor där man beskriver det problem som man stött på eller fråga hur en funktion fungerar kommer du hitta en stor samling av sidor som säkerligen beskriver exakt det du är ute efter.</p>
+<section id="sec-chat-GPT" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="sec-chat-GPT"><span class="header-section-number">2.4.1</span> ChatGPT eller annan AI</h3>
 <p>Ytterligare en resurs som kan både hjälpa och stjälpa är ChatGPT och andra liknande AI-program. Genom att ställa frågor av olika slag till programmet kan man få resultat som dels ger kommenterad kod som (förhoppningsvis) löser det problem som man frågar efter och beskriver mer i detalj koden som den producerat.</p>
 <div id="fig-chatgpt" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -696,10 +759,12 @@ Figur&nbsp;2.2: Exempel på en fråga och svar med ChatGPT
 
 
 </section>
+</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Vi kommer senare se andra exempel på symboler som visar R att kodningen fortsätter på nästa rad.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Detta beror på att R använder paket som objekt vilket identifieras utan citationstecknen<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Vi kommer senare se andra exempel på symboler som visar R att kodningen fortsätter på nästa rad.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

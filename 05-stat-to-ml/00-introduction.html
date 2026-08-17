@@ -352,7 +352,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../00-programming/01-packages-and-functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Paket och funktioner</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Att använda R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -634,17 +634,17 @@ window.Quarto = {
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vilka av följande påståenden beskriver en modell som inte generaliserar väl till nya, liknande data?</p>
-<div id="webex-6eb850df789ff1df6c3aa173010bb41e" class="webex-checkboxgroup" data-answer="bVROCBkBSFcbCGQ=">
-<label><input type="checkbox" autocomplete="off" name="6eb850df789ff1df6c3aa173010bb41e"><span>Modellen är för enkel för att fånga relevanta strukturer och samband i data.</span></label><label><input type="checkbox" autocomplete="off" name="6eb850df789ff1df6c3aa173010bb41e"><span>Modellen har ungefär lika lågt fel på träningsdata som på valideringsdata.</span></label><label><input type="checkbox" autocomplete="off" name="6eb850df789ff1df6c3aa173010bb41e"><span>Modellen anpassar träningsdata mycket väl men ger betydligt större fel på nya data.</span></label><label><input type="checkbox" autocomplete="off" name="6eb850df789ff1df6c3aa173010bb41e"><span>Modellen behandlar slumpmässigt brus i träningsdata som om det vore ett verkligt samband.</span></label><label><input type="checkbox" autocomplete="off" name="6eb850df789ff1df6c3aa173010bb41e"><span>Modellen är lagom komplex och fångar de generella mönstren utan att följa enskilda avvikande observationer.</span></label>
+<div id="webex-526d08baa77583cf59e027c73c04f67e" class="webex-checkboxgroup" data-answer="bgIaVBwJTlBNBmo=">
+<label><input type="checkbox" autocomplete="off" name="526d08baa77583cf59e027c73c04f67e"><span>Modellen har ungefär lika lågt fel på träningsdata som på valideringsdata.</span></label><label><input type="checkbox" autocomplete="off" name="526d08baa77583cf59e027c73c04f67e"><span>Modellen är lagom komplex och fångar de generella mönstren utan att följa enskilda avvikande observationer.</span></label><label><input type="checkbox" autocomplete="off" name="526d08baa77583cf59e027c73c04f67e"><span>Modellen är för enkel för att fånga relevanta strukturer och samband i data.</span></label><label><input type="checkbox" autocomplete="off" name="526d08baa77583cf59e027c73c04f67e"><span>Modellen anpassar träningsdata mycket väl men ger betydligt större fel på nya data.</span></label><label><input type="checkbox" autocomplete="off" name="526d08baa77583cf59e027c73c04f67e"><span>Modellen behandlar slumpmässigt brus i träningsdata som om det vore ett verkligt samband.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Sant. En underanpassad modell är för enkel för att fånga relevanta strukturer och kan därför inte generalisera väl.</li>
 <li>Falskt. Liknande låga fel på tränings- och valideringsdata tyder på att modellen kan generalisera väl till nya, liknande data.</li>
+<li>Falskt. En lagom komplex modell som fångar de generella mönstren utan att anpassa sig till bruset är den typ av modell som eftersträvas.</li>
+<li>Sant. En underanpassad modell är för enkel för att fånga relevanta strukturer och kan därför inte generalisera väl.</li>
 <li>Sant. Ett mycket lågt träningsfel i kombination med ett betydligt större fel på nya data är ett tecken på överanpassning.</li>
 <li>Sant. En överanpassad modell tolkar slumpmässigt brus som en del av det verkliga sambandet och kan därför fungera dåligt på nya data.</li>
-<li>Falskt. En lagom komplex modell som fångar de generella mönstren utan att anpassa sig till bruset är den typ av modell som eftersträvas.</li>
 </ul>
 </div>
 </div>
@@ -864,8 +864,8 @@ Figur&nbsp;25.3: Lagom komplex modell
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vilka av följande påståenden beskriver en modell som inte generaliserar väl till nya, liknande data?</p>
-<div id="webex-6c4e999da24228db505dfff2c8bc4537" class="webex-checkboxgroup" data-answer="bVMYVBUIFVVNAmk=">
-<label><input type="checkbox" autocomplete="off" name="6c4e999da24228db505dfff2c8bc4537"><span>Modellen är lagom komplex och fångar de generella mönstren utan att följa enskilda avvikande observationer.</span></label><label><input type="checkbox" autocomplete="off" name="6c4e999da24228db505dfff2c8bc4537"><span>Modellen behandlar slumpmässigt brus i träningsdata som om det vore ett verkligt samband.</span></label><label><input type="checkbox" autocomplete="off" name="6c4e999da24228db505dfff2c8bc4537"><span>Modellen är för enkel för att fånga relevanta strukturer och samband i data.</span></label><label><input type="checkbox" autocomplete="off" name="6c4e999da24228db505dfff2c8bc4537"><span>Modellen anpassar träningsdata mycket väl men ger betydligt större fel på nya data.</span></label><label><input type="checkbox" autocomplete="off" name="6c4e999da24228db505dfff2c8bc4537"><span>Modellen har ungefär lika lågt fel på träningsdata som på valideringsdata.</span></label>
+<div id="webex-adacb9a85abe1b4f23d4a11257218b4e" class="webex-checkboxgroup" data-answer="OlRNUk4ITQkZUT8=">
+<label><input type="checkbox" autocomplete="off" name="adacb9a85abe1b4f23d4a11257218b4e"><span>Modellen är lagom komplex och fångar de generella mönstren utan att följa enskilda avvikande observationer.</span></label><label><input type="checkbox" autocomplete="off" name="adacb9a85abe1b4f23d4a11257218b4e"><span>Modellen behandlar slumpmässigt brus i träningsdata som om det vore ett verkligt samband.</span></label><label><input type="checkbox" autocomplete="off" name="adacb9a85abe1b4f23d4a11257218b4e"><span>Modellen är för enkel för att fånga relevanta strukturer och samband i data.</span></label><label><input type="checkbox" autocomplete="off" name="adacb9a85abe1b4f23d4a11257218b4e"><span>Modellen anpassar träningsdata mycket väl men ger betydligt större fel på nya data.</span></label><label><input type="checkbox" autocomplete="off" name="adacb9a85abe1b4f23d4a11257218b4e"><span>Modellen har ungefär lika lågt fel på träningsdata som på valideringsdata.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -917,8 +917,8 @@ Figur&nbsp;25.3: Lagom komplex modell
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vilka av följande påståenden beskriver korrekt vad en kostnadsfunktion är och hur den används?</p>
-<div id="webex-018ded11bf91d704e23a789d6442c18d" class="webex-checkboxgroup" data-answer="awAUVElVHQBOVmQ=">
-<label><input type="checkbox" autocomplete="off" name="018ded11bf91d704e23a789d6442c18d"><span>En kostnadsfunktion ger ett numeriskt mått på hur stora fel en modell gör på en viss datamängd.</span></label><label><input type="checkbox" autocomplete="off" name="018ded11bf91d704e23a789d6442c18d"><span>Ett felvärde på <span class="math inline">\(0\)</span> för träningsdata garanterar att modellen generaliserar väl till nya data.</span></label><label><input type="checkbox" autocomplete="off" name="018ded11bf91d704e23a789d6442c18d"><span>MAE kan användas som ett alternativ till MSE när man vill minska extremvärdens påverkan på det beräknade felet.</span></label><label><input type="checkbox" autocomplete="off" name="018ded11bf91d704e23a789d6442c18d"><span>MSE ger stora avvikelser större betydelse än MAE eftersom felen kvadreras.</span></label><label><input type="checkbox" autocomplete="off" name="018ded11bf91d704e23a789d6442c18d"><span>Samma kostnadsfunktion måste alltid användas för både regressions- och klassificeringsproblem.</span></label>
+<div id="webex-99ccbd8f5dac2b491764ac4298ff24e4" class="webex-checkboxgroup" data-answer="YghPU05VFFcZVDw=">
+<label><input type="checkbox" autocomplete="off" name="99ccbd8f5dac2b491764ac4298ff24e4"><span>En kostnadsfunktion ger ett numeriskt mått på hur stora fel en modell gör på en viss datamängd.</span></label><label><input type="checkbox" autocomplete="off" name="99ccbd8f5dac2b491764ac4298ff24e4"><span>Ett felvärde på <span class="math inline">\(0\)</span> för träningsdata garanterar att modellen generaliserar väl till nya data.</span></label><label><input type="checkbox" autocomplete="off" name="99ccbd8f5dac2b491764ac4298ff24e4"><span>MAE kan användas som ett alternativ till MSE när man vill minska extremvärdens påverkan på det beräknade felet.</span></label><label><input type="checkbox" autocomplete="off" name="99ccbd8f5dac2b491764ac4298ff24e4"><span>MSE ger stora avvikelser större betydelse än MAE eftersom felen kvadreras.</span></label><label><input type="checkbox" autocomplete="off" name="99ccbd8f5dac2b491764ac4298ff24e4"><span>Samma kostnadsfunktion måste alltid användas för både regressions- och klassificeringsproblem.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -1008,8 +1008,8 @@ Tips
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>En statistisk inlärningsmodell kan generellt beskrivas som <span class="math inline">\(y=f(x\mid\theta)+\varepsilon\)</span>, där <span class="math inline">\(f\)</span> beskriver sambandet mellan de förklarande variablerna och responsvariabeln. Vilka av följande påståenden beskriver korrekt analysprocessen och valet av en lämplig modell?</p>
-<div id="webex-87ef338043779da6a0a711f07f7b3d03" class="webex-checkboxgroup" data-answer="YwdJVx8CFAEYAmo=">
-<label><input type="checkbox" autocomplete="off" name="87ef338043779da6a0a711f07f7b3d03"><span>Modellens beräkningstid saknar betydelse så länge modellen ger korrekta prediktioner på träningsdata.</span></label><label><input type="checkbox" autocomplete="off" name="87ef338043779da6a0a711f07f7b3d03"><span>Explorativ analys med beskrivande mått och visualiseringar kan genomföras innan en modell väljs och anpassas.</span></label><label><input type="checkbox" autocomplete="off" name="87ef338043779da6a0a711f07f7b3d03"><span>Modellutvärdering är ett separat steg som används för att bedöma hur väl den anpassade modellen fungerar.</span></label><label><input type="checkbox" autocomplete="off" name="87ef338043779da6a0a711f07f7b3d03"><span>En lämplig modell bör fånga relevanta samband men samtidigt vara så enkel som möjligt.</span></label><label><input type="checkbox" autocomplete="off" name="87ef338043779da6a0a711f07f7b3d03"><span>Databearbetning kan innefatta hantering av saknade värden, extremvärden samt skalning eller normalisering av variabler.</span></label>
+<div id="webex-d38f6d0b6ea519be5b7741dd742aa2b1" class="webex-checkboxgroup" data-answer="PwMUVxpVHFMaVDw=">
+<label><input type="checkbox" autocomplete="off" name="d38f6d0b6ea519be5b7741dd742aa2b1"><span>Modellens beräkningstid saknar betydelse så länge modellen ger korrekta prediktioner på träningsdata.</span></label><label><input type="checkbox" autocomplete="off" name="d38f6d0b6ea519be5b7741dd742aa2b1"><span>Explorativ analys med beskrivande mått och visualiseringar kan genomföras innan en modell väljs och anpassas.</span></label><label><input type="checkbox" autocomplete="off" name="d38f6d0b6ea519be5b7741dd742aa2b1"><span>Modellutvärdering är ett separat steg som används för att bedöma hur väl den anpassade modellen fungerar.</span></label><label><input type="checkbox" autocomplete="off" name="d38f6d0b6ea519be5b7741dd742aa2b1"><span>En lämplig modell bör fånga relevanta samband men samtidigt vara så enkel som möjligt.</span></label><label><input type="checkbox" autocomplete="off" name="d38f6d0b6ea519be5b7741dd742aa2b1"><span>Databearbetning kan innefatta hantering av saknade värden, extremvärden samt skalning eller normalisering av variabler.</span></label>
 </div>
 </div>
 <div class="webex-solution">
