@@ -8,11 +8,9 @@ filters:
 
 # Ensemblemetoder
 
-Istället för att förlita sig på en enstaka modell kan vi kombinera flera modeller i en **ensemblemodell**. Grundidén är att med hjälp av flera modeller kan respektive fokusera på olika områden av data och när de kombineras blir prediktionerna bättre.
+Istället för att förlita sig på en enstaka modell kan vi kombinera flera modeller i en **ensemblemodell**. Grundidén är att med hjälp av flera modeller kan respektive fokusera på olika egenskaper av data och när de kombineras blir prediktionerna bättre.
 
 Det finns många olika varianter men de delas ofta upp i två olika metoder; fokusera på data eller på modeller. Vi kan med hjälp av **bootstrapping** eller **bagging** (bootstrap aggregating) göra slumpmässiga urval från träningsdata och skatta modeller på dessa olika urval. Vi kan också med hjälp av **boosting** vikta observationer i urvalen beroende på olika kriterier, exempelvis vikta upp de observationer som en modell inte lyckats prediktera rätt och vikta ner de observationer som en modell lyckats prediktera rätt. 
-
-
 
 ::: {#fig-ensemble-data}
 ```{.tikz}
@@ -39,7 +37,7 @@ Det finns många olika varianter men de delas ofta upp i två olika metoder; fok
 \node[model, right=2cm of model, yshift=2cm] (model1) {Model 1}
 \node[model, right=2cm of model, yshift=0cm] (model2) {Model 2}
 \node[model, right=2cm of model, yshift=-2cm] (model3) {Model 3}
-\node[block, right=3cm of model2, align=center] (ens) {Ensemble Model\\(Average)};
+\node[block, right=3cm of model2, align=center] (ens) {Ensemble Model\\(Medelvärde)};
 \node[data, right=2cm of ens] (score) {Testdata};
 
 \draw[->, thick] (train) -- (train1);
@@ -64,8 +62,6 @@ Databaserad ensemble
 
 Metoder som fokuserar på olika modeller innebär att träna flera olika modeller på samma data eller samma modell med olika hyperparametervärden som sedan kombineras.
 
-
-
 ::: {#fig-ensemble-model}
 ```{.tikz}
 \definecolor{myOrange}{RGB}{255,153,0}
@@ -89,7 +85,7 @@ Metoder som fokuserar på olika modeller innebär att träna flera olika modelle
 \node[block, right=2cm of train, yshift=-1.4cm] (mB) {Neuralt nätverk};
 \node[model, right=2cm of mA] (A) {Model A};
 \node[model, below=1.15cm of A] (B) {Model B};
-\node[block, right=3cm of $(A)!0.5!(B)$, align=center] (ens) {Ensemble Model\\(Average)};
+\node[block, right=3cm of $(A)!0.5!(B)$, align=center] (ens) {Ensemble Model\\(Medelvärde)};
 \node[data, right=2cm of ens] (score) {Testdata};
 \draw[->, thick] (train) -- (mA);
 \draw[->, thick] (train) -- (mB);
@@ -106,23 +102,38 @@ Modellbaserad ensemble
 
 ## Bootstrapping och Bagging
 
-Bootstrapping är en klassisk teknik för att skapa nya datamaterial från ett begränsat insamlat data. Metoden går ut på att vi skapar $B$ urval där observationer väljs [med återläggning]{.underline} från träningsmängden som vi sedan använder för att skatta olika modell eller funktioner. Metoden har använts inom frekventistisk statistik för att skapa skattningar av de sanna parametrarna och deras medelfel och samplingfördelning. 
+Bootstrapping är en klassisk teknik för att skapa nya datamaterial från ett begränsat insamlat data. Metoden går ut på att vi skapar $B$ urval där observationer väljs [med återläggning]{.underline} från träningsmängden som vi sedan använder för att skatta olika modeller eller funktioner. Metoden används inom frekventistisk statistik för att skapa skattningar av de sanna parametrarna och deras medelfel och samplingfördelning, men inom maskininlärning används den med ett annat syfte.
 
-Bagging tar alla $B$ bootstrapurval och tränar en modell på respektive urval $\hat{f}_b$. Den slutgiltiga modellen får vi genom att aggregera alla dessa modeller med exempelvis dess medelvärde.
+Bagging tar alla $B$ bootstrapurval och tränar en modell på respektive urval $\hat{f}_b$. Vi kan se det som att vi replikerar datainsamlingen $B$ gånger och tränar en modell för varje replikat. Nu är inte bootstrapurval ett helt nytt datamaterial eftersom vi utgår från samma ursprungliga data men vi kan ändå få nytta av den ytterligare informationen. Den slutgiltiga modellen får vi genom att aggregera alla dessa modeller med exempelvis dess medelvärde vid regression. För klassificering kan vi använda majoritetsröstning för att bestämma den slutgiltiga prediktionen. 
 $$
   \begin{aligned}
-  \hat{f}_{bag}(\boldsymbol{X}) = \frac{1}{B} \sum_{b=1}^B \hat{f}_b(\boldsymbol{X})
+  \hat{f}_{bag}(\boldsymbol{X}) &= \frac{1}{B} \sum_{b=1}^B \hat{f}_b(\boldsymbol{X})\\
+  \hat{f}_{bag}(\boldsymbol{X}) &= argmax_j \sum_{b=1}^B I\left(\hat{f}_b(\boldsymbol{X}) = j\right)
   \end{aligned}
 $$
-För klassificering kan vi använda majoritetsröstning för att bestämma den slutgiltiga prediktionen. Bagging sänker variansen av den anpassade funktionen men påverkas *mycket* av kvalitén av modellen som anpassas. Om modellen är bra blir aggregeringen bättre, men en dålig modell blir sämre när den aggregeras. 
 
-[MER OM HUR DETTA KAN GÖRAS I PRAKTIKEN I R]{style="color: red"}
+Om vi minns tillbaka till @fig-bias-variance vet vi att en komplex modell ofta har en hög(re) varians som ökar felet. Bagging sänker variansen av den anpassade funktionen så att en mer komplex modell ändå blir generaliserbar men påverkas *mycket* av kvalitén av modellen som anpassas. Om modellen är bra blir aggregeringen bättre, men en dålig modell blir sämre när den aggregeras. 
+
+<!-- TODO: LABBUPPGIFTER + EXEMPELKOD I ISLRv2 -->
+
+
+:::{.callout-caution}
+## Övning 1
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap30.1_ex1.rmd")
+
+```
+:::
+
 
 ## Random Forest
 
-Specifikt för trädmodeller kan bagging ge stora förbättringar i den slutgiltiga prestandan men det finns vissa problem. Bootstrapurvalen är korrelerade eftersom vi utgår från samma ursprungliga träningsmängd och detta medför att reduktionen i varians blir liten när vi tar ett medelvärde över de korrelerade variablerna [VARIABLERNA?]{style="color: red"}.
+Specifikt för trädmodeller kan bagging ge stora förbättringar i den slutgiltiga prestandan men det finns vissa problem. Bootstrapurvalen är korrelerade, varje urval ser nästan likadana ut vilket ofta leder till väldigt snarlika modeller. En konsekvens blir att den modellvarians som vi hoppas bli mindre, inte längre blir det när vi beräknar ett medelvärde över modellanpassningar som liknar varandra mycket.
 
-**Random Forest** löser problemet med korrelerade modeller genom att slumpmässigt ändra modellerna som tränas. Vid varje uppdelning används endast en slumpmässig delmängd ($q \le p$) av de förklarande variablerna. Storleken på $q$ bestämmer vi själva men Leo Breiman [KÄLLA PÅ DENNA]{style="color: red"} föreslår följande tumregler:
+**Random Forest** löser problemet med korrelerade modeller genom att slumpmässigt ändra modellerna som tränas. När vi tränar ett träd från ett bootstrapurval används endast en slumpmässig delmängd ($q \le p$) av de förklarande variablerna vid varje uppdelning. Storleken på $q$ bestämmer vi själva men skaparen av Random Forest, Leo Breiman (@hastieESL), föreslår följande tumregler:
 
 $$
   \begin{aligned}
@@ -131,36 +142,224 @@ $$
   \end{aligned}
 $$
 
-Varje modell tränas då på ett urval av observationer (med återläggning) och ett urval av variabler vilket leder till ett minskat bias, "artificiell" varians i varje träd och mindre korrelation mellan träden. Ofta dominerar den avkorrelerade effekten vilket leder till att MSE minskar på testdata. 
+Varje modell tränas både på ett urval av observationer (med återläggning) *och* ett urval av variabler vilket leder till ett minskat bias, "artificiell" varians i varje träd och mindre korrelation mellan träden. Ofta dominerar den avkorrelerade effekten vilket leder till att MSE minskar på testdata. Andra fördelar med Random Forest är att den är lätt att parallelisera samt att det urval av parametrar som görs minskar kostnaden för varje uppdelning.
 
-Andra fördelar med Random Forest är att den är lätt att parallelisera samt att det urval av parametrar som görs minskar kostnaden för varje uppdelning.
+Metoden har, utöver de vanliga hyperparametrar från ett enskilt beslutsträd, två ytterligare hyperparametrar i form av $B$ och $q$.
+
+:::{.callout-caution}
+## Övning 2
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap30.2_ex2.rmd")
+
+```
+:::
+
 
 ## Boosting
 
-En enkel modell kan vanligtvis fånga upp vissa aspekter av data. Om vi försöker lära oss en stor mängd av enkla modeller som var och en lär sig en liten del av data kan vi sedan kombinera dessa "dåliga" modeller till en tillsammans stark modell. Boostingmetoden lär sig *sekventiellt* en ensemble av svaga modeller, till skillnad från den parallella baggingmetoden. 
+En enkel modell kan vanligtvis fånga upp vissa aspekter av data. Om vi försöker lära oss en stor mängd av enkla modeller som var och en lär sig en liten del av data kan vi sedan kombinera dessa "dåliga" modeller till en tillsammans stark modell. Boostingmetoden lär sig *sekventiellt* en ensemble av svaga modeller, till skillnad från den parallella baggingmetoden, genom att successivt vikta urvalet så att nästa modell får ett urval bestående av observationer som tidigare modeller inte lyckats anpassa bra.
 
-Vi exemplifierar metoden för en binär klassificerare där $y$ antar värdena -1 eller 1. Utifrån dessa värden kan vi skriva en majoritetsröstning av $B$ klassificerare som:
+::: {#fig-ensemble-data}
+```{.tikz}
+\definecolor{myOrange}{RGB}{255,153,0}
+\definecolor{myBlue}{RGB}{16,152,247}
+
+\usetikzlibrary{positioning,arrows.meta,calc,shapes.geometric}
+
+\begin{tikzpicture}[
+  block/.style={draw, rectangle, minimum width=2.8cm, minimum height=1cm, fill=myBlue!60},
+  model/.style={draw, circle, minimum size=1.4cm, fill=myBlue!80},
+  data/.style={draw, cylinder, cylinder uses custom fill,
+    cylinder body fill=myOrange!60,
+    cylinder end fill=myOrange!80,
+    shape border rotate=90,
+    aspect=0.25,
+    minimum height=1.9cm,
+    minimum width=1.5cm},
+  >=Stealth
+]
+
+\node[data] (train) {Träningsdata};
+
+\node[model, right=3cm of train] (m1) {Modell 1};
+\node[model, right=3cm of m1] (m2) {Modell 2};
+\node[model, right=3cm of m2] (m3) {Modell 3};
+
+\node[data, below=1.8cm of m1] (w1) {Omviktning};
+\node[data, below=1.8cm of m2] (w2) {Omviktning};
+
+\node[block, right=3cm of m3, align=center] (ens)
+{Boostad modell\\(Viktad summa)};
+
+\node[data, right=2cm of ens] (test) {Testdata};
+
+\draw[->, thick] (train) -- (m1);
+
+\draw[->, thick] (m1) -- (w1);
+\draw[->, thick] (w1) -- (m2);
+
+\draw[->, thick] (m2) -- (w2);
+\draw[->, thick] (w2) -- (m3);
+
+\draw[->, thick] (m1) to[out=45, in=135] (ens); 
+\draw[->, thick] (m2) to[out=30, in=150] (ens); 
+\draw[->, thick] (m3) to[out=0, in=180] (ens);
+
+\draw[->, thick] (test) -- (ens);
+
+\end{tikzpicture}
+```
+Illustration av boosting
+:::
+
+Första modellen som tränas har samma vikt på alla observationer, $w_i^1 = \frac{1}{n}\quad i = \{1, 2, \dots, n\}$. Denna modell kommer vara överlag en svag prediktor men vi använder dess prestanda för att uppdatera vikterna för nästa träning. Felklassificerade observationer (eller observationer som har en större residual) får en högre vikt, och blir mer viktiga att optimera i nästa modellträning,  medan korrekta prediktioner får en mindre vikt, vilket gör att nästa modell fokuserar på att prediktera de felaktiva observationerna korrekt. Denna process repeteras fram till att vi har $B$ modeller med successivt ökande och minskande vikter beroende på resultaten från den föregående modellen. En observation som är svårklassificerad kommer få större och större vikt tills modellen tvingas att prediktera den rätt.
+
+:::{.callout-important}
+Inom boosting används en **viktad kostnadsfunktion**^[Den används för många andra syften utöver boosting, framförallt när det finns ett intresse av att fokusera på vissa observationer i träningen.]. I @sec-cost-function har vi antagit att varje observation bidrar lika mycket till den totala kostnaden. Vi kan omformulera @eq-mse till en viktad summa enligt:
+$$
+  \begin{aligned}
+    MSE = \Sum{n} w_i \cdot (y_i - \hat{y}_i)^2
+  \end{aligned}
+$$ {#eq-mse-weighted}
+där vi får det "vanliga" MSE om $w_i = 1/n$.
+
+Om vi vill lägga en större (eller mindre) vikt på vissa observationer, har vi nu en mer generell formel där vi kan göra detta. 
+:::
+
+Vi börjar med ett klassificeringsexempel där $Y$ antar värdena -1 eller 1, kan vi beräkna en majoritetsröstning av $B$ klassificerare som:
 
 $$
   \begin{aligned}
-  sign\left(\sum_{b=1}^B \hat{y}^b(\boldsymbol{X})\right)
+    \hat{f}_{boost} (\boldsymbol{X})= sign\left(\sum_{b=1}^B \hat{f}_b(\boldsymbol{X})\right)
   \end{aligned}
 $$
-Första modellen som tränas har samma vikt på alla observationer, $w_i^1 = \frac{1}{n}\quad i = \{1, 2, \dots, n\}$. Denna modell kommer vara överlag en svag prediktor men vi använder dess prestanda för att uppdatera vikterna för nästa träning. Felklassificerade observationer får en högre vikt vilket gör att nästa modell behöver jobba mer för att klassificera dessa rätt, medan korrekta prediktioner får en mindre vikt. Denna process repeteras fram till att vi har $B$ modeller där vikterna successivt ökas och minskas beroende på resultaten från den föregående modellen. En observation som är svårklassificerad kommer få en större och större vikt tills modellen måste specifikt försöka prediktera den rätt.
+där $sign(\cdot)$ identifierar om summan är positiv eller negativ och predikterar en klass som +1 eller -1 respektive. $\hat{f}_b(\boldsymbol{X})$ är en modell tränad på ett boostat urval.
 
-Prediktionerna från alla modellerna kombineras genom att använda en viktad majoritetsröstning:
+Men eftersom vi vill lägga olika vikt på de olika modellerna, lägger vi till en koefficient som ger en viktad majoritetsröstning:
 $$
   \begin{aligned}
-  \hat{y}_{boost}(\boldsymbol{X}) = sign\left(\sum_{b = 1}^B \alpha^b \hat{y}^b(\boldsymbol{X})\right)
+  \hat{f}_{boost}(\boldsymbol{X}) = sign\left(\sum_{b = 1}^B \alpha_b \hat{f}_b(\boldsymbol{X})\right)
   \end{aligned}
 $$
-där $\alpha^b$ är en viktningskoefficient för modell $b$.
+där $\alpha_b$ är viktningskoefficienten för modell $b$.
 
-[BEHÖVER VISA HUR VIKTNING KAN ANVÄNDAS I EN FELFUNKTION FÖR ATT DENNA METOD SKA VARA LÄTT ATT FÖRSTÅ]{style="color: red"}
+Flera olika algoritmer finns för att bestämma hur vikterna justeras och hur $\alpha_b$ bestäms, den vanligaste är **ADABOOST** (@hastieESL).
 
-Frågorna vi måste ställa oss nu är; hur ska vi öka/minska vikterna och hur ska vi bestämma värdet på $\alpha^b$. Olika boostingalgoritmer ger lite olika svar på dessa frågor. En utav de första algoritmerna, AdaBoost, besvarade dessa frågor genom att minimera den exponentiella kostnadsfunktionen. Det finns många olika varianter, den mest kända är nog XGBoost.
+:::{.callout-tip}
+## ADABOOST
 
-[Mer om gradient boosting/XGBOOST? Slide 30 i FL6]{style="color: red"}
+1. Ge varje datapunkt en vikt $w_i^1 = 1/n$.
+2. För $b = 1, \dots, B$
+    a. Träna en "svag" klassificerare $\hat{f}_b(\boldsymbol{X})$ på den viktade träningsdatan $\{(\boldsymbol{x}_i, y_i, w_i^b\}_{i=1}^n$
+    b. Uppdatera vikterna $\{w_i^{b+1}\}_{i = 1}^n$ från $\{w_i^{b}\}_{i = 1}^n$
+        i. Beräkna $err_b = \frac{\Sum{n} w_i^b \cdot I(y_i \ne \hat{f}_b(\boldsymbol{x}_i))}{\Sum{n}w_i^b}$ 
+        ii. Beräkna $\alpha_b = \log\left((1 - err_b) / err_b \right)$
+        iii. Beräkna $w_i^{b+1} = w_i^b \cdot exp\left(\alpha_b \cdot I\left(y_i \ne \hat{f}_b(\boldsymbol{x}_i)\right)\right)$
+:::
+
+Kortfattat beräknar algoritmen hur mycket fel modell $b$ gör, $err_b$, genom att en viktad summa för de missklassificerade observationerna^[$I(y_i \ne \hat{f}_b(\boldsymbol{x}_i))$ blir 1 om observationen inte överensstämmer med prediktionen.] och använder sedan denna summa för att beräkna koefficienten $\alpha_b$. En bra modell har ett lågt värde på $err_b$ vilket leder till ett positivt värde på $\alpha_b$ och en dålig modell får negativa värden. 
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: $\alpha_b$ för olika prestanda på modellerna
+#| label: fig-adaboost-alpha
+#| out-width: "90%"
+#| echo: false
+
+x <- seq(0.01, 1, by = 0.01)
+y <- 0.5 * log((1-x)/x)
+
+tibble(
+  x = x, 
+  y = y
+) |> 
+  ggplot() + aes(x = x, y = y) +
+  geom_line() + 
+  theme_bw() +
+  labs(x = expression(err[b]), y = expression(alpha[b]))
+
+
+```
+
+I viktuppdateringen, $w_i^{b+1}$, kommer alla vikter där modellen gjort fel uppdateras med en faktor $exp(\alpha_b)$, vilket vi kan visualisera för att få en bättre uppfattning.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: $w^{(b+1)}$ utifrån $w^b = 1/1000$ med olika värden på $\alpha_b$
+#| label: fig-adaboost-wb-1
+#| out-width: "90%"
+#| echo: false
+
+y <- 0.5 * log((1-x)/x)
+w <- 1/1000 * exp(y)
+
+tibble(
+  x = y, 
+  y = w
+) |> 
+  ggplot() + aes(x = x, y = y) +
+  geom_line() + 
+  theme_bw() +
+  labs(x = expression(alpha[b]), y = expression(w^(b+1)))
+
+```
+
+I @fig-adaboost-wb-1 ser vi hur vikterna för en missklassificerad observation med $w_i^b = 1/1000$ förändras beroende på modellens prestanda. För en bra modell (positiv $\alpha_b$) kommer $w_i^{b+1}$ bli mycket större eftersom den är en av få observationer som blivit fel, medan i en sämre modell (negativ $\alpha_b$) får många observationer istället en mindre ökning. 
+
+:::{.callout-caution}
+## Övning 3
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap30.3_ex1.rmd")
+
+```
+:::
+
+
+### XGBoost
+Ytterligare en form av boosting är den populära algoritmen **XGBoost** (eng. eXtreme Gradient Boosting). Den är en form av **Gradient Boosting** som approximerar $f(\boldsymbol{X})$ genom att minimera en differentiabel kostnadsfunktion. Istället för att vi förändrar vikterna i kostnadsfunktionen vid varje modell, kommer varje ny modell approximera den negativa gradienten av kostnaden från den föregående modellen. 
+
+$$
+  \begin{aligned}
+    \hat{f}_{b} (\boldsymbol{X})= \hat{f}_{b-1}(\boldsymbol{X}) + 
+        v \cdot h_b(\boldsymbol{X})
+  \end{aligned}
+$$
+där $h_b(\boldsymbol{X})$ är en approximation av den negativa gradienten. Vi känner också igen $v$ från gradient descent som inlärningshastigheten.
+
+Gradient Boosting är teoretisk välgrundad då den bygger på just gradient descent och fungerar på olika kostnadsfunktioner. Varje iteration fokuserar på att minska felet mest effektivt. XGBoost gör algoritmen än mer effektiv med fokus på modellens prestanda och skalbarhet samtidigt som den hanterar saknade värden automatiskt. Med hjälp av inbyggd regularisering kan algoritmen kontrollera modellens komplexitet och minska risken för överanpassning där kostnadsfunktionen kombinerar storleken på felet och komplexiteten. XGBoost är optimerad för parallellisering och hantering av stora datamängder.
+
+- eta – Inlärningshastighet. Lägger mindre vikt vid varje nytt träd.
+- nrounds – Antal boosting-rundor, dvs. antal träd som byggs.
+- lambda – L2-regularisering av vikter. Minskar överanpassning.
+- gamma – Minsta förbättring som krävs för att göra en split. Påverkar
+pruning.
+- max depth – Maximal djup för varje träd. Påverkar modellens
+komplexitet.
+- subsample – Andel av träningsdata som används för varje träd.
+Minskar överanpassning.
+- colsample bytree – Andel features som används vid varje träd.
+Ökar variation mellan träden
+
+## Modellbaserad ensemblemetod
+
+Med modellbaserade ensemblemetoder 
+
+Case 1:
+Data: dela upp i träning, val (och test)
+- skattar 2-3 olika modeller av olika sort och sen kombinera deras predktioner. Visa tabell med utvärderingsmått för
+enskilda modeller för träning och validering + dessa mått för den kombinerade modellen
+- lasso reg + beslutsträd + neurala nätverk
+Case 2:
+Skatta samma modelltyp, men olika hyperparametervärden. Tex träna nätverk med 3 olika startvärden och sen
+kombinera prediktioner
 
 ## Bagging eller boosting?
 
@@ -198,6 +397,16 @@ Valet av ensemblemetod kan ibland vara svårt att göra. Mycket beror på vad vi
 :::
 
 
+:::{.callout-caution}
+## Övning 4
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 5/Del5_Chap30.4_ex1.rmd")
+
+```
+:::
 
 
 ## Referenser {.unnumbered}
