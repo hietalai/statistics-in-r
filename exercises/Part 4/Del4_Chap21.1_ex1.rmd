@@ -1,0 +1,14 @@
+Question
+========
+Vilket värde har den tionde observationen i serien, $Y_{10}$?
+
+Solution
+========
+Genom att t.ex. använda `prices$price[10]` kan vi få fram det tionde värdet.
+
+Meta-information
+================
+exname: indexing
+extype: num
+exsolution: `r 69.3`
+extol: 0.01
