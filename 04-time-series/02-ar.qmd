@@ -42,12 +42,12 @@ Denna modell antar att $Y_t$ endast beror på den föregående tidpunkten och et
 
 Vi kan simulera hur en AR(1) ser ut för olika värden på $\phi$ med hjälp av funktionen `arima.sim()`. Vi kan ändra värdet på $\phi$ i följande kod för att se hur serien förändras, men vi måste tänka på vissa begränsningar som vi återkommer till nedanför.
 
-```{webr-r}
+```{r}
 #| fig-width: 5
 #| fig-height: 3
 #| fig-cap: Simulerad AR(1) serie från angivet phi
 #| out-width: "90%"
-#| autorun: true
+#| code-fold: false
 
 # Egenskaper för simuleringen
 n <- 100
@@ -125,12 +125,12 @@ det vill säga en exponentiellt minskande korrelation då $|\phi| < 1$.
 
 Med hjälp av dessa härledningar kan vi interaktivt visualisera hur $\rho_k$ ser ut för olika värden på $\phi$. Denna visualisering av den sanna autokorrelationen kan ge oss en intuition när vi senare vill identifiera lämpliga modeller med hjälp av den observerade autokorrelationen (SAC). 
 
-```{webr-r}
+```{r}
 #| fig-width: 5
 #| fig-height: 3
 #| fig-cap: Autokorrelationen för en AR(1) med olika phi
 #| out-width: "90%"
-#| autorun: true
+#| code-fold: false
 
 # Ange ett värde på phi i processen
 phi <- 0.5
@@ -171,12 +171,12 @@ $$ {#eq-ar2-stationarity}
 
 Att beräkna autokorrelationen för olika värden på $\phi$ blir också mer komplicerat eftersom vi numera har två variabler men vissa härledningar finns även för en AR(2) i @cryer2008. Med följande kod kan vi justera värden på $\phi_1$ och $\phi_2$ för att beräkna $\rho_k$ utifrån de härledda formlerna.
 
-```{webr-r}
+```{r}
 #| fig-width: 5
 #| fig-height: 3
 #| fig-cap: Autokorrelationen för en AR(2) med olika värden på phi
 #| out-width: "90%"
-#| autorun: true
+#| code-fold: false
 
 rhoAr2 <- function(phi1, phi2) {
   
@@ -313,12 +313,12 @@ $$
   \end{aligned}
 $$ {#eq-ma1-rho}
 
-```{webr-r}
+```{r}
 #| fig-width: 5
 #| fig-height: 3
 #| fig-cap: Autokorrelationen för en MA(1) med olika theta
 #| out-width: "90%"
-#| autorun: true
+#| code-fold: false
 
 # Ange ett värde på theta i processen
 theta <- 0.5
@@ -359,12 +359,12 @@ $$ {#eq-ma2-rho}
 
 Vad detta betyder är att när $q = 2$ finner vi två nollskilda lagg och resterande är 0. Detta beteende går att utöka till den generella MA(q) processen där vi kan se nollskilda lagg när $k \le q$ och 0 för alla $k > q$.
 
-```{webr-r}
+```{r}
 #| fig-width: 5
 #| fig-height: 3
 #| fig-cap: Autokorrelationen för en MA(2) med olika theta
 #| out-width: "90%"
-#| autorun: true
+#| code-fold: false
 
 rhoMa2 <- function(theta1, theta2) {
   

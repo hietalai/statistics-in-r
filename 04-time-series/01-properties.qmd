@@ -5,40 +5,6 @@ filters:
 ---
 <!-- CONTENT -->
 
-```{webr-r}
-#| context: setup
-
-checkSolution <- function(object, ex) {
-  
-  if (ex == 1) {
-    assert_that(object |> is.data.frame(), msg = "Objektet måste vara en data.frame eller tibble")
-    assert_that("t" %in% colnames(object), msg = "Variabeln t måste finnas i objektet.")
-    assert_that(all(seq_len(nrow(prices)) %in% object$t), msg = "Alla tidssindex måste finnas i objektet.")
-  
-  } else if (ex == 2) {
-    
-    assert_that(object |> is.numeric(), msg = "Objektet måste vara ett numeriskt värde.")
-    answer <- prices$pris[10]
-    
-    assert_that(all.equal(object, answer, tolerance = 1E-3) |> isTRUE(),
-                msg = "Svaret är fel.")
-    
-  } else if (ex == 4) {
-    
-    assert_that(object |> class() == "acf", msg = "Objektet måste vara ett objekt från acf().")
-    
-    answer <- customAcf(randomWalk, plot = FALSE)
-    
-    
-    assert_that(all.equal(answer$acf, object$acf, tolerance = 1E-3) |> isTRUE(),
-                msg = "Svaret är fel.")
-  }
-  
-  print("Korrekt!")
-  
-}
-```
-
 # Tidsserier
 
 När det kommer till hantering, bearbetning och analys av tidsserier i R är det vanligast att vi sparar serien som en `tibble` med två kolumner; tid och variabeln som mäts. Varje rad motsvarar mätvariabelns värde vid tidpunkt $t$, betecknad som $Y_t$. Om vi får tillgång till data med en annan struktur behöver vi bearbeta om den till detta format.
@@ -46,18 +12,8 @@ När det kommer till hantering, bearbetning och analys av tidsserier i R är det
 ## Databearbetning
 Vi kan titta närmare på det exempeldata om elpriser som visualiserades i @fig-price.
 
-```{webr-r}
-#| autorun: true
-
-## Läser in exempeldata i tre steg
-#  URL för källan
-url <- "https://hietalai.github.io/statistics-in-r/resources/data/electricityprice.csv"
-
-#  Laddar ner data från URL
-download.file(url, "electricityprice.csv", quiet = TRUE)
-
-#  Läser in data till R
-prices <- read_csv("electricityprice.csv", show_col_types = FALSE)
+```{r}
+#| code-fold: true
 
 #  Visar de första observationerna i serien
 head(prices)
@@ -70,8 +26,8 @@ Notera att tidsvariabeln `tid` i detta fall inte är numerisk utan en textsträn
 
 Det enklaste sättet att göra detta är att skapa en ny variabel som helt enkelt räknar från 1 till den sista observationen i serien. Med hjälp av funktionerna `seq_len()`^[som skapar en sekvens (seq) av en angiven längd (len).] och `nrow()`^[som räknar antalet rader i data.] kan vi skapa en sekvens av antalet raders längd.
 
-```{webr-r}
-#| autorun: true
+```{r}
+#| code-fold: false
 
 t <- seq_len(nrow(prices))
 
@@ -86,19 +42,14 @@ Testa nu att lägga till detta tidsindex till datamaterialet istället för att 
 
 :::{.callout-caution}
 ## Övning 1
-Utifrån datamaterialet `prices`, skapa ett nytt objekt, `dataWithT`, där variabeln $t$ innehåller ett tidsindex.
-
-```{webr-r}
-dataWithT <- ______
-
-checkSolution(dataWithT, ex = 1)
-```
-
+Utifrån datamaterialet `prices`, skapa ett nytt objekt eller lägg till i samma objekt, en ny variabel $t$ som innehåller ett tidsindex.
 :::
 
 Ibland kan det vara av intresse att plocka ut vissa tidpunkter, till exempel om någon specifik tidpunkt är fokus av undersökningen eller om vissa observationer kan anses missvisande och behöver undersökas i detalj. Det finns tre huvudsakliga sätt att **indexera** data i R; med hjälp av olika funktioner från `dplyr`-paketet eller två olika sätt att använda `[]`.
 
-```{webr-r}
+```{r}
+#| code-fold: false
+
 #  Plockar ut tidpunkt 5
 prices |> 
   slice(5) |> 
@@ -125,13 +76,12 @@ Testa nu själv att plocka ut det tionde priset i serien.
 
 :::{.callout-caution}
 ## Övning 2
-Vilket värde har den tionde observationen i serien, $Y_{10}$?
 
-```{webr-r}
-# TODO Tilldela värdet från den tionde observationen i serien
-y10 <- ________
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap21.1_ex1.rmd")
 
-checkSolution(y10, ex = 2)
 ```
 :::
 
@@ -224,13 +174,13 @@ $$
   \end{aligned}
 $$
 Vi kan i R generera en serie med vitt brus genom dragningar från `rnorm()` med väntevärde 0 och en godytcklig varians.
-```{webr-r}
+```{r}
 #| fig-width: 5
 #| fig-height: 3
 #| fig-cap: En serie med vitt brus
 #| label: 'fig-white-noise'
 #| out-width: "90%"
-#| autorun: true
+#| code-fold: false
 
 # Dra 100 observationer från normalfördelningen
 n <- 100
@@ -280,13 +230,13 @@ $$
   \end{aligned}
 $$ {#eq-random-walk}
 
-```{webr-r}
+```{r}
 #| fig-width: 5
 #| fig-height: 3
 #| fig-cap: En serie som visar en Random Walk
 #| label: fig-random-walk
 #| out-width: "90%" 
-#| autorun: true  
+#| code-fold: false  
 
 # Ange längden av serien som ska genereras
 n <- 100
@@ -390,7 +340,7 @@ för alla $1 \le t \le s$. En visualisering av olika värden på $\rho$ för oli
 #| fig-width: 4
 #| fig-height: 3
 #| fig-cap: Autokorrelationen för olika avstånd av tidssteg t och s i en Random Walk serie
-#| label: 'fig-rho'
+#| label: fig-rho
 #| out-width: "90%"
 #| echo: false
 
@@ -432,13 +382,13 @@ $$
   \end{aligned}
 $$
 
-```{webr-r}
+```{r}
 #| fig-width: 5
 #| fig-height: 3
 #| fig-cap: Exempelserie för ett glidande medelvärde
-#| label: 'fig-moving-average'
+#| label: fig-moving-average
 #| out-width: "90%" 
-#| autorun: true 
+#| code-fold: false 
 #| warning: false
 
 n <- 100
@@ -634,7 +584,7 @@ För att köra funktioner från TSA-paketet lokalt, läs @sec-basic-r för hur d
 #| fig-cap: SAC för vita brus serien
 #| label: fig-sac-white-noise
 #| out-width: "90%"
-#| autorun: true
+#| code-fold: false
 
 require(TSA)
 
@@ -647,43 +597,6 @@ whiteNoise <- rnorm(n = n, mean = 0, sd = 1)
 acf(whiteNoise)
 
 ```
-
-:::{#imp-webr-tsa .callout-important collapse="true"}
-## Expandera för att visa en variant av `TSA` i WEBR
-Tyvärr finns inte `TSA` tillgängligt via WEBR men vi kan återskapa paketets funktioner vid behov. I detta och efterföljande kapitel där funktioner från `TSA`-paketet används kommer vi först visa ett icke-interaktivt kodblock med TSA funktionen och tillhörande utskrift och sedan ett interaktivt WEBR-kodblock med motsvarande egenskapade funktion som speglar TSAs variant. 
-
-På grund av att dessa två sätt att visa kod i detta material inte delar objektmiljöer med varandra kommer vi behöva återskapa objekten i koden, till exempel hur `whiteNoise` återskapades innan vi anropade `acf()` för @fig-sac-white-noise trots att tidigare WEBR kodblock har använt sig av `whiteNoise`.
-
-```{webr-r}
-#| fig-width: 5
-#| fig-height: 3
-#| fig-cap: SAC för vita brus serien med egenskapad kod
-#| out-width: "90%"
-#| autorun: true
-
-customAcf <- function(series, plot = FALSE) {
-  # Använder acf() från paketet stats
-  SAC <- acf(series, plot = FALSE)
-  
-  SAC$series <- deparse(substitute(series))
-  
-  # Tar bort lag 0 eftersom det alltid kommer vara SAC = 1
-  SAC$acf <- SAC$acf[-1,,, drop = FALSE]
-  SAC$lag <- SAC$lag[-1,,, drop = FALSE]
-  
-  if (plot) {
-    plot(SAC)  
-  }
-  
-  return(SAC)
-}
-
-SAC <- customAcf(whiteNoise, plot = TRUE)
-
-```
-
-På grund av att vi behövt skapa en ny serie med vitt brus kommer dessa diagram inte se exakt lika ut, men vi ser att samma beräkningar och visualisering har gjorts. 
-::: 
 
 @fig-sac-white-noise visar att alla $r_k$ ligger inom felmarginalen från 0 vilket tyder på att det i praktiken kan tolkas som att det inte råder någon autokorrelation i serien. Detta blir då en indikation att serien är stationär.
 
@@ -713,7 +626,7 @@ På grund av att vi behövt skapa en ny serie med vitt brus kommer dessa diagram
 #| fig-cap: SAC för Random Walk
 #| label: fig-sac-random-walk
 #| out-width: "90%"
-#| autorun: true
+#| code-fold: false
 
 # Ange längden av serien som ska genereras
 n <- 100
@@ -772,7 +685,7 @@ Funktionen `diff()` skapar en serie som differentierats `differences` gånger ba
 #| fig-cap: SAC för en differentierad Random Walk
 #| label: fig-sac-diff-random-walk
 #| out-width: "90%"
-#| autorun: true
+#| code-fold: false
 
 # Differentiera en icke-stationär serie
 diffY <- diff(randomWalk, lag = 1, differences = 1)
