@@ -101,7 +101,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-6c85c9fc2bbb9926b7650676933c738f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f46846042fbd00966f0114f0ffd981ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -741,7 +741,7 @@ Viktigt
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vilket värde har den tionde observationen i serien, <span class="math inline">\(Y_{10}\)</span>?</p>
-<p><input class="webex-solveme nospaces" id="webex-dfc45ccd0ade01e72b38703cf77cdbb9" data-tol="0.01" size="20" data-answer="P0RVDRtQQTk="></p>
+<p><input class="webex-solveme nospaces" id="webex-a9f8a96155aa8060d3b8659f304691a4" data-tol="0.01" size="20" data-answer="OhtQAU8KFGw="></p>
 </div>
 <div class="webex-solution">
 <p>Genom att t.ex. använda <code>prices$price[10]</code> kan vi få fram det tionde värdet.</p>
@@ -1120,15 +1120,15 @@ Notera
 Y_t = \frac{e_t + e_{t-1}}{2}.
 \]</span></p>
 <p>Vilka av följande påståenden om serien är korrekta?</p>
-<div id="webex-b8dcc39626e2f5fa88bbe9b5a1616828" class="webex-checkboxgroup" data-answer="OQhIUk8CFQdv">
-<label><input type="checkbox" autocomplete="off" name="b8dcc39626e2f5fa88bbe9b5a1616828"><span><span class="math inline">\(\operatorname{Var}(Y_t) = \sigma_e^2\)</span>, eftersom serien består av två termer som båda har variansen <span class="math inline">\(\sigma_e^2\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="b8dcc39626e2f5fa88bbe9b5a1616828"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är korrelerade eftersom båda innehåller slumpvariabeln <span class="math inline">\(e_{t-1}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="b8dcc39626e2f5fa88bbe9b5a1616828"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-2}\)</span> är okorrelerade eftersom de inte innehåller någon gemensam slumpvariabel.</span></label><label><input type="checkbox" autocomplete="off" name="b8dcc39626e2f5fa88bbe9b5a1616828"><span>Kovariansen mellan <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är <span class="math inline">\(\sigma_e^2/4\)</span>.</span></label>
+<div id="webex-f35d1a83810884f876237243d42ab0d5" class="webex-checkboxgroup" data-answer="PQIZVR1RFAJl">
+<label><input type="checkbox" autocomplete="off" name="f35d1a83810884f876237243d42ab0d5"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är korrelerade eftersom båda innehåller slumpvariabeln <span class="math inline">\(e_{t-1}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f35d1a83810884f876237243d42ab0d5"><span><span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-2}\)</span> är okorrelerade eftersom de inte innehåller någon gemensam slumpvariabel.</span></label><label><input type="checkbox" autocomplete="off" name="f35d1a83810884f876237243d42ab0d5"><span><span class="math inline">\(\operatorname{Var}(Y_t) = \sigma_e^2\)</span>, eftersom serien består av två termer som båda har variansen <span class="math inline">\(\sigma_e^2\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f35d1a83810884f876237243d42ab0d5"><span>Kovariansen mellan <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är <span class="math inline">\(\sigma_e^2/4\)</span>.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Eftersom <span class="math inline">\(e_t\)</span> och <span class="math inline">\(e_{t-1}\)</span> är oberoende gäller <span class="math inline">\(\operatorname{Var}(Y_t) = \{\operatorname{Var}(e_t) + \operatorname{Var}(e_{t-1})\}/4 = \sigma_e^2/2\)</span>.</li>
 <li>Sant. Både <span class="math inline">\(Y_t = (e_t + e_{t-1})/2\)</span> och <span class="math inline">\(Y_{t-1} = (e_{t-1} + e_{t-2})/2\)</span> innehåller <span class="math inline">\(e_{t-1}\)</span>. Den gemensamma slumpvariabeln gör att kovariansen är positiv.</li>
 <li>Sant. <span class="math inline">\(Y_t\)</span> innehåller <span class="math inline">\(e_t\)</span> och <span class="math inline">\(e_{t-1}\)</span>, medan <span class="math inline">\(Y_{t-2}\)</span> innehåller <span class="math inline">\(e_{t-2}\)</span> och <span class="math inline">\(e_{t-3}\)</span>. Eftersom termerna i det vita bruset är oberoende är <span class="math inline">\(\operatorname{Cov}(Y_t,Y_{t-2}) = 0\)</span>.</li>
+<li>Falskt. Eftersom <span class="math inline">\(e_t\)</span> och <span class="math inline">\(e_{t-1}\)</span> är oberoende gäller <span class="math inline">\(\operatorname{Var}(Y_t) = \{\operatorname{Var}(e_t) + \operatorname{Var}(e_{t-1})\}/4 = \sigma_e^2/2\)</span>.</li>
 <li>Sant. Den enda gemensamma slumpvariabeln i <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-1}\)</span> är <span class="math inline">\(e_{t-1}\)</span>. Därför gäller <span class="math inline">\(\operatorname{Cov}(Y_t,Y_{t-1}) = \operatorname{Var}(e_{t-1})/4 = \sigma_e^2/4\)</span>.</li>
 </ul>
 </div>
@@ -1188,16 +1188,16 @@ Y_t = \frac{e_t + e_{t-1}}{2}.
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>En serie av vitt brus <span class="math inline">\(e_t\)</span> har väntevärde <span class="math inline">\(0\)</span>, konstant varians och är stationär. En random walk definieras som <span class="math inline">\(Y_t=Y_{t-1}+e_t\)</span>. Trots att <span class="math inline">\(e_t\)</span> är stationärt är <span class="math inline">\(Y_t\)</span> vanligtvis inte stationär. Vilken förklaring är korrekt?</p>
-<div id="webex-88ee78b6af0bb939bd256026ca69ffc4" class="webex-radiogroup" data-answer="YwhJVBsITgY8">
-<label><input type="radio" autocomplete="off" name="88ee78b6af0bb939bd256026ca69ffc4"><span>En random walk är inte stationär eftersom vitt brus alltid är autokorrelerat.</span></label><label><input type="radio" autocomplete="off" name="88ee78b6af0bb939bd256026ca69ffc4"><span>En random walk är inte stationär eftersom variansen ökar när nya slumpchocker ackumuleras över tid.</span></label><label><input type="radio" autocomplete="off" name="88ee78b6af0bb939bd256026ca69ffc4"><span>En random walk är inte stationär eftersom väntevärdet alltid ökar över tid.</span></label><label><input type="radio" autocomplete="off" name="88ee78b6af0bb939bd256026ca69ffc4"><span>En random walk är inte stationär eftersom den inte innehåller någon slumpmässighet.</span></label>
+<div id="webex-34c8d1fd07775ffe80e8da71a070840a" class="webex-radiogroup" data-answer="aARPCUgBSlRt">
+<label><input type="radio" autocomplete="off" name="34c8d1fd07775ffe80e8da71a070840a"><span>En random walk är inte stationär eftersom den inte innehåller någon slumpmässighet.</span></label><label><input type="radio" autocomplete="off" name="34c8d1fd07775ffe80e8da71a070840a"><span>En random walk är inte stationär eftersom variansen ökar när nya slumpchocker ackumuleras över tid.</span></label><label><input type="radio" autocomplete="off" name="34c8d1fd07775ffe80e8da71a070840a"><span>En random walk är inte stationär eftersom väntevärdet alltid ökar över tid.</span></label><label><input type="radio" autocomplete="off" name="34c8d1fd07775ffe80e8da71a070840a"><span>En random walk är inte stationär eftersom vitt brus alltid är autokorrelerat.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Vitt brus saknar autokorrelation mellan observationer vid olika tidpunkter.</li>
+<li>Falskt. En random walk är slumpmässig eftersom den byggs upp av slumpchocker.</li>
 <li>Sant. Slumpchockerna summeras över tid, vilket gör att variansen ökar.</li>
 <li>Falskt. För en random walk utan drift är väntevärdet konstant om startvärdet är konstant.</li>
-<li>Falskt. En random walk är slumpmässig eftersom den byggs upp av slumpchocker.</li>
+<li>Falskt. Vitt brus saknar autokorrelation mellan observationer vid olika tidpunkter.</li>
 </ul>
 </div>
 </div>
@@ -1216,16 +1216,16 @@ Y_t = \frac{e_t + e_{t-1}}{2}.
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Många tidsseriemodeller bygger på antagandet om svag stationäritet. Det innebär att serien har konstant väntevärde och varians samt att autokovariansen mellan <span class="math inline">\(Y_t\)</span> och <span class="math inline">\(Y_{t-k}\)</span> endast beror på avståndet <span class="math inline">\(k\)</span>. Vilka av följande påståenden är korrekta om antagandet inte är uppfyllt?</p>
-<div id="webex-e3437e7b3f5f11684e0abf1882df08f1" class="webex-checkboxgroup" data-answer="PgMYAxtUG1Nu">
-<label><input type="checkbox" autocomplete="off" name="e3437e7b3f5f11684e0abf1882df08f1"><span>Problemet försvinner automatiskt om fler observationer läggs till i tidsserien.</span></label><label><input type="checkbox" autocomplete="off" name="e3437e7b3f5f11684e0abf1882df08f1"><span>Serien kan analyseras på samma sätt eftersom stationäritet främst påverkar seriens utseende.</span></label><label><input type="checkbox" autocomplete="off" name="e3437e7b3f5f11684e0abf1882df08f1"><span>Autokovariansen kan bero på var i serien den beräknas och inte enbart på avståndet <span class="math inline">\(k\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="e3437e7b3f5f11684e0abf1882df08f1"><span>Modellskattningar och slutsatser kan bli missvisande när seriens struktur förändras över tid.</span></label>
+<div id="webex-61a402ad2320dfc88bab4f944f5d038d" class="webex-checkboxgroup" data-answer="bQFNBRwDTVRv">
+<label><input type="checkbox" autocomplete="off" name="61a402ad2320dfc88bab4f944f5d038d"><span>Problemet försvinner automatiskt om fler observationer läggs till i tidsserien.</span></label><label><input type="checkbox" autocomplete="off" name="61a402ad2320dfc88bab4f944f5d038d"><span>Modellskattningar och slutsatser kan bli missvisande när seriens struktur förändras över tid.</span></label><label><input type="checkbox" autocomplete="off" name="61a402ad2320dfc88bab4f944f5d038d"><span>Autokovariansen kan bero på var i serien den beräknas och inte enbart på avståndet <span class="math inline">\(k\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="61a402ad2320dfc88bab4f944f5d038d"><span>Serien kan analyseras på samma sätt eftersom stationäritet främst påverkar seriens utseende.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
 <li>Falskt. Fler observationer gör inte automatiskt en icke-stationär serie stationär.</li>
-<li>Falskt. Stationäritet påverkar om seriens nivå, variation och beroendestruktur kan beskrivas på ett stabilt sätt över tid.</li>
-<li>Sant. För en icke-stationär serie kan autokovariansen bero på både tidpunkten och avståndet mellan observationerna.</li>
 <li>Sant. Om seriens egenskaper förändras över tid kan en modell som antar en stabil struktur ge missvisande skattningar och slutsatser.</li>
+<li>Sant. För en icke-stationär serie kan autokovariansen bero på både tidpunkten och avståndet mellan observationerna.</li>
+<li>Falskt. Stationäritet påverkar om seriens nivå, variation och beroendestruktur kan beskrivas på ett stabilt sätt över tid.</li>
 </ul>
 </div>
 </div>
@@ -1387,8 +1387,8 @@ Y_t = Y_{t-1} + e_t,
 \]</span></p>
 <p>där <span class="math inline">\(e_t\)</span> är vitt brus. Serien kan bearbetas genom differentiering med funktionen <code>diff()</code>.</p>
 <p>Vilka av följande påståenden är korrekta?</p>
-<div id="webex-04d04b22c1215faf177e652440661041" class="webex-checkboxgroup" data-answer="awVIARhSHgM+">
-<label><input type="checkbox" autocomplete="off" name="04d04b22c1215faf177e652440661041"><span>Den första differensen med lagg <span class="math inline">\(1\)</span> kan skrivas som <span class="math inline">\(\nabla Y_t = Y_t-Y_{t-1}=e_t\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="04d04b22c1215faf177e652440661041"><span>Den första differensen är stationär om <span class="math inline">\(e_t\)</span> är vitt brus, trots att den ursprungliga serien <span class="math inline">\(Y_t\)</span> inte är stationär.</span></label><label><input type="checkbox" autocomplete="off" name="04d04b22c1215faf177e652440661041"><span>Uttrycket <code>diff(Y, lag = 2, differences = 2)</code> ger differensen <span class="math inline">\(Y_t-Y_{t-4}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="04d04b22c1215faf177e652440661041"><span>Två differentieringar med lagg <span class="math inline">\(1\)</span> ger <span class="math inline">\(\nabla^2Y_t=Y_t-2Y_{t-1}+Y_{t-2}\)</span>.</span></label>
+<div id="webex-fee4289766ac12927798bc3e48354e83" class="webex-checkboxgroup" data-answer="PVRJBR4IFQZr">
+<label><input type="checkbox" autocomplete="off" name="fee4289766ac12927798bc3e48354e83"><span>Den första differensen med lagg <span class="math inline">\(1\)</span> kan skrivas som <span class="math inline">\(\nabla Y_t = Y_t-Y_{t-1}=e_t\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="fee4289766ac12927798bc3e48354e83"><span>Den första differensen är stationär om <span class="math inline">\(e_t\)</span> är vitt brus, trots att den ursprungliga serien <span class="math inline">\(Y_t\)</span> inte är stationär.</span></label><label><input type="checkbox" autocomplete="off" name="fee4289766ac12927798bc3e48354e83"><span>Uttrycket <code>diff(Y, lag = 2, differences = 2)</code> ger differensen <span class="math inline">\(Y_t-Y_{t-4}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="fee4289766ac12927798bc3e48354e83"><span>Två differentieringar med lagg <span class="math inline">\(1\)</span> ger <span class="math inline">\(\nabla^2Y_t=Y_t-2Y_{t-1}+Y_{t-2}\)</span>.</span></label>
 </div>
 </div>
 <div class="webex-solution">

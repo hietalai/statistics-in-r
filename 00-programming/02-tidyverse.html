@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-6c85c9fc2bbb9926b7650676933c738f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f46846042fbd00966f0114f0ffd981ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -531,10 +531,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#sec-readr" id="toc-sec-readr" class="nav-link active" data-scroll-target="#sec-readr"><span class="header-section-number">3.1</span> Läsa in filer med <code>readr</code></a></li>
-  <li><a href="#sec-tibble" id="toc-sec-tibble" class="nav-link" data-scroll-target="#sec-tibble"><span class="header-section-number">3.2</span> Dataobjektet <code>tibble</code></a></li>
-  <li><a href="#sec-tidyr" id="toc-sec-tidyr" class="nav-link" data-scroll-target="#sec-tidyr"><span class="header-section-number">3.3</span> Omformatera data med <code>tidyr</code></a></li>
-  <li><a href="#koppla-samman-funktioner-med-pipes" id="toc-koppla-samman-funktioner-med-pipes" class="nav-link" data-scroll-target="#koppla-samman-funktioner-med-pipes"><span class="header-section-number">3.4</span> Koppla samman funktioner med pipes</a></li>
+  <li><a href="#koppla-samman-funktioner-med-pipes" id="toc-koppla-samman-funktioner-med-pipes" class="nav-link active" data-scroll-target="#koppla-samman-funktioner-med-pipes"><span class="header-section-number">3.1</span> Koppla samman funktioner med pipes</a></li>
+  <li><a href="#sec-readr" id="toc-sec-readr" class="nav-link" data-scroll-target="#sec-readr"><span class="header-section-number">3.2</span> Läsa in filer med <code>readr</code></a></li>
+  <li><a href="#sec-tibble" id="toc-sec-tibble" class="nav-link" data-scroll-target="#sec-tibble"><span class="header-section-number">3.3</span> Dataobjektet <code>tibble</code></a></li>
+  <li><a href="#sec-tidyr" id="toc-sec-tidyr" class="nav-link" data-scroll-target="#sec-tidyr"><span class="header-section-number">3.4</span> Omformatera data med <code>tidyr</code></a></li>
   <li><a href="#databearbetning-med-dplyr" id="toc-databearbetning-med-dplyr" class="nav-link" data-scroll-target="#databearbetning-med-dplyr"><span class="header-section-number">3.5</span> Databearbetning med <code>dplyr</code></a>
   <ul class="collapse">
   <li><a href="#byta-namn-på-variabler-med-rename" id="toc-byta-namn-på-variabler-med-rename" class="nav-link" data-scroll-target="#byta-namn-på-variabler-med-rename"><span class="header-section-number">3.5.1</span> Byta namn på variabler med <code>rename()</code></a></li>
@@ -546,6 +546,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#gruppera-beräkningar-med-group_by" id="toc-gruppera-beräkningar-med-group_by" class="nav-link" data-scroll-target="#gruppera-beräkningar-med-group_by"><span class="header-section-number">3.5.7</span> Gruppera beräkningar med <code>group_by()</code></a></li>
   <li><a href="#sammanfatta-data-med-summarize" id="toc-sammanfatta-data-med-summarize" class="nav-link" data-scroll-target="#sammanfatta-data-med-summarize"><span class="header-section-number">3.5.8</span> Sammanfatta data med <code>summarize()</code></a></li>
   </ul></li>
+  <li><a href="#sammanfattning" id="toc-sammanfattning" class="nav-link" data-scroll-target="#sammanfattning"><span class="header-section-number">3.6</span> Sammanfattning</a></li>
   </ul>
 </nav>
     </div>
@@ -573,42 +574,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>En stor del utav statistisk analys omfattar bearbetning av datamaterial som samlats in till ett format som lämpar sig för olika statistiska analysmetoder. Ett datamaterial som man själv samlar in (<em>primärdata</em>) eller datamaterial som hämtas från någon annan källa (<em>sekundärdata</em>) är inte alltid strukturerat på det sätt som vi, eller metoderna, önskar.</p>
 <p>För att underlätta denna process finns en samling paket kallat <code>tidyverse</code> som har en gemensam grund för programmering, både i dess syntax och grammatik.</p>
-<p>Inom statistik önskas data ofta följa formatet: “en rad är en observation”, “en kolumn är en variabel” och “en cell är ett värde”, så att vi med lätthet kan hantera datamaterialet på ett flertal olika sätt. Detta kan vi kalla för <em>rådata</em> eller <em>tidy data</em> och <a href="../01-regression/01-explorative-analysis.html#sec-example-data" class="quarto-xref"><span>Avsnitt 5.1</span></a> visar data på just detta format. Varje rad är en uppmätt pingvin och varje kolumn är mätvärden för varje variabel. Exempel på en struktur som inte följer denna praxis är frekvenstabeller där varje rad visar flera observationer som har samma variabelvärde.</p>
-<p>Vi kan installera de paketen som ingår i <code>tidyverse</code> genom att installera paketet med samma namn och ladda in det i arbetsminnet med <code>require()</code> eller <code>library()</code>.</p>
+<p>Inom statistik önskas data ofta följa formatet: “en rad är en observation”, “en kolumn är en variabel” och “en cell är ett värde”, så att vi med lätthet kan hantera datamaterialet på ett flertal olika sätt. Detta kan vi kalla för <strong>rådata</strong> eller <strong>tidy data</strong> som <code>tidyverse</code> också använder sig av. Exempel på en struktur som inte följer denna praxis är frekvenstabeller där varje rad visar flera observationer som har samma variabelvärde. Denna typ av sekundärdata kan vi ofta stöta på vilket kan komplicera vad vi kan analysera.</p>
+<p>Vi kan installera de paketen som ingår i <code>tidyverse</code> genom att installera paketet med samma namn och ladda in det i arbetsminnet med <code>require()</code> eller <code>library()</code>. Vi får nu alla paket som tidyverse innehåller installerade och laddade på ett effektivt sätt.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I detta kapitel kommer vi gå igenom de olika paketen som behandlar datastrukturer och olika variablertyper medan senare kapitel kommer fortsätta med paket för visualisering (<code>ggplot2</code>) och mer avancerad kodning (<code>purrr</code>).</p>
-<section id="sec-readr" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="sec-readr"><span class="header-section-number">3.1</span> Läsa in filer med <code>readr</code></h2>
-<p>R innehåller många inbyggda funktioner (se <a href="01-packages-and-functions.html#sec-readData" class="quarto-xref"><span>Avsnitt 2.2</span></a>) för hur man kan läsa in filer av olika format från hårddisken. Vi har tidigare tittat på <code>read.csv2()</code> som är en grundfunktion i R, men <code>readr</code> har liknande funktioner utöver flera andra specialfall som utgår från vissa standardformat för filer.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tips
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Det är starkt rekommenderat att läsa in text-filer i R, inte Excelfiler då Excel kan innehålla specialformat som R inte kan läsa in korrekt. Vi kan från Excel spara om en .xlsx fil till en .txt-, .tsv- eller .csv-fil.</p>
-</div>
-</div>
+<section id="koppla-samman-funktioner-med-pipes" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="koppla-samman-funktioner-med-pipes"><span class="header-section-number">3.1</span> Koppla samman funktioner med pipes</h2>
+<p>Inom programmering, speciellt databearbetning, är det vanligt att vi vill skapa ett objekt, göra någon bearbetning på den, använda den i en statistisk analys och så vidare. Att nästla funktioner inuti varandra blir lätt väldigt krångligt att läsa och förstå vad som faktiskt händer eller vilka argument som hör till vilken funktion. Alternativet är att spara om objektet flera gånger men då skapas många onödiga objekt som vi måste hålla koll på och som egentligen bara tar upp plats i arbetsminnet. I kodexemplet nedan ser vi hur fyra funktioner kan nästlas eller sparas som separata objekt.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Läser in en textfil där kolumner separeras med en (eller flera) mellanslag (.txt)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">read_table</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fyra nästlade funktioner som ska appliceras på ett objekt med olika argument</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">funktion4</span>(<span class="fu">funktion3</span>(<span class="fu">funktion2</span>(<span class="fu">funktion1</span>(objekt), <span class="at">argument2 =</span> X)), <span class="at">argument4 =</span> Y)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Läser in en textfil där kolumner separeras med tab (.tsv)</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fyra funktioner som sparas vid varje steg</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">funktion1</span>(objekt)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Läser in en textfil där kolumner separeras med , (read_csv) eller ; (read_csv2)</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv2</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">funktion2</span>(A, <span class="at">argument2 =</span> X)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">funktion3</span>(B)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">funktion4</span>(C, <span class="at">argument4 =</span> Y)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Resultatet av dessa funktioner blir en formatterad <em>tibble</em>, vilket är <code>tidyverse</code> version av en <code>data frame</code>.</p>
+<p>Inom modern R-programmering används istället en annan process som kallas för <strong>programmeringspipes</strong> som kan skapa sekvenser av funktioner som är sammanlänkade i varandra. Detta populariserades först inom <code>tidyverse</code> och har sedan integrerats inuti baspaketet i R.</p>
+<p>Från baspaketet används operatorn <code>|&gt;</code> som kan skapas med kortkommandot <em>CTRL + SHIFT + M</em> (<em>CMD + SHIFT + M</em>). Denna operator tar resultatet från funktionen innan <code>|&gt;</code> och skickar vidare det som det första argumentet i funktionen efter <code>|&gt;</code>. Koden nedan visar samma fyra funktioner som vi ville genomföra på ett objekt, där varje ny rad tar resultatet från den tidigare som en del av funktionen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Samma operation av fyra funktioner men med piping</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>objekt <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion1</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion2</span>(<span class="at">argument2 =</span> X) <span class="sc">|&gt;</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion3</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion4</span>(<span class="at">argument4 =</span> Y)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Funktioner som inte behöver fler än ett argument skrivs bara ut som funktionen med tomma parenteser då resultatet från raden innan används automatiskt som värdet på det argumentet. Funktioner som har ytterligare argument behöver bara ange de argument som inte använder sig av det tidigare resultatet.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -619,13 +619,89 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Se till att datamaterialet som laddats in ser ut som vi förväntar att det ska göra, exempelvis är decimaler korrekt angivna, har vi lika många variabler i R som i originalfilen och liknande.</p>
+<p>Det kan finnas funktioner som vill använda det tidigare resultatet i ett argument som <em>inte</em> är den första i funktionen. Som tur är kan vi lösa detta genom att använda <code>_</code> som symbolen för det tidigare resultatet och ange det vid argumentet som är aktuellt.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Objektet (_) läggs här in som värde för det andra argumentet i funktionen</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>objekt <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion5</span>(<span class="at">argument1 =</span> X, <span class="at">argument2 =</span> _)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Användandet av <code>_</code> säger åt funktionen att den inte längre automatiskt ska ange resultatet som värdet i det första argumentet.</p>
+<p><code>|&gt;</code> är något begränsat med denna funktionalitet men som tur är finns dess “kusin” <code>%&gt;%</code> från paketet <code>dplyr</code> som fungerar på mestadels samma sätt men tillåter mer flexibilitet var objektet från tidigare i pipen placeras i den nuvarande funktionen. Det vi måste tänka på är att vi här byter symbol till <code>.</code> istället för <code>_</code> för att beskriva objektet.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Objektet (.) läggs här in som värde för det andra argumentet i funktionen</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>objekt <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion5</span>(<span class="at">argument1 =</span> X, <span class="at">argument2 =</span> .)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>I resterande del av detta underlag kommer vi konsekvent att använda <code>|&gt;</code> istället för <code>dplyr</code>s funktion. Det är i relativt abstrakta specialfall som <code>%&gt;%</code> funktionaliteten behövs som inte täcks av detta material.</p>
 </div>
 </div>
 </section>
-<section id="sec-tibble" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="sec-tibble"><span class="header-section-number">3.2</span> Dataobjektet <code>tibble</code></h2>
-<p>I <a href="00-basics-R.html#sec-data-frame" class="quarto-xref"><span>Avsnitt 1.2.4.3</span></a> presenterades datastrukturen <code>data frame</code> som ett sätt för oss att i R spara information i ett strukturerat rådataformat. En <code>tibble</code> är en utbyggnad av denna datastruktur som rensat bort egenskaper av objektet som inte längre används och lägger till egenskaper som vi ofta vill använda när vi bearbetar data. Likt en <code>data frame</code>, innehåller en <code>tibble</code> en samling lika långa kolumner och dessa kolumner kan vara av olika objekttyper. Till exempel kan vi blanda listor och vektorer så länge de innehåller lika många element.</p>
+<section id="sec-readr" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="sec-readr"><span class="header-section-number">3.2</span> Läsa in filer med <code>readr</code></h2>
+<p>R innehåller många inbyggda funktioner (se <a href="01-packages-and-functions.html#sec-readData" class="quarto-xref"><span>Avsnitt 2.2</span></a>) för hur man kan läsa in filer av olika format från hårddisken. Vi har tidigare tittat på <code>read.csv2()</code> som är en grundfunktion i R, men <code>readr</code> har liknande funktioner, samt flera andra specialfall, som utgår från vissa standardformat för filer.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det är starkt rekommenderat att läsa in text-filer i R, inte Excelfiler (<code>.xlsx</code>). Excel kan innehålla specialformat som R inte kan läsa in korrekt utan behov av speciallösningar.</p>
+<p>Vi kan från Excel enkelt spara om en .xlsx fil till en .txt-, .tsv- eller .csv-fil för lättare import.</p>
+</div>
+</div>
+<p>Det finns i huvudsak fyra olika vanliga typer av data som ska läsas in:</p>
+<ul>
+<li><code>.txt</code> filer där kolumner separeras med en eller flera mellanslag</li>
+<li><code>.csv</code> filer där kolumner separeras med <code>,</code> eller <code>;</code></li>
+<li><code>.tsv</code> filer där kolumner separeras med tab-avstånd</li>
+</ul>
+<p>Var och en av dessa filer har en specifik <code>read_X()</code> funktion kopplat till sig med standardvärden som underlättar inläsningen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Läser in en textfil där kolumner separeras med en (eller flera) mellanslag (.txt)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">read_table</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Läser in en textfil där kolumner separeras med tab (.tsv)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Läser in en textfil där kolumner separeras med , (read_csv) eller ; (read_csv2)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv2</span>(<span class="at">file =</span> <span class="st">"sökväg"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Notera</span><code>tibble</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Resultatet av dessa funktioner blir en formatterad <em>tibble</em>, vilket är <code>tidyverse</code> version av en <code>data frame</code>. Allting som vi tidigare introducerat för en <code>data frame</code> gäller fortfarande men en <code>tibble</code> har mer funktionalitet som vi kan dra nytta av med alla de funktioner som <code>tidyverse</code> erhåller.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ett mycket viktigt steg i datainläsningen är att data faktiskt importerats korrekt. Dubbelkolla <u>alltdi</u> att datamaterialet som laddats in ser ut som vi förväntar att det ska göra, exempelvis är decimaler korrekt angivna, har vi lika många variabler i R som i originalfilen och liknande.</p>
+<p>Detta kan vi göra genom att klicka på den importerade objektet i <code>Environment</code> fönstret. Vi kan också få en överblick av objektet och dess struktur genom att klicka på den blå pilen till vänster om objektnamnet. Då vecklas raden ut och visar vilka variabler som objektet innehåller och vilken typ av variabel R anser dessa är. Här är det viktigt att dubbelkolla att numeriska värden också blivit <code>numeric</code> i R, då det är lätt hänt att decimalseparatorn inte lästs in korrekt och R felaktigt tror det är en <code>character</code> istället.</p>
+</div>
+</div>
+</section>
+<section id="sec-tibble" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sec-tibble"><span class="header-section-number">3.3</span> Dataobjektet <code>tibble</code></h2>
+<p>I <a href="00-basics-R.html#sec-data-frame" class="quarto-xref"><span>Avsnitt 1.2.4.3</span></a> presenterades datastrukturen <code>data frame</code> som ett sätt för oss att i R spara information i ett strukturerat rådataformat. En <code>tibble</code> är en utbyggnad av denna datastruktur som rensat bort egenskaper av objektet som inte längre används i modern programmering och lägger till egenskaper som vi ofta vill använda när vi bearbetar data. Likt en <code>data frame</code>, innehåller en <code>tibble</code> en samling kolumner av lika längd och dessa kolumner kan vara av olika objekttyper.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -639,22 +715,22 @@ Viktigt
 <p>En <code>tibble</code> konverterar inte textvektorer till faktorer per automatik. Det vill säga om ett datamaterial som läses in via <code>read_csv2()</code> innehåller text, kommer denna variabel vara ett <code>character</code>-objekt, inte ett <code>Factor</code>-objekt.</p>
 </div>
 </div>
-<p>Vi kan skapa en <code>tibble</code> från grunden genom att ange vilka objekt vi vill inkludera och vad de ska heta:</p>
+<p>Vi kan skapa en <code>tibble</code> från grunden genom funktionen <code>tibble()</code> om vi anger vilka objekt vi vill inkludera och vad de ska heta:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en tibble utifrån angivna vektorer</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> </span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Var1 =</span> a,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Var2 =</span> b,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Var3 =</span> c</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriver ut tibble till konsollen</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(data)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en tibble utifrån angivna vektorer</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Var1 =</span> a,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Var2 =</span> b,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Var3 =</span> c</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriver ut tibble till konsollen</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(data)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
    Var1  Var2 Var3 
@@ -664,16 +740,13 @@ Viktigt
 3     3     6 c    </code></pre>
 </div>
 </div>
-<p>En direkt utskrift av en <code>tibble</code> innehåller både dimensionerna av hela objektet och vad för typ respektive variabel är.</p>
+<p>En direkt utskrift av en <code>tibble</code> innehåller både dimensionerna av hela objektet och vad för typ respektive variabel är. Mer information än vad vi skulle fått från en <code>data frame</code> över samma data.</p>
 <p>Om vi har en matris eller något annat objekt som ser ut som en tibble men inte är det, kan vi konvertera den till en tibble med hjälp av <code>as_tibble()</code>.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar objektet a (en vektor) och gör om den till formatet tibble innehållande en kolumn</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>vectorToTibble <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(a)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(vectorToTibble)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar objektet a (en vektor) och gör om den till formatet tibble innehållande en kolumn</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>vectorToTibble <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(a)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(vectorToTibble)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 1
   value
@@ -684,42 +757,211 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="sec-tidyr" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="sec-tidyr"><span class="header-section-number">3.3</span> Omformatera data med <code>tidyr</code></h2>
-<p>En utav de tyngsta delarna av statistisk analys är ofta att bearbeta data till det format som önskas. Paketet <code>tidyr</code> innehåller ett flertal funktioner som kan bearbeta data på många olika sätt</p>
-<p>Om data inte är på det format som vi önskar eller om någon statistisk metod behöver ett material som har ett annat format än tidy-data. Detta paket kommer vi inte titta på just nu i detalj men följande Cheat Sheets innehåller exempel på olika bearbetningar som vi kan vara intresserade av att genomföra med data.</p>
+<section id="sec-tidyr" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-tidyr"><span class="header-section-number">3.4</span> Omformatera data med <code>tidyr</code></h2>
+<p>En utav de tyngsta delarna av statistisk analys är ofta att bearbeta data till det format som önskas. Paketet <code>tidyr</code> innehåller ett flertal funktioner som kan bearbeta data på många olika sätt, med målsättingen att göra den “tidy”. Detta paket kommer vi inte titta på just nu i detalj men följande Cheat Sheets innehåller exempel på olika bearbetningar som vi kan vara intresserade av att genomföra med data.</p>
 <div class="cell">
 <div class="cell-output-display">
 <a href="https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf" class="external-link" target="blank"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/thumbnails/tidyr-thumbs.png"></a>
 </div>
 </div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Många paket har liknande Cheat Sheets med en sammanfattning av paketets funktioner. Dessa sheets kommer väl till pass både när man först lär sig om paketet och när man sedan ska använda det, för det är inte alltid man kommer ihåg exakta funktionerna som behövs för att göra en viss operation.</p>
+<p>Testa alltid att söka efter “paket cheat sheet” i din föredragna sökmotor för att se om det paket som du ska arbeta med också har något sådant.</p>
+</div>
+</div>
 </section>
-<section id="koppla-samman-funktioner-med-pipes" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="koppla-samman-funktioner-med-pipes"><span class="header-section-number">3.4</span> Koppla samman funktioner med pipes</h2>
-<p>Inom programmering, speciellt databearbetning, är det vanligt att vi vill skapa ett objekt, göra någon bearbetning på den, använda den i en statistisk analys och så vidare. Att nästla funktioner inuti varandra blir lätt väldigt krångligt att läsa och förstå vad som faktiskt händer eller vilka argument som hör till vilken funktion. Alternativet är att spara om objektet flera gånger men då skapas många onödiga objekt som vi måste hålla koll på och som egentligen bara tar upp plats i arbetsminnet.</p>
+<section id="databearbetning-med-dplyr" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="databearbetning-med-dplyr"><span class="header-section-number">3.5</span> Databearbetning med <code>dplyr</code></h2>
+<p>Nu har vi lärt oss hur vi läser in data från en text fil, vad en <code>tibble</code> är och det “nya” sättet att skriva sekvenser av funktioner med pipes. Då kan vi börja titta närmare på databearbetning av objekt. I detta kapitel förutsätter vi att vi har data på tidy format.</p>
+<p>Det är vanligt att vi i databearbetningen behöver göra flera steg för att skapa det objekt vi sen vill analysera och då kommer <code>|&gt;</code> mycket väl till pass.</p>
+<p>Paketet <code>dplyr</code> innehåller ett flertal olika “verb” som på ett sätt eller annat bearbetar data. Det första argumentet i alla dessa funktioner är ett dataobjekt men om vi använder pipes kommer det ske per automatik och vi behöver endast fokusera på de andra argumenten som beskriver hur “verbet” används.</p>
+<section id="byta-namn-på-variabler-med-rename" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="byta-namn-på-variabler-med-rename"><span class="header-section-number">3.5.1</span> Byta namn på variabler med <code>rename()</code></h3>
+<p>Data som läses in till R kan ibland ha konstiga och långa namn som vid programmering kan bli svåra att hantera. Ett sätt att underlätta detta problem är att döpa om variablerna till ett enkelt ord som vi sedan kan använda i efterföljande steg.</p>
+<p>Vi kan döpa om variabler med hjälp av <code>rename()</code> där vi anger det nya namnet givet det gamla namnet på variabeln eller variabelns kolumnindex. Datamaterialet <code>faithful</code> i dessa exempel finns i baspaketet och kan läsas in direkt genom att använda dess objektnamn. Materialet beskriver väntetiden mellan varje utbrott (minuter) och längden på utbrottet (minuter) vid gejsern Old Faithful i Yellowstone National Park.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fyra nästlade funktioner som ska appliceras på ett objekt med olika argument</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">funktion4</span>(<span class="fu">funktion3</span>(<span class="fu">funktion2</span>(<span class="fu">funktion1</span>(objekt), <span class="at">argument2 =</span> X)), <span class="at">argument4 =</span> Y)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fyra funktioner som sparas vid varje steg</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">funktion1</span>(objekt)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">funktion2</span>(A, <span class="at">argument2 =</span> X)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">funktion3</span>(B)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">funktion4</span>(C, <span class="at">argument4 =</span> Y)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Döper om variabler till svenska namn utifrån det gamla namnet</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">utbrott =</span> eruptions,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    väntan <span class="ot">=</span> waiting</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 2
+   utbrott väntan
+     &lt;dbl&gt;  &lt;dbl&gt;
+ 1    3.6      79
+ 2    1.8      54
+ 3    3.33     74
+ 4    2.28     62
+ 5    4.53     85
+ 6    2.88     55
+ 7    4.7      88
+ 8    3.6      85
+ 9    1.95     51
+10    4.35     85
+# ℹ 262 more rows</code></pre>
 </div>
-<p>Inom modern R-programmering används istället en annan process som kallas för <strong>programmeringspipes</strong> som kan skapa sekvenser av funktioner som är sammanlänkade i varandra. Från baspaketet används operatorn <code>|&gt;</code> som kan skapas med kortkommandot Ctrl + Shift + M (CMD + Shift + M). Denna operator tar resultatet från funktionen innan <code>|&gt;</code> och skickar vidare det som det första argumentet i funktionen efter <code>|&gt;</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Döper om variabler till svenska namn utifrån dess kolumnindex</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">utbrott =</span> <span class="dv">1</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    väntan <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 2
+   utbrott väntan
+     &lt;dbl&gt;  &lt;dbl&gt;
+ 1    3.6      79
+ 2    1.8      54
+ 3    3.33     74
+ 4    2.28     62
+ 5    4.53     85
+ 6    2.88     55
+ 7    4.7      88
+ 8    3.6      85
+ 9    1.95     51
+10    4.35     85
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="plocka-ut-rader-med-filter" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="plocka-ut-rader-med-filter"><span class="header-section-number">3.5.2</span> Plocka ut rader med <code>filter()</code></h3>
+<p>Om vi är intresserade av att plocka ut vissa rader ur ett objekt, till exempel om vi vill rensa bort saknade värden, kan vi använda <code>filter()</code> med någon logisk operator som säger vilka rader vi vill ha kvar.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Viktigt</span>Logiska operatorer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En logisk operator är ett uttryck vars resultat är sant eller falskt (TRUE eller FALSE). Det finns många olika operationer som vi kan använda för olika ändamål:</p>
+<ul>
+<li><code>a == b</code>: a är lika med b. *Notera användningen av dubbla <code>==</code> för den logiska operationen till skillnad från <code>=</code> för att säga att a har värdet b.</li>
+<li><code>a &gt;  b</code>: a är större än b,</li>
+<li><code>a &gt;= b</code>: a är större än eller lika med b,</li>
+<li><code>a &lt;  b</code>: a är mindre än b,</li>
+<li><code>a &lt;= b</code>: a är mindre än eller lika med b,</li>
+<li><code>a != b</code>: a är inte lika med b.</li>
+</ul>
+</div>
+</div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Samma operation av fyra funktioner men med piping</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>objekt <span class="sc">|&gt;</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion1</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion2</span>(<span class="at">argument2 =</span> X) <span class="sc">|&gt;</span> </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion3</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion4</span>(<span class="at">argument4 =</span> Y)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Väljer ut alla observationer vars väntetid är större än 70 minuter</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>faithfulLong <span class="ot">&lt;-</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  faithful <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(waiting <span class="sc">&gt;</span> <span class="dv">70</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(faithfulLong)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 165 × 2
+   eruptions waiting
+       &lt;dbl&gt;   &lt;dbl&gt;
+ 1      3.6       79
+ 2      3.33      74
+ 3      4.53      85
+ 4      4.7       88
+ 5      3.6       85
+ 6      4.35      85
+ 7      3.92      84
+ 8      4.2       78
+ 9      4.7       83
+10      4.8       84
+# ℹ 155 more rows</code></pre>
 </div>
-<p>Funktioner som inte behöver fler än ett argument skrivs bara ut som funktionen med tomma parenteser då resultatet används automatiskt som värdet på det argumentet. Funktioner som har ytterligare argument behöver bara ange de argument som inte använder sig av det tidigare resultatet.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Notera att eftersom vi inte sparade de omnämnda variabelnamnen i föregående kapitel så kan vi inte använda dessa i fortsatta bearbetningar. Objektet <code>faithful</code> består här fortfarande av de engelska namnen.</p>
+</div>
+</div>
+<p>Vi kan också använda negativa operationer för att plocka ut observationer som <em>inte</em> uppfyller ett visst kriterie. Vi använder då operatorn <code>!</code> runt hela uttrycket som betyder “icke”.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(waiting <span class="sc">&gt;</span> <span class="dv">70</span>))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 107 × 2
+   eruptions waiting
+       &lt;dbl&gt;   &lt;dbl&gt;
+ 1      1.8       54
+ 2      2.28      62
+ 3      2.88      55
+ 4      1.95      51
+ 5      1.83      54
+ 6      1.75      47
+ 7      2.17      52
+ 8      1.75      62
+ 9      1.6       52
+10      1.8       51
+# ℹ 97 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="plocka-ut-kolumner-med-select" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="plocka-ut-kolumner-med-select"><span class="header-section-number">3.5.3</span> Plocka ut kolumner med <code>select()</code></h3>
+<p>Anta att vi bara är intresserade av vissa kolumner från ett stort datamaterial, till exempel bara väntetiden. Vi kan plocka ut en eller flera variabler med hjälp av <code>select()</code>. Vi kan antingen använda variablernas faktiska namn eller variablernas kolumnindex för att specificera vilka variabler som ska plockas ut.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select med variabelnamn</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(waiting)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 1
+   waiting
+     &lt;dbl&gt;
+ 1      79
+ 2      54
+ 3      74
+ 4      62
+ 5      85
+ 6      55
+ 7      88
+ 8      85
+ 9      51
+10      85
+# ℹ 262 more rows</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select med kolumnindex</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 1
+   eruptions
+       &lt;dbl&gt;
+ 1      3.6 
+ 2      1.8 
+ 3      3.33
+ 4      2.28
+ 5      4.53
+ 6      2.88
+ 7      4.7 
+ 8      3.6 
+ 9      1.95
+10      4.35
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -730,257 +972,453 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Det kan finnas funktioner som vill använda det tidigare resultatet i ett argument som inte är det första i funktionen. Som tur är kan vi lösa detta genom att använda <code>_</code> som symbolen för det tidigare resultatet och ange det vid argumentet som är aktuellt.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Objektet (_) läggs här in som värde för det andra argumentet i funktionen</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>objekt <span class="sc">|&gt;</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion5</span>(<span class="at">argument1 =</span> X, <span class="at">argument2 =</span> _)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><code>|&gt;</code> är något begränsat med detta men som tur är finns dess “kusin” från paketet <code>dplyr</code> <code>%&gt;%</code> som fungerar på mestadels samma sätt men tillåter mer flexibilitet var objektet från tidigare i pipen placeras i den nuvarande funktionen. Det vi måste tänka på är att vi här byter symbol till <code>.</code> istället för <code>_</code> för att beskriva objektet.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Objektet (.) läggs här in som värde för det andra argumentet i funktionen</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>objekt <span class="sc">%&gt;%</span> </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">funktion5</span>(<span class="at">argument1 =</span> X, <span class="at">argument2 =</span> .)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</section>
-<section id="databearbetning-med-dplyr" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="databearbetning-med-dplyr"><span class="header-section-number">3.5</span> Databearbetning med <code>dplyr</code></h2>
-<p>Med hjälp av de tidigare kapitlen och det “nya” sättet att skriva sekvenser av funktioner med pipes kan vi nu börja titta närmare på databearbetning av objekt till en <code>tibble</code>. Det är vanligt att vi i databearbetning behöver göra flera steg för att skapa det objekt vi sen vill analysera och då kommer <code>|&gt;</code> mycket väl till pass.</p>
-<p><code>dplyr</code> innehåller ett flertal olika “verb” som på ett sätt eller annat bearbetar data. Det första argumentet i alla dessa funktioner är ett dataobjekt men om vi använder pipes kommer det ske per automatik och vi behöver endast fokusera på de andra argumentet som beskriver hur “verbet” används.</p>
-<section id="byta-namn-på-variabler-med-rename" class="level3" data-number="3.5.1">
-<h3 data-number="3.5.1" class="anchored" data-anchor-id="byta-namn-på-variabler-med-rename"><span class="header-section-number">3.5.1</span> Byta namn på variabler med <code>rename()</code></h3>
-<p>Data som läses in till R kan ibland ha konstiga och långa namn som vid programmering kan bli svåra att hantera. Ett sätt att underlätta detta problem är att döpa om variablerna till ett enkelt ord som vi sedan kan använda i efterföljande steg.</p>
-<p>Vi kan döpa om variabler med hjälp av <code>rename()</code> där vi anger det nya namnet givet det gamla namnet på variabeln eller variabelns kolumnindex.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Döper om variabler till svenska namn utifrån det gamla namnet</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">art =</span> species,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    näbblängd <span class="ot">=</span> bill_length_mm</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 333 × 8
-   art    island    näbblängd bill_depth_mm flipper_length_mm body_mass_g sex   
-   &lt;fct&gt;  &lt;fct&gt;         &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt; 
- 1 Adelie Torgersen      39.1          18.7               181        3750 male  
- 2 Adelie Torgersen      39.5          17.4               186        3800 female
- 3 Adelie Torgersen      40.3          18                 195        3250 female
- 4 Adelie Torgersen      36.7          19.3               193        3450 female
- 5 Adelie Torgersen      39.3          20.6               190        3650 male  
- 6 Adelie Torgersen      38.9          17.8               181        3625 female
- 7 Adelie Torgersen      39.2          19.6               195        4675 male  
- 8 Adelie Torgersen      41.1          17.6               182        3200 female
- 9 Adelie Torgersen      38.6          21.2               191        3800 male  
-10 Adelie Torgersen      34.6          21.1               198        4400 male  
-# ℹ 323 more rows
-# ℹ 1 more variable: year &lt;int&gt;</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Döper om variabler till svenska namn utifrån dess kolumnindex</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">art =</span> <span class="dv">1</span>,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    näbblängd <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 333 × 8
-   art    island    näbblängd bill_depth_mm flipper_length_mm body_mass_g sex   
-   &lt;fct&gt;  &lt;fct&gt;         &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt; 
- 1 Adelie Torgersen      39.1          18.7               181        3750 male  
- 2 Adelie Torgersen      39.5          17.4               186        3800 female
- 3 Adelie Torgersen      40.3          18                 195        3250 female
- 4 Adelie Torgersen      36.7          19.3               193        3450 female
- 5 Adelie Torgersen      39.3          20.6               190        3650 male  
- 6 Adelie Torgersen      38.9          17.8               181        3625 female
- 7 Adelie Torgersen      39.2          19.6               195        4675 male  
- 8 Adelie Torgersen      41.1          17.6               182        3200 female
- 9 Adelie Torgersen      38.6          21.2               191        3800 male  
-10 Adelie Torgersen      34.6          21.1               198        4400 male  
-# ℹ 323 more rows
-# ℹ 1 more variable: year &lt;int&gt;</code></pre>
-</div>
-</div>
-</section>
-<section id="plocka-ut-rader-med-filter" class="level3" data-number="3.5.2">
-<h3 data-number="3.5.2" class="anchored" data-anchor-id="plocka-ut-rader-med-filter"><span class="header-section-number">3.5.2</span> Plocka ut rader med <code>filter()</code></h3>
-<p>Om vi är intresserade av att plocka ut vissa rader ur ett objekt, till exempel om vi vill rensa bort saknade värden, kan vi använda <code>filter()</code> med någon logisk operator som säger vilka rader vi vill ha kvar.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrerar bort observationer som saknar information ur variabeln "sex"</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>penguinsNonMissing <span class="ot">&lt;-</span> </span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  penguins <span class="sc">|&gt;</span> </span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex))</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(penguinsNonMissing)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 333 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750
- 2 Adelie  Torgersen           39.5          17.4               186        3800
- 3 Adelie  Torgersen           40.3          18                 195        3250
- 4 Adelie  Torgersen           36.7          19.3               193        3450
- 5 Adelie  Torgersen           39.3          20.6               190        3650
- 6 Adelie  Torgersen           38.9          17.8               181        3625
- 7 Adelie  Torgersen           39.2          19.6               195        4675
- 8 Adelie  Torgersen           41.1          17.6               182        3200
- 9 Adelie  Torgersen           38.6          21.2               191        3800
-10 Adelie  Torgersen           34.6          21.1               198        4400
-# ℹ 323 more rows
-# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
-</div>
-</div>
-<p>Vi kan också plocka ut rader som uppfyller ett visst kriterie, till exempel plocka ut alla Adelie pingviner.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Adelie"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 146 × 8
-   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
-   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
- 1 Adelie  Torgersen           39.1          18.7               181        3750
- 2 Adelie  Torgersen           39.5          17.4               186        3800
- 3 Adelie  Torgersen           40.3          18                 195        3250
- 4 Adelie  Torgersen           36.7          19.3               193        3450
- 5 Adelie  Torgersen           39.3          20.6               190        3650
- 6 Adelie  Torgersen           38.9          17.8               181        3625
- 7 Adelie  Torgersen           39.2          19.6               195        4675
- 8 Adelie  Torgersen           41.1          17.6               182        3200
- 9 Adelie  Torgersen           38.6          21.2               191        3800
-10 Adelie  Torgersen           34.6          21.1               198        4400
-# ℹ 136 more rows
-# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
-</div>
-</div>
-</section>
-<section id="plocka-ut-kolumner-med-select" class="level3" data-number="3.5.3">
-<h3 data-number="3.5.3" class="anchored" data-anchor-id="plocka-ut-kolumner-med-select"><span class="header-section-number">3.5.3</span> Plocka ut kolumner med <code>select()</code></h3>
-<p>Anta att vi bara är intresserade av vissa kolumner från ett stort datamaterial, till exempel art och fenlängd av pingvinerna kan vi plocka ut de med hjälp av <code>select()</code>. Vi kan antingen använda variablernas faktiska namn eller variablernas kolumnindex för att specificera vilka variabler som ska plockas ut.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select med variabelnamn</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(species, flipper_length_mm)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 333 × 2
-   species flipper_length_mm
-   &lt;fct&gt;               &lt;int&gt;
- 1 Adelie                181
- 2 Adelie                186
- 3 Adelie                195
- 4 Adelie                193
- 5 Adelie                190
- 6 Adelie                181
- 7 Adelie                195
- 8 Adelie                182
- 9 Adelie                191
-10 Adelie                198
-# ℹ 323 more rows</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select med kolumnindex</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span>, <span class="dv">5</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 333 × 2
-   species flipper_length_mm
-   &lt;fct&gt;               &lt;int&gt;
- 1 Adelie                181
- 2 Adelie                186
- 3 Adelie                195
- 4 Adelie                193
- 5 Adelie                190
- 6 Adelie                181
- 7 Adelie                195
- 8 Adelie                182
- 9 Adelie                191
-10 Adelie                198
-# ℹ 323 more rows</code></pre>
-</div>
-</div>
 <p>Det rekommenderas att använda variabelnamnen för att koden ska vara tydlig att läsa av och vi vet vilka variabler som faktiskt plockas ut och ev. skickas vidare till efterföljande funktioner.</p>
+</div>
+</div>
 <p>Om vi har flera variabler som följer efter varandra behöver vi inte skriva upp varje enskilda variabelnamn som argument utan kan använda <code>Var1:Var5</code> för att säga åt funktionen att plocka ut alla variabler från och med <code>Var1</code> till och med <code>Var5</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(species, bill_length_mm<span class="sc">:</span>body_mass_g)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(waiting<span class="sc">:</span>eruptions)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 333 × 5
-   species bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
-   &lt;fct&gt;            &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
- 1 Adelie            39.1          18.7               181        3750
- 2 Adelie            39.5          17.4               186        3800
- 3 Adelie            40.3          18                 195        3250
- 4 Adelie            36.7          19.3               193        3450
- 5 Adelie            39.3          20.6               190        3650
- 6 Adelie            38.9          17.8               181        3625
- 7 Adelie            39.2          19.6               195        4675
- 8 Adelie            41.1          17.6               182        3200
- 9 Adelie            38.6          21.2               191        3800
-10 Adelie            34.6          21.1               198        4400
-# ℹ 323 more rows</code></pre>
+<pre><code># A tibble: 272 × 2
+   waiting eruptions
+     &lt;dbl&gt;     &lt;dbl&gt;
+ 1      79      3.6 
+ 2      54      1.8 
+ 3      74      3.33
+ 4      62      2.28
+ 5      85      4.53
+ 6      55      2.88
+ 7      88      4.7 
+ 8      85      3.6 
+ 9      51      1.95
+10      85      4.35
+# ℹ 262 more rows</code></pre>
 </div>
 </div>
 </section>
 <section id="byta-plats-på-variabler-med-relocate" class="level3" data-number="3.5.4">
 <h3 data-number="3.5.4" class="anchored" data-anchor-id="byta-plats-på-variabler-med-relocate"><span class="header-section-number">3.5.4</span> Byta plats på variabler med <code>relocate()</code></h3>
-<p>Ibland kan vi vilja byta ordning på variablerna i datamaterialet utan att välja dem. Med <code>select()</code> får vi en möjlighet att välja vilken ordning som variablerna plockas ut, den ordning som vi anger dem i funktionen, men om vi bara vill flytta på variabler utan att plocka ut vissa kan <code>relocate()</code> användas istället.</p>
+<p>Ibland kan vi vilja byta ordning på variablerna i datamaterialet utan att specifikt plocka ut enbart dem. Med <code>select()</code> får vi en möjlighet att välja vilken ordning som variablerna plockas ut, den ordning som vi anger dem i funktionen, men om vi bara vill flytta på variabler utan att plocka ut vissa kan <code>relocate()</code> användas istället.</p>
 <p>Funktionen använder sig av tre argument, vilka variabler som ska flyttas och var de ska placeras. Som standard placeras de i början av datamaterialet.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Placerar fenlängd som första kolumnen</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(flipper_length_mm)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Placerar eruptions som första kolumnen</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(eruptions)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 333 × 8
-   flipper_length_mm species island    bill_length_mm bill_depth_mm body_mass_g
-               &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;       &lt;int&gt;
- 1               181 Adelie  Torgersen           39.1          18.7        3750
- 2               186 Adelie  Torgersen           39.5          17.4        3800
- 3               195 Adelie  Torgersen           40.3          18          3250
- 4               193 Adelie  Torgersen           36.7          19.3        3450
- 5               190 Adelie  Torgersen           39.3          20.6        3650
- 6               181 Adelie  Torgersen           38.9          17.8        3625
- 7               195 Adelie  Torgersen           39.2          19.6        4675
- 8               182 Adelie  Torgersen           41.1          17.6        3200
- 9               191 Adelie  Torgersen           38.6          21.2        3800
-10               198 Adelie  Torgersen           34.6          21.1        4400
-# ℹ 323 more rows
-# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+<pre><code># A tibble: 272 × 2
+   eruptions waiting
+       &lt;dbl&gt;   &lt;dbl&gt;
+ 1      3.6       79
+ 2      1.8       54
+ 3      3.33      74
+ 4      2.28      62
+ 5      4.53      85
+ 6      2.88      55
+ 7      4.7       88
+ 8      3.6       85
+ 9      1.95      51
+10      4.35      85
+# ℹ 262 more rows</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Placerar art efter näbbreddens variabel</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, <span class="at">.after =</span> bill_depth_mm)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Placerar waiting efter eruptions</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(waiting, <span class="at">.after =</span> eruptions)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 333 × 8
-   island    bill_length_mm bill_depth_mm species flipper_length_mm body_mass_g
-   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt; &lt;fct&gt;               &lt;int&gt;       &lt;int&gt;
- 1 Torgersen           39.1          18.7 Adelie                181        3750
- 2 Torgersen           39.5          17.4 Adelie                186        3800
- 3 Torgersen           40.3          18   Adelie                195        3250
- 4 Torgersen           36.7          19.3 Adelie                193        3450
- 5 Torgersen           39.3          20.6 Adelie                190        3650
- 6 Torgersen           38.9          17.8 Adelie                181        3625
- 7 Torgersen           39.2          19.6 Adelie                195        4675
- 8 Torgersen           41.1          17.6 Adelie                182        3200
- 9 Torgersen           38.6          21.2 Adelie                191        3800
-10 Torgersen           34.6          21.1 Adelie                198        4400
-# ℹ 323 more rows
-# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+<pre><code># A tibble: 272 × 2
+   eruptions waiting
+       &lt;dbl&gt;   &lt;dbl&gt;
+ 1      3.6       79
+ 2      1.8       54
+ 3      3.33      74
+ 4      2.28      62
+ 5      4.53      85
+ 6      2.88      55
+ 7      4.7       88
+ 8      3.6       85
+ 9      1.95      51
+10      4.35      85
+# ℹ 262 more rows</code></pre>
 </div>
 </div>
 </section>
 <section id="sortera-data-med-arrange" class="level3" data-number="3.5.5">
 <h3 data-number="3.5.5" class="anchored" data-anchor-id="sortera-data-med-arrange"><span class="header-section-number">3.5.5</span> Sortera data med <code>arrange()</code></h3>
+<p>Ibland vill vi sortera observationerna i ett datamaterial efter värdet på en eller flera variabler. Detta kan vara användbart för att snabbt identifiera de största eller minsta värdena i ett datamaterial. Funktionen <code>arrange()</code> används för att sortera raderna i stigande ordning som standard, alltså från minsta till största värdet, men vi kan sortera i fallande ordning med hjälp av <code>desc()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sorterar datamaterialet efter väntetiden i stigande ordning</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(waiting)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 2
+   eruptions waiting
+       &lt;dbl&gt;   &lt;dbl&gt;
+ 1      1.98      43
+ 2      1.92      45
+ 3      1.87      45
+ 4      2.2       45
+ 5      1.83      46
+ 6      1.83      46
+ 7      1.78      46
+ 8      2.15      46
+ 9      1.82      46
+10      1.75      47
+# ℹ 262 more rows</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sorterar datamaterialet efter väntetiden i fallande ordning</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(waiting))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 2
+   eruptions waiting
+       &lt;dbl&gt;   &lt;dbl&gt;
+ 1      5.1       96
+ 2      4.8       94
+ 3      4.08      93
+ 4      4.62      93
+ 5      4.4       92
+ 6      4.13      91
+ 7      4.78      90
+ 8      4.72      90
+ 9      4.33      90
+10      4.65      90
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
+<p>Om vi vill sortera efter flera variabler anger vi dem i den ordning som sorteringen ska ske. Först sorteras observationerna efter den första variabeln. Om två observationer har samma värde används nästa variabel för att avgöra ordningen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(waiting, eruptions)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 2
+   eruptions waiting
+       &lt;dbl&gt;   &lt;dbl&gt;
+ 1      1.98      43
+ 2      1.87      45
+ 3      1.92      45
+ 4      2.2       45
+ 5      1.78      46
+ 6      1.82      46
+ 7      1.83      46
+ 8      1.83      46
+ 9      2.15      46
+10      1.75      47
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
 </section>
 <section id="skapa-nya-variabler-med-mutate" class="level3" data-number="3.5.6">
 <h3 data-number="3.5.6" class="anchored" data-anchor-id="skapa-nya-variabler-med-mutate"><span class="header-section-number">3.5.6</span> Skapa nya variabler med <code>mutate()</code></h3>
+<p>När vi vill skapa nya variabler eller förändra befintliga variabler kan vi använda funktionen <code>mutate()</code>. Den nya variabeln skapas genom att kombinera eller bearbeta en eller flera befintliga variabler.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en ny variabel som är väntetiden i sekunder</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">waitingSec =</span> waiting <span class="sc">*</span> <span class="dv">60</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 3
+   eruptions waiting waitingSec
+       &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;
+ 1      3.6       79       4740
+ 2      1.8       54       3240
+ 3      3.33      74       4440
+ 4      2.28      62       3720
+ 5      4.53      85       5100
+ 6      2.88      55       3300
+ 7      4.7       88       5280
+ 8      3.6       85       5100
+ 9      1.95      51       3060
+10      4.35      85       5100
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
+<p>Vi kan skapa flera variabler samtidigt genom att separera dem med kommatecken.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">waitingSec =</span> waiting <span class="sc">*</span> <span class="dv">60</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">eruptionsSec =</span> eruptions <span class="sc">*</span> <span class="dv">60</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 4
+   eruptions waiting waitingSec eruptionsSec
+       &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;
+ 1      3.6       79       4740         216 
+ 2      1.8       54       3240         108 
+ 3      3.33      74       4440         200.
+ 4      2.28      62       3720         137.
+ 5      4.53      85       5100         272.
+ 6      2.88      55       3300         173.
+ 7      4.7       88       5280         282 
+ 8      3.6       85       5100         216 
+ 9      1.95      51       3060         117 
+10      4.35      85       5100         261 
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
+<p>Om vi skapar en variabel med samma namn som en befintlig variabel kommer den befintliga variabeln att ersättas av den nya versionen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">waiting =</span> waiting <span class="sc">*</span> <span class="dv">60</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 2
+   eruptions waiting
+       &lt;dbl&gt;   &lt;dbl&gt;
+ 1      3.6     4740
+ 2      1.8     3240
+ 3      3.33    4440
+ 4      2.28    3720
+ 5      4.53    5100
+ 6      2.88    3300
+ 7      4.7     5280
+ 8      3.6     5100
+ 9      1.95    3060
+10      4.35    5100
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
 </section>
 <section id="gruppera-beräkningar-med-group_by" class="level3" data-number="3.5.7">
 <h3 data-number="3.5.7" class="anchored" data-anchor-id="gruppera-beräkningar-med-group_by"><span class="header-section-number">3.5.7</span> Gruppera beräkningar med <code>group_by()</code></h3>
+<p>Många gånger vill vi genomföra beräkningar separat för olika grupper i datamaterialet. För att göra detta använder vi <code>group_by()</code>, som delar upp observationerna i grupper baserat på värdena i en eller flera variabler.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Eftersom datamaterialet faithful endast innehåller numeriska variabler skapar vi först en gruppvariabel som delar in observationerna i korta och långa väntetider. Vi använder <code>if_else()</code> för att ge den nya variabeln ett värde om uttrycket uppfylls (<code>Short wait</code>), ett annat om det inte uppfylls (<code>Long wait</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="ot">&lt;-</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  faithful <span class="sc">|&gt;</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">waitLength =</span> <span class="fu">if_else</span>(waiting <span class="sc">&lt;</span> <span class="dv">70</span>, <span class="st">"Short wait"</span>, <span class="st">"Long wait"</span>)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(faithful)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 3
+   eruptions waiting waitLength
+       &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     
+ 1      3.6       79 Long wait 
+ 2      1.8       54 Short wait
+ 3      3.33      74 Long wait 
+ 4      2.28      62 Short wait
+ 5      4.53      85 Long wait 
+ 6      2.88      55 Short wait
+ 7      4.7       88 Long wait 
+ 8      3.6       85 Long wait 
+ 9      1.95      51 Short wait
+10      4.35      85 Long wait 
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
+</div>
+</div>
+<p>Genom att använda <code>group_by()</code> sparar vi nu en grupperingskolumn i <code>tibble</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(waitLength)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 3
+# Groups:   waitLength [2]
+   eruptions waiting waitLength
+       &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     
+ 1      3.6       79 Long wait 
+ 2      1.8       54 Short wait
+ 3      3.33      74 Long wait 
+ 4      2.28      62 Short wait
+ 5      4.53      85 Long wait 
+ 6      2.88      55 Short wait
+ 7      4.7       88 Long wait 
+ 8      3.6       85 Long wait 
+ 9      1.95      51 Short wait
+10      4.35      85 Long wait 
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
+<p>När ett objekt har grupperats kommer många funktioner att utföra sina beräkningar separat inom varje grupp. Följande kod visar ett medelvärde per grupp.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(waitLength) <span class="sc">|&gt;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">meanWait =</span> <span class="fu">mean</span>(waiting))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 4
+# Groups:   waitLength [2]
+   eruptions waiting waitLength meanWait
+       &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;
+ 1      3.6       79 Long wait      80.5
+ 2      1.8       54 Short wait     55.2
+ 3      3.33      74 Long wait      80.5
+ 4      2.28      62 Short wait     55.2
+ 5      4.53      85 Long wait      80.5
+ 6      2.88      55 Short wait     55.2
+ 7      4.7       88 Long wait      80.5
+ 8      3.6       85 Long wait      80.5
+ 9      1.95      51 Short wait     55.2
+10      4.35      85 Long wait      80.5
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
+<p>Vi kan också gruppera efter flera variabler samtidigt genom att ange flera variabelnamn i group_by().</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">waitLength =</span> <span class="fu">if_else</span>(waiting <span class="sc">&lt;</span> <span class="dv">70</span>, <span class="st">"Short"</span>, <span class="st">"Long"</span>),</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">eruptLength =</span> <span class="fu">if_else</span>(eruptions <span class="sc">&lt;</span> <span class="dv">3</span>, <span class="st">"Short"</span>, <span class="st">"Long"</span>)</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(waitLength, eruptLength)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 4
+# Groups:   waitLength, eruptLength [4]
+   eruptions waiting waitLength eruptLength
+       &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      
+ 1      3.6       79 Long       Long       
+ 2      1.8       54 Short      Short      
+ 3      3.33      74 Long       Long       
+ 4      2.28      62 Short      Short      
+ 5      4.53      85 Long       Long       
+ 6      2.88      55 Short      Short      
+ 7      4.7       88 Long       Long       
+ 8      3.6       85 Long       Long       
+ 9      1.95      51 Short      Short      
+10      4.35      85 Long       Long       
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
+<p>Funktioner som nu läggs till kommer bearbetas för alla fyra kombinationer av grupperade värden.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I slutet av varje grupperingsoperation bör vi ange <code>ungroup()</code>. Denna funktion tar bort all grupperingsinformation så att efterföljande funktioner inte luras på något sätt.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(waitLength) <span class="sc">|&gt;</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">meanWait =</span> <span class="fu">mean</span>(waiting)) <span class="sc">|&gt;</span> </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 272 × 4
+   eruptions waiting waitLength meanWait
+       &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;
+ 1      3.6       79 Long wait      80.5
+ 2      1.8       54 Short wait     55.2
+ 3      3.33      74 Long wait      80.5
+ 4      2.28      62 Short wait     55.2
+ 5      4.53      85 Long wait      80.5
+ 6      2.88      55 Short wait     55.2
+ 7      4.7       88 Long wait      80.5
+ 8      3.6       85 Long wait      80.5
+ 9      1.95      51 Short wait     55.2
+10      4.35      85 Long wait      80.5
+# ℹ 262 more rows</code></pre>
+</div>
+</div>
+<p>Det är bra att få in en vana att alltid lägga till en <code>ungroup()</code> i slutet av sin pipe när en <code>group_by()</code> har använts, oavsett om bearbetningen är klar eller inte.</p>
+</div>
+</div>
 </section>
 <section id="sammanfatta-data-med-summarize" class="level3" data-number="3.5.8">
 <h3 data-number="3.5.8" class="anchored" data-anchor-id="sammanfatta-data-med-summarize"><span class="header-section-number">3.5.8</span> Sammanfatta data med <code>summarize()</code></h3>
+<p>Funktionen <code>summarize()</code> används för att beräkna sammanfattande mått, till exempel medelvärden, summor eller antal observationer. Resultatet blir ett nytt objekt där varje rad motsvarar en sammanfattning av hela datamaterialet eller av varje grupp.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar medelvärdet av väntetiden</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">meanWait =</span> <span class="fu">mean</span>(waiting)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  meanWait
+     &lt;dbl&gt;
+1     70.9</code></pre>
+</div>
+</div>
+<p>Vi kan beräkna flera sammanfattande mått samtidigt.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">meanWait =</span> <span class="fu">mean</span>(waiting),</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">minWait =</span> <span class="fu">min</span>(waiting),</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxWait =</span> <span class="fu">max</span>(waiting)</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  meanWait minWait maxWait
+     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1     70.9      43      96</code></pre>
+</div>
+</div>
+<p>Den verkliga styrkan hos summarize() framträder när den kombineras med group_by(). Då beräknas sammanfattningarna separat för varje grupp.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(waitLength) <span class="sc">|&gt;</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">meanWait =</span> <span class="fu">mean</span>(waiting),</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>()</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  waitLength meanWait     n
+  &lt;chr&gt;         &lt;dbl&gt; &lt;int&gt;
+1 Long wait      80.5   169
+2 Short wait     55.2   103</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det är mycket vanligt att kombinera flera funktioner från <code>dplyr</code> i samma kedja. Ett vanligt arbetsflöde är att först välja ut observationer med <code>filter()</code>, skapa nya variabler med <code>mutate()</code>, gruppera data med <code>group_by()</code> och slutligen beräkna sammanfattande mått med <code>summarize()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>faithful <span class="sc">|&gt;</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(waiting <span class="sc">&gt;</span> <span class="dv">60</span>) <span class="sc">|&gt;</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">waitingSec =</span> waiting <span class="sc">*</span> <span class="dv">60</span>,</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">eruptionLength =</span> <span class="fu">if_else</span>(eruptions <span class="sc">&lt;</span> <span class="dv">3</span>, <span class="st">"Short"</span>, <span class="st">"Long"</span>)</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(eruptionLength) <span class="sc">|&gt;</span> </span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">meanWait =</span> <span class="fu">mean</span>(waitingSec)</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  eruptionLength meanWait
+  &lt;chr&gt;             &lt;dbl&gt;
+1 Long              4799.
+2 Short             3849.</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sammanfattning" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="sammanfattning"><span class="header-section-number">3.6</span> Sammanfattning</h2>
+<p>I detta kapitel har vi introducerat ett flertal sätt att läsa in och bearbeta data med hjälp av funktioner från <code>tidyverse</code> samlingen. Detta är bara ett sätt att databearbeta i R, flertalet olika paket finns därute som gör liknande saker.</p>
+<p>I efterföljande kapitel kommer vi använda denna grund för att sedan introducera de statistiska paket och funktioner som kan hjälpa oss att besvara olika typer av frågeställningar.</p>
 <!-- ## Hantering av text med `stringr` och `forcats` -->
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

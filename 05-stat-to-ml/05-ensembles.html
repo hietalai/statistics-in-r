@@ -65,7 +65,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-6c85c9fc2bbb9926b7650676933c738f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f46846042fbd00966f0114f0ffd981ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -625,18 +625,18 @@ Figur&nbsp;30.2: Modellbaserad ensemble
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vid bagging skapas flera bootstrapurval från samma träningsmängd. Anta att träningsmängden innehåller observationerna A, B, C, D och E. Ett av bootstrapurvalen med storlek 5 blev A, A, C, E, E. Fyra regressionsmodeller tränas därefter på var sitt bootstrapurval. För en ny observation ger modellerna prediktionerna 4.2, 5.8, 6.1 och 7.9. Den aggregerade prediktionen beräknas som <span class="math inline">\(\hat{f}_{bag}(\boldsymbol{X})=\frac{1}{B}\sum_{b=1}^{B}\hat{f}_b(\boldsymbol{X})\)</span>. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-1462934625aceca3696fb401e234e5b1" class="webex-checkboxgroup" data-answer="agQaAxUDGAceBU1SOA==">
-<label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>När antalet bootstrapmodeller <span class="math inline">\(B\)</span> ökar tränas varje enskild modell automatiskt på fler unika observationer.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Bootstrapurvalet är giltigt trots att vissa observationer förekommer flera gånger och andra inte förekommer alls.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Om samtliga enskilda modeller har ungefär samma systematiska bias garanterar ett större antal bootstrapmodeller att denna bias försvinner.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Baggingmodellens prediktion för den nya observationen är 6.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Bootstrapurval skapas utan återläggning, vilket innebär att varje observation kan förekomma högst en gång i ett urval.</span></label><label><input type="checkbox" autocomplete="off" name="1462934625aceca3696fb401e234e5b1"><span>Bagging används enligt underlaget främst för att minska modellens varians snarare än dess bias.</span></label>
+<div id="webex-bc864df4831bc4be10a0d0441615fbce" class="webex-checkboxgroup" data-answer="OVIUBxhVSgQUAx1SPg==">
+<label><input type="checkbox" autocomplete="off" name="bc864df4831bc4be10a0d0441615fbce"><span>Bootstrapurvalet är giltigt trots att vissa observationer förekommer flera gånger och andra inte förekommer alls.</span></label><label><input type="checkbox" autocomplete="off" name="bc864df4831bc4be10a0d0441615fbce"><span>Baggingmodellens prediktion för den nya observationen är 6.</span></label><label><input type="checkbox" autocomplete="off" name="bc864df4831bc4be10a0d0441615fbce"><span>Bagging används enligt underlaget främst för att minska modellens varians snarare än dess bias.</span></label><label><input type="checkbox" autocomplete="off" name="bc864df4831bc4be10a0d0441615fbce"><span>Om samtliga enskilda modeller har ungefär samma systematiska bias garanterar ett större antal bootstrapmodeller att denna bias försvinner.</span></label><label><input type="checkbox" autocomplete="off" name="bc864df4831bc4be10a0d0441615fbce"><span>Bootstrapurval skapas utan återläggning, vilket innebär att varje observation kan förekomma högst en gång i ett urval.</span></label><label><input type="checkbox" autocomplete="off" name="bc864df4831bc4be10a0d0441615fbce"><span>När antalet bootstrapmodeller <span class="math inline">\(B\)</span> ökar tränas varje enskild modell automatiskt på fler unika observationer.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Ett större <span class="math inline">\(B\)</span> innebär att fler bootstrapurval och fler modeller skapas. Det förändrar inte automatiskt antalet unika observationer i varje enskilt urval.</li>
 <li>Sant. Bootstrap innebär urval med återläggning. Därför kan samma observation väljas flera gånger, samtidigt som andra observationer kan saknas i ett enskilt urval.</li>
-<li>Falskt. Bagging kan minska variationen mellan skattningar, men det innebär inte att en systematisk bias som delas av grundmodellerna automatiskt försvinner.</li>
 <li>Sant. Den aggregerade prediktionen blir <span class="math inline">\((4.2+5.8+6.1+7.9)/4=6\)</span>.</li>
-<li>Falskt. Bootstrapurval görs med återläggning. Observationerna kan därför förekomma flera gånger i samma urval.</li>
 <li>Sant. Enligt underlaget är baggings huvudsakliga effekt att minska variansen. Metoden beskrivs inte som en metod som i första hand minskar bias.</li>
+<li>Falskt. Bagging kan minska variationen mellan skattningar, men det innebär inte att en systematisk bias som delas av grundmodellerna automatiskt försvinner.</li>
+<li>Falskt. Bootstrapurval görs med återläggning. Observationerna kan därför förekomma flera gånger i samma urval.</li>
+<li>Falskt. Ett större <span class="math inline">\(B\)</span> innebär att fler bootstrapurval och fler modeller skapas. Det förändrar inte automatiskt antalet unika observationer i varje enskilt urval.</li>
 </ul>
 </div>
 </div>
@@ -668,18 +668,18 @@ Figur&nbsp;30.2: Modellbaserad ensemble
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Random Forest är en ensemblemetod som bygger vidare på bagging genom att kombinera ett stort antal beslutsträd. Vilka av följande påståenden om Random Forest är korrekta?</p>
-<div id="webex-2cce9b7f32e871dc7580c2ea782f0c9c" class="webex-checkboxgroup" data-answer="aVJPVBVSG1cfA0kIag==">
-<label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Varje beslutsträd tränas vanligtvis på ett bootstrapurval från den ursprungliga träningsmängden.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Det slumpmässiga urvalet av variabler kan minska korrelationen mellan träden.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Samtliga förklarande variabler måste användas som kandidater vid varje uppdelning för att träden ska bli tillräckligt olika.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Vid regression kombineras trädens prediktioner vanligtvis med ett medelvärde, medan majoritetsröstning kan användas vid klassificering.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Vid varje uppdelning i ett träd väljs den bästa uppdelningen bland en slumpmässigt utvald delmängd av de förklarande variablerna.</span></label><label><input type="checkbox" autocomplete="off" name="2cce9b7f32e871dc7580c2ea782f0c9c"><span>Varje nytt träd tränas för att korrigera de fel som det föregående trädet gjorde.</span></label>
+<div id="webex-e2daf166b04637c3616aeeb5e588d023" class="webex-checkboxgroup" data-answer="PgJIUEoAGgZOARgHbg==">
+<label><input type="checkbox" autocomplete="off" name="e2daf166b04637c3616aeeb5e588d023"><span>Samtliga förklarande variabler måste användas som kandidater vid varje uppdelning för att träden ska bli tillräckligt olika.</span></label><label><input type="checkbox" autocomplete="off" name="e2daf166b04637c3616aeeb5e588d023"><span>Varje beslutsträd tränas vanligtvis på ett bootstrapurval från den ursprungliga träningsmängden.</span></label><label><input type="checkbox" autocomplete="off" name="e2daf166b04637c3616aeeb5e588d023"><span>Vid regression kombineras trädens prediktioner vanligtvis med ett medelvärde, medan majoritetsröstning kan användas vid klassificering.</span></label><label><input type="checkbox" autocomplete="off" name="e2daf166b04637c3616aeeb5e588d023"><span>Varje nytt träd tränas för att korrigera de fel som det föregående trädet gjorde.</span></label><label><input type="checkbox" autocomplete="off" name="e2daf166b04637c3616aeeb5e588d023"><span>Vid varje uppdelning i ett träd väljs den bästa uppdelningen bland en slumpmässigt utvald delmängd av de förklarande variablerna.</span></label><label><input type="checkbox" autocomplete="off" name="e2daf166b04637c3616aeeb5e588d023"><span>Det slumpmässiga urvalet av variabler kan minska korrelationen mellan träden.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Sant. Varje träd tränas vanligtvis på ett eget bootstrapurval, vilket skapar variation mellan träden.</li>
-<li>Sant. Om träden inte alltid använder samma starka prediktorer kan deras prediktioner bli mindre korrelerade.</li>
 <li>Falskt. Det slumpmässiga variabelurvalet är en central del av Random Forest och används för att göra träden mindre lika varandra.</li>
+<li>Sant. Varje träd tränas vanligtvis på ett eget bootstrapurval, vilket skapar variation mellan träden.</li>
 <li>Sant. Vid regression används vanligtvis medelvärdet av trädens prediktioner. Vid klassificering kan den klass som får flest röster väljas.</li>
-<li>Sant. Vid varje uppdelning får trädet endast välja mellan en slumpmässigt utvald delmängd av de förklarande variablerna.</li>
 <li>Falskt. Träden i Random Forest tränas oberoende av varandra. Att varje ny modell försöker korrigera tidigare fel är kännetecknande för boosting.</li>
+<li>Sant. Vid varje uppdelning får trädet endast välja mellan en slumpmässigt utvald delmängd av de förklarande variablerna.</li>
+<li>Sant. Om träden inte alltid använder samma starka prediktorer kan deras prediktioner bli mindre korrelerade.</li>
 </ul>
 </div>
 </div>
@@ -799,16 +799,16 @@ Figur&nbsp;30.5: <span class="math inline">\(w^{(b+1)}\)</span> utifrån <span c
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>I maskininlärning kan boosting användas för att klassificera observationer genom att kombinera flera svaga modeller. Efter att den första modellen har tränats visar det sig att vissa observationer har klassificerats fel. Vilka av följande påståenden beskriver korrekt hur boosting fortsätter träningen och kombinerar de olika modellerna?</p>
-<div id="webex-014312c54843a4302649c3ae1883b592" class="webex-checkboxgroup" data-answer="awEYAh0DTwRp">
-<label><input type="checkbox" autocomplete="off" name="014312c54843a4302649c3ae1883b592"><span>Varje ny modell tränas utan information om resultaten från tidigare modeller.</span></label><label><input type="checkbox" autocomplete="off" name="014312c54843a4302649c3ae1883b592"><span>Observationer som redan klassificerats korrekt kan få lägre vikt i nästa steg.</span></label><label><input type="checkbox" autocomplete="off" name="014312c54843a4302649c3ae1883b592"><span>De felklassificerade observationerna får större betydelse när nästa modell tränas.</span></label><label><input type="checkbox" autocomplete="off" name="014312c54843a4302649c3ae1883b592"><span>Den slutliga prediktionen kan baseras på en viktad kombination av de tränade modellerna.</span></label>
+<div id="webex-fc23d48fe7a6c0042437734b8c10d2db" class="webex-checkboxgroup" data-answer="PVIeAkgFFFY4">
+<label><input type="checkbox" autocomplete="off" name="fc23d48fe7a6c0042437734b8c10d2db"><span>De felklassificerade observationerna får större betydelse när nästa modell tränas.</span></label><label><input type="checkbox" autocomplete="off" name="fc23d48fe7a6c0042437734b8c10d2db"><span>Den slutliga prediktionen kan baseras på en viktad kombination av de tränade modellerna.</span></label><label><input type="checkbox" autocomplete="off" name="fc23d48fe7a6c0042437734b8c10d2db"><span>Observationer som redan klassificerats korrekt kan få lägre vikt i nästa steg.</span></label><label><input type="checkbox" autocomplete="off" name="fc23d48fe7a6c0042437734b8c10d2db"><span>Varje ny modell tränas utan information om resultaten från tidigare modeller.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Boosting är en sekventiell metod där resultaten från tidigare modeller påverkar träningen av nästa modell.</li>
-<li>Sant. Korrekt klassificerade observationer kan få lägre vikt eftersom modellen redan hanterar dem relativt väl.</li>
 <li>Sant. Felklassificerade observationer får vanligtvis högre vikt, så att nästa modell fokuserar mer på dem.</li>
 <li>Sant. Modellernas prediktioner kan kombineras genom exempelvis en viktad majoritetsröstning.</li>
+<li>Sant. Korrekt klassificerade observationer kan få lägre vikt eftersom modellen redan hanterar dem relativt väl.</li>
+<li>Falskt. Boosting är en sekventiell metod där resultaten från tidigare modeller påverkar träningen av nästa modell.</li>
 </ul>
 </div>
 </div>
@@ -911,17 +911,17 @@ Minskar varians och bias
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Två modellproblem ska hanteras med ensemblemetoder. * I problem A används en instabil modell vars prediktioner varierar mycket mellan olika träningsurval. Modellens systematiska bias bedöms däremot vara relativt liten. Modellerna behöver helst kunna tränas parallellt. * I problem B används enkla svaga modeller som var för sig underanpassar data. Det är möjligt att träna modellerna sekventiellt och låta senare modeller fokusera på tidigare fel. Vilka av följande påståenden är korrekta enligt jämförelsen mellan bagging och boosting i underlaget?</p>
-<div id="webex-9ad08d2044563bee52b69c0507ff1185" class="webex-checkboxgroup" data-answer="YlBIABRUHgAYBRkHbg==">
-<label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Bagging är ett rimligt val för problem A eftersom metoden främst används för att minska variansen hos instabila modeller.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Boosting kan inte överanpassa när antalet modeller <span class="math inline">\(B\)</span> ökar, eftersom varje enskild modell är svag.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Bagging bör väljas för problem B eftersom metoden främst reducerar hög bias hos en underanpassad grundmodell.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Kravet på parallell träning i problem A talar för boosting snarare än bagging.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>När <span class="math inline">\(B\)</span> ökar brukar baggingprediktionen stabiliseras, medan boosting kan överanpassa om alltför många modeller läggs till.</span></label><label><input type="checkbox" autocomplete="off" name="9ad08d2044563bee52b69c0507ff1185"><span>Boosting är ett rimligt val för problem B eftersom flera svaga modeller stegvis kan kombineras till en starkare modell.</span></label>
+<div id="webex-eddfecf961bb8aad06f873d3d6c53a9b" class="webex-checkboxgroup" data-answer="PlRIVklSSggaAU5TZQ==">
+<label><input type="checkbox" autocomplete="off" name="eddfecf961bb8aad06f873d3d6c53a9b"><span>Boosting kan inte överanpassa när antalet modeller <span class="math inline">\(B\)</span> ökar, eftersom varje enskild modell är svag.</span></label><label><input type="checkbox" autocomplete="off" name="eddfecf961bb8aad06f873d3d6c53a9b"><span>Bagging bör väljas för problem B eftersom metoden främst reducerar hög bias hos en underanpassad grundmodell.</span></label><label><input type="checkbox" autocomplete="off" name="eddfecf961bb8aad06f873d3d6c53a9b"><span>När <span class="math inline">\(B\)</span> ökar brukar baggingprediktionen stabiliseras, medan boosting kan överanpassa om alltför många modeller läggs till.</span></label><label><input type="checkbox" autocomplete="off" name="eddfecf961bb8aad06f873d3d6c53a9b"><span>Bagging är ett rimligt val för problem A eftersom metoden främst används för att minska variansen hos instabila modeller.</span></label><label><input type="checkbox" autocomplete="off" name="eddfecf961bb8aad06f873d3d6c53a9b"><span>Kravet på parallell träning i problem A talar för boosting snarare än bagging.</span></label><label><input type="checkbox" autocomplete="off" name="eddfecf961bb8aad06f873d3d6c53a9b"><span>Boosting är ett rimligt val för problem B eftersom flera svaga modeller stegvis kan kombineras till en starkare modell.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Sant. Bagging tränar modeller på olika bootstrapurval och aggregerar deras resultat. Metoden används främst för att minska variansen, vilket är relevant för en instabil grundmodell.</li>
 <li>Falskt. Underlaget anger att boosting kan överanpassa när antalet modeller ökar, trots att de enskilda modellerna är svaga.</li>
 <li>Falskt. Enligt jämförelsen i underlaget minskar bagging främst variansen och inte bias. En modell som underanpassar kan därför kräva en metod som också angriper bias.</li>
-<li>Falskt. Baggingmodeller kan tränas oberoende och parallellt. Boosting är däremot sekventiell eftersom varje ny modell påverkas av resultaten från tidigare modeller.</li>
 <li>Sant. Baggingprediktionen stabiliseras normalt när fler modeller aggregeras, medan boosting kan börja överanpassa när antalet modeller blir stort.</li>
+<li>Sant. Bagging tränar modeller på olika bootstrapurval och aggregerar deras resultat. Metoden används främst för att minska variansen, vilket är relevant för en instabil grundmodell.</li>
+<li>Falskt. Baggingmodeller kan tränas oberoende och parallellt. Boosting är däremot sekventiell eftersom varje ny modell påverkas av resultaten från tidigare modeller.</li>
 <li>Sant. Boosting tränar svaga modeller sekventiellt och låter senare modeller fokusera på de fel som tidigare modeller gjort. Detta kan minska både bias och varians.</li>
 </ul>
 </div>

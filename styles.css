@@ -103,10 +103,14 @@ p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
 }
 
 /* Non WEBR code-blocks */
-div.sourceCode {
+div.sourceCode, pre.cell-code {
   border: 1px solid var(--code-highlight);
   border-left: 3px solid var(--code-highlight);
   border-radius: 0.25rem;
+}
+
+pre.cell-code {
+  background-color: rgba(221,221,221,.65);
 }
 
 /* WEBR code-output */

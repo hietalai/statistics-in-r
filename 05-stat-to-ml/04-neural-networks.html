@@ -66,7 +66,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-6c85c9fc2bbb9926b7650676933c738f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f46846042fbd00966f0114f0ffd981ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -670,18 +670,18 @@ Figur&nbsp;29.2: Visualisering av ReLu aktiveringsfunktion
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Ett neuralt nätverk används för ett klassificeringsproblem med tre nominala klasser. Nätverkets outputlager ger värdena <span class="math inline">\(z_1=0\)</span>, <span class="math inline">\(z_2=\log(2)\)</span> och <span class="math inline">\(z_3=\log(3)\)</span> innan aktiveringsfunktionen appliceras. Softmaxfunktionen beräknar outputvärdet för klass <span class="math inline">\(i\)</span> som <span class="math inline">\(f_i=\frac{\exp(z_i)}{\sum_{j=1}^K\exp(z_j)}\)</span>. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-f427d22b035f62cc616c5be368999cbb" class="webex-checkboxgroup" data-answer="PQQeBkgCHlIcAhlXaw==">
-<label><input type="checkbox" autocomplete="off" name="f427d22b035f62cc616c5be368999cbb"><span>För regression där responsvariabeln kan anta alla reella värden bör exponentialfunktionen användas i outputlagret i stället för identitetsfunktionen.</span></label><label><input type="checkbox" autocomplete="off" name="f427d22b035f62cc616c5be368999cbb"><span>Om samma konstant adderas till samtliga <span class="math inline">\(z_i\)</span> förblir softmaxfunktionens outputvärden oförändrade.</span></label><label><input type="checkbox" autocomplete="off" name="f427d22b035f62cc616c5be368999cbb"><span>Om samtliga <span class="math inline">\(z_i\)</span> multipliceras med 2 förblir softmaxfunktionens outputvärden oförändrade.</span></label><label><input type="checkbox" autocomplete="off" name="f427d22b035f62cc616c5be368999cbb"><span>Eftersom de gömda lagren använder ReLU summerar outputlagrets värden automatiskt till 1 även utan softmax.</span></label><label><input type="checkbox" autocomplete="off" name="f427d22b035f62cc616c5be368999cbb"><span>Softmax är en lämplig aktiveringsfunktion i outputlagret när responsvariabeln består av flera nominella klasser.</span></label><label><input type="checkbox" autocomplete="off" name="f427d22b035f62cc616c5be368999cbb"><span>Softmax ger outputvärdena <span class="math inline">\(f_1=1/6\)</span>, <span class="math inline">\(f_2=2/6\)</span> och <span class="math inline">\(f_3=3/6\)</span>.</span></label>
+<div id="webex-2b93f918c0e7a87f0d60ce991de6be6e" class="webex-checkboxgroup" data-answer="aVMVAkoIHQhPAEkHPA==">
+<label><input type="checkbox" autocomplete="off" name="2b93f918c0e7a87f0d60ce991de6be6e"><span>Softmax är en lämplig aktiveringsfunktion i outputlagret när responsvariabeln består av flera nominella klasser.</span></label><label><input type="checkbox" autocomplete="off" name="2b93f918c0e7a87f0d60ce991de6be6e"><span>Softmax ger outputvärdena <span class="math inline">\(f_1=1/6\)</span>, <span class="math inline">\(f_2=2/6\)</span> och <span class="math inline">\(f_3=3/6\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="2b93f918c0e7a87f0d60ce991de6be6e"><span>Om samma konstant adderas till samtliga <span class="math inline">\(z_i\)</span> förblir softmaxfunktionens outputvärden oförändrade.</span></label><label><input type="checkbox" autocomplete="off" name="2b93f918c0e7a87f0d60ce991de6be6e"><span>För regression där responsvariabeln kan anta alla reella värden bör exponentialfunktionen användas i outputlagret i stället för identitetsfunktionen.</span></label><label><input type="checkbox" autocomplete="off" name="2b93f918c0e7a87f0d60ce991de6be6e"><span>Eftersom de gömda lagren använder ReLU summerar outputlagrets värden automatiskt till 1 även utan softmax.</span></label><label><input type="checkbox" autocomplete="off" name="2b93f918c0e7a87f0d60ce991de6be6e"><span>Om samtliga <span class="math inline">\(z_i\)</span> multipliceras med 2 förblir softmaxfunktionens outputvärden oförändrade.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Identitetsfunktionen kan användas när regressionens output tillåts ligga på hela tallinjen. Exponentialfunktionen kan användas när endast positiva värden är tillåtna.</li>
-<li>Sant. Om en konstant <span class="math inline">\(c\)</span> adderas till samtliga värden multipliceras både täljaren och nämnaren med <span class="math inline">\(\exp(c)\)</span>. Faktorn förkortas bort.</li>
-<li>Falskt. Efter multipliceringen blir de onormaliserade värdena proportionella mot <span class="math inline">\(1\)</span>, <span class="math inline">\(4\)</span> och <span class="math inline">\(9\)</span>, vilket ger en annan fördelning.</li>
-<li>Falskt. ReLU används i de gömda lagren för att skapa icke-linjära transformationer. Den gör inte att outputvärdena automatiskt summerar till 1.</li>
 <li>Sant. Softmax normaliserar outputlagrets värden och är lämplig när responsvariabeln består av flera nominella klasser.</li>
 <li>Sant. Eftersom <span class="math inline">\(\exp(0)=1\)</span>, <span class="math inline">\(\exp(\log(2))=2\)</span> och <span class="math inline">\(\exp(\log(3))=3\)</span> blir nämnaren <span class="math inline">\(1+2+3=6\)</span>.</li>
+<li>Sant. Om en konstant <span class="math inline">\(c\)</span> adderas till samtliga värden multipliceras både täljaren och nämnaren med <span class="math inline">\(\exp(c)\)</span>. Faktorn förkortas bort.</li>
+<li>Falskt. Identitetsfunktionen kan användas när regressionens output tillåts ligga på hela tallinjen. Exponentialfunktionen kan användas när endast positiva värden är tillåtna.</li>
+<li>Falskt. ReLU används i de gömda lagren för att skapa icke-linjära transformationer. Den gör inte att outputvärdena automatiskt summerar till 1.</li>
+<li>Falskt. Efter multipliceringen blir de onormaliserade värdena proportionella mot <span class="math inline">\(1\)</span>, <span class="math inline">\(4\)</span> och <span class="math inline">\(9\)</span>, vilket ger en annan fördelning.</li>
 </ul>
 </div>
 </div>
@@ -717,16 +717,16 @@ Tips
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Ett neuralt nätverk används för att modellera ett komplicerat icke-linjärt samband. Nätverket görs mer flexibelt genom att fler neuroner läggs till. Vilka av följande slutsatser är rimliga utifrån Universal Approximation Theorem och materialets diskussion?</p>
-<div id="webex-28f800a4c79642912a0e6afb50e17052" class="webex-checkboxgroup" data-answer="aQhKCRwBTQQ+">
-<label><input type="checkbox" autocomplete="off" name="28f800a4c79642912a0e6afb50e17052"><span>Om nätverket kan approximera sambandet väl blir det automatiskt enkelt att tolka hur varje prediktor påverkar responsvariabeln.</span></label><label><input type="checkbox" autocomplete="off" name="28f800a4c79642912a0e6afb50e17052"><span>Ett tillräckligt flexibelt neuralt nätverk kan i princip representera mycket komplexa samband.</span></label><label><input type="checkbox" autocomplete="off" name="28f800a4c79642912a0e6afb50e17052"><span>Ökad flexibilitet kan förbättra nätverkets förmåga att anpassa komplexa samband, men kan också öka risken för överanpassning.</span></label><label><input type="checkbox" autocomplete="off" name="28f800a4c79642912a0e6afb50e17052"><span>Eftersom nätverket är flexibelt krävs endast en liten mängd träningsdata för att få tillförlitliga prediktioner.</span></label>
+<div id="webex-4015295a4f789cb8e88f37314cfa148f" class="webex-checkboxgroup" data-answer="bwEdBB4JGVFp">
+<label><input type="checkbox" autocomplete="off" name="4015295a4f789cb8e88f37314cfa148f"><span>Ett tillräckligt flexibelt neuralt nätverk kan i princip representera mycket komplexa samband.</span></label><label><input type="checkbox" autocomplete="off" name="4015295a4f789cb8e88f37314cfa148f"><span>Ökad flexibilitet kan förbättra nätverkets förmåga att anpassa komplexa samband, men kan också öka risken för överanpassning.</span></label><label><input type="checkbox" autocomplete="off" name="4015295a4f789cb8e88f37314cfa148f"><span>Eftersom nätverket är flexibelt krävs endast en liten mängd träningsdata för att få tillförlitliga prediktioner.</span></label><label><input type="checkbox" autocomplete="off" name="4015295a4f789cb8e88f37314cfa148f"><span>Om nätverket kan approximera sambandet väl blir det automatiskt enkelt att tolka hur varje prediktor påverkar responsvariabeln.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Neurala nätverk är ofta svåra att tolka och betraktas därför som black box-modeller, även när de ger bra prediktioner.</li>
 <li>Sant. Universal Approximation Theorem visar att neurala nätverk med tillräcklig flexibilitet kan representera mycket komplexa och icke-linjära funktioner.</li>
 <li>Sant. Ett mer flexibelt nätverk kan anpassa mer komplicerade samband, men flexibiliteten innebär också en större risk att modellen överanpassas till träningsdata.</li>
 <li>Falskt. Neurala nätverk behöver ofta mycket träningsdata för att lära sig komplexa samband och ge tillförlitliga prediktioner.</li>
+<li>Falskt. Neurala nätverk är ofta svåra att tolka och betraktas därför som black box-modeller, även när de ger bra prediktioner.</li>
 </ul>
 </div>
 </div>
@@ -803,18 +803,18 @@ Tips
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vid träningen av ett neuralt nätverk används en slumpmässigt vald mini-batch för att beräkna gradientskattningen <span class="math inline">\(\nabla\hat{c}\)</span>. Skattningen antas vara väntevärdesriktig och inlärningshastigheten följer schemat <span class="math inline">\(\gamma_t=1/t\)</span>. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-1be69682b250745d4b78663e95c5a607" class="webex-checkboxgroup" data-answer="alNJBxUHFANOAhkAag==">
-<label><input type="checkbox" autocomplete="off" name="1be69682b250745d4b78663e95c5a607"><span>Att gradientskattningen är väntevärdesriktig innebär att <span class="math inline">\(\mathrm{E}[\hat{\nabla L}]=\nabla L\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1be69682b250745d4b78663e95c5a607"><span>En lägre inlärningshastighet kan minska hur mycket en ovanligt dålig gradientskattning påverkar parametrarna.</span></label><label><input type="checkbox" autocomplete="off" name="1be69682b250745d4b78663e95c5a607"><span>En väntevärdesriktig gradientskattning behöver inte vara lika med den fullständiga gradienten i varje enskild iteration.</span></label><label><input type="checkbox" autocomplete="off" name="1be69682b250745d4b78663e95c5a607"><span>En större mini-batch ger vanligtvis lägre varians i gradientskattningen men är dyrare att beräkna.</span></label><label><input type="checkbox" autocomplete="off" name="1be69682b250745d4b78663e95c5a607"><span>Schemat <span class="math inline">\(\gamma_k=1/k\)</span> uppfyller inte kravet <span class="math inline">\(\sum_{k=1}^{\infty}\gamma_k^2&lt;\infty\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1be69682b250745d4b78663e95c5a607"><span>En mindre mini-batch gör varje parameteruppdatering mer beräkningskrävande eftersom färre observationer används.</span></label>
+<div id="webex-54d213a3a7162f4f1bf94a4aabfc5539" class="webex-checkboxgroup" data-answer="bgVIAh0DTQJNBh0Hbw==">
+<label><input type="checkbox" autocomplete="off" name="54d213a3a7162f4f1bf94a4aabfc5539"><span>En väntevärdesriktig gradientskattning behöver inte vara lika med den fullständiga gradienten i varje enskild iteration.</span></label><label><input type="checkbox" autocomplete="off" name="54d213a3a7162f4f1bf94a4aabfc5539"><span>Schemat <span class="math inline">\(\gamma_k=1/k\)</span> uppfyller inte kravet <span class="math inline">\(\sum_{k=1}^{\infty}\gamma_k^2&lt;\infty\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="54d213a3a7162f4f1bf94a4aabfc5539"><span>En mindre mini-batch gör varje parameteruppdatering mer beräkningskrävande eftersom färre observationer används.</span></label><label><input type="checkbox" autocomplete="off" name="54d213a3a7162f4f1bf94a4aabfc5539"><span>En större mini-batch ger vanligtvis lägre varians i gradientskattningen men är dyrare att beräkna.</span></label><label><input type="checkbox" autocomplete="off" name="54d213a3a7162f4f1bf94a4aabfc5539"><span>Att gradientskattningen är väntevärdesriktig innebär att <span class="math inline">\(\mathrm{E}[\hat{\nabla L}]=\nabla L\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="54d213a3a7162f4f1bf94a4aabfc5539"><span>En lägre inlärningshastighet kan minska hur mycket en ovanligt dålig gradientskattning påverkar parametrarna.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Sant. Väntevärdesriktighet innebär att gradientskattningens förväntade värde är den fullständiga gradienten.</li>
-<li>Sant. När inlärningshastigheten minskas får en avvikande gradientskattning mindre påverkan på parameteruppdateringen.</li>
 <li>Sant. Skattningen kan variera mellan mini-batcher även om dess väntevärde är korrekt. Väntevärdesriktig betyder därför inte att varje enskild skattning är exakt.</li>
-<li>Sant. Större batcher innehåller mer information och ger därmed mindre variation, men de kräver samtidigt fler beräkningar per uppdatering.</li>
 <li>Falskt. För <span class="math inline">\(\gamma_k=1/k\)</span> gäller både <span class="math inline">\(\sum_{k=1}^{\infty}\gamma_k=\infty\)</span> och <span class="math inline">\(\sum_{k=1}^{\infty}\gamma_k^2&lt;\infty\)</span>, vilket är de två krav som anges i underlaget.</li>
 <li>Falskt. En mindre mini-batch innehåller färre observationer och gör därför vanligtvis varje enskild gradientberäkning billigare.</li>
+<li>Sant. Större batcher innehåller mer information och ger därmed mindre variation, men de kräver samtidigt fler beräkningar per uppdatering.</li>
+<li>Sant. Väntevärdesriktighet innebär att gradientskattningens förväntade värde är den fullständiga gradienten.</li>
+<li>Sant. När inlärningshastigheten minskas får en avvikande gradientskattning mindre påverkan på parameteruppdateringen.</li>
 </ul>
 </div>
 </div>
@@ -852,18 +852,18 @@ Tips
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vid träningen av ett neuralt nätverk används backpropagation för att beräkna hur nätverkets parametrar påverkar kostnadsfunktionen. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-35e17e4c47877641f3ede1b491d4c19b" class="webex-checkboxgroup" data-answer="aARJARtUGFMYBxQGag==">
-<label><input type="checkbox" autocomplete="off" name="35e17e4c47877641f3ede1b491d4c19b"><span>Backpropagation använder kedjeregeln för att beräkna kostnadfunktionens gradient med avseende på nätverkets vikter och bias.</span></label><label><input type="checkbox" autocomplete="off" name="35e17e4c47877641f3ede1b491d4c19b"><span>Backpropagation kan endast användas när nätverkets dolda lager har en sigmoidfunktion och fungerar därför inte tillsammans med ReLU.</span></label><label><input type="checkbox" autocomplete="off" name="35e17e4c47877641f3ede1b491d4c19b"><span>Vid backpropagation förs derivatorna bakåt från kostnadsfunktionen genom nätverkets olika lager.</span></label><label><input type="checkbox" autocomplete="off" name="35e17e4c47877641f3ede1b491d4c19b"><span>Nätverkets bias påverkar inte kostnadsfunktionen och behöver därför inte ingå i gradientberäkningen.</span></label><label><input type="checkbox" autocomplete="off" name="35e17e4c47877641f3ede1b491d4c19b"><span>Backpropagation uppdaterar automatiskt nätverkets parametrar utan att någon optimeringsalgoritm behövs.</span></label><label><input type="checkbox" autocomplete="off" name="35e17e4c47877641f3ede1b491d4c19b"><span>En optimeringsalgoritm kan använda de beräknade gradienterna för att justera nätverkets vikter och bias.</span></label>
+<div id="webex-537ade0c0f7bde6c8dcb6a504d1b4ee8" class="webex-checkboxgroup" data-answer="bgMbUEhVHFIcVxtSOQ==">
+<label><input type="checkbox" autocomplete="off" name="537ade0c0f7bde6c8dcb6a504d1b4ee8"><span>Nätverkets bias påverkar inte kostnadsfunktionen och behöver därför inte ingå i gradientberäkningen.</span></label><label><input type="checkbox" autocomplete="off" name="537ade0c0f7bde6c8dcb6a504d1b4ee8"><span>Vid backpropagation förs derivatorna bakåt från kostnadsfunktionen genom nätverkets olika lager.</span></label><label><input type="checkbox" autocomplete="off" name="537ade0c0f7bde6c8dcb6a504d1b4ee8"><span>Backpropagation kan endast användas när nätverkets dolda lager har en sigmoidfunktion och fungerar därför inte tillsammans med ReLU.</span></label><label><input type="checkbox" autocomplete="off" name="537ade0c0f7bde6c8dcb6a504d1b4ee8"><span>Backpropagation använder kedjeregeln för att beräkna kostnadfunktionens gradient med avseende på nätverkets vikter och bias.</span></label><label><input type="checkbox" autocomplete="off" name="537ade0c0f7bde6c8dcb6a504d1b4ee8"><span>En optimeringsalgoritm kan använda de beräknade gradienterna för att justera nätverkets vikter och bias.</span></label><label><input type="checkbox" autocomplete="off" name="537ade0c0f7bde6c8dcb6a504d1b4ee8"><span>Backpropagation uppdaterar automatiskt nätverkets parametrar utan att någon optimeringsalgoritm behövs.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Sant. Backpropagation använder kedjeregeln för att beräkna hur varje vikt och bias påverkar förlustfunktionens värde.</li>
-<li>Falskt. Backpropagation är inte begränsad till sigmoidfunktioner utan kan även användas i nätverk med andra aktiveringsfunktioner, exempelvis ReLU.</li>
-<li>Sant. Beräkningen börjar vid förlustfunktionen och förs bakåt genom nätverkets lager till de olika parametrarna.</li>
 <li>Falskt. Bias påverkar nätverkets beräkningar och därmed även förlustfunktionen. Bias behöver därför ingå i gradientberäkningen.</li>
-<li>Falskt. Backpropagation beräknar gradienterna. En optimeringsalgoritm använder därefter gradienterna för att uppdatera parametrarna.</li>
+<li>Sant. Beräkningen börjar vid förlustfunktionen och förs bakåt genom nätverkets lager till de olika parametrarna.</li>
+<li>Falskt. Backpropagation är inte begränsad till sigmoidfunktioner utan kan även användas i nätverk med andra aktiveringsfunktioner, exempelvis ReLU.</li>
+<li>Sant. Backpropagation använder kedjeregeln för att beräkna hur varje vikt och bias påverkar förlustfunktionens värde.</li>
 <li>Sant. Optimeringsalgoritmen använder gradienterna för att avgöra hur nätverkets vikter och bias ska justeras.</li>
+<li>Falskt. Backpropagation beräknar gradienterna. En optimeringsalgoritm använder därefter gradienterna för att uppdatera parametrarna.</li>
 </ul>
 </div>
 </div>
