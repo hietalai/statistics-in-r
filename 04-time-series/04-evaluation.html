@@ -576,7 +576,15 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#datauppdelning" id="toc-datauppdelning" class="nav-link" data-scroll-target="#datauppdelning"><span class="header-section-number">24.4.1</span> Datauppdelning</a></li>
   </ul></li>
-  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser"><span class="header-section-number">24.5</span> Referenser</a></li>
+  <li><a href="#sammanfattande-fallstudie" id="toc-sammanfattande-fallstudie" class="nav-link" data-scroll-target="#sammanfattande-fallstudie"><span class="header-section-number">24.5</span> Sammanfattande fallstudie</a>
+  <ul class="collapse">
+  <li><a href="#läsa-in-och-visualisera-tidsserien" id="toc-läsa-in-och-visualisera-tidsserien" class="nav-link" data-scroll-target="#läsa-in-och-visualisera-tidsserien"><span class="header-section-number">24.5.1</span> Läsa in och visualisera tidsserien</a></li>
+  <li><a href="#stationäritet-och-modellidentifiering" id="toc-stationäritet-och-modellidentifiering" class="nav-link" data-scroll-target="#stationäritet-och-modellidentifiering"><span class="header-section-number">24.5.2</span> Stationäritet och modellidentifiering</a></li>
+  <li><a href="#anpassa-arima-modeller" id="toc-anpassa-arima-modeller" class="nav-link" data-scroll-target="#anpassa-arima-modeller"><span class="header-section-number">24.5.3</span> Anpassa ARIMA-modeller</a></li>
+  <li><a href="#diagnostik-av-residualerna" id="toc-diagnostik-av-residualerna" class="nav-link" data-scroll-target="#diagnostik-av-residualerna"><span class="header-section-number">24.5.4</span> Diagnostik av residualerna</a></li>
+  <li><a href="#jämförelse-av-modellens-prediktioner" id="toc-jämförelse-av-modellens-prediktioner" class="nav-link" data-scroll-target="#jämförelse-av-modellens-prediktioner"><span class="header-section-number">24.5.5</span> Jämförelse av modellens prediktioner</a></li>
+  </ul></li>
+  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser"><span class="header-section-number">24.6</span> Referenser</a></li>
   </ul>
 </nav>
     </div>
@@ -823,8 +831,8 @@ X-squared = 8.7023, df = 10, p-value = 0.5606</code></pre>
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>En ARIMA-modell har anpassats till en tidsserie. För att modellen ska anses ha fångat seriens modellerbara tidsberoende vill vi att residualerna ungefär ska bete sig som vitt brus. Vilka av följande resultat talar för att residualerna kan betraktas som vitt brus?</p>
-<div id="webex-6c8de19ba16aa8ca3e1220e13dad00ae" class="webex-checkboxgroup" data-answer="bVIUVUkBFVJNAGs=">
-<label><input type="checkbox" autocomplete="off" name="6c8de19ba16aa8ca3e1220e13dad00ae"><span>SAC och SPAC för residualerna saknar tydliga signifikanta spikar.</span></label><label><input type="checkbox" autocomplete="off" name="6c8de19ba16aa8ca3e1220e13dad00ae"><span>Ljung-Box-testet ger ett högt <span class="math inline">\(p\)</span>-värde, vilket innebär att nollhypotesen om frånvaro av autokorrelation inte förkastas.</span></label><label><input type="checkbox" autocomplete="off" name="6c8de19ba16aa8ca3e1220e13dad00ae"><span>Residualernas SAC visar flera tydligt signifikanta autokorrelationer.</span></label><label><input type="checkbox" autocomplete="off" name="6c8de19ba16aa8ca3e1220e13dad00ae"><span>Ljung-Box-testet ger ett lågt <span class="math inline">\(p\)</span>-värde, vilket visar att modellen har fångat allt tidsberoende.</span></label><label><input type="checkbox" autocomplete="off" name="6c8de19ba16aa8ca3e1220e13dad00ae"><span>Residualerna varierar slumpmässigt kring <span class="math inline">\(0\)</span> utan tydlig trend eller återkommande mönster.</span></label>
+<div id="webex-648be7b2e4b96545738903b04b0a2bd6" class="webex-checkboxgroup" data-answer="bQUUU0kHTgJJBT8=">
+<label><input type="checkbox" autocomplete="off" name="648be7b2e4b96545738903b04b0a2bd6"><span>SAC och SPAC för residualerna saknar tydliga signifikanta spikar.</span></label><label><input type="checkbox" autocomplete="off" name="648be7b2e4b96545738903b04b0a2bd6"><span>Ljung-Box-testet ger ett högt <span class="math inline">\(p\)</span>-värde, vilket innebär att nollhypotesen om frånvaro av autokorrelation inte förkastas.</span></label><label><input type="checkbox" autocomplete="off" name="648be7b2e4b96545738903b04b0a2bd6"><span>Residualernas SAC visar flera tydligt signifikanta autokorrelationer.</span></label><label><input type="checkbox" autocomplete="off" name="648be7b2e4b96545738903b04b0a2bd6"><span>Ljung-Box-testet ger ett lågt <span class="math inline">\(p\)</span>-värde, vilket visar att modellen har fångat allt tidsberoende.</span></label><label><input type="checkbox" autocomplete="off" name="648be7b2e4b96545738903b04b0a2bd6"><span>Residualerna varierar slumpmässigt kring <span class="math inline">\(0\)</span> utan tydlig trend eller återkommande mönster.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -1001,8 +1009,8 @@ Notera
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Två ARIMA-modeller har anpassats till samma tidsserie med <span class="math inline">\(n=30\)</span> observationer. Modell A är en ARIMA<span class="math inline">\((2,0,1)\)</span> med konstant och har <span class="math inline">\(\ln(L)=-100\)</span>. Modell B är en ARIMA<span class="math inline">\((1,0,1)\)</span> utan konstant och har <span class="math inline">\(\ln(L)=-102\)</span>. Använd <span class="math inline">\(AIC=-2\ln(L)+2m\)</span> och <span class="math inline">\(AIC_c=AIC+\frac{2(m+1)(m+2)}{n-m-2}\)</span>, där <span class="math inline">\(m=p+q+1\)</span> om en konstant inkluderas och <span class="math inline">\(m=p+q\)</span> annars. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-c590a6c5dcdfb07f92de19a6efeb0dfa" class="webex-checkboxgroup" data-answer="OAQVAU0HTwVIUkhWPw==">
-<label><input type="checkbox" autocomplete="off" name="c590a6c5dcdfb07f92de19a6efeb0dfa"><span>Modell B har lägre <span class="math inline">\(AIC_c\)</span> än Modell A och bör därför föredras enligt detta kriterium.</span></label><label><input type="checkbox" autocomplete="off" name="c590a6c5dcdfb07f92de19a6efeb0dfa"><span>Korrigeringen från <span class="math inline">\(AIC\)</span> till <span class="math inline">\(AIC_c\)</span> blir större för Modell A eftersom den har fler skattade parametrar.</span></label><label><input type="checkbox" autocomplete="off" name="c590a6c5dcdfb07f92de19a6efeb0dfa"><span>Båda modellerna har samma <span class="math inline">\(AIC\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="c590a6c5dcdfb07f92de19a6efeb0dfa"><span>Eftersom modellerna har samma <span class="math inline">\(AIC\)</span> måste de också ha samma <span class="math inline">\(AIC_c\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="c590a6c5dcdfb07f92de19a6efeb0dfa"><span>Modell A har <span class="math inline">\(AIC_c=210.5\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="c590a6c5dcdfb07f92de19a6efeb0dfa"><span>För Modell A är <span class="math inline">\(m=3\)</span>, eftersom modellen sammanlagt har tre AR- och MA-parametrar.</span></label>
+<div id="webex-43635552012cdc423a97a96a55dafaa8" class="webex-checkboxgroup" data-answer="bwIaAhkEGQIcAB5TOQ==">
+<label><input type="checkbox" autocomplete="off" name="43635552012cdc423a97a96a55dafaa8"><span>Modell B har lägre <span class="math inline">\(AIC_c\)</span> än Modell A och bör därför föredras enligt detta kriterium.</span></label><label><input type="checkbox" autocomplete="off" name="43635552012cdc423a97a96a55dafaa8"><span>Korrigeringen från <span class="math inline">\(AIC\)</span> till <span class="math inline">\(AIC_c\)</span> blir större för Modell A eftersom den har fler skattade parametrar.</span></label><label><input type="checkbox" autocomplete="off" name="43635552012cdc423a97a96a55dafaa8"><span>Båda modellerna har samma <span class="math inline">\(AIC\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="43635552012cdc423a97a96a55dafaa8"><span>Eftersom modellerna har samma <span class="math inline">\(AIC\)</span> måste de också ha samma <span class="math inline">\(AIC_c\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="43635552012cdc423a97a96a55dafaa8"><span>Modell A har <span class="math inline">\(AIC_c=210.5\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="43635552012cdc423a97a96a55dafaa8"><span>För Modell A är <span class="math inline">\(m=3\)</span>, eftersom modellen sammanlagt har tre AR- och MA-parametrar.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -1124,17 +1132,19 @@ Training set -0.05341016</code></pre>
 </div>
 <p>När modellen är anpassad gör vi prognoser för lika många observationer framåt i serien som vi delat in i testdelen:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Visa kod</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fc <span class="ot">&lt;-</span> <span class="fu">forecast</span>(fit, <span class="at">h =</span> <span class="fu">length</span>(test))</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fc)</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">length</span>(train)), test), <span class="at">col =</span> <span class="st">"firebrick"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="04-evaluation_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-arima111-pred" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-arima111-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="04-evaluation_files/figure-html/fig-arima111-pred-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-arima111-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;24.5: Prediktioner med tillhörande konfidensband från ARIMA(1,1,1)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -1153,93 +1163,8 @@ Training set -0.05341016</code></pre>
  6.520795 56.818759 67.698633 </code></pre>
 </div>
 </div>
-<!-- ### $\tau$-steg framåt -->
-<!-- Prediktionerna ovan beräknar nästkommande tidpunkt utifrån den nuvarande. Vi kan också vara intresserade av att prediktera $\tau$ steg framåt utifrån den nuvarande. Exempelvisualiseringar: -->
-<!-- ```{mermaid} -->
-<!-- flowchart LR -->
-<!--   A@{ shape: circle, label: "t = 1"} -->
-<!--   B@{ shape: circle, label: "t = 2"} -->
-<!--   C@{ shape: circle, label: "t = 3"} -->
-<!--   D@{ shape: circle, label: "t = 4"} -->
-<!--   E@{ shape: circle, label: "t = 5"} -->
-<!--   F@{ shape: circle, label: "t = 6"} -->
-<!--   G@{ shape: circle, label: "t = 7"} -->
-<!--   H@{ shape: circle, label: "t = 8"} -->
-<!--   I@{ shape: circle, label: "t = 9"} -->
-<!--   X@{ shape: rounded, label: "1 steg -->
-<!--   framåt"} -->
-<!--   Y@{ shape: rounded, label: "1 steg -->
-<!--   framåt"} -->
-<!--   Z@{ shape: rounded, label: "1 steg -->
-<!--   framåt"} -->
-<!--   classDef predict fill:#d9544d,stroke:#000,color:#FFF -->
-<!-- subgraph observationer -->
-<!--   A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict -->
-<!-- end -->
-<!-- subgraph prediktioner -->
-<!--   X ~~~ Y ~~~ Z -->
-<!-- end -->
-<!-- D --- X -->
-<p>E — Y –&gt; F — Z –&gt; G –&gt;</p>
-<!-- style observationer fill:#fcfcfc,stroke:#fcfcfc -->
-<!-- style prediktioner fill:#eee,stroke:#eee -->
-<!-- ``` -->
-<!-- ```{mermaid} -->
-<!-- flowchart LR -->
-<!--   A@{ shape: circle, label: "t = 1"} -->
-<!--   B@{ shape: circle, label: "t = 2"} -->
-<!--   C@{ shape: circle, label: "t = 3"} -->
-<!--   D@{ shape: circle, label: "t = 4"} -->
-<!--   E@{ shape: circle, label: "t = 5"} -->
-<!--   F@{ shape: circle, label: "t = 6"} -->
-<!--   G@{ shape: circle, label: "t = 7"} -->
-<!--   H@{ shape: circle, label: "t = 8"} -->
-<!--   I@{ shape: circle, label: "t = 9"} -->
-<!--   X@{ shape: rounded, label: "2 steg -->
-<!--   framåt"} -->
-<!--   Y@{ shape: rounded, label: "2 steg -->
-<!--   framåt"} -->
-<!--   Z@{ shape: rounded, label: "2 steg -->
-<!--   framåt"} -->
-<!--   classDef predict fill:#d9544d,stroke:#000,color:#FFF -->
-<!-- subgraph observationer -->
-<!--   A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict -->
-<!-- end -->
-<!-- subgraph prediktioner -->
-<!--   X ~~~ Y ~~~ Z -->
-<!-- end -->
-<!-- D --- X -->
-<p>F –&gt; <!-- E --- Y --> G –&gt; <!-- F --- Z --> H –&gt;</p>
-<!-- style observationer fill:#fcfcfc,stroke:#fcfcfc -->
-<!-- style prediktioner fill:#eee,stroke:#eee -->
-<!-- ``` -->
-<!-- ```{mermaid} -->
-<!-- flowchart LR -->
-<!--   A@{ shape: circle, label: "t = 1"} -->
-<!--   B@{ shape: circle, label: "t = 2"} -->
-<!--   C@{ shape: circle, label: "t = 3"} -->
-<!--   D@{ shape: circle, label: "t = 4"} -->
-<!--   E@{ shape: circle, label: "t = 5"} -->
-<!--   F@{ shape: circle, label: "t = 6"} -->
-<!--   G@{ shape: circle, label: "t = 7"} -->
-<!--   H@{ shape: circle, label: "t = 8"} -->
-<!--   I@{ shape: circle, label: "t = 9"} -->
-<!--   X@{ shape: rounded, label: "3 steg -->
-<!--   framåt"} -->
-<!--   Y@{ shape: rounded, label: "3 steg -->
-<!--   framåt"} -->
-<!--   Z@{ shape: rounded, label: "3 steg -->
-<!--   framåt"} -->
-<!--   classDef predict fill:#d9544d,stroke:#000,color:#FFF -->
-<!-- subgraph observationer -->
-<!--   A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict -->
-<!-- end -->
-<!-- D --- X -->
-<p>G –&gt; <!-- E --- Y --> H –&gt; <!-- F --- Z --> I –&gt; <!-- subgraph prediktioner --> <!--   X ~~~ Y ~~~ Z --> <!-- end --></p>
-<!-- style observationer fill:#fcfcfc,stroke:#fcfcfc -->
-<!-- style prediktioner fill:#eee,stroke:#eee -->
-<!-- ``` -->
-<!-- [TODO: Utöka detta kapitel]{style="color: red"} -->
+<p>Vi ser visuellt att prediktionerna inte riktigt lyckats fånga upp serien då den observerade linjen ligger utanför modellens prediktioner. I detta läge kan det vara aktuellt att öka komplexiteten på modellen något för att prediktionerna ska lyckas något bättre, men vi måste fortfarande vara aktsam med överanpassning.</p>
+<!-- [TODO: Utöka detta kapitel med tau steg framåt, tikz och sedan exempelkod]{style="color: red"} -->
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1253,8 +1178,8 @@ Training set -0.05341016</code></pre>
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>En ARIMA-modell använder första differensiering, så att <span class="math inline">\(\Delta Y_t=Y_t-Y_{t-1}\)</span>. Det senast observerade värdet är <span class="math inline">\(Y_t=100\)</span>. Modellen ger följande prognoser för den differensierade serien: <span class="math inline">\(\widehat{\Delta Y}_{t+1|t}=2\)</span>, <span class="math inline">\(\widehat{\Delta Y}_{t+2|t}=1\)</span> och <span class="math inline">\(\widehat{\Delta Y}_{t+3|t}=-0.5\)</span>. Vilka av följande påståenden om prognoserna på seriens ursprungliga skala är korrekta?</p>
-<div id="webex-5fd5c2b45efc873bdb61fb82d469b161" class="webex-checkboxgroup" data-answer="bldIBU8DTgUZVEpTZQ==">
-<label><input type="checkbox" autocomplete="off" name="5fd5c2b45efc873bdb61fb82d469b161"><span>Prognosen för <span class="math inline">\(Y_{t+3}\)</span> är lägre än prognosen för <span class="math inline">\(Y_{t+2}\)</span>, eftersom den prognostiserade tredje förändringen är negativ.</span></label><label><input type="checkbox" autocomplete="off" name="5fd5c2b45efc873bdb61fb82d469b161"><span>Prognosen tre steg framåt är <span class="math inline">\(99.5\)</span>, eftersom <span class="math inline">\(\widehat{\Delta Y}_{t+3|t}=-0.5\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="5fd5c2b45efc873bdb61fb82d469b161"><span><span class="math inline">\(\hat{Y}_{t+1|t}=102\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="5fd5c2b45efc873bdb61fb82d469b161"><span>För att återgå till originalskalan måste de prognostiserade differenserna summeras successivt från det senast observerade värdet.</span></label><label><input type="checkbox" autocomplete="off" name="5fd5c2b45efc873bdb61fb82d469b161"><span><span class="math inline">\(\hat{Y}_{t+3|t}=102.5\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="5fd5c2b45efc873bdb61fb82d469b161"><span><span class="math inline">\(\hat{Y}_{t+2|t}=101\)</span>, eftersom prognosen <span class="math inline">\(1\)</span> ska adderas direkt till det senast observerade värdet <span class="math inline">\(Y_t=100\)</span>.</span></label>
+<div id="webex-d2ea8d20f57d5a11cafb281212ba61fd" class="webex-checkboxgroup" data-answer="PwNJURRVHgFKBBtUaA==">
+<label><input type="checkbox" autocomplete="off" name="d2ea8d20f57d5a11cafb281212ba61fd"><span>Prognosen för <span class="math inline">\(Y_{t+3}\)</span> är lägre än prognosen för <span class="math inline">\(Y_{t+2}\)</span>, eftersom den prognostiserade tredje förändringen är negativ.</span></label><label><input type="checkbox" autocomplete="off" name="d2ea8d20f57d5a11cafb281212ba61fd"><span>Prognosen tre steg framåt är <span class="math inline">\(99.5\)</span>, eftersom <span class="math inline">\(\widehat{\Delta Y}_{t+3|t}=-0.5\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="d2ea8d20f57d5a11cafb281212ba61fd"><span><span class="math inline">\(\hat{Y}_{t+1|t}=102\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="d2ea8d20f57d5a11cafb281212ba61fd"><span>För att återgå till originalskalan måste de prognostiserade differenserna summeras successivt från det senast observerade värdet.</span></label><label><input type="checkbox" autocomplete="off" name="d2ea8d20f57d5a11cafb281212ba61fd"><span><span class="math inline">\(\hat{Y}_{t+3|t}=102.5\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="d2ea8d20f57d5a11cafb281212ba61fd"><span><span class="math inline">\(\hat{Y}_{t+2|t}=101\)</span>, eftersom prognosen <span class="math inline">\(1\)</span> ska adderas direkt till det senast observerade värdet <span class="math inline">\(Y_t=100\)</span>.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -1283,8 +1208,8 @@ Training set -0.05341016</code></pre>
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>En tidsseriemodell har lågt fel på de observationer som användes vid modellanpassningen. För att undersöka om modellens prognoser är tillförlitliga delas tidsserien upp i en träningsdel och en testdel. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-3dc9ef7e736affc6b0a2ee1e7c2d2267" class="webex-checkboxgroup" data-answer="aFVPCUlXG1QbAxpQOw==">
-<label><input type="checkbox" autocomplete="off" name="3dc9ef7e736affc6b0a2ee1e7c2d2267"><span>Prognoserna kan jämföras med testobservationerna med mått som MAD, MSD eller MAPE.</span></label><label><input type="checkbox" autocomplete="off" name="3dc9ef7e736affc6b0a2ee1e7c2d2267"><span>Tidsserien bör delas slumpmässigt mellan tränings- och testdata.</span></label><label><input type="checkbox" autocomplete="off" name="3dc9ef7e736affc6b0a2ee1e7c2d2267"><span>En modell med något högre träningsfel men lägre prognosfel på testdelen kan ge bättre prognoser för framtida tidpunkter.</span></label><label><input type="checkbox" autocomplete="off" name="3dc9ef7e736affc6b0a2ee1e7c2d2267"><span>Testobservationerna ska hållas utanför modellanpassningen så att de kan användas för en mer rättvis utvärdering av prognoserna.</span></label><label><input type="checkbox" autocomplete="off" name="3dc9ef7e736affc6b0a2ee1e7c2d2267"><span>Ett lågt träningsfel garanterar att modellen ger tillförlitliga prognoser för nya tidpunkter.</span></label><label><input type="checkbox" autocomplete="off" name="3dc9ef7e736affc6b0a2ee1e7c2d2267"><span>Modellen ska anpassas på den tidigare delen av tidsserien och utvärderas på de senaste observationerna.</span></label>
+<div id="webex-a174be5a63179f3099151dc4de011ba7" class="webex-checkboxgroup" data-answer="OgAbBE5UGVAaAx0GZA==">
+<label><input type="checkbox" autocomplete="off" name="a174be5a63179f3099151dc4de011ba7"><span>Prognoserna kan jämföras med testobservationerna med mått som MAD, MSD eller MAPE.</span></label><label><input type="checkbox" autocomplete="off" name="a174be5a63179f3099151dc4de011ba7"><span>Tidsserien bör delas slumpmässigt mellan tränings- och testdata.</span></label><label><input type="checkbox" autocomplete="off" name="a174be5a63179f3099151dc4de011ba7"><span>En modell med något högre träningsfel men lägre prognosfel på testdelen kan ge bättre prognoser för framtida tidpunkter.</span></label><label><input type="checkbox" autocomplete="off" name="a174be5a63179f3099151dc4de011ba7"><span>Testobservationerna ska hållas utanför modellanpassningen så att de kan användas för en mer rättvis utvärdering av prognoserna.</span></label><label><input type="checkbox" autocomplete="off" name="a174be5a63179f3099151dc4de011ba7"><span>Ett lågt träningsfel garanterar att modellen ger tillförlitliga prognoser för nya tidpunkter.</span></label><label><input type="checkbox" autocomplete="off" name="a174be5a63179f3099151dc4de011ba7"><span>Modellen ska anpassas på den tidigare delen av tidsserien och utvärderas på de senaste observationerna.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -1302,8 +1227,280 @@ Training set -0.05341016</code></pre>
 </div>
 </section>
 </section>
-<section id="referenser" class="level2" data-number="24.5">
-<h2 data-number="24.5" class="anchored" data-anchor-id="referenser"><span class="header-section-number">24.5</span> Referenser</h2>
+<section id="sammanfattande-fallstudie" class="level2" data-number="24.5">
+<h2 data-number="24.5" class="anchored" data-anchor-id="sammanfattande-fallstudie"><span class="header-section-number">24.5</span> Sammanfattande fallstudie</h2>
+<p>Datamaterialet <code>Nile</code> finns inbyggt i R och innehåller mätningar av det årliga vattenflödet i floden Nilen vid Aswan i Egypten under perioden 1871 till 1970. Målet med analysen är att undersöka seriens egenskaper, identifiera en lämplig tidsseriemodell och använda modellen för att göra prognoser av framtida flöden.</p>
+<section id="läsa-in-och-visualisera-tidsserien" class="level3" data-number="24.5.1">
+<h3 data-number="24.5.1" class="anchored" data-anchor-id="läsa-in-och-visualisera-tidsserien"><span class="header-section-number">24.5.1</span> Läsa in och visualisera tidsserien</h3>
+<p>Vi börjar med att visualisera tidsserien för att identifiera möjliga trender, säsongsmönster eller andra strukturer.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(TSA)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(forecast)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># autoplot() läser av variabeltyperna och skapar "rätt" diagram som vi sedan kan justera</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(Nile) <span class="sc">+</span> </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"År"</span>,</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Flöde"</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nile-timeseries" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nile-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="04-evaluation_files/figure-html/fig-nile-timeseries-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nile-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;24.6: Det årliga vattenflödet i Nilen, mätt i miljoner kubikmeter
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Av figuren ser vi att serien varierar över tid men saknar tydliga säsongseffekter. Eftersom observationerna är årsvisa finns det inte heller någon naturlig säsongskomponent att analysera, vilket lämpar sig för enklare ARIMA-modellering.</p>
+</section>
+<section id="stationäritet-och-modellidentifiering" class="level3" data-number="24.5.2">
+<h3 data-number="24.5.2" class="anchored" data-anchor-id="stationäritet-och-modellidentifiering"><span class="header-section-number">24.5.2</span> Stationäritet och modellidentifiering</h3>
+<p>Nästa steg är att undersöka SAC och SPAC för att bedöma om serien verkar stationär och vilken modell som kan vara lämplig.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-nile-sac-spac" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nile-sac-spac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="04-evaluation_files/figure-html/fig-nile-sac-spac-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nile-sac-spac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;24.7: SAC och SPAC för Nile
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Eftersom SAC avtar relativt långsamt indikerar detta på att serien inte är stationär. Vi behöver därför differentiera serien innan vi kan identifiera vilken modell som är lämplig.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>NileDiff <span class="ot">&lt;-</span> <span class="fu">diff</span>(Nile)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(NileDiff) <span class="sc">+</span> </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"År"</span>,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Differens av flöde"</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nile-diff-timeseries" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nile-diff-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="04-evaluation_files/figure-html/fig-nile-diff-timeseries-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nile-diff-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;24.8: Differensen av det årliga vattenflödet i Nilen
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-nile-diff-sac-spac" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nile-diff-sac-spac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="04-evaluation_files/figure-html/fig-nile-diff-sac-spac-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nile-diff-sac-spac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;24.9: SAC och SPAC för den differentierade Nile-serien
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Nu verkar serien stationär då SAC avtar snabbt, men det är något otydligt vilken typ av modell som är lämplig. Då SPAC avtar snabbt och SAC ser ut att ha en spik verkar det som en ARIMA(0,1,1) är möjlig.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eacf</span>(<span class="at">z =</span> NileDiff)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AR/MA
+  0 1 2 3 4 5 6 7 8 9 10 11 12 13
+0 x o o o o o o x o o o  o  o  o 
+1 x x o o o o o x o x o  o  o  o 
+2 x o o o o o o o o o o  o  o  o 
+3 x x x o o o o o o o o  o  o  o 
+4 x x x o o o o o o o o  o  o  o 
+5 x o x o x o o o o o o  o  o  o 
+6 x x o x x o o o o o o  o  o  o 
+7 x o x o x o o o o o o  o  o  o </code></pre>
+</div>
+</div>
+<p>Den utökade autokorrelationen indikerar också på en ARIMA(0,1,1), eller kanske en ARIMA(2,1,1), så vi går vidare med dessa två modellkandidater. Vi skulle kunna se detta även från SPAC där vi ser två spikar i de första två laggen, indikerar på två AR komponenter.</p>
+</section>
+<section id="anpassa-arima-modeller" class="level3" data-number="24.5.3">
+<h3 data-number="24.5.3" class="anchored" data-anchor-id="anpassa-arima-modeller"><span class="header-section-number">24.5.3</span> Anpassa ARIMA-modeller</h3>
+<p>Vi väljer att anpassa båda modellerna och jämföra deras egenskaper.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>model011 <span class="ot">&lt;-</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Arima</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    Nile,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>model211 <span class="ot">&lt;-</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Arima</span>(</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    Nile,</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model011)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: Nile 
+ARIMA(0,1,1) 
+
+Coefficients:
+          ma1
+      -0.7329
+s.e.   0.1143
+
+sigma^2 = 20810:  log likelihood = -632.55
+AIC=1269.09   AICc=1269.22   BIC=1274.28
+
+Training set error measures:
+                   ME     RMSE      MAE       MPE     MAPE     MASE      ACF1
+Training set -11.9358 142.8071 112.1752 -3.574702 12.93594 0.841824 0.1153593</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model211)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: Nile 
+ARIMA(2,1,1) 
+
+Coefficients:
+         ar1     ar2      ma1
+      0.2566  0.0664  -0.8897
+s.e.  0.1164  0.1110   0.0590
+
+sigma^2 = 20316:  log likelihood = -630.45
+AIC=1268.9   AICc=1269.32   BIC=1279.28
+
+Training set error measures:
+                    ME    RMSE      MAE       MPE     MAPE     MASE        ACF1
+Training set -16.56905 139.654 110.0714 -4.051647 12.78716 0.826036 -0.02018463</code></pre>
+</div>
+</div>
+<p>I utskriften erhålls skattningar av modellparametrarna tillsammans med standardfel och olika informationskriterier. Det vi kan se direkt i utskriften är att parameterskattningen <span class="math inline">\(\hat{\phi}_2\)</span> har ett större medelfel än själva skattningen vilket är en indikation att den komponenten förmodligen inte är relevant. Om vi jämför utvärderingsmåtten ser vi att modellerna är ganska snarlika men att ARIMA(2,1,1) nog har fått aningen bättre mått på loglikelihood (lägre), AIC (lägre), MAD (i utskriften MAE, lägre), och MAPE (lägre).</p>
+<p>Nästa steg blir att avgöra vilken modell som ger den bästa beskrivningen av data.</p>
+</section>
+<section id="diagnostik-av-residualerna" class="level3" data-number="24.5.4">
+<h3 data-number="24.5.4" class="anchored" data-anchor-id="diagnostik-av-residualerna"><span class="header-section-number">24.5.4</span> Diagnostik av residualerna</h3>
+<p>Efter modellanpassningen behöver vi kontrollera att residualerna beter sig som vitt brus. Om modellen fångar tidsseriens struktur bör det inte finnas några systematiska mönster kvar i residualerna. Funktionen <code>checkresiduals()</code> från <code>forecast</code> slår ihop visualisering, kontroll av SAC och ett Ljung-Box-test i ett och samma svep.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">checkresiduals</span>(model011)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04-evaluation_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Ljung-Box test
+
+data:  Residuals from ARIMA(0,1,1)
+Q* = 13.387, df = 9, p-value = 0.1458
+
+Model df: 1.   Total lags used: 10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">checkresiduals</span>(model211)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04-evaluation_files/figure-html/unnamed-chunk-20-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Ljung-Box test
+
+data:  Residuals from ARIMA(2,1,1)
+Q* = 9.7639, df = 7, p-value = 0.2024
+
+Model df: 3.   Total lags used: 10</code></pre>
+</div>
+</div>
+<p>Funktionen producerar:</p>
+<ul>
+<li>residualdiagram,</li>
+<li>histogram över residualerna,</li>
+<li>SAC för residualerna,</li>
+<li>Ljung-Box-test.</li>
+</ul>
+<p>Båda modellerna verkar skapa residualer utan tydliga mönster, vilket vi förväntar oss om modellen är bra. Dessutom visar Ljung-Box-testen båda ett icke-signifikant resultat vilket indikerar att residualerna inte innehåller någon kvarvarande autokorrelation.</p>
+</section>
+<section id="jämförelse-av-modellens-prediktioner" class="level3" data-number="24.5.5">
+<h3 data-number="24.5.5" class="anchored" data-anchor-id="jämförelse-av-modellens-prediktioner"><span class="header-section-number">24.5.5</span> Jämförelse av modellens prediktioner</h3>
+<p>Då båda modellerna har snarlika utvärderingsmått och verkar skapa residualer som ser ut som vitt brus, blir den sista bedömningen vi kan göra hur modellen sedan används för att skapa prediktioner.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>fc011 <span class="ot">&lt;-</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">forecast</span>(</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    model011,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">h =</span> <span class="dv">10</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>fc211 <span class="ot">&lt;-</span> </span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">forecast</span>(</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    model211,</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">h =</span> <span class="dv">10</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Här skapas prognoser tio år framåt i tiden tillsammans med tillhörande prognosintervall. Prognoserna kan visualiseras tillsammans med de historiska observationerna för att ge en bild av förväntad framtida utveckling och osäkerhet.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(fc011) <span class="sc">+</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"År"</span>,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Flöde"</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04-evaluation_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(fc211) <span class="sc">+</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"År"</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Flöde"</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04-evaluation_files/figure-html/unnamed-chunk-22-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Vi ser direkt att ARIMA(0,1,1) genererar väldigt dåliga prognoser, eftersom modellen enbart baseras på <span class="math inline">\(e_{t-1}\)</span>, ett fel som inte går att prediktera framåt. ARIMA(2,1,1) ger oss någon mer information men även den har svårt att prediktera långt framåt i tiden.</p>
+<p>Vi kan nu egentligen välja vilken som av dessa två modeller utifrån deras utvärdering, men om syftet är att prediktera framtida flöde faller valet på ARIMA(2,1,1) trots, eller tack vare, dess större komplexitet. Den valda modellen ger oss åtminstone någon indikation på hur flödet kan förändras de nästkommande åren.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Prediktioner innehåller mycket osäkerhet vilket innebär att prediktioner långt framåt i tiden ger ofta ingen information.</p>
+<p>I dessa diagram täcker osäkerhetsbanden större delen av flödevariationen sedan 1920 vilket innebär att serien i stort uppvisar en stor grad av osäkerhet som kanske inte går att prediktera.</p>
+<p>Vanligtvis bör vi förhålla oss till prediktioner i en nära horisont, de nästkommande 2-3 tidpunkterna, för att vi ska få någon vettig information att använda.</p>
+</div>
+</div>
+<p>Detta fall illustrerar ett vanligt arbetssätt inom tidsserieanalys där flera rimliga modellkandidater först identifieras från SAC, SPAC och EACF, varefter residualdiagnostik, utvärderingsmått och prediktioner används för att välja den modell som bäst beskriver data och ger tillförlitliga prognoser.</p>
+</section>
+</section>
+<section id="referenser" class="level2" data-number="24.6">
+<h2 data-number="24.6" class="anchored" data-anchor-id="referenser"><span class="header-section-number">24.6</span> Referenser</h2>
 
 
 </section>
