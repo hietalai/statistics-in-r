@@ -1,0 +1,114 @@
+Question
+========
+Datamaterialet `Nile` finns inbyggt i R och innehåller mätningar av det årliga flödet i floden Nilen vid Aswan i Egypten under åren 1871 till 1970. Variabeln anger flödet i miljarder kubikmeter vatten per år.
+
+```{r setup}
+#| code-fold: false
+
+# Nile finns inbyggd i R
+series <-
+  tibble(
+    tid = time(Nile) |> as.numeric(),
+    yt = as.numeric(Nile)
+  )
+```
+
+Vilken modellbeskrivning passar bäst för denna tidsserie?
+
+```{r exercise-ts}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 3
+#| fig-cap: Tidsserien Nile
+#| out-width: "90%"
+
+ggplot(series) +
+  aes(x = tid, y = yt) +
+  geom_line() +
+  theme_bw() +
+  labs(
+    x = "År",
+    y = "Årlig flöde av vatten"
+  )
+```
+
+Studera därefter seriens SAC och SPAC.
+
+```{r exercise-graph}
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3
+#| fig-cap: SAC och SPAC för Nile
+#| out-width: "90%"
+
+data <-
+  tibble(
+    lag = 1:30,
+    ACF = acf(series$yt, lag.max = 30, plot = FALSE)$acf,
+    PACF = pacf(series$yt, lag.max = 30, plot = FALSE)$acf
+  ) |>
+  pivot_longer(!lag)
+
+ggplot(data) +
+  aes(x = lag, y = value) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_hline(
+    yintercept = 1.96/sqrt(nrow(series)),
+    linetype = 2,
+    color = "firebrick"
+  ) +
+  geom_hline(
+    yintercept = -1.96/sqrt(nrow(series)),
+    linetype = 2,
+    color = "firebrick"
+  ) +
+  theme_bw() +
+  labs(
+    x = "Lag",
+    y = "Korrelationskoefficient"
+  ) +
+  facet_wrap(~name, nrow = 1)
+
+```
+::: {}
+
+```{r eacf-nile}
+#| echo: false
+
+# y är den simulerade ARMA(1,1)-serien
+eacf(z = series$yt)
+
+```
+
+EACF för tidsserien Nile
+
+::: 
+
+
+Answerlist
+--------
+
+* Ej stationär serie
+* ARMA(1,1)
+* ARMA(0,2)
+* Vitt brus
+
+
+Solution
+========
+Answerlist
+--------
+* Sant. Tidsserien visar tydlig trend och säsongsvariation. SAC avtar långsamt och förblir hög över många lag, vilket tyder på att serien inte är stationär.
+* Falskt. En stationär ARMA(1,1)-modell skulle vanligtvis ge ett snabbare avtagande SAC.
+* Falskt. För en MA(2)-modell skulle SAC kapa av efter ungefär två lag.
+* Falskt. Ett vitt brus skulle sakna tydlig struktur både i tidsserien och i SAC/SPAC.
+
+Meta-information
+================
+exname: airpassengers_stationary
+
+extype: schoice
+
+exsolution: 1000
+
+exshuffle: 4

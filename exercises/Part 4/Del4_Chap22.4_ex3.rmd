@@ -1,0 +1,74 @@
+```{r setup}
+
+set.seed(20260818)
+# Egenskaper för simuleringen
+n <- 100
+phi1 <- 0.6
+phi2 <- -0.35
+
+# Visualisera serien i ett linjediagram
+series <- 
+  tibble(
+    t = seq_len(n),
+    yt = arima.sim(n = n, model = list(order = c(2,0,0), ar = c(phi1, phi2))) |> as.numeric()
+  )
+
+```
+
+
+Question
+========
+
+Vilken modell anses passa in på följande SAC och SPAC diagram?
+
+```{r exercise graph}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: SAC och SPAC för en okänd modell
+#| out-width: "90%"
+
+data <- 
+  tibble(
+    lag = 1:30,
+    # Beräknar SAC och SPAC samt plockar ut endast acf delen av objektet som innehåller korrelationerna
+    ACF = acf(series$yt, lag.max = 30, plot = FALSE)$acf,
+    PACF = pacf(series$yt, lag.max = 30, plot = FALSE)$acf
+  ) |> 
+  pivot_longer(!lag)
+
+ggplot(data) + aes(x = lag, y = value) + 
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_hline(yintercept = 1.96/sqrt(nrow(series)), linetype = 2, color = "firebrick") +
+  geom_hline(yintercept = -1.96/sqrt(nrow(series)), linetype = 2, color = "firebrick") +
+  theme_bw() + 
+  scale_y_continuous(breaks = seq(-1, 1, by = 0.05)) +
+  labs(x = "Lag", y = "ACF") + 
+  facet_wrap(~name, nrow = 1)
+
+
+```
+
+
+Answerlist
+----------
+* AR(2)
+* MA(3)
+* AR(1)
+* Ej stationär serie
+
+Solution
+========
+Answerlist
+----------
+* Sant. SAC avtar snabbt medan SPAC visar på två spikar.
+* Falskt. Trots att SPAC avtar snabbt och SAC kan tolkas som 3 spikar, är den enklaste modellen den med färre parametrar, AR(2).
+* Falskt. SPAC visar på 2 spikar, så en AR(1) är för simpel.
+* Falskt. SAC avtar relativt snabbt så serien kan anses stationär.
+
+Meta-information
+================
+exname: ar2_identify
+extype: schoice
+exsolution: 1000
+exshuffle: 4

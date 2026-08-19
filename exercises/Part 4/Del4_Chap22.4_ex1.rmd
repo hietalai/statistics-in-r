@@ -1,0 +1,14 @@
+Question
+========
+Beräkna $\rho_1$ för en MA(1) process där $\theta = 0.2$.
+
+Solution
+========
+$\rho_1 = \frac{\theta}{1 + \theta^2}$
+
+Meta-information
+================
+exname: rhoma1
+extype: num
+exsolution: `r 0.2 / (1 + 0.2^2)`
+extol: 0.01

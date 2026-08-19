@@ -1,0 +1,14 @@
+Question
+========
+Beräkna $\rho_3$ för en AR(1) process där $\phi = 0.8$.
+
+Solution
+========
+$\rho_k = \phi^k$
+
+Meta-information
+================
+exname: rhoar1
+extype: num
+exsolution: `r 0.8^3`
+extol: 0.01
