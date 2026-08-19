@@ -73,6 +73,9 @@ lakeFull <-
                           delim = ";", escape_double = FALSE, trim_ws = TRUE) |> 
   suppressMessages()
 
+faithful <- 
+  datasets::faithful |> dplyr::as_tibble()
+
 lake <- 
   lakeFull |> 
   # Tar bort en observation om minst en variabel är saknad
