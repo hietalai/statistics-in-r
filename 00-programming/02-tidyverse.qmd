@@ -1,10 +1,12 @@
 # tidyverse {#sec-tidyverse} 
 
-En stor del utav statistisk analys omfattar bearbetning av datamaterial som samlats in till ett format som lämpar sig för olika statistiska analysmetoder. Ett datamaterial som man själv samlar in (*primärdata*) eller datamaterial som hämtas från någon annan källa (*sekundärdata*) är inte alltid strukturerat på det sätt som vi, eller metoderna, önskar. `tidyverse` är en samling paket i R som har en gemensam grund att programmera, både i dess syntax och grammatik. 
+En stor del utav statistisk analys omfattar bearbetning av datamaterial som samlats in till ett format som lämpar sig för olika statistiska analysmetoder. Ett datamaterial som man själv samlar in (*primärdata*) eller datamaterial som hämtas från någon annan källa (*sekundärdata*) är inte alltid strukturerat på det sätt som vi, eller metoderna, önskar. 
 
-Inom statistik önskas data ofta följa formatet: "en rad är en observation", "en kolumn är en variabel" och "en cell är ett värde", så att vi med lätthet kan hantera datamaterialet på ett flertal olika sätt. Detta kan vi kalla för *rådata* eller *tidy data* och @sec-example-data visar data på just detta format. Varje rad är en uppmätt pingvin och varje kolumn är mätvärden för varje variabel. Exempel på en struktur som inte följer denna praxis är frekvenstabeller där varje rad visar flera observationer som har samma variabelvärde. 
+För att underlätta denna process finns en samling paket kallat `tidyverse` som har en gemensam grund för programmering, både i dess syntax och grammatik. 
 
-Vi kan installera de paketen som ingår i `tidyverse` genom att installera paketet med samma namn och ladda in det i arbetsminnet med `require()` eller `library()`.
+Inom statistik önskas data ofta följa formatet: "en rad är en observation", "en kolumn är en variabel" och "en cell är ett värde", så att vi med lätthet kan hantera datamaterialet på ett flertal olika sätt. Detta kan vi kalla för **rådata** eller **tidy data** som `tidyverse` också använder sig av. Exempel på en struktur som inte följer denna praxis är frekvenstabeller där varje rad visar flera observationer som har samma variabelvärde. Denna typ av sekundärdata kan vi ofta stöta på vilket kan komplicera vad vi kan analysera.
+
+Vi kan installera de paketen som ingår i `tidyverse` genom att installera paketet med samma namn och ladda in det i arbetsminnet med `require()` eller `library()`. Vi får nu alla paket som tidyverse innehåller installerade och laddade på ett effektivt sätt.
 
 ```{r}
 #| eval: false
@@ -18,12 +20,92 @@ require(tidyverse)
 
 I detta kapitel kommer vi gå igenom de olika paketen som behandlar datastrukturer och olika variablertyper medan senare kapitel kommer fortsätta med paket för visualisering (`ggplot2`) och mer avancerad kodning (`purrr`).
 
+## Koppla samman funktioner med pipes
+Inom programmering, speciellt databearbetning, är det vanligt att vi vill skapa ett objekt, göra någon bearbetning på den, använda den i en statistisk analys och så vidare. Att nästla funktioner inuti varandra blir lätt väldigt krångligt att läsa och förstå vad som faktiskt händer eller vilka argument som hör till vilken funktion. Alternativet är att spara om objektet flera gånger men då skapas många onödiga objekt som vi måste hålla koll på och som egentligen bara tar upp plats i arbetsminnet. I kodexemplet nedan ser vi hur fyra funktioner kan nästlas eller sparas som separata objekt.
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+# Fyra nästlade funktioner som ska appliceras på ett objekt med olika argument
+funktion4(funktion3(funktion2(funktion1(objekt), argument2 = X)), argument4 = Y)
+
+# Fyra funktioner som sparas vid varje steg
+A <- funktion1(objekt)
+
+B <- funktion2(A, argument2 = X)
+
+C <- funktion3(B)
+
+D <- funktion4(C, argument4 = Y)
+
+```
+
+Inom modern R-programmering används istället en annan process som kallas för **programmeringspipes** som kan skapa sekvenser av funktioner som är sammanlänkade i varandra. Detta populariserades först inom `tidyverse` och har sedan integrerats inuti baspaketet i R. 
+
+Från baspaketet används operatorn `|>` som kan skapas med kortkommandot *CTRL + SHIFT + M* (*CMD + SHIFT + M*). Denna operator tar resultatet från funktionen innan `|>` och skickar vidare det som det första argumentet i funktionen efter `|>`. Koden nedan visar samma fyra funktioner som vi ville genomföra på ett objekt, där varje ny rad tar resultatet från den tidigare som en del av funktionen.
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+# Samma operation av fyra funktioner men med piping
+objekt |> 
+  funktion1() |> 
+  funktion2(argument2 = X) |> 
+  funktion3() |> 
+  funktion4(argument4 = Y)
+
+```
+
+Funktioner som inte behöver fler än ett argument skrivs bara ut som funktionen med tomma parenteser då resultatet från raden innan används automatiskt som värdet på det argumentet. Funktioner som har ytterligare argument behöver bara ange de argument som inte använder sig av det tidigare resultatet. 
+
+:::{.callout-important}
+Det kan finnas funktioner som vill använda det tidigare resultatet i ett argument som *inte* är den första i funktionen. Som tur är kan vi lösa detta genom att använda `_` som symbolen för det tidigare resultatet och ange det vid argumentet som är aktuellt.
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+# Objektet (_) läggs här in som värde för det andra argumentet i funktionen
+objekt |> 
+  funktion5(argument1 = X, argument2 = _)
+
+```
+
+Användandet av `_` säger åt funktionen att den inte längre automatiskt ska ange resultatet som värdet i det första argumentet.
+
+`|>` är något begränsat med denna funktionalitet men som tur är finns dess "kusin" `%>%` från paketet `dplyr` som fungerar på mestadels samma sätt men tillåter mer flexibilitet var objektet från tidigare i pipen placeras i den nuvarande funktionen. Det vi måste tänka på är att vi här byter symbol till `.` istället för `_` för att beskriva objektet.
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+# Objektet (.) läggs här in som värde för det andra argumentet i funktionen
+objekt %>% 
+  funktion5(argument1 = X, argument2 = .)
+
+```
+
+I resterande del av detta underlag kommer vi konsekvent att använda `|>` istället för `dplyr`s funktion. Det är i relativt abstrakta specialfall som `%>%` funktionaliteten behövs som inte täcks av detta material.
+:::
+
 ## Läsa in filer med `readr` {#sec-readr}
-R innehåller många inbyggda funktioner (se @sec-readData) för hur man kan läsa in filer av olika format från hårddisken. Vi har tidigare tittat på `read.csv2()` som är en grundfunktion i R, men `readr` har liknande funktioner utöver flera andra specialfall som utgår från vissa standardformat för filer. 
+R innehåller många inbyggda funktioner (se @sec-readData) för hur man kan läsa in filer av olika format från hårddisken. Vi har tidigare tittat på `read.csv2()` som är en grundfunktion i R, men `readr` har liknande funktioner, samt flera andra specialfall, som utgår från vissa standardformat för filer. 
 
 :::{.callout-tip}
-Det är starkt rekommenderat att läsa in text-filer i R, inte Excelfiler då Excel kan innehålla specialformat som R inte kan läsa in korrekt. Vi kan från Excel spara om en .xlsx fil till en .txt-, .tsv- eller .csv-fil.
+Det är starkt rekommenderat att läsa in text-filer i R, inte Excelfiler (`.xlsx`). Excel kan innehålla specialformat som R inte kan läsa in korrekt utan behov av speciallösningar. 
+
+Vi kan från Excel enkelt spara om en .xlsx fil till en .txt-, .tsv- eller .csv-fil för lättare import.
 :::
+
+Det finns i huvudsak fyra olika vanliga typer av data som ska läsas in:
+
+- `.txt` filer där kolumner separeras med en eller flera mellanslag
+- `.csv` filer där kolumner separeras med `,` eller `;`
+- `.tsv` filer där kolumner separeras med tab-avstånd
+
+Var och en av dessa filer har en specifik `read_X()` funktion kopplat till sig med standardvärden som underlättar inläsningen.
 
 ```{r}
 #| eval: false
@@ -41,20 +123,25 @@ read_csv2(file = "sökväg")
 
 ```
 
-Resultatet av dessa funktioner blir en formatterad *tibble*, vilket är `tidyverse` version av en `data frame`.
+:::{.callout-note}
+## `tibble`
+Resultatet av dessa funktioner blir en formatterad *tibble*, vilket är `tidyverse` version av en `data frame`. Allting som vi tidigare introducerat för en `data frame` gäller fortfarande men en `tibble` har mer funktionalitet som vi kan dra nytta av med alla de funktioner som `tidyverse` erhåller.
+:::
 
 :::{.callout-important}
-Se till att datamaterialet som laddats in ser ut som vi förväntar att det ska göra, exempelvis är decimaler korrekt angivna, har vi lika många variabler i R som i originalfilen och liknande.
+Ett mycket viktigt steg i datainläsningen är att data faktiskt importerats korrekt. Dubbelkolla [alltdi]{.underline} att datamaterialet som laddats in ser ut som vi förväntar att det ska göra, exempelvis är decimaler korrekt angivna, har vi lika många variabler i R som i originalfilen och liknande.
+
+Detta kan vi göra genom att klicka på den importerade objektet i `Environment` fönstret. Vi kan också få en överblick av objektet och dess struktur genom att klicka på den blå pilen till vänster om objektnamnet. Då vecklas raden ut och visar vilka variabler som objektet innehåller och vilken typ av variabel R anser dessa är. Här är det viktigt att dubbelkolla att numeriska värden också blivit `numeric` i R, då det är lätt hänt att decimalseparatorn inte lästs in korrekt och R felaktigt tror det är en `character` istället.
 :::
 
 ## Dataobjektet `tibble` {#sec-tibble}
-I @sec-data-frame presenterades datastrukturen `data frame` som ett sätt för oss att i R spara information i ett strukturerat rådataformat. En `tibble` är en utbyggnad av denna datastruktur som rensat bort egenskaper av objektet som inte längre används och lägger till egenskaper som vi ofta vill använda när vi bearbetar data. Likt en `data frame`, innehåller en `tibble` en samling lika långa kolumner och dessa kolumner kan vara av olika objekttyper. Till exempel kan vi blanda listor och vektorer så länge de innehåller lika många element. 
+I @sec-data-frame presenterades datastrukturen `data frame` som ett sätt för oss att i R spara information i ett strukturerat rådataformat. En `tibble` är en utbyggnad av denna datastruktur som rensat bort egenskaper av objektet som inte längre används i modern programmering och lägger till egenskaper som vi ofta vill använda när vi bearbetar data. Likt en `data frame`, innehåller en `tibble` en samling kolumner av lika längd och dessa kolumner kan vara av olika objekttyper. 
 
 :::{.callout-important}
 En `tibble` konverterar inte textvektorer till faktorer per automatik. Det vill säga om ett datamaterial som läses in via `read_csv2()` innehåller text, kommer denna variabel vara ett `character`-objekt, inte ett `Factor`-objekt.
 ::: 
 
-Vi kan skapa en `tibble` från grunden genom att ange vilka objekt vi vill inkludera och vad de ska heta:
+Vi kan skapa en `tibble` från grunden genom funktionen `tibble()` om vi anger vilka objekt vi vill inkludera och vad de ska heta:
 
 ```{r}
 #| code-fold: false
@@ -76,11 +163,12 @@ print(data)
 
 ```
 
-En direkt utskrift av en `tibble` innehåller både dimensionerna av hela objektet och vad för typ respektive variabel är. 
+En direkt utskrift av en `tibble` innehåller både dimensionerna av hela objektet och vad för typ respektive variabel är. Mer information än vad vi skulle fått från en `data frame` över samma data.
 
 Om vi har en matris eller något annat objekt som ser ut som en tibble men inte är det, kan vi konvertera den till en tibble med hjälp av `as_tibble()`.
 
 ```{r}
+#| code-fold: false
 
 # Tar objektet a (en vektor) och gör om den till formatet tibble innehållande en kolumn
 vectorToTibble <- as_tibble(a)
@@ -90,10 +178,7 @@ print(vectorToTibble)
 ```
 
 ## Omformatera data med `tidyr` {#sec-tidyr}
-En utav de tyngsta delarna av statistisk analys är ofta att bearbeta data till det format som önskas. Paketet `tidyr` innehåller ett flertal funktioner som kan bearbeta data på många olika sätt 
-
-
-Om data inte är på det format som vi önskar eller om någon statistisk metod behöver ett material som har ett annat format än tidy-data. Detta paket kommer vi inte titta på just nu i detalj men följande Cheat Sheets innehåller exempel på olika bearbetningar som vi kan vara intresserade av att genomföra med data.
+En utav de tyngsta delarna av statistisk analys är ofta att bearbeta data till det format som önskas. Paketet `tidyr` innehåller ett flertal funktioner som kan bearbeta data på många olika sätt, med målsättingen att göra den "tidy". Detta paket kommer vi inte titta på just nu i detalj men följande Cheat Sheets innehåller exempel på olika bearbetningar som vi kan vara intresserade av att genomföra med data.
 
 ```{r}
 #| echo: false
@@ -102,95 +187,39 @@ htmltools::HTML("<a href='https://github.com/rstudio/cheatsheets/blob/master/tid
 
 ```
 
-## Koppla samman funktioner med pipes
-Inom programmering, speciellt databearbetning, är det vanligt att vi vill skapa ett objekt, göra någon bearbetning på den, använda den i en statistisk analys och så vidare. Att nästla funktioner inuti varandra blir lätt väldigt krångligt att läsa och förstå vad som faktiskt händer eller vilka argument som hör till vilken funktion. Alternativet är att spara om objektet flera gånger men då skapas många onödiga objekt som vi måste hålla koll på och som egentligen bara tar upp plats i arbetsminnet.
+:::{.callout-tip}
+Många paket har liknande Cheat Sheets med en sammanfattning av paketets funktioner. Dessa sheets kommer väl till pass både när man först lär sig om paketet och när man sedan ska använda det, för det är inte alltid man kommer ihåg exakta funktionerna som behövs för att göra en viss operation.
 
-```{r}
-#| eval: false
-#| code-fold: false
-
-# Fyra nästlade funktioner som ska appliceras på ett objekt med olika argument
-funktion4(funktion3(funktion2(funktion1(objekt), argument2 = X)), argument4 = Y)
-
-# Fyra funktioner som sparas vid varje steg
-A <- funktion1(objekt)
-
-B <- funktion2(A, argument2 = X)
-
-C <- funktion3(B)
-
-D <- funktion4(C, argument4 = Y)
-
-```
-
-Inom modern R-programmering används istället en annan process som kallas för **programmeringspipes** som kan skapa sekvenser av funktioner som är sammanlänkade i varandra. Från baspaketet används operatorn `|>` som kan skapas med kortkommandot Ctrl + Shift + M (CMD + Shift + M). Denna operator tar resultatet från funktionen innan `|>` och skickar vidare det som det första argumentet i funktionen efter `|>`.
-
-```{r}
-#| eval: false
-#| code-fold: false
-
-# Samma operation av fyra funktioner men med piping
-objekt |> 
-  funktion1() |> 
-  funktion2(argument2 = X) |> 
-  funktion3() |> 
-  funktion4(argument4 = Y)
-
-```
-
-Funktioner som inte behöver fler än ett argument skrivs bara ut som funktionen med tomma parenteser då resultatet används automatiskt som värdet på det argumentet. Funktioner som har ytterligare argument behöver bara ange de argument som inte använder sig av det tidigare resultatet. 
-
-:::{.callout-important}
-Det kan finnas funktioner som vill använda det tidigare resultatet i ett argument som inte är det första i funktionen. Som tur är kan vi lösa detta genom att använda `_` som symbolen för det tidigare resultatet och ange det vid argumentet som är aktuellt.
-
-```{r}
-#| eval: false
-#| code-fold: false
-
-# Objektet (_) läggs här in som värde för det andra argumentet i funktionen
-objekt |> 
-  funktion5(argument1 = X, argument2 = _)
-
-```
-
-`|>` är något begränsat med detta men som tur är finns dess "kusin" från paketet `dplyr` `%>%` som fungerar på mestadels samma sätt men tillåter mer flexibilitet var objektet från tidigare i pipen placeras i den nuvarande funktionen. Det vi måste tänka på är att vi här byter symbol till `.` istället för `_` för att beskriva objektet.
-
-```{r}
-#| eval: false
-#| code-fold: false
-
-# Objektet (.) läggs här in som värde för det andra argumentet i funktionen
-objekt %>% 
-  funktion5(argument1 = X, argument2 = .)
-
-```
+Testa alltid att söka efter "paket cheat sheet" i din föredragna sökmotor för att se om det paket som du ska arbeta med också har något sådant.
 :::
 
 ## Databearbetning med `dplyr`
-Med hjälp av de tidigare kapitlen och det "nya" sättet att skriva sekvenser av funktioner med pipes kan vi nu börja titta närmare på databearbetning av objekt till en `tibble`. Det är vanligt att vi i databearbetning behöver göra flera steg för att skapa det objekt vi sen vill analysera och då kommer `|>` mycket väl till pass. 
+Nu har vi lärt oss hur vi läser in data från en text fil, vad en `tibble` är och det "nya" sättet att skriva sekvenser av funktioner med pipes. Då kan vi börja titta närmare på databearbetning av objekt. I detta kapitel förutsätter vi att vi har data på tidy format.
 
-`dplyr` innehåller ett flertal olika "verb" som på ett sätt eller annat bearbetar data. Det första argumentet i alla dessa funktioner är ett dataobjekt men om vi använder pipes kommer det ske per automatik och vi behöver endast fokusera på de andra argumentet som beskriver hur "verbet" används.
+Det är vanligt att vi i databearbetningen behöver göra flera steg för att skapa det objekt vi sen vill analysera och då kommer `|>` mycket väl till pass. 
+
+Paketet `dplyr` innehåller ett flertal olika "verb" som på ett sätt eller annat bearbetar data. Det första argumentet i alla dessa funktioner är ett dataobjekt men om vi använder pipes kommer det ske per automatik och vi behöver endast fokusera på de andra argumenten som beskriver hur "verbet" används.
 
 ### Byta namn på variabler med `rename()`
 Data som läses in till R kan ibland ha konstiga och långa namn som vid programmering kan bli svåra att hantera. Ett sätt att underlätta detta problem är att döpa om variablerna till ett enkelt ord som vi sedan kan använda i efterföljande steg. 
 
-Vi kan döpa om variabler med hjälp av `rename()` där vi anger det nya namnet givet det gamla namnet på variabeln eller variabelns kolumnindex.
+Vi kan döpa om variabler med hjälp av `rename()` där vi anger det nya namnet givet det gamla namnet på variabeln eller variabelns kolumnindex. Datamaterialet `faithful` i dessa exempel finns i baspaketet och kan läsas in direkt genom att använda dess objektnamn. Materialet beskriver väntetiden mellan varje utbrott (minuter) och längden på utbrottet (minuter) vid gejsern Old Faithful i Yellowstone National Park.
 
 ```{r}
 #| code-fold: false
 
 # Döper om variabler till svenska namn utifrån det gamla namnet
-penguins |> 
+faithful |> 
   rename(
-    art = species,
-    näbblängd = bill_length_mm
+    utbrott = eruptions,
+    väntan = waiting
   )
 
 # Döper om variabler till svenska namn utifrån dess kolumnindex
-penguins |> 
+faithful |> 
   rename(
-    art = 1,
-    näbblängd = 3
+    utbrott = 1,
+    väntan = 2
   )
 
 ```
@@ -198,6 +227,19 @@ penguins |>
 
 ### Plocka ut rader med `filter()`
 Om vi är intresserade av att plocka ut vissa rader ur ett objekt, till exempel om vi vill rensa bort saknade värden, kan vi använda `filter()` med någon logisk operator som säger vilka rader vi vill ha kvar.
+
+:::{.callout-important}
+## Logiska operatorer
+En logisk operator är ett uttryck vars resultat är sant eller falskt (TRUE eller FALSE). Det finns många olika operationer som vi kan använda för olika ändamål: 
+
+- `a == b`: a är lika med b. *Notera användningen av dubbla `==` för den logiska operationen till skillnad från `=` för att säga att a har värdet b.
+- `a >  b`: a är större än b,
+- `a >= b`: a är större än eller lika med b,
+- `a <  b`: a är mindre än b,
+- `a <= b`: a är mindre än eller lika med b,
+- `a != b`: a är inte lika med b.
+:::
+
 
 ```{r}
 #| include: false
@@ -209,77 +251,271 @@ require(dplyr)
 
 ```{r}
 #| code-fold: false
-# Filtrerar bort observationer som saknar information ur variabeln "sex"
-penguinsNonMissing <- 
-  penguins |> 
-    filter(!is.na(sex))
+# Väljer ut alla observationer vars väntetid är större än 70 minuter
+faithfulLong <- 
+  faithful |> 
+    filter(waiting > 70)
 
-print(penguinsNonMissing)
+print(faithfulLong)
 
 ```
 
-Vi kan också plocka ut rader som uppfyller ett visst kriterie, till exempel plocka ut alla Adelie pingviner.
+:::{.callout-note}
+Notera att eftersom vi inte sparade de omnämnda variabelnamnen i föregående kapitel så kan vi inte använda dessa i fortsatta bearbetningar. Objektet `faithful` består här fortfarande av de engelska namnen.
+:::
+
+Vi kan också använda negativa operationer för att plocka ut observationer som *inte* uppfyller ett visst kriterie. Vi använder då operatorn `!` runt hela uttrycket som betyder "icke".
 
 ```{r}
 #| code-fold: false
 
-penguins |> 
-  filter(species == "Adelie")
+faithful |> 
+  filter(!(waiting > 70))
 
 ```
 
 ### Plocka ut kolumner med `select()`
-Anta att vi bara är intresserade av vissa kolumner från ett stort datamaterial, till exempel art och fenlängd av pingvinerna kan vi plocka ut de med hjälp av `select()`. Vi kan antingen använda variablernas faktiska namn eller variablernas kolumnindex för att specificera vilka variabler som ska plockas ut.
+Anta att vi bara är intresserade av vissa kolumner från ett stort datamaterial, till exempel bara väntetiden. Vi kan plocka ut en eller flera variabler med hjälp av `select()`. Vi kan antingen använda variablernas faktiska namn eller variablernas kolumnindex för att specificera vilka variabler som ska plockas ut.
 
 ```{r}
 #| code-fold: false
 
 # Select med variabelnamn
-penguins |> 
-  select(species, flipper_length_mm)
+faithful |> 
+  select(waiting)
 
 # Select med kolumnindex
-penguins |> 
-  select(1, 5)
+faithful |> 
+  select(1)
   
 ```
 
+:::{.callout-important}
 Det rekommenderas att använda variabelnamnen för att koden ska vara tydlig att läsa av och vi vet vilka variabler som faktiskt plockas ut och ev. skickas vidare till efterföljande funktioner.
+:::
 
 Om vi har flera variabler som följer efter varandra behöver vi inte skriva upp varje enskilda variabelnamn som argument utan kan använda `Var1:Var5` för att säga åt funktionen att plocka ut alla variabler från och med `Var1` till och med `Var5`.
 
 ```{r}
 #| code-fold: false
 
-penguins |> 
-  select(species, bill_length_mm:body_mass_g)
+faithful |> 
+  select(waiting:eruptions)
 ```
 
 ### Byta plats på variabler med `relocate()`
-Ibland kan vi vilja byta ordning på variablerna i datamaterialet utan att välja dem. Med `select()` får vi en möjlighet att välja vilken ordning som variablerna plockas ut, den ordning som vi anger dem i funktionen, men om vi bara vill flytta på variabler utan att plocka ut vissa kan `relocate()` användas istället.
+Ibland kan vi vilja byta ordning på variablerna i datamaterialet utan att specifikt plocka ut enbart dem. Med `select()` får vi en möjlighet att välja vilken ordning som variablerna plockas ut, den ordning som vi anger dem i funktionen, men om vi bara vill flytta på variabler utan att plocka ut vissa kan `relocate()` användas istället.
 
 Funktionen använder sig av tre argument, vilka variabler som ska flyttas och var de ska placeras. Som standard placeras de i början av datamaterialet.
 
 ```{r}
 #| code-fold: false
 
-# Placerar fenlängd som första kolumnen
-penguins |> 
-  relocate(flipper_length_mm)
+# Placerar eruptions som första kolumnen
+faithful |> 
+  relocate(eruptions)
 
-# Placerar art efter näbbreddens variabel
-penguins |> 
-  relocate(species, .after = bill_depth_mm)
+# Placerar waiting efter eruptions
+faithful |> 
+  relocate(waiting, .after = eruptions)
 
 ```
 
 ### Sortera data med `arrange()`
+Ibland vill vi sortera observationerna i ett datamaterial efter värdet på en eller flera variabler. Detta kan vara användbart för att snabbt identifiera de största eller minsta värdena i ett datamaterial. Funktionen `arrange()` används för att sortera raderna i stigande ordning som standard, alltså från minsta till största värdet, men vi kan sortera i fallande ordning med hjälp av `desc()`.
+
+```{r}
+#| code-fold: false
+
+# Sorterar datamaterialet efter väntetiden i stigande ordning
+faithful |>
+  arrange(waiting)
+
+# Sorterar datamaterialet efter väntetiden i fallande ordning
+faithful |>
+  arrange(desc(waiting))
+```
+
+Om vi vill sortera efter flera variabler anger vi dem i den ordning som sorteringen ska ske. Först sorteras observationerna efter den första variabeln. Om två observationer har samma värde används nästa variabel för att avgöra ordningen.
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  arrange(waiting, eruptions)
+```
+
 
 ### Skapa nya variabler med `mutate()`
+När vi vill skapa nya variabler eller förändra befintliga variabler kan vi använda funktionen `mutate()`. Den nya variabeln skapas genom att kombinera eller bearbeta en eller flera befintliga variabler.
+
+```{r}
+#| code-fold: false
+
+# Skapar en ny variabel som är väntetiden i sekunder
+faithful |>
+  mutate(waitingSec = waiting * 60)
+```
+
+Vi kan skapa flera variabler samtidigt genom att separera dem med kommatecken.
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  mutate(
+    waitingSec = waiting * 60,
+    eruptionsSec = eruptions * 60
+  )
+```
+
+Om vi skapar en variabel med samma namn som en befintlig variabel kommer den befintliga variabeln att ersättas av den nya versionen.
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  mutate(
+    waiting = waiting * 60
+  )
+```
 
 ### Gruppera beräkningar med `group_by()`
 
+Många gånger vill vi genomföra beräkningar separat för olika grupper i datamaterialet. För att göra detta använder vi `group_by()`, som delar upp observationerna i grupper baserat på värdena i en eller flera variabler.
+
+:::{.callout-note}
+Eftersom datamaterialet faithful endast innehåller numeriska variabler skapar vi först en gruppvariabel som delar in observationerna i korta och långa väntetider. Vi använder `if_else()` för att ge den nya variabeln ett värde om uttrycket uppfylls (`Short wait`), ett annat om det inte uppfylls (`Long wait`).
+
+```{r}
+#| code-fold: false
+
+faithful <- 
+  faithful |>
+  mutate(
+    waitLength = if_else(waiting < 70, "Short wait", "Long wait")
+  )
+
+print(faithful)
+```
+:::
+
+Genom att använda `group_by()` sparar vi nu en grupperingskolumn i `tibble`.
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  group_by(waitLength)
+
+```
+
+När ett objekt har grupperats kommer många funktioner att utföra sina beräkningar separat inom varje grupp. Följande kod visar ett medelvärde per grupp.
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  group_by(waitLength) |>
+  mutate(meanWait = mean(waiting))
+```
+
+Vi kan också gruppera efter flera variabler samtidigt genom att ange flera variabelnamn i group_by().
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  mutate(
+    waitLength = if_else(waiting < 70, "Short", "Long"),
+    eruptLength = if_else(eruptions < 3, "Short", "Long")
+  ) |>
+  group_by(waitLength, eruptLength)
+```
+
+Funktioner som nu läggs till kommer bearbetas för alla fyra kombinationer av grupperade värden.
+
+:::{.callout-important}
+I slutet av varje grupperingsoperation bör vi ange `ungroup()`. Denna funktion tar bort all grupperingsinformation så att efterföljande funktioner inte luras på något sätt.
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  group_by(waitLength) |>
+  mutate(meanWait = mean(waiting)) |> 
+  ungroup()
+```
+
+Det är bra att få in en vana att alltid lägga till en `ungroup()` i slutet av sin pipe när en `group_by()` har använts, oavsett om bearbetningen är klar eller inte.
+:::
+
 ### Sammanfatta data med `summarize()`
+
+Funktionen `summarize()` används för att beräkna sammanfattande mått, till exempel medelvärden, summor eller antal observationer. Resultatet blir ett nytt objekt där varje rad motsvarar en sammanfattning av hela datamaterialet eller av varje grupp.
+
+```{r}
+#| code-fold: false
+
+# Beräknar medelvärdet av väntetiden
+faithful |>
+  summarize(
+    meanWait = mean(waiting)
+  )
+```
+
+Vi kan beräkna flera sammanfattande mått samtidigt.
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  summarize(
+    meanWait = mean(waiting),
+    minWait = min(waiting),
+    maxWait = max(waiting)
+  )
+```
+
+Den verkliga styrkan hos summarize() framträder när den kombineras med group_by(). Då beräknas sammanfattningarna separat för varje grupp.
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  group_by(waitLength) |>
+  summarize(
+    meanWait = mean(waiting),
+    n = n()
+  ) |> 
+  ungroup()
+```
+
+:::{.callout-important} 
+Det är mycket vanligt att kombinera flera funktioner från `dplyr` i samma kedja. Ett vanligt arbetsflöde är att först välja ut observationer med `filter()`, skapa nya variabler med `mutate()`, gruppera data med `group_by()` och slutligen beräkna sammanfattande mått med `summarize()`. 
+
+```{r}
+#| code-fold: false
+
+faithful |>
+  filter(waiting > 60) |>
+  mutate(
+    waitingSec = waiting * 60,
+    eruptionLength = if_else(eruptions < 3, "Short", "Long")
+  ) |>
+  group_by(eruptionLength) |> 
+  summarize(
+    meanWait = mean(waitingSec)
+  ) |> 
+  ungroup()
+```
+:::
+
+## Sammanfattning
+
+I detta kapitel har vi introducerat ett flertal sätt att läsa in och bearbeta data med hjälp av funktioner från `tidyverse` samlingen. Detta är bara ett sätt att databearbeta i R, flertalet olika paket finns därute som gör liknande saker. 
+
+I efterföljande kapitel kommer vi använda denna grund för att sedan introducera de statistiska paket och funktioner som kan hjälpa oss att besvara olika typer av frågeställningar.
 
 <!-- ## Hantering av text med `stringr` och `forcats` -->
 
