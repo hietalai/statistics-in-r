@@ -28,7 +28,7 @@ modelMA <- arima(y, order = c(0, 0, 2), include.mean = FALSE)
 
 # Modellutvärdering {#sec-tsa-model-evaluation}
 
-Trots att vi kan använda SAC, SPAC och EACF för att fatta ett informerat beslut om vilken modell (AR(p), MA(q) eller ARMA(p,q), med eller utan differentiering) som är lämpligast för en observerad tidsserie, är det inte alltid så lätt att enbart välja en modell. Istället kan vi anse dessa verktyg som en del av processen och utvärdering av anpassade modeller som ytterligare en del, vilken bör vägas in innan en slutgiltig modell väljs. 
+Trots att vi kan använda SAC, SPAC och EACF för att fatta ett informerat beslut om vilken modell^[AR(p), MA(q) eller ARMA(p,q), med eller utan differentiering.] som är lämpligast för en observerad tidsserie, är det inte alltid så lätt att enbart välja en specifik modell direkt. Istället kan vi anse dessa verktyg som en del av processen och utvärdering av anpassade modeller som ytterligare en del, vilken bör vägas in innan en slutgiltig modell väljs. 
 
 Modellutvärdering kan fokusera på ett par olika aspekter, till exempel: 
 
@@ -550,6 +550,13 @@ summary(fit)
 När modellen är anpassad gör vi prognoser för lika många observationer framåt i serien som vi delat in i testdelen:
 
 ```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Prediktioner med tillhörande konfidensband från ARIMA(1,1,1)
+#| label: fig-arima111-pred
+#| out-width: "90%"
+#| code-fold: false
+
 fc <- forecast(fit, h = length(test))
 
 plot(fc)
@@ -570,118 +577,9 @@ MAPE <- mean(abs(errors / test)) * 100
 c(MAD = MAD, MSD = MSD, MAPE = MAPE)
 ```
 
-<!-- ### $\tau$-steg framåt -->
+Vi ser visuellt att prediktionerna inte riktigt lyckats fånga upp serien då den observerade linjen ligger utanför modellens prediktioner. I detta läge kan det vara aktuellt att öka komplexiteten på modellen något för att prediktionerna ska lyckas något bättre, men vi måste fortfarande vara aktsam med överanpassning. 
 
-<!-- Prediktionerna ovan beräknar nästkommande tidpunkt utifrån den nuvarande. Vi kan också vara intresserade av att prediktera $\tau$ steg framåt utifrån den nuvarande. Exempelvisualiseringar: -->
-
-<!-- ```{mermaid} -->
-
-<!-- flowchart LR -->
-<!--   A@{ shape: circle, label: "t = 1"} -->
-<!--   B@{ shape: circle, label: "t = 2"} -->
-<!--   C@{ shape: circle, label: "t = 3"} -->
-<!--   D@{ shape: circle, label: "t = 4"} -->
-<!--   E@{ shape: circle, label: "t = 5"} -->
-<!--   F@{ shape: circle, label: "t = 6"} -->
-<!--   G@{ shape: circle, label: "t = 7"} -->
-<!--   H@{ shape: circle, label: "t = 8"} -->
-<!--   I@{ shape: circle, label: "t = 9"} -->
-<!--   X@{ shape: rounded, label: "1 steg -->
-<!--   framåt"} -->
-<!--   Y@{ shape: rounded, label: "1 steg -->
-<!--   framåt"} -->
-<!--   Z@{ shape: rounded, label: "1 steg -->
-<!--   framåt"} -->
-
-<!--   classDef predict fill:#d9544d,stroke:#000,color:#FFF -->
-
-<!-- subgraph observationer -->
-<!--   A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict -->
-<!-- end -->
-<!-- subgraph prediktioner -->
-<!--   X ~~~ Y ~~~ Z -->
-<!-- end -->
-<!-- D --- X --> E --- Y --> F --- Z --> G -->
-
-<!-- style observationer fill:#fcfcfc,stroke:#fcfcfc -->
-<!-- style prediktioner fill:#eee,stroke:#eee -->
-
-
-<!-- ``` -->
-
-<!-- ```{mermaid} -->
-
-<!-- flowchart LR -->
-<!--   A@{ shape: circle, label: "t = 1"} -->
-<!--   B@{ shape: circle, label: "t = 2"} -->
-<!--   C@{ shape: circle, label: "t = 3"} -->
-<!--   D@{ shape: circle, label: "t = 4"} -->
-<!--   E@{ shape: circle, label: "t = 5"} -->
-<!--   F@{ shape: circle, label: "t = 6"} -->
-<!--   G@{ shape: circle, label: "t = 7"} -->
-<!--   H@{ shape: circle, label: "t = 8"} -->
-<!--   I@{ shape: circle, label: "t = 9"} -->
-<!--   X@{ shape: rounded, label: "2 steg -->
-<!--   framåt"} -->
-<!--   Y@{ shape: rounded, label: "2 steg -->
-<!--   framåt"} -->
-<!--   Z@{ shape: rounded, label: "2 steg -->
-<!--   framåt"} -->
-
-<!--   classDef predict fill:#d9544d,stroke:#000,color:#FFF -->
-
-<!-- subgraph observationer -->
-<!--   A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict -->
-<!-- end -->
-<!-- subgraph prediktioner -->
-<!--   X ~~~ Y ~~~ Z -->
-<!-- end -->
-<!-- D --- X --> F  -->
-<!-- E --- Y --> G  -->
-<!-- F --- Z --> H -->
-
-<!-- style observationer fill:#fcfcfc,stroke:#fcfcfc -->
-<!-- style prediktioner fill:#eee,stroke:#eee -->
-
-<!-- ``` -->
-
-<!-- ```{mermaid} -->
-
-<!-- flowchart LR -->
-<!--   A@{ shape: circle, label: "t = 1"} -->
-<!--   B@{ shape: circle, label: "t = 2"} -->
-<!--   C@{ shape: circle, label: "t = 3"} -->
-<!--   D@{ shape: circle, label: "t = 4"} -->
-<!--   E@{ shape: circle, label: "t = 5"} -->
-<!--   F@{ shape: circle, label: "t = 6"} -->
-<!--   G@{ shape: circle, label: "t = 7"} -->
-<!--   H@{ shape: circle, label: "t = 8"} -->
-<!--   I@{ shape: circle, label: "t = 9"} -->
-<!--   X@{ shape: rounded, label: "3 steg -->
-<!--   framåt"} -->
-<!--   Y@{ shape: rounded, label: "3 steg -->
-<!--   framåt"} -->
-<!--   Z@{ shape: rounded, label: "3 steg -->
-<!--   framåt"} -->
-
-<!--   classDef predict fill:#d9544d,stroke:#000,color:#FFF -->
-
-<!-- subgraph observationer -->
-<!--   A ~~~ B ~~~ C ~~~ D ~~~ E:::predict ~~~ F:::predict ~~~ G:::predict ~~~ H:::predict ~~~ I:::predict -->
-<!-- end -->
-<!-- D --- X --> G -->
-<!-- E --- Y --> H -->
-<!-- F --- Z --> I -->
-<!-- subgraph prediktioner -->
-<!--   X ~~~ Y ~~~ Z -->
-<!-- end -->
-
-<!-- style observationer fill:#fcfcfc,stroke:#fcfcfc -->
-<!-- style prediktioner fill:#eee,stroke:#eee -->
-
-<!-- ``` -->
-
-<!-- [TODO: Utöka detta kapitel]{style="color: red"} -->
+<!-- [TODO: Utöka detta kapitel med tau steg framåt, tikz och sedan exempelkod]{style="color: red"} -->
 
 :::{.callout-caution}
 ## Övning 3
@@ -704,5 +602,252 @@ exams2forms(file = "../exercises/Part 4/Del4_Chap24.4_ex2.rmd")
 
 ```
 :::
+
+## Sammanfattande fallstudie
+
+Datamaterialet `Nile` finns inbyggt i R och innehåller mätningar av det årliga vattenflödet i floden Nilen vid Aswan i Egypten under perioden 1871 till 1970. Målet med analysen är att undersöka seriens egenskaper, identifiera en lämplig tidsseriemodell och använda modellen för att göra prognoser av framtida flöden.
+
+### Läsa in och visualisera tidsserien
+
+Vi börjar med att visualisera tidsserien för att identifiera möjliga trender, säsongsmönster eller andra strukturer.
+
+```{r}
+#| code-fold: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Det årliga vattenflödet i Nilen, mätt i miljoner kubikmeter
+#| label: fig-nile-timeseries
+#| out-width: "90%"
+
+require(tidyverse)
+require(TSA)
+require(forecast)
+
+# autoplot() läser av variabeltyperna och skapar "rätt" diagram som vi sedan kan justera
+autoplot(Nile) + 
+  theme_bw() +
+  labs(
+    x = "År",
+    y = "Flöde"
+  )
+```
+
+Av figuren ser vi att serien varierar över tid men saknar tydliga säsongseffekter. Eftersom observationerna är årsvisa finns det inte heller någon naturlig säsongskomponent att analysera, vilket lämpar sig för enklare ARIMA-modellering.
+
+### Stationäritet och modellidentifiering
+
+Nästa steg är att undersöka SAC och SPAC för att bedöma om serien verkar stationär och vilken modell som kan vara lämplig.
+
+```{r}
+#| code-fold: false
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3
+#| fig-cap: SAC och SPAC för Nile
+#| label: fig-nile-sac-spac
+#| out-width: "90%"
+
+data <-
+  tibble(
+    lag = 1:30,
+    ACF = acf(Nile, lag.max = 30, plot = FALSE)$acf,
+    PACF = pacf(Nile, lag.max = 30, plot = FALSE)$acf
+  ) |>
+  pivot_longer(!lag)
+
+ggplot(data) +
+  aes(x = lag, y = value) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_hline(
+    yintercept = 1.96/sqrt(length(Nile)),
+    linetype = 2,
+    color = "firebrick"
+  ) +
+  geom_hline(
+    yintercept = -1.96/sqrt(length(Nile)),
+    linetype = 2,
+    color = "firebrick"
+  ) +
+  theme_bw() +
+  labs(
+    x = "Lag",
+    y = "Korrelationskoefficient"
+  ) +
+  facet_wrap(~name, nrow = 1)
+```
+
+Eftersom SAC avtar relativt långsamt indikerar detta på att serien inte är stationär. Vi behöver därför differentiera serien innan vi kan identifiera vilken modell som är lämplig.
+
+```{r}
+#| code-fold: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Differensen av det årliga vattenflödet i Nilen
+#| label: fig-nile-diff-timeseries
+#| out-width: "90%"
+
+NileDiff <- diff(Nile)
+
+autoplot(NileDiff) + 
+  theme_bw() +
+  labs(
+    x = "År",
+    y = "Differens av flöde"
+  )
+
+```
+
+
+```{r}
+#| code-fold: false
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3
+#| fig-cap: SAC och SPAC för den differentierade Nile-serien
+#| label: fig-nile-diff-sac-spac
+#| out-width: "90%"
+data <-
+  tibble(
+    lag = 1:30,
+    ACF = acf(NileDiff, lag.max = 30, plot = FALSE)$acf,
+    PACF = pacf(NileDiff, lag.max = 30, plot = FALSE)$acf
+  ) |>
+  pivot_longer(!lag)
+
+ggplot(data) +
+  aes(x = lag, y = value) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_hline(
+    yintercept = 1.96/sqrt(length(NileDiff)),
+    linetype = 2,
+    color = "firebrick"
+  ) +
+  geom_hline(
+    yintercept = -1.96/sqrt(length(NileDiff)),
+    linetype = 2,
+    color = "firebrick"
+  ) +
+  theme_bw() +
+  labs(
+    x = "Lag",
+    y = "Korrelationskoefficient"
+  ) +
+  facet_wrap(~name, nrow = 1)
+```
+
+Nu verkar serien stationär då SAC avtar snabbt, men det är något otydligt vilken typ av modell som är lämplig. Då SPAC avtar snabbt och SAC ser ut att ha en spik verkar det som en ARIMA(0,1,1) är möjlig.
+
+```{r}
+#| code-fold: false
+
+eacf(z = NileDiff)
+
+```
+
+Den utökade autokorrelationen indikerar också på en ARIMA(0,1,1), eller kanske en ARIMA(2,1,1), så vi går vidare med dessa två modellkandidater. Vi skulle kunna se detta även från SPAC där vi ser två spikar i de första två laggen, indikerar på två AR komponenter.
+
+### Anpassa ARIMA-modeller
+
+Vi väljer att anpassa båda modellerna och jämföra deras egenskaper.
+
+```{r}
+#| code-fold: false
+
+model011 <-
+  Arima(
+    Nile,
+    order = c(0, 1, 1)
+  )
+
+model211 <-
+  Arima(
+    Nile,
+    order = c(2, 1, 1)
+  )
+
+summary(model011)
+
+summary(model211)
+```
+
+I utskriften erhålls skattningar av modellparametrarna tillsammans med standardfel och olika informationskriterier. Det vi kan se direkt i utskriften är att parameterskattningen $\hat{\phi}_2$ har ett större medelfel än själva skattningen vilket är en indikation att den komponenten förmodligen inte är relevant. Om vi jämför utvärderingsmåtten ser vi att modellerna är ganska snarlika men att ARIMA(2,1,1) nog har fått aningen bättre mått på loglikelihood (lägre), AIC (lägre), MAD (i utskriften MAE, lägre), och MAPE (lägre).
+
+Nästa steg blir att avgöra vilken modell som ger den bästa beskrivningen av data.
+
+### Diagnostik av residualerna
+
+Efter modellanpassningen behöver vi kontrollera att residualerna beter sig som vitt brus. Om modellen fångar tidsseriens struktur bör det inte finnas några systematiska mönster kvar i residualerna. Funktionen `checkresiduals()` från `forecast` slår ihop visualisering, kontroll av SAC och ett Ljung-Box-test i ett och samma svep.
+
+```{r}
+#| code-fold: false
+
+checkresiduals(model011)
+
+checkresiduals(model211)
+```
+
+Funktionen producerar:
+
+* residualdiagram,
+* histogram över residualerna,
+* SAC för residualerna,
+* Ljung-Box-test.
+
+Båda modellerna verkar skapa residualer utan tydliga mönster, vilket vi förväntar oss om modellen är bra. Dessutom visar Ljung-Box-testen båda ett icke-signifikant resultat vilket indikerar att residualerna inte innehåller någon kvarvarande autokorrelation.
+
+### Jämförelse av modellens prediktioner
+
+Då båda modellerna har snarlika utvärderingsmått och verkar skapa residualer som ser ut som vitt brus, blir den sista bedömningen vi kan göra hur modellen sedan används för att skapa prediktioner.
+
+```{r}
+#| code-fold: false
+
+fc011 <-
+  forecast(
+    model011,
+    h = 10
+  )
+
+fc211 <- 
+  forecast(
+    model211,
+    h = 10
+  )
+
+```
+
+Här skapas prognoser tio år framåt i tiden tillsammans med tillhörande prognosintervall. Prognoserna kan visualiseras tillsammans med de historiska observationerna för att ge en bild av förväntad framtida utveckling och osäkerhet.
+
+```{r}
+#| code-fold: false
+
+autoplot(fc011) +
+  theme_bw() +
+  labs(
+    x = "År",
+    y = "Flöde"
+  )
+
+autoplot(fc211) +
+  theme_bw() +
+  labs(
+    x = "År",
+    y = "Flöde"
+  )
+```
+
+Vi ser direkt att ARIMA(0,1,1) genererar väldigt dåliga prognoser, eftersom modellen enbart baseras på $e_{t-1}$, ett fel som inte går att prediktera framåt. ARIMA(2,1,1) ger oss någon mer information men även den har svårt att prediktera långt framåt i tiden.
+
+Vi kan nu egentligen välja vilken som av dessa två modeller utifrån deras utvärdering, men om syftet är att prediktera framtida flöde faller valet på ARIMA(2,1,1) trots, eller tack vare, dess större komplexitet. Den valda modellen ger oss åtminstone någon indikation på hur flödet kan förändras de nästkommande åren. 
+
+:::{.callout-important}
+Prediktioner innehåller mycket osäkerhet vilket innebär att prediktioner långt framåt i tiden ger ofta ingen information. 
+
+I dessa diagram täcker  osäkerhetsbanden större delen av flödevariationen sedan 1920 vilket innebär att serien i stort uppvisar en stor grad av osäkerhet som kanske inte går att prediktera.
+
+Vanligtvis bör vi förhålla oss till prediktioner i en nära horisont, de nästkommande 2-3 tidpunkterna, för att vi ska få någon vettig information att använda.
+:::
+
+Detta fall illustrerar ett vanligt arbetssätt inom tidsserieanalys där flera rimliga modellkandidater först identifieras från SAC, SPAC och EACF, varefter residualdiagnostik, utvärderingsmått och prediktioner används för att välja den modell som bäst beskriver data och ger tillförlitliga prognoser.
 
 ## Referenser

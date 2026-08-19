@@ -563,6 +563,42 @@ exams2forms(file = "../exercises/Part 4/Del4_Chap22.3_ex1.rmd")
 ```
 :::
 
+## Övningsuppgifter
+
+:::{.callout-caution}
+## Övning 5
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap22.4_ex1.rmd")
+
+```
+:::
+
+:::{.callout-caution}
+## Övning 6
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap22.4_ex2.rmd")
+
+```
+:::
+
+:::{.callout-caution}
+## Övning 7
+
+```{r}
+#| echo: FALSE
+#| results: asis
+exams2forms(file = "../exercises/Part 4/Del4_Chap22.4_ex3.rmd")
+
+```
+:::
+
+
 
 ## Referenser {.unnumbered}
 
