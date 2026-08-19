@@ -87,6 +87,7 @@ format:
     tbl-cap-location: top
     code-fold: true
     code-summary: "Visa kod"
+    code-overflow: wrap
     code-block-bg: true
     include-in-header:
       - file: "mathjax-macros.js"
