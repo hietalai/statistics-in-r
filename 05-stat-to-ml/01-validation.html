@@ -737,20 +737,20 @@ Notera
 <p>För vissa extremt komplexa modeller förekommer ett fenomen benämnt <strong>double descent</strong> där valideringsfelet minskar och sedan ökar för att till sist minska igen. Ni kan läsa mer om detta fenomen via <a href="https://en.wikipedia.org/wiki/Double_descent">Wikipedia</a>, det är inget som vi kommer titta närmare på i detta material.</p>
 </div>
 </div>
-<p>Vi kan visa dette fenomen med ett enkelt exempel för <code>lake</code> data. Vi börjar med att först dela upp data i tre olika mängder där träningsmängden får 60% av data, valideringsmängden 30% och testmängden 10%.</p>
+<p>Vi kan visa detta fenomen med ett enkelt exempel för <code>lakesurvey</code> data. Vi börjar med att först dela upp data i tre olika mängder där träningsmängden får 60% av data, valideringsmängden 30% och testmängden 10%.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sätter ett seed för reproducerbarhet</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20260701</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar de tre mängderna</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(lake)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(lakesurvey)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>trainSize <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>validSize <span class="ot">&lt;-</span> <span class="fl">0.3</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n), <span class="at">size =</span> n<span class="sc">*</span>trainSize)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>trainData <span class="ot">&lt;-</span> lake[trainIndex, ]</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>remaining <span class="ot">&lt;-</span> lake[<span class="sc">-</span>trainIndex, ] </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>trainData <span class="ot">&lt;-</span> lakesurvey[trainIndex, ]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>remaining <span class="ot">&lt;-</span> lakesurvey[<span class="sc">-</span>trainIndex, ] </span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>validIndex <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(remaining)), <span class="at">size =</span> n<span class="sc">*</span>validSize)</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
@@ -774,8 +774,18 @@ Notera
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>yhat1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel1, <span class="at">newdata =</span> validData)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>yhat2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel2, <span class="at">newdata =</span> validData)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>MSE1 <span class="ot">&lt;-</span> <span class="fu">sum</span>((validData<span class="sc">$</span>pH <span class="sc">-</span> yhat1)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">nrow</span>(validData)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>MSE2 <span class="ot">&lt;-</span> <span class="fu">sum</span>((validData<span class="sc">$</span>pH <span class="sc">-</span> yhat2)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">nrow</span>(validData)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>MSE <span class="ot">&lt;-</span> <span class="cf">function</span>(y, yhat) {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>((y <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">length</span>(y)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>MSE1 <span class="ot">&lt;-</span> <span class="fu">MSE</span>(validData<span class="sc">$</span>ph, yhat1)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Unknown or uninitialised column: `ph`.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>MSE2 <span class="ot">&lt;-</span> <span class="fu">MSE</span>(validData<span class="sc">$</span>ph, yhat2)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Unknown or uninitialised column: `ph`.</code></pre>
+</div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -791,13 +801,14 @@ Viktigt
 <p>Skillnaden i nämnare blir försumbar när vi har ett stort <span class="math inline">\(n\)</span>, vilket vi oftast har när vi använder maskininlärningsmetoder, därav att vi förenklar till den generella formeln.</p>
 </div>
 </div>
-<p>MSE för den första modellen är 0.45 medan för den andra modellen vi får 0.303. Utifrån dessa två mått väljer vi att gå vidare med modell 2 då dess MSE var lägre. Vi använder till sist testmängden för att få en väntevärdesriktig skattning av modellens fel:</p>
+<p>MSE för den första modellen är NaN medan för den andra modellen vi får NaN. Utifrån dessa två mått väljer vi att gå vidare med modell 2 då dess MSE för valideringsmängden var lägre.</p>
+<p>Till sist får vi en väntevärdesriktig skattning av modellens fel utifrån testmängden:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yhatTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel2, <span class="at">newdata =</span> testData)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>MSETest <span class="ot">&lt;-</span> <span class="fu">sum</span>((testData<span class="sc">$</span>pH <span class="sc">-</span> yhatTest)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">nrow</span>(testData)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>MSETest <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>yhatTest <span class="ot">&lt;-</span> <span class="fu">predict</span>(trainModel2, <span class="at">newdata =</span> testData)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>MSETest <span class="ot">&lt;-</span> <span class="fu">sum</span>((testData<span class="sc">$</span>pH <span class="sc">-</span> yhatTest)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">nrow</span>(testData)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>MSETest <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.334</code></pre>
 </div>
@@ -816,8 +827,8 @@ Viktigt
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>När vi utvecklar en maskininlärningsmodell vill vi hitta en modell som beskriver sambandet mellan de förklarande variablerna och responsvariabeln så bra som möjligt, samtidigt som modellen ska fungera väl på nya observationer. Vilken av följande beskrivningar återger modellvalsprocessen korrekt?</p>
-<div id="webex-bb4277d52fda1aa357f7ba0330df2ef0" class="webex-radiogroup" data-answer="OVIYAhsHSARv">
-<label><input type="radio" autocomplete="off" name="bb4277d52fda1aa357f7ba0330df2ef0"><span>Alla kandidatmodeller tränas på hela datamängden. Därefter väljs modellen med lägst träningsfel och samma data används för att uppskatta modellens slutliga prestanda.</span></label><label><input type="radio" autocomplete="off" name="bb4277d52fda1aa357f7ba0330df2ef0"><span>Kandidatmodeller tränas på valideringsmängden. Testmängden används sedan för att välja modell och träningsmängden används slutligen för att kontrollera resultatet.</span></label><label><input type="radio" autocomplete="off" name="bb4277d52fda1aa357f7ba0330df2ef0"><span>Testmängden används under hela träningsprocessen för att säkerställa att modellen hela tiden förbättras på nya observationer.</span></label><label><input type="radio" autocomplete="off" name="bb4277d52fda1aa357f7ba0330df2ef0"><span>Kandidatmodeller tränas på träningsmängden och jämförs med hjälp av valideringsmängden. När den bästa modellen har valts används testmängden en gång för att uppskatta modellens prestanda på nya observationer.</span></label>
+<div id="webex-e47bf97c8098729cc87f156028f3690d" class="webex-radiogroup" data-answer="PgQbUkoJG1Jl">
+<label><input type="radio" autocomplete="off" name="e47bf97c8098729cc87f156028f3690d"><span>Alla kandidatmodeller tränas på hela datamängden. Därefter väljs modellen med lägst träningsfel och samma data används för att uppskatta modellens slutliga prestanda.</span></label><label><input type="radio" autocomplete="off" name="e47bf97c8098729cc87f156028f3690d"><span>Kandidatmodeller tränas på valideringsmängden. Testmängden används sedan för att välja modell och träningsmängden används slutligen för att kontrollera resultatet.</span></label><label><input type="radio" autocomplete="off" name="e47bf97c8098729cc87f156028f3690d"><span>Testmängden används under hela träningsprocessen för att säkerställa att modellen hela tiden förbättras på nya observationer.</span></label><label><input type="radio" autocomplete="off" name="e47bf97c8098729cc87f156028f3690d"><span>Kandidatmodeller tränas på träningsmängden och jämförs med hjälp av valideringsmängden. När den bästa modellen har valts används testmängden en gång för att uppskatta modellens prestanda på nya observationer.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -834,7 +845,7 @@ Viktigt
 </section>
 <section id="korsvalidering" class="level2" data-number="26.2">
 <h2 data-number="26.2" class="anchored" data-anchor-id="korsvalidering"><span class="header-section-number">26.2</span> Korsvalidering</h2>
-<p>Nackdelen med att dela upp data enligt <a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.3.3</span></a> är att mycket av data behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är <strong>korsvalidering</strong> där vi delar upp data i en större träningsmängd och en testmängd. Korsvalidering innebär att träningsmängden delas sedan in i flera mindre delar, vi lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar. När alla delar använts för validering beräknas det genomsnittliga valideringsfelet som sedan kan jämföras mellan olika modeller.</p>
+<p>Nackdelen med att dela upp data enligt <a href="00-introduction.html#sec-data-split" class="quarto-xref"><span>Avsnitt 25.3.3</span></a> är att mycket information behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är <strong>korsvalidering</strong> där vi delar upp data i en större träningsmängd och en testmängd. Korsvalidering innebär att träningsmängden delas sedan in i flera mindre delar, vi lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar. När alla delar använts för validering beräknas det genomsnittliga valideringsfelet som sedan kan jämföras mellan olika modeller.</p>
 <p>I det extrema fallet delar vi upp träningsmängden i <span class="math inline">\(n\)</span> lika stora delar vilket kallas för <strong>Leave-one-out</strong> korsvalidering (LOOCV). Som namnet antyder följer vi följande procedur:</p>
 <ol type="1">
 <li>ta bort en observation och träna modellen på återstående data.</li>
@@ -872,7 +883,7 @@ Figur&nbsp;26.8: Illustration av 5-fold korsvalidering
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Korsvalidering kan implementeras direkt i R genom att använda loopar men många av de metoder som vi kommer till i senare kapitel har integrerade alternativ för korsvalidering i dess tillhörande funktioner. Vi kommer därför återkomma till korsvalidering senare.</p>
+<p>Korsvalidering kan implementeras direkt i R genom att använda loopar men många av de metoder som vi kommer till i senare kapitel har integrerade alternativ för korsvalidering i dess tillhörande funktioner. Vi kommer därför återkomma till korsvalidering senare när vi tillämpar maskininlärningsmetoderna.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">
@@ -888,8 +899,8 @@ Figur&nbsp;26.8: Illustration av 5-fold korsvalidering
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Ett datamaterial består av 120 observationer. Två kandidatmodeller ska jämföras med hjälp av korsvalidering. För varje kandidatmodell överväger man antingen Leave-One-Out Cross-Validation (LOOCV) eller 6-fold-korsvalidering. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-ce027134faf36e8493dd597a2689463a" class="webex-checkboxgroup" data-answer="OFUcAxsAHwVKUTs=">
-<label><input type="checkbox" autocomplete="off" name="ce027134faf36e8493dd597a2689463a"><span>Eftersom LOOCV använder fler modellanpassningar än 6-fold-korsvalidering måste LOOCV alltid ge en bättre slutlig modell.</span></label><label><input type="checkbox" autocomplete="off" name="ce027134faf36e8493dd597a2689463a"><span>Vid LOOCV tränas varje kandidatmodell 120 gånger och varje modellanpassning använder <span class="math inline">\(119\)</span> observationer för träning.</span></label><label><input type="checkbox" autocomplete="off" name="ce027134faf36e8493dd597a2689463a"><span>Vid 6-fold-korsvalidering består varje valideringsblock av 20 observationer och varje modellanpassning tränas på 100 observationer.</span></label><label><input type="checkbox" autocomplete="off" name="ce027134faf36e8493dd597a2689463a"><span>För att jämföra kandidatmodellerna kan man för varje modell beräkna medelvärdet av valideringsfelet över samtliga observationer eller block.</span></label><label><input type="checkbox" autocomplete="off" name="ce027134faf36e8493dd597a2689463a"><span>Om båda kandidatmodellerna utvärderas med LOOCV krävs totalt 120 modellanpassningar.</span></label>
+<div id="webex-0c0528d3e1eee56b2afee7fa9705a8f6" class="webex-checkboxgroup" data-answer="a1McBB4JSAJJATg=">
+<label><input type="checkbox" autocomplete="off" name="0c0528d3e1eee56b2afee7fa9705a8f6"><span>Eftersom LOOCV använder fler modellanpassningar än 6-fold-korsvalidering måste LOOCV alltid ge en bättre slutlig modell.</span></label><label><input type="checkbox" autocomplete="off" name="0c0528d3e1eee56b2afee7fa9705a8f6"><span>Vid LOOCV tränas varje kandidatmodell 120 gånger och varje modellanpassning använder <span class="math inline">\(119\)</span> observationer för träning.</span></label><label><input type="checkbox" autocomplete="off" name="0c0528d3e1eee56b2afee7fa9705a8f6"><span>Vid 6-fold-korsvalidering består varje valideringsblock av 20 observationer och varje modellanpassning tränas på 100 observationer.</span></label><label><input type="checkbox" autocomplete="off" name="0c0528d3e1eee56b2afee7fa9705a8f6"><span>För att jämföra kandidatmodellerna kan man för varje modell beräkna medelvärdet av valideringsfelet över samtliga observationer eller block.</span></label><label><input type="checkbox" autocomplete="off" name="0c0528d3e1eee56b2afee7fa9705a8f6"><span>Om båda kandidatmodellerna utvärderas med LOOCV krävs totalt 120 modellanpassningar.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -974,11 +985,11 @@ Figur&nbsp;26.9: Enkelt exempel på iterativ optimering
 </div>
 </div>
 </div>
-<p>I denna illustration har en första “gissning” av parametrarnas värden gjorts vid den streckade röda linjen. Sedan har parametrarna justerats tills att de når fram till värdet som ger den största kostnaden, den svartstreckade linjen.</p>
+<p>I denna illustration har en första “gissning” av parametrarnas värden gjorts vid den streckade röda linjen. Sedan har parametrarna justerats tills att de når fram till värdet som ger den minsta kostnaden, den svartstreckade linjen.</p>
 </section>
 <section id="gradient" class="level3" data-number="26.3.2">
 <h3 data-number="26.3.2" class="anchored" data-anchor-id="gradient"><span class="header-section-number">26.3.2</span> Gradient</h3>
-<p>Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens negativa <strong>gradient</strong>, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger riktningen till var nästa justering av parameterns värde bör ske, i den negativa riktningen där funktionen ökar snabbast.</p>
+<p>Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens negativa <strong>gradient</strong>, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger riktningen till var nästa justering av parameterns värde bör ske, i den negativa riktningen där funktionen ökar snabbast. Vi använder den negativa riktningen för att gradienten alltid visar den positiva lutningen, alltså vilket håll funktionen ökar mest. För att hitta det minsta värdet behöver vi då flippa värdet genom att sätta <span class="math inline">\(-\)</span> framför.</p>
 <p>I dessa två föregående exempel har vi ett globalt minimum (optimum) som identiferats, men för mer komplexa kostnadsfunktioner kan det finnas flera <strong>lokala optimum</strong> som algoritmen kan nå fram till.</p>
 <div class="columns">
 <div class="column" style="width:49%;">
@@ -1019,12 +1030,11 @@ Figur&nbsp;26.11: En komplex funktion med flera lokala minimum
 <h3 data-number="26.3.3" class="anchored" data-anchor-id="konvergens-och-inlärningshastighet"><span class="header-section-number">26.3.3</span> Konvergens och inlärningshastighet</h3>
 <p>För att motverka att optimeringsalgoritmer genomför oändligt många iterationer med (till slut) ytterst små justeringar av parametervärdena, avslutas optimeringen när vi anser den <strong>konvergerat</strong>. Konvergens betyder att algoritmen nått ett tillstånd där ytterligare iterationer inte leder till någon meningsfull förbättring. Detta skulle kunna vara:</p>
 <ul>
-<li>Liten förändring i kostnadsfunktionen mellan iterationer (<span class="math inline">\(i\)</span>), <span class="math inline">\(|c(\boldsymbol{\theta}_i) - c(\boldsymbol{\theta}_{i-1})| &lt; \xi\)</span></li>
+<li>Liten förändring i kostnadsfunktionen mellan iterationer (<span class="math inline">\(t\)</span>), <span class="math inline">\(|c(\boldsymbol{\theta}_t) - c(\boldsymbol{\theta}_{t-1})| &lt; \xi\)</span></li>
 <li>Liten förändring i skattade parametervärden mellan iterationer</li>
 <li>Maximalt antal iterationer har uppnåtts</li>
 </ul>
-<p><span class="math inline">\(\xi\)</span> (grekiska xi) är oftast vald till något väldigt litet värde, till exempel <span class="math inline">\(\frac{1}{10 000}\)</span> eller liknande.</p>
-<p>Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet samt den totala beräkningstiden förändras.</p>
+<p><span class="math inline">\(\xi\)</span> (grekiska xi, uttalas ksi) är oftast vald till något väldigt litet värde, till exempel <span class="math inline">\(\frac{1}{10 000}\)</span> eller liknande, för att vi ska hamna nära optimum men ändå inte spendera onödigt mycket tid med små förbättringar. Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet samt den totala beräkningstiden förändras.</p>
 <p>Ytterligare en aspekt av iterativa algoritmer är <strong>inlärningshastigheten</strong> (betecknat med <span class="math inline">\(\gamma\)</span>, grekiska gamma) vilket påverkar hur snabbt vi rör oss mot bättre parametervärden närmare kostnadsfunktionens optimum. I <a href="#fig-optimization" class="quarto-xref">Figur&nbsp;<span>26.9</span></a> är denna 0.0002 = 2E-04 men vi kan öka eller minska den för att (förhoppningsvis) effektivisera algoritmen.</p>
 <div class="columns">
 <div class="column" style="width:49%;">
@@ -1194,8 +1204,8 @@ Notera
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>När en maskinininlärningsmodell tränas optimeras modellens parametrar iterativt. Vilka av följande påståenden om optimeringsprocessen är korrekta?</p>
-<div id="webex-5dd46bb96bb09010a5fc7846e3afcd0b" class="webex-checkboxgroup" data-answer="blVIBBpTTglr">
-<label><input type="checkbox" autocomplete="off" name="5dd46bb96bb09010a5fc7846e3afcd0b"><span>Gradientens riktning visar var kostnadsfunktionen ökar snabbast. Vid minimering justeras därför parametrarna i motsatt riktning.</span></label><label><input type="checkbox" autocomplete="off" name="5dd46bb96bb09010a5fc7846e3afcd0b"><span>Gradient descent hittar alltid det globala minimumet, även om kostnadsfunktionen är icke-konvex.</span></label><label><input type="checkbox" autocomplete="off" name="5dd46bb96bb09010a5fc7846e3afcd0b"><span>Modellens parametrar kan optimeras genom att minimera en kostnadsfunktion eller maximera en log-likelihood.</span></label><label><input type="checkbox" autocomplete="off" name="5dd46bb96bb09010a5fc7846e3afcd0b"><span>En högre inlärningshastighet leder alltid till snabbare konvergens utan risk att algoritmen passerar optimum.</span></label>
+<div id="webex-f3f92b7cc575c55fa395c82c9a9593ee" class="webex-checkboxgroup" data-answer="PQJKCR5TG1M+">
+<label><input type="checkbox" autocomplete="off" name="f3f92b7cc575c55fa395c82c9a9593ee"><span>Gradientens riktning visar var kostnadsfunktionen ökar snabbast. Vid minimering justeras därför parametrarna i motsatt riktning.</span></label><label><input type="checkbox" autocomplete="off" name="f3f92b7cc575c55fa395c82c9a9593ee"><span>Gradient descent hittar alltid det globala minimumet, även om kostnadsfunktionen är icke-konvex.</span></label><label><input type="checkbox" autocomplete="off" name="f3f92b7cc575c55fa395c82c9a9593ee"><span>Modellens parametrar kan optimeras genom att minimera en kostnadsfunktion eller maximera en log-likelihood.</span></label><label><input type="checkbox" autocomplete="off" name="f3f92b7cc575c55fa395c82c9a9593ee"><span>En högre inlärningshastighet leder alltid till snabbare konvergens utan risk att algoritmen passerar optimum.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -1280,6 +1290,36 @@ Sann klass
   \text{Felkvot} &amp;= \frac{FN + FP}{n} = \frac{FN + FP}{TP + FN + FP + TN} = 1 - \text{Träffsäkerhet} \\
 \end{aligned}
 \]</span> När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas.</p>
+<p>Vi kan beräkna dessa för hand om vi vill, men många funktioner använder sig av inbyggda komponenter där dessa mått, eller de som introduceras senare i kapitlet, beräknas automatiskt och vi kan få ut dem som delar av modellobjektet. Om vi vill räkna ut dessa för hand behöver vi först bygga förväxlingsmatrisen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar två vektorer med värden 0 eller 1</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">size =</span> <span class="dv">50</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">size =</span> <span class="dv">50</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar en korstabell, en förväxlingsmatris, med table()</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(y, yhat)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   yhat
+y    0  1
+  0 15 13
+  1 13  9</code></pre>
+</div>
+</div>
+<p>Om vi sparar tabellen får vi ett objekt med två dimensioner, rader och kolumner, vilket innebär att vi kan indexera ut <span class="math inline">\(TP\)</span>, <span class="math inline">\(FN\)</span>, <span class="math inline">\(FP\)</span> och <span class="math inline">\(TN\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>confusion <span class="ot">&lt;-</span> <span class="fu">table</span>(y, yhat)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>TP <span class="ot">&lt;-</span> confusion[<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>FN <span class="ot">&lt;-</span> confusion[<span class="dv">1</span>,<span class="dv">2</span>]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>FP <span class="ot">&lt;-</span> confusion[<span class="dv">2</span>,<span class="dv">1</span>]</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>TN <span class="ot">&lt;-</span> confusion[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar träffsäkerheten</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(TP, TN) <span class="sc">/</span> <span class="fu">sum</span>(TP, FN, FP, TN)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.48</code></pre>
+</div>
+</div>
 <section id="klassbalans" class="level3" data-number="26.4.1">
 <h3 data-number="26.4.1" class="anchored" data-anchor-id="klassbalans"><span class="header-section-number">26.4.1</span> Klassbalans</h3>
 <p>Problemet med att använda felkvoten som modellens kostnadsfunktion är att måttet kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering påverkar den sanna andelen av data som tillhör vardera klass modellens övergripande prestanda. Denna andel kallas för <strong>klassbalans</strong>. När vi modellerar en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda.</p>
@@ -1332,18 +1372,18 @@ Sann klass
 <div class="webex-check webex-box">
 <p>En modell används för att klassificera observationer i klasserna <span class="math inline">\(Y=1\)</span> och <span class="math inline">\(Y=0\)</span>. På en valideringsmängd erhålls följande resultat: * <span class="math inline">\(f_{11}=18\)</span>: observationer med <span class="math inline">\(Y=1\)</span> som predikterats som <span class="math inline">\(\hat{Y}=1\)</span>. * <span class="math inline">\(f_{10}=2\)</span>: observationer med <span class="math inline">\(Y=1\)</span> som predikterats som <span class="math inline">\(\hat{Y}=0\)</span>. * <span class="math inline">\(f_{01}=16\)</span>: observationer med <span class="math inline">\(Y=0\)</span> som predikterats som <span class="math inline">\(\hat{Y}=1\)</span>. * <span class="math inline">\(f_{00}=64\)</span>: observationer med <span class="math inline">\(Y=0\)</span> som predikterats som <span class="math inline">\(\hat{Y}=0\)</span>.</p>
 <p>Vilka av följande påståenden är korrekta?</p>
-<div id="webex-920478ea5302414eb08446e9ab3e30be" class="webex-checkboxgroup" data-answer="YgMcBRsJSVAZAhwCaQ==">
-<label><input type="checkbox" autocomplete="off" name="920478ea5302414eb08446e9ab3e30be"><span>Modellens felkvot är <span class="math inline">\(1-0.82=0.18\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="920478ea5302414eb08446e9ab3e30be"><span>Modellens träffsäkerhet är <span class="math inline">\(\frac{18+64}{100}=0.82\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="920478ea5302414eb08446e9ab3e30be"><span>En modell som alltid predikterar majoritetsklassen <span class="math inline">\(Y=0\)</span> skulle få träffsäkerheten <span class="math inline">\(0.80\)</span>, vilket visar varför träffsäkerheten ensam kan ge en ofullständig bild av modellen.</span></label><label><input type="checkbox" autocomplete="off" name="920478ea5302414eb08446e9ab3e30be"><span>Modellens specificitet är <span class="math inline">\(\frac{64}{16+64}=0.80\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="920478ea5302414eb08446e9ab3e30be"><span>Modellens sensitivitet för <span class="math inline">\(Y=1\)</span> är <span class="math inline">\(\frac{18}{18+2}=0.90\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="920478ea5302414eb08446e9ab3e30be"><span>Eftersom sensitiviteten är högre än specificiteten kan man dra slutsatsen att modellen gör lika bra prediktioner för båda klasserna.</span></label>
+<div id="webex-147f901dc6e682584dc1577bafe06c3c" class="webex-checkboxgroup" data-answer="agUbVxUBHVRPB0kHZQ==">
+<label><input type="checkbox" autocomplete="off" name="147f901dc6e682584dc1577bafe06c3c"><span>Modellens sensitivitet för <span class="math inline">\(Y=1\)</span> är <span class="math inline">\(\frac{18}{18+2}=0.90\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="147f901dc6e682584dc1577bafe06c3c"><span>Modellens träffsäkerhet är <span class="math inline">\(\frac{18+64}{100}=0.82\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="147f901dc6e682584dc1577bafe06c3c"><span>En modell som alltid predikterar majoritetsklassen <span class="math inline">\(Y=0\)</span> skulle få träffsäkerheten <span class="math inline">\(0.80\)</span>, vilket visar varför träffsäkerheten ensam kan ge en ofullständig bild av modellen.</span></label><label><input type="checkbox" autocomplete="off" name="147f901dc6e682584dc1577bafe06c3c"><span>Eftersom sensitiviteten är högre än specificiteten kan man dra slutsatsen att modellen gör lika bra prediktioner för båda klasserna.</span></label><label><input type="checkbox" autocomplete="off" name="147f901dc6e682584dc1577bafe06c3c"><span>Modellens specificitet är <span class="math inline">\(\frac{64}{16+64}=0.80\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="147f901dc6e682584dc1577bafe06c3c"><span>Modellens felkvot är <span class="math inline">\(1-0.82=0.18\)</span>.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Sant. Felkvoten är andelen felaktiga klassificeringar och kan beräknas som <span class="math inline">\(1-\text{träffsäkerhet}=1-0.82=0.18\)</span>.</li>
+<li>Sant. Sensitiviteten beskriver andelen observerade ettor som klassificerats korrekt och blir <span class="math inline">\(\frac{f_{11}}{f_{11}+f_{10}}=\frac{18}{20}=0.90\)</span>.</li>
 <li>Sant. Antalet korrekta klassificeringar är <span class="math inline">\(f_{11}+f_{00}=18+64=82\)</span> av totalt <span class="math inline">\(100\)</span>, vilket ger träffsäkerheten <span class="math inline">\(0.82\)</span>.</li>
 <li>Sant. Det finns <span class="math inline">\(80\)</span> observationer med <span class="math inline">\(Y=0\)</span>. En modell som alltid predikterar <span class="math inline">\(0\)</span> skulle därför klassificera <span class="math inline">\(80\)</span> av <span class="math inline">\(100\)</span> observationer korrekt, trots att den helt misslyckas med att identifiera <span class="math inline">\(Y=1\)</span>.</li>
-<li>Sant. Specificiteten beskriver andelen observerade nollor som klassificerats korrekt och blir <span class="math inline">\(\frac{f_{00}}{f_{01}+f_{00}}=\frac{64}{80}=0.80\)</span>.</li>
-<li>Sant. Sensitiviteten beskriver andelen observerade ettor som klassificerats korrekt och blir <span class="math inline">\(\frac{f_{11}}{f_{11}+f_{10}}=\frac{18}{20}=0.90\)</span>.</li>
 <li>Falskt. Skillnaden mellan sensitivitet och specificitet visar att modellen lyckas olika väl för de två klasserna. Att båda måtten är relativt höga innebär inte att prestandan är identisk.</li>
+<li>Sant. Specificiteten beskriver andelen observerade nollor som klassificerats korrekt och blir <span class="math inline">\(\frac{f_{00}}{f_{01}+f_{00}}=\frac{64}{80}=0.80\)</span>.</li>
+<li>Sant. Felkvoten är andelen felaktiga klassificeringar och kan beräknas som <span class="math inline">\(1-\text{träffsäkerhet}=1-0.82=0.18\)</span>.</li>
 </ul>
 </div>
 </div>

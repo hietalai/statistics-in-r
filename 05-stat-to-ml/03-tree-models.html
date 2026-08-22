@@ -61,7 +61,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -560,14 +579,15 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#icke-linjära-modeller" id="toc-icke-linjära-modeller" class="nav-link active" data-scroll-target="#icke-linjära-modeller"><span class="header-section-number">28.1</span> Icke-linjära modeller</a></li>
-  <li><a href="#splines" id="toc-splines" class="nav-link" data-scroll-target="#splines"><span class="header-section-number">28.2</span> Splines</a></li>
-  <li><a href="#trädmodeller" id="toc-trädmodeller" class="nav-link" data-scroll-target="#trädmodeller"><span class="header-section-number">28.3</span> Trädmodeller</a>
+  <li><a href="#splines" id="toc-splines" class="nav-link active" data-scroll-target="#splines"><span class="header-section-number">28.1</span> Splines</a></li>
+  <li><a href="#trädmodeller" id="toc-trädmodeller" class="nav-link" data-scroll-target="#trädmodeller"><span class="header-section-number">28.2</span> Trädmodeller</a>
   <ul class="collapse">
-  <li><a href="#att-skapa-beslutsregler" id="toc-att-skapa-beslutsregler" class="nav-link" data-scroll-target="#att-skapa-beslutsregler"><span class="header-section-number">28.3.1</span> Att skapa beslutsregler</a></li>
-  <li><a href="#regressionsträd" id="toc-regressionsträd" class="nav-link" data-scroll-target="#regressionsträd"><span class="header-section-number">28.3.2</span> Regressionsträd</a></li>
-  <li><a href="#klassificeringsträd" id="toc-klassificeringsträd" class="nav-link" data-scroll-target="#klassificeringsträd"><span class="header-section-number">28.3.3</span> Klassificeringsträd</a></li>
-  <li><a href="#fördelar-och-nackdelar" id="toc-fördelar-och-nackdelar" class="nav-link" data-scroll-target="#fördelar-och-nackdelar"><span class="header-section-number">28.3.4</span> Fördelar och nackdelar</a></li>
+  <li><a href="#att-skapa-beslutsregler" id="toc-att-skapa-beslutsregler" class="nav-link" data-scroll-target="#att-skapa-beslutsregler"><span class="header-section-number">28.2.1</span> Att skapa beslutsregler</a></li>
+  <li><a href="#stoppkriterier" id="toc-stoppkriterier" class="nav-link" data-scroll-target="#stoppkriterier"><span class="header-section-number">28.2.2</span> Stoppkriterier</a></li>
+  <li><a href="#regressionsträd" id="toc-regressionsträd" class="nav-link" data-scroll-target="#regressionsträd"><span class="header-section-number">28.2.3</span> Regressionsträd</a></li>
+  <li><a href="#sec-tree-class" id="toc-sec-tree-class" class="nav-link" data-scroll-target="#sec-tree-class"><span class="header-section-number">28.2.4</span> Klassificeringsträd</a></li>
+  <li><a href="#hyperparameter-tuning-med-grid-search" id="toc-hyperparameter-tuning-med-grid-search" class="nav-link" data-scroll-target="#hyperparameter-tuning-med-grid-search"><span class="header-section-number">28.2.5</span> Hyperparameter tuning med Grid Search</a></li>
+  <li><a href="#fördelar-och-nackdelar" id="toc-fördelar-och-nackdelar" class="nav-link" data-scroll-target="#fördelar-och-nackdelar"><span class="header-section-number">28.2.6</span> Fördelar och nackdelar</a></li>
   </ul></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
@@ -611,7 +631,7 @@ Figur&nbsp;28.1: 100 observationer, två förklarande variabler och en binär re
 </div>
 </div>
 </div>
-<p>Den sanna beslutsregeln som exakt separerar de två färgerna (klasserna) är <span class="math inline">\(x_2 \cdot (1 + exp(-25 \cdot (x_1 - 0.5))) &gt; 1\)</span>. I bilden nedan visas gränsen som regeln skapar med en streckad linje där uttrycket är lika med 1.</p>
+<p>Den sanna beslutsregeln som exakt separerar de två färgerna (klasserna) är <span class="math display">\[x_2 \cdot (1 + exp(-25 \cdot (x_1 - 0.5))) &gt; 1\]</span>. I bilden nedan visas gränsen som regeln skapar med en streckad linje när uttrycket är lika med 1.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-nonlinear-boundary-example" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -627,11 +647,9 @@ Figur&nbsp;28.2: Den icke-linjära beslutsregeln
 </div>
 </div>
 <p>Men hur skulle vi kunna hitta en linjär beslutsregel som motsvarar denna? Vad gör vi om en linjär modell inte passar till data?</p>
-<section id="icke-linjära-modeller" class="level2" data-number="28.1">
-<h2 data-number="28.1" class="anchored" data-anchor-id="icke-linjära-modeller"><span class="header-section-number">28.1</span> Icke-linjära modeller</h2>
 <p>Vi kan ta ett enklare exempel med regression.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Genererar icke-linjär data</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Genererar icke-linjärt data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span>  <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="at">length.out =</span> <span class="fl">1e3</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span>  <span class="dv">5</span><span class="sc">*</span><span class="fu">cos</span>(x<span class="sc">*</span><span class="dv">3</span>) <span class="sc">-</span> <span class="dv">1</span><span class="sc">*</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="fu">length</span>(x))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -664,12 +682,15 @@ Figur&nbsp;28.4: Polynom av ordning 6
 </div>
 </div>
 </div>
-<p>Till och med ett polynom av ordning 6 räcker inte att modellera data på ett bra sätt i <a href="#fig-nonlinear-polynomial" class="quarto-xref">Figur&nbsp;<span>28.4</span></a>. Polynom av hög ordning bidrar också till instabila anpassningar och numeriska problem i skattningen, då det är inte ett optimalt alternativ.</p>
-<p>Vi skulle kunna dela upp data i olika områden och anpassa separata modeller för varje område som sedan knyts ihop till en sammanhängande modell. En sådan typ av metod är <strong>splines</strong>.</p>
-</section>
-<section id="splines" class="level2" data-number="28.2">
-<h2 data-number="28.2" class="anchored" data-anchor-id="splines"><span class="header-section-number">28.2</span> Splines</h2>
-<p>Målet med splines är att anpassa en stegvis polynomfunktion på en uppdelat data där vi sätter begränsningar i skarvarna för att få kontinuitet, kontinuerliga derivator och andra eftersökta egenskaper. De olika delarna av data separeras av <strong>knutar</strong> (eng. knot) som bryter data i olika delar och frihetsgrader i denna kontext beskriver antalet parametrar som anpassas.</p>
+<p>I just detta fall räcker inte ens ett polynom av ordning 6 för att modellera data på ett bra sätt. Polynom av hög ordning bidrar också till instabila anpassningar och numeriska problem i skattningen; det är inte ett optimalt alternativ.</p>
+<p>Istället för ett komplex polynom över hela funktionen skulle vi kunna dela upp data i olika områden och anpassa enklare separata modeller för respektive som sedan knyts ihop till en sammanhängande modell. En sådan typ av metod är <strong>splines</strong>.</p>
+<section id="splines" class="level2" data-number="28.1">
+<h2 data-number="28.1" class="anchored" data-anchor-id="splines"><span class="header-section-number">28.1</span> Splines</h2>
+<p>Målet med splines är att anpassa en stegvis polynomfunktion på uppdelad data där vi sätter begränsningar i skarvarna för att få kontinuitet, kontinuerliga derivator och andra eftersökta egenskaper. De olika delarna av data separeras av <strong>knutar</strong> (eng. knot) som bryter data i olika delar och termen frihetsgrader i denna kontext beskriver antalet delar (parametrar) som anpassas.</p>
+<p>Med hjälp av funktionen <code>ns()</code> från paketet <code>splines</code> kan vi skapa <strong>naturliga splines</strong>. I funktionen används argumentet <code>df</code> som ett sätt att styra komplexiteten av funktionen, där högre värden genererar fler knutar och därmed större flexibilitet i funktionen. I <a href="#fig-nonlinear-regression" class="quarto-xref">Figur&nbsp;<span>28.3</span></a> ser det ut som att det förekommer fyra ganska regelbundnda vändpunkter i data, så vi kan testa med att använda 5 frihetsgrader där antalet knutar definieras som <code>df - 1</code>. Då bör de fyra knutarna placera sig regelbundet utöver vändpunkterna.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">ns</span>(x, <span class="at">df =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-nonlinear-spline" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -678,18 +699,16 @@ Figur&nbsp;28.4: Polynom av ordning 6
 <img src="03-tree-models_files/figure-html/fig-nonlinear-spline-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonlinear-spline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;28.5: Polynom av ordning 6
+Figur&nbsp;28.5: Naturlig spline med 4 knutar
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-nonlinear-spline" class="quarto-xref">Figur&nbsp;<span>28.5</span></a> visar hur vi kan dela upp datamaterialet med hjälp av fyra knutar (de röda strecken) och anpassa enklare polynom för varje område. I just denna figur har vi begränsat modellen i dess knutpunkter för att få en sammanhängande anpassning, men enklare funktioner såsom stegfunktioner, basfunktioner m.fl. kan också anpassas.</p>
+<p><a href="#fig-nonlinear-spline" class="quarto-xref">Figur&nbsp;<span>28.5</span></a> visar att vi delar upp datamaterialet med hjälp av fyra knutar (de röda strecken) och anpassa enklare polynom för varje område. Har vi en mer komplex och mindre regelbunden icke-linjär data behöver vi förmodligen öka antalet frihetsgrader för att knutarna ska placeras på “rätt” ställen för en bra anpassning. Funktionen <code>ns()</code> placerar knutarna på kvantiler av <code>x</code> vilket inte alltid överensstämmer med vändpunkterna. Valet av frihetsgrader bör väljas med hjälp av korsvalidering.</p>
+<p>Vi har också möjlighet att själva ange var knutarna ska placeras med argumentet <code>knots</code>, dock är det inte alltid så lätt att visualisera funktionen och manuellt definiera knutarnas positioner.</p>
+<p>Med naturliga splines begränsar vi modellen i dess knutpunkter för att få en sammanhängande anpassning, men enklare funktioner såsom stegfunktioner, basfunktioner m.fl. kan också anpassas.</p>
 <!-- DEVELOPMENT: Visa samma uppdelning med separata regressionsmodeller istället för spline. -->
-<p>Splines anpassas i R med hjälp av <code>ns()</code> från paketet <code>splines</code>. Funktionen styrs av hyperparametern <code>df</code> som beskriver funktionens frihetsgrader vilket motsvarar antalet knutar + 1 som standard. I figuren ovan har vi valt 5 frihetsgrader som motsvarar 4 knutar på angivna platser, men valet av frihetsgrader bör väljas med hjälp av korsvalidering</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ns</span>(x, <span class="at">df =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -717,8 +736,8 @@ Notera
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>När sambandet mellan en prediktor och responsvariabeln är icke-linjärt kan både polynomregression och splines användas. Vilka av följande påståenden om splines är korrekta?</p>
-<div id="webex-c805fa1e3a32cfac8b108d5943fc1de0" class="webex-checkboxgroup" data-answer="OAkcBEpQHVVu">
-<label><input type="checkbox" autocomplete="off" name="c805fa1e3a32cfac8b108d5943fc1de0"><span>Antalet frihetsgrader beskriver antalet parametrar som skattas i spline-modellen.</span></label><label><input type="checkbox" autocomplete="off" name="c805fa1e3a32cfac8b108d5943fc1de0"><span>Punkterna där de olika polynomdelarna möts kallas knutpunkter, och villkor används för att göra den sammanfogade kurvan jämn.</span></label><label><input type="checkbox" autocomplete="off" name="c805fa1e3a32cfac8b108d5943fc1de0"><span>En vanlig polynomregression använder ett enda polynom för hela prediktorns intervall, medan en spline består av flera polynom som anpassas inom olika delar av intervallet.</span></label><label><input type="checkbox" autocomplete="off" name="c805fa1e3a32cfac8b108d5943fc1de0"><span>Polynomdelarna i en spline skattas helt oberoende av varandra och behöver inte mötas vid knutpunkterna.</span></label>
+<div id="webex-100192d789cb657efa6e0aa3d779afb2" class="webex-checkboxgroup" data-answer="agEcABUDSAdl">
+<label><input type="checkbox" autocomplete="off" name="100192d789cb657efa6e0aa3d779afb2"><span>Antalet frihetsgrader beskriver antalet parametrar som skattas i spline-modellen.</span></label><label><input type="checkbox" autocomplete="off" name="100192d789cb657efa6e0aa3d779afb2"><span>Punkterna där de olika polynomdelarna möts kallas knutpunkter, och villkor används för att göra den sammanfogade kurvan jämn.</span></label><label><input type="checkbox" autocomplete="off" name="100192d789cb657efa6e0aa3d779afb2"><span>En vanlig polynomregression använder ett enda polynom för hela prediktorns intervall, medan en spline består av flera polynom som anpassas inom olika delar av intervallet.</span></label><label><input type="checkbox" autocomplete="off" name="100192d789cb657efa6e0aa3d779afb2"><span>Polynomdelarna i en spline skattas helt oberoende av varandra och behöver inte mötas vid knutpunkterna.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -733,9 +752,10 @@ Notera
 </div>
 </div>
 </section>
-<section id="trädmodeller" class="level2" data-number="28.3">
-<h2 data-number="28.3" class="anchored" data-anchor-id="trädmodeller"><span class="header-section-number">28.3</span> Trädmodeller</h2>
+<section id="trädmodeller" class="level2" data-number="28.2">
+<h2 data-number="28.2" class="anchored" data-anchor-id="trädmodeller"><span class="header-section-number">28.2</span> Trädmodeller</h2>
 <p>Ytterligare en metod som delar upp data och modellerar delar är <strong>trädmodeller</strong>. Istället för att använda knutar som brytpunkter delas variabelrummet in i icke-överlappande regioner (rektanglar) där alla observationer i samma region får samma anpassade värde.</p>
+<p>Vi går tillbaka till den binära klassificeringen med en icke-linjär beslutsgräns som vi såg i <a href="#fig-nonlinear-example" class="quarto-xref">Figur&nbsp;<span>28.1</span></a>. Följande diagram visar hur vi skulle kunna dela upp området i olika regioner där färgen på regionen speglar det anpassade värdet för observationerna däri.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-nonlinear-tree-region" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -750,7 +770,7 @@ Figur&nbsp;28.6: Binära klasser uppdelad i olika regioner
 </div>
 </div>
 </div>
-<p>Att identifiera vilken region som en observation hamnar i kan beskrivas i en trädstruktur, därav namnet trädmodeller, där gränserna för respektive region används som förgreningar. Det anpassade värdet inom regionen beräknas oftast genom ett enkelt medelvärde eller typvärde beroende på responsvariabelns typ.</p>
+<p>Att identifiera vilken region som en observation hamnar i kan beskrivas i en trädstruktur, därav namnet trädmodeller, där gränserna för respektive region används som förgreningar. Det anpassade värdet inom regionen beräknas oftast genom ett enkelt medelvärde eller typvärde/majoritetsröstning beroende på responsvariabelns typ.</p>
 <p>En stor del av trädmodellernas träning styrs av hur vi kan dela upp variabelrummet på ett bra sätt. Vi kan börja med att presentera strukturen av modellen och lite terminologi. Följande diagram visar ett binärt träd där varje uppdelning sker med två utfall.</p>
 <div id="fig-tree-structure" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -777,8 +797,8 @@ Viktigt
 <p>En viktig aspekt av uppdelningen är att variabelns skala och typ ska bibehållas även i barnnoderna. Detta betyder specifikt för variabler som följer en ordinalskala att de två mängderna som används till uppdelningen måste också följa ordinalskalan inom och mellan sig.</p>
 </div>
 </div>
-<section id="att-skapa-beslutsregler" class="level3" data-number="28.3.1">
-<h3 data-number="28.3.1" class="anchored" data-anchor-id="att-skapa-beslutsregler"><span class="header-section-number">28.3.1</span> Att skapa beslutsregler</h3>
+<section id="att-skapa-beslutsregler" class="level3" data-number="28.2.1">
+<h3 data-number="28.2.1" class="anchored" data-anchor-id="att-skapa-beslutsregler"><span class="header-section-number">28.2.1</span> Att skapa beslutsregler</h3>
 <p>Vilka regler, vilka variabler och dess värden, samt hur många regler som ett träd ska använda kan i regel göras på oändligt antal sätt. Vi måste därför effektivt kunna välja och jämföra regler samt bedöma när trädet ska sluta förgrenas och anse en nod vara ett löv. Ett sätt är att använda <strong>Hunt’s algoritm</strong>:</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -826,8 +846,8 @@ Viktigt
 <div class="webex-check webex-box">
 <p>CART-algoritmen ska välja en testregel för en föräldernod med 100 observationer och orenheten <span class="math inline">\(I(\text{förälder})=0.48\)</span>. Två möjliga testregler ger följande barnnoder: * Regel A: <span class="math inline">\(N(R_1)=20\)</span> med <span class="math inline">\(I(R_1)=0.10\)</span> och <span class="math inline">\(N(R_2)=80\)</span> med <span class="math inline">\(I(R_2)=0.35\)</span>. * Regel B: <span class="math inline">\(N(R_1)=50\)</span> med <span class="math inline">\(I(R_1)=0.24\)</span> och <span class="math inline">\(N(R_2)=50\)</span> med <span class="math inline">\(I(R_2)=0.28\)</span>.</p>
 <p>Informationsvinsten beräknas som <span class="math inline">\(\Delta=I(\text{förälder})-\sum_j\frac{N(R_j)}{N}I(R_j)\)</span>. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-896ca6bac1d7ce671d172ccb96143404" class="webex-checkboxgroup" data-answer="YwgaUk0HTlFPATk=">
-<label><input type="checkbox" autocomplete="off" name="896ca6bac1d7ce671d172ccb96143404"><span>Informationsvinsten för regel A är <span class="math inline">\(0.18\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="896ca6bac1d7ce671d172ccb96143404"><span>Den viktade orenheten i barnnoderna för regel A är <span class="math inline">\(0.30\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="896ca6bac1d7ce671d172ccb96143404"><span>Den viktade orenheten för regel B är <span class="math inline">\(0.26\)</span>, vilket ger informationsvinsten <span class="math inline">\(0.22\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="896ca6bac1d7ce671d172ccb96143404"><span>Regel A bör väljas eftersom det oviktade medelvärdet av barnnodernas orenhet är lägre för regel A än för regel B.</span></label><label><input type="checkbox" autocomplete="off" name="896ca6bac1d7ce671d172ccb96143404"><span>Eftersom regel B ger störst informationsvinst i detta steg är den garanterad att ingå i det globalt optimala trädet.</span></label>
+<div id="webex-1520edde6353f70d6966c5b8930829d6" class="webex-checkboxgroup" data-answer="agQeAUlVSFUaA2g=">
+<label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Informationsvinsten för regel A är <span class="math inline">\(0.18\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Den viktade orenheten i barnnoderna för regel A är <span class="math inline">\(0.30\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Den viktade orenheten för regel B är <span class="math inline">\(0.26\)</span>, vilket ger informationsvinsten <span class="math inline">\(0.22\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Regel A bör väljas eftersom det oviktade medelvärdet av barnnodernas orenhet är lägre för regel A än för regel B.</span></label><label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Eftersom regel B ger störst informationsvinst i detta steg är den garanterad att ingå i det globalt optimala trädet.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -843,12 +863,274 @@ Viktigt
 </div>
 </div>
 </section>
-<section id="regressionsträd" class="level3" data-number="28.3.2">
-<h3 data-number="28.3.2" class="anchored" data-anchor-id="regressionsträd"><span class="header-section-number">28.3.2</span> Regressionsträd</h3>
-<p><span style="color: red">SE KAPITEL 8.1</span></p>
+<section id="stoppkriterier" class="level3" data-number="28.2.2">
+<h3 data-number="28.2.2" class="anchored" data-anchor-id="stoppkriterier"><span class="header-section-number">28.2.2</span> Stoppkriterier</h3>
+<p>Trädmodeller har en tendens att överanpassa till data väldigt lätt, vilket leder till en större vikt att fokusera på validering och generalisering. Vi har dock möjlighet att justera modellens komplexitet med vissa hyperparametrar, även kallad <strong>stoppkriterier</strong>:</p>
+<ul>
+<li>trädets djup</li>
+<li>minsta antal observationer för att överväga att dela upp en nod</li>
+</ul>
+<p>Ju djupare trädet tillåts att vara, desto fler regler kommer användas och skapa fler löv med mindre storlek. Vi kan också sätta en gräns på när vi inte längre vill dela upp ett löv, att den måste innehålla ett visst antal observationer. Dessa hyperparametrar kan implementas på två olika sätt; <strong>förbeskärning</strong> eller <strong>efterbeskärning</strong>, ofta med hjälp av någon metod för hyperparameter tuning.</p>
+<p>Förbeskärning tillämpas under träningen där vi slutar att expandera trädet när den minsta antalet observationer i ett löv är uppnådd eller om informationsvinsten är lägre än en vald tröskel. Detta sätt minskar beräkningskostnaden då vi inte utforskar ett fullt utvecklat träd.</p>
+<p>Efterbeskärning utgår istället från ett fullt utvecklat träd där vi ersätter delträd (förgreningar) med ett löv ifall de inte uppfyller angivna begränsningar. Vi har med denna metod redan anpassat ett fullt träd (<span class="math inline">\(T_0\)</span>) och har möjlighet att med hjälp av korsvalidering välja vilka delträd (<span class="math inline">\(T\)</span>) som minimerar kostnaden när djupet av trädet också tas hänsyn till.</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  c_{\alpha}(T) = \sum_{j = R \in \text{Löv i } T} N(R_j) \cdot I(R_j) + \alpha|T|
+  \end{aligned}
+\]</span> där <span class="math inline">\(|T|\)</span> är antalet löv i <span class="math inline">\(T\)</span>, <span class="math inline">\(N(R_j)\)</span> antal objekt i löv <span class="math inline">\(j\)</span>.</p>
+<p>På samma sätt som LASSO, lägger vi till en straffterm i kostnadsfunktionen som straffar modellen för dess komplexitet. Parametrarna representeras här med antalet löv, det vill säga storleken av trädet, där flera löv inneburit flera regler (parametrar). <span class="math inline">\(\alpha\)</span> styr hur mycket efterbeskärning som sker, där stora värden innebär en mer omfattande beskärning som leder till ett mindre slutgiltigt träd. Korsvalidering kan användas för att välja det <span class="math inline">\(\alpha\)</span> som ger minst valideringsfel.</p>
 </section>
-<section id="klassificeringsträd" class="level3" data-number="28.3.3">
-<h3 data-number="28.3.3" class="anchored" data-anchor-id="klassificeringsträd"><span class="header-section-number">28.3.3</span> Klassificeringsträd</h3>
+<section id="regressionsträd" class="level3" data-number="28.2.3">
+<h3 data-number="28.2.3" class="anchored" data-anchor-id="regressionsträd"><span class="header-section-number">28.2.3</span> Regressionsträd</h3>
+<p>Ett <strong>regressionsträd</strong> är en trädmodell för en kontinuerlig responsvariabel. Vi såg i <a href="02-regularization.html" class="quarto-xref"><span>Kapitel 27</span></a> hur vi kan med olika former av regularisering skapa en regressionsmodell, men vi kan också lösa samma problem med ett regressionsträd. Vi börjar återigen med att enbart välja de kemiska variablerna.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Väljer ut de kemiska variablerna</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lakesurvey <span class="ot">&lt;-</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  lakesurvey <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>X_SMHI<span class="sc">:</span>Day)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Vi använder funktionen <code>rpart</code> från paketet med samma namn. Funktionen innehåller en hel del hyperparametrar som vi kan justera, men vi kommer fokusera på en delmängd av dessa.</p>
+<ul>
+<li><code>formula</code>: anger modellen enligt <code>y ~ x</code> format (se <a href="../01-regression/02-model-structure.html#sec-model-fit-example" class="quarto-xref"><span>Avsnitt 6.2.1</span></a> för mer detaljer)</li>
+<li><code>data</code>: vilket datamaterial som ska användas där variablerna finns,</li>
+<li><code>method</code>: vilket typ av träd (responsvariabel) som ska anpassas, där <code>"anova"</code> betyder regression, <code>"class"</code> betyder klassificering</li>
+<li><code>control</code>: en lista med hyperparametrar för optimeringsalgoritmen, däribland olika stoppkriterier
+<ul>
+<li><code>minsplit</code>: antalet observationer som krävs i en nod för att en förgrening ska ske</li>
+<li><code>maxdepth</code>: maximala djupet (hur många “generationer”) av trädet, där 0 är rotnoden</li>
+<li><code>cp</code>: den minsta tillåtna förbättringen som måste inträffa för att en förbättring ska ske</li>
+<li><code>xval</code>: antalet folds i korsvalideringen som ska ske under träningen</li>
+<li><code>usesurrogate</code>: antalet surrogatregler som kan användas om en observation har saknade värden. Denna hyperparameter ska vara 2 om saknade värden finns i materialet.</li>
+</ul></li>
+</ul>
+<p>På grund av att funktionen inkluderar en inbyggd korsvalidering genomför vi datauppdelningen endast med en tränings och testmängd. Vi anger också ett <code>seed</code> så att vi får samma uppdelning var gång denna kod körs.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Anger antalet observationer i data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(lakesurvey)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Anger storleken av träningsmängden</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>trainSize <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20260820</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Drar slumpmässigt n*trainSize observationsindex</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n), <span class="at">size =</span> n<span class="sc">*</span>trainSize)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut valda index till trainData</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>trainData <span class="ot">&lt;-</span> lakesurvey[trainIndex,]</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar bort valda index till testData</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>testData <span class="ot">&lt;-</span> lakesurvey[<span class="sc">-</span>trainIndex,]</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>treeModel <span class="ot">&lt;-</span> </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">TOC mg/l</span><span class="st">`</span> <span class="sc">~</span> .,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> trainData,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"anova"</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">minsplit =</span> <span class="dv">10</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxdepth =</span> <span class="dv">30</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">cp =</span> <span class="fl">0.01</span>,</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">xval =</span> <span class="dv">10</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">usesurrogate =</span> <span class="dv">0</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Två argument som inte används mer i detalj så vi sätter dessa till 0</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxcompete =</span> <span class="dv">0</span>,</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxsurrogate =</span> <span class="dv">0</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Alla stoppkriterier som används i funktionen är exempel på förbeskärning, sätt som vi kan stoppa trädet från att växa vidare under träningen. Reducerar vi <code>minsplit</code> eller ökar <code>maxdepth</code> får vi ett mer utvecklat (och komplex) träd. Detsamma gäller argumentet <code>cp</code> där ett värde på 0 “tvingar” fram ett fullt utvecklat träd som vi i efterhand måste beskära.</p>
+<p>Objektet <code>treeModel</code> innehåller nu vår tränade modell och vi kan använda vanliga objektfunktioner såsom <code>summary()</code> eller <code>plot()</code> för att få mer information om modellen. Problemet med dessa funktioner är att objektet innehåller väldigt mycket information som är svår att faktiskt få en översikt av.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  treeModel, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Justerar placeringen av noder</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">uniform =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Lägger till information om varje uppdelning</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  treeModel,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Lägger till all information</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">all =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Styr storleken av texten</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.6</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-tree-plot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tree-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03-tree-models_files/figure-html/fig-tree-plot-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tree-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;28.8: Modellen med alla dess noder och beslutsregler
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Som tur är finns det andra paket som kan hjälpa till, bland annat <code>rpart.plot</code> från paketet med samma namn, som innehåller specifika funktioner för lättare visualisering.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(treeModel)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-tree-rpart.plot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tree-rpart.plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03-tree-models_files/figure-html/fig-tree-rpart.plot-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tree-rpart.plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;28.9: Modellen med alla dess noder och beslutsregler
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>I detta diagram visar siffrorna i varje nod det predikterade värdet samt hur stor andel av alla observationer som tillhör noden. Vi kan se att rotnoten fått 100% av alla observationer med ett predikterat värde på 11 mg/l. Det är dock löven, de noder som placerats längst ner i diagrammet, som är av vikt att tolka eftersom det är modellens slutgiltiga prediktioner. Färgen på nodera är kopplade till prediktionens värde, låga värden får en ljusare färg och höga värden får en mörkare.</p>
+<p>Vi ka ibland råka ut för modeller som är alldeles för stora för att göra sig bra på bild men vi kan även då se en mycket tydligare struktur i trädet gentemot basfunktionerna. <code>rpart.plot()</code> har också betydligt fler möjligheter att justera trädet, se mer dokumentation med illustrationer <a href="https://www.rob-mcculloch.org/2021_ml/webpage/R/prp.pdf">här</a>.</p>
+<p>Via <code>summary()</code> ser vi också en sektion som heter <code>Variable importance</code>. Vi kan plocka ut det enskilda objektet från <code>treeModel</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> för enklare tolkning.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>treeModel<span class="sc">$</span>variable.importance</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Abs__F 420nm/5cm   Cond_ mS/m25øC         Na meq/l 
+       86283.205         4684.881         2533.139 </code></pre>
+</div>
+</div>
+<p>Här ser vi att endast ett fåtal av de totalt 17 variabler som datamaterialet inkluderade faktiskt används av modellen, variabler som inte inkluderas i listan har ingen “viktighet” och används inte. Vi kan jämföra detta med den LASSO regularisering som vi gjorde i <a href="02-regularization.html#sec-lasso" class="quarto-xref"><span>Avsnitt 27.3</span></a>, där två variabler sattes till 0 och de övriga 15 ansågs bidra till modellanpassningen. Regressionsträdet har en inbyggt variabelselektionsprocess där endast variabler som bidrar (eller en av flera variabler med hög multikollinearitet) inkluderas i modellen.</p>
+<p>Den interna korsvalideringen har valt den bästa modellen givet de övriga hyperparametrarna, men även dessa kan justeras för att sedan jämföra olika modeller med varandra. Det vi vill jämföra är valideringsfelet för modellerna som vi kan visualisera för en modell genom <code>plotcp()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(treeModel)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03-tree-models_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Den streckade linjen är var <span class="citation" data-cites="breiman1984">Breiman m.fl. (<a href="#ref-breiman1984" role="doc-biblioref">1984</a>)</span> föreslår som den gräns där trädet bör sluta träna, en standardavvikelse från det minsta valideringsfelet.</p>
+</div>
+</div>
+<p>Vi kan också få dessa värden i tabellform som gör det lättare att plocka ut enskilda värden för en jämförelse. Vi utgår från att det minsta valideringsfelet är den bästa modellen, trots <span class="citation" data-cites="breiman1984">Breiman m.fl. (<a href="#ref-breiman1984" role="doc-biblioref">1984</a>)</span> förslag.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>treeModel<span class="sc">$</span>cptable <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(xerror <span class="sc">==</span> <span class="fu">min</span>(xerror))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+     CP nsplit `rel error` xerror   xstd
+  &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1  0.01      8       0.268  0.316 0.0204</code></pre>
+</div>
+</div>
+<p>Säg att vi anpassar en mer komplex modell där vi tillåter ett lite större träd genom att justera ner <code>cp</code> till 0.001.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>treeModelAlt <span class="ot">&lt;-</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">TOC mg/l</span><span class="st">`</span> <span class="sc">~</span> .,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> trainData,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"anova"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">minsplit =</span> <span class="dv">10</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxdepth =</span> <span class="dv">30</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">cp =</span> <span class="fl">0.001</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">xval =</span> <span class="dv">10</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">usesurrogate =</span> <span class="dv">0</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Två argument som inte används mer i detalj så vi sätter dessa till 0</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxcompete =</span> <span class="dv">0</span>,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxsurrogate =</span> <span class="dv">0</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(treeModelAlt)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03-tree-models_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>treeModelAlt<span class="sc">$</span>cptable <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(xerror <span class="sc">==</span> <span class="fu">min</span>(xerror))</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+       CP nsplit `rel error` xerror   xstd
+    &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1 0.00331     17       0.221  0.284 0.0202</code></pre>
+</div>
+</div>
+<p>Här ser vi att modellen fått ett lägre valideringsfel när vi tillåtit den att växa lite mer (0.284 jämfört med 0.316). Vi kan då välja att gå vidare med det mer komplexa trädet för att få en väntevärdesriktig skattning av en vald kostnadsfunktion på testmängden, till exempel MSE. Vi tränar om modellen på träningsmängden och anger de exakta hyperparametrarna från den bästa modellen <u>men anger det exakta värdet på <code>cp</code> som gav det minsta valideringsfelet</u>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>optimalTree <span class="ot">&lt;-</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">TOC mg/l</span><span class="st">`</span> <span class="sc">~</span> .,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> trainData,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"anova"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">minsplit =</span> <span class="dv">10</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxdepth =</span> <span class="dv">30</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">cp =</span> <span class="fl">0.00331</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">xval =</span> <span class="dv">10</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">usesurrogate =</span> <span class="dv">0</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Två argument som inte används mer i detalj så vi sätter dessa till 0</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxcompete =</span> <span class="dv">0</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxsurrogate =</span> <span class="dv">0</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(optimalTree, <span class="at">newdata =</span> testData)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>mseTest <span class="ot">&lt;-</span> <span class="fu">MSE</span>(<span class="at">y =</span> testData<span class="sc">$</span><span class="st">`</span><span class="at">TOC mg/l</span><span class="st">`</span>, <span class="at">yhat =</span> predictions)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Vi återanvänder funktionen MSE som skapades i #sec-validation och ser att vi får ett värde på 17.185 för testmängden.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Notera att <code>xerror</code> och MSE inte har samma skala och detta är för att <code>xerror</code> beräknas som ett relativt fel gentemot en modell som inte genomför någon uppdelning, det vill säga rotnodens fel. Vi kan titta på en större del av feltabellen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visar de 10 första raderna av tabellen</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>treeModelAlt<span class="sc">$</span>cptable <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            CP nsplit rel error    xerror       xstd
+1  0.438774772      0 1.0000000 1.0010002 0.05671718
+2  0.088867391      1 0.5612252 0.5869525 0.03360041
+3  0.084123401      2 0.4723578 0.4781017 0.02615951
+4  0.036678779      3 0.3882344 0.4236655 0.02394047
+5  0.023979813      4 0.3515557 0.3761709 0.02280603
+6  0.020616825      5 0.3275758 0.3568250 0.02171661
+7  0.019832401      6 0.3069590 0.3495189 0.02154825
+8  0.019164626      7 0.2871266 0.3464990 0.02154925
+9  0.007106216      8 0.2679620 0.3104980 0.02005131
+10 0.006144314      9 0.2608558 0.2946777 0.02010555</code></pre>
+</div>
+</div>
+<p><code>rel error</code> är det relativa felet gentemot rotnodens fel för träningsmängden. Första raden har därför ett <code>rel error</code> värde på 1. <code>xerror</code> är också ett relativt mått men den jämför valideringsfelet jämfört med rotnodens fel för träningsmängden. Så första raden indikerar på att rotnoden för valideringsmängden har ett större fel än rotnoden för träningen, vilket är något vi kan förvänta oss.</p>
+</div>
+</div>
+</section>
+<section id="sec-tree-class" class="level3" data-number="28.2.4">
+<h3 data-number="28.2.4" class="anchored" data-anchor-id="sec-tree-class"><span class="header-section-number">28.2.4</span> Klassificeringsträd</h3>
 <p>För klassificeringsträd behöver vi använda andra kostnadsfunktioner för att ta hänsyn till den kategoriska responsvariabeln. Tre vanliga alternativ är:</p>
 <ul>
 <li>Felkvot: <span class="math inline">\(E = 1 - max_k(p_{m,k})\)</span></li>
@@ -870,20 +1152,280 @@ Notera
 </div>
 </div>
 <p>Varje löv får en predikterad klass via majoritetsröstning där vi helst vill att alla observationer i ett löv ska ha samma klass. Cross Entropy och Gini är ett bättre mått än felkvoten för detta ändamål men felkvoten brukar ändå användas för att utvärdera trädet på valideringsdata då det ger en enklare tolkning.</p>
-<p>Trädmodeller har en tendens att överanpassa till data väldigt lätt, vilket leder till en större vikt att fokusera på validering och generalisering. Vi har dock möjlighet att justera modellens komplexitet med vissa hyperparametrar:</p>
+<p>I funktionen <code>rpart()</code> behöver vi nu fokusera på ytterligare ett argument:</p>
 <ul>
-<li>trädets djup</li>
-<li>minsta antal observationer för att överväga att dela upp en nod</li>
+<li><code>parms</code>: en lista med hyperparametrar för beslutsregler
+<ul>
+<li><code>loss</code>: en matris som tillåter att sätta olika kostnader för olika felaktiga prediktioner, diagonalen måste vara 0.</li>
+<li><code>split</code>: vilket mått som vi vill använda för förgreningar, <code>"gini"</code> eller <code>"information"</code></li>
+</ul></li>
 </ul>
-<p>Ju djupare trädet tillåts att vara, desto fler regler kommer användas och skapa fler löv med mindre storlek. Vi kan också sätta en gräns på när vi inte längre vill dela upp ett löv, att den måste innehålla ett visst antal observationer. Dessa hyperparametrar kan implementas på två olika sätt; <strong>förbeskärning</strong> eller <strong>efterbeskärning</strong>, ofta med hjälp av någon metod för hyperparameter tuning.</p>
-<p>Förbeskärning tillämpas under träningen där vi slutar att expandera trädet när den minsta antalet observationer i ett löv är uppnådd eller om informationsvinsten är lägre än en vald tröskel. Detta sätt minskar beräkningskostnaden då vi inte utforskar ett fullt utvecklat träd.</p>
-<p>Efterbeskärning utgår istället från ett fullt utvecklat träd där vi ersätter delträd (förgreningar) med ett löv ifall de inte uppfyller angivna begränsningar. Vi har med denna metod redan anpassat ett fullt träd (<span class="math inline">\(T_0\)</span>) och har möjlighet att med hjälp av korsvalidering välja vilka delträd (<span class="math inline">\(T\)</span>) som minimerar kostnaden när djupet av trädet också tas hänsyn till.</p>
-<p><span class="math display">\[
-  \begin{aligned}
-  c_{\alpha}(T) = \sum_{j = R \in \text{Löv i } T} N(R_j) \cdot I(R_j) + \alpha|T|
-  \end{aligned}
-\]</span> där <span class="math inline">\(|T|\)</span> är antalet löv i <span class="math inline">\(T\)</span>, <span class="math inline">\(N(R_j)\)</span> antal objekt i löv <span class="math inline">\(j\)</span>.</p>
-<p>På samma sätt som LASSO, lägger vi till en straffterm i kostnadsfunktionen som straffar modellen för dess komplexitet. Parametrarna representeras här med antalet löv, det vill säga storleken av trädet, där flera löv inneburit flera regler (parametrar). <span class="math inline">\(\alpha\)</span> styr hur mycket efterbeskärning som sker, där stora värden innebär en mer omfattande beskärning som leder till ett mindre slutgiltigt träd. Korsvalidering kan användas för att välja det <span class="math inline">\(\alpha\)</span> som ger minst valideringsfel.</p>
+<p>Vi kan använda ett klassificeringsträd för att prediktera ifall ett mail är ett spam eller inte. Vi börjar med datauppdelningen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Anger antalet observationer i data</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(spambase)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Anger storleken av träningsmängden</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>trainSize <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20260820</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Drar slumpmässigt n*trainSize observationsindex</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n), <span class="at">size =</span> n<span class="sc">*</span>trainSize)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut valda index till trainData</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>trainSpam <span class="ot">&lt;-</span> spambase[trainIndex,]</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar bort valda index till testData</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>testSpam <span class="ot">&lt;-</span> spambase[<span class="sc">-</span>trainIndex,]</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>treeSpam <span class="ot">&lt;-</span> </span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    Spam <span class="sc">~</span> .,</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> trainSpam,</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"class"</span>,</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">parms =</span> </span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">split =</span> <span class="st">"gini"</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> </span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">minsplit =</span> <span class="dv">10</span>,</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxdepth =</span> <span class="dv">30</span>,</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">cp =</span> <span class="fl">0.01</span>,</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">xval =</span> <span class="dv">10</span>,</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">usesurrogate =</span> <span class="dv">0</span>,</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Två argument som inte används mer i detalj så vi sätter dessa till 0</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxcompete =</span> <span class="dv">0</span>,</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxsurrogate =</span> <span class="dv">0</span></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(treeSpam)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-tree-spam" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tree-spam-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03-tree-models_files/figure-html/fig-tree-spam-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tree-spam-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;28.10: Modellen med alla dess noder och beslutsregler
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Till skillnad från ett regressionsträd får vi ytterligare en bit information i varje nod av figuren, andelen 1:or i noden vilket kan tolkas som nodens predikterade sannolikhet. Vi får också ett annat färgschema där ljusare färger betyder att noden gör mer fel (<span class="math inline">\(\hat{f}(x) \approx 0.5\)</span>) och mörkare färger betyder att noden gör mer rätt, blått för 0:or och grönt för 1:or.</p>
+</section>
+<section id="hyperparameter-tuning-med-grid-search" class="level3" data-number="28.2.5">
+<h3 data-number="28.2.5" class="anchored" data-anchor-id="hyperparameter-tuning-med-grid-search"><span class="header-section-number">28.2.5</span> Hyperparameter tuning med Grid Search</h3>
+<p>I de tidigare exemplen valde vi hyperparametrar manuellt genom att prova några olika modeller och sedan jämföra deras valideringsfel. När antalet hyperparametrar ökar blir detta snabbt ineffektivt då antalet möjliga kombinationer växer stort.</p>
+<p>Vi kan istället använda grid search där vi skapar ett rutnät med tänkbara hyperparametrar och därefter anpassar en modell för varje kombination. Slutligen väljs den kombination som ger bäst resultat enligt valideringsfelet.</p>
+<p>För detta underlag kan vi visa hur vi justerar två hyperparametrar <code>minsplit</code> och <code>maxdepth</code>, men vi kan utöka detta till flera om vi så vill i praktiken.</p>
+<p>Vi börjar med att skapa ett rutnät av hyperparametrar som ska jämföras.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand.grid</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">minsplit =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxdepth =</span> <span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">1</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>grid <span class="sc">|&gt;</span> </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">9</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  minsplit maxdepth
+1        5        5
+2       10        5
+3       20        5
+4        5        6
+5       10        6
+6       20        6
+7        5        7
+8       10        7
+9       20        7</code></pre>
+</div>
+</div>
+<p>Antalet modeller som kommer utvärderas blir 33 där alla olika kombinationer av hyperparametervärden används. Vi tränar därefter en modell för varje kombination och väljer ut den bästa modellen för respektive utifrån dess <code>xerror</code> i korsvalideringen. Vi väljer att sätta <code>cp</code> till ett ganska lågt värde för att tillåta trädet att växa sig lite större.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Använder en for-loop för att träna en modell för varje rad (i) av rutnätet</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(grid))) {</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  models[[i]] <span class="ot">&lt;-</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rpart</span>(</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>      Spam <span class="sc">~</span> .,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> trainSpam,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">method =</span> <span class="st">"class"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">parms =</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">split =</span> <span class="st">"gini"</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">control =</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">cp =</span> <span class="fl">0.0001</span>,</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">minsplit =</span> grid<span class="sc">$</span>minsplit[i],</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">maxdepth =</span> grid<span class="sc">$</span>maxdepth[i],</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">xval =</span> <span class="dv">10</span>,</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">usesurrogate =</span> <span class="dv">0</span>,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">maxcompete =</span> <span class="dv">0</span>,</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">maxsurrogate =</span> <span class="dv">0</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nu har vi en lista med alla de tränade modellerna och kan börja med att plocka ut deras respektive bästa valideringsfel.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tips</span>Effektivisera kod
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Eftersom det är en lista med liknande objekt kan vi effektivisera kodningen genom att använda <code>lapply()</code> som “applicerar” en funktion på varje element i en lista.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kör samma funktion på varje element (model) i listan med modeller</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>errors <span class="ot">&lt;-</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="at">X =</span> models, <span class="at">FUN =</span> <span class="cf">function</span>(model){</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    model<span class="sc">$</span>cptable <span class="sc">|&gt;</span> </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(xerror <span class="sc">==</span> <span class="fu">min</span>(xerror))</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">|&gt;</span> </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Slår ihop den resulterande listan till en tibble</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Lägger till ett ID-nummer</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sorterar utefter minsta felet</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(xerror)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>errors</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 41 × 6
+         CP nsplit `rel error` xerror   xstd model
+      &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;
+ 1 0.000920     50      0.119   0.191 0.0110    21
+ 2 0.000690     53      0.117   0.191 0.0110    22
+ 3 0.000690     43      0.126   0.197 0.0112    26
+ 4 0.000920     42      0.123   0.198 0.0112    31
+ 5 0.0001       85      0.0807  0.199 0.0112    33
+ 6 0.000690     48      0.114   0.2   0.0113    37
+ 7 0.000690     61      0.1     0.202 0.0113    30
+ 8 0.00172      36      0.130   0.202 0.0113    34
+ 9 0.000690     25      0.163   0.203 0.0114    10
+10 0.000690     59      0.105   0.203 0.0114    25
+# ℹ 31 more rows</code></pre>
+</div>
+</div>
+<p>Vi kan utläsa att modell 21 har den minsta valideringsfelet och väljer då att träna den modellen med de använda hyperparametrarna.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>optimalSpam <span class="ot">&lt;-</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    Spam <span class="sc">~</span> .,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> trainSpam,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"class"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">parms =</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">split =</span> <span class="st">"gini"</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Anger komplexiteten från den bästa modellen</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">cp =</span> <span class="fl">0.000920</span>,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Anger hyperparametrarna från modell 21 i rutnätet</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">minsplit =</span> grid<span class="sc">$</span>minsplit[<span class="dv">21</span>],</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxdepth =</span> grid<span class="sc">$</span>maxdepth[<span class="dv">21</span>],</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">xval =</span> <span class="dv">10</span>,</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">usesurrogate =</span> <span class="dv">0</span>,</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxcompete =</span> <span class="dv">0</span>,</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxsurrogate =</span> <span class="dv">0</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(optimalSpam, <span class="at">newdata =</span> testSpam, <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(testSpam<span class="sc">$</span>Spam, predictions)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   predictions
+      0   1
+  0 528  30
+  1  50 313</code></pre>
+</div>
+</div>
+<p>Från paketet <code>caret</code> får vi en funktion som både skapar förväxlingsmatrisen och alla olika mått vi skulle vara intresserade av; <code>confusionMatrix()</code>. En skillnad från <code>table()</code> är att funktionen byter plats på de sanna och predikterade värdena i argumenten. Den andra och något mer problematiska skillnaden är att funktionen förutsätter dessa två vektorer vara av typen <code>Factor</code>. Vi kan också styra vilket utfall vi anser vara det “positiva” utfallet, ofta det som vi vill att modellen ska prediktera, i detta fall 1 då det indikerar på ett spam.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  predictions <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>()</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>testSpam<span class="sc">$</span>Spam <span class="ot">&lt;-</span> </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  testSpam<span class="sc">$</span>Spam <span class="sc">|&gt;</span> </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>()</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(predictions, testSpam<span class="sc">$</span>Spam, <span class="at">positive =</span> <span class="st">"1"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 528  50
+         1  30 313
+                                              
+               Accuracy : 0.9131              
+                 95% CI : (0.8931, 0.9305)    
+    No Information Rate : 0.6059              
+    P-Value [Acc &gt; NIR] : &lt; 0.0000000000000002
+                                              
+                  Kappa : 0.8164              
+                                              
+ Mcnemar's Test P-Value : 0.03365             
+                                              
+            Sensitivity : 0.8623              
+            Specificity : 0.9462              
+         Pos Pred Value : 0.9125              
+         Neg Pred Value : 0.9135              
+             Prevalence : 0.3941              
+         Detection Rate : 0.3398              
+   Detection Prevalence : 0.3724              
+      Balanced Accuracy : 0.9042              
+                                              
+       'Positive' Class : 1                   
+                                              </code></pre>
+</div>
+</div>
+<p>Från utskriften får vi mycket information men vi vill fokusera på vissa utvärderingsmått. Bland annat ser vi att träffsäkerheten är 0.9131 vilket är relativt högt på över 90% korrekta prediktioner, men vi vet inte hur prestandan fördelas på de två klasserna. Då kan vi se längre ner i utskriften sensitiviteten som 0.8623 och specificiteten 0.9462. Sensitiviteten säger att ungefär 86% av de mail som är spam också predikterades som spam medan specificiteten säger att ungefär 95% av vanliga mail också predikterades som vanliga mail. Modellen är något bättre på att prediktera vanliga mail och missklassificerar spam oftare än vanliga mail.</p>
+<p>För mer specifika mått kan vi plocka ut alla de klasspecifika måtten via objektet <code>byClass</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(predictions, testSpam<span class="sc">$</span>Spam, <span class="at">positive =</span> <span class="st">"1"</span>)<span class="sc">$</span>byClass</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Sensitivity          Specificity       Pos Pred Value 
+           0.8622590            0.9462366            0.9125364 
+      Neg Pred Value            Precision               Recall 
+           0.9134948            0.9125364            0.8622590 
+                  F1           Prevalence       Detection Rate 
+           0.8866856            0.3941368            0.3398480 
+Detection Prevalence    Balanced Accuracy 
+           0.3724213            0.9042478 </code></pre>
+</div>
+</div>
+<p>Här kan vi se att precisionen är ungefär 91% och F1 värdet är ca 89%. Överlag har vi fått en bra modell som tenderar att identifiera majoriteten av alla spam, men några (strax under 15%) slinker igenom, och placerar ungefär 5% av de vanliga mailen i skräpkorgen. Med tanke på de enkla variablerna är ändå modellen bra på att separera de två typerna av mail.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Vi ser betydligt fler mått i dessa utskrifter som vi inte går in på i detta material mer, men vi kan läsa mer om hur de beräknas och vad de betyder i funktionens dokumentation.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -898,17 +1440,17 @@ Notera
 <div class="webex-check webex-box">
 <p>I ett klassificeringsträd innehåller en föräldernod 100 observationer: 60 från klass A och 40 från klass B. Två möjliga uppdelningar ger följande barnnoder: * Uppdelning 1: vänster nod <span class="math inline">\((30,0)\)</span> och höger nod <span class="math inline">\((30,40)\)</span>. * Uppdelning 2: vänster nod <span class="math inline">\((45,15)\)</span> och höger nod <span class="math inline">\((15,25)\)</span>.</p>
 <p>Paren anger antalet observationer från klass A respektive klass B. För en nod <span class="math inline">\(R\)</span> definieras felkvoten som <span class="math inline">\(I_E(R)=1-\max_k(\hat{p}_{kR})\)</span> och Gini-indexet som <span class="math inline">\(I_G(R)=1-\sum_k\hat{p}_{kR}^2\)</span>. Barnnodernas orenhet viktas med respektive nods andel av observationerna. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-c744ef0c4d446a326ccf153663fbdd77" class="webex-checkboxgroup" data-answer="OAcYBUlXHFIYVRgFaw==">
-<label><input type="checkbox" autocomplete="off" name="c744ef0c4d446a326ccf153663fbdd77"><span>Om två uppdelningar har samma viktade felkvot måste de även ha samma viktade Gini-index.</span></label><label><input type="checkbox" autocomplete="off" name="c744ef0c4d446a326ccf153663fbdd77"><span>Den viktade felkvoten efter uppdelning 2 är också <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="c744ef0c4d446a326ccf153663fbdd77"><span>Det viktade Gini-indexet är lägre för uppdelning 1 än för uppdelning 2.</span></label><label><input type="checkbox" autocomplete="off" name="c744ef0c4d446a326ccf153663fbdd77"><span>Föräldernodens felkvot är <span class="math inline">\(0.4\)</span> och dess Gini-index är <span class="math inline">\(0.48\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="c744ef0c4d446a326ccf153663fbdd77"><span>Den viktade felkvoten efter uppdelning 1 är <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="c744ef0c4d446a326ccf153663fbdd77"><span>Felkvoten kan vara mindre känslig än Gini-indexet när en uppdelning förändrar klassfördelningen utan att förändra majoritetsklassen.</span></label>
+<div id="webex-f025abe42a63023e553af3967fc2393f" class="webex-checkboxgroup" data-answer="PQEeBU1TSQUeUBoCbQ==">
+<label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Det viktade Gini-indexet är lägre för uppdelning 1 än för uppdelning 2.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Om två uppdelningar har samma viktade felkvot måste de även ha samma viktade Gini-index.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Den viktade felkvoten efter uppdelning 1 är <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Föräldernodens felkvot är <span class="math inline">\(0.4\)</span> och dess Gini-index är <span class="math inline">\(0.48\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Den viktade felkvoten efter uppdelning 2 är också <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Felkvoten kan vara mindre känslig än Gini-indexet när en uppdelning förändrar klassfördelningen utan att förändra majoritetsklassen.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Felkvoten beror endast på andelen observationer som inte tillhör majoritetsklassen. Gini-indexet tar hänsyn till hela klassfördelningen, så två uppdelningar kan ha samma felkvot men olika Gini-index.</li>
-<li>Sant. Den viktade felkvoten blir <span class="math inline">\((60/100)\cdot(15/60)+(40/100)\cdot(15/40)=0.3\)</span>.</li>
 <li>Sant. För uppdelning 1 är det viktade Gini-indexet ungefär <span class="math inline">\(0.343\)</span>. För uppdelning 2 är det <span class="math inline">\(0.375\)</span>. Uppdelning 1 ger därför lägre orenhet enligt Gini-indexet.</li>
-<li>Sant. Felkvoten är <span class="math inline">\(1-0.6=0.4\)</span>. Gini-indexet är <span class="math inline">\(1-0.6^2-0.4^2=0.48\)</span>.</li>
+<li>Falskt. Felkvoten beror endast på andelen observationer som inte tillhör majoritetsklassen. Gini-indexet tar hänsyn till hela klassfördelningen, så två uppdelningar kan ha samma felkvot men olika Gini-index.</li>
 <li>Sant. Den vänstra noden är ren och har felkvoten <span class="math inline">\(0\)</span>. I den högra noden är felkvoten <span class="math inline">\(30/70\)</span>. Den viktade felkvoten blir därför <span class="math inline">\((30/100)\cdot 0+(70/100)\cdot(30/70)=0.3\)</span>.</li>
+<li>Sant. Felkvoten är <span class="math inline">\(1-0.6=0.4\)</span>. Gini-indexet är <span class="math inline">\(1-0.6^2-0.4^2=0.48\)</span>.</li>
+<li>Sant. Den viktade felkvoten blir <span class="math inline">\((60/100)\cdot(15/60)+(40/100)\cdot(15/40)=0.3\)</span>.</li>
 <li>Sant. Så länge majoritetsklassen inte förändras kan felkvoten förbli oförändrad trots att fördelningen mellan klasserna förändras. Gini-indexet reagerar mer gradvis på sådana förändringar.</li>
 </ul>
 </div>
@@ -928,30 +1470,29 @@ Notera
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Trädmodeller kan överanpassa träningsdata. Förbeskärning och efterbeskärning är två metoder för att kontrollera trädets komplexitet. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-ab98e16cedad6b1196ef11be2b63b6fe" class="webex-checkboxgroup" data-answer="OlIVCUkAGlI4">
-<label><input type="checkbox" autocomplete="off" name="ab98e16cedad6b1196ef11be2b63b6fe"><span>Ett djupare träd bör alltid väljas, eftersom fler noder automatiskt ger bättre prediktioner på nya data.</span></label><label><input type="checkbox" autocomplete="off" name="ab98e16cedad6b1196ef11be2b63b6fe"><span>Efterbeskärning innebär att man först tränar ett fullt utvecklat träd och därefter ersätter vissa delträd med löv för att minska modellens komplexitet.</span></label><label><input type="checkbox" autocomplete="off" name="ab98e16cedad6b1196ef11be2b63b6fe"><span>Korsvalidering kan användas för att avgöra hur mycket trädet bör beskäras.</span></label><label><input type="checkbox" autocomplete="off" name="ab98e16cedad6b1196ef11be2b63b6fe"><span>Förbeskärning innebär att trädets tillväxt stoppas under träningen när ett kriterium är uppfyllt, exempelvis maximalt träddjup, för få observationer i en nod eller för liten förbättring.</span></label>
+<div id="webex-347f24ad53fe20acd51563c8d3ff26bd" class="webex-checkboxgroup" data-answer="aAUbVx4FTVRo">
+<label><input type="checkbox" autocomplete="off" name="347f24ad53fe20acd51563c8d3ff26bd"><span>Förbeskärning innebär att trädets tillväxt stoppas under träningen när ett kriterium är uppfyllt, exempelvis maximalt träddjup, för få observationer i en nod eller för liten förbättring.</span></label><label><input type="checkbox" autocomplete="off" name="347f24ad53fe20acd51563c8d3ff26bd"><span>Efterbeskärning innebär att man först tränar ett fullt utvecklat träd och därefter ersätter vissa delträd med löv för att minska modellens komplexitet.</span></label><label><input type="checkbox" autocomplete="off" name="347f24ad53fe20acd51563c8d3ff26bd"><span>Korsvalidering kan användas för att avgöra hur mycket trädet bör beskäras.</span></label><label><input type="checkbox" autocomplete="off" name="347f24ad53fe20acd51563c8d3ff26bd"><span>Ett djupare träd bör alltid väljas, eftersom fler noder automatiskt ger bättre prediktioner på nya data.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Ett djupare träd får ofta lägre träningsfel men kan ge sämre prediktioner på nya data på grund av överanpassning.</li>
+<li>Sant. Förbeskärning begränsar trädets tillväxt genom stoppregler som används under träningen.</li>
 <li>Sant. Efterbeskärning utgår från ett fullt utvecklat träd och förenklar det genom att ersätta vissa delträd med löv.</li>
 <li>Sant. Korsvalideringsfelet kan användas för att jämföra träd med olika komplexitet och välja en lämplig beskärningsnivå.</li>
-<li>Sant. Förbeskärning begränsar trädets tillväxt genom stoppregler som används under träningen.</li>
+<li>Falskt. Ett djupare träd får ofta lägre träningsfel men kan ge sämre prediktioner på nya data på grund av överanpassning.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="fördelar-och-nackdelar" class="level3" data-number="28.3.4">
-<h3 data-number="28.3.4" class="anchored" data-anchor-id="fördelar-och-nackdelar"><span class="header-section-number">28.3.4</span> Fördelar och nackdelar</h3>
+<section id="fördelar-och-nackdelar" class="level3" data-number="28.2.6">
+<h3 data-number="28.2.6" class="anchored" data-anchor-id="fördelar-och-nackdelar"><span class="header-section-number">28.2.6</span> Fördelar och nackdelar</h3>
 <p>Trädmodeller har många fördelar. Modellerna är oftast lätta att förstå och tolka på grund av dess binära uppdelningar där det går lätt att följa en observations väg till ett löv. Träd klarar också av olika sorters responsvariabler utan att markant behöva förändra tillämpningen.</p>
 <p>Om vi har mycket data eller många variabler kan trädmodeller effektivt hantera detta, bland annat genom att vi i processen faktiskt också får en form av variabelselektion. Om en variabel inte har någon relation till responsvariabeln kommer den aldrig väljas som en beslutsregel, medan variabler som har ett samband kommer användas oftare eller vid uppdelningar som ger stora förbättringar av kostnadsfunktionen.</p>
 <p>Metoden lär sig också interaktioner, fall där kombinationer av variabelvärden har en förändrad relation till responsvariabeln, eftersom beslutsregler som följer efter varandra naturligt kan leda till olika relationer för olika områden av en variabel.</p>
 <p>Trots att trädmodeller generellt har möjlighet att anpassa många olika sorts funktioner, även icke-linjära som visats i <a href="#fig-nonlinear-tree-region" class="quarto-xref">Figur&nbsp;<span>28.6</span></a>, kan modellerna snabbt bli onödigt komplexa om sambandet är s.k. mjukt varierande. Vi kan se en trappliknande form på regionerna som separerar färgerna i <a href="#fig-nonlinear-tree-region" class="quarto-xref">Figur&nbsp;<span>28.6</span></a> som en approximering av den enkla icke-linjära beslutsgränsen. Ju mer komplex och varierande den icke-linjära gränsen är, desto fler “trappsteg” behöver skapas av trädmodellen. Detta gäller även för gränser som inte är ortogonala (rätvinklade), t.ex. <span class="math inline">\(x_1 &lt; x_2\)</span> eftersom beslutsreglerna inte kan förhålla sig till fler än en variabel åt gången.</p>
-<p>En konsekvens av denna onödiga komplexitet är att trädmodeller ofta överanpassar träningsdata vilket ger modellen en något sämre prediktiv förmåga jämfört med andra modeller.</p>
-<p>Dessa nackdelar kan förbättras genom metoder som kommer presenteras i <span class="quarto-unresolved-ref">?sec-ensemble</span>.</p>
+<p>En konsekvens av denna onödiga komplexitet är att trädmodeller ofta överanpassar träningsdata vilket ger modellen en något sämre prediktiv förmåga jämfört med andra modeller, trots att korsvalidering eller en fix valideringsmängd används för modellval. Dessa nackdelar kan förbättras genom metoder som kommer presenteras i <span class="quarto-unresolved-ref">?sec-ensemble</span>.</p>
 <!-- DEVELOPMENT: Jämför GAM med träd -->
 </section>
 </section>
@@ -959,6 +1500,17 @@ Notera
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-breiman1984" class="csl-entry" role="listitem">
+Breiman, L., J. Friedman, C. J. Stone, och R. A. Olshen. 1984. <em>Classification and Regression Trees</em>. Taylor &amp; Francis. <a href="https://books.google.se/books?id=JwQx-WOmSyQC">https://books.google.se/books?id=JwQx-WOmSyQC</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p> Notera att inuti <code>summary()</code> är dessa värden skalade så att summan blir 100.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

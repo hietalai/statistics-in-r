@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -528,7 +563,8 @@ window.Quarto = {
   <li><a href="#standardisering" id="toc-standardisering" class="nav-link active" data-scroll-target="#standardisering"><span class="header-section-number">27.1</span> Standardisering</a></li>
   <li><a href="#sec-ridge" id="toc-sec-ridge" class="nav-link" data-scroll-target="#sec-ridge"><span class="header-section-number">27.2</span> Ridge regression</a></li>
   <li><a href="#sec-lasso" id="toc-sec-lasso" class="nav-link" data-scroll-target="#sec-lasso"><span class="header-section-number">27.3</span> LASSO regression</a></li>
-  <li><a href="#sec-elastic-net" id="toc-sec-elastic-net" class="nav-link" data-scroll-target="#sec-elastic-net"><span class="header-section-number">27.4</span> Elastic Net</a></li>
+  <li><a href="#jämförelse-mellan-ridge-och-lasso" id="toc-jämförelse-mellan-ridge-och-lasso" class="nav-link" data-scroll-target="#jämförelse-mellan-ridge-och-lasso"><span class="header-section-number">27.4</span> Jämförelse mellan Ridge och LASSO</a></li>
+  <li><a href="#sec-elastic-net" id="toc-sec-elastic-net" class="nav-link" data-scroll-target="#sec-elastic-net"><span class="header-section-number">27.5</span> Elastic Net</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -538,7 +574,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-stat-to-ml/index.html">DEL V - Från statistik till maskininlärning</a></li><li class="breadcrumb-item"><a href="../05-stat-to-ml/02-regularization.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></h1>
+<h1 class="title"><span id="sec-regularization" class="quarto-section-identifier"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regularisering</span></span></h1>
 </div>
 
 
@@ -583,17 +619,17 @@ window.Quarto = {
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>En regressionsmodell innehåller en förklarande variabel <span class="math inline">\(X_1\)</span> som mäts i meter. Innan variablerna har standardiserats är dess skattade koefficient <span class="math inline">\(\beta_1=2\)</span>. Samma variabel uttrycks därefter i centimeter som <span class="math inline">\(X_1^*=100X_1\)</span>. För att modellens anpassade värden ska vara oförändrade ersätts koefficienten med <span class="math inline">\(\beta_1^*=0.02\)</span>, så att <span class="math inline">\(2X_1=0.02X_1^*\)</span>. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-8fc2da5968fd6ac52a1e261044d0bebe" class="webex-checkboxgroup" data-answer="Y1ZPA0hRGQgaCTs=">
-<label><input type="checkbox" autocomplete="off" name="8fc2da5968fd6ac52a1e261044d0bebe"><span>Variabelns bidrag till LASSO-straffet är oförändrat, eftersom LASSO använder absolutbelopp i stället för kvadrater.</span></label><label><input type="checkbox" autocomplete="off" name="8fc2da5968fd6ac52a1e261044d0bebe"><span>Exemplet visar varför förklarande variabler bör standardiseras före regularisering.</span></label><label><input type="checkbox" autocomplete="off" name="8fc2da5968fd6ac52a1e261044d0bebe"><span>Interceptet <span class="math inline">\(\beta_0\)</span> bör ingå i strafftermen så att även responsvariabelns nivå påverkas av regulariseringen.</span></label><label><input type="checkbox" autocomplete="off" name="8fc2da5968fd6ac52a1e261044d0bebe"><span>Variabelns bidrag till Ridge-straffet ändras från <span class="math inline">\(\beta_1^2=4\)</span> till <span class="math inline">\((\beta_1^*)^2=0.0004\)</span>, trots att modellens prediktioner är oförändrade.</span></label><label><input type="checkbox" autocomplete="off" name="8fc2da5968fd6ac52a1e261044d0bebe"><span>Modellens prediktioner och SSE är oförändrade när <span class="math inline">\(X_1\)</span> och <span class="math inline">\(\beta_1\)</span> skalas om på detta sätt.</span></label>
+<div id="webex-9c876b4c8763f3f8b23f6e2856735634" class="webex-checkboxgroup" data-answer="YlIUBxpTGFMUBms=">
+<label><input type="checkbox" autocomplete="off" name="9c876b4c8763f3f8b23f6e2856735634"><span>Exemplet visar varför förklarande variabler bör standardiseras före regularisering.</span></label><label><input type="checkbox" autocomplete="off" name="9c876b4c8763f3f8b23f6e2856735634"><span>Variabelns bidrag till LASSO-straffet är oförändrat, eftersom LASSO använder absolutbelopp i stället för kvadrater.</span></label><label><input type="checkbox" autocomplete="off" name="9c876b4c8763f3f8b23f6e2856735634"><span>Modellens prediktioner och SSE är oförändrade när <span class="math inline">\(X_1\)</span> och <span class="math inline">\(\beta_1\)</span> skalas om på detta sätt.</span></label><label><input type="checkbox" autocomplete="off" name="9c876b4c8763f3f8b23f6e2856735634"><span>Interceptet <span class="math inline">\(\beta_0\)</span> bör ingå i strafftermen så att även responsvariabelns nivå påverkas av regulariseringen.</span></label><label><input type="checkbox" autocomplete="off" name="9c876b4c8763f3f8b23f6e2856735634"><span>Variabelns bidrag till Ridge-straffet ändras från <span class="math inline">\(\beta_1^2=4\)</span> till <span class="math inline">\((\beta_1^*)^2=0.0004\)</span>, trots att modellens prediktioner är oförändrade.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. LASSO-straffets bidrag ändras från <span class="math inline">\(|\beta_1|=2\)</span> till <span class="math inline">\(|\beta_1^*|=0.02\)</span>. Även LASSO påverkas alltså av variabelns skala.</li>
 <li>Sant. Standardisering gör variablernas skalor mer jämförbara och motverkar att valet av måttenhet avgör hur hårt olika koefficienter straffas.</li>
+<li>Falskt. LASSO-straffets bidrag ändras från <span class="math inline">\(|\beta_1|=2\)</span> till <span class="math inline">\(|\beta_1^*|=0.02\)</span>. Även LASSO påverkas alltså av variabelns skala.</li>
+<li>Sant. Eftersom <span class="math inline">\(2X_1=0.02X_1^*\)</span> blir varje anpassat värde detsamma. Residualerna och därmed SSE förändras därför inte.</li>
 <li>Falskt. I de regulariserade regressionsmodellerna straffas lutningskoefficienterna, men inte interceptet <span class="math inline">\(\beta_0\)</span>.</li>
 <li>Sant. Ridge-straffet beror på koefficienternas kvadrater. Enheten som används för variabeln kan därför kraftigt förändra straffet om variablerna inte har standardiserats.</li>
-<li>Sant. Eftersom <span class="math inline">\(2X_1=0.02X_1^*\)</span> blir varje anpassat värde detsamma. Residualerna och därmed SSE förändras därför inte.</li>
 </ul>
 </div>
 </div>
@@ -615,6 +651,7 @@ window.Quarto = {
   \end{aligned}
 \]</span> där <span class="math inline">\(\lambda \ge 0\)</span>. Notera att ingen straffterm sätts på <span class="math inline">\(\beta_0\)</span> utan bara respektive lutningsparameter. <span class="math inline">\(\lambda\)</span> är en hyperparameter som måste bestämmas där ett värde av 0 indikerar på inget straff (bara vanlig SSE) och stora värden indikerar på stora straff där många parametrar sätts till väldigt små värden. Strafftermen kallas för <span class="math inline">\(L_2\)</span>-regularisering.</p>
 <p>Dessa två delar av funktionen samverkar på följande sätt. När en variabel inte har något samband med Y, kommer dess effekt på <span class="math inline">\(f(x_i)\)</span> vara liten och vi kan reducera dess parametervärde till nära 0 för att också effekten på strafftermen ska vara så liten som möjligt. När en variabeln har ett samband med Y, kommmer istället dess effekt på <span class="math inline">\(f(x_i)\)</span> vara noterbar och nollskilda värden kommer ge en förbättring av SSE mer än straffet ökar. Syftet med straffet är alltså att väga samman variabelns effekt i modellen med det tillhörande straff som parametern får.</p>
+<p>För logistisk regression agerar strafftermen på samma sätt, men med en annan kostnadsfunktion lämplig för problemet.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -628,6 +665,123 @@ Notera
 <p>De maximala värdena som fås i träningen sker när <span class="math inline">\(\lambda = 0\)</span> vilket motsvarar en ren minsta kvadratskattning. När <span class="math inline">\(\lambda &gt; 0\)</span> kommer parametrarna endast bli mindre. Ridge ger oss en flexibel modell där vi tillåter alla effekter som kan identifieras i träningsmängden, men som också tar bort effekten av variabler som beskriver samma sak som en annan eller som är överflödiga.</p>
 </div>
 </div>
+<p>Säg att vi vill skapa en regressionsmodell på datamaterialet om alla sjöar, <code>lakesurvey</code>. Vi är intresserade av att undersöka hur mängden organiskt kol, <code>TOC mg/l</code>, kan beskrivas av de övriga kemiska variablerna. För Ridge (och senare regulariseringsmetoder) används funktioner från paketet <code>glmnet</code>. Funktionen <code>glmnet()</code> kan anpassa olika former av regression där argumenten är:</p>
+<ul>
+<li><code>x</code>: en matris med förklarande variabler,</li>
+<li><code>y</code>: en vektor med responsvariabeln,</li>
+<li><code>family</code>: anger vilken typ av modell som anpassas, <code>"gaussian"</code> för linjär regression,</li>
+<li><code>alpha</code>: en mixparameter, för Ridge ska denna vara 0, se <a href="#sec-elastic-net" class="quarto-xref"><span>Avsnitt 27.5</span></a> för mer information,</li>
+<li><code>standardize</code>: ifall vi vill att de förklarande variablerna standardiseras i anpassningen, standard är <code>TRUE</code>.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Väljer ut de kemiska variablerna</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>lakesurvey <span class="ot">&lt;-</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  lakesurvey <span class="sc">|&gt;</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>X_SMHI<span class="sc">:</span>Day)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar designmatrisen och konverterar objektet till en matris</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> lakesurvey <span class="sc">|&gt;</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="st">`</span><span class="at">TOC mg/l</span><span class="st">`</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Skapar responsvariabeln och konverterar objektet till en matris</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> lakesurvey <span class="sc">|&gt;</span> </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">TOC mg/l</span><span class="st">`</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>ridgeModel <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">0</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Vi kan titta på modellen genom olika hjälpfunktioner såsom <code>plot</code>, <code>print</code>, <code>coef</code> och <code>predict</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ridgeModel)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02-regularization_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Koefficienter för olika värden på <span class="math inline">\(\lambda\)</span></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Denna figur är något otydlig men den visar hur koefficienternas värden justeras beroende på hur starkt straff som sätts på regulariseringen. Notera att x-axeln visar <span class="math inline">\(-log(\lambda)\)</span> vilket gör att den kan vara negativ trots att <span class="math inline">\(\lambda \ge 0\)</span>. Vi ser att en variabel har en mycket stor påverkan när inget straff sätts <span class="math inline">\(-log(\lambda) \approx 0\)</span> men som snabbt reduceras till ett mindre värde när starkare straff sätts <span class="math inline">\(-log(\lambda) \approx -4\)</span>.</p>
+<p>Vad detta diagram inte ger oss är en indikation vilket <span class="math inline">\(\lambda\)</span> som bör väljas för den bästa modellen. Vi kan utläsa med hjälp av <code>print(ridgeModel)</code> alla olika modeller för 100 olika värden på straffet, men det ändå svårt att välja rätt. Istället kan vi använda korsvalidering genom <code>cv.glmnet()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cvRidgeModel <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvRidgeModel)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02-regularization_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Korsvalidering för <span class="math inline">\(\lambda\)</span> i Ridge regression</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Figuren indikerar genom de vertikalt streckade linjerna två värden på <span class="math inline">\(\lambda\)</span> där den bästa modellen fås, vilket i detta fall nästan indikerar på inget straff alls.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cvRidgeModel)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:  cv.glmnet(x = x, y = y, alpha = 0) 
+
+Measure: Mean-Squared Error 
+
+    Lambda Index Measure     SE Nonzero
+min  0.629   100   15.91 0.7294      16
+1se  1.206    93   16.62 0.7087      16</code></pre>
+</div>
+</div>
+<p>Objektet innehåller <code>lambda.min</code> och <code>lambda.1se</code>, den första vilket värde på <span class="math inline">\(\lambda\)</span> som ger det minsta korsvalideringsfelet och det andra vilket värde på <span class="math inline">\(\lambda\)</span> som ger en regulariserad modell. Vi kan plocka ut dessa värden genom <code>cvRidgeModel$lambda.min</code> som vi sedan kan ange i <code>coef()</code> eller <code>predict()</code> för att visa koefficienterna eller prediktionerna från en modell med det angivna <span class="math inline">\(\lambda\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(cvRidgeModel, <span class="at">s =</span> <span class="st">"lambda.1se"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>17 x 1 sparse Matrix of class "dgCMatrix"
+                   lambda.1se
+(Intercept)       5.949738117
+Depth m           1.850561321
+Temp_ øC         -0.020080634
+pH               -0.549270046
+Cond_ mS/m25øC    0.056534328
+Ca meq/l          1.321122702
+Mg meq/l          0.436898870
+Na meq/l          2.137434642
+K meq/l          -0.601597503
+Alk_/Acid meq/l  -0.142907355
+SO4_IC meq/l     -1.560043615
+Cl meq/l         -0.221549251
+NO2+NO3-N ug/l   -0.001340323
+Tot-N_ps ug/l     0.002614072
+Tot-P ug/l        0.004048634
+Abs__F 420nm/5cm 25.945417096
+Si mg/l           0.282599961</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(cvRidgeModel, <span class="at">newx =</span> x, <span class="at">s =</span> <span class="st">"lambda.1se"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     lambda.1se
+[1,]   7.710304
+[2,]   7.258081
+[3,]  11.924829
+[4,]   9.228439
+[5,]   8.929821
+[6,]   8.634802</code></pre>
+</div>
+</div>
+<p>För prediktioner vill vi egentligen använda en helt ny matris av värden som vi vill prediktera.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tips
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Mer dokumentation och exempel om <code>glmnet</code> kan hittas <a href="https://glmnet.stanford.edu/articles/glmnet.html">här</a>.</p>
+</div>
+</div>
 <!-- DEVELOPMENT! Ridge example in R -->
 </section>
 <section id="sec-lasso" class="level2" data-number="27.3">
@@ -638,9 +792,86 @@ Notera
   f_{LASSO}(\boldsymbol{\beta}) = \sum_{i=1}^n \left(Y_i - \beta_0 + \sum_{j = 1}^p \beta_j X_{ij} \right)^2 + \lambda \sum_{j = 1}^p |\beta_j|
   \end{aligned}
 \]</span> där <span class="math inline">\(\lambda \ge 0\)</span>.</p>
+<p>Låt oss istället för Ridge, använda LASSO regularisering för regressionsmodellen för <code>lakesurvey</code>. Argumentet <code>alpha = 1</code> i <code>glmnet</code> ger oss en modell med LASSO-regularisering. Vi börjar direkt med korsvalideringsvarianten av funktionen för att få hjälp med att välja hur mycket straff som ska tillämpas.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cvLASSOModel <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvLASSOModel)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02-regularization_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Korsvalidering för <span class="math inline">\(\lambda\)</span> i LASSO regression</figcaption>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(cvLASSOModel, <span class="at">s =</span> <span class="st">"lambda.1se"</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>17 x 1 sparse Matrix of class "dgCMatrix"
+                   lambda.1se
+(Intercept)       0.767146208
+Depth m           2.511293326
+Temp_ øC          0.002358264
+pH                .          
+Cond_ mS/m25øC    0.029777058
+Ca meq/l         10.217034948
+Mg meq/l          7.889265891
+Na meq/l          4.690369956
+K meq/l          14.088418453
+Alk_/Acid meq/l  -8.595441048
+SO4_IC meq/l     -9.589766992
+Cl meq/l         -1.759360728
+NO2+NO3-N ug/l   -0.002766478
+Tot-N_ps ug/l     0.001212844
+Tot-P ug/l        0.003721458
+Abs__F 420nm/5cm 30.133624225
+Si mg/l           .          </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(cvLASSOModel, <span class="at">newx =</span> x, <span class="at">s =</span> <span class="st">"lambda.1se"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     lambda.1se
+[1,]   6.506225
+[2,]   6.956406
+[3,]  11.610746
+[4,]   8.596475
+[5,]   8.153851
+[6,]   7.759693</code></pre>
+</div>
+</div>
+<p>Vi ser att vid <code>lambda.1se</code> för LASSO har vi två variabler som satts till 0, markerat som <code>.</code> i koefficienttabellen.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Vi kan visa hur straffet påverkar koefficienterna i LASSO till skillnad från Ridge genom:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02-regularization_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Koefficienter för olika värden på <span class="math inline">\(\lambda\)</span></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Siffrorna högst upp i diagrammet visar hur många nollskilda koefficienter som finns vid respektive nivå av straff som i detta diagram till skillnad från Ridge faktiskt minskas. Detta visar hur LASSO är “bättre” på att reducera modellen och faktiskt sätter koefficienterna till 0.</p>
+</div>
+</div>
 <!-- DEVELOPMENT! LASSO example in R -->
+</section>
+<section id="jämförelse-mellan-ridge-och-lasso" class="level2" data-number="27.4">
+<h2 data-number="27.4" class="anchored" data-anchor-id="jämförelse-mellan-ridge-och-lasso"><span class="header-section-number">27.4</span> Jämförelse mellan Ridge och LASSO</h2>
 <p>Båda former av regularisering hjälper till att reducera antalet variabler som har en distinkt effekt på responsvariabeln men de har också vissa skillnader.</p>
-<p>På samma sätt som med Ridge väljs <span class="math inline">\(\lambda\)</span> som en hyperparameter men till skillnad från Ridge ger stora värden på <span class="math inline">\(\lambda\)</span> att flera parametrar sätts till nära 0. Vid multikollinearitet delar Ridge regularisering på effekten till alla variabler som beskriver samma relation medan LASSO “väljer” en parameter som nollskild och de övriga sätts nära 0. LASSO resulterar i en modell där många parametrar är nära 0 vilket ger oss möjligheten att träna om modellen med enbart de nollskilda parametrarna. Ridge passar bra när <span class="math inline">\(Y_i\)</span> beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten nära 0. I de flesta tillfällen vet vi inte detta förrän modellerna tränas så ett tips är att testa båda metoderna och se vilken som ger bäst prediktioner.</p>
+<p>I båda metoderna väljs <span class="math inline">\(\lambda\)</span> som en hyperparameter men till skillnad från Ridge ger LASSO stora värden på <span class="math inline">\(\lambda\)</span> att flera parametrar sätts till 0. Vid multikollinearitet delar Ridge regularisering på effekten till alla variabler som beskriver samma relation medan LASSO “väljer” en parameter som nollskild och de övriga sätts 0. LASSO resulterar i en modell där många parametrar är nära 0 vilket ger oss möjligheten att träna om modellen med enbart de nollskilda parametrarna. Ridge passar bra när <span class="math inline">\(Y_i\)</span> beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten 0. I de flesta tillfällen vet vi inte detta förrän modellerna tränas så ett tips är att testa båda metoderna och se vilken som ger bäst prediktioner.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -654,7 +885,7 @@ Notera
 <p>Dessa metoder tränas med en speciell optimeringsalgoritm som kallas för Coordinate Descent. Kortfattat kan algoritmen fokusera på specifika parametrar att optimera vid varje iteration till skillnad från de algoritmer vi tidigare tagit upp. Vi kommer inte gå in mer på denna metod i detta underlag men mer information finns <a href="https://en.wikipedia.org/wiki/Coordinate_descent">här</a>.</p>
 </div>
 </div>
-<p>Skillnaderna i de två metodernas tillvägagångssätt medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för. Ridge kan ses som en skalning (<span class="math inline">\(\lambda\)</span>) av de vanliga minsta kvadratskattningsmatriserna och vi kan då använda inferensteori därifrån. Detsamma gäller inte för LASSO.</p>
+<p>Skillnaderna i de två metodernas tillvägagångssätt medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för. Ridge kan ses som en skalning (med <span class="math inline">\(\lambda\)</span>) av de vanliga minsta kvadratskattningsmatriserna och vi kan då använda inferensteori därifrån. Detsamma gäller inte för LASSO.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -672,26 +903,26 @@ Notera
 <li>Lösning A har <span class="math inline">\(SSE_A=20\)</span> och koefficienterna <span class="math inline">\(\boldsymbol{\beta}_A=(3,0,0)\)</span>.</li>
 <li>Lösning B har <span class="math inline">\(SSE_B=22\)</span> och koefficienterna <span class="math inline">\(\boldsymbol{\beta}_B=(1,1,1)\)</span>. För Ridge används kostnadsfunktionen <span class="math inline">\(SSE+\lambda\sum_{j=1}^p\beta_j^2\)</span>, medan LASSO använder <span class="math inline">\(SSE+\lambda\sum_{j=1}^p|\beta_j|\)</span>. Vilka av följande påståenden är korrekta?</li>
 </ul>
-<div id="webex-fd008415f133fc8b20e111e846286d30" class="webex-checkboxgroup" data-answer="PVUcABQFHQVKAB8COw==">
-<label><input type="checkbox" autocomplete="off" name="fd008415f133fc8b20e111e846286d30"><span>För Ridge har lösningarna samma kostnad när <span class="math inline">\(\lambda=\frac{1}{3}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="fd008415f133fc8b20e111e846286d30"><span>Resultatet visar att Ridge alltid väljer modeller med många koefficienter och att LASSO alltid väljer modeller med endast en nollskild koefficient.</span></label><label><input type="checkbox" autocomplete="off" name="fd008415f133fc8b20e111e846286d30"><span>När <span class="math inline">\(\lambda=1\)</span> blir LASSO-kostnaden 23 för lösning A och 25 för lösning B, vilket innebär att lösning A föredras.</span></label><label><input type="checkbox" autocomplete="off" name="fd008415f133fc8b20e111e846286d30"><span>För LASSO kommer lösning B att föredras framför lösning A om <span class="math inline">\(\lambda\)</span> görs tillräckligt stor.</span></label><label><input type="checkbox" autocomplete="off" name="fd008415f133fc8b20e111e846286d30"><span>När <span class="math inline">\(\lambda=1\)</span> blir Ridge-kostnaden 29 för lösning A och 25 för lösning B, vilket innebär att lösning B föredras.</span></label><label><input type="checkbox" autocomplete="off" name="fd008415f133fc8b20e111e846286d30"><span>När <span class="math inline">\(\lambda=0\)</span> väljer både Ridge och LASSO lösning A eftersom endast SSE återstår i kostnadsfunktionen.</span></label>
+<div id="webex-3c4dab1b467f75dae1e4734db1592691" class="webex-checkboxgroup" data-answer="aFMYVU1THVMYBxtWag==">
+<label><input type="checkbox" autocomplete="off" name="3c4dab1b467f75dae1e4734db1592691"><span>För LASSO kommer lösning B att föredras framför lösning A om <span class="math inline">\(\lambda\)</span> görs tillräckligt stor.</span></label><label><input type="checkbox" autocomplete="off" name="3c4dab1b467f75dae1e4734db1592691"><span>När <span class="math inline">\(\lambda=1\)</span> blir LASSO-kostnaden 23 för lösning A och 25 för lösning B, vilket innebär att lösning A föredras.</span></label><label><input type="checkbox" autocomplete="off" name="3c4dab1b467f75dae1e4734db1592691"><span>För Ridge har lösningarna samma kostnad när <span class="math inline">\(\lambda=\frac{1}{3}\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="3c4dab1b467f75dae1e4734db1592691"><span>När <span class="math inline">\(\lambda=0\)</span> väljer både Ridge och LASSO lösning A eftersom endast SSE återstår i kostnadsfunktionen.</span></label><label><input type="checkbox" autocomplete="off" name="3c4dab1b467f75dae1e4734db1592691"><span>När <span class="math inline">\(\lambda=1\)</span> blir Ridge-kostnaden 29 för lösning A och 25 för lösning B, vilket innebär att lösning B föredras.</span></label><label><input type="checkbox" autocomplete="off" name="3c4dab1b467f75dae1e4734db1592691"><span>Resultatet visar att Ridge alltid väljer modeller med många koefficienter och att LASSO alltid väljer modeller med endast en nollskild koefficient.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Sant. Ridge-kostnaderna är <span class="math inline">\(20+9\lambda\)</span> respektive <span class="math inline">\(22+3\lambda\)</span>. Likheten <span class="math inline">\(20+9\lambda=22+3\lambda\)</span> ger <span class="math inline">\(\lambda=\frac{1}{3}\)</span>.</li>
-<li>Falskt. Vilken lösning som väljs beror på både SSE, koefficienternas storlek och värdet på <span class="math inline">\(\lambda\)</span>. Exemplet visar en möjlig skillnad mellan straffen, inte en regel som gäller för alla datamaterial och kandidatmodeller.</li>
-<li>Sant. Båda lösningarna har LASSO-straffet 3. Kostnaderna blir därför <span class="math inline">\(20+3=23\)</span> för lösning A och <span class="math inline">\(22+3=25\)</span> för lösning B.</li>
 <li>Falskt. Båda lösningarna har samma LASSO-straff eftersom <span class="math inline">\(|3|=|1|+|1|+|1|=3\)</span>. Lösning A har lägre SSE och kommer därför att ha lägre LASSO-kostnad för alla <span class="math inline">\(\lambda\geq0\)</span>.</li>
-<li>Sant. För lösning A blir Ridge-kostnaden <span class="math inline">\(20+1\cdot(3^2+0^2+0^2)=29\)</span>. För lösning B blir den <span class="math inline">\(22+1\cdot(1^2+1^2+1^2)=25\)</span>.</li>
+<li>Sant. Båda lösningarna har LASSO-straffet 3. Kostnaderna blir därför <span class="math inline">\(20+3=23\)</span> för lösning A och <span class="math inline">\(22+3=25\)</span> för lösning B.</li>
+<li>Sant. Ridge-kostnaderna är <span class="math inline">\(20+9\lambda\)</span> respektive <span class="math inline">\(22+3\lambda\)</span>. Likheten <span class="math inline">\(20+9\lambda=22+3\lambda\)</span> ger <span class="math inline">\(\lambda=\frac{1}{3}\)</span>.</li>
 <li>Sant. När <span class="math inline">\(\lambda=0\)</span> försvinner strafftermen. Eftersom <span class="math inline">\(SSE_A=20\)</span> är mindre än <span class="math inline">\(SSE_B=22\)</span> väljs lösning A av båda metoderna.</li>
+<li>Sant. För lösning A blir Ridge-kostnaden <span class="math inline">\(20+1\cdot(3^2+0^2+0^2)=29\)</span>. För lösning B blir den <span class="math inline">\(22+1\cdot(1^2+1^2+1^2)=25\)</span>.</li>
+<li>Falskt. Vilken lösning som väljs beror på både SSE, koefficienternas storlek och värdet på <span class="math inline">\(\lambda\)</span>. Exemplet visar en möjlig skillnad mellan straffen, inte en regel som gäller för alla datamaterial och kandidatmodeller.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="sec-elastic-net" class="level2" data-number="27.4">
-<h2 data-number="27.4" class="anchored" data-anchor-id="sec-elastic-net"><span class="header-section-number">27.4</span> Elastic Net</h2>
+<section id="sec-elastic-net" class="level2" data-number="27.5">
+<h2 data-number="27.5" class="anchored" data-anchor-id="sec-elastic-net"><span class="header-section-number">27.5</span> Elastic Net</h2>
 <p>Som en kombination av Ridge och LASSO finns <strong>Elastic Net</strong> som blandar de två <span class="math inline">\(L_1\)</span> och <span class="math inline">\(L_2\)</span> strafftermerna med en ny hyperparameter <span class="math inline">\(\alpha\)</span>.</p>
 <p><span class="math display">\[
   \begin{aligned}
@@ -701,6 +932,21 @@ Notera
 <p>Metoden blir en flexibel form av regularisern där <span class="math inline">\(\alpha\)</span> styr hur mycket vikt vi ger till Ridge respektive LASSO straffen. Detta innebär att vi kan tvinga vissa <span class="math inline">\(\beta\)</span> till 0 men inte lika många som i vanlig LASSO och Elastic Net kan klara av korrelerade variabler bättre än enbart Ridge. Vi kan se att när <span class="math inline">\(\alpha = 1\)</span> så får vi Ridge, medan om <span class="math inline">\(\alpha = 0\)</span> så får vi LASSO.</p>
 <!-- DEVELOPMENT! Elastic net example in R -->
 <p>Likt LASSO kommer Elastic Net få det svårt att genomföra någon form av inferens, så fokus ligger på att tolka effektstorleken av de nollskilda variablerna, t.ex. via ett stapeldiagram för att få en enklare visuell överblick.</p>
+<p>Om vi vill använda den flexibla formen av regularisering kan vi ändra <code>alpha</code> till värden mellan 0 och 1.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02-regularization_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Koefficienter för olika värden på <span class="math inline">\(\lambda\)</span> med Elastic Net</figcaption>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>cvElasticNet <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(x, y, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Vi kan testa olika värden på <code>alpha</code> och jämför deras korsvalideringsfel för att välja det bästa värdet på de olika straffen. Tyvärr finns inget “automagiskt” sätt att hitta det bästa värdet på hyperparametern.</p>
 <!-- :::{.callout-note} -->
 <!-- De tidigare presenterade algoritmerna och regulariseringsmetoderna är "automatiska" metoder för att välja variabler som bidrar till att förklara responsvariabeln. Efter variabelselektion är det vanligt att analysera parametrarnas p-värden och intervallskattning, även kallad för **post-selection inference**. Problemet är att vanliga inferensmetoder antar att modellen är fixerad innan data analyseras men med variabelselektion används data för att välja modell och introducerar ett beroende mellan data och modellen. Detta påverkar fördelningen av skattningarna vilket i sin tur leder till för snäva konfidensintervall, för små p-värden och ökad risk för typ I fel. Vi bör därför undvika att använda vanliga metoder för inferens och istället använda inferensmetoder som tar hänsyn till variabelselektionen. -->
 <!-- Några vanliga metoder är: -->
@@ -723,16 +969,16 @@ Notera
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Ridge och LASSO använder olika typer av strafftermer. Elastic net kombinerar egenskaper från båda metoderna genom att använda både ett <span class="math inline">\(L_1\)</span>-straff och ett <span class="math inline">\(L_2\)</span>-straff. Vilka av följande påståenden beskriver elastic net korrekt?</p>
-<div id="webex-da9b1a67eff074c16ed26bb56cc52391" class="webex-checkboxgroup" data-answer="P1EVUx1QGgY4">
-<label><input type="checkbox" autocomplete="off" name="da9b1a67eff074c16ed26bb56cc52391"><span>Elastic net skiljer sig från ridge genom att den aldrig kan genomföra variabelselektion.</span></label><label><input type="checkbox" autocomplete="off" name="da9b1a67eff074c16ed26bb56cc52391"><span>Elastic net kan både krympa regressionskoefficienterna och sätta vissa av dem exakt till <span class="math inline">\(0\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="da9b1a67eff074c16ed26bb56cc52391"><span>Elastic net kan hantera korrelerade prediktorer bättre än ren LASSO.</span></label><label><input type="checkbox" autocomplete="off" name="da9b1a67eff074c16ed26bb56cc52391"><span>Elastic net kombinerar strafftermerna från ridge och LASSO, och blandningen styrs av en ytterligare parameter.</span></label>
+<div id="webex-24a02bde8a25f776f356fdceaa745397" class="webex-checkboxgroup" data-answer="aQVNAR5TSFVl">
+<label><input type="checkbox" autocomplete="off" name="24a02bde8a25f776f356fdceaa745397"><span>Elastic net kombinerar strafftermerna från ridge och LASSO, och blandningen styrs av en ytterligare parameter.</span></label><label><input type="checkbox" autocomplete="off" name="24a02bde8a25f776f356fdceaa745397"><span>Elastic net kan hantera korrelerade prediktorer bättre än ren LASSO.</span></label><label><input type="checkbox" autocomplete="off" name="24a02bde8a25f776f356fdceaa745397"><span>Elastic net kan både krympa regressionskoefficienterna och sätta vissa av dem exakt till <span class="math inline">\(0\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="24a02bde8a25f776f356fdceaa745397"><span>Elastic net skiljer sig från ridge genom att den aldrig kan genomföra variabelselektion.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Genom <span class="math inline">\(L_1\)</span>-komponenten kan elastic net sätta vissa koefficienter exakt till <span class="math inline">\(0\)</span> och därmed genomföra variabelselektion.</li>
-<li>Sant. Metodens <span class="math inline">\(L_2\)</span>-del krymper koefficienterna, medan <span class="math inline">\(L_1\)</span>-delen kan göra vissa koefficienter exakt lika med <span class="math inline">\(0\)</span>.</li>
-<li>Sant. Kombinationen av <span class="math inline">\(L_1\)</span>- och <span class="math inline">\(L_2\)</span>-straff gör att elastic net kan hantera korrelerade variabler bättre än ren LASSO.</li>
 <li>Sant. Parametern <span class="math inline">\(\lambda\)</span> styr den totala graden av regularisering, medan blandningsparametern <span class="math inline">\(\alpha\)</span> bestämmer balansen mellan <span class="math inline">\(L_1\)</span>- och <span class="math inline">\(L_2\)</span>-straffet.</li>
+<li>Sant. Kombinationen av <span class="math inline">\(L_1\)</span>- och <span class="math inline">\(L_2\)</span>-straff gör att elastic net kan hantera korrelerade variabler bättre än ren LASSO.</li>
+<li>Sant. Metodens <span class="math inline">\(L_2\)</span>-del krymper koefficienterna, medan <span class="math inline">\(L_1\)</span>-delen kan göra vissa koefficienter exakt lika med <span class="math inline">\(0\)</span>.</li>
+<li>Falskt. Genom <span class="math inline">\(L_1\)</span>-komponenten kan elastic net sätta vissa koefficienter exakt till <span class="math inline">\(0\)</span> och därmed genomföra variabelselektion.</li>
 </ul>
 </div>
 </div>

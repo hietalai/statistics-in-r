@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -555,6 +590,7 @@ window.Quarto = {
   <li><a href="#stokastisk-gradient-descent" id="toc-stokastisk-gradient-descent" class="nav-link" data-scroll-target="#stokastisk-gradient-descent"><span class="header-section-number">29.3.2</span> Stokastisk gradient descent</a></li>
   <li><a href="#andra-hyperparametrar" id="toc-andra-hyperparametrar" class="nav-link" data-scroll-target="#andra-hyperparametrar"><span class="header-section-number">29.3.3</span> Andra hyperparametrar</a></li>
   </ul></li>
+  <li><a href="#keras3" id="toc-keras3" class="nav-link" data-scroll-target="#keras3"><span class="header-section-number">29.4</span> <code>keras3</code></a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -610,7 +646,7 @@ Notera
 <p>Det finns <em>väldigt många</em> olika sorters nätverk, en översikt kan hittas <a href="https://www.asimovinstitute.org/neural-network-zoo/">här</a>. Alla dessa nätverk kan användas för att lösa många olika problem inom supervised learning eller mer avancerade problem som reinforcement learning.</p>
 </div>
 </div>
-<p>Inom “vanlig” regression kan vi transformera de förklarande variablerna för att lyckas modellera mer icke-linjära samband, till exempel med polynom eller logaritmstransformationer. Det är dock svårt att veta exakt vilken transformation som behövs för att lösa varje problem och det blir nästintill omöjligt att hantera komplexa datastrukturer såsom text eller bilder. Detta kallas för <strong>feature engineering</strong> inom maskininlärning, som inom statistik är en gren av databearbetning.</p>
+<p>Inom “vanlig” regression kan vi transformera de förklarande variablerna för att lyckas modellera mer icke-linjära samband, till exempel med polynom eller logaritmstransformationer. Det är dock svårt att veta exakt vilken transformation som behövs för att lösa varje problem och det blir nästintill omöjligt att hantera komplexa datastrukturer såsom text eller bilder. Detta kallas för <strong>feature engineering</strong> inom maskininlärning, som inom statistik kan anses vara en del av databearbetningen.</p>
 <!-- DEVELOPMENT: Presentera feature engineering tidigare! -->
 <p>Syftet med neurala nätverkets gömda lager är att automatiskt lära sig lämpliga transformationer av de förklarande variablerna för att lyckas identifiera icke-linjära samband som sedan transformeras linjärt i det sista outputlagret. Denna process kallas för <strong>feature learning</strong>.</p>
 </section>
@@ -670,18 +706,18 @@ Figur&nbsp;29.2: Visualisering av ReLu aktiveringsfunktion
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Ett neuralt nätverk används för ett klassificeringsproblem med tre nominala klasser. Nätverkets outputlager ger värdena <span class="math inline">\(z_1=0\)</span>, <span class="math inline">\(z_2=\log(2)\)</span> och <span class="math inline">\(z_3=\log(3)\)</span> innan aktiveringsfunktionen appliceras. Softmaxfunktionen beräknar outputvärdet för klass <span class="math inline">\(i\)</span> som <span class="math inline">\(f_i=\frac{\exp(z_i)}{\sum_{j=1}^K\exp(z_j)}\)</span>. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-1efdfa4f98c49540af8e496778faef0f" class="webex-checkboxgroup" data-answer="alVKVUpQGFcVCE8EZA==">
-<label><input type="checkbox" autocomplete="off" name="1efdfa4f98c49540af8e496778faef0f"><span>Om samtliga <span class="math inline">\(z_i\)</span> multipliceras med 2 förblir softmaxfunktionens outputvärden oförändrade.</span></label><label><input type="checkbox" autocomplete="off" name="1efdfa4f98c49540af8e496778faef0f"><span>Om samma konstant adderas till samtliga <span class="math inline">\(z_i\)</span> förblir softmaxfunktionens outputvärden oförändrade.</span></label><label><input type="checkbox" autocomplete="off" name="1efdfa4f98c49540af8e496778faef0f"><span>Softmax är en lämplig aktiveringsfunktion i outputlagret när responsvariabeln består av flera nominella klasser.</span></label><label><input type="checkbox" autocomplete="off" name="1efdfa4f98c49540af8e496778faef0f"><span>Softmax ger outputvärdena <span class="math inline">\(f_1=1/6\)</span>, <span class="math inline">\(f_2=2/6\)</span> och <span class="math inline">\(f_3=3/6\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1efdfa4f98c49540af8e496778faef0f"><span>För regression där responsvariabeln kan anta alla reella värden bör exponentialfunktionen användas i outputlagret i stället för identitetsfunktionen.</span></label><label><input type="checkbox" autocomplete="off" name="1efdfa4f98c49540af8e496778faef0f"><span>Eftersom de gömda lagren använder ReLU summerar outputlagrets värden automatiskt till 1 även utan softmax.</span></label>
+<div id="webex-c61b7e8f5300dd2677ccc96f8d62c3f9" class="webex-checkboxgroup" data-answer="OAcdUhtUFFYZAxwBOQ==">
+<label><input type="checkbox" autocomplete="off" name="c61b7e8f5300dd2677ccc96f8d62c3f9"><span>Om samma konstant adderas till samtliga <span class="math inline">\(z_i\)</span> förblir softmaxfunktionens outputvärden oförändrade.</span></label><label><input type="checkbox" autocomplete="off" name="c61b7e8f5300dd2677ccc96f8d62c3f9"><span>Eftersom de gömda lagren använder ReLU summerar outputlagrets värden automatiskt till 1 även utan softmax.</span></label><label><input type="checkbox" autocomplete="off" name="c61b7e8f5300dd2677ccc96f8d62c3f9"><span>Softmax ger outputvärdena <span class="math inline">\(f_1=1/6\)</span>, <span class="math inline">\(f_2=2/6\)</span> och <span class="math inline">\(f_3=3/6\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="c61b7e8f5300dd2677ccc96f8d62c3f9"><span>För regression där responsvariabeln kan anta alla reella värden bör exponentialfunktionen användas i outputlagret i stället för identitetsfunktionen.</span></label><label><input type="checkbox" autocomplete="off" name="c61b7e8f5300dd2677ccc96f8d62c3f9"><span>Om samtliga <span class="math inline">\(z_i\)</span> multipliceras med 2 förblir softmaxfunktionens outputvärden oförändrade.</span></label><label><input type="checkbox" autocomplete="off" name="c61b7e8f5300dd2677ccc96f8d62c3f9"><span>Softmax är en lämplig aktiveringsfunktion i outputlagret när responsvariabeln består av flera nominella klasser.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Efter multipliceringen blir de onormaliserade värdena proportionella mot <span class="math inline">\(1\)</span>, <span class="math inline">\(4\)</span> och <span class="math inline">\(9\)</span>, vilket ger en annan fördelning.</li>
 <li>Sant. Om en konstant <span class="math inline">\(c\)</span> adderas till samtliga värden multipliceras både täljaren och nämnaren med <span class="math inline">\(\exp(c)\)</span>. Faktorn förkortas bort.</li>
-<li>Sant. Softmax normaliserar outputlagrets värden och är lämplig när responsvariabeln består av flera nominella klasser.</li>
+<li>Falskt. ReLU används i de gömda lagren för att skapa icke-linjära transformationer. Den gör inte att outputvärdena automatiskt summerar till 1.</li>
 <li>Sant. Eftersom <span class="math inline">\(\exp(0)=1\)</span>, <span class="math inline">\(\exp(\log(2))=2\)</span> och <span class="math inline">\(\exp(\log(3))=3\)</span> blir nämnaren <span class="math inline">\(1+2+3=6\)</span>.</li>
 <li>Falskt. Identitetsfunktionen kan användas när regressionens output tillåts ligga på hela tallinjen. Exponentialfunktionen kan användas när endast positiva värden är tillåtna.</li>
-<li>Falskt. ReLU används i de gömda lagren för att skapa icke-linjära transformationer. Den gör inte att outputvärdena automatiskt summerar till 1.</li>
+<li>Falskt. Efter multipliceringen blir de onormaliserade värdena proportionella mot <span class="math inline">\(1\)</span>, <span class="math inline">\(4\)</span> och <span class="math inline">\(9\)</span>, vilket ger en annan fördelning.</li>
+<li>Sant. Softmax normaliserar outputlagrets värden och är lämplig när responsvariabeln består av flera nominella klasser.</li>
 </ul>
 </div>
 </div>
@@ -717,16 +753,16 @@ Tips
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Ett neuralt nätverk används för att modellera ett komplicerat icke-linjärt samband. Nätverket görs mer flexibelt genom att fler neuroner läggs till. Vilka av följande slutsatser är rimliga utifrån Universal Approximation Theorem och materialets diskussion?</p>
-<div id="webex-b2db18c585a6a0b3b083e9a7d441da63" class="webex-checkboxgroup" data-answer="OQJIUh0JTwRl">
-<label><input type="checkbox" autocomplete="off" name="b2db18c585a6a0b3b083e9a7d441da63"><span>Om nätverket kan approximera sambandet väl blir det automatiskt enkelt att tolka hur varje prediktor påverkar responsvariabeln.</span></label><label><input type="checkbox" autocomplete="off" name="b2db18c585a6a0b3b083e9a7d441da63"><span>Eftersom nätverket är flexibelt krävs endast en liten mängd träningsdata för att få tillförlitliga prediktioner.</span></label><label><input type="checkbox" autocomplete="off" name="b2db18c585a6a0b3b083e9a7d441da63"><span>Ett tillräckligt flexibelt neuralt nätverk kan i princip representera mycket komplexa samband.</span></label><label><input type="checkbox" autocomplete="off" name="b2db18c585a6a0b3b083e9a7d441da63"><span>Ökad flexibilitet kan förbättra nätverkets förmåga att anpassa komplexa samband, men kan också öka risken för överanpassning.</span></label>
+<div id="webex-907bba57cdae63ea901c454b84d0653b" class="webex-checkboxgroup" data-answer="YgAbU05QGQc+">
+<label><input type="checkbox" autocomplete="off" name="907bba57cdae63ea901c454b84d0653b"><span>Eftersom nätverket är flexibelt krävs endast en liten mängd träningsdata för att få tillförlitliga prediktioner.</span></label><label><input type="checkbox" autocomplete="off" name="907bba57cdae63ea901c454b84d0653b"><span>Ett tillräckligt flexibelt neuralt nätverk kan i princip representera mycket komplexa samband.</span></label><label><input type="checkbox" autocomplete="off" name="907bba57cdae63ea901c454b84d0653b"><span>Ökad flexibilitet kan förbättra nätverkets förmåga att anpassa komplexa samband, men kan också öka risken för överanpassning.</span></label><label><input type="checkbox" autocomplete="off" name="907bba57cdae63ea901c454b84d0653b"><span>Om nätverket kan approximera sambandet väl blir det automatiskt enkelt att tolka hur varje prediktor påverkar responsvariabeln.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Neurala nätverk är ofta svåra att tolka och betraktas därför som black box-modeller, även när de ger bra prediktioner.</li>
 <li>Falskt. Neurala nätverk behöver ofta mycket träningsdata för att lära sig komplexa samband och ge tillförlitliga prediktioner.</li>
 <li>Sant. Universal Approximation Theorem visar att neurala nätverk med tillräcklig flexibilitet kan representera mycket komplexa och icke-linjära funktioner.</li>
 <li>Sant. Ett mer flexibelt nätverk kan anpassa mer komplicerade samband, men flexibiliteten innebär också en större risk att modellen överanpassas till träningsdata.</li>
+<li>Falskt. Neurala nätverk är ofta svåra att tolka och betraktas därför som black box-modeller, även när de ger bra prediktioner.</li>
 </ul>
 </div>
 </div>
@@ -803,16 +839,16 @@ Tips
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vid träningen av ett neuralt nätverk används en slumpmässigt vald mini-batch för att beräkna gradientskattningen <span class="math inline">\(\nabla\hat{c}\)</span>. Skattningen antas vara väntevärdesriktig och inlärningshastigheten följer schemat <span class="math inline">\(\gamma_t=1/t\)</span>. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-4ef92b5cfeb9530dd31c0a31b2572879" class="webex-checkboxgroup" data-answer="b1RKCB5SGVNKVE4IaA==">
-<label><input type="checkbox" autocomplete="off" name="4ef92b5cfeb9530dd31c0a31b2572879"><span>En större mini-batch ger vanligtvis lägre varians i gradientskattningen men är dyrare att beräkna.</span></label><label><input type="checkbox" autocomplete="off" name="4ef92b5cfeb9530dd31c0a31b2572879"><span>Att gradientskattningen är väntevärdesriktig innebär att <span class="math inline">\(\mathrm{E}[\hat{\nabla L}]=\nabla L\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="4ef92b5cfeb9530dd31c0a31b2572879"><span>En mindre mini-batch gör varje parameteruppdatering mer beräkningskrävande eftersom färre observationer används.</span></label><label><input type="checkbox" autocomplete="off" name="4ef92b5cfeb9530dd31c0a31b2572879"><span>Schemat <span class="math inline">\(\gamma_k=1/k\)</span> uppfyller inte kravet <span class="math inline">\(\sum_{k=1}^{\infty}\gamma_k^2&lt;\infty\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="4ef92b5cfeb9530dd31c0a31b2572879"><span>En väntevärdesriktig gradientskattning behöver inte vara lika med den fullständiga gradienten i varje enskild iteration.</span></label><label><input type="checkbox" autocomplete="off" name="4ef92b5cfeb9530dd31c0a31b2572879"><span>En lägre inlärningshastighet kan minska hur mycket en ovanligt dålig gradientskattning påverkar parametrarna.</span></label>
+<div id="webex-1e874a035bac3a1b202b7284dba21723" class="webex-checkboxgroup" data-answer="alQUBxhRHAIZU01Sbg==">
+<label><input type="checkbox" autocomplete="off" name="1e874a035bac3a1b202b7284dba21723"><span>En större mini-batch ger vanligtvis lägre varians i gradientskattningen men är dyrare att beräkna.</span></label><label><input type="checkbox" autocomplete="off" name="1e874a035bac3a1b202b7284dba21723"><span>Schemat <span class="math inline">\(\gamma_k=1/k\)</span> uppfyller inte kravet <span class="math inline">\(\sum_{k=1}^{\infty}\gamma_k^2&lt;\infty\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1e874a035bac3a1b202b7284dba21723"><span>En mindre mini-batch gör varje parameteruppdatering mer beräkningskrävande eftersom färre observationer används.</span></label><label><input type="checkbox" autocomplete="off" name="1e874a035bac3a1b202b7284dba21723"><span>Att gradientskattningen är väntevärdesriktig innebär att <span class="math inline">\(\mathrm{E}[\hat{\nabla L}]=\nabla L\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1e874a035bac3a1b202b7284dba21723"><span>En väntevärdesriktig gradientskattning behöver inte vara lika med den fullständiga gradienten i varje enskild iteration.</span></label><label><input type="checkbox" autocomplete="off" name="1e874a035bac3a1b202b7284dba21723"><span>En lägre inlärningshastighet kan minska hur mycket en ovanligt dålig gradientskattning påverkar parametrarna.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
 <li>Sant. Större batcher innehåller mer information och ger därmed mindre variation, men de kräver samtidigt fler beräkningar per uppdatering.</li>
-<li>Sant. Väntevärdesriktighet innebär att gradientskattningens förväntade värde är den fullständiga gradienten.</li>
-<li>Falskt. En mindre mini-batch innehåller färre observationer och gör därför vanligtvis varje enskild gradientberäkning billigare.</li>
 <li>Falskt. För <span class="math inline">\(\gamma_k=1/k\)</span> gäller både <span class="math inline">\(\sum_{k=1}^{\infty}\gamma_k=\infty\)</span> och <span class="math inline">\(\sum_{k=1}^{\infty}\gamma_k^2&lt;\infty\)</span>, vilket är de två krav som anges i underlaget.</li>
+<li>Falskt. En mindre mini-batch innehåller färre observationer och gör därför vanligtvis varje enskild gradientberäkning billigare.</li>
+<li>Sant. Väntevärdesriktighet innebär att gradientskattningens förväntade värde är den fullständiga gradienten.</li>
 <li>Sant. Skattningen kan variera mellan mini-batcher även om dess väntevärde är korrekt. Väntevärdesriktig betyder därför inte att varje enskild skattning är exakt.</li>
 <li>Sant. När inlärningshastigheten minskas får en avvikande gradientskattning mindre påverkan på parameteruppdateringen.</li>
 </ul>
@@ -852,17 +888,17 @@ Tips
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vid träningen av ett neuralt nätverk används backpropagation för att beräkna hur nätverkets parametrar påverkar kostnadsfunktionen. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-bececf74f19dd7a96f8c1d4cb38954f2" class="webex-checkboxgroup" data-answer="OVRPVU9XGwRKABVUOQ==">
-<label><input type="checkbox" autocomplete="off" name="bececf74f19dd7a96f8c1d4cb38954f2"><span>Vid backpropagation förs derivatorna bakåt från kostnadsfunktionen genom nätverkets olika lager.</span></label><label><input type="checkbox" autocomplete="off" name="bececf74f19dd7a96f8c1d4cb38954f2"><span>Nätverkets bias påverkar inte kostnadsfunktionen och behöver därför inte ingå i gradientberäkningen.</span></label><label><input type="checkbox" autocomplete="off" name="bececf74f19dd7a96f8c1d4cb38954f2"><span>En optimeringsalgoritm kan använda de beräknade gradienterna för att justera nätverkets vikter och bias.</span></label><label><input type="checkbox" autocomplete="off" name="bececf74f19dd7a96f8c1d4cb38954f2"><span>Backpropagation uppdaterar automatiskt nätverkets parametrar utan att någon optimeringsalgoritm behövs.</span></label><label><input type="checkbox" autocomplete="off" name="bececf74f19dd7a96f8c1d4cb38954f2"><span>Backpropagation använder kedjeregeln för att beräkna kostnadfunktionens gradient med avseende på nätverkets vikter och bias.</span></label><label><input type="checkbox" autocomplete="off" name="bececf74f19dd7a96f8c1d4cb38954f2"><span>Backpropagation kan endast användas när nätverkets dolda lager har en sigmoidfunktion och fungerar därför inte tillsammans med ReLU.</span></label>
+<div id="webex-f4204166e887798a3938d2ccc89aa813" class="webex-checkboxgroup" data-answer="PQUeARgBGgZJCRQHag==">
+<label><input type="checkbox" autocomplete="off" name="f4204166e887798a3938d2ccc89aa813"><span>Vid backpropagation förs derivatorna bakåt från kostnadsfunktionen genom nätverkets olika lager.</span></label><label><input type="checkbox" autocomplete="off" name="f4204166e887798a3938d2ccc89aa813"><span>Backpropagation använder kedjeregeln för att beräkna kostnadfunktionens gradient med avseende på nätverkets vikter och bias.</span></label><label><input type="checkbox" autocomplete="off" name="f4204166e887798a3938d2ccc89aa813"><span>Nätverkets bias påverkar inte kostnadsfunktionen och behöver därför inte ingå i gradientberäkningen.</span></label><label><input type="checkbox" autocomplete="off" name="f4204166e887798a3938d2ccc89aa813"><span>Backpropagation uppdaterar automatiskt nätverkets parametrar utan att någon optimeringsalgoritm behövs.</span></label><label><input type="checkbox" autocomplete="off" name="f4204166e887798a3938d2ccc89aa813"><span>En optimeringsalgoritm kan använda de beräknade gradienterna för att justera nätverkets vikter och bias.</span></label><label><input type="checkbox" autocomplete="off" name="f4204166e887798a3938d2ccc89aa813"><span>Backpropagation kan endast användas när nätverkets dolda lager har en sigmoidfunktion och fungerar därför inte tillsammans med ReLU.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
 <li>Sant. Beräkningen börjar vid förlustfunktionen och förs bakåt genom nätverkets lager till de olika parametrarna.</li>
-<li>Falskt. Bias påverkar nätverkets beräkningar och därmed även förlustfunktionen. Bias behöver därför ingå i gradientberäkningen.</li>
-<li>Sant. Optimeringsalgoritmen använder gradienterna för att avgöra hur nätverkets vikter och bias ska justeras.</li>
-<li>Falskt. Backpropagation beräknar gradienterna. En optimeringsalgoritm använder därefter gradienterna för att uppdatera parametrarna.</li>
 <li>Sant. Backpropagation använder kedjeregeln för att beräkna hur varje vikt och bias påverkar förlustfunktionens värde.</li>
+<li>Falskt. Bias påverkar nätverkets beräkningar och därmed även förlustfunktionen. Bias behöver därför ingå i gradientberäkningen.</li>
+<li>Falskt. Backpropagation beräknar gradienterna. En optimeringsalgoritm använder därefter gradienterna för att uppdatera parametrarna.</li>
+<li>Sant. Optimeringsalgoritmen använder gradienterna för att avgöra hur nätverkets vikter och bias ska justeras.</li>
 <li>Falskt. Backpropagation är inte begränsad till sigmoidfunktioner utan kan även användas i nätverk med andra aktiveringsfunktioner, exempelvis ReLU.</li>
 </ul>
 </div>
@@ -871,11 +907,405 @@ Tips
 </div>
 </section>
 </section>
+<section id="keras3" class="level2" data-number="29.4">
+<h2 data-number="29.4" class="anchored" data-anchor-id="keras3"><span class="header-section-number">29.4</span> <code>keras3</code></h2>
+<p>För att träna neurala nätverk i R används paketet <code>keras3</code>. På grund av metodens komplexitet är <code>keras3</code> lite annorlunda än vanliga paket och kräver flera steg i installationen innan vi kan använda den. <span class="citation" data-cites="isl2021">Gareth James (<a href="#ref-isl2021" role="doc-biblioref">2023</a>)</span> inkluderar instruktioner för hur alla delar kan installeras. Följ relevanta instruktioner <a href="https://hastie.su.domains/ISLR2/keras-instructions.html">här</a> beroende på om du har en installation av Python / Conda eller ej.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>I instruktionerna används den tidigare varianten av paketet, döpt <code>keras</code>, men samma instruktioner kan användas bara du byter ut <code>keras</code> med <code>keras3</code>.</p></li>
+<li><p>Ytterligare något som behöver noteras är att R kommer vilja starta om efter att <code>install_keras()</code> körts klart. Det finns en överhängande risk att R kommer hänga sig och man får upp ett varningsmeddelande att R har crashat och inte vill starta om. Det enda man behöver göra då är stänga ner RStudio och starta upp det igen.</p></li>
+<li><p><strong>Se till att spara osparade skript innan <code>install_keras()</code> körs så att du inte förlorar information när RStudio startar om.</strong></p></li>
+<li><p>Att använda <code>keras3</code> kan komma med en del konstiga felmeddelanden då paketet arbetar tillsammans med ett annat språk Python. Tveka inte att återkoppla om du får felmeddelanden som inte går att lösa.</p></li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>keras3</code> har ett <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/master/keras.pdf">Cheat Sheet</a> med alla de olika typerna av lager som kan läggas till i en modell. Vi kommer endast använda ett litet urval av dessa men översikten visar på flexibiliteten och kraften i neurala nätverk.</p>
+</div>
+</div>
+<p>I detta exempel kommer vi återigen göra en modell för spamkontroll genom data <code>spambase</code>. Använd samma datauppdelning som vi gjorde i <a href="03-tree-models.html#sec-tree-class" class="quarto-xref"><span>Avsnitt 28.2.4</span></a> för att kunna jämföra modellerna åt.</p>
+<p>Inom <code>keras</code> finns två olika sätt att definiera en modell, vi kommer fokusera på den sekventiella strukturen som innebär att vi med kod successivt bygger den arkitektur som vi sett i en MLP, lager för lager. Något som är speciellt med <code>keras</code> är hur den önskar att data är formaterad. Bland annat kräver den separata x och y matriser samt specifika format på responsvariabeln. Eftersom vi redan gjort en datauppdelning kommer vi behöva göra samma bearbetning för både <code>trainSpam</code> och <code>testSpam</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bearbeta data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>trainSpamX <span class="ot">&lt;-</span> trainSpam <span class="sc">|&gt;</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>Spam) <span class="sc">|&gt;</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>testSpamX <span class="ot">&lt;-</span> testSpam <span class="sc">|&gt;</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>Spam) <span class="sc">|&gt;</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Konverterar responsvariabeln till ett specifikt format med två klasser</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>trainSpamY <span class="ot">&lt;-</span> trainSpam<span class="sc">$</span>Spam <span class="sc">|&gt;</span> </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_categorical</span>(<span class="at">num_classes =</span> <span class="dv">2</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>testSpamY <span class="ot">&lt;-</span> testSpam<span class="sc">$</span>Spam <span class="sc">|&gt;</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_categorical</span>(<span class="at">num_classes =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Sedan börjar vi med att skapa en arkitektur. <code>input_shape</code> argumentet i <code>keras_model_sequential()</code> beskriver hur många variabler, eller inputnoder, som input lagret har. Detta kan vi lätt läsa ut från antalet kolumner i <code>trainSpamX</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>För att dessa resultat ska vara densamma varje gång vi kör samma modell, kan vi ange ett seed även här. Dock behöver vi använda <code>keras3</code> egna funktion istället för den inbyggda i R, <code>set_random_seed()</code>.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">20260820</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>kerasSpamModel <span class="ot">&lt;-</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">keras_model_sequential</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="fu">ncol</span>(trainSpamX))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>När vi sedan bygger vidare modellen med gömda lager gör vi det med den enklaste formen <code>layer_dense</code> som kopplar samman alla gömda neuroner med alla neuroner i det föregående lagret. Argumenten <code>units</code> och <code>activation</code> styr storleken på lagret samt vilket aktiveringsfunktion som ska användas. Vi kan börja med en rätt så enkel modell med tre gömda lager av varierande storlek, 10, 30, 10 noder.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>kerasSpamModel <span class="ot">&lt;-</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  kerasSpamModel <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger antalet gömda neuroner i lagret</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">10</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger aktiveringsfunktionen för lagret</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">30</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">10</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>När vi till sist vill knyta ihop modellen gör vi det med ytterligare ett <code>layer_dense()</code> där antalet noder motsvarar antalet klasser. Här behöver vi också justera valet av aktiveringsfunktion lämpligt för ändamålet, för klassificiering används <code>"softmax"</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>kerasSpamModel <span class="ot">&lt;-</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  kerasSpamModel <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="fu">ncol</span>(trainSpamY),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"softmax"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nu är arkitekturen för vår första enkla modell klar, men ingenting har egentligen tränats. Till skillnad från tidigare paket och funktioner, behöver vi först ange modellens struktur, dess optimeringsalgoritm och sedan specifikt säga till R att träna modellen med vissa andra hyperparametrar.</p>
+<p>Vi kan med <code>summary()</code> se en översikt av den skapade strukturen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(kerasSpamModel)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "sequential"
+┌───────────────────────────────────┬──────────────────────────┬───────────────
+│ Layer (type)                      │ Output Shape             │       Param # 
+├───────────────────────────────────┼──────────────────────────┼───────────────
+│ dense (Dense)                     │ (None, 10)               │           580 
+├───────────────────────────────────┼──────────────────────────┼───────────────
+│ dense_1 (Dense)                   │ (None, 30)               │           330 
+├───────────────────────────────────┼──────────────────────────┼───────────────
+│ dense_2 (Dense)                   │ (None, 10)               │           310 
+├───────────────────────────────────┼──────────────────────────┼───────────────
+│ dense_3 (Dense)                   │ (None, 2)                │            22 
+└───────────────────────────────────┴──────────────────────────┴───────────────
+ Total params: 1,242 (4.85 KB)
+ Trainable params: 1,242 (4.85 KB)
+ Non-trainable params: 0 (0.00 B)</code></pre>
+</div>
+</div>
+<p>För att träna modellen behöver vi också bestämma optimeringen genom <code>compile()</code> där argumenten fokuserar på optimeringsparametrar, till exempel:</p>
+<ul>
+<li><code>loss</code>: valet av kostnadsfunktion</li>
+<li><code>optimizer</code>: valet av optimeringsalgoritm</li>
+<li><code>metrics</code>: valet av utvärderingsmått som används under träningen</li>
+</ul>
+<p>Dessa tre argument har många olika valmöjligheter, vi kan till och med skapa en egen kostnadsfunktion eller utvärderingsmått till träningen. Vi kan läsa mer om olika alternativ i dokumentationen, vi kommer stanna vid vanliga värden; cross entropy som kostnadsfunktion, RMSprop som optimeringsalgoritm och träffsäkerheten som utvärderingsmått.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>kerasSpamModel <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="fu">optimizer_rmsprop</span>(),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Till sist är vi redo för träningen med hjälp av <code>fit()</code>. Här får vi också möjlighet att ange argument som styr processen, främst fokuserad på hyperparametrar som berör stoppkriterier, batchstorlekar och validering.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  kerasSpamModel <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fit</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Anger X och Y för modellen</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>      trainSpamX, trainSpamY,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Anger antalet maximala epoker</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">epochs =</span> <span class="dv">30</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Anger batchstorleken</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">batch_size =</span> <span class="dv">128</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Anger hur mycket av träningsdata som ska gå till validering</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">validation_split =</span> <span class="fl">0.2</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>När vi tränar modellen kommer konsollen ge uppdateringar för varje epok. Vi får också en diagram som visar utvecklingen av kostnadsfunktionen och det valda utvärderingsmåttet för tränings och valideringsmängden för att vi ska kunna mer visuellt se träningshistoriken. Detta diagram kan vi få tag på igen om vi sparar ner träningen till ett separat objekt.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(history) <span class="sc">+</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nn-keras-fit" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nn-keras-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="04-neural-networks_files/figure-html/fig-nn-keras-fit-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nn-keras-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;29.3: Kostnadsfunktionen (loss) och träffsäkerheten för modellens träning
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Om vi fokuserar på valideringsfelet i <a href="#fig-nn-keras-fit" class="quarto-xref">Figur&nbsp;<span>29.3</span></a> ser vi att den sjunker tillsammans med träningsfelet under de första 10 epokerna för att sedan plana ut och öka när träningsmängden fortfarande minskar sin kostnad. Detta visar på ett fall när modeller börjar överanpassa till träningsmängden.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ibland kan vi få resultat där det inte ser ut som att modellen konvergerat när vi nått det angivna antalet epoker. Då kan vi behöva fortsätta träningen genom att lägga till ett större antal epoker och låta modellen tränas vidare.</p>
+<p>Lägg märke till att vi inte sparar över <code>kerasSpamModel</code> efter att arkitekturen bestämts. Både <code>compile()</code> och <code>fit()</code> gör detta till viss del automatiskt vilket innebär att om vi kör <code>fit()</code> två gånger kommer den andra gången börja träningen där den första tog slut, modellens vikter sparas. Detta kan bli vilseledande då alla utskrifter anger epokerna vid den fortsatta träningen fortfarande som 0-30.</p>
+<p>Om man vill träna om modellen behöver vi skapa den helt på nytt genom att skapa arkitekturen igen från början.</p>
+</div>
+</div>
+<p>Vi kan faktiskt direkt se vilken epok som har det minsta valideringsfelet genom:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.min</span>(history<span class="sc">$</span>metrics<span class="sc">$</span>val_loss)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15</code></pre>
+</div>
+</div>
+<p>Problemet vi står för nu är att vi inte kan ta tillbaka modellens parametrar vid den epoken när vi tränat alla 30 epoker. Det vi behöver göra är att träna om modellen och stanna vid den epok som har det minsta felet, och vi får inte glömma att sätta samma seed.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">20260820</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>kerasSpamModel <span class="ot">&lt;-</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">keras_model_sequential</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="fu">ncol</span>(trainSpamX))</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger antalet gömda neuroner i lagret</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">10</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger aktiveringsfunktionen för lagret</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">30</span>,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">10</span>,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="fu">ncol</span>(trainSpamY),</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"softmax"</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> </span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  kerasSpamModel <span class="sc">|&gt;</span> </span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="fu">optimizer_rmsprop</span>(),</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>      trainSpamX, trainSpamY,</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Anger antalet maximala epoker</span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">epochs =</span> <span class="dv">15</span>,</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">batch_size =</span> <span class="dv">128</span>,</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">validation_split =</span> <span class="fl">0.2</span></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Istället för att behöva träna om en modell med ett fix antal epoker can vi använda ett stoppkriterie även för neurala nätverk. Funktionen <code>callback_early_stopping()</code> ger oss olika val för hur vi kan stanna träningen utan att ha nått de maximala antalet epokerna som vi först angav. Vi måste då också lägga till i <code>fit()</code> att vi vill stanna träningen om kriterierna uppfylldes. Detta kallas för <strong>early stopping</strong>.</p>
+<p>Vi har ett par olika argument som vi kan titta på:</p>
+<ul>
+<li><code>monitor</code>: väljer vilket mått som ska kontrolleras, vanligtvis <code>"val_loss"</code> (valideringsfelet)</li>
+<li><code>min_delta</code>: anger en minsta förändringen som anses vara en förbättning, standard är 0</li>
+<li><code>patience</code>: antalet epoker med ingen förbättring innan träningen stoppas, standard är 0</li>
+<li><code>start_from_epoch</code>: antalet epoker som kriterierna “hoppas över” i början av träningen innan kontrollen börjar.</li>
+<li><code>restore_best_weights</code>: <code>TRUE</code> eller <code>FALSE</code> som anger om modellens vikter från den bästa modellen ska återställas när träningen stoppas. Detta bör vara TRUE om <code>patience</code> &gt; 0.</li>
+</ul>
+<p>Vi väljer att använda bara en del av dessa i just detta fall.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>callback <span class="ot">&lt;-</span> <span class="fu">callback_early_stopping</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">monitor =</span> <span class="st">"val_loss"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Tillåter tre epoker av "försämring" innan träningen stannar</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">patience =</span> <span class="dv">3</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">restore_best_weights =</span> <span class="cn">TRUE</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Tillsammans skulle den fullständiga koden bli:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">20260820</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>kerasSpamModel <span class="ot">&lt;-</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">keras_model_sequential</span>(</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="fu">ncol</span>(trainSpamX))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger antalet gömda neuroner i lagret</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">10</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger aktiveringsfunktionen för lagret</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">30</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">10</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"relu"</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="fu">ncol</span>(trainSpamY),</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">activation =</span> <span class="st">"softmax"</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> </span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  kerasSpamModel <span class="sc">|&gt;</span> </span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>,</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="fu">optimizer_rmsprop</span>(),</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>    trainSpamX, trainSpamY,</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger antalet maximala epoker</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">epochs =</span> <span class="dv">30</span>,</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">batch_size =</span> <span class="dv">128</span>,</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">validation_split =</span> <span class="fl">0.2</span>,</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Lägger till kriterier för early stopping</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">callbacks =</span> <span class="fu">list</span>(callback)</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Vi kan kontrollera att vikterna är samma för de två olika sätten att träna modellen med 15 epoker genom <code>kerasSpamModel$weights</code>.</p>
+</div>
+</div>
+<p>Nu till sist har vi en slutgiltig modell, <code>kerasSpamModel</code>, som valts ut utifrån valideringsfelet i träningen.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Hade vi velat jämföra detta neurala nätverk med det beslutsträd som vi tränade i föregående kapitel hade vi <strong>inte</strong> kunnat jämföra valideringsfelen direkt från de olika utskrifterna. Valideringen hanteras och presenteras på olika sätt i olika modeller vilket ibland gör det svårt att använda den <strong>interna</strong> valideringen för att jämföra modeller från olika familjer.</p>
+<p>Istället kan vi genomföra <strong>extern</strong> validering genom den disjunkta datauppdelningen som skapar en separat, och fix, valideringsmängd för jämförelse.</p>
+</div>
+</div>
+<p>Vi kan få en väntevärdesriktig skattning av utvärderingsmåtten från testmängden genom att prediktera modellen. Problemet med prediktioner från <code>keras3</code> är att vi får två kolumner med sannolikheten för att observationen tillhör respektive klass. Vi behöver bearbeta dessa objekt innan vi kan använda <code>confusionMatrix()</code>.</p>
+<p>Den första kolumnen representerar klass <span class="math inline">\(Y = 0\)</span> och den andra kolumnen <span class="math inline">\(Y = 1\)</span> och vi predikterar varje observation till den klass som fått det högsta värdet.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>predictSpam <span class="ot">&lt;-</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  kerasSpamModel <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(testSpamX) <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"zero"</span>, <span class="st">"one"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">class =</span> <span class="fu">if_else</span>(zero <span class="sc">&gt;</span> one, <span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(class) <span class="sc">|&gt;</span> </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>()</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>29/29 - 0s - 2ms/step</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  predictSpam, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  testSpam<span class="sc">$</span>Spam <span class="sc">|&gt;</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">factor</span>(),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">positive =</span> <span class="st">"1"</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 513  55
+         1  45 308
+                                             
+               Accuracy : 0.8914             
+                 95% CI : (0.8695, 0.9108)   
+    No Information Rate : 0.6059             
+    P-Value [Acc &gt; NIR] : &lt;0.0000000000000002
+                                             
+                  Kappa : 0.7716             
+                                             
+ Mcnemar's Test P-Value : 0.3681             
+                                             
+            Sensitivity : 0.8485             
+            Specificity : 0.9194             
+         Pos Pred Value : 0.8725             
+         Neg Pred Value : 0.9032             
+             Prevalence : 0.3941             
+         Detection Rate : 0.3344             
+   Detection Prevalence : 0.3833             
+      Balanced Accuracy : 0.8839             
+                                             
+       'Positive' Class : 1                  
+                                             </code></pre>
+</div>
+</div>
+<p>Modellen får en träffsäkerhet på ca 89%, en sensitivitet på ca 85% och en specificitet på ca 92%. Vi har fått en ganska bra modell (i linje med den trädmodell som tränades i föregående kapitel) med en relativt enkel arkitektur, vi skulle säkerligen kunna utöka antalet noder i de gömda lagrena för att få en bättre modell.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Viktigt</span>Neurala nätverk och regression
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>För regressionsproblem behöver vi enbart bearbeta responsvariabeln till en matris och i det slutgiltiga lagret ange en <code>unit</code>. Om vi inte anger någon specifik aktiveringsfunktion kommer den automatiskt att välja <code>"linear"</code>, vilket motsvarar ren regression.</p>
+</div>
+</div>
+</section>
 <section id="referenser" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-isl2021" class="csl-entry" role="listitem">
+Gareth James, Trevor Hastie, Daniela Witten. 2023. <em>An Introduction to Statistical Learning: with Applications in R</em>. Springer Texts in Statistics. Springer New York, NY. <a href="https://www.statlearning.com/">https://www.statlearning.com/</a>.
+</div>
 <div id="ref-bobadilla2024" class="csl-entry" role="listitem">
 Ponce-Bobadilla, Ana Victoria, Vanessa Schmitt, Corinna S. Maier, Sven Mensing, och Sven Stodtmann. 2024. <span>”Practical guide to SHAP analysis: Explaining supervised machine learning model predictions in drug development”</span>. <em>Clinical and Translational Science</em> 17 (11): e70056. https://doi.org/<a href="https://doi.org/10.1111/cts.70056">https://doi.org/10.1111/cts.70056</a>.
 </div>
