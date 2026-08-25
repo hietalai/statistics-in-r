@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>17&nbsp; Slumpmässiga faktorer – Statistisk teori och tillämpningar i R</title>
+<title>31&nbsp; Epilog – Statistisk teori och tillämpningar i R</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,61 +26,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -90,8 +36,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../02-variance/02-control-variables.html" rel="next">
-<link href="../02-variance/00-oneway-anova.html" rel="prev">
+<link href="../05-stat-to-ml/05-ensembles.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -227,35 +172,6 @@ div.csl-indent {
 
 </script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../webex.css">
@@ -308,7 +224,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html">DEL III - Variansanalys</a></li><li class="breadcrumb-item"><a href="../02-variance/01-random-factors.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-stat-to-ml/index.html">DEL V - Från statistik till maskininlärning</a></li><li class="breadcrumb-item"><a href="../05-stat-to-ml/06-epilogue.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Epilog</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Skifta sidonavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Sök" onclick="window.quartoOpenSearch();">
@@ -450,11 +366,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="../02-variance/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL III - Variansanalys</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../02-variance/00-oneway-anova.html" class="sidebar-item-text sidebar-link">
@@ -463,7 +379,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link active">
+  <a href="../02-variance/01-random-factors.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></a>
   </div>
 </li>
@@ -526,11 +442,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="../05-stat-to-ml/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">DEL V - Från statistik till maskininlärning</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Skifta sektion">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Skifta sektion">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-stat-to-ml/00-introduction.html" class="sidebar-item-text sidebar-link">
@@ -569,7 +485,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../05-stat-to-ml/06-epilogue.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-stat-to-ml/06-epilogue.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Epilog</span></span></a>
   </div>
 </li>
@@ -580,27 +496,15 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Innehållsförteckning</h2>
-   
-  <ul>
-  <li><a href="#modellens-formulering" id="toc-modellens-formulering" class="nav-link active" data-scroll-target="#modellens-formulering"><span class="header-section-number">17.1</span> Modellens formulering</a></li>
-  <li><a href="#inferens-på-en-slumpmässig-faktor" id="toc-inferens-på-en-slumpmässig-faktor" class="nav-link" data-scroll-target="#inferens-på-en-slumpmässig-faktor"><span class="header-section-number">17.2</span> Inferens på en slumpmässig faktor</a>
-  <ul class="collapse">
-  <li><a href="#varianskomponenter" id="toc-varianskomponenter" class="nav-link" data-scroll-target="#varianskomponenter"><span class="header-section-number">17.2.1</span> Varianskomponenter</a></li>
-  </ul></li>
-  <li><a href="#övningsuppgifter" id="toc-övningsuppgifter" class="nav-link" data-scroll-target="#övningsuppgifter"><span class="header-section-number">17.3</span> Övningsuppgifter</a></li>
-  <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-variance/index.html">DEL III - Variansanalys</a></li><li class="breadcrumb-item"><a href="../02-variance/01-random-factors.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-stat-to-ml/index.html">DEL V - Från statistik till maskininlärning</a></li><li class="breadcrumb-item"><a href="../05-stat-to-ml/06-epilogue.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Epilog</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-random-effects" class="quarto-section-identifier"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Slumpmässiga faktorer</span></span></h1>
+<h1 class="title"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Epilog</span></h1>
 </div>
 
 
@@ -618,194 +522,14 @@ window.Quarto = {
 
 
 <!-- CONTENT -->
-<p>I alla tidigare regressionsmodeller förutsätter vi till viss del att de nivåer som finns i det insamlade data är de nivåer som faktorn innehåller och som vi är intresserade att dra slutsatser om, detta kallas för <em>fixa</em> effekter. Det finns tillfällen där vi kan vilja inkludera en faktor som endast består av ett urval av faktorns alla nivåer, till exempel hur olika skolor kan påverka prestationsgraden inom ett visst ämne. Det kan vara så att vi har en faktor i vår undersökning som har ett stort antal nivåer, fler än vi kan undersöka, och vi väljer istället att dra ett urval av nivåer från populationen av alla nivåer. Det vore omöjligt att skapa ett experiment med alla olika skolor i Sverige, så istället dras ett urval av säg 10 skolor där vår undersökning genomförs. Detta är ett exempel på en <strong>slumpmässig faktor</strong>. Med en slumpmässig faktor är vi inte intresserad av skatta effekterna för just de nivåer som vi råkade dra i vårt urval, utan vi vill dra slutsater om faktorn generellt på populationsnivå.</p>
-<section id="modellens-formulering" class="level2" data-number="17.1">
-<h2 data-number="17.1" class="anchored" data-anchor-id="modellens-formulering"><span class="header-section-number">17.1</span> Modellens formulering</h2>
-<p>Det finns flera olika sätt att formulera en modell som innehåller en slumpmässig faktor, men det viktiga är att vi beskriver egenskaperna i modellens komponenter så att det blir tydligt, oavsett de beteckningar som används, att faktorn numera är slumpmässig. Givet att detta underlag grundar sig i regressionsformuleringen till skillnad från den “klassiska” variansanalysformuleringen hänvisad i <a href="00-oneway-anova.html#nte-anova-formulation" class="quarto-xref">Note&nbsp;<span>16.1</span></a>, kommer en regressionsformulering fortsätta användas även för slumpmässiga faktorer.</p>
-<p>Vi kan formulera en modell där vi tillåter responsvariabeln variera beroende på vilken nivå en observation tillhör som: <span class="math display">\[
-\begin{aligned}
-  Y_{ij} &amp;= \beta_{0i} + E_{ij}\\
-  \text{där}\\
-  \beta_{0i} &amp;= \gamma_{00} + U_{0i}
-\end{aligned}
-\]</span> där <span class="math inline">\(i\)</span> är de uppmätta nivåerna av faktorn, <span class="math inline">\(\gamma_{00}\)</span> är det övergripande medelvärdet (motsvarande <span class="math inline">\(\mu\)</span> i <a href="00-oneway-anova.html#eq-fix-effect-anova" class="quarto-xref">Ekvation&nbsp;<span>16.1</span></a>), och <span class="math inline">\(U_{0i}\)</span> är den avvikelse som nivå <span class="math inline">\(i\)</span> har på det övergripande medelvärdet.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>Om vi skriver ut modellen i sin helhet: <span id="eq-random-effect-anova"><span class="math display">\[
-\begin{aligned}
-  Y_{ij} &amp;= \gamma_{00} + U_{0i} + E_{ij}
-\end{aligned}
-\tag{17.1}\]</span></span> ser vi tydliga likheter med den fixa modellen, men också några skillnader. Vi visar inga kodade variabler eftersom de enskilda effekterna <span class="math inline">\(U_{0i}\)</span> är inte lika intressant att titta på som <span class="math inline">\(\beta_i\)</span> i den fixa modellen. Däremot kan vi beskriva att de enskilda effekterna är slumpmässigt dragna från en normalfördelad population med väntevärde 0 och en specifik varians: <span class="math display">\[
-\begin{aligned}
-  U_{0i} \sim N(0, \sigma^2_A)
-\end{aligned}
-\]</span> där <span class="math inline">\(\sigma^2_A\)</span> är variansen för faktorn.</p>
-<p>Fortfarande råder att <span class="math inline">\(E_{ij} \sim N(0, \sigma^2)\)</span> vilket innebär att vi har en modell bestående av två olika varianskomponenter, <span class="math inline">\(\sigma^2_A\)</span> och <span class="math inline">\(\sigma^2\)</span>, som anses vara oberoende av varandra. Detta leder också att vi kan beskriva fördelningen av Y|X som: <span id="eq-distr-random-factor"><span class="math display">\[
-\begin{aligned}
-  Y_{ij}|\mathbf{X_j} \sim N(\gamma_{00}, \sigma^2_A + \sigma^2)
-\end{aligned}
-\tag{17.2}\]</span></span></p>
-</section>
-<section id="inferens-på-en-slumpmässig-faktor" class="level2" data-number="17.2">
-<h2 data-number="17.2" class="anchored" data-anchor-id="inferens-på-en-slumpmässig-faktor"><span class="header-section-number">17.2</span> Inferens på en slumpmässig faktor</h2>
-<p>Om vi antar en modell som inte har någon faktor ser den ut som: <span class="math display">\[
-\begin{aligned}
-  Y_j = \gamma_{00} + E_{j}
-\end{aligned}
-\]</span> där <span class="math inline">\(j = 1, \dots, n\)</span>. Som en följd innebär det att responsvariabelns fördelning blir <span class="math inline">\(Y_{j}\sim N(\gamma{00}, \sigma^2)\)</span>, det vill säga att den enda variationen runt väntevärdet kommer från felets variation. Skillnaden gentemot <a href="#eq-distr-random-factor" class="quarto-xref">Ekvation&nbsp;<span>17.2</span></a> är att variationen också beror på variationen i den slumpmässiga faktorn. Om den slumpmässiga faktorn har en effekt på responsvariabeln betyder detta att <span class="math inline">\(\sigma^2_A &gt; 0\)</span>, det vill säga det är inte bara felet som bidrar till osäkerheten.</p>
-<p>På samma sätt som vi med kvadratsummor kan dela upp den totala variationen av en responsvariabel i modellens förklarade och oförklarade variation, kan vi med en slumpmässig faktor göra detsamma dock med några justeringar. Vi betecknar de olika delarna med komponenternas olika varianser och andelen förklarad variation beräknas som: <span class="math display">\[
-\begin{aligned}
-  \frac{\sigma_A^2}{\sigma^2_Y} = \frac{\sigma^2_A}{\sigma^2 + \sigma^2_A}
-\end{aligned}
-\]</span> där <span class="math inline">\(\sigma^2_Y\)</span> är den totala varians som finns i responsvariabeln.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Notera
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Något som är speciellt med slumpmässiga faktorer är att observationerna inom en faktornivå <strong>inte</strong> är oberoende eftersom de uppkommer från samma delgrupp av faktorn. Vi kan beräkna kovariansen mellan observationer inom en faktornivå: <span class="math display">\[
-\begin{aligned}
-  \sigma(Y_{ij}, Y_{ij'}) = \sigma^2_A
-\end{aligned}
-\]</span> där <span class="math inline">\(j \ne j'\)</span>.</p>
-<p>Kovariansen mellan observationer i olika faktornivåer antas oberoende: <span class="math display">\[
-\begin{aligned}
-  \sigma(Y_{ij}, Y_{i'j'}) = 0
-\end{aligned}
-\]</span> där <span class="math inline">\(i \ne i'\)</span>.</p>
-<p>Anta att en faktor har två faktornivåer och tre observationer i varje cell (faktornivå). Om vi lägger dessa observationer i en vektor sorterade efter faktorn får vi följande kovariansmatris: <span class="math display">\[
-\begin{aligned}
-\sigma^2(\mathbf{Y})= \begin{bmatrix}
-        \sigma^2 + \sigma^2_A   &amp; \sigma^2_A              &amp; \sigma^2_A              &amp; 0 &amp; 0 &amp; 0\\
-        \sigma^2_A            &amp; \sigma^2 + \sigma^2_A     &amp; \sigma^2_A              &amp; 0 &amp; 0 &amp; 0\\
-        \sigma^2_A            &amp; \sigma^2_A              &amp; \sigma^2 + \sigma^2_A     &amp; 0 &amp; 0 &amp; 0\\
-        0                       &amp; 0                         &amp; 0                         &amp; \sigma^2 + \sigma^2_A &amp; \sigma^2_A          &amp; \sigma^2_A\\
-        0                       &amp; 0                         &amp; 0                         &amp; \sigma^2_A          &amp; \sigma^2 + \sigma^2_A &amp; \sigma^2_A \\
-        0                       &amp; 0                         &amp; 0                         &amp; \sigma^2_A          &amp; \sigma^2_A          &amp; \sigma^2 + \sigma^2_A
-    \end{bmatrix}
-\end{aligned}
-\]</span></p>
-</div>
-</div>
-<p>För att undersöka om den slumpmässiga faktorn bidrar med en signifikant effekt formuleras följande hypoteser: <span class="math display">\[
-\begin{aligned}
-  &amp;H_0: \sigma^2_A = 0\\
-  &amp;H_a: \sigma^2_A &gt; 0
-\end{aligned}
-\]</span> Om <span class="math inline">\(H_0: \sigma_A^2 = 0\)</span> är sann betyder det att alla dragningar från populationen av alla nivåer är lika, en konstant, och att faktorn därav inte har någon effekt. Om <span class="math inline">\(H_a\)</span> är sann betyder det däremot att faktorn har en effekt och att dragningar från populationen av alla nivåer generar olika effekter.</p>
-<p>För att beräkna testvariabeln för denna hypotesprövning används kvadratsummorna från den linjära modellen som en skattning av varianserna. Vi utgår från att de förväntade medelkvadratsummorna för <span class="math inline">\(MSE\)</span> och <span class="math inline">\(MSA\)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> är: <span class="math display">\[
-\begin{aligned}
-    E[MSE] &amp;= \sigma^2 \\
-    E[MSA] &amp;= \sigma^2 + n_i\cdot \sigma^2_A
-\end{aligned}
-\]</span> Om <span class="math inline">\(H_0\)</span> är sann betyder det att <span class="math inline">\(E[MSE] = E[MSA]\)</span> men om <span class="math inline">\(H_a\)</span> är sann betyder det att <span class="math inline">\(E[MSA] &gt; E[MSE]\)</span> eftersom <span class="math inline">\(n_i &gt; 0\)</span>. En lämplig testvariabel formuleras då som: <span class="math display">\[
-\begin{aligned}
-  F_{test} = \frac{MSA}{MSE}
-\end{aligned}
-\]</span> där <span class="math inline">\(F_{test} \sim F_{A - 1; A\cdot(n_i - 1)}\)</span>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Notera
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Frihetsgraderna för nämnaren är en omskrivning av “den vanliga” <span class="math inline">\(n - (k + 1)\)</span> enligt: <span class="math display">\[
-\begin{aligned}
-    n - (k + 1) &amp;= \\
-    n - (A - 1 + 1) &amp;=\\
-    n_i \cdot A - A &amp;= A \cdot (n_i - 1)
-\end{aligned}
-\]</span> där <span class="math inline">\(n_i\)</span> är antalet observationer inom en nivå. Vi förutsätter att modellen är <em>balanserad</em>, det vill säga att alla nivåer har lika många observationer, <span class="math inline">\(n_i = n / A\)</span>.</p>
-</div>
-</div>
-<p>I R kommer denna hypotesprövning beräknas på samma sätt som ett övergripande F-test i en fix modell beskriven i <a href="00-oneway-anova.html#sec-fix-effect-inference" class="quarto-xref"><span>Avsnitt 16.4.1</span></a> eftersom testvariabeln beräknas på samma sätt som det tidigare F-testet. Med en slumpmässig faktor kommer dock hypoteserna beskriva någonting annat och slutsatser som vi drar behöver ta hänsyn till variationen i faktorn, inte de enskilda faktormedelvärdena.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Viktigt
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Om <span class="math inline">\(H_0\)</span> förkastas vill vi <strong>inte</strong> genomföra multipla jämförelser för att bedöma specifikt vilka nivåer som skiljer sig åt. Med en slumpmässig faktor är de utvalda nivåerna inte intressanta att jämföra.</p>
-</div>
-</div>
-<section id="varianskomponenter" class="level3" data-number="17.2.1">
-<h3 data-number="17.2.1" class="anchored" data-anchor-id="varianskomponenter"><span class="header-section-number">17.2.1</span> Varianskomponenter</h3>
-<p>Istället för att beräkna multipla jämförelser för de uppmätta slumpmässiga effekterna kan vi istället skatta varianskomponenten för faktorn. Detta kommer ge oss en indikation på magnituden av variation som finns inuti faktorn. Med hjälp av omskrivningar av väntevärden kan vi beräkna skattningen genom: <span class="math display">\[
-\begin{aligned}
-    s^2 &amp;= MSE\\
-    s^2_A &amp;= \frac{MSA - MSE}{n}
-\end{aligned}
-\]</span></p>
-<p>där <span class="math inline">\(n\)</span> är antalet observationer inom en faktornivå. Kom ihåg att vi här behandlar en balanserad modell vilket betyder att <span class="math inline">\(n_i = n\)</span>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sparar ner ANOVA-tabellen som en data.frame</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>anovaTabell <span class="ot">&lt;-</span> <span class="fu">anova</span>(model)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut MSA och MSE från tabellen</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>MSA <span class="ot">&lt;-</span> anovaTabell<span class="sc">$</span><span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">1</span>]</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>MSE <span class="ot">&lt;-</span> anovaTabell<span class="sc">$</span><span class="st">`</span><span class="at">Mean Sq</span><span class="st">`</span>[<span class="dv">2</span>]</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut antalet observationer per cell </span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> (<span class="fu">sum</span>(anovaTabell<span class="sc">$</span>Df) <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> (anovaTabell<span class="sc">$</span>Df[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Beräknar variansskattningarna</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>sigmaEst <span class="ot">&lt;-</span> MSE</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>sigmaAEst <span class="ot">&lt;-</span> (MSA <span class="sc">-</span> MSE) <span class="sc">/</span> n</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Sammanställer skattningarna och presenterar som en tabell</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Parameter =</span> </span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2$"</span>,<span class="st">"$</span><span class="sc">\\</span><span class="st">sigma^2_A$"</span>),</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Skattning =</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(sigmaEst,sigmaAEst)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Skattade varianser."</span>, </span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Med hjälp av dessa skattningar skulle vi kunna göra intervallskattningar för exempelvis <span class="math inline">\(\sigma_A^2\)</span> (se kapitel 6.1 i Teorikompendiet för Satterthwaite intervall).</p>
-<!-- TODO MORE ABOUT INFERENCE (INTERVALS) OF DIFFERENT SIGMA -->
-</section>
-</section>
-<section id="övningsuppgifter" class="level2" data-number="17.3">
-<h2 data-number="17.3" class="anchored" data-anchor-id="övningsuppgifter"><span class="header-section-number">17.3</span> Övningsuppgifter</h2>
-<p>Dessa övningar använder sig av ett datamaterial från en fabrik som skapar spolar (tråd som är lindad i en spiral för diverse elektronik). I fabriken väljs fyra maskiner slumpmässigt ut från alla maskiner som finns i fabriken. Sedan väljs 10 skapade spolar ut slumpmässigt från respektive maskin. Mätvariabeln (<code>coil_characteristic</code>) är en egenskap (oklart vad) hos spolarna. Materialet finns tillgängligt <a href="https://raw.githubusercontent.com/hietalai/statistics-in-r/main/resources/data/coils.csv">här</a>.</p>
-<ol type="a">
-<li><p>Motivera varför en modell med en slumpmässiga faktor är lämplig för att analysera detta material. Formulera modellen och beskriv varje komponent.</p></li>
-<li><p>Undersök om det finns en signifikant effekt av maskinerna på egenskaperna med 5 procents signifikans.</p></li>
-<li><p>Skatta <span class="math inline">\(\sigma^2_{A}\)</span> med ett 90% approximativt konfidensintervall med hjälp av Satterthwaites metod. Tolka intervallet.</p></li>
-<li><p>Skatta kvoten av <span class="math inline">\(\frac{\sigma^2_{A}}{\sigma^2_Y}\)</span> med ett 95% intervall. Tolka intervallet.</p></li>
-</ol>
-</section>
-<section id="referenser" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="referenser">Referenser</h2>
+<p>I denna del har vi nu introducerat begreppet statistisk inlärning och presenterat olika metoder som låter datorn lära sig mönster, samband och trender för att lösa olika typer av uppgifter.</p>
+<p>Vi började med regulariseringsmetoder som en utbyggnad av vanlig regression där en straffterm lades till i kostnadsfunktionen för att förhindra överanpassning och en form av variabelselektion när data är stort. Vi gick sen över till modeller som hanterar icke-linjära samband både i regressions och klassificeringsproblem, däribland trädmodeller som också integrerar en form av variabelselektion i träningen. Till sist introducerades en flexibel men komplex modell i formen av neurala nätverk som både lär sig transformationer och icke-linjära samband utan att vi behöver manuellt välja ut dessa.</p>
+<p>Som sista kapitel introducerades metoder för hur dessa modeller kan bli än bättre, antingen genom att slå ihop flera enkla varianter av modeller eller successivt fokusera modellträningen på de observationer som blivit fel tills modellen träffar rätt.</p>
+<p>Något som vi inte tagit upp lika mycket är statistisk inferens inom dessa metoder, vårt fokus har främst varit prediktioner. Detta beror till största del på att metoderna i sig är inte alltid är lämpade för att beskriva sambanden på grund av sin komplexitet. Statistisk inferens är en större gren av maskininlärning där statistisk teori integreras än mer med datorvetenskapliga algoritmer.</p>
+<p>Vi har inte heller gjort något större avtryck i alla de neurala nätverkmodeller som finns såsom <a href="https://en.wikipedia.org/wiki/Autoencoder">auto-encoders</a> för hantering av unsupervised learning, <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">convolutional neurala nätverk (CNN)</a> eller <a href="https://en.wikipedia.org/wiki/Transformer_(deep_learning)">transformers</a> för hantering av bilder osv.</p>
+<p>Det finns mycket mer att utforska inom maskininlärningsvärlden!</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-kleinbaum2013" class="csl-entry" role="listitem">
-Kleinbaum, D. G., L. L. Kupper, A. Nizam, och E. S. Rosenberg. 2013. <em>Applied Regression Analysis and Other Multivariable Methods</em>. Cengage Learning. <a href="https://books.google.se/books?id=v590AgAAQBAJ">https://books.google.se/books?id=v590AgAAQBAJ</a>.
-</div>
-</div>
-</section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>Detta är ekvivalent som <span class="math inline">\(Y_{ij} = \mu + A_i + E_{ij}\)</span> från <span class="citation" data-cites="kleinbaum2013">Kleinbaum m.fl. (<a href="#ref-kleinbaum2013" role="doc-biblioref">2013</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><span class="math inline">\(MSA\)</span> är specifikt medelkvadratsumman för faktorn. I en envägs-ANOVA är detta samma som <span class="math inline">\(MSR\)</span>, men i tvåvägs-ANOVA kommer vi vilja dela upp <span class="math inline">\(MSR\)</span> i dess mindre beståndsdelar.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1210,14 +934,11 @@ Kleinbaum, D. G., L. L. Kupper, A. Nizam, och E. S. Rosenberg. 2013. <em>Applied
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../02-variance/00-oneway-anova.html" class="pagination-link" aria-label="Introduktion till variansanalys">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduktion till variansanalys</span></span>
+      <a href="../05-stat-to-ml/05-ensembles.html" class="pagination-link" aria-label="Ensemblemetoder">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Ensemblemetoder</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../02-variance/02-control-variables.html" class="pagination-link" aria-label="Kontrollvariabler">
-        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Kontrollvariabler</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

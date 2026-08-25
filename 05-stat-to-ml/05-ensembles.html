@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -55,6 +90,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../05-stat-to-ml/06-epilogue.html" rel="next">
 <link href="../05-stat-to-ml/04-neural-networks.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -531,6 +567,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Ensemblemetoder</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/06-epilogue.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Epilog</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -543,14 +585,17 @@ window.Quarto = {
     <h2 id="toc-title">Innehållsförteckning</h2>
    
   <ul>
-  <li><a href="#bootstrapping-och-bagging" id="toc-bootstrapping-och-bagging" class="nav-link active" data-scroll-target="#bootstrapping-och-bagging"><span class="header-section-number">30.1</span> Bootstrapping och Bagging</a></li>
+  <li><a href="#bootstrapping-och-bagging" id="toc-bootstrapping-och-bagging" class="nav-link active" data-scroll-target="#bootstrapping-och-bagging"><span class="header-section-number">30.1</span> Bootstrapping och Bagging</a>
+  <ul class="collapse">
+  <li><a href="#sec-bagging-wine" id="toc-sec-bagging-wine" class="nav-link" data-scroll-target="#sec-bagging-wine"><span class="header-section-number">30.1.1</span> Prediktioner av vin</a></li>
+  </ul></li>
   <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest"><span class="header-section-number">30.2</span> Random Forest</a></li>
   <li><a href="#boosting" id="toc-boosting" class="nav-link" data-scroll-target="#boosting"><span class="header-section-number">30.3</span> Boosting</a>
   <ul class="collapse">
-  <li><a href="#xgboost" id="toc-xgboost" class="nav-link" data-scroll-target="#xgboost"><span class="header-section-number">30.3.1</span> XGBoost</a></li>
+  <li><a href="#adaboost-i-r" id="toc-adaboost-i-r" class="nav-link" data-scroll-target="#adaboost-i-r"><span class="header-section-number">30.3.1</span> AdaBoost i R</a></li>
+  <li><a href="#xgboost" id="toc-xgboost" class="nav-link" data-scroll-target="#xgboost"><span class="header-section-number">30.3.2</span> XGBoost</a></li>
   </ul></li>
-  <li><a href="#modellbaserad-ensemblemetod" id="toc-modellbaserad-ensemblemetod" class="nav-link" data-scroll-target="#modellbaserad-ensemblemetod"><span class="header-section-number">30.4</span> Modellbaserad ensemblemetod</a></li>
-  <li><a href="#bagging-eller-boosting" id="toc-bagging-eller-boosting" class="nav-link" data-scroll-target="#bagging-eller-boosting"><span class="header-section-number">30.5</span> Bagging eller boosting?</a></li>
+  <li><a href="#bagging-eller-boosting" id="toc-bagging-eller-boosting" class="nav-link" data-scroll-target="#bagging-eller-boosting"><span class="header-section-number">30.4</span> Bagging eller boosting?</a></li>
   <li><a href="#referenser" id="toc-referenser" class="nav-link" data-scroll-target="#referenser">Referenser</a></li>
   </ul>
 </nav>
@@ -583,7 +628,7 @@ window.Quarto = {
 <div id="fig-ensemble-data" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="05-ensembles_files/mediabag/788dd4d3826e129abf4793f9334daa5fb2708c9c.svg" class="img-fluid figure-img">
+<img src="05-ensembles_files/mediabag/fcf756c13d91c3e1cb75fc73e17e7c424a506f5d.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;30.1: Databaserad ensemble
@@ -594,7 +639,7 @@ Figur&nbsp;30.1: Databaserad ensemble
 <div id="fig-ensemble-model" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ensemble-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="05-ensembles_files/mediabag/49cb26729b8320cb6d702cc560ecd3c712dde43f.svg" class="img-fluid figure-img">
+<img src="05-ensembles_files/mediabag/71616baf79c5de2d748fff893d171f5d2a320da2.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ensemble-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;30.2: Modellbaserad ensemble
@@ -611,7 +656,190 @@ Figur&nbsp;30.2: Modellbaserad ensemble
   \end{aligned}
 \]</span></p>
 <p>Om vi minns tillbaka till <a href="01-validation.html#fig-bias-variance" class="quarto-xref">Figur&nbsp;<span>26.7</span></a> vet vi att en komplex modell ofta har en hög(re) varians som ökar felet. Bagging sänker variansen av den anpassade funktionen så att en mer komplex modell ändå blir generaliserbar men påverkas <em>mycket</em> av kvalitén av modellen som anpassas. Om modellen är bra blir aggregeringen bättre, men en dålig modell blir sämre när den aggregeras.</p>
-<!-- TODO: LABBUPPGIFTER + EXEMPELKOD I ISLRv2 -->
+<section id="sec-bagging-wine" class="level3" data-number="30.1.1">
+<h3 data-number="30.1.1" class="anchored" data-anchor-id="sec-bagging-wine"><span class="header-section-number">30.1.1</span> Prediktioner av vin</h3>
+<p>Säg att vi vill prediktera vilken typ av vin som vi har givet olika egenskaper. Vi börjar med att dela upp data och träna en enkel modell. Nu när vi gjort dessa steg manuellt tidigare kan vi använda en funktion som gör allting i ett och samma svep.</p>
+<p>Från <code>caret</code> finns funktionen <code>createDataPartition()</code>. En fördel med denna funktion är att den kan genomföra uppdelningen på ett par olika sätt, bland annat att dragningarna görs inom varje nivå av responsvariabeln<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> för att bibehålla klassbalansen i de olika mängderna. Vi tränar sedan en väldigt enkel modell, ett beslutsträd med mycket låg komplexitet.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Först säkerställer vi att responsvariabeln är en faktor</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>wine<span class="sc">$</span>Class <span class="ot">&lt;-</span> wine<span class="sc">$</span>Class <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20260824</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createDataPartition</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    wine<span class="sc">$</span>Class,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> <span class="fl">0.8</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">list =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Plockar ut valda index till trainWine</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>trainWine <span class="ot">&lt;-</span> wine[trainIndex,]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Tar bort valda index till testWine</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>testWine <span class="ot">&lt;-</span> wine[<span class="sc">-</span>trainIndex,]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>wineTree <span class="ot">&lt;-</span> </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    Class <span class="sc">~</span> .,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> trainWine,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"class"</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">parms =</span> </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">split =</span> <span class="st">"gini"</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> </span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">minsplit =</span> <span class="dv">5</span>,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxdepth =</span> <span class="dv">5</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">cp =</span> <span class="fl">0.1</span>,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">xval =</span> <span class="dv">10</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">usesurrogate =</span> <span class="dv">0</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxcompete =</span> <span class="dv">0</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxsurrogate =</span> <span class="dv">0</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(wineTree, <span class="at">newdata =</span> testWine, <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(predictions, testWine<span class="sc">$</span>Class)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  1  2  3
+         1 10  2  0
+         2  1 10  2
+         3  0  2  7
+
+Overall Statistics
+                                        
+               Accuracy : 0.7941        
+                 95% CI : (0.621, 0.913)
+    No Information Rate : 0.4118        
+    P-Value [Acc &gt; NIR] : 0.000006217   
+                                        
+                  Kappa : 0.6873        
+                                        
+ Mcnemar's Test P-Value : NA            
+
+Statistics by Class:
+
+                     Class: 1 Class: 2 Class: 3
+Sensitivity            0.9091   0.7143   0.7778
+Specificity            0.9130   0.8500   0.9200
+Pos Pred Value         0.8333   0.7692   0.7778
+Neg Pred Value         0.9545   0.8095   0.9200
+Prevalence             0.3235   0.4118   0.2647
+Detection Rate         0.2941   0.2941   0.2059
+Detection Prevalence   0.3529   0.3824   0.2647
+Balanced Accuracy      0.9111   0.7821   0.8489</code></pre>
+</div>
+</div>
+<p>Med tre klasser har vi nu en annorlunda utskrift från <code>confusionMatrix()</code>. Vi får direkt utvärderingsmått uppdelat på klass, 1 2 och 3 och vi kan se den övergripande träffsäkerheten inte är dålig men inte heller jättebra, ca 79%. Vi kan nu försöka förbättra modellen genom att skapa bootstrapurval från träningsmängden och träna samma enkla modell på respektive urval.</p>
+<p>Ett bootstrap urval kan skapas med funktionen <code>createResample()</code> från <code>caret</code>. Argumentet <code>times</code> styr hur många urval som skapas. Det resulterande objektet är en lista vilket innebär att vi kan effektivisera koden genom att använda <code>lapply</code> eller liknande funktion för att skatta samma modell på respektive urval.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bags <span class="ot">&lt;-</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createResample</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> trainWine<span class="sc">$</span>Class,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Skapar 20 bootstrapurval</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">times =</span> <span class="dv">20</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">list =</span> <span class="cn">TRUE</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">X =</span> bags,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">FUN =</span> <span class="cf">function</span>(bootstrap) {</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Plockar ut bootstrapurvalet från träningsdata</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      sample <span class="ot">&lt;-</span> trainWine[bootstrap, ]</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Tränar den enkla modellen på bootstrapurvalet</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      model <span class="ot">&lt;-</span> </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">rpart</span>(</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>          Class <span class="sc">~</span> .,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>          <span class="co"># Tränar modellen på bootstrapurvalet</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> sample,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">method =</span> <span class="st">"class"</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>          <span class="at">parms =</span> </span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>            <span class="fu">list</span>(</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>              <span class="at">split =</span> <span class="st">"gini"</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>          <span class="at">control =</span> </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>            <span class="fu">list</span>(</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>              <span class="at">minsplit =</span> <span class="dv">5</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>              <span class="at">maxdepth =</span> <span class="dv">5</span>,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>              <span class="at">cp =</span> <span class="fl">0.1</span>,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>              <span class="at">xval =</span> <span class="dv">10</span>,</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>              <span class="at">usesurrogate =</span> <span class="dv">0</span>,</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>              <span class="at">maxcompete =</span> <span class="dv">0</span>,</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>              <span class="at">maxsurrogate =</span> <span class="dv">0</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Genererar prediktioner från den tränade modellen.</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">predict</span>(model, <span class="at">newdata =</span> testWine, <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Objektet <code>yhat</code> innehåller nu en lista med prediktioner över testmängden för alla 20 bootstrapurval. För att se hur bra modellen är överlag behöver vi använda majoritetsröstning för att vi ska få en prediktion per observation. Med hjälp av funktionen <code>bind_rows()</code> från <code>tidyverse</code> kan vi sammanställa alla 20 modellernas prediktioner för varje observation i testmängden, en <strong>rad för varje urval</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>argmaxPrediction <span class="ot">&lt;-</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  yhat <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># För varje kolumn, beräkna det mest förekommande värdet</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">everything</span>(),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> .x <span class="sc">|&gt;</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Skapar en frekvenstabell över alla prediktioner</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">table</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Hittar vilket element som är det största frekvensen</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">which.max</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Plockar ut namnet (klassen) för det elementet</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">names</span>()</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Roterar från rader till kolumner </span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>()</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(argmaxPrediction, testWine<span class="sc">$</span>Class)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  1  2  3
+         1 10  1  0
+         2  1 13  0
+         3  0  0  9
+
+Overall Statistics
+                                          
+               Accuracy : 0.9412          
+                 95% CI : (0.8032, 0.9928)
+    No Information Rate : 0.4118          
+    P-Value [Acc &gt; NIR] : 0.00000000009446
+                                          
+                  Kappa : 0.9103          
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: 1 Class: 2 Class: 3
+Sensitivity            0.9091   0.9286   1.0000
+Specificity            0.9565   0.9500   1.0000
+Pos Pred Value         0.9091   0.9286   1.0000
+Neg Pred Value         0.9565   0.9500   1.0000
+Prevalence             0.3235   0.4118   0.2647
+Detection Rate         0.2941   0.3824   0.2647
+Detection Prevalence   0.3235   0.4118   0.2647
+Balanced Accuracy      0.9328   0.9393   1.0000</code></pre>
+</div>
+</div>
+<p>Med hjälp av 20 bootstrapurval och majoritetsröstning har vi nu lyckats få en träffsäkerhet på ungefär 94% och väldigt bra klasspecifika mått (över 90% sensitivitet för varje klass) på testmängden. Detta visar på styrkan i metoden, trots att vi har enkla modeller som var för sig inte är den bästa, kan de tillsammans bli en väldigt kraftfull sammanslagen modell.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -625,23 +853,24 @@ Figur&nbsp;30.2: Modellbaserad ensemble
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Vid bagging skapas flera bootstrapurval från samma träningsmängd. Anta att träningsmängden innehåller observationerna A, B, C, D och E. Ett av bootstrapurvalen med storlek 5 blev A, A, C, E, E. Fyra regressionsmodeller tränas därefter på var sitt bootstrapurval. För en ny observation ger modellerna prediktionerna 4.2, 5.8, 6.1 och 7.9. Den aggregerade prediktionen beräknas som <span class="math inline">\(\hat{f}_{bag}(\boldsymbol{X})=\frac{1}{B}\sum_{b=1}^{B}\hat{f}_b(\boldsymbol{X})\)</span>. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-45ca6772cd6fd9e3d63e1c880dc1c577" class="webex-checkboxgroup" data-answer="bwRPURoGGwNPVBpWOQ==">
-<label><input type="checkbox" autocomplete="off" name="45ca6772cd6fd9e3d63e1c880dc1c577"><span>Baggingmodellens prediktion för den nya observationen är 6.</span></label><label><input type="checkbox" autocomplete="off" name="45ca6772cd6fd9e3d63e1c880dc1c577"><span>Om samtliga enskilda modeller har ungefär samma systematiska bias garanterar ett större antal bootstrapmodeller att denna bias försvinner.</span></label><label><input type="checkbox" autocomplete="off" name="45ca6772cd6fd9e3d63e1c880dc1c577"><span>Bootstrapurvalet är giltigt trots att vissa observationer förekommer flera gånger och andra inte förekommer alls.</span></label><label><input type="checkbox" autocomplete="off" name="45ca6772cd6fd9e3d63e1c880dc1c577"><span>Bagging används enligt underlaget främst för att minska modellens varians snarare än dess bias.</span></label><label><input type="checkbox" autocomplete="off" name="45ca6772cd6fd9e3d63e1c880dc1c577"><span>Bootstrapurval skapas utan återläggning, vilket innebär att varje observation kan förekomma högst en gång i ett urval.</span></label><label><input type="checkbox" autocomplete="off" name="45ca6772cd6fd9e3d63e1c880dc1c577"><span>När antalet bootstrapmodeller <span class="math inline">\(B\)</span> ökar tränas varje enskild modell automatiskt på fler unika observationer.</span></label>
+<div id="webex-d0ad0fa0d68ac52d90b3af36491b4279" class="webex-checkboxgroup" data-answer="PwFNVBxXTQBIBxRRPg==">
+<label><input type="checkbox" autocomplete="off" name="d0ad0fa0d68ac52d90b3af36491b4279"><span>Bootstrapurvalet är giltigt trots att vissa observationer förekommer flera gånger och andra inte förekommer alls.</span></label><label><input type="checkbox" autocomplete="off" name="d0ad0fa0d68ac52d90b3af36491b4279"><span>Bootstrapurval skapas utan återläggning, vilket innebär att varje observation kan förekomma högst en gång i ett urval.</span></label><label><input type="checkbox" autocomplete="off" name="d0ad0fa0d68ac52d90b3af36491b4279"><span>Baggingmodellens prediktion för den nya observationen är 6.</span></label><label><input type="checkbox" autocomplete="off" name="d0ad0fa0d68ac52d90b3af36491b4279"><span>Om samtliga enskilda modeller har ungefär samma systematiska bias garanterar ett större antal bootstrapmodeller att denna bias försvinner.</span></label><label><input type="checkbox" autocomplete="off" name="d0ad0fa0d68ac52d90b3af36491b4279"><span>Bagging används enligt underlaget främst för att minska modellens varians snarare än dess bias.</span></label><label><input type="checkbox" autocomplete="off" name="d0ad0fa0d68ac52d90b3af36491b4279"><span>När antalet bootstrapmodeller <span class="math inline">\(B\)</span> ökar tränas varje enskild modell automatiskt på fler unika observationer.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
+<li>Sant. Bootstrap innebär urval med återläggning. Därför kan samma observation väljas flera gånger, samtidigt som andra observationer kan saknas i ett enskilt urval.</li>
+<li>Falskt. Bootstrapurval görs med återläggning. Observationerna kan därför förekomma flera gånger i samma urval.</li>
 <li>Sant. Den aggregerade prediktionen blir <span class="math inline">\((4.2+5.8+6.1+7.9)/4=6\)</span>.</li>
 <li>Falskt. Bagging kan minska variationen mellan skattningar, men det innebär inte att en systematisk bias som delas av grundmodellerna automatiskt försvinner.</li>
-<li>Sant. Bootstrap innebär urval med återläggning. Därför kan samma observation väljas flera gånger, samtidigt som andra observationer kan saknas i ett enskilt urval.</li>
 <li>Sant. Enligt underlaget är baggings huvudsakliga effekt att minska variansen. Metoden beskrivs inte som en metod som i första hand minskar bias.</li>
-<li>Falskt. Bootstrapurval görs med återläggning. Observationerna kan därför förekomma flera gånger i samma urval.</li>
 <li>Falskt. Ett större <span class="math inline">\(B\)</span> innebär att fler bootstrapurval och fler modeller skapas. Det förändrar inte automatiskt antalet unika observationer i varje enskilt urval.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
+</section>
 </section>
 <section id="random-forest" class="level2" data-number="30.2">
 <h2 data-number="30.2" class="anchored" data-anchor-id="random-forest"><span class="header-section-number">30.2</span> Random Forest</h2>
@@ -654,7 +883,89 @@ Figur&nbsp;30.2: Modellbaserad ensemble
   \end{aligned}
 \]</span></p>
 <p>Varje modell tränas både på ett urval av observationer (med återläggning) <em>och</em> ett urval av variabler vilket leder till ett minskat bias, “artificiell” varians i varje träd och mindre korrelation mellan träden. Ofta dominerar den avkorrelerade effekten vilket leder till att MSE minskar på testdata. Andra fördelar med Random Forest är att den är lätt att parallelisera samt att det urval av parametrar som görs minskar kostnaden för varje uppdelning.</p>
-<p>Metoden har, utöver de vanliga hyperparametrar från ett enskilt beslutsträd, två ytterligare hyperparametrar i form av <span class="math inline">\(B\)</span> och <span class="math inline">\(q\)</span>.</p>
+<p>Metoden har, utöver de vanliga hyperparametrar från ett enskilt beslutsträd, två ytterligare hyperparametrar i form av <span class="math inline">\(B\)</span> och <span class="math inline">\(q\)</span>. Vi har i <a href="#sec-bagging-wine" class="quarto-xref"><span>Avsnitt 30.1.1</span></a> introducerat <span class="math inline">\(B\)</span> med enkel bagging som går att använda för andra sorters modeller, men Random Forest behöver också slumpa fram variabler för varje träd vilket inte kan implementeras på samma enkla sätt. Vi kan istället använda funktionen <code>randomForest</code> från paketet med samma namn.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ett problem med <code>randomForest()</code> är att den är en gammal funktion som inte är riktigt kompatibelt med <code>tidyverse</code>. Specifikt har funktionen problem med variabelnamn som innehåller mellanslag. Vi måste först konvertera namnen till ett äldre format där mellanslag byts ut med någon annan symbol.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Byter ut alla mellanslag med .</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(trainWine) <span class="ot">&lt;-</span> <span class="fu">make.names</span>(<span class="fu">names</span>(trainWine))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(testWine) <span class="ot">&lt;-</span> <span class="fu">make.names</span>(<span class="fu">names</span>(testWine))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">randomForest</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    Class <span class="sc">~</span> .,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> trainWine,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger testmängden</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">xtest =</span> testWine <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span>Class),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">ytest =</span> testWine <span class="sc">|&gt;</span> <span class="fu">pull</span>(Class)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+ randomForest(formula = Class ~ ., data = trainWine, xtest = select(testWine,      !Class), ytest = pull(testWine, Class)) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 3
+
+        OOB estimate of  error rate: 0.69%
+Confusion matrix:
+   1  2  3 class.error
+1 48  0  0  0.00000000
+2  0 56  1  0.01754386
+3  0  0 39  0.00000000
+                Test set error rate: 2.94%
+Confusion matrix:
+   1  2 3 class.error
+1 11  0 0  0.00000000
+2  1 13 0  0.07142857
+3  0  0 9  0.00000000</code></pre>
+</div>
+</div>
+<p>Från utskriften ser vi dels vilka inställningar som använts i modellen; 500 träd har tränats baserat på olika bootstrapurval samt varje träd har endast använt 3 variabler från datamaterialets 13. Vi får också förväxlingsmatrisen för träningsmängden med ett valideringsfel, det som vi i Random Forest sammanhang kallar för <strong>out of bag (OOB) error</strong>, samt en förväxlingsmatris för testmängden med dess fel.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Notera</span>OOB
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Detta fel beräknas på respektive träds icke-bootstrappade urval på samma sätt som vi i korsvalidering beräknar felet på den fold som inte använts i träningen. Det är dock där som skillnaderna mellan OOB och korsvalidering slutar, då korsvalidering har en tydlig struktur och använder endast varje observation en gång för validering medan OOB kan på grund av slumpen i bootstrapurvalet använda samma observation flera gånger till beräkningen av felet.</p>
+</div>
+</div>
+<p>Vi kan se att testmängden för Random Forest-modellen endast fått en missklassificerad observation med en resulterande träffsäkerhet på <span class="math inline">\(1 - 0.0294 = 0.9706\)</span>. Modellen har producerat bättre resultat än den enkla bagging-modellen från <a href="#sec-bagging-wine" class="quarto-xref"><span>Avsnitt 30.1.1</span></a>.</p>
+<p>För att få en indikation om vilka variabler som är viktiga för modellen att separera klasserna kan vi undersöka <strong>Variable Importance</strong> (ungefärlig sv. variablernas viktighet). Måttet Importance mäts utifrån hur mycket varje variabel bidrar med förklaring, det vill säga hur mycket gini minskar för en förgrening där variabeln inkluderas. För att sammanfatta alla de olika träden som skapas beräknas ett genomsnitt av alla förgreningar och viktiga variabler har höga genomsnittliga värden.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(model)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-wine-rf-importance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-wine-rf-importance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="05-ensembles_files/figure-html/fig-wine-rf-importance-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wine-rf-importance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;30.3: Variable importance (viktighet) för Random Forest modellen
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Det verkar som att egenskaper som <code>Proline</code> och <code>Flavanoids</code> separerar klasserna bäst medan både färgintensiteten och mängden alcohol också är viktiga. Det är värt att notera detta diagram inte visar hur dessa variabler separerar klasserna, huruvida låga eller höga värden hör till en klass eller annan, utan för sådana slutsatser behöver vi titta närmare på träden i sig. Detta ligger utanför detta material.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -668,18 +979,18 @@ Figur&nbsp;30.2: Modellbaserad ensemble
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Random Forest är en ensemblemetod som bygger vidare på bagging genom att kombinera ett stort antal beslutsträd. Vilka av följande påståenden om Random Forest är korrekta?</p>
-<div id="webex-f4126cee43dce5451ab09f7e1690124e" class="webex-checkboxgroup" data-answer="PQQdAhpSSVQYAkhSOA==">
-<label><input type="checkbox" autocomplete="off" name="f4126cee43dce5451ab09f7e1690124e"><span>Varje nytt träd tränas för att korrigera de fel som det föregående trädet gjorde.</span></label><label><input type="checkbox" autocomplete="off" name="f4126cee43dce5451ab09f7e1690124e"><span>Samtliga förklarande variabler måste användas som kandidater vid varje uppdelning för att träden ska bli tillräckligt olika.</span></label><label><input type="checkbox" autocomplete="off" name="f4126cee43dce5451ab09f7e1690124e"><span>Vid varje uppdelning i ett träd väljs den bästa uppdelningen bland en slumpmässigt utvald delmängd av de förklarande variablerna.</span></label><label><input type="checkbox" autocomplete="off" name="f4126cee43dce5451ab09f7e1690124e"><span>Det slumpmässiga urvalet av variabler kan minska korrelationen mellan träden.</span></label><label><input type="checkbox" autocomplete="off" name="f4126cee43dce5451ab09f7e1690124e"><span>Vid regression kombineras trädens prediktioner vanligtvis med ett medelvärde, medan majoritetsröstning kan användas vid klassificering.</span></label><label><input type="checkbox" autocomplete="off" name="f4126cee43dce5451ab09f7e1690124e"><span>Varje beslutsträd tränas vanligtvis på ett bootstrapurval från den ursprungliga träningsmängden.</span></label>
+<div id="webex-449f09f279c9045faedf4e0fc2c50641" class="webex-checkboxgroup" data-answer="bwUVVxwISgIbCU8IbQ==">
+<label><input type="checkbox" autocomplete="off" name="449f09f279c9045faedf4e0fc2c50641"><span>Varje beslutsträd tränas vanligtvis på ett bootstrapurval från den ursprungliga träningsmängden.</span></label><label><input type="checkbox" autocomplete="off" name="449f09f279c9045faedf4e0fc2c50641"><span>Vid regression kombineras trädens prediktioner vanligtvis med ett medelvärde, medan majoritetsröstning kan användas vid klassificering.</span></label><label><input type="checkbox" autocomplete="off" name="449f09f279c9045faedf4e0fc2c50641"><span>Det slumpmässiga urvalet av variabler kan minska korrelationen mellan träden.</span></label><label><input type="checkbox" autocomplete="off" name="449f09f279c9045faedf4e0fc2c50641"><span>Varje nytt träd tränas för att korrigera de fel som det föregående trädet gjorde.</span></label><label><input type="checkbox" autocomplete="off" name="449f09f279c9045faedf4e0fc2c50641"><span>Samtliga förklarande variabler måste användas som kandidater vid varje uppdelning för att träden ska bli tillräckligt olika.</span></label><label><input type="checkbox" autocomplete="off" name="449f09f279c9045faedf4e0fc2c50641"><span>Vid varje uppdelning i ett träd väljs den bästa uppdelningen bland en slumpmässigt utvald delmängd av de förklarande variablerna.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
+<li>Sant. Varje träd tränas vanligtvis på ett eget bootstrapurval, vilket skapar variation mellan träden.</li>
+<li>Sant. Vid regression används vanligtvis medelvärdet av trädens prediktioner. Vid klassificering kan den klass som får flest röster väljas.</li>
+<li>Sant. Om träden inte alltid använder samma starka prediktorer kan deras prediktioner bli mindre korrelerade.</li>
 <li>Falskt. Träden i Random Forest tränas oberoende av varandra. Att varje ny modell försöker korrigera tidigare fel är kännetecknande för boosting.</li>
 <li>Falskt. Det slumpmässiga variabelurvalet är en central del av Random Forest och används för att göra träden mindre lika varandra.</li>
 <li>Sant. Vid varje uppdelning får trädet endast välja mellan en slumpmässigt utvald delmängd av de förklarande variablerna.</li>
-<li>Sant. Om träden inte alltid använder samma starka prediktorer kan deras prediktioner bli mindre korrelerade.</li>
-<li>Sant. Vid regression används vanligtvis medelvärdet av trädens prediktioner. Vid klassificering kan den klass som får flest röster väljas.</li>
-<li>Sant. Varje träd tränas vanligtvis på ett eget bootstrapurval, vilket skapar variation mellan träden.</li>
 </ul>
 </div>
 </div>
@@ -692,10 +1003,10 @@ Figur&nbsp;30.2: Modellbaserad ensemble
 <div id="fig-ensemble-data" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="05-ensembles_files/mediabag/7e7d0af1635a86af9d65d795869a826c4b1e1c3d.svg" class="img-fluid figure-img">
+<img src="05-ensembles_files/mediabag/bfaf1f7314e6a166e5e744fd6eafd1278b224a27.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ensemble-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;30.3: Illustration av boosting
+Figur&nbsp;30.4: Illustration av boosting
 </figcaption>
 </figure>
 </div>
@@ -710,7 +1021,7 @@ Viktigt
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Inom boosting används en <strong>viktad kostnadsfunktion</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I <a href="00-introduction.html#sec-cost-function" class="quarto-xref"><span>Avsnitt 25.3.2</span></a> har vi antagit att varje observation bidrar lika mycket till den totala kostnaden. Vi kan omformulera <a href="00-introduction.html#eq-mse" class="quarto-xref">Ekvation&nbsp;<span>25.3</span></a> till en viktad summa enligt: <span id="eq-mse-weighted"><span class="math display">\[
+<p>Inom boosting används en <strong>viktad kostnadsfunktion</strong><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. I <a href="00-introduction.html#sec-cost-function" class="quarto-xref"><span>Avsnitt 25.3.2</span></a> har vi antagit att varje observation bidrar lika mycket till den totala kostnaden. Vi kan omformulera <a href="00-introduction.html#eq-mse" class="quarto-xref">Ekvation&nbsp;<span>25.3</span></a> till en viktad summa enligt: <span id="eq-mse-weighted"><span class="math display">\[
   \begin{aligned}
     MSE = \Sum{n} w_i \cdot (y_i - \hat{y}_i)^2
   \end{aligned}
@@ -755,7 +1066,7 @@ Viktigt
 </ol>
 </div>
 </div>
-<p>Kortfattat beräknar algoritmen hur mycket fel modell <span class="math inline">\(b\)</span> gör, <span class="math inline">\(err_b\)</span>, genom att en viktad summa för de missklassificerade observationerna<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> och använder sedan denna summa för att beräkna koefficienten <span class="math inline">\(\alpha_b\)</span>. En bra modell har ett lågt värde på <span class="math inline">\(err_b\)</span> vilket leder till ett positivt värde på <span class="math inline">\(\alpha_b\)</span> och en dålig modell får negativa värden.</p>
+<p>Kortfattat beräknar algoritmen hur mycket fel modell <span class="math inline">\(b\)</span> gör, <span class="math inline">\(err_b\)</span>, genom att en viktad summa för de missklassificerade observationerna<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> och använder sedan denna summa för att beräkna koefficienten <span class="math inline">\(\alpha_b\)</span>. En bra modell har ett lågt värde på <span class="math inline">\(err_b\)</span> vilket leder till ett positivt värde på <span class="math inline">\(\alpha_b\)</span> och en dålig modell får negativa värden.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-adaboost-alpha" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -764,7 +1075,7 @@ Viktigt
 <img src="05-ensembles_files/figure-html/fig-adaboost-alpha-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-adaboost-alpha-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;30.4: <span class="math inline">\(\alpha_b\)</span> för olika prestanda på modellerna
+Figur&nbsp;30.5: <span class="math inline">\(\alpha_b\)</span> för olika prestanda på modellerna
 </figcaption>
 </figure>
 </div>
@@ -779,13 +1090,111 @@ Figur&nbsp;30.4: <span class="math inline">\(\alpha_b\)</span> för olika presta
 <img src="05-ensembles_files/figure-html/fig-adaboost-wb-1-1.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-adaboost-wb-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;30.5: <span class="math inline">\(w^{(b+1)}\)</span> utifrån <span class="math inline">\(w^b = 1/1000\)</span> med olika värden på <span class="math inline">\(\alpha_b\)</span>
+Figur&nbsp;30.6: <span class="math inline">\(w^{(b+1)}\)</span> utifrån <span class="math inline">\(w^b = 1/1000\)</span> med olika värden på <span class="math inline">\(\alpha_b\)</span>
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>I <a href="#fig-adaboost-wb-1" class="quarto-xref">Figur&nbsp;<span>30.5</span></a> ser vi hur vikterna för en missklassificerad observation med <span class="math inline">\(w_i^b = 1/1000\)</span> förändras beroende på modellens prestanda. För en bra modell (positiv <span class="math inline">\(\alpha_b\)</span>) kommer <span class="math inline">\(w_i^{b+1}\)</span> bli mycket större eftersom den är en av få observationer som blivit fel, medan i en sämre modell (negativ <span class="math inline">\(\alpha_b\)</span>) får många observationer istället en mindre ökning.</p>
+<p>I <a href="#fig-adaboost-wb-1" class="quarto-xref">Figur&nbsp;<span>30.6</span></a> ser vi hur vikterna för en missklassificerad observation med <span class="math inline">\(w_i^b = 1/1000\)</span> förändras beroende på modellens prestanda. För en bra modell (positiv <span class="math inline">\(\alpha_b\)</span>) kommer <span class="math inline">\(w_i^{b+1}\)</span> bli mycket större eftersom den är en av få observationer som blivit fel, medan i en sämre modell (negativ <span class="math inline">\(\alpha_b\)</span>) får många observationer istället en mindre ökning.</p>
+<section id="adaboost-i-r" class="level3" data-number="30.3.1">
+<h3 data-number="30.3.1" class="anchored" data-anchor-id="adaboost-i-r"><span class="header-section-number">30.3.1</span> AdaBoost i R</h3>
+<p>Vi kan träna en AdaBoost modell genom att använda funktioner från <code>caret</code> paketet. Som ett tillägg behövs också paketet <code>adabag</code>. Vi har sedan tidigare i detta kapitel delat upp <code>wine</code> i en tränings och testmängd som vi kommer återanvända.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>train()</code> är anpassad för att genomföra hyperparameter tuning enligt Grid Search, men om vi är intresserade av att bara genomföra en form av boosting can vi använda funktionen <code>boosting()</code> direkt från <code>adabag</code>-paketet.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>adaboostModel <span class="ot">&lt;-</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">train</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    Class <span class="sc">~</span> ., </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> trainWine,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"AdaBoost.M1"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Applicerar 10-fold korsvalidering</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">trainControl</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"cv"</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">number =</span> <span class="dv">10</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anger fixa hyperparametrar för grid search</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">mfinal =</span> <span class="dv">100</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">maxdepth =</span> <span class="dv">1</span>, </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">coeflearn =</span> <span class="st">"Breiman"</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>adaboostModel</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AdaBoost.M1 
+
+144 samples
+ 13 predictor
+  3 classes: '1', '2', '3' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 130, 130, 129, 129, 130, 130, ... 
+Resampling results:
+
+  Accuracy   Kappa    
+  0.9719048  0.9577061
+
+Tuning parameter 'mfinal' was held constant at a value of 100
+Tuning
+ parameter 'maxdepth' was held constant at a value of 1
+Tuning
+ parameter 'coeflearn' was held constant at a value of Breiman</code></pre>
+</div>
+</div>
+<p>I modellutskriften får vi information om hur träningen gått till och det slutgiltiga träningsfelet. Vi kan också få en väntevärdesriktigt skattning av felet på testmängden.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(adaboostModel, <span class="at">newdata =</span> testWine)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(predictions, testWine<span class="sc">$</span>Class)</span></code></pre></div><button title="Kopiera till urklipp" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  1  2  3
+         1 10  1  0
+         2  1 13  0
+         3  0  0  9
+
+Overall Statistics
+                                          
+               Accuracy : 0.9412          
+                 95% CI : (0.8032, 0.9928)
+    No Information Rate : 0.4118          
+    P-Value [Acc &gt; NIR] : 0.00000000009446
+                                          
+                  Kappa : 0.9103          
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: 1 Class: 2 Class: 3
+Sensitivity            0.9091   0.9286   1.0000
+Specificity            0.9565   0.9500   1.0000
+Pos Pred Value         0.9091   0.9286   1.0000
+Neg Pred Value         0.9565   0.9500   1.0000
+Prevalence             0.3235   0.4118   0.2647
+Detection Rate         0.2941   0.3824   0.2647
+Detection Prevalence   0.3235   0.4118   0.2647
+Balanced Accuracy      0.9328   0.9393   1.0000</code></pre>
+</div>
+</div>
+<p>AdaBoost ger en modell med ungefär 94% träffsäkerhet och sensitiviteten ligger över 90% för alla klasser.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -799,23 +1208,24 @@ Figur&nbsp;30.5: <span class="math inline">\(w^{(b+1)}\)</span> utifrån <span c
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>I maskininlärning kan boosting användas för att klassificera observationer genom att kombinera flera svaga modeller. Efter att den första modellen har tränats visar det sig att vissa observationer har klassificerats fel. Vilka av följande påståenden beskriver korrekt hur boosting fortsätter träningen och kombinerar de olika modellerna?</p>
-<div id="webex-d78c21570f55ec6f9c5d28f93607f3a3" class="webex-checkboxgroup" data-answer="PwcUUh4AGQZt">
-<label><input type="checkbox" autocomplete="off" name="d78c21570f55ec6f9c5d28f93607f3a3"><span>Varje ny modell tränas utan information om resultaten från tidigare modeller.</span></label><label><input type="checkbox" autocomplete="off" name="d78c21570f55ec6f9c5d28f93607f3a3"><span>De felklassificerade observationerna får större betydelse när nästa modell tränas.</span></label><label><input type="checkbox" autocomplete="off" name="d78c21570f55ec6f9c5d28f93607f3a3"><span>Den slutliga prediktionen kan baseras på en viktad kombination av de tränade modellerna.</span></label><label><input type="checkbox" autocomplete="off" name="d78c21570f55ec6f9c5d28f93607f3a3"><span>Observationer som redan klassificerats korrekt kan få lägre vikt i nästa steg.</span></label>
+<div id="webex-26d3659dc8f2517b9d6aee0d0fc2239c" class="webex-checkboxgroup" data-answer="aQdIAhoFFVU+">
+<label><input type="checkbox" autocomplete="off" name="26d3659dc8f2517b9d6aee0d0fc2239c"><span>De felklassificerade observationerna får större betydelse när nästa modell tränas.</span></label><label><input type="checkbox" autocomplete="off" name="26d3659dc8f2517b9d6aee0d0fc2239c"><span>Observationer som redan klassificerats korrekt kan få lägre vikt i nästa steg.</span></label><label><input type="checkbox" autocomplete="off" name="26d3659dc8f2517b9d6aee0d0fc2239c"><span>Varje ny modell tränas utan information om resultaten från tidigare modeller.</span></label><label><input type="checkbox" autocomplete="off" name="26d3659dc8f2517b9d6aee0d0fc2239c"><span>Den slutliga prediktionen kan baseras på en viktad kombination av de tränade modellerna.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
-<li>Falskt. Boosting är en sekventiell metod där resultaten från tidigare modeller påverkar träningen av nästa modell.</li>
 <li>Sant. Felklassificerade observationer får vanligtvis högre vikt, så att nästa modell fokuserar mer på dem.</li>
-<li>Sant. Modellernas prediktioner kan kombineras genom exempelvis en viktad majoritetsröstning.</li>
 <li>Sant. Korrekt klassificerade observationer kan få lägre vikt eftersom modellen redan hanterar dem relativt väl.</li>
+<li>Falskt. Boosting är en sekventiell metod där resultaten från tidigare modeller påverkar träningen av nästa modell.</li>
+<li>Sant. Modellernas prediktioner kan kombineras genom exempelvis en viktad majoritetsröstning.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
-<section id="xgboost" class="level3" data-number="30.3.1">
-<h3 data-number="30.3.1" class="anchored" data-anchor-id="xgboost"><span class="header-section-number">30.3.1</span> XGBoost</h3>
+</section>
+<section id="xgboost" class="level3" data-number="30.3.2">
+<h3 data-number="30.3.2" class="anchored" data-anchor-id="xgboost"><span class="header-section-number">30.3.2</span> XGBoost</h3>
 <p>Ytterligare en form av boosting är den populära algoritmen <strong>XGBoost</strong> (eng. eXtreme Gradient Boosting). Den är en form av <strong>Gradient Boosting</strong> som approximerar <span class="math inline">\(f(\boldsymbol{X})\)</span> genom att minimera en differentiabel kostnadsfunktion. Istället för att vi förändrar vikterna i kostnadsfunktionen vid varje modell, kommer varje ny modell approximera den negativa gradienten av kostnaden från den föregående modellen.</p>
 <p><span class="math display">\[
   \begin{aligned}
@@ -824,29 +1234,37 @@ Figur&nbsp;30.5: <span class="math inline">\(w^{(b+1)}\)</span> utifrån <span c
   \end{aligned}
 \]</span> där <span class="math inline">\(h_b(\boldsymbol{X})\)</span> är en approximation av den negativa gradienten. Vi känner också igen <span class="math inline">\(v\)</span> från gradient descent som inlärningshastigheten.</p>
 <p>Gradient Boosting är teoretisk välgrundad då den bygger på just gradient descent och fungerar på olika kostnadsfunktioner. Varje iteration fokuserar på att minska felet mest effektivt. XGBoost gör algoritmen än mer effektiv med fokus på modellens prestanda och skalbarhet samtidigt som den hanterar saknade värden automatiskt. Med hjälp av inbyggd regularisering kan algoritmen kontrollera modellens komplexitet och minska risken för överanpassning där kostnadsfunktionen kombinerar storleken på felet och komplexiteten. XGBoost är optimerad för parallellisering och hantering av stora datamängder.</p>
+<p>Algoritmen har ett flertal olika hyperparametrar som kan justeras vilket gör den både flexibel och träningstung avseende hyperparameter tuning.</p>
 <ul>
-<li>eta – Inlärningshastighet. Lägger mindre vikt vid varje nytt träd.</li>
-<li>nrounds – Antal boosting-rundor, dvs. antal träd som byggs.</li>
-<li>lambda – L2-regularisering av vikter. Minskar överanpassning.</li>
-<li>gamma – Minsta förbättring som krävs för att göra en split. Påverkar pruning.</li>
-<li>max depth – Maximal djup för varje träd. Påverkar modellens komplexitet.</li>
-<li>subsample – Andel av träningsdata som används för varje träd. Minskar överanpassning.</li>
-<li>colsample bytree – Andel features som används vid varje träd. Ökar variation mellan träden</li>
+<li><code>eta</code> – Inlärningshastighet. Lägger mindre vikt vid varje nytt träd.</li>
+<li><code>nrounds</code> – Antal boosting-rundor, dvs. antal träd som byggs.</li>
+<li><code>lambda</code> – L2-regularisering av vikter. Minskar överanpassning.</li>
+<li><code>gamma</code> – Minsta förbättring som krävs för att göra en split. Påverkar pruning.</li>
+<li><code>max depth</code> – Maximal djup för varje träd. Påverkar modellens komplexitet.</li>
+<li><code>subsample</code> – Andel av träningsdata som används för varje träd. Minskar överanpassning.</li>
+<li><code>colsample bytree</code> – Andel features som används vid varje träd. Ökar variation mellan träden</li>
 </ul>
+<p>För mer information kan ni läsa <a href="https://xgboosting.com/">här</a>.</p>
+<!-- DEVELOPMENT: VISA MODELLBASERAD ENSEMBLE -->
+<!-- ## Modellbaserad ensemblemetod -->
+<!-- Med modellbaserade ensemblemetoder  -->
+<!-- Case 1: -->
+<!-- Data: dela upp i träning, val (och test) -->
+<!-- - skattar 2-3 olika modeller av olika sort och sen kombinera deras predktioner. Visa tabell med utvärderingsmått för -->
+<!-- enskilda modeller för träning och validering + dessa mått för den kombinerade modellen -->
+<!-- - lasso reg + beslutsträd + neurala nätverk -->
+<!-- Case 2: -->
+<!-- Skatta samma modelltyp, men olika hyperparametervärden. Tex träna nätverk med 3 olika startvärden och sen -->
+<!-- kombinera prediktioner -->
 </section>
 </section>
-<section id="modellbaserad-ensemblemetod" class="level2" data-number="30.4">
-<h2 data-number="30.4" class="anchored" data-anchor-id="modellbaserad-ensemblemetod"><span class="header-section-number">30.4</span> Modellbaserad ensemblemetod</h2>
-<p>Med modellbaserade ensemblemetoder</p>
-<p>Case 1: Data: dela upp i träning, val (och test) - skattar 2-3 olika modeller av olika sort och sen kombinera deras predktioner. Visa tabell med utvärderingsmått för enskilda modeller för träning och validering + dessa mått för den kombinerade modellen - lasso reg + beslutsträd + neurala nätverk Case 2: Skatta samma modelltyp, men olika hyperparametervärden. Tex träna nätverk med 3 olika startvärden och sen kombinera prediktioner</p>
-</section>
-<section id="bagging-eller-boosting" class="level2" data-number="30.5">
-<h2 data-number="30.5" class="anchored" data-anchor-id="bagging-eller-boosting"><span class="header-section-number">30.5</span> Bagging eller boosting?</h2>
+<section id="bagging-eller-boosting" class="level2" data-number="30.4">
+<h2 data-number="30.4" class="anchored" data-anchor-id="bagging-eller-boosting"><span class="header-section-number">30.4</span> Bagging eller boosting?</h2>
 <p>Valet av ensemblemetod kan ibland vara svårt att göra. Mycket beror på vad vi vill uppnå med metoden då deras syften och för-/nackdelar är lite olika.</p>
 <div id="tbl-ensemble-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-ensemble-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;30.1
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ensemble-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;30.1: Fördelar med respektive metod.
 </figcaption>
 <div aria-describedby="tbl-ensemble-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table style="margin-left: auto; margin-right: auto; border-collapse: collapse;">
@@ -898,6 +1316,20 @@ Minskar varians och bias
 </div>
 </figure>
 </div>
+<p>I detta kapitel har vi använt tre olika ensemblemetoder för att prediktera typen av vin. Vi såg att Random Forest hade den bästa prestandan på testmängden medan bagging och AdaBoost gav ungefär samma prestanda. AdaBoost var också den långsammaste av de tre modellerna på grund av den sekventiella träningsprocessen och gav ingen större förbättring i modellanpassningen i just detta fall. Vi gjorde dock inte någon Grid Search som skulle kunna förbättra modellen ytterligare, men ökat beräkningskomplexiteten markant då flera boostade modeller behövts tränas.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktigt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Glöm inte att om syftet är att strikt jämföra modeller bör vi göra det med en dedikerad valideringsmängd, inte att jämföra testmängder som det informellt görs i detta kapitel. Syftet med textens jämförelse är att visa effekten av de olika ensemblemetoderna, att en bättre modell kan fås genom att återsampla data och träna flera enkla modeller som tillsammans har en bättre prediktiv förmåga.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -911,18 +1343,18 @@ Minskar varians och bias
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Två modellproblem ska hanteras med ensemblemetoder. * I problem A används en instabil modell vars prediktioner varierar mycket mellan olika träningsurval. Modellens systematiska bias bedöms däremot vara relativt liten. Modellerna behöver helst kunna tränas parallellt. * I problem B används enkla svaga modeller som var för sig underanpassar data. Det är möjligt att träna modellerna sekventiellt och låta senare modeller fokusera på tidigare fel. Vilka av följande påståenden är korrekta enligt jämförelsen mellan bagging och boosting i underlaget?</p>
-<div id="webex-bcfbac463e2d3cf524b5929a2ab26734" class="webex-checkboxgroup" data-answer="OVNKU01TGAYfVB5Vbg==">
-<label><input type="checkbox" autocomplete="off" name="bcfbac463e2d3cf524b5929a2ab26734"><span>Bagging bör väljas för problem B eftersom metoden främst reducerar hög bias hos en underanpassad grundmodell.</span></label><label><input type="checkbox" autocomplete="off" name="bcfbac463e2d3cf524b5929a2ab26734"><span>Bagging är ett rimligt val för problem A eftersom metoden främst används för att minska variansen hos instabila modeller.</span></label><label><input type="checkbox" autocomplete="off" name="bcfbac463e2d3cf524b5929a2ab26734"><span>Boosting kan inte överanpassa när antalet modeller <span class="math inline">\(B\)</span> ökar, eftersom varje enskild modell är svag.</span></label><label><input type="checkbox" autocomplete="off" name="bcfbac463e2d3cf524b5929a2ab26734"><span>Kravet på parallell träning i problem A talar för boosting snarare än bagging.</span></label><label><input type="checkbox" autocomplete="off" name="bcfbac463e2d3cf524b5929a2ab26734"><span>När <span class="math inline">\(B\)</span> ökar brukar baggingprediktionen stabiliseras, medan boosting kan överanpassa om alltför många modeller läggs till.</span></label><label><input type="checkbox" autocomplete="off" name="bcfbac463e2d3cf524b5929a2ab26734"><span>Boosting är ett rimligt val för problem B eftersom flera svaga modeller stegvis kan kombineras till en starkare modell.</span></label>
+<div id="webex-16af20c9521404c3921b182ea17261d1" class="webex-checkboxgroup" data-answer="agZNVx4BTwkZAx0EbQ==">
+<label><input type="checkbox" autocomplete="off" name="16af20c9521404c3921b182ea17261d1"><span>Bagging bör väljas för problem B eftersom metoden främst reducerar hög bias hos en underanpassad grundmodell.</span></label><label><input type="checkbox" autocomplete="off" name="16af20c9521404c3921b182ea17261d1"><span>Bagging är ett rimligt val för problem A eftersom metoden främst används för att minska variansen hos instabila modeller.</span></label><label><input type="checkbox" autocomplete="off" name="16af20c9521404c3921b182ea17261d1"><span>Boosting är ett rimligt val för problem B eftersom flera svaga modeller stegvis kan kombineras till en starkare modell.</span></label><label><input type="checkbox" autocomplete="off" name="16af20c9521404c3921b182ea17261d1"><span>Kravet på parallell träning i problem A talar för boosting snarare än bagging.</span></label><label><input type="checkbox" autocomplete="off" name="16af20c9521404c3921b182ea17261d1"><span>När <span class="math inline">\(B\)</span> ökar brukar baggingprediktionen stabiliseras, medan boosting kan överanpassa om alltför många modeller läggs till.</span></label><label><input type="checkbox" autocomplete="off" name="16af20c9521404c3921b182ea17261d1"><span>Boosting kan inte överanpassa när antalet modeller <span class="math inline">\(B\)</span> ökar, eftersom varje enskild modell är svag.</span></label>
 </div>
 </div>
 <div class="webex-solution">
 <ul>
 <li>Falskt. Enligt jämförelsen i underlaget minskar bagging främst variansen och inte bias. En modell som underanpassar kan därför kräva en metod som också angriper bias.</li>
 <li>Sant. Bagging tränar modeller på olika bootstrapurval och aggregerar deras resultat. Metoden används främst för att minska variansen, vilket är relevant för en instabil grundmodell.</li>
-<li>Falskt. Underlaget anger att boosting kan överanpassa när antalet modeller ökar, trots att de enskilda modellerna är svaga.</li>
+<li>Sant. Boosting tränar svaga modeller sekventiellt och låter senare modeller fokusera på de fel som tidigare modeller gjort. Detta kan minska både bias och varians.</li>
 <li>Falskt. Baggingmodeller kan tränas oberoende och parallellt. Boosting är däremot sekventiell eftersom varje ny modell påverkas av resultaten från tidigare modeller.</li>
 <li>Sant. Baggingprediktionen stabiliseras normalt när fler modeller aggregeras, medan boosting kan börja överanpassa när antalet modeller blir stort.</li>
-<li>Sant. Boosting tränar svaga modeller sekventiellt och låter senare modeller fokusera på de fel som tidigare modeller gjort. Detta kan minska både bias och varians.</li>
+<li>Falskt. Underlaget anger att boosting kan överanpassa när antalet modeller ökar, trots att de enskilda modellerna är svaga.</li>
 </ul>
 </div>
 </div>
@@ -942,8 +1374,10 @@ Hastie, Trevor, Robert Tibshirani, och Jerome Friedman. 2001. <em>The Elements o
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Den används för många andra syften utöver boosting, framförallt när det finns ett intresse av att fokusera på vissa observationer i träningen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><span class="math inline">\(I(y_i \ne \hat{f}_b(\boldsymbol{x}_i))\)</span> blir 1 om observationen inte överensstämmer med prediktionen.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>För kontinuerliga responsvariabler görs uppdelningen baserat på percentiler<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Varför vi lägger urvalen som rader är för att det är lättare att arbeta med kolumner.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Den används för många andra syften utöver boosting, framförallt när det finns ett intresse av att fokusera på vissa observationer i träningen.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><span class="math inline">\(I(y_i \ne \hat{f}_b(\boldsymbol{x}_i))\)</span> blir 1 om observationen inte överensstämmer med prediktionen.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -1355,6 +1789,9 @@ Hastie, Trevor, Robert Tibshirani, och Jerome Friedman. 2001. <em>The Elements o
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../05-stat-to-ml/06-epilogue.html" class="pagination-link" aria-label="Epilog">
+        <span class="nav-page-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Epilog</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

@@ -567,6 +567,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Ensemblemetoder</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-stat-to-ml/06-epilogue.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Epilog</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -736,8 +742,8 @@ Notera
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>När sambandet mellan en prediktor och responsvariabeln är icke-linjärt kan både polynomregression och splines användas. Vilka av följande påståenden om splines är korrekta?</p>
-<div id="webex-100192d789cb657efa6e0aa3d779afb2" class="webex-checkboxgroup" data-answer="agEcABUDSAdl">
-<label><input type="checkbox" autocomplete="off" name="100192d789cb657efa6e0aa3d779afb2"><span>Antalet frihetsgrader beskriver antalet parametrar som skattas i spline-modellen.</span></label><label><input type="checkbox" autocomplete="off" name="100192d789cb657efa6e0aa3d779afb2"><span>Punkterna där de olika polynomdelarna möts kallas knutpunkter, och villkor används för att göra den sammanfogade kurvan jämn.</span></label><label><input type="checkbox" autocomplete="off" name="100192d789cb657efa6e0aa3d779afb2"><span>En vanlig polynomregression använder ett enda polynom för hela prediktorns intervall, medan en spline består av flera polynom som anpassas inom olika delar av intervallet.</span></label><label><input type="checkbox" autocomplete="off" name="100192d789cb657efa6e0aa3d779afb2"><span>Polynomdelarna i en spline skattas helt oberoende av varandra och behöver inte mötas vid knutpunkterna.</span></label>
+<div id="webex-0638b5dad000cafdb14d8ac3d7c209e6" class="webex-checkboxgroup" data-answer="awcfCU4ESFE5">
+<label><input type="checkbox" autocomplete="off" name="0638b5dad000cafdb14d8ac3d7c209e6"><span>Antalet frihetsgrader beskriver antalet parametrar som skattas i spline-modellen.</span></label><label><input type="checkbox" autocomplete="off" name="0638b5dad000cafdb14d8ac3d7c209e6"><span>Punkterna där de olika polynomdelarna möts kallas knutpunkter, och villkor används för att göra den sammanfogade kurvan jämn.</span></label><label><input type="checkbox" autocomplete="off" name="0638b5dad000cafdb14d8ac3d7c209e6"><span>En vanlig polynomregression använder ett enda polynom för hela prediktorns intervall, medan en spline består av flera polynom som anpassas inom olika delar av intervallet.</span></label><label><input type="checkbox" autocomplete="off" name="0638b5dad000cafdb14d8ac3d7c209e6"><span>Polynomdelarna i en spline skattas helt oberoende av varandra och behöver inte mötas vid knutpunkterna.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -775,7 +781,7 @@ Figur&nbsp;28.6: Binära klasser uppdelad i olika regioner
 <div id="fig-tree-structure" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-tree-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="03-tree-models_files/mediabag/36f7401c93ef8c8d89f090a87abc055de36f6367.svg" class="img-fluid figure-img">
+<img src="03-tree-models_files/mediabag/90c37dbd77c143ae7be86a3e4730628f934ec784.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tree-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;28.7: Ett exempel på en trädmodell
@@ -846,8 +852,8 @@ Viktigt
 <div class="webex-check webex-box">
 <p>CART-algoritmen ska välja en testregel för en föräldernod med 100 observationer och orenheten <span class="math inline">\(I(\text{förälder})=0.48\)</span>. Två möjliga testregler ger följande barnnoder: * Regel A: <span class="math inline">\(N(R_1)=20\)</span> med <span class="math inline">\(I(R_1)=0.10\)</span> och <span class="math inline">\(N(R_2)=80\)</span> med <span class="math inline">\(I(R_2)=0.35\)</span>. * Regel B: <span class="math inline">\(N(R_1)=50\)</span> med <span class="math inline">\(I(R_1)=0.24\)</span> och <span class="math inline">\(N(R_2)=50\)</span> med <span class="math inline">\(I(R_2)=0.28\)</span>.</p>
 <p>Informationsvinsten beräknas som <span class="math inline">\(\Delta=I(\text{förälder})-\sum_j\frac{N(R_j)}{N}I(R_j)\)</span>. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-1520edde6353f70d6966c5b8930829d6" class="webex-checkboxgroup" data-answer="agQeAUlVSFUaA2g=">
-<label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Informationsvinsten för regel A är <span class="math inline">\(0.18\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Den viktade orenheten i barnnoderna för regel A är <span class="math inline">\(0.30\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Den viktade orenheten för regel B är <span class="math inline">\(0.26\)</span>, vilket ger informationsvinsten <span class="math inline">\(0.22\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Regel A bör väljas eftersom det oviktade medelvärdet av barnnodernas orenhet är lägre för regel A än för regel B.</span></label><label><input type="checkbox" autocomplete="off" name="1520edde6353f70d6966c5b8930829d6"><span>Eftersom regel B ger störst informationsvinst i detta steg är den garanterad att ingå i det globalt optimala trädet.</span></label>
+<div id="webex-d992ad0527880d25bd0c5f035f9d8ca5" class="webex-checkboxgroup" data-answer="PwgVA01VHAUeB2U=">
+<label><input type="checkbox" autocomplete="off" name="d992ad0527880d25bd0c5f035f9d8ca5"><span>Informationsvinsten för regel A är <span class="math inline">\(0.18\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="d992ad0527880d25bd0c5f035f9d8ca5"><span>Den viktade orenheten i barnnoderna för regel A är <span class="math inline">\(0.30\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="d992ad0527880d25bd0c5f035f9d8ca5"><span>Den viktade orenheten för regel B är <span class="math inline">\(0.26\)</span>, vilket ger informationsvinsten <span class="math inline">\(0.22\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="d992ad0527880d25bd0c5f035f9d8ca5"><span>Regel A bör väljas eftersom det oviktade medelvärdet av barnnodernas orenhet är lägre för regel A än för regel B.</span></label><label><input type="checkbox" autocomplete="off" name="d992ad0527880d25bd0c5f035f9d8ca5"><span>Eftersom regel B ger störst informationsvinst i detta steg är den garanterad att ingå i det globalt optimala trädet.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -1440,8 +1446,8 @@ Notera
 <div class="webex-check webex-box">
 <p>I ett klassificeringsträd innehåller en föräldernod 100 observationer: 60 från klass A och 40 från klass B. Två möjliga uppdelningar ger följande barnnoder: * Uppdelning 1: vänster nod <span class="math inline">\((30,0)\)</span> och höger nod <span class="math inline">\((30,40)\)</span>. * Uppdelning 2: vänster nod <span class="math inline">\((45,15)\)</span> och höger nod <span class="math inline">\((15,25)\)</span>.</p>
 <p>Paren anger antalet observationer från klass A respektive klass B. För en nod <span class="math inline">\(R\)</span> definieras felkvoten som <span class="math inline">\(I_E(R)=1-\max_k(\hat{p}_{kR})\)</span> och Gini-indexet som <span class="math inline">\(I_G(R)=1-\sum_k\hat{p}_{kR}^2\)</span>. Barnnodernas orenhet viktas med respektive nods andel av observationerna. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-f025abe42a63023e553af3967fc2393f" class="webex-checkboxgroup" data-answer="PQEeBU1TSQUeUBoCbQ==">
-<label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Det viktade Gini-indexet är lägre för uppdelning 1 än för uppdelning 2.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Om två uppdelningar har samma viktade felkvot måste de även ha samma viktade Gini-index.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Den viktade felkvoten efter uppdelning 1 är <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Föräldernodens felkvot är <span class="math inline">\(0.4\)</span> och dess Gini-index är <span class="math inline">\(0.48\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Den viktade felkvoten efter uppdelning 2 är också <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="f025abe42a63023e553af3967fc2393f"><span>Felkvoten kan vara mindre känslig än Gini-indexet när en uppdelning förändrar klassfördelningen utan att förändra majoritetsklassen.</span></label>
+<div id="webex-96fc5d91bf6b3aae0f9c40c8dc6ee900" class="webex-checkboxgroup" data-answer="YgdKUxlVFQBOVxpTbg==">
+<label><input type="checkbox" autocomplete="off" name="96fc5d91bf6b3aae0f9c40c8dc6ee900"><span>Det viktade Gini-indexet är lägre för uppdelning 1 än för uppdelning 2.</span></label><label><input type="checkbox" autocomplete="off" name="96fc5d91bf6b3aae0f9c40c8dc6ee900"><span>Om två uppdelningar har samma viktade felkvot måste de även ha samma viktade Gini-index.</span></label><label><input type="checkbox" autocomplete="off" name="96fc5d91bf6b3aae0f9c40c8dc6ee900"><span>Den viktade felkvoten efter uppdelning 1 är <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="96fc5d91bf6b3aae0f9c40c8dc6ee900"><span>Föräldernodens felkvot är <span class="math inline">\(0.4\)</span> och dess Gini-index är <span class="math inline">\(0.48\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="96fc5d91bf6b3aae0f9c40c8dc6ee900"><span>Den viktade felkvoten efter uppdelning 2 är också <span class="math inline">\(0.3\)</span>.</span></label><label><input type="checkbox" autocomplete="off" name="96fc5d91bf6b3aae0f9c40c8dc6ee900"><span>Felkvoten kan vara mindre känslig än Gini-indexet när en uppdelning förändrar klassfördelningen utan att förändra majoritetsklassen.</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -1470,8 +1476,8 @@ Notera
 <div class="webex-question">
 <div class="webex-check webex-box">
 <p>Trädmodeller kan överanpassa träningsdata. Förbeskärning och efterbeskärning är två metoder för att kontrollera trädets komplexitet. Vilka av följande påståenden är korrekta?</p>
-<div id="webex-347f24ad53fe20acd51563c8d3ff26bd" class="webex-checkboxgroup" data-answer="aAUbVx4FTVRo">
-<label><input type="checkbox" autocomplete="off" name="347f24ad53fe20acd51563c8d3ff26bd"><span>Förbeskärning innebär att trädets tillväxt stoppas under träningen när ett kriterium är uppfyllt, exempelvis maximalt träddjup, för få observationer i en nod eller för liten förbättring.</span></label><label><input type="checkbox" autocomplete="off" name="347f24ad53fe20acd51563c8d3ff26bd"><span>Efterbeskärning innebär att man först tränar ett fullt utvecklat träd och därefter ersätter vissa delträd med löv för att minska modellens komplexitet.</span></label><label><input type="checkbox" autocomplete="off" name="347f24ad53fe20acd51563c8d3ff26bd"><span>Korsvalidering kan användas för att avgöra hur mycket trädet bör beskäras.</span></label><label><input type="checkbox" autocomplete="off" name="347f24ad53fe20acd51563c8d3ff26bd"><span>Ett djupare träd bör alltid väljas, eftersom fler noder automatiskt ger bättre prediktioner på nya data.</span></label>
+<div id="webex-5c4fb5bb86179d50194174a79955b083" class="webex-checkboxgroup" data-answer="blIYV04ETlJl">
+<label><input type="checkbox" autocomplete="off" name="5c4fb5bb86179d50194174a79955b083"><span>Förbeskärning innebär att trädets tillväxt stoppas under träningen när ett kriterium är uppfyllt, exempelvis maximalt träddjup, för få observationer i en nod eller för liten förbättring.</span></label><label><input type="checkbox" autocomplete="off" name="5c4fb5bb86179d50194174a79955b083"><span>Efterbeskärning innebär att man först tränar ett fullt utvecklat träd och därefter ersätter vissa delträd med löv för att minska modellens komplexitet.</span></label><label><input type="checkbox" autocomplete="off" name="5c4fb5bb86179d50194174a79955b083"><span>Korsvalidering kan användas för att avgöra hur mycket trädet bör beskäras.</span></label><label><input type="checkbox" autocomplete="off" name="5c4fb5bb86179d50194174a79955b083"><span>Ett djupare träd bör alltid väljas, eftersom fler noder automatiskt ger bättre prediktioner på nya data.</span></label>
 </div>
 </div>
 <div class="webex-solution">
