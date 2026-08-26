@@ -6,7 +6,7 @@ filters:
 ---
 <!-- CONTENT -->
 
-# Regularisering
+# Regularisering {#sec-regularization}
 
 En stor del av statistisk inlärning berör generalisering, att modellen som tränas också ska kunna effektivt användas på ny data. Vid stora datamaterial, med många observationer och variabler, krävs ofta en flexibel men komplex modell för att modellen ska prestera bra, men det ger också en överhängande risk för att modellen överanpassas. 
 
@@ -65,8 +65,96 @@ där $\lambda \ge 0$. Notera att ingen straffterm sätts på $\beta_0$ utan bara
 
 Dessa två delar av funktionen samverkar på följande sätt. När en variabel inte har något samband med Y, kommer dess effekt på $f(x_i)$ vara liten och vi kan reducera dess parametervärde till nära 0 för att också effekten på strafftermen ska vara så liten som möjligt. När en variabeln har ett samband med Y, kommmer istället dess effekt på $f(x_i)$ vara noterbar och nollskilda värden kommer ge en förbättring av SSE mer än straffet ökar. Syftet med straffet är alltså att väga samman variabelns effekt i modellen med det tillhörande straff som parametern får.
 
+För logistisk regression agerar strafftermen på samma sätt, men med en annan kostnadsfunktion lämplig för problemet.
+
 :::{.callout-note}
 De maximala värdena som fås i träningen sker när $\lambda = 0$ vilket motsvarar en ren minsta kvadratskattning. När $\lambda > 0$ kommer parametrarna endast bli mindre. Ridge ger oss en flexibel modell där vi tillåter alla effekter som kan identifieras i träningsmängden, men som också tar bort effekten av variabler som beskriver samma sak som en annan eller som är överflödiga.
+:::
+
+Säg att vi vill skapa en regressionsmodell på datamaterialet om alla sjöar, `lakesurvey`. Vi är intresserade av att undersöka hur mängden organiskt kol, `TOC mg/l`, kan beskrivas av de övriga kemiska variablerna. För Ridge (och senare regulariseringsmetoder) används funktioner från paketet `glmnet`. Funktionen `glmnet()` kan anpassa olika former av regression där argumenten är:
+
+- `x`: en matris med förklarande variabler,
+- `y`: en vektor med responsvariabeln,
+- `family`: anger vilken typ av modell som anpassas, `"gaussian"` för linjär regression,
+- `alpha`: en mixparameter, för Ridge ska denna vara 0, se @sec-elastic-net för mer information,
+- `standardize`: ifall vi vill att de förklarande variablerna standardiseras i anpassningen, standard är `TRUE`.
+
+```{r}
+#| code-fold: false
+
+# Väljer ut de kemiska variablerna
+lakesurvey <- 
+  lakesurvey |> 
+  select(!X_SMHI:Day)
+
+# Skapar designmatrisen och konverterar objektet till en matris
+x <- lakesurvey |> 
+  select(!`TOC mg/l`) |> 
+  as.matrix()
+
+# Skapar responsvariabeln och konverterar objektet till en matris
+y <- lakesurvey |> 
+  select(`TOC mg/l`) |> 
+  as.matrix()
+
+ridgeModel <- glmnet(x, y, alpha = 0)
+
+```
+
+Vi kan titta på modellen genom olika hjälpfunktioner såsom `plot`, `print`, `coef` och `predict`.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Koefficienter för olika värden på $\lambda$
+#| out-width: "90%"
+#| code-fold: false
+
+plot(ridgeModel)
+
+```
+
+Denna figur är något otydlig men den visar hur koefficienternas värden justeras beroende på hur starkt straff som sätts på regulariseringen. Notera att x-axeln visar $-log(\lambda)$ vilket gör att den kan vara negativ trots att $\lambda \ge 0$. Vi ser att en variabel har en mycket stor påverkan när inget straff sätts $-log(\lambda) \approx 0$ men som snabbt reduceras till ett mindre värde när starkare straff sätts $-log(\lambda) \approx -4$.
+
+Vad detta diagram inte ger oss är en indikation vilket $\lambda$ som bör väljas för den bästa modellen. Vi kan utläsa med hjälp av `print(ridgeModel)` alla olika modeller för 100 olika värden på straffet, men det ändå svårt att välja rätt. Istället kan vi använda korsvalidering genom `cv.glmnet()`.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Korsvalidering för $\lambda$ i Ridge regression
+#| out-width: "90%"
+#| code-fold: false
+
+cvRidgeModel <- cv.glmnet(x, y, alpha = 0)
+
+plot(cvRidgeModel)
+
+```
+
+Figuren indikerar genom de vertikalt streckade linjerna två värden på $\lambda$ där den bästa modellen fås, vilket i detta fall nästan indikerar på inget straff alls. 
+
+```{r}
+#| code-fold: false
+
+print(cvRidgeModel)
+
+```
+
+Objektet innehåller `lambda.min` och `lambda.1se`, den första vilket värde på $\lambda$ som ger det minsta korsvalideringsfelet och det andra vilket värde på $\lambda$ som ger en regulariserad modell. Vi kan plocka ut dessa värden genom `cvRidgeModel$lambda.min` som vi sedan kan ange i `coef()` eller `predict()` för att visa koefficienterna eller prediktionerna från en modell med det angivna $\lambda$.
+
+```{r}
+#| code-fold: false
+
+coef(cvRidgeModel, s = "lambda.1se")
+
+predict(cvRidgeModel, newx = x, s = "lambda.1se") |> 
+  head()
+```
+
+För prediktioner vill vi egentligen använda en helt ny matris av värden som vi vill prediktera.
+
+:::{.callout-tip}
+Mer dokumentation och exempel om `glmnet` kan hittas [här](https://glmnet.stanford.edu/articles/glmnet.html).
 :::
 
 <!-- DEVELOPMENT! Ridge example in R -->
@@ -82,18 +170,58 @@ $$
 $$
 där $\lambda \ge 0$.
 
+Låt oss istället för Ridge, använda LASSO regularisering för regressionsmodellen för `lakesurvey`. Argumentet `alpha = 1` i `glmnet` ger oss en modell med LASSO-regularisering. Vi börjar direkt med korsvalideringsvarianten av funktionen för att få hjälp med att välja hur mycket straff som ska tillämpas.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Korsvalidering för $\lambda$ i LASSO regression
+#| out-width: "90%"
+#| code-fold: false
+
+cvLASSOModel <- cv.glmnet(x, y, alpha = 1)
+
+plot(cvLASSOModel)
+
+coef(cvLASSOModel, s = "lambda.1se")
+
+predict(cvLASSOModel, newx = x, s = "lambda.1se") |> 
+  head()
+
+```
+
+Vi ser att vid `lambda.1se` för LASSO har vi två variabler som satts till 0, markerat som `.` i koefficienttabellen.
+
+:::{.callout-note}
+Vi kan visa hur straffet påverkar koefficienterna i LASSO till skillnad från Ridge genom:
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Koefficienter för olika värden på $\lambda$
+#| out-width: "90%"
+#| code-fold: false
+
+glmnet(x, y, alpha = 1) |> 
+  plot()
+```
+
+Siffrorna högst upp i diagrammet visar hur många nollskilda koefficienter som finns vid respektive nivå av straff som i detta diagram till skillnad från Ridge faktiskt minskas. Detta visar hur LASSO är "bättre" på att reducera modellen och faktiskt sätter koefficienterna till 0.
+:::
 
 <!-- DEVELOPMENT! LASSO example in R -->
 
+## Jämförelse mellan Ridge och LASSO
+
 Båda former av regularisering hjälper till att reducera antalet variabler som har en distinkt effekt på responsvariabeln men de har också vissa skillnader.
 
-På samma sätt som med Ridge väljs $\lambda$ som en hyperparameter men till skillnad från Ridge ger stora värden på $\lambda$ att flera parametrar sätts till nära 0. Vid multikollinearitet delar Ridge regularisering på effekten till alla variabler som beskriver samma relation medan LASSO "väljer" en parameter som nollskild och de övriga sätts nära 0. LASSO resulterar i en modell där många parametrar är nära 0 vilket ger oss möjligheten att träna om modellen med enbart de nollskilda parametrarna. Ridge passar bra när $Y_i$ beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten nära 0. I de flesta tillfällen vet vi inte detta förrän modellerna tränas så ett tips är att testa båda metoderna och se vilken som ger bäst prediktioner.
+I båda metoderna väljs $\lambda$ som en hyperparameter men till skillnad från Ridge ger LASSO stora värden på $\lambda$ att flera parametrar sätts till 0. Vid multikollinearitet delar Ridge regularisering på effekten till alla variabler som beskriver samma relation medan LASSO "väljer" en parameter som nollskild och de övriga sätts 0. LASSO resulterar i en modell där många parametrar är nära 0 vilket ger oss möjligheten att träna om modellen med enbart de nollskilda parametrarna. Ridge passar bra när $Y_i$ beror på de flesta av variablerna då många av variablerna får ungefär samma effektstorlek. LASSO däremot passar bra när endast ett fåtal variabler har ett samband med responsvariabeln och den resulterande modellen har få variabler med hög effektstorlek och resten 0. I de flesta tillfällen vet vi inte detta förrän modellerna tränas så ett tips är att testa båda metoderna och se vilken som ger bäst prediktioner.
 
 :::{.callout-note}
 Dessa metoder tränas med en speciell optimeringsalgoritm som kallas för Coordinate Descent. Kortfattat kan algoritmen fokusera på specifika parametrar att optimera vid varje iteration till skillnad från de algoritmer vi tidigare tagit upp. Vi kommer inte gå in mer på denna metod i detta underlag men mer information finns [här](https://en.wikipedia.org/wiki/Coordinate_descent).
 :::
 
-Skillnaderna i de två metodernas tillvägagångssätt medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för. Ridge kan ses som en skalning ($\lambda$) av de vanliga minsta kvadratskattningsmatriserna och vi kan då använda inferensteori därifrån. Detsamma gäller inte för LASSO.
+Skillnaderna i de två metodernas tillvägagångssätt medför att LASSO kan vara lättare att tolka medan Ridge är enklare att göra inferens för. Ridge kan ses som en skalning (med $\lambda$) av de vanliga minsta kvadratskattningsmatriserna och vi kan då använda inferensteori därifrån. Detsamma gäller inte för LASSO.
 
 :::{.callout-caution}
 ## Övning 2
@@ -123,6 +251,24 @@ Metoden blir en flexibel form av regularisern där $\alpha$ styr hur mycket vikt
 <!-- DEVELOPMENT! Elastic net example in R -->
 
 Likt LASSO kommer Elastic Net få det svårt att genomföra någon form av inferens, så fokus ligger på att tolka effektstorleken av de nollskilda variablerna, t.ex. via ett stapeldiagram för att få en enklare visuell överblick.
+
+Om vi vill använda den flexibla formen av regularisering kan vi ändra `alpha` till värden mellan 0 och 1.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Koefficienter för olika värden på $\lambda$ med Elastic Net
+#| out-width: "90%"
+#| code-fold: false
+
+glmnet(x, y, alpha = 0.5) |> 
+  plot()
+
+cvElasticNet <- cv.glmnet(x, y, alpha = 0.5)
+
+```
+
+Vi kan testa olika värden på `alpha` och jämför deras korsvalideringsfel för att välja det bästa värdet på de olika straffen. Tyvärr finns inget "automagiskt" sätt att hitta det bästa värdet på hyperparametern.
 
 <!-- :::{.callout-note} -->
 <!-- De tidigare presenterade algoritmerna och regulariseringsmetoderna är "automatiska" metoder för att välja variabler som bidrar till att förklara responsvariabeln. Efter variabelselektion är det vanligt att analysera parametrarnas p-värden och intervallskattning, även kallad för **post-selection inference**. Problemet är att vanliga inferensmetoder antar att modellen är fixerad innan data analyseras men med variabelselektion används data för att välja modell och introducerar ett beroende mellan data och modellen. Detta påverkar fördelningen av skattningarna vilket i sin tur leder till för snäva konfidensintervall, för små p-värden och ökad risk för typ I fel. Vi bör därför undvika att använda vanliga metoder för inferens och istället använda inferensmetoder som tar hänsyn till variabelselektionen. -->

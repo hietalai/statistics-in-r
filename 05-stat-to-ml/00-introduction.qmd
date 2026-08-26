@@ -8,7 +8,7 @@ filters:
 
 # Introduktion
 
-I dagens samhälle genereras över 400 miljoner terabyte data *dagligen*^[https://www.statista.com/statistics/871513/worldwide-data-created/] av många olika former; text, ljud, video, bild. Klassiska statistiska modeller stöter ofta på problem dels när data varken är numeriska värden eller enkel text, samt att modellerna har stora problem att anpassas när data är alldeles för stort. Sedan 1990-talet har termer såsom Big Data, Knowledge Discovery, Data Mining, Artificial Intelligence, Machine Learning m.fl. alla försökt integrera statistisk teori med datavetenskapliga algoritmer för att hantera de specifika problem som uppkommer med stora datamängder av olika slag.
+I dagens samhälle genereras över 400 miljoner terabyte data *dagligen*^[https://www.statista.com/statistics/871513/worldwide-data-created/] av många olika former; text, ljud, video, bild. Klassiska statistiska modeller stöter ofta på problem när data varken är numeriska värden eller enkel text, samt att modellerna har stora problem att anpassas när data är alldeles för stort. Sedan 1990-talet har termer såsom Big Data, Knowledge Discovery, Data Mining, Artificial Intelligence, Machine Learning m.fl. alla försökt integrera statistisk teori med datavetenskapliga algoritmer för att hantera de specifika problem som uppkommer med stora datamängder av olika slag.
 
 I denna del kommer vi introducera och tillämpa begreppet **statistisk inlärning** som ett samlingsnamn för metoder som låter en dator lära sig mönster, samband och trender för att lösa uppgifter med både beskrivande och prediktiva syften. Vi kommer göra avtramp i klassiskt statistiska modeller såsom linjär regression och statistisk inferens, identifiera när dessa metoder brister och vägleda valet av mer kraftfulla metoder.
 
@@ -405,7 +405,7 @@ Datamaterialet innehåller kemisk information från 2782 svenska sjöar uppmätt
 ```{r}
 #| include: false
 
-lake <- lakeFull
+lakesurvey <- lakesurveyFull
 
 ```
 
@@ -456,14 +456,14 @@ Detta material gör oss också uppmärksamma på en aspekt av statistisk modelle
 #| echo: false
 
 p1 <- 
-  lake |> 
+  lakesurvey |> 
   ggplot() + aes(y = `Mg meq/l`) +
   geom_boxplot(fill = "steelblue") + 
   scale_x_continuous(breaks = NULL) + 
   theme_bw()
 
 p2 <- 
-  lake |> 
+  lakesurvey |> 
   ggplot() + aes(y = `Na meq/l`) +
   geom_boxplot(fill = "steelblue") + 
   scale_x_continuous(breaks = NULL) + 
@@ -480,8 +480,8 @@ I samband med denna utforskning identifieras också en del saknade värden på e
 ```{r}
 #| code-fold: false
 
-lake <- 
-  lake |> 
+lakesurvey <- 
+  lakesurvey |> 
   # Tar bort en observation om minst en variabel är saknad
   dplyr::filter(if_all(!Name, ~!is.na(.x))) |> 
   # Tar bort observationer som heter LERKILEN eller BOGEVIK

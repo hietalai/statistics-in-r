@@ -6,7 +6,7 @@ filters:
 ---
 <!-- CONTENT -->
 
-# Ensemblemetoder
+# Ensemblemetoder {#sec-ensembles}
 
 Istället för att förlita sig på en enstaka modell kan vi kombinera flera modeller i en **ensemblemodell**. Grundidén är att med hjälp av flera modeller kan respektive fokusera på olika egenskaper av data och när de kombineras blir prediktionerna bättre.
 
@@ -58,7 +58,6 @@ Det finns många olika varianter men de delas ofta upp i två olika metoder; fok
 ```
 Databaserad ensemble
 :::
-
 
 Metoder som fokuserar på olika modeller innebär att träna flera olika modeller på samma data eller samma modell med olika hyperparametervärden som sedan kombineras.
 
@@ -114,8 +113,142 @@ $$
 
 Om vi minns tillbaka till @fig-bias-variance vet vi att en komplex modell ofta har en hög(re) varians som ökar felet. Bagging sänker variansen av den anpassade funktionen så att en mer komplex modell ändå blir generaliserbar men påverkas *mycket* av kvalitén av modellen som anpassas. Om modellen är bra blir aggregeringen bättre, men en dålig modell blir sämre när den aggregeras. 
 
-<!-- TODO: LABBUPPGIFTER + EXEMPELKOD I ISLRv2 -->
+### Prediktioner av vin {#sec-bagging-wine}
+Säg att vi vill prediktera vilken typ av vin som vi har givet olika egenskaper. Vi börjar med att dela upp data och träna en enkel modell. Nu när vi gjort dessa steg manuellt tidigare kan vi använda en funktion som gör allting i ett och samma svep. 
 
+Från `caret` finns funktionen `createDataPartition()`. En fördel med denna funktion är att den kan genomföra uppdelningen på ett par olika sätt, bland annat att dragningarna görs inom varje nivå av responsvariabeln^[För kontinuerliga responsvariabler görs uppdelningen baserat på percentiler] för att bibehålla klassbalansen i de olika mängderna. Vi tränar sedan en väldigt enkel modell, ett beslutsträd med mycket låg komplexitet.
+
+```{r}
+#| code-fold: false
+
+# Först säkerställer vi att responsvariabeln är en faktor
+wine$Class <- wine$Class |> factor()
+
+set.seed(20260824)
+
+trainIndex <- 
+  createDataPartition(
+    wine$Class,
+    p = 0.8,
+    list = FALSE
+  )
+
+# Plockar ut valda index till trainWine
+trainWine <- wine[trainIndex,]
+
+# Tar bort valda index till testWine
+testWine <- wine[-trainIndex,]
+
+wineTree <- 
+  rpart(
+    Class ~ .,
+    data = trainWine,
+    method = "class",
+    parms = 
+      list(
+        split = "gini"
+      ),
+    control = 
+      list(
+        minsplit = 5,
+        maxdepth = 5,
+        cp = 0.1,
+        xval = 10,
+        usesurrogate = 0,
+        maxcompete = 0,
+        maxsurrogate = 0
+      )
+  )
+
+predictions <- predict(wineTree, newdata = testWine, type = "class")
+
+confusionMatrix(predictions, testWine$Class)
+
+```
+
+Med tre klasser har vi nu en annorlunda utskrift från `confusionMatrix()`. Vi får direkt utvärderingsmått uppdelat på klass, 1 2 och 3 och vi kan se den övergripande träffsäkerheten inte är dålig men inte heller jättebra, ca 79%.  Vi kan nu försöka förbättra modellen genom att skapa bootstrapurval från träningsmängden och träna samma enkla modell på respektive urval.
+
+Ett bootstrap urval kan skapas med funktionen `createResample()` från `caret`. Argumentet `times` styr hur många urval som skapas. Det resulterande objektet är en lista vilket innebär att vi kan effektivisera koden genom att använda `lapply` eller liknande funktion för att skatta samma modell på respektive urval.
+
+```{r}
+#| code-fold: false
+
+bags <- 
+  createResample(
+    y = trainWine$Class,
+    # Skapar 20 bootstrapurval
+    times = 20,
+    list = TRUE
+  )
+
+yhat <- 
+  lapply(
+    X = bags,
+    FUN = function(bootstrap) {
+      
+      # Plockar ut bootstrapurvalet från träningsdata
+      sample <- trainWine[bootstrap, ]
+      
+      # Tränar den enkla modellen på bootstrapurvalet
+      model <- 
+        rpart(
+          Class ~ .,
+          # Tränar modellen på bootstrapurvalet
+          data = sample,
+          method = "class",
+          parms = 
+            list(
+              split = "gini"
+            ),
+          control = 
+            list(
+              minsplit = 5,
+              maxdepth = 5,
+              cp = 0.1,
+              xval = 10,
+              usesurrogate = 0,
+              maxcompete = 0,
+              maxsurrogate = 0
+            )
+        )
+      
+      # Genererar prediktioner från den tränade modellen.
+      predict(model, newdata = testWine, type = "class")
+    }
+  )
+
+```
+
+Objektet `yhat` innehåller nu en lista med prediktioner över testmängden för alla 20 bootstrapurval. För att se hur bra modellen är överlag behöver vi använda majoritetsröstning för att vi ska få en prediktion per observation. Med hjälp av funktionen `bind_rows()` från `tidyverse` kan vi sammanställa alla 20 modellernas prediktioner för varje observation i testmängden, en **rad för varje urval**^[Varför vi lägger urvalen som rader är för att det är lättare att arbeta med kolumner.].
+
+```{r}
+#| code-fold: false
+
+argmaxPrediction <- 
+  yhat |> 
+  bind_rows() |> 
+  # För varje kolumn, beräkna det mest förekommande värdet
+  summarize(
+    across(
+      everything(),
+      ~ .x |> 
+        # Skapar en frekvenstabell över alla prediktioner
+        table() |> 
+        # Hittar vilket element som är det största frekvensen
+        which.max() |> 
+        # Plockar ut namnet (klassen) för det elementet
+        names()
+    )
+  ) |> 
+  # Roterar från rader till kolumner 
+  t() |> 
+  factor()
+
+confusionMatrix(argmaxPrediction, testWine$Class)
+
+```
+
+Med hjälp av 20 bootstrapurval och majoritetsröstning har vi nu lyckats få en träffsäkerhet på ungefär 94% och väldigt bra klasspecifika mått (över 90% sensitivitet för varje klass) på testmängden. Detta visar på styrkan i metoden, trots att vi har enkla modeller som var för sig inte är den bästa, kan de tillsammans bli en väldigt kraftfull sammanslagen modell.
 
 :::{.callout-caution}
 ## Övning 1
@@ -127,7 +260,6 @@ exams2forms(file = "../exercises/Part 5/Del5_Chap30.1_ex1.rmd")
 
 ```
 :::
-
 
 ## Random Forest
 
@@ -144,7 +276,56 @@ $$
 
 Varje modell tränas både på ett urval av observationer (med återläggning) *och* ett urval av variabler vilket leder till ett minskat bias, "artificiell" varians i varje träd och mindre korrelation mellan träden. Ofta dominerar den avkorrelerade effekten vilket leder till att MSE minskar på testdata. Andra fördelar med Random Forest är att den är lätt att parallelisera samt att det urval av parametrar som görs minskar kostnaden för varje uppdelning.
 
-Metoden har, utöver de vanliga hyperparametrar från ett enskilt beslutsträd, två ytterligare hyperparametrar i form av $B$ och $q$.
+Metoden har, utöver de vanliga hyperparametrar från ett enskilt beslutsträd, två ytterligare hyperparametrar i form av $B$ och $q$. Vi har i @sec-bagging-wine introducerat $B$ med enkel bagging som går att använda för andra sorters modeller, men Random Forest behöver också slumpa fram variabler för varje träd vilket inte kan implementeras på samma enkla sätt. Vi kan istället använda funktionen `randomForest` från paketet med samma namn.
+
+:::{.callout-important}
+Ett problem med `randomForest()` är att den är en gammal funktion som inte är riktigt kompatibelt med `tidyverse`. Specifikt har funktionen problem med variabelnamn som innehåller mellanslag. Vi måste först konvertera namnen till ett äldre format där mellanslag byts ut med någon annan symbol.
+:::
+
+```{r}
+#| code-fold: false
+
+# Byter ut alla mellanslag med .
+names(trainWine) <- make.names(names(trainWine))
+names(testWine) <- make.names(names(testWine))
+
+model <- 
+  randomForest(
+    Class ~ .,
+    data = trainWine,
+    # Anger testmängden
+    xtest = testWine |> select(!Class),
+    ytest = testWine |> pull(Class)
+  )
+
+model
+
+```
+
+Från utskriften ser vi dels vilka inställningar som använts i modellen; 500 träd har tränats baserat på olika bootstrapurval samt varje träd har endast använt 3 variabler från datamaterialets 13. Vi får också förväxlingsmatrisen för träningsmängden med ett valideringsfel, det som vi i Random Forest sammanhang kallar för **out of bag (OOB) error**, samt en förväxlingsmatris för testmängden med dess fel.
+
+:::{.callout-note}
+## OOB
+Detta fel beräknas på respektive träds icke-bootstrappade urval på samma sätt som vi i korsvalidering beräknar felet på den fold som inte använts i träningen. Det är dock där som skillnaderna mellan OOB och korsvalidering slutar, då korsvalidering har en tydlig struktur och använder endast varje observation en gång för validering medan OOB kan på grund av slumpen i bootstrapurvalet använda samma observation flera gånger till beräkningen av felet. 
+:::
+
+Vi kan se att testmängden för Random Forest-modellen endast fått en missklassificerad observation med en resulterande träffsäkerhet på $1 - 0.0294 = 0.9706$. Modellen har producerat bättre resultat än den enkla bagging-modellen från @sec-bagging-wine. 
+
+För att få en indikation om vilka variabler som är viktiga för modellen att separera klasserna kan vi undersöka **Variable Importance** (ungefärlig sv. variablernas viktighet). Måttet Importance mäts utifrån hur mycket varje variabel bidrar med förklaring, det vill säga hur mycket gini minskar för en förgrening där variabeln inkluderas. För att sammanfatta alla de olika träden som skapas beräknas ett genomsnitt av alla förgreningar och viktiga variabler har höga genomsnittliga värden.
+
+```{r}
+#| code-fold: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Variable importance (viktighet) för Random Forest modellen
+#| label: fig-wine-rf-importance
+#| out-width: "90%"
+
+varImpPlot(model)
+
+```
+
+Det verkar som att egenskaper som `Proline` och `Flavanoids` separerar klasserna bäst medan både färgintensiteten och mängden alcohol också är viktiga. Det är värt att notera detta diagram inte visar hur dessa variabler separerar klasserna, huruvida låga eller höga värden hör till en klass eller annan, utan för sådana slutsatser behöver vi titta närmare på träden i sig. Detta ligger utanför detta material.
 
 :::{.callout-caution}
 ## Övning 2
@@ -156,7 +337,6 @@ exams2forms(file = "../exercises/Part 5/Del5_Chap30.2_ex2.rmd")
 
 ```
 :::
-
 
 ## Boosting
 
@@ -311,6 +491,53 @@ tibble(
 
 I @fig-adaboost-wb-1 ser vi hur vikterna för en missklassificerad observation med $w_i^b = 1/1000$ förändras beroende på modellens prestanda. För en bra modell (positiv $\alpha_b$) kommer $w_i^{b+1}$ bli mycket större eftersom den är en av få observationer som blivit fel, medan i en sämre modell (negativ $\alpha_b$) får många observationer istället en mindre ökning. 
 
+### AdaBoost i R
+
+Vi kan träna en AdaBoost modell genom att använda funktioner från `caret` paketet. Som ett tillägg behövs också paketet `adabag`. Vi har sedan tidigare i detta kapitel delat upp `wine` i en tränings och testmängd som vi kommer återanvända.
+
+:::{.callout-note}
+`train()` är anpassad för att genomföra hyperparameter tuning enligt Grid Search, men om vi är intresserade av att bara genomföra en form av boosting can vi använda funktionen `boosting()` direkt från `adabag`-paketet.
+:::
+
+```{r}
+#| code-fold: false
+
+adaboostModel <- 
+  train(
+    Class ~ ., 
+    data = trainWine,
+    method = "AdaBoost.M1",
+    trControl = 
+      # Applicerar 10-fold korsvalidering
+      trainControl(
+        method = "cv",
+        number = 10
+      ),
+    # Anger fixa hyperparametrar för grid search
+    tuneGrid = data.frame(
+      mfinal = 100,
+      maxdepth = 1, 
+      coeflearn = "Breiman"
+    )
+  )
+
+adaboostModel
+
+```
+
+I modellutskriften får vi information om hur träningen gått till och det slutgiltiga träningsfelet. Vi kan också få en väntevärdesriktigt skattning av felet på testmängden.
+
+```{r}
+#| code-fold: false
+
+predictions <- predict(adaboostModel, newdata = testWine)
+
+confusionMatrix(predictions, testWine$Class)
+
+```
+
+AdaBoost ger en modell med ungefär 94% träffsäkerhet och sensitiviteten ligger över 90% för alla klasser. 
+
 :::{.callout-caution}
 ## Övning 3
 
@@ -336,30 +563,36 @@ där $h_b(\boldsymbol{X})$ är en approximation av den negativa gradienten. Vi k
 
 Gradient Boosting är teoretisk välgrundad då den bygger på just gradient descent och fungerar på olika kostnadsfunktioner. Varje iteration fokuserar på att minska felet mest effektivt. XGBoost gör algoritmen än mer effektiv med fokus på modellens prestanda och skalbarhet samtidigt som den hanterar saknade värden automatiskt. Med hjälp av inbyggd regularisering kan algoritmen kontrollera modellens komplexitet och minska risken för överanpassning där kostnadsfunktionen kombinerar storleken på felet och komplexiteten. XGBoost är optimerad för parallellisering och hantering av stora datamängder.
 
-- eta – Inlärningshastighet. Lägger mindre vikt vid varje nytt träd.
-- nrounds – Antal boosting-rundor, dvs. antal träd som byggs.
-- lambda – L2-regularisering av vikter. Minskar överanpassning.
-- gamma – Minsta förbättring som krävs för att göra en split. Påverkar
+Algoritmen har ett flertal olika hyperparametrar som kan justeras vilket gör den både flexibel och träningstung avseende hyperparameter tuning.
+
+- `eta` – Inlärningshastighet. Lägger mindre vikt vid varje nytt träd.
+- `nrounds` – Antal boosting-rundor, dvs. antal träd som byggs.
+- `lambda` – L2-regularisering av vikter. Minskar överanpassning.
+- `gamma` – Minsta förbättring som krävs för att göra en split. Påverkar
 pruning.
-- max depth – Maximal djup för varje träd. Påverkar modellens
+- `max depth` – Maximal djup för varje träd. Påverkar modellens
 komplexitet.
-- subsample – Andel av träningsdata som används för varje träd.
+- `subsample` – Andel av träningsdata som används för varje träd.
 Minskar överanpassning.
-- colsample bytree – Andel features som används vid varje träd.
+- `colsample bytree` – Andel features som används vid varje träd.
 Ökar variation mellan träden
 
-## Modellbaserad ensemblemetod
+För mer information kan ni läsa [här](https://xgboosting.com/).
 
-Med modellbaserade ensemblemetoder 
+<!-- DEVELOPMENT: VISA MODELLBASERAD ENSEMBLE -->
 
-Case 1:
-Data: dela upp i träning, val (och test)
-- skattar 2-3 olika modeller av olika sort och sen kombinera deras predktioner. Visa tabell med utvärderingsmått för
-enskilda modeller för träning och validering + dessa mått för den kombinerade modellen
-- lasso reg + beslutsträd + neurala nätverk
-Case 2:
-Skatta samma modelltyp, men olika hyperparametervärden. Tex träna nätverk med 3 olika startvärden och sen
-kombinera prediktioner
+<!-- ## Modellbaserad ensemblemetod -->
+
+<!-- Med modellbaserade ensemblemetoder  -->
+
+<!-- Case 1: -->
+<!-- Data: dela upp i träning, val (och test) -->
+<!-- - skattar 2-3 olika modeller av olika sort och sen kombinera deras predktioner. Visa tabell med utvärderingsmått för -->
+<!-- enskilda modeller för träning och validering + dessa mått för den kombinerade modellen -->
+<!-- - lasso reg + beslutsträd + neurala nätverk -->
+<!-- Case 2: -->
+<!-- Skatta samma modelltyp, men olika hyperparametervärden. Tex träna nätverk med 3 olika startvärden och sen -->
+<!-- kombinera prediktioner -->
 
 ## Bagging eller boosting?
 
@@ -393,9 +626,14 @@ Valet av ensemblemetod kan ibland vara svårt att göra. Mycket beror på vad vi
     </tr>
   </tbody>
 </table>
-
+Fördelar med respektive metod.
 :::
 
+I detta kapitel har vi använt tre olika ensemblemetoder för att prediktera typen av vin. Vi såg att Random Forest hade den bästa prestandan på testmängden medan bagging och AdaBoost gav ungefär samma prestanda. AdaBoost var också den långsammaste av de tre modellerna på grund av den sekventiella träningsprocessen och gav ingen större förbättring i modellanpassningen i just detta fall. Vi gjorde dock inte någon Grid Search som skulle kunna förbättra modellen ytterligare, men ökat beräkningskomplexiteten markant då flera boostade modeller behövts tränas.
+
+:::{.callout-important}
+Glöm inte att om syftet är att strikt jämföra modeller bör vi göra det med en dedikerad valideringsmängd, inte att jämföra testmängder som det informellt görs i detta kapitel. Syftet med textens jämförelse är att visa effekten av de olika ensemblemetoderna, att en bättre modell kan fås genom att återsampla data och träna flera enkla modeller som tillsammans har en bättre prediktiv förmåga.
+:::
 
 :::{.callout-caution}
 ## Övning 4

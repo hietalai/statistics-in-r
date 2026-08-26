@@ -1,0 +1,25 @@
+---
+engine: knitr
+filters: 
+  - webr
+  - diagram
+---
+<!-- CONTENT -->
+
+# Epilog
+
+I denna del har vi nu introducerat begreppet statistisk inlärning och presenterat olika metoder som låter datorn lära sig mönster, samband och trender för att lösa olika typer av uppgifter. 
+
+Vi började med regulariseringsmetoder som en utbyggnad av vanlig regression där en straffterm lades till i kostnadsfunktionen för att förhindra överanpassning och en form av variabelselektion när data är stort. Vi gick sen över till modeller som hanterar icke-linjära samband både i regressions och klassificeringsproblem, däribland trädmodeller som också integrerar en form av variabelselektion i träningen. Till sist introducerades en flexibel men komplex modell i formen av neurala nätverk som både lär sig transformationer och icke-linjära samband utan att vi behöver manuellt välja ut dessa. 
+
+Som sista kapitel introducerades metoder för hur dessa modeller kan bli än bättre, antingen genom att slå ihop flera enkla varianter av modeller eller successivt fokusera modellträningen på de observationer som blivit fel tills modellen träffar rätt.
+
+Något som vi inte tagit upp lika mycket är statistisk inferens inom dessa metoder, vårt fokus har främst varit prediktioner. Detta beror till största del på att metoderna i sig är inte alltid är lämpade för att beskriva sambanden på grund av sin komplexitet. Statistisk inferens är en större gren av maskininlärning där statistisk teori integreras än mer med datorvetenskapliga algoritmer. 
+
+Vi har inte heller gjort något större avtryck i alla de neurala nätverkmodeller som finns såsom [auto-encoders](https://en.wikipedia.org/wiki/Autoencoder) för hantering av unsupervised learning, [convolutional neurala nätverk (CNN)](https://en.wikipedia.org/wiki/Convolutional_neural_network) eller [transformers](https://en.wikipedia.org/wiki/Transformer_(deep_learning)) för hantering av bilder osv. 
+
+Det finns mycket mer att utforska inom maskininlärningsvärlden!
+
+
+
+

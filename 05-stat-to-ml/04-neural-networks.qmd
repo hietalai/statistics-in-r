@@ -70,7 +70,7 @@ I @fig-nn-structure innehåller **neuroner** uppdelat i tre lager; **inputlagret
 Det finns *väldigt många* olika sorters nätverk, en översikt kan hittas [här](https://www.asimovinstitute.org/neural-network-zoo/). Alla dessa nätverk kan användas för att lösa många olika problem inom supervised learning eller mer avancerade problem som reinforcement learning.
 :::
 
-Inom "vanlig" regression kan vi transformera de förklarande variablerna för att lyckas modellera mer icke-linjära samband, till exempel med polynom eller logaritmstransformationer. Det är dock svårt att veta exakt vilken transformation som behövs för att lösa varje problem och det blir nästintill omöjligt att hantera komplexa datastrukturer såsom text eller bilder. Detta kallas för **feature engineering** inom maskininlärning, som inom statistik är en gren av databearbetning. 
+Inom "vanlig" regression kan vi transformera de förklarande variablerna för att lyckas modellera mer icke-linjära samband, till exempel med polynom eller logaritmstransformationer. Det är dock svårt att veta exakt vilken transformation som behövs för att lösa varje problem och det blir nästintill omöjligt att hantera komplexa datastrukturer såsom text eller bilder. Detta kallas för **feature engineering** inom maskininlärning, som inom statistik kan anses vara en del av databearbetningen. 
 
 <!-- DEVELOPMENT: Presentera feature engineering tidigare! -->
 
@@ -258,6 +258,358 @@ En utav de större ramverken för neurala nätverk är Tensorflow. Det har ocks�
 exams2forms(file = "../exercises/Part 5/Del5_Chap29.2_ex2.rmd")
 
 ```
+:::
+
+## `keras3`
+
+För att träna neurala nätverk i R används paketet `keras3`. På grund av metodens komplexitet är `keras3` lite annorlunda än vanliga paket och kräver flera steg i installationen innan vi kan använda den. @isl2021 inkluderar instruktioner för hur alla delar kan installeras. Följ relevanta instruktioner [här](https://hastie.su.domains/ISLR2/keras-instructions.html) beroende på om du har en installation av Python / Conda eller ej. 
+
+:::{.callout-important}
+1. I instruktionerna används den tidigare varianten av paketet, döpt `keras`, men samma instruktioner kan användas bara du byter ut `keras` med `keras3`.
+
+2. Ytterligare något som behöver noteras är att R kommer vilja starta om efter att `install_keras()` körts klart. Det finns en överhängande risk att R kommer hänga sig och man får upp ett varningsmeddelande att R har crashat och inte vill starta om. Det enda man behöver göra då är stänga ner RStudio och starta upp det igen.
+
+3. **Se till att spara osparade skript innan `install_keras()` körs så att du inte förlorar information när RStudio startar om.**
+
+4. Att använda `keras3` kan komma med en del konstiga felmeddelanden då paketet arbetar tillsammans med ett annat språk Python. Tveka inte att återkoppla om du får felmeddelanden som inte går att lösa.
+:::
+
+:::{.callout-note}
+`keras3` har ett [Cheat Sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/master/keras.pdf) med alla de olika typerna av lager som kan läggas till i en modell. Vi kommer endast använda ett litet urval av dessa men översikten visar på flexibiliteten och kraften i neurala nätverk.
+:::
+
+I detta exempel kommer vi återigen göra en modell för spamkontroll genom data `spambase`. Använd samma datauppdelning som vi gjorde i @sec-tree-class för att kunna jämföra modellerna åt.
+
+Inom `keras` finns två olika sätt att definiera en modell, vi kommer fokusera på den sekventiella strukturen som innebär att vi med kod successivt bygger den arkitektur som vi sett i en MLP, lager för lager. Något som är speciellt med `keras` är hur den önskar att data är formaterad. Bland annat kräver den separata x och y matriser samt specifika format på responsvariabeln. Eftersom vi redan gjort en datauppdelning kommer vi behöva göra samma bearbetning för både `trainSpam` och `testSpam`.
+
+```{r}
+#| code-fold: false
+
+# Bearbeta data
+trainSpamX <- trainSpam |> 
+  select(!Spam) |> 
+  as.matrix()
+
+testSpamX <- testSpam |> 
+  select(!Spam) |> 
+  as.matrix()
+
+# Konverterar responsvariabeln till ett specifikt format med två klasser
+trainSpamY <- trainSpam$Spam |> 
+  to_categorical(num_classes = 2)
+
+testSpamY <- testSpam$Spam |> 
+  to_categorical(num_classes = 2)
+
+```
+
+Sedan börjar vi med att skapa en arkitektur. `input_shape` argumentet i `keras_model_sequential()` beskriver hur många variabler, eller inputnoder, som input lagret har. Detta kan vi lätt läsa ut från antalet kolumner i `trainSpamX`.
+
+:::{.callout-note}
+För att dessa resultat ska vara densamma varje gång vi kör samma modell, kan vi ange ett seed även här. Dock behöver vi använda `keras3` egna funktion istället för den inbyggda i R, `set_random_seed()`.
+:::
+
+```{r}
+#| code-fold: false
+
+set_random_seed(20260820)
+
+kerasSpamModel <- 
+  keras_model_sequential(
+    input_shape = c(ncol(trainSpamX))
+  ) 
+
+```
+
+När vi sedan bygger vidare modellen med gömda lager gör vi det med den enklaste formen `layer_dense` som kopplar samman alla gömda neuroner med alla neuroner i det föregående lagret. Argumenten `units` och `activation` styr storleken på lagret samt vilket aktiveringsfunktion som ska användas. Vi kan börja med en rätt så enkel modell med tre gömda lager av varierande storlek, 10, 30, 10 noder.
+
+```{r}
+#| code-fold: false
+
+kerasSpamModel <- 
+  kerasSpamModel |> 
+  layer_dense(
+    # Anger antalet gömda neuroner i lagret
+    units = 10,
+    # Anger aktiveringsfunktionen för lagret
+    activation = "relu"
+  ) |> 
+  layer_dense(
+    units = 30,
+    activation = "relu"
+  ) |> 
+  layer_dense(
+    units = 10,
+    activation = "relu"
+  )
+
+```
+
+När vi till sist vill knyta ihop modellen gör vi det med ytterligare ett `layer_dense()` där antalet noder motsvarar antalet klasser. Här behöver vi också justera valet av aktiveringsfunktion lämpligt för ändamålet, för klassificiering används `"softmax"`.
+
+```{r}
+#| code-fold: false
+
+kerasSpamModel <- 
+  kerasSpamModel |> 
+  layer_dense(
+    units = ncol(trainSpamY),
+    activation = "softmax"
+  )
+
+```
+
+Nu är arkitekturen för vår första enkla modell klar, men ingenting har egentligen tränats. Till skillnad från tidigare paket och funktioner, behöver vi först ange modellens struktur, dess optimeringsalgoritm och sedan specifikt säga till R att träna modellen med vissa andra hyperparametrar.
+
+Vi kan med `summary()` se en översikt av den skapade strukturen. 
+
+```{r}
+#| code-fold: false
+
+summary(kerasSpamModel)
+
+```
+
+För att träna modellen behöver vi också bestämma optimeringen genom `compile()` där argumenten fokuserar på optimeringsparametrar, till exempel:
+
+- `loss`: valet av kostnadsfunktion
+- `optimizer`: valet av optimeringsalgoritm
+- `metrics`: valet av utvärderingsmått som används under träningen
+
+Dessa tre argument har många olika valmöjligheter, vi kan till och med skapa en egen kostnadsfunktion eller utvärderingsmått till träningen. Vi kan läsa mer om olika alternativ i dokumentationen, vi kommer stanna vid vanliga värden; cross entropy som kostnadsfunktion, RMSprop som optimeringsalgoritm och träffsäkerheten som utvärderingsmått.
+
+```{r}
+#| code-fold: false
+
+kerasSpamModel |> 
+  compile(
+    loss = "categorical_crossentropy",
+    optimizer = optimizer_rmsprop(),
+    metrics = c("accuracy")
+  )
+
+```
+
+Till sist är vi redo för träningen med hjälp av `fit()`. Här får vi också möjlighet att ange argument som styr processen, främst fokuserad på hyperparametrar som berör stoppkriterier, batchstorlekar och validering.
+
+```{r}
+#| code-fold: false
+#| output: false
+
+history <- 
+  kerasSpamModel |> 
+    fit(
+      # Anger X och Y för modellen
+      trainSpamX, trainSpamY,
+      # Anger antalet maximala epoker
+      epochs = 30,
+      # Anger batchstorleken
+      batch_size = 128,
+      # Anger hur mycket av träningsdata som ska gå till validering
+      validation_split = 0.2
+    )
+
+```
+
+När vi tränar modellen kommer konsollen ge uppdateringar för varje epok. Vi får också en diagram som visar utvecklingen av kostnadsfunktionen och det valda utvärderingsmåttet för tränings och valideringsmängden för att vi ska kunna mer visuellt se träningshistoriken. Detta diagram kan vi få tag på igen om vi sparar ner träningen till ett separat objekt. 
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Kostnadsfunktionen (loss) och träffsäkerheten för modellens träning
+#| label: fig-nn-keras-fit
+#| out-width: "90%"
+#| code-fold: false
+
+plot(history) + 
+  theme_bw()
+
+```
+
+Om vi fokuserar på valideringsfelet i @fig-nn-keras-fit ser vi att den sjunker tillsammans med träningsfelet under de första 10 epokerna för att sedan plana ut och öka när träningsmängden fortfarande minskar sin kostnad. Detta visar på ett fall när modeller börjar överanpassa till träningsmängden. 
+
+:::{.callout-important}
+Ibland kan vi få resultat där det inte ser ut som att modellen konvergerat när vi nått det angivna antalet epoker. Då kan vi behöva fortsätta träningen genom att lägga till ett större antal epoker och låta modellen tränas vidare.
+
+Lägg märke till att vi inte sparar över `kerasSpamModel` efter att arkitekturen bestämts. Både `compile()` och `fit()` gör detta till viss del automatiskt vilket innebär att om vi kör `fit()` två gånger kommer den andra gången börja träningen där den första tog slut, modellens vikter sparas. Detta kan bli vilseledande då alla utskrifter anger epokerna vid den fortsatta träningen fortfarande som 0-30.
+
+Om man vill träna om modellen behöver vi skapa den helt på nytt genom att skapa arkitekturen igen från början.
+:::
+
+Vi kan faktiskt direkt se vilken epok som har det minsta valideringsfelet genom:
+
+```{r}
+#| code-fold: false
+
+which.min(history$metrics$val_loss)
+
+```
+
+Problemet vi står för nu är att vi inte kan ta tillbaka modellens parametrar vid den epoken när vi tränat alla 30 epoker. Det vi behöver göra är att träna om modellen och stanna vid den epok som har det minsta felet, och vi får inte glömma att sätta samma seed.
+
+```{r}
+#| code-fold: false
+#| output: false
+
+set_random_seed(20260820)
+
+kerasSpamModel <- 
+  keras_model_sequential(
+    input_shape = c(ncol(trainSpamX))
+  ) |> 
+  layer_dense(
+    # Anger antalet gömda neuroner i lagret
+    units = 10,
+    # Anger aktiveringsfunktionen för lagret
+    activation = "relu"
+  ) |> 
+  layer_dense(
+    units = 30,
+    activation = "relu"
+  ) |> 
+  layer_dense(
+    units = 10,
+    activation = "relu"
+  ) |> 
+  layer_dense(
+    units = ncol(trainSpamY),
+    activation = "softmax"
+  )
+
+history <- 
+  kerasSpamModel |> 
+  compile(
+    loss = "categorical_crossentropy",
+    optimizer = optimizer_rmsprop(),
+    metrics = c("accuracy")
+  ) |> 
+  fit(
+      trainSpamX, trainSpamY,
+      # Anger antalet maximala epoker
+      epochs = 15,
+      batch_size = 128,
+      validation_split = 0.2
+    )
+
+
+```
+
+:::{.callout-note}
+Istället för att behöva träna om en modell med ett fix antal epoker can vi använda ett stoppkriterie även för neurala nätverk. Funktionen `callback_early_stopping()` ger oss olika val för hur vi kan stanna träningen utan att ha nått de maximala antalet epokerna som vi först angav. Vi måste då också lägga till i `fit()` att vi vill stanna träningen om kriterierna uppfylldes. Detta kallas för **early stopping**.
+
+Vi har ett par olika argument som vi kan titta på: 
+
+- `monitor`: väljer vilket mått som ska kontrolleras, vanligtvis `"val_loss"` (valideringsfelet)
+- `min_delta`: anger en minsta förändringen som anses vara en förbättning, standard är 0
+- `patience`: antalet epoker med ingen förbättring innan träningen stoppas, standard är 0
+- `start_from_epoch`: antalet epoker som kriterierna "hoppas över" i början av träningen innan kontrollen börjar. 
+- `restore_best_weights`: `TRUE` eller `FALSE` som anger om modellens vikter från den bästa modellen ska återställas när träningen stoppas. Detta bör vara TRUE om `patience` > 0.
+
+Vi väljer att använda bara en del av dessa i just detta fall.
+
+```{r}
+#| code-fold: false
+
+callback <- callback_early_stopping(
+  monitor = "val_loss",
+  # Tillåter tre epoker av "försämring" innan träningen stannar
+  patience = 3,
+  restore_best_weights = TRUE
+)
+
+```
+
+Tillsammans skulle den fullständiga koden bli:
+
+```{r}
+#| code-fold: false
+#| output: false
+
+set_random_seed(20260820)
+
+kerasSpamModel <- 
+  keras_model_sequential(
+    input_shape = c(ncol(trainSpamX))
+  ) |> 
+  layer_dense(
+    # Anger antalet gömda neuroner i lagret
+    units = 10,
+    # Anger aktiveringsfunktionen för lagret
+    activation = "relu"
+  ) |> 
+  layer_dense(
+    units = 30,
+    activation = "relu"
+  ) |> 
+  layer_dense(
+    units = 10,
+    activation = "relu"
+  ) |> 
+  layer_dense(
+    units = ncol(trainSpamY),
+    activation = "softmax"
+  )
+
+history <- 
+  kerasSpamModel |> 
+  compile(
+    loss = "categorical_crossentropy",
+    optimizer = optimizer_rmsprop(),
+    metrics = c("accuracy")
+  ) |> 
+  fit(
+    trainSpamX, trainSpamY,
+    # Anger antalet maximala epoker
+    epochs = 30,
+    batch_size = 128,
+    validation_split = 0.2,
+    # Lägger till kriterier för early stopping
+    callbacks = list(callback)
+  )
+
+```
+
+Vi kan kontrollera att vikterna är samma för de två olika sätten att träna modellen med 15 epoker genom `kerasSpamModel$weights`.
+:::
+
+Nu till sist har vi en slutgiltig modell, `kerasSpamModel`, som valts ut utifrån valideringsfelet i träningen. 
+
+:::{.callout-important}
+Hade vi velat jämföra detta neurala nätverk med det beslutsträd som vi tränade i föregående kapitel hade vi **inte** kunnat jämföra valideringsfelen direkt från de olika utskrifterna. Valideringen hanteras och presenteras på olika sätt i olika modeller vilket ibland gör det svårt att använda den **interna** valideringen för att jämföra modeller från olika familjer. 
+
+Istället kan vi genomföra **extern** validering genom den disjunkta datauppdelningen som skapar en separat, och fix, valideringsmängd för jämförelse. 
+:::
+
+Vi kan få en väntevärdesriktig skattning av utvärderingsmåtten från testmängden genom att prediktera modellen. Problemet med prediktioner från `keras3` är att vi får två kolumner med sannolikheten för att observationen tillhör respektive klass. Vi behöver bearbeta dessa objekt innan vi kan använda `confusionMatrix()`.
+
+Den första kolumnen representerar klass $Y = 0$ och den andra kolumnen $Y = 1$ och vi predikterar varje observation till den klass som fått det högsta värdet. 
+
+```{r}
+#| code-fold: false
+
+predictSpam <- 
+  kerasSpamModel |> 
+  predict(testSpamX) |> 
+  as_tibble(.name_repair = ~ c("zero", "one")) |> 
+  mutate(class = if_else(zero > one, 0, 1)) |> 
+  pull(class) |> 
+  factor()
+  
+confusionMatrix(
+  predictSpam, 
+  testSpam$Spam |> 
+    factor(),
+  positive = "1"
+)
+  
+```
+
+Modellen får en träffsäkerhet på ca 89%, en sensitivitet på ca 85% och en specificitet på ca 92%. Vi har fått en ganska bra modell (i linje med den trädmodell som tränades i föregående kapitel) med en relativt enkel arkitektur, vi skulle säkerligen kunna utöka antalet noder i de gömda lagrena för att få en bättre modell.
+
+:::{.callout-important}
+## Neurala nätverk och regression
+
+För regressionsproblem behöver vi enbart bearbeta responsvariabeln till en matris och i det slutgiltiga lagret ange en `unit`. Om vi inte anger någon specifik aktiveringsfunktion kommer den automatiskt att välja `"linear"`, vilket motsvarar ren regression.
 :::
 
 

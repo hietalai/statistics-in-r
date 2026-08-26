@@ -307,7 +307,7 @@ I relation till @fig-bias-variance betyder det att området till vänster har en
 För vissa extremt komplexa modeller förekommer ett fenomen benämnt **double descent** där valideringsfelet minskar och sedan ökar för att till sist minska igen. Ni kan läsa mer om detta fenomen via [Wikipedia](https://en.wikipedia.org/wiki/Double_descent), det är inget som vi kommer titta närmare på i detta material.
 :::
 
-Vi kan visa dette fenomen med ett enkelt exempel för `lake` data. Vi börjar med att först dela upp data i tre olika mängder där träningsmängden får 60% av data, valideringsmängden 30% och testmängden 10%.
+Vi kan visa detta fenomen med ett enkelt exempel för `lakesurvey` data. Vi börjar med att först dela upp data i tre olika mängder där träningsmängden får 60% av data, valideringsmängden 30% och testmängden 10%.
 
 ```{r}
 #| code-fold: false
@@ -316,14 +316,14 @@ Vi kan visa dette fenomen med ett enkelt exempel för `lake` data. Vi börjar me
 set.seed(20260701)
 
 # Skapar de tre mängderna
-n <- nrow(lake)
+n <- nrow(lakesurvey)
 trainSize <- 0.6
 validSize <- 0.3
 
 trainIndex <- sample(seq_len(n), size = n*trainSize)
 
-trainData <- lake[trainIndex, ]
-remaining <- lake[-trainIndex, ] 
+trainData <- lakesurvey[trainIndex, ]
+remaining <- lakesurvey[-trainIndex, ] 
 
 validIndex <- sample(seq_len(nrow(remaining)), size = n*validSize)
 
@@ -357,8 +357,12 @@ Dessa två modeller vill vi sedan jämföra valideringsfelet på. För regressio
 yhat1 <- predict(trainModel1, newdata = validData)
 yhat2 <- predict(trainModel2, newdata = validData)
 
-MSE1 <- sum((validData$pH - yhat1)^2) / nrow(validData)
-MSE2 <- sum((validData$pH - yhat2)^2) / nrow(validData)
+MSE <- function(y, yhat) {
+  sum((y - yhat)^2) / length(y)
+}
+
+MSE1 <- MSE(validData$ph, yhat1)
+MSE2 <- MSE(validData$ph, yhat2)
 
 ```
 
@@ -368,7 +372,9 @@ Inom maskininlärning använder vi den generella formeln för MSE där nämnaren
 Skillnaden i nämnare blir försumbar när vi har ett stort $n$, vilket vi oftast har när vi använder maskininlärningsmetoder, därav att vi förenklar till den generella formeln.
 :::
 
-MSE för den första modellen är `r MSE1 |> round(3)` medan för den andra modellen vi får `r MSE2 |> round(3)`. Utifrån dessa två mått väljer vi att gå vidare med modell 2 då dess MSE var lägre. Vi använder till sist testmängden för att få en väntevärdesriktig skattning av modellens fel:
+MSE för den första modellen är `r MSE1 |> round(3)` medan för den andra modellen vi får `r MSE2 |> round(3)`. Utifrån dessa två mått väljer vi att gå vidare med modell 2 då dess MSE för valideringsmängden var lägre. 
+
+Till sist får vi en väntevärdesriktig skattning av modellens fel utifrån testmängden:
 
 ```{r}
 #| code-fold: false
@@ -396,7 +402,7 @@ exams2forms(file = "../exercises/Part 5/Del5_Chap26.1_ex1.rmd")
 
 ## Korsvalidering
 
-Nackdelen med att dela upp data enligt @sec-data-split är att mycket av data behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är **korsvalidering** där vi delar upp data i en större träningsmängd och en testmängd. Korsvalidering innebär att träningsmängden delas sedan in i flera mindre delar, vi lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar. När alla delar använts för validering beräknas det genomsnittliga valideringsfelet som sedan kan jämföras mellan olika modeller.  
+Nackdelen med att dela upp data enligt @sec-data-split är att mycket information behöver läggas åt sidan från träningen för bland annat validering. Ett alternativ till den disjunkta datauppdelningen är **korsvalidering** där vi delar upp data i en större träningsmängd och en testmängd. Korsvalidering innebär att träningsmängden delas sedan in i flera mindre delar, vi lägger åt sidan en del, tränar en modell på resterande och utvärderar på den delen som lagts åt sidan, och repeterar detta för alla delar. När alla delar använts för validering beräknas det genomsnittliga valideringsfelet som sedan kan jämföras mellan olika modeller.  
 
 I det extrema fallet delar vi upp träningsmängden i $n$ lika stora delar vilket kallas för **Leave-one-out** korsvalidering (LOOCV). Som namnet antyder följer vi följande procedur:
 
@@ -487,7 +493,7 @@ När en modell väl har valts ut, tränas en slutgiltig modell på all tränings
 :::{.callout-note}
 ## Korsvalidering i R
 
-Korsvalidering kan implementeras direkt i R genom att använda loopar men många av de metoder som vi kommer till i senare kapitel har integrerade alternativ för korsvalidering i dess tillhörande funktioner. Vi kommer därför återkomma till korsvalidering senare.
+Korsvalidering kan implementeras direkt i R genom att använda loopar men många av de metoder som vi kommer till i senare kapitel har integrerade alternativ för korsvalidering i dess tillhörande funktioner. Vi kommer därför återkomma till korsvalidering senare när vi tillämpar maskininlärningsmetoderna.
 :::
 
 :::{.callout-caution}
@@ -607,10 +613,10 @@ ggplot(data) + aes(x = x, y = y) + geom_line() +
 
 ```
 
-I denna illustration har en första "gissning" av parametrarnas värden gjorts vid den streckade röda linjen. Sedan har parametrarna justerats tills att de når fram till värdet som ger den största kostnaden, den svartstreckade linjen.
+I denna illustration har en första "gissning" av parametrarnas värden gjorts vid den streckade röda linjen. Sedan har parametrarna justerats tills att de når fram till värdet som ger den minsta kostnaden, den svartstreckade linjen.
 
 ### Gradient
-Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens negativa **gradient**, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger riktningen till var nästa justering av parameterns värde bör ske, i den negativa riktningen där funktionen ökar snabbast.
+Ett vanligt sätt att justera parametrarna vid varje steg är med hjälp av funktionens negativa **gradient**, det vill säga en vektor bestående av funktionens partiella derivator. Denna vektor ger riktningen till var nästa justering av parameterns värde bör ske, i den negativa riktningen där funktionen ökar snabbast. Vi använder den negativa riktningen för att gradienten alltid visar den positiva lutningen, alltså vilket håll funktionen ökar mest. För att hitta det minsta värdet behöver vi då flippa värdet genom att sätta $-$ framför.
 
 I dessa två föregående exempel har vi ett globalt minimum (optimum) som identiferats, men för mer komplexa kostnadsfunktioner kan det finnas flera **lokala optimum** som algoritmen kan nå fram till. 
 
@@ -671,13 +677,11 @@ Vissa kostnadsfunktioner definieras endast av ett minimum vilket gör det enklar
 ### Konvergens och inlärningshastighet
 För att motverka att optimeringsalgoritmer genomför oändligt många iterationer med (till slut) ytterst små justeringar av parametervärdena, avslutas optimeringen när vi anser den **konvergerat**. Konvergens betyder att algoritmen nått ett tillstånd där ytterligare iterationer inte leder till någon meningsfull förbättring. Detta skulle kunna vara:
 
-- Liten förändring i kostnadsfunktionen mellan iterationer ($i$), $|c(\boldsymbol{\theta}_i) - c(\boldsymbol{\theta}_{i-1})| < \xi$
+- Liten förändring i kostnadsfunktionen mellan iterationer ($t$), $|c(\boldsymbol{\theta}_t) - c(\boldsymbol{\theta}_{t-1})| < \xi$
 - Liten förändring i skattade parametervärden mellan iterationer
 - Maximalt antal iterationer har uppnåtts
 
-$\xi$ (grekiska xi) är oftast vald till något väldigt litet värde, till exempel $\frac{1}{10 000}$ eller liknande.
-
-Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet samt den totala beräkningstiden förändras.
+$\xi$ (grekiska xi, uttalas ksi) är oftast vald till något väldigt litet värde, till exempel $\frac{1}{10 000}$ eller liknande, för att vi ska hamna nära optimum men ändå inte spendera onödigt mycket tid med små förbättringar. Beroende på vilken av dessa konvergenskriterium som vi väljer, kommer den föreslagna lösningens kvalitet samt den totala beräkningstiden förändras.
 
 Ytterligare en aspekt av iterativa algoritmer är **inlärningshastigheten** (betecknat med $\gamma$, grekiska gamma) vilket påverkar hur snabbt vi rör oss mot bättre parametervärden närmare kostnadsfunktionens optimum. I @fig-optimization är denna 0.0002 = 2E-04 men vi kan öka eller minska den för att (förhoppningsvis) effektivisera algoritmen.
 
@@ -918,7 +922,38 @@ $$
   \text{Felkvot} &= \frac{FN + FP}{n} = \frac{FN + FP}{TP + FN + FP + TN} = 1 - \text{Träffsäkerhet} \\
 \end{aligned}
 $$
-När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas. 
+När träffsäkerheten i modellen är hög kommer felkvoten vara låg och vice versa vilket gör att endast ett av dessa mått egentligen behöver beräknas.
+
+Vi kan beräkna dessa för hand om vi vill, men många funktioner använder sig av inbyggda komponenter där dessa mått, eller de som introduceras senare i kapitlet, beräknas automatiskt och vi kan få ut dem som delar av modellobjektet. Om vi vill räkna ut dessa för hand behöver vi först bygga förväxlingsmatrisen:
+
+```{r}
+#| code-fold: false
+
+# Skapar två vektorer med värden 0 eller 1
+y <- sample(0:1, size = 50, replace = TRUE)
+yhat <- sample(0:1, size = 50, replace = TRUE)
+
+# Skapar en korstabell, en förväxlingsmatris, med table()
+table(y, yhat)
+
+```
+
+Om vi sparar tabellen får vi ett objekt med två dimensioner, rader och kolumner, vilket innebär att vi kan indexera ut $TP$, $FN$, $FP$ och $TN$.
+
+```{r}
+#| code-fold: false
+
+confusion <- table(y, yhat)
+
+TP <- confusion[1,1]
+FN <- confusion[1,2]
+FP <- confusion[2,1]
+TN <- confusion[2,2]
+
+# Beräknar träffsäkerheten
+sum(TP, TN) / sum(TP, FN, FP, TN)
+
+```
 
 ### Klassbalans
 Problemet med att använda felkvoten som modellens kostnadsfunktion är att måttet kan lätt missa om modellen fokuserar sin anpassning på enbart en av klasserna. När vi arbetar med klassificering påverkar den sanna andelen av data som tillhör vardera klass modellens övergripande prestanda. Denna andel kallas för **klassbalans**. När vi modellerar en binär responsvariabel är det bra att först ta fram en tabell med andelen som tillhör klass 1 och andelen som tillhör klass 0 för att bilda en uppfattning om vilken och hur mycket information vi har om de båda. 

@@ -37,9 +37,7 @@ data |>
 
 ```
 
-
-Den sanna beslutsregeln som exakt separerar de två färgerna (klasserna) är $x_2 \cdot (1 + exp(-25 \cdot (x_1 - 0.5))) > 1$. I bilden nedan visas gränsen som regeln skapar med en streckad linje där uttrycket är lika med 1.
-
+Den sanna beslutsregeln som exakt separerar de två färgerna (klasserna) är $$x_2 \cdot (1 + exp(-25 \cdot (x_1 - 0.5))) > 1$$. I bilden nedan visas gränsen som regeln skapar med en streckad linje när uttrycket är lika med 1.
 
 ```{r}
 #| fig-width: 5
@@ -59,18 +57,16 @@ data |>
 
 Men hur skulle vi kunna hitta en linjär beslutsregel som motsvarar denna? Vad gör vi om en linjär modell inte passar till data?
 
-## Icke-linjära modeller
 Vi kan ta ett enklare exempel med regression.
 
 ```{r}
 #| code-fold: false
 
-# Genererar icke-linjär data
+# Genererar icke-linjärt data
 x <-  seq(0, 5, length.out = 1e3)
 y <-  5*cos(x*3) - 1*x + rnorm(n = length(x))
 
 ```
-
 
 ```{r}
 #| fig-width: 5
@@ -108,18 +104,27 @@ tibble(
 
 ```
 
-Till och med ett polynom av ordning 6 räcker inte att modellera data på ett bra sätt i @fig-nonlinear-polynomial. Polynom av hög ordning bidrar också till instabila anpassningar och numeriska problem i skattningen, då det är inte ett optimalt alternativ.
+I just detta fall räcker inte ens ett polynom av ordning 6 för att modellera data på ett bra sätt. Polynom av hög ordning bidrar också till instabila anpassningar och numeriska problem i skattningen; det är inte ett optimalt alternativ.
 
-Vi skulle kunna dela upp data i olika områden och anpassa separata modeller för varje område som sedan knyts ihop till en sammanhängande modell. En sådan typ av metod är **splines**.
+Istället för ett komplex polynom över hela funktionen skulle vi kunna dela upp data i olika områden och anpassa enklare separata modeller för respektive som sedan knyts ihop till en sammanhängande modell. En sådan typ av metod är **splines**.
 
 ## Splines
 
-Målet med splines är att anpassa en stegvis polynomfunktion på en uppdelat data där vi sätter begränsningar i skarvarna för att få kontinuitet, kontinuerliga derivator och andra eftersökta egenskaper. De olika delarna av data separeras av **knutar** (eng. knot) som bryter data i olika delar och frihetsgrader i denna kontext beskriver antalet parametrar som anpassas.
+Målet med splines är att anpassa en stegvis polynomfunktion på uppdelad data där vi sätter begränsningar i skarvarna för att få kontinuitet, kontinuerliga derivator och andra eftersökta egenskaper. De olika delarna av data separeras av **knutar** (eng. knot) som bryter data i olika delar och termen frihetsgrader i denna kontext beskriver antalet delar (parametrar) som anpassas.
+
+Med hjälp av funktionen `ns()` från paketet `splines` kan vi skapa **naturliga splines**. I funktionen används argumentet `df` som ett sätt att styra komplexiteten av funktionen, där högre värden genererar fler knutar och därmed större flexibilitet i funktionen. I @fig-nonlinear-regression ser det ut som att det förekommer fyra ganska regelbundnda vändpunkter i data, så vi kan testa med att använda 5 frihetsgrader där antalet knutar definieras som `df - 1`. Då bör de fyra knutarna placera sig regelbundet utöver vändpunkterna.
+
+```{r}
+#| code-fold: false
+
+yhat <- ns(x, df = 5)
+
+```
 
 ```{r}
 #| fig-width: 5
 #| fig-height: 3
-#| fig-cap: Polynom av ordning 6
+#| fig-cap: Naturlig spline med 4 knutar
 #| label: fig-nonlinear-spline
 #| out-width: "90%"
 #| echo: false
@@ -137,19 +142,13 @@ tibble(
 
 ```
 
-@fig-nonlinear-spline visar hur vi kan dela upp datamaterialet med hjälp av fyra knutar (de röda strecken) och anpassa enklare polynom för varje område. I just denna figur har vi begränsat modellen i dess knutpunkter för att få en sammanhängande anpassning, men enklare funktioner såsom stegfunktioner, basfunktioner m.fl. kan också anpassas.
+@fig-nonlinear-spline visar att vi delar upp datamaterialet med hjälp av fyra knutar (de röda strecken) och anpassa enklare polynom för varje område. Har vi en mer komplex och mindre regelbunden icke-linjär data behöver vi förmodligen öka antalet frihetsgrader för att knutarna ska placeras på "rätt" ställen för en bra anpassning. Funktionen `ns()` placerar knutarna på kvantiler av `x` vilket inte alltid överensstämmer med vändpunkterna. Valet av frihetsgrader bör väljas med hjälp av korsvalidering.
+
+Vi har också möjlighet att själva ange var knutarna ska placeras med argumentet `knots`, dock är det inte alltid så lätt att visualisera funktionen och manuellt definiera knutarnas positioner.
+
+Med naturliga splines begränsar vi modellen i dess knutpunkter för att få en sammanhängande anpassning, men enklare funktioner såsom stegfunktioner, basfunktioner m.fl. kan också anpassas.
 
 <!-- DEVELOPMENT: Visa samma uppdelning med separata regressionsmodeller istället för spline. -->
-
-Splines anpassas i R med hjälp av `ns()` från paketet `splines`. Funktionen styrs av hyperparametern `df` som beskriver funktionens frihetsgrader vilket motsvarar antalet knutar + 1 som standard. I figuren ovan har vi valt 5 frihetsgrader som motsvarar 4 knutar på angivna platser, men valet av frihetsgrader bör väljas med hjälp av korsvalidering
-
-```{r}
-#| code-fold: false
-#| output: false
-
-ns(x, df = 5)
-
-```
 
 :::{.callout-note}
 **Generaliserade Additiva Modeller** (GAM) är ett samlingsnamn för modeller som kombinerar olika typer av modeller inom olika områden eller variabler. Till exempel kan en GAM kombinera linjära modeller med splines. 
@@ -171,6 +170,8 @@ exams2forms(file = "../exercises/Part 5/Del5_Chap28.1_ex1.rmd")
 ## Trädmodeller
 
 Ytterligare en metod som delar upp data och modellerar delar är **trädmodeller**. Istället för att använda knutar som brytpunkter delas variabelrummet in i icke-överlappande regioner (rektanglar) där alla observationer i samma region får samma anpassade värde.
+
+Vi går tillbaka till den binära klassificeringen med en icke-linjär beslutsgräns som vi såg i @fig-nonlinear-example. Följande diagram visar hur vi skulle kunna dela upp området i olika regioner där färgen på regionen speglar det anpassade värdet för observationerna däri.
 
 ```{r}
 #| fig-width: 5
@@ -195,7 +196,7 @@ data |>
 ```
 
 
-Att identifiera vilken region som en observation hamnar i kan beskrivas i en trädstruktur, därav namnet trädmodeller, där gränserna för respektive region används som förgreningar. Det anpassade värdet inom regionen beräknas oftast genom ett enkelt medelvärde eller typvärde beroende på responsvariabelns typ.
+Att identifiera vilken region som en observation hamnar i kan beskrivas i en trädstruktur, därav namnet trädmodeller, där gränserna för respektive region används som förgreningar. Det anpassade värdet inom regionen beräknas oftast genom ett enkelt medelvärde eller typvärde/majoritetsröstning beroende på responsvariabelns typ.
 
 En stor del av trädmodellernas träning styrs av hur vi kan dela upp variabelrummet på ett bra sätt. Vi kan börja med att presentera strukturen av modellen och lite terminologi. Följande diagram visar ett binärt träd där varje uppdelning sker med två utfall.
 
@@ -297,27 +298,9 @@ exams2forms(file = "../exercises/Part 5/Del5_Chap28.2_ex3.rmd")
 ```
 :::
 
-### Regressionsträd
+### Stoppkriterier
 
-[SE KAPITEL 8.1]{style="color: red"}
-
-### Klassificeringsträd
-
-För klassificeringsträd behöver vi använda andra kostnadsfunktioner för att ta hänsyn till den kategoriska responsvariabeln. Tre vanliga alternativ är:
-
-- Felkvot: $E = 1 - max_k(p_{m,k})$
-- Gini index: $G = \sum_k p_{m,k} (1 - p_{m,k})$
-- Entropy: $D = -\sum_k p_{m,k} log(p_{m,k})$
-
-där $p_{m,k}$ andelen i region $m$ som tillhör klass $k$.
-
-:::{.callout-note}
-Entropy och Cross Entropy (@sec-cross-entropy) är snarlika mått. Entropy tittar enbart på "sig själv", i detta fall på andelen observationer av en viss kategori i en viss nod, medan Cross Entropy använder sig av två omfång, andelen i data och andelen i modellanpassningen.
-:::
-
-Varje löv får en predikterad klass via majoritetsröstning där vi helst vill att alla observationer i ett löv ska ha samma klass. Cross Entropy och Gini är ett bättre mått än felkvoten för detta ändamål men felkvoten brukar ändå användas för att utvärdera trädet på valideringsdata då det ger en enklare tolkning.
-
-Trädmodeller har en tendens att överanpassa till data väldigt lätt, vilket leder till en större vikt att fokusera på validering och generalisering. Vi har dock möjlighet att justera modellens komplexitet med vissa hyperparametrar: 
+Trädmodeller har en tendens att överanpassa till data väldigt lätt, vilket leder till en större vikt att fokusera på validering och generalisering. Vi har dock möjlighet att justera modellens komplexitet med vissa hyperparametrar, även kallad **stoppkriterier**: 
 
 - trädets djup
 - minsta antal observationer för att överväga att dela upp en nod
@@ -336,6 +319,477 @@ $$
 där $|T|$ är antalet löv i $T$, $N(R_j)$ antal objekt i löv $j$. 
 
 På samma sätt som LASSO, lägger vi till en straffterm i kostnadsfunktionen som straffar modellen för dess komplexitet. Parametrarna representeras här med antalet löv, det vill säga storleken av trädet, där flera löv inneburit flera regler (parametrar). $\alpha$ styr hur mycket efterbeskärning som sker, där stora värden innebär en mer omfattande beskärning som leder till ett mindre slutgiltigt träd. Korsvalidering kan användas för att välja det $\alpha$ som ger minst valideringsfel.
+
+### Regressionsträd
+
+Ett **regressionsträd** är en trädmodell för en kontinuerlig responsvariabel. Vi såg i @sec-regularization hur vi kan med olika former av regularisering skapa en regressionsmodell, men vi kan också lösa samma problem med ett regressionsträd. Vi börjar återigen med att enbart välja de kemiska variablerna.
+
+```{r}
+#| code-fold: false
+
+# Väljer ut de kemiska variablerna
+lakesurvey <- 
+  lakesurvey |> 
+  select(!X_SMHI:Day)
+
+```
+
+Vi använder funktionen `rpart` från paketet med samma namn. Funktionen innehåller en hel del hyperparametrar som vi kan justera, men vi kommer fokusera på en delmängd av dessa.
+
+- `formula`: anger modellen enligt `y ~ x` format (se @sec-model-fit-example för mer detaljer)
+- `data`: vilket datamaterial som ska användas där variablerna finns,
+- `method`: vilket typ av träd (responsvariabel) som ska anpassas, där `"anova"` betyder regression, `"class"` betyder klassificering
+- `control`: en lista med hyperparametrar för optimeringsalgoritmen, däribland olika stoppkriterier
+  - `minsplit`: antalet observationer som krävs i en nod för att en förgrening ska ske
+  - `maxdepth`: maximala djupet (hur många "generationer") av trädet, där 0 är rotnoden
+  - `cp`: den minsta tillåtna förbättringen som måste inträffa för att en förbättring ska ske
+  - `xval`: antalet folds i korsvalideringen som ska ske under träningen
+  - `usesurrogate`: antalet surrogatregler som kan användas om en observation har saknade värden. Denna hyperparameter ska vara 2 om saknade värden finns i materialet.
+  
+På grund av att funktionen inkluderar en inbyggd korsvalidering genomför vi datauppdelningen endast med en tränings och testmängd. Vi anger också ett `seed` så att vi får samma uppdelning var gång denna kod körs.
+
+```{r}
+#| code-fold: false
+
+# Anger antalet observationer i data
+n <- nrow(lakesurvey)
+
+# Anger storleken av träningsmängden
+trainSize <- 0.8
+
+set.seed(20260820)
+
+# Drar slumpmässigt n*trainSize observationsindex
+trainIndex <- sample(seq_len(n), size = n*trainSize)
+
+# Plockar ut valda index till trainData
+trainData <- lakesurvey[trainIndex,]
+
+# Tar bort valda index till testData
+testData <- lakesurvey[-trainIndex,]
+
+treeModel <- 
+  rpart(
+    `TOC mg/l` ~ .,
+    data = trainData,
+    method = "anova",
+    control = 
+      list(
+        minsplit = 10,
+        maxdepth = 30,
+        cp = 0.01,
+        xval = 10,
+        usesurrogate = 0,
+        # Två argument som inte används mer i detalj så vi sätter dessa till 0
+        maxcompete = 0,
+        maxsurrogate = 0
+      )
+  )
+
+```
+
+Alla stoppkriterier som används i funktionen är exempel på förbeskärning, sätt som vi kan stoppa trädet från att växa vidare under träningen. Reducerar vi `minsplit` eller ökar `maxdepth` får vi ett mer utvecklat (och komplex) träd. Detsamma gäller argumentet `cp` där ett värde på 0 "tvingar" fram ett fullt utvecklat träd som vi i efterhand måste beskära.
+
+Objektet `treeModel` innehåller nu vår tränade modell och vi kan använda vanliga objektfunktioner såsom `summary()` eller `plot()` för att få mer information om modellen. Problemet med dessa funktioner är att objektet innehåller väldigt mycket information som är svår att faktiskt få en översikt av.
+
+```{r}
+#| code-fold: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Modellen med alla dess noder och beslutsregler
+#| label: fig-tree-plot
+#| out-width: "90%"
+
+plot(
+  treeModel, 
+  # Justerar placeringen av noder
+  uniform = TRUE
+)
+
+# Lägger till information om varje uppdelning
+text(
+  treeModel,
+  # Lägger till all information
+  all = TRUE,
+  # Styr storleken av texten
+  cex = 0.6
+)
+
+```
+
+Som tur är finns det andra paket som kan hjälpa till, bland annat `rpart.plot` från paketet med samma namn, som innehåller specifika funktioner för lättare visualisering. 
+
+```{r}
+#| code-fold: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Modellen med alla dess noder och beslutsregler
+#| label: fig-tree-rpart.plot
+#| out-width: "90%"
+
+rpart.plot(treeModel)
+
+```
+
+I detta diagram visar siffrorna i varje nod det predikterade värdet samt hur stor andel av alla observationer som tillhör noden. Vi kan se att rotnoten fått 100% av alla observationer med ett predikterat värde på 11 mg/l. Det är dock löven, de noder som placerats längst ner i diagrammet, som är av vikt att tolka eftersom det är modellens slutgiltiga prediktioner. Färgen på nodera är kopplade till prediktionens värde, låga värden får en ljusare färg och höga värden får en mörkare. 
+
+Vi ka ibland råka ut för modeller som är alldeles för stora för att göra sig bra på bild men vi kan även då se en mycket tydligare struktur i trädet gentemot basfunktionerna. `rpart.plot()` har också betydligt fler möjligheter att justera trädet, se mer dokumentation med illustrationer [här](https://www.rob-mcculloch.org/2021_ml/webpage/R/prp.pdf).
+
+Via `summary()` ser vi också en sektion som heter `Variable importance`. Vi kan plocka ut det enskilda objektet från `treeModel`^[ Notera att inuti `summary()` är dessa värden skalade så att summan blir 100.] för enklare tolkning.
+
+```{r}
+#| code-fold: false
+
+treeModel$variable.importance
+
+```
+
+Här ser vi att endast ett fåtal av de totalt 17 variabler som datamaterialet inkluderade faktiskt används av modellen, variabler som inte inkluderas i listan har ingen "viktighet" och används inte. Vi kan jämföra detta med den LASSO regularisering som vi gjorde i @sec-lasso, där två variabler sattes till 0 och de övriga 15 ansågs bidra till modellanpassningen. Regressionsträdet har en inbyggt variabelselektionsprocess där endast variabler som bidrar (eller en av flera variabler med hög multikollinearitet) inkluderas i modellen.
+
+Den interna korsvalideringen har valt den bästa modellen givet de övriga hyperparametrarna, men även dessa kan justeras för att sedan jämföra olika modeller med varandra. Det vi vill jämföra är valideringsfelet för modellerna som vi kan visualisera för en modell genom `plotcp()`. 
+
+```{r}
+#| code-fold: false
+
+plotcp(treeModel)
+
+```
+
+:::{.callout-note}
+Den streckade linjen är var @breiman1984 föreslår som den gräns där trädet bör sluta träna, en standardavvikelse från det minsta valideringsfelet.
+:::
+
+Vi kan också få dessa värden i tabellform som gör det lättare att plocka ut enskilda värden för en jämförelse. Vi utgår från att det minsta valideringsfelet är den bästa modellen, trots @breiman1984 förslag. 
+
+
+```{r}
+#| include: false
+
+## Får in filter som en del av dplyr paketet och inte stats
+detach("package:dplyr")
+require(dplyr)
+
+```
+
+```{r}
+#| code-fold: false
+
+treeModel$cptable |> 
+  as_tibble() |> 
+  filter(xerror == min(xerror))
+
+```
+
+Säg att vi anpassar en mer komplex modell där vi tillåter ett lite större träd genom att justera ner `cp` till 0.001. 
+
+```{r}
+#| code-fold: false
+
+treeModelAlt <- 
+  rpart(
+    `TOC mg/l` ~ .,
+    data = trainData,
+    method = "anova",
+    control = 
+      list(
+        minsplit = 10,
+        maxdepth = 30,
+        cp = 0.001,
+        xval = 10,
+        usesurrogate = 0,
+        # Två argument som inte används mer i detalj så vi sätter dessa till 0
+        maxcompete = 0,
+        maxsurrogate = 0
+      )
+  )
+
+plotcp(treeModelAlt)
+
+treeModelAlt$cptable |> 
+  as_tibble() |> 
+  filter(xerror == min(xerror))
+
+```
+
+Här ser vi att modellen fått ett lägre valideringsfel när vi tillåtit den att växa lite mer (0.284 jämfört med 0.316). Vi kan då välja att gå vidare med det mer komplexa trädet för att få en väntevärdesriktig skattning av en vald kostnadsfunktion på testmängden, till exempel MSE. Vi tränar om modellen på träningsmängden och anger de exakta hyperparametrarna från den bästa modellen [men anger det exakta värdet på `cp` som gav det minsta valideringsfelet]{.underline}.
+
+```{r}
+#| code-fold: false
+
+optimalTree <- 
+  rpart(
+    `TOC mg/l` ~ .,
+    data = trainData,
+    method = "anova",
+    control = 
+      list(
+        minsplit = 10,
+        maxdepth = 30,
+        cp = 0.00331,
+        xval = 10,
+        usesurrogate = 0,
+        # Två argument som inte används mer i detalj så vi sätter dessa till 0
+        maxcompete = 0,
+        maxsurrogate = 0
+      )
+  )
+
+predictions <- predict(optimalTree, newdata = testData)
+
+mseTest <- MSE(y = testData$`TOC mg/l`, yhat = predictions)
+
+```
+
+Vi återanvänder funktionen MSE som skapades i #sec-validation och ser att vi får ett värde på `r mseTest |> round(3)` för testmängden.
+
+:::{.callout-note}
+Notera att `xerror` och MSE inte har samma skala och detta är för att `xerror` beräknas som ett relativt fel gentemot en modell som inte genomför någon uppdelning, det vill säga rotnodens fel. Vi kan titta på en större del av feltabellen.
+
+```{r}
+#| code-fold: false
+
+# Visar de 10 första raderna av tabellen
+treeModelAlt$cptable |> 
+  head(10)
+
+```
+
+`rel error` är det relativa felet gentemot rotnodens fel för träningsmängden. Första raden har därför ett `rel error` värde på 1. `xerror` är också ett relativt mått men den jämför valideringsfelet jämfört med rotnodens fel för träningsmängden. Så första raden indikerar på att rotnoden för valideringsmängden har ett större fel än rotnoden för träningen, vilket är något vi kan förvänta oss.
+:::
+
+### Klassificeringsträd {#sec-tree-class}
+
+För klassificeringsträd behöver vi använda andra kostnadsfunktioner för att ta hänsyn till den kategoriska responsvariabeln. Tre vanliga alternativ är:
+
+- Felkvot: $E = 1 - max_k(p_{m,k})$
+- Gini index: $G = \sum_k p_{m,k} (1 - p_{m,k})$
+- Entropy: $D = -\sum_k p_{m,k} log(p_{m,k})$
+
+där $p_{m,k}$ andelen i region $m$ som tillhör klass $k$.
+
+:::{.callout-note}
+Entropy och Cross Entropy (@sec-cross-entropy) är snarlika mått. Entropy tittar enbart på "sig själv", i detta fall på andelen observationer av en viss kategori i en viss nod, medan Cross Entropy använder sig av två omfång, andelen i data och andelen i modellanpassningen.
+:::
+
+Varje löv får en predikterad klass via majoritetsröstning där vi helst vill att alla observationer i ett löv ska ha samma klass. Cross Entropy och Gini är ett bättre mått än felkvoten för detta ändamål men felkvoten brukar ändå användas för att utvärdera trädet på valideringsdata då det ger en enklare tolkning.
+
+I funktionen `rpart()` behöver vi nu fokusera på ytterligare ett argument:
+
+- `parms`: en lista med hyperparametrar för beslutsregler
+  - `loss`: en matris som tillåter att sätta olika kostnader för olika felaktiga prediktioner, diagonalen måste vara 0.
+  - `split`: vilket mått som vi vill använda för förgreningar, `"gini"` eller `"information"`
+  
+Vi kan använda ett klassificeringsträd för att prediktera ifall ett mail är ett spam eller inte. Vi börjar med datauppdelningen.
+
+```{r}
+#| code-fold: false
+
+# Anger antalet observationer i data
+n <- nrow(spambase)
+
+# Anger storleken av träningsmängden
+trainSize <- 0.8
+
+set.seed(20260820)
+
+# Drar slumpmässigt n*trainSize observationsindex
+trainIndex <- sample(seq_len(n), size = n*trainSize)
+
+# Plockar ut valda index till trainData
+trainSpam <- spambase[trainIndex,]
+
+# Tar bort valda index till testData
+testSpam <- spambase[-trainIndex,]
+
+treeSpam <- 
+  rpart(
+    Spam ~ .,
+    data = trainSpam,
+    method = "class",
+    parms = 
+      list(
+        split = "gini"
+      ),
+    control = 
+      list(
+        minsplit = 10,
+        maxdepth = 30,
+        cp = 0.01,
+        xval = 10,
+        usesurrogate = 0,
+        # Två argument som inte används mer i detalj så vi sätter dessa till 0
+        maxcompete = 0,
+        maxsurrogate = 0
+      )
+  )
+
+```
+
+```{r}
+#| code-fold: false
+#| fig-width: 5
+#| fig-height: 3
+#| fig-cap: Modellen med alla dess noder och beslutsregler
+#| label: fig-tree-spam
+#| out-width: "90%"
+
+rpart.plot(treeSpam)
+
+```
+
+Till skillnad från ett regressionsträd får vi ytterligare en bit information i varje nod av figuren, andelen 1:or i noden vilket kan tolkas som nodens predikterade sannolikhet. Vi får också ett annat färgschema där ljusare färger betyder att noden gör mer fel ($\hat{f}(x) \approx 0.5$) och mörkare färger betyder att noden gör mer rätt, blått för 0:or och grönt för 1:or.
+
+### Hyperparameter tuning med Grid Search
+
+I de tidigare exemplen valde vi hyperparametrar manuellt genom att prova några olika modeller och sedan jämföra deras valideringsfel. När antalet hyperparametrar ökar blir detta snabbt ineffektivt då antalet möjliga kombinationer växer stort.
+
+Vi kan istället använda grid search där vi skapar ett rutnät med tänkbara hyperparametrar och därefter anpassar en modell för varje kombination. Slutligen väljs den kombination som ger bäst resultat enligt valideringsfelet.
+
+För detta underlag kan vi visa hur vi justerar två hyperparametrar `minsplit` och `maxdepth`, men vi kan utöka detta till flera om vi så vill i praktiken.
+
+Vi börjar med att skapa ett rutnät av hyperparametrar som ska jämföras.
+
+```{r}
+#| code-fold: false
+
+grid <-
+  expand.grid(
+    minsplit = c(5, 10, 20),
+    maxdepth = seq(5, 15, 1)
+  )
+
+grid |> 
+  head(9)
+```
+
+Antalet modeller som kommer utvärderas blir `r nrow(grid)` där alla olika kombinationer av hyperparametervärden används. Vi tränar därefter en modell för varje kombination och väljer ut den bästa modellen för respektive utifrån dess `xerror` i korsvalideringen. Vi väljer att sätta `cp` till ett ganska lågt värde för att tillåta trädet att växa sig lite större.
+
+```{r}
+#| code-fold: false
+
+models <- list()
+
+# Använder en for-loop för att träna en modell för varje rad (i) av rutnätet
+for(i in seq_len(nrow(grid))) {
+  models[[i]] <-
+    rpart(
+      Spam ~ .,
+      data = trainSpam,
+      method = "class",
+      parms =
+        list(
+          split = "gini"
+        ),
+      control =
+        list(
+          cp = 0.0001,
+          minsplit = grid$minsplit[i],
+          maxdepth = grid$maxdepth[i],
+          xval = 10,
+          usesurrogate = 0,
+          maxcompete = 0,
+          maxsurrogate = 0
+        )
+    )
+}
+
+```
+
+Nu har vi en lista med alla de tränade modellerna och kan börja med att plocka ut deras respektive bästa valideringsfel. 
+
+:::{.callout-tip}
+## Effektivisera kod
+Eftersom det är en lista med liknande objekt kan vi effektivisera kodningen genom att använda `lapply()` som "applicerar" en funktion på varje element i en lista.
+:::
+
+```{r}
+#| code-fold: false
+
+# Kör samma funktion på varje element (model) i listan med modeller
+errors <- 
+  lapply(X = models, FUN = function(model){
+    model$cptable |> 
+      as_tibble() |> 
+      filter(xerror == min(xerror))
+  }) |> 
+  # Slår ihop den resulterande listan till en tibble
+  bind_rows() |> 
+  # Lägger till ett ID-nummer
+  mutate(model = 1:n()) |> 
+  # Sorterar utefter minsta felet
+  arrange(xerror)
+
+errors
+
+```
+
+Vi kan utläsa att modell 21 har den minsta valideringsfelet och väljer då att träna den modellen med de använda hyperparametrarna.
+
+```{r}
+#| code-fold: false
+
+optimalSpam <- 
+  rpart(
+    Spam ~ .,
+    data = trainSpam,
+    method = "class",
+    parms =
+      list(
+        split = "gini"
+      ),
+    control =
+      list(
+        # Anger komplexiteten från den bästa modellen
+        cp = 0.000920,
+        # Anger hyperparametrarna från modell 21 i rutnätet
+        minsplit = grid$minsplit[21],
+        maxdepth = grid$maxdepth[21],
+        xval = 10,
+        usesurrogate = 0,
+        maxcompete = 0,
+        maxsurrogate = 0
+      )
+  )
+
+predictions <- predict(optimalSpam, newdata = testSpam, type = "class")
+
+table(testSpam$Spam, predictions)
+
+```
+
+Från paketet `caret` får vi en funktion som både skapar förväxlingsmatrisen och alla olika mått vi skulle vara intresserade av; `confusionMatrix()`. En skillnad från `table()` är att funktionen byter plats på de sanna och predikterade värdena i argumenten. Den andra och något mer problematiska skillnaden är att funktionen förutsätter dessa två vektorer vara av typen `Factor`. Vi kan också styra vilket utfall vi anser vara det "positiva" utfallet, ofta det som vi vill att modellen ska prediktera, i detta fall 1 då det indikerar på ett spam.
+
+```{r}
+#| code-fold: false
+
+predictions <- 
+  predictions |> 
+  factor()
+
+testSpam$Spam <- 
+  testSpam$Spam |> 
+  factor()
+
+confusionMatrix(predictions, testSpam$Spam, positive = "1")
+
+```
+
+Från utskriften får vi mycket information men vi vill fokusera på vissa utvärderingsmått. Bland annat ser vi att träffsäkerheten är 0.9131 vilket är relativt högt på över 90% korrekta prediktioner, men vi vet inte hur prestandan fördelas på de två klasserna. Då kan vi se längre ner i utskriften sensitiviteten som 0.8623 och specificiteten 0.9462. Sensitiviteten säger att ungefär 86% av de mail som är spam också predikterades som spam medan specificiteten säger att ungefär 95% av vanliga mail också predikterades som vanliga mail. Modellen är något bättre på att prediktera vanliga mail och missklassificerar spam oftare än vanliga mail.
+
+För mer specifika mått kan vi plocka ut alla de klasspecifika måtten via objektet `byClass`:
+
+```{r}
+#| code-fold: false
+
+confusionMatrix(predictions, testSpam$Spam, positive = "1")$byClass
+
+```
+
+Här kan vi se att precisionen är ungefär 91% och F1 värdet är ca 89%. Överlag har vi fått en bra modell som tenderar att identifiera majoriteten av alla spam, men några (strax under 15%) slinker igenom, och placerar ungefär 5% av de vanliga mailen i skräpkorgen. Med tanke på de enkla variablerna är ändå modellen bra på att separera de två typerna av mail.  
+
+:::{.callout-note}
+Vi ser betydligt fler mått i dessa utskrifter som vi inte går in på i detta material mer, men vi kan läsa mer om hur de beräknas och vad de betyder i funktionens dokumentation.
+:::
 
 :::{.callout-caution}
 ## Övning 3
@@ -368,12 +822,9 @@ Metoden lär sig också interaktioner, fall där kombinationer av variabelvärde
 
 Trots att trädmodeller generellt har möjlighet att anpassa många olika sorts funktioner, även icke-linjära som visats i @fig-nonlinear-tree-region, kan modellerna snabbt bli onödigt komplexa om sambandet är s.k. mjukt varierande. Vi kan se en trappliknande form på regionerna som separerar färgerna i @fig-nonlinear-tree-region som en approximering av den enkla icke-linjära beslutsgränsen. Ju mer komplex och varierande den icke-linjära gränsen är, desto fler "trappsteg" behöver skapas av trädmodellen. Detta gäller även för gränser som inte är ortogonala (rätvinklade), t.ex. $x_1 < x_2$ eftersom beslutsreglerna inte kan förhålla sig till fler än en variabel åt gången.
 
-En konsekvens av denna onödiga komplexitet är att trädmodeller ofta överanpassar träningsdata vilket ger modellen en något sämre prediktiv förmåga jämfört med andra modeller. 
-
-Dessa nackdelar kan förbättras genom metoder som kommer presenteras i @sec-ensemble.
+En konsekvens av denna onödiga komplexitet är att trädmodeller ofta överanpassar träningsdata vilket ger modellen en något sämre prediktiv förmåga jämfört med andra modeller, trots att korsvalidering eller en fix valideringsmängd används för modellval. Dessa nackdelar kan förbättras genom metoder som kommer presenteras i @sec-ensemble.
 
 <!-- DEVELOPMENT: Jämför GAM med träd -->
-
 
 ## Referenser {.unnumbered}
 
