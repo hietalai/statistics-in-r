@@ -63,6 +63,7 @@ book:
         - 05-stat-to-ml/03-tree-models.qmd
         - 05-stat-to-ml/04-neural-networks.qmd
         - 05-stat-to-ml/05-ensembles.qmd
+        - 05-stat-to-ml/06-epilogue.qmd
   search: 
     location: sidebar
     show-item-context: false
