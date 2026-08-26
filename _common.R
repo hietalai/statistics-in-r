@@ -2,7 +2,6 @@
 # Laddar paketet med datamaterialet
 suppressMessages({
   require(palmerpenguins, quietly = TRUE)
-  require(tidyverse, quietly = TRUE)
   require(plotly, quietly = TRUE)
   require(kableExtra, quietly = TRUE)
   require(ggforce, quietly = TRUE)
@@ -19,9 +18,18 @@ suppressMessages({
   require(sf)
   require(swemaps2)
   require(splines)
+  require(glmnet)
+  require(rpart)
+  require(rpart.plot)
+  require(caret)
+  require(tidyverse, quietly = TRUE)
+  require(keras3)
+  require(randomForest)
 })
 
 utils::data(penguins)
+
+options(scipen = 999)
 
 # Filtrerar bort observationer med saknade värden
 penguins <- 
@@ -68,7 +76,7 @@ prices <- readr::read_csv("resources/data/electricityprice.csv") |>
 consumption <- readr::read_csv2("resources/data/electricityconsumption.csv") |> 
   suppressMessages()
 
-lakeFull <- 
+lakesurveyFull <- 
   readr::read_delim("resources/data/lakesurvey.csv", 
                           delim = ";", escape_double = FALSE, trim_ws = TRUE) |> 
   suppressMessages()
@@ -76,8 +84,8 @@ lakeFull <-
 faithful <- 
   datasets::faithful |> dplyr::as_tibble()
 
-lake <- 
-  lakeFull |> 
+lakesurvey <- 
+  lakesurveyFull |> 
   # Tar bort en observation om minst en variabel är saknad
   dplyr::filter(if_all(!Name, ~!is.na(.x))) |> 
   # Tar bort observationer som heter LERKILEN eller BOGEVIK
@@ -88,6 +96,36 @@ spambase <- readr::read_csv2("resources/data/spambase.csv") |>
 
 wine <- readr::read_csv2("resources/data/wine.csv") |> 
   suppressMessages()
+
+
+### Data split for spambase
+n <- nrow(spambase)
+
+# Anger storleken av träningsmängden
+trainSize <- 0.8
+
+set.seed(20260820)
+
+# Drar slumpmässigt n*trainSize observationsindex
+trainIndex <- sample(seq_len(n), size = n*trainSize)
+
+# Plockar ut valda index till trainData
+trainSpam <- spambase[trainIndex,]
+
+# Tar bort valda index till testData
+testSpam <- spambase[-trainIndex,]
+
+
+### COMMON FUNCTIONS
+
+MSE <- function(y, yhat) {
+  sum((y - yhat)^2) / length(y)
+}
+
+MAD <- function(y, yhat) {
+  sum(abs(y - yhat)) / length(y)
+}
+
 
 diagnosticPlots <- 
   function(
